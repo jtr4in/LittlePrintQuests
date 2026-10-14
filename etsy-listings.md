@@ -103,12 +103,16 @@ princess party, princess scavenger, scavenger hunt kids, treasure hunt clues, pr
 
 ---
 
-## 6. Custom Scavenger Hunt ($9.99 to start)
+## 6. Custom Party Bundle: hunt + matching play kit ($16.99, or $9.99 hunt only)
 
-Raise to $12.99, then $14.99, once you have 10 to 20 reviews. No sale needed on this one.
+Add a variation called **Package** with prices per option:
+- **Party Bundle: hunt + play kit**: $16.99 (make this the first option, so it's the default shown)
+- **Hunt only**: $9.99
+
+The bundle is the main offer; "hunt only" is there so the bundle looks like the obvious deal. No sale needed. Once you have 10 to 20 reviews, raise the bundle to $19.99 and the hunt to $12.99.
 
 **Title**
-Custom Scavenger Hunt for Kids, Personalized Birthday Party Game with Your Child's Name and Home, Rhyming Treasure Hunt Clues, Printable PDF
+Custom Scavenger Hunt and Pretend Play Kit for Kids, Personalized Birthday Party Game with Your Child's Name and Home, Rhyming Clues, Printable PDF
 
 **Description**
 ```
@@ -119,11 +123,21 @@ Tell us your child's name, age, theme and 6–10 hiding spots in your house or y
 ★ CHOOSE A THEME
 Dinosaurs · Superheroes · Pirates · Outer Space · Princess & Knights
 
-★ WHAT YOU GET
+★ PARTY BUNDLE: THE HUNT + A MATCHING PLAY KIT ($17.98 value)
+THE HUNT
 • Host Guide with your exact hiding order
 • Mission Briefing letter addressed to your child
 • 6–10 custom rhyming clue cards (4" x 6", two per page)
 • Mission Accomplished Certificate with your child's name
+
+THE PLAY KIT (17 pages, matches your theme)
+• 8 door signs with your child's name ("Leo's Mission Control")
+• A fold-up pretend dashboard with a calendar, a "next up" list and 3 screens
+  (dino scanner, hero communicator, ship's helm, mission control console or magic mirror)
+• ID badges, a job log, check-up forms for each of your child's pets or toys
+• Tickets, passports, a menu with coins to cut out, and a certificate
+
+Choose "Hunt only" if you just want the scavenger hunt.
 
 ★ HOW TO ORDER
 1. Fill in the personalization box (see the example below)
@@ -131,7 +145,7 @@ Dinosaurs · Superheroes · Pirates · Outer Space · Princess & Knights
 3. We send your PDF through Etsy messages, usually within a few hours
 
 Personalization example:
-Maya, turning 6, Space. Spots: front door, shoe rack, coat closet, washer, dryer, piano, dog bed, kitchen table (prize)
+Maya, turning 6, Space. Spots: front door, shoe rack, coat closet, washer, dryer, piano, dog bed, kitchen table (prize). Pets/toys: Rover (dog), Teddy (bear)
 
 ★ PLEASE NOTE
 This is a DIGITAL file. No physical item will be shipped.
@@ -140,10 +154,50 @@ This is a DIGITAL file. No physical item will be shipped.
 **Personalization:** On, required. Max characters 500.
 Instructions to buyer:
 ```
-Child's name, age, theme (Dino, Superhero, Pirate, Space, or Princess), and 6–10 hiding spots in order. The LAST spot is where the prize goes.
+Child's name, age, theme (Dino, Superhero, Pirate, Space, or Princess), and 6–10 hiding spots in order. The LAST spot is where the prize goes. Bundle: add up to 6 pets or toys for the play kit, like "Rover (dog)".
 ```
 
 **Digital file:** Etsy requires one. Upload a one-page "Thank you, your custom hunt is on its way" PDF, or reuse a standard pack as a bonus.
 
 **Tags (13)**
 custom hunt for kids, personalized game, scavenger hunt kids, treasure hunt clues, kids birthday game, custom party game, personalized party, indoor scavenger, birthday activity, rhyming clues, name party game, custom treasure hunt, kids party printable
+
+---
+
+## 7. Personalized Pretend Play Kit ($7.99)
+
+One listing with a **Kit** variation: Vet Clinic, Mission Control, Dino Dig Lab, Hero HQ, Pirate Ship, Royal Castle. The Vet Clinic kit is the stand-alone one that doesn't match a hunt, so put it first in the photos.
+
+**Title**
+Personalized Pretend Play Kit for Kids, Printable Vet Clinic, Space, Dinosaur, Pirate, Superhero or Castle Role Play Set with Your Child's Name, PDF
+
+**Description**
+```
+Turn the living room into a vet clinic, a pirate ship or mission control, with your child's name on every sign.
+
+★ WHAT YOU GET (17-page PDF, US Letter)
+• 8 door signs, including "[Name]'s Pet Clinic" (or Pirate Ship, Mission Control…)
+• A fold-up pretend dashboard: a clinic laptop, dino scanner, hero communicator,
+  ship's helm, mission control console or magic mirror, with a calendar,
+  a "next patients" list and 3 screens to swap
+• 8 ID badges for your child, family and friends
+• A check-up form and passport for each of your child's pets or toys
+• Tickets, a job log, a price list with coins to cut out, and a certificate
+
+★ HOW TO ORDER
+Fill in the personalization box with your child's name and up to 6 pets or toys.
+We send your PDF through Etsy messages, usually within a few hours.
+
+★ PLEASE NOTE
+This is a DIGITAL file. No physical item will be shipped. For personal use only.
+```
+
+**Personalization:** On, required. Instructions to buyer:
+```
+Child's first name, and up to 6 pets or toys with what they are, like "Rover (dog), Teddy (bear)".
+```
+
+**Photos:** use `/mnt/project-files/pretend-play/kit-*-pages.png` and the site's kit images for now.
+
+**Tags (13)**
+pretend play, pretend play kit, vet clinic printable, kids role play, dramatic play, printable play set, personalized kids, pirate party game, space party kids, dinosaur party, superhero party, princess party, homeschool play
