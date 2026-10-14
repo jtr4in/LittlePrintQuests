@@ -8,6 +8,8 @@ const store = require('./store');
 const etsy = require('./etsy');
 const orders = require('./orders');
 const payments = require('./payments');
+const listings = require('./listings');
+const { KITS } = require('../kits/engine');
 const { sendHuntEmail } = require('./email');
 const THEMES = require('../generator/themes');
 
@@ -91,9 +93,30 @@ h1{font-size:28px;line-height:1.2}p{color:var(--muted)}p b{color:var(--ink)}
 </style></head><body><main>${body}</main></body></html>`;
 }
 
+// Etsy listings the bot can create as drafts (see listings.js).
+function listingsPanel(s) {
+  if (!etsy.isConnected()) return '';
+  const st = s.listings || {};
+  const working = listings.isRunning();
+  const rows = listings.CATALOG.map((c) => {
+    const l = st[c.key] || {};
+    const state = l.ready
+      ? `<a href="https://www.etsy.com/your/shops/me/listing-editor/edit/${esc(l.id)}" target="_blank">Draft ready, review and publish</a>`
+      : l.working ? 'Creating…' : l.error ? `<span class="problem">${esc(l.error)}</span>` : l.id ? 'Partly created' : '<span class="muted">Not created</span>';
+    return `<li><b>${esc(c.label)}</b> · ${state}</li>`;
+  }).join('');
+  const allReady = listings.CATALOG.every((c) => st[c.key]?.ready);
+  const action = !etsy.canWriteListings()
+    ? `<p class="muted">To let the bot create listings, reconnect your shop once and allow listing access.</p><a href="/auth/etsy/start"><button class="secondary">Reconnect Etsy shop</button></a>`
+    : allReady ? '' : `<form method="post" action="/admin/etsy/listings"><button${working ? ' disabled' : ''}>${working ? 'Creating drafts…' : 'Create drafts on Etsy'}</button></form>`;
+  return `<div class="panel"><b>Etsy listings</b> <span class="muted">Created as drafts with photos, files, prices and options. Nothing goes live until you publish it in Shop Manager.</span>
+  <ul>${rows}</ul>${s.listingsError ? `<p class="problem">${esc(s.listingsError)}</p>` : ''}${action}
+  ${working ? '<script>setTimeout(()=>location.reload(),4000)</script>' : ''}</div>`;
+}
+
 function orderCard(o) {
   const badge = { ready: 'Ready to send', needs_attention: 'Needs a look', processing: 'Working…', awaiting_payment: 'Not paid' }[o.status] || o.status;
-  const theme = o.config && THEMES[o.config.theme];
+  const theme = o.config && (THEMES[o.config.theme] || KITS[o.config.kit]);
   return `<article id="${esc(o.id)}" class="order ${o.sent ? 'sent' : o.status}">
     <header><span class="badge">${o.sent ? 'Sent' : esc(badge)}</span>
       <b>${esc(o.config?.childName || o.form?.childName || o.buyerName || 'Order')}</b>${theme ? ` · ${esc(theme.name)}` : ''}
@@ -163,6 +186,7 @@ button.secondary{background:#fff;color:#2d6a4f;border:1px solid #2d6a4f;margin-t
       ? `<b>Website checkout on.</b> <span class="muted">$${(payments.BUNDLE_PRICE_CENTS / 100).toFixed(2)} per party bundle, $${(payments.PRICE_CENTS / 100).toFixed(2)} per hunt only, built and emailed automatically.${unpaid.length ? ` ${unpaid.length} checkout${unpaid.length === 1 ? '' : 's'} started but not paid.` : ''}</span>`
       : `<b>Website checkout off.</b> <span class="muted">Add STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET to take orders on your site.</span>`
   }</div>
+${listingsPanel(s)}
 <details class="panel"><summary><b>Make a hunt by hand</b> <span class="muted">(paste order notes, or test the bot)</span></summary>
   <form method="post" action="/admin/orders">
     <p><input name="buyerName" placeholder="Buyer name (optional)"></p>
@@ -258,6 +282,11 @@ async function route(req, res) {
 
   if (p === '/admin/poll') {
     await orders.pollEtsy();
+    return redirect(res, '/admin');
+  }
+  if (p === '/admin/etsy/listings') {
+    store.update((st) => (st.listingsError = null));
+    listings.createDrafts();
     return redirect(res, '/admin');
   }
   if (p === '/admin/orders') {

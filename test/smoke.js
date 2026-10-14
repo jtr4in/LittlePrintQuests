@@ -12,7 +12,7 @@ Object.assign(process.env, {
   STRIPE_SECRET_KEY: 'sk_test_fake', STRIPE_WEBHOOK_SECRET: 'whsec_test', RESEND_API_KEY: 're_test', EMAIL_FROM: 'Hunts <hi@example.com>',
 });
 fs.writeFileSync(path.join(dataDir, 'state.json'), JSON.stringify({
-  etsy: { access_token: '1.a', refresh_token: '1.r', expires_at: Date.now() + 3600e3, user_id: 1, shop_id: 42 }, orders: {},
+  etsy: { access_token: '1.a', refresh_token: '1.r', expires_at: Date.now() + 3600e3, user_id: 1, shop_id: 42, scopes: 'transactions_r listings_r listings_w shops_r' }, orders: {},
 }));
 
 // Fake Claude: return a structured answer for whatever order text arrives.
@@ -29,6 +29,10 @@ parse.parseOrder = async ({ personalization }) => realToConfig({
   ],
 });
 
+parse.parseKitOrder = async ({ personalization, kit }) => ({
+  ok: true, config: { kit, childName: personalization.split(',')[0], subjects: [{ name: 'Biscuit', kind: 'dog' }], lenient: true },
+});
+
 // Fake Stripe Checkout session creation (webhooks are signed for real below).
 const payments = require('../src/bot/payments');
 const charged = [];
@@ -40,16 +44,38 @@ payments.createCheckout = async (order) => {
 // Fake Etsy receipts endpoint and Resend.
 const realFetch = global.fetch;
 const seen = [];
+const etsyCalls = [];
+let failImageOnce = true;
+const etsyListingApi = async (u, opts) => {
+  const p = new URL(u).pathname.replace('/v3/application', '');
+  const body = opts.body instanceof FormData ? Object.fromEntries(opts.body) : opts.body instanceof URLSearchParams ? Object.fromEntries(opts.body) : opts.body && JSON.parse(opts.body);
+  etsyCalls.push({ method: opts.method, p, body });
+  const json = (o, status = 200) => new Response(JSON.stringify(o), { status });
+  if (p === '/seller-taxonomy/nodes') return json({ results: [{ id: 1, name: 'Paper & Party Supplies', children: [{ id: 2, name: 'Party Supplies', children: [{ id: 1250, name: 'Party Games', children: [] }] }] }] });
+  if (p === '/shops/42/listings') return json({ listing_id: 7000 + etsyCalls.filter((c) => c.p === p).length });
+  if (/\/images$/.test(p) && body.image.name === 'kits-main.jpg' && failImageOnce) {
+    failImageOnce = false;
+    return json({ error: 'Temporary upload problem' }, 500);
+  }
+  return json({ ok: true });
+};
 global.fetch = async (url, opts = {}) => {
   const u = String(url);
+  if (u.startsWith('https://api.etsy.com/') && !u.includes('/receipts')) return etsyListingApi(u, opts);
   if (u.startsWith('https://api.etsy.com/')) {
     seen.push({ u, headers: opts.headers });
     return new Response(JSON.stringify({ count: 2, results: [
       { receipt_id: 900, name: 'Pat Buyer', transactions: [
         { transaction_id: 1, listing_id: 555, title: 'Custom Hunt', variations: [
           { property_id: 513, formatted_name: 'Theme', formatted_value: 'Space', question_id: 0 },
-          { property_id: 514, formatted_name: 'Package', formatted_value: 'Party Bundle: hunt + play kit', question_id: 0 },
+          { property_id: 514, formatted_name: 'Package', formatted_value: 'Hunt + Play Kit', question_id: 0 },
           { property_id: 54, formatted_name: 'Personalization', formatted_value: 'Leo, 6, front door, piano, dog bed, table', question_id: 77 },
+        ] },
+      ] },
+      { receipt_id: 902, name: 'Kim Kit', transactions: [
+        { transaction_id: 3, listing_id: 557, title: 'Play Kit', variations: [
+          { property_id: 513, formatted_name: 'Kit', formatted_value: 'Vet Clinic', question_id: 0 },
+          { property_id: 54, formatted_name: 'Personalization', formatted_value: 'Maya, Biscuit (dog)', question_id: 78 },
         ] },
       ] },
       { receipt_id: 901, name: 'Sam Standard', transactions: [{ transaction_id: 2, listing_id: 556, title: 'Dino Pack', variations: [] }] },
@@ -71,13 +97,18 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 (async () => {
   for (let i = 0; i < 60; i++) {
     const s = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
-    if (s.orders['etsy-900-1']?.status === 'ready') break;
+    if (s.orders['etsy-900-1']?.status === 'ready' && s.orders['etsy-902-3']?.status === 'ready') break;
     await wait(500);
   }
   let state = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
   const o = state.orders['etsy-900-1'];
   assert.equal(o.status, 'ready', JSON.stringify(o));
   assert.ok(!state.orders['etsy-901-2'], 'standard pack order should be ignored');
+  const kitOrder = state.orders['etsy-902-3'];
+  assert.equal(kitOrder.product, 'kit');
+  assert.equal(kitOrder.config.kit, 'vet');
+  assert.match(kitOrder.message, /Hi Kim! Your Vet Clinic play kit for Maya is ready/);
+  assert.ok(!kitOrder.kitReady);
   assert.equal(o.options.Theme, 'Space');
   assert.match(o.message, /Hi Pat!.*Deep Space Rover Expedition for Leo/s);
   assert.equal(o.product, 'bundle');
@@ -162,6 +193,45 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.deepEqual(charged, [1699, 999]);
   assert.equal((await realFetch(base + '/order/manual-1')).status, 401); // only web orders are public
   assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Emailed to ava\.parent@example\.com/);
+
+  // Etsy listings: drafts with photos, files and variation prices; a failed step resumes on the next click.
+  const createListings = () => realFetch(base + '/admin/etsy/listings', { method: 'POST', headers: auth, redirect: 'manual' });
+  const listingsDone = async () => {
+    for (let i = 0; i < 240; i++) {
+      await wait(500);
+      const l = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8')).listings || {};
+      if (Object.keys(l).length === 7 && Object.values(l).every((x) => x.ready || (x.error && !x.working))) return l;
+    }
+    throw new Error('listings never finished');
+  };
+  assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Create drafts on Etsy/);
+  await createListings();
+  let listed = await listingsDone();
+  assert.match(listed.kits.error, /Temporary upload problem/);
+  assert.equal(Object.values(listed).filter((x) => x.ready).length, 6);
+  await createListings();
+  listed = await listingsDone();
+  assert.ok(Object.values(listed).every((x) => x.ready));
+  const creates = etsyCalls.filter((c) => c.p === '/shops/42/listings');
+  assert.equal(creates.length, 7, 'resuming must not create a second kits listing');
+  const pack = creates[0].body;
+  assert.equal(pack.type, 'download');
+  assert.equal(pack.price, '8.00');
+  assert.equal(pack.taxonomy_id, '1250');
+  assert.equal(pack.tags.split(',').length, 13);
+  assert.match(pack.description, /^Roar!.*WHAT'S INCLUDED/s);
+  const bundleId = listed.bundle.id;
+  const inv = etsyCalls.find((c) => c.p === `/listings/${bundleId}/inventory`).body;
+  assert.deepEqual(inv.products.map((x) => [x.property_values[0].values[0], x.offerings[0].price]), [['Hunt + Play Kit', 16.99], ['Hunt only', 9.99]]);
+  const kitInv = etsyCalls.find((c) => c.p === `/listings/${listed.kits.id}/inventory`).body;
+  assert.equal(kitInv.products.length, 6);
+  const q = etsyCalls.find((c) => c.p === `/shops/42/listings/${bundleId}/personalization`).body.personalization_questions[0];
+  assert.ok(q.required && q.question_text.length <= 45 && /pets or toys/.test(q.instructions));
+  assert.equal(etsyCalls.filter((c) => c.p === `/shops/42/listings/${listed.kits.id}/images`).length, 8); // 7 photos + 1 failed try
+  const files = etsyCalls.filter((c) => /\/files$/.test(c.p));
+  assert.equal(files.length, 7);
+  assert.ok(files.every((f) => f.body.file.size > 10000 && f.body.file.type === 'application/pdf'));
+  assert.ok(!etsyCalls.some((c) => c.p.includes(`/listings/${listed['pack-dino'].id}/personalization`)));
 
   console.log('All smoke checks passed');
   process.exit(0);

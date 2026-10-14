@@ -1,6 +1,8 @@
 # Etsy listings
 
-Copy-paste ready. Each standard listing uses its PDF from `output/standard/` as the digital file and its photo from `output/listing-photos/` as the main image.
+The order bot can create all of these as Etsy drafts for you: open its dashboard and click **Create drafts on Etsy**, then review and publish each one in Shop Manager. The bot reads the titles, descriptions and tags from this file, so edit them here.
+
+To do it by hand instead, everything is copy-paste ready. Each standard listing uses its PDF from `output/standard/` as the digital file and its photo from `output/listing-photos/` as the main image.
 
 **Pricing:** Etsy shoppers in this category expect a sale price. Set the standard packs at $8.00 and run an ongoing 40% off sale (Shop Manager > Marketing > Sales and discounts), so buyers see $4.80 with the $8 crossed out.
 
@@ -106,13 +108,15 @@ princess party, princess scavenger, scavenger hunt kids, treasure hunt clues, pr
 ## 6. Custom Party Bundle: hunt + matching play kit ($16.99, or $9.99 hunt only)
 
 Add a variation called **Package** with prices per option:
-- **Party Bundle: hunt + play kit**: $16.99 (make this the first option, so it's the default shown)
+- **Hunt + Play Kit**: $16.99 (make this the first option, so it's the default shown)
 - **Hunt only**: $9.99
+
+The bot dashboard's **Create drafts on Etsy** button sets all of this up for you, including this variation.
 
 The bundle is the main offer; "hunt only" is there so the bundle looks like the obvious deal. No sale needed. Once you have 10 to 20 reviews, raise the bundle to $19.99 and the hunt to $12.99.
 
 **Title**
-Custom Scavenger Hunt and Pretend Play Kit for Kids, Personalized Birthday Party Game with Your Child's Name and Home, Rhyming Clues, Printable PDF
+Custom Scavenger Hunt and Pretend Play Kit, Personalized Kids Birthday Party Game with Your Child's Name, Rhyming Clues, Printable PDF
 
 **Description**
 ```
@@ -169,7 +173,7 @@ custom hunt for kids, personalized game, scavenger hunt kids, treasure hunt clue
 One listing with a **Kit** variation: Vet Clinic, Mission Control, Dino Dig Lab, Hero HQ, Pirate Ship, Royal Castle. The Vet Clinic kit is the stand-alone one that doesn't match a hunt, so put it first in the photos.
 
 **Title**
-Personalized Pretend Play Kit for Kids, Printable Vet Clinic, Space, Dinosaur, Pirate, Superhero or Castle Role Play Set with Your Child's Name, PDF
+Personalized Pretend Play Kit, Printable Vet Clinic, Space, Dino, Pirate, Superhero or Castle Role Play Set with Your Child's Name
 
 **Description**
 ```

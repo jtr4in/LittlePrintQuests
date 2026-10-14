@@ -6,7 +6,7 @@ const { z } = require('zod');
 const { zodOutputFormat } = require('@anthropic-ai/sdk/helpers/zod');
 const SPOTS = require('../generator/spots');
 const THEMES = require('../generator/themes');
-const { kitForHunt } = require('../kits/engine');
+const { kitForHunt, KITS } = require('../kits/engine');
 
 const MODEL = process.env.CLAUDE_MODEL || 'claude-opus-5-5';
 const client = new Anthropic();
@@ -91,4 +91,31 @@ function toHuntConfig(p) {
   };
 }
 
-module.exports = { parseOrder, toHuntConfig, OrderSchema };
+// ---------- play kit only orders ----------
+
+const KitSchema = z.object({
+  ok: z.boolean().describe('false if the child’s first name is missing'),
+  problem: z.string().nullable().describe('When ok is false: a short note to the shop owner saying what is missing'),
+  childName: z.string().nullable(),
+  pets: z.array(z.object({ name: z.string(), kind: z.string() })).describe('up to 6 pets or toys; empty if none'),
+});
+
+// Reads a play kit order: the child's name plus any pets or toys, mapped to the kit's kinds.
+async function parseKitOrder({ personalization, kit }) {
+  const def = KITS[kit];
+  const response = await client.messages.parse({
+    model: MODEL,
+    max_tokens: 1000,
+    output_config: { effort: 'low', format: zodOutputFormat(KitSchema) },
+    system: `You set up personalized ${def.name} pretend play kits for children aged 3 to 8 from a buyer's Etsy order notes.
+Return the child's first name and up to 6 pets or toys. For each, keep the name the buyer gave and set kind to the closest of: ${Object.keys(def.kinds).join(', ')}.
+Missing pets are fine. Set ok to false only if there's no child's name.`,
+    messages: [{ role: 'user', content: `Buyer's personalization text:\n"""\n${personalization}\n"""` }],
+  });
+  const p = response.parsed_output;
+  if (!p) return { ok: false, problem: `Claude could not read this order (stop reason: ${response.stop_reason}).` };
+  if (!p.ok || !p.childName) return { ok: false, problem: p.problem || 'missing child’s name', draft: p };
+  return { ok: true, config: { kit, childName: p.childName.trim(), subjects: p.pets.slice(0, 6), lenient: true } };
+}
+
+module.exports = { parseOrder, parseKitOrder, toHuntConfig, OrderSchema };

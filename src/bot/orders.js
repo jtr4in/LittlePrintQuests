@@ -6,11 +6,11 @@ const crypto = require('crypto');
 const path = require('path');
 const store = require('./store');
 const etsy = require('./etsy');
-const { parseOrder } = require('./parse');
+const parse = require('./parse');
 const { renderPdf } = require('../generator/render');
 const { sendHuntEmail } = require('./email');
 const { renderKit } = require('../kits/render-kit');
-const { kitForHunt } = require('../kits/engine');
+const { kitForHunt, KITS } = require('../kits/engine');
 const THEMES = require('../generator/themes');
 const SPOTS = require('../generator/spots');
 
@@ -27,12 +27,23 @@ function customRequest(tx) {
   const isCustom = CUSTOM_LISTING_IDS.length ? CUSTOM_LISTING_IDS.includes(String(tx.listing_id)) : personal.length > 0;
   if (!isCustom) return null;
   const options = Object.fromEntries(variations.filter((v) => !personal.includes(v)).map((v) => [v.formatted_name, v.formatted_value]));
+  const personalization = personal.map((v) => v.formatted_value).join('\n');
+  // The play kit listing has a "Kit" option naming the kit.
+  const kit = Object.values(KITS).find((k) => Object.values(options).some((v) => v.toLowerCase() === k.name.toLowerCase()));
+  if (kit) return { personalization, options, product: 'kit', kit: kit.id };
   const bundle = Object.values(options).some((v) => /bundle|play kit/i.test(v)) || /bundle|play kit/i.test(tx.title || '');
-  return { personalization: personal.map((v) => v.formatted_value).join('\n'), options, product: bundle ? 'bundle' : 'hunt' };
+  return { personalization, options, product: bundle ? 'bundle' : 'hunt' };
 }
 
 function buyerMessage(order) {
   const first = (order.buyerName || '').split(' ')[0] || 'there';
+  if (order.product === 'kit') {
+    return `Hi ${first}! Your ${KITS[order.config.kit].name} play kit for ${order.config.childName} is ready. Download your printable PDF here:
+
+${process.env.PUBLIC_URL}/d/${order.downloadToken}.pdf
+
+Print at "Actual Size / 100%" and start with the grown-up guide on page 1. Have fun! 🎉`;
+  }
   const theme = THEMES[order.config.theme];
   const kit = order.kitReady ? kitForHunt(order.config.theme) : null;
   return `Hi ${first}! Your custom ${theme.name} for ${order.config.childName} is ready. Download your printable PDF here:
@@ -45,7 +56,8 @@ Print at "Actual Size / 100%", cut out the clue cards, and use the Host Guide on
 async function generate(id) {
   const order = store.get().orders[id];
   const token = order.downloadToken || crypto.randomBytes(18).toString('base64url');
-  await renderPdf(order.config, path.join(store.PDF_DIR, `${token}.pdf`));
+  if (order.product === 'kit') await renderKit(order.config, path.join(store.PDF_DIR, `${token}.pdf`));
+  else await renderPdf(order.config, path.join(store.PDF_DIR, `${token}.pdf`));
   const kit = order.product === 'bundle' ? kitForHunt(order.config.theme) : null;
   if (kit) await renderKit(kitConfig(order, kit), path.join(store.PDF_DIR, `${token}-kit.pdf`));
   store.update((s) => {
@@ -62,7 +74,9 @@ function kitConfig(order, kit) {
 async function processOrder(id) {
   const order = store.get().orders[id];
   try {
-    const parsed = await parseOrder({ personalization: order.personalization, options: order.options });
+    const parsed = order.product === 'kit'
+      ? await parse.parseKitOrder({ personalization: order.personalization, kit: order.kit })
+      : await parse.parseOrder({ personalization: order.personalization, options: order.options });
     if (!parsed.ok) {
       store.update((s) => Object.assign(s.orders[id], { status: 'needs_attention', problem: parsed.problem, draft: parsed.draft || null }));
     } else {
@@ -118,7 +132,7 @@ async function notify(order) {
     await fetch(`https://ntfy.sh/${encodeURIComponent(topic)}`, {
       method: 'POST',
       headers: {
-        Title: ready ? `Hunt ready for ${order.config.childName}` : 'Order needs a look',
+        Title: ready ? `${order.product === 'kit' ? 'Play kit' : 'Hunt'} ready for ${order.config.childName}` : 'Order needs a look',
         Click: `${process.env.PUBLIC_URL}/admin#${order.id}`,
         Tags: ready ? 'tada' : 'warning',
       },
@@ -162,7 +176,7 @@ function addWebOrder(form) {
     pets: form.pets,
     form,
     personalization: formAsText(form),
-    options: { Theme: THEMES[form.theme].name, Package: form.product === 'bundle' ? 'Party Bundle: hunt + play kit' : 'Hunt only' },
+    options: { Theme: THEMES[form.theme].name, Package: form.product === 'bundle' ? 'Hunt + Play Kit' : 'Hunt only' },
   });
 }
 
@@ -182,7 +196,7 @@ async function fulfillWebOrder(id, { email, buyerName }) {
       // Every spot is in the library, so no need to ask Claude.
       store.update((s) => (s.orders[id].config = { theme: f.theme, childName: f.childName, ...(f.age ? { age: f.age } : {}), spots: f.spots }));
     } else {
-      const parsed = await parseOrder({ personalization: order.personalization, options: order.options });
+      const parsed = await parse.parseOrder({ personalization: order.personalization, options: order.options });
       if (!parsed.ok) throw new Error(parsed.problem);
       store.update((s) => (s.orders[id].config = { ...parsed.config, theme: f.theme }));
     }
