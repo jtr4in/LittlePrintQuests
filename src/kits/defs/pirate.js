@@ -66,6 +66,16 @@ module.exports = {
     dock: ['📜', '🧭', '🗺️', '🔭', '⚓', '💬'],
     keys: [['⚓', 'Drop anchor'], ['⛵', 'Raise sails'], ['🔭', 'Spyglass'], ['🗺️', 'Treasure map']],
   },
+  props: {
+    map: { title: 'Treasure Map', theme: 'sea', howTo: 'Hide the treasure at the X, then sail from island to island to find it.',
+      start: ['⛵', 'Home Port'], places: [['🐚', 'Shell Beach'], ['🦈', 'Shark Bay'], ['🌋', 'Fire Mountain'], ['🧜', 'Mermaid Cove'], ['💀', 'Skull Rock']], end: ['❌', 'Treasure'] },
+    wanted: { title: 'Wanted Posters', word: 'WANTED', howTo: 'Nail them to the mast! Catch these scallywags for a reward in doubloons.',
+      list: [['🦜', 'Pesky Polly', 'Scrambling the captain’s map'], ['🐙', 'Ink-Eyed Ollie', 'Tickling sailors'], ['🦀', 'Crabby Pete', 'Pinching the ship’s biscuits'], ['🐒', 'Monkey Mo', 'Swiping bananas from the galley']] },
+    cards: { title: 'Pirate Treasure', howTo: 'Cut out the treasure. Bury it, find it, and share it fair and square.',
+      items: [['💎', 'Ruby', 3], ['👑', 'Gold crown', 5], ['💍', 'Ring', 2], ['📿', 'Pearls', 2], ['🪙', 'Gold coin', 1], ['🗡️', 'Sword', 3],
+        ['🧭', 'Compass', 2], ['🔭', 'Spyglass', 2], ['🗝️', 'Chest key', 2], ['🍌', 'Banana', 1], ['🥥', 'Coconut', 1], ['🐟', 'Fish', 1]] },
+    wearable: { type: 'eyepatch', title: 'Pirate Eye Patches', howTo: 'Print on cardstock. Cut out, punch the two dots, and tie on with string or elastic.' },
+  },
   certificate: { title: 'Official Pirate Crew', icon: '🏴‍☠️', seal: '⚓', line: 'sailed the seven seas, followed the map, and shared the treasure fair and square.' },
   guide: {
     afterHunt: 'The crew found Captain Barnaby’s treasure, and now they need a ship! Set up {place} right where the treasure was buried, and put the treasure in the Treasure Room. Captain {child} takes the wheel.',
@@ -77,7 +87,7 @@ module.exports = {
     ],
     play: [
       ['🗺️ Treasure voyage', 'Pick an island on the voyage ticket, sail there, and stamp the pirate papers.'],
-      ['📜 Ship’s log', 'The captain hands out jobs; the crew ticks them off.'],
+      ['❌ X marks the spot', 'Hide the treasure at the X on the map, then sail island to island to find it.'],
       ['🐙 Sea monster!', 'The octopus attacks! Turn the wheel and sing a shanty to scare it off.'],
       ['🪙 The galley', 'Hungry pirates pay with gold doubloons. Great for early counting.'],
     ],

@@ -66,6 +66,15 @@ module.exports = {
     dock: ['🗓️', '🦖', '🥚', '🔬', '🗺️', '💬'],
     keys: [['🌋', 'Volcano'], ['🥚', 'Hatchery'], ['📡', 'Call ranger'], ['🗺️', 'Dig map']],
   },
+  props: {
+    scans: { title: 'Fossil Scans', label: 'FOSSIL SCAN', howTo: 'Cut out the scans. Match each scan to a dinosaur, then tick what the lab found.',
+      findings: ['Big sharp teeth', 'Very long neck', 'Eats only plants', 'Super fast runner', 'Baby dinosaur', 'Brand new species'] },
+    map: { title: 'Dig Site Map', theme: 'land', howTo: 'Hide a toy dinosaur at each spot, then follow the map to dig them all up.',
+      start: ['⛺', 'Base camp'], places: [['🌋', 'Volcano'], ['🌴', 'Fern Forest'], ['🏜️', 'Sandy Dunes'], ['🦴', 'Bone Bed'], ['💧', 'Swamp']], end: ['🥚', 'Nest'] },
+    cards: { title: 'Fossil Finds', howTo: 'Cut out the finds. Hide them for a dig, then sell them in the Gift Shop.',
+      items: [['🦴', 'Dino bone', 2], ['🦷', 'T. rex tooth', 3], ['🥚', 'Dino egg', 3], ['🐚', 'Sea shell', 1], ['🍂', 'Fossil leaf', 1], ['🪨', 'Lucky rock', 1],
+        ['🐾', 'Footprint', 2], ['💎', 'Amber', 3], ['🖌️', 'Dig brush', 1], ['🔍', 'Magnifier', 1], ['⛏️', 'Pickaxe', 2], ['🧢', 'Ranger cap', 2]] },
+  },
   certificate: { title: 'Junior Paleontologist', icon: '🏅', seal: '🦖', line: 'dug up fossils, cared for every dinosaur, and saved the eggs from the volcano.' },
   guide: {
     afterHunt: 'The Junior Rangers rescued every dinosaur egg! Set up {place} where the last egg was found, and bring the eggs in for a check-up. The Master Fossil Hunter runs the lab first.',
@@ -76,7 +85,7 @@ module.exports = {
       'Pin on the badges and start digging!',
     ],
     play: [
-      ['⛏️ The big dig', 'Brush away the “dirt” to find each dino, then fill in its check-up form.'],
+      ['⛏️ The big dig', 'Hide the fossil finds around the room, follow the dig site map, then match each dino to its fossil scan.'],
       ['🏛️ Museum day', 'Line up your finds, sell tickets, and give a guided tour.'],
       ['🌋 Volcano alert!', 'The volcano rumbles! Rescue the eggs and carry them to the Hatchery.'],
       ['🦴 Gift shop', 'Visitors pay with fossil coins. Great for early counting.'],

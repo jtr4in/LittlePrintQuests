@@ -66,6 +66,15 @@ module.exports = {
     dock: ['🗓️', '🛰️', '🌕', '🪐', '📡', '💬'],
     keys: [['🔥', 'Launch'], ['🛑', 'Abort'], ['📡', 'Call Earth'], ['🗺️', 'Star map']],
   },
+  props: {
+    map: { title: 'Star Map', theme: 'space', howTo: 'Lay the map on the floor. Fly the rocket from Earth to every planet and back.',
+      start: ['🌍', 'Earth'], places: [['🌕', 'The Moon'], ['🔴', 'Mars'], ['🪐', 'Saturn'], ['☄️', 'Comet Alley'], ['🌌', 'Far Galaxy']], end: ['👽', 'Alien Base'] },
+    cards: { title: 'Space Supplies', howTo: 'Cut out the supplies. Astronauts pack them before launch or buy them at the Snack Bar.',
+      items: [['🍕', 'Space pizza', 2], ['🧃', 'Juice pouch', 1], ['🍦', 'Freeze-dried ice cream', 2], ['🍎', 'Moon apple', 1], ['🔦', 'Torch', 1], ['🧭', 'Star compass', 2],
+        ['🔧', 'Rocket wrench', 1], ['🛰️', 'Satellite', 3], ['📡', 'Radio', 2], ['🪨', 'Moon rock', 1], ['🧪', 'Space sample', 2], ['🧤', 'Space gloves', 1]] },
+    patches: { title: 'Mission Patches', howTo: 'Cut out and tape a patch on each astronaut after every mission.',
+      items: [['🚀', 'Launch crew'], ['🌕', 'Moon walker'], ['🔴', 'Mars mission'], ['🪐', 'Ring explorer'], ['⭐', 'Star pilot'], ['👽', 'Alien friend'], ['🛰️', 'Satellite fixer'], ['☄️', 'Comet chaser'], ['🧑‍🚀', 'Space cadet']] },
+  },
   certificate: { title: 'Certified Space Cadet', icon: '🎖️', seal: '🚀', line: 'completed astronaut training and is cleared for launch to anywhere in the galaxy.' },
   guide: {
     afterHunt: 'The beacons are found and the thrusters are back on. Time to launch! Set up {place} next to the last beacon, and Mission Commander {child} runs the countdown.',
@@ -78,7 +87,7 @@ module.exports = {
     play: [
       ['🧑‍🚀 Pre-flight check', 'Go down the health check: helmet, oxygen, boots. Tick each box.'],
       ['⏱️ Countdown', 'Mission Control counts down from 10 while the crew buckles in.'],
-      ['🌕 Moon landing', 'Fly across the room, land at Moon Base, and stamp the passports.'],
+      ['🌕 Star map', 'Lay the star map on the floor and fly from Earth to every planet. Stamp the passports and hand out a mission patch.'],
       ['⭐ Snack bar', 'Hungry astronauts pay with star credits. Great for early counting.'],
     ],
   },

@@ -216,8 +216,8 @@ function guidePage(k) {
     `${signCount} signs for doors and walls`,
     `${['laptop', 'console'].includes(d.dashboard.device) ? 'A fold-up' : 'A cut-out'} ${d.dashboard.gadget} with 3 screens`,
     '8 ID badges',
-    d.log.title,
-    `${d.record.title} forms for ${k.subjects.length ? `each of your ${d.subjectPlural}` : `four ${d.subjectPlural}`}, plus a blank one`,
+    ...(d.props ? [`Props to cut out: ${Object.values(d.props).map((x) => x.title).join(', ')}`] : []),
+    `${d.record.title} forms, two to a page, for ${k.subjects.length ? `each of your ${d.subjectPlural}` : `four ${d.subjectPlural}`} plus a blank one`,
     `${d.ticket.title} cards`,
     d.passport.pageTitle,
     `${d.menu.title} and ${d.menu.coinsTitle.toLowerCase()}`,
@@ -391,6 +391,125 @@ function gadgetPages(k) {
     </section>`;
 }
 
+// ---------- flat props ----------
+// def.props picks which of these a kit gets: scans, map, wanted, cards, patches, wearable.
+
+const coins = (k, n) => `${n} ${n === 1 ? k.def.menu.coinWord : `${k.def.menu.coinWord}s`}`;
+const propHead = (k, title, howTo) => `<h2 class="pg-title">${esc(title)}</h2><p class="pg-sub">${esc(howTo)}</p>`;
+
+// Six scan cards: each subject as a glowing silhouette, with findings to tick.
+function scansPage(k) {
+  const S = k.def.props.scans;
+  const subs = [...subjectsOrDefaults(k)];
+  for (const kind of [...k.def.defaultKinds, ...Object.keys(k.def.kinds)]) if (subs.length < 6 && !subs.some((s) => s.kind === kind)) subs.push({ name: '', kind });
+  const cards = subs.slice(0, 6).map((p, i) => {
+    const f = S.findings;
+    const ticks = [f[i % f.length], f[(i + 2) % f.length], 'All healthy'];
+    return `<div class="scan">
+      <div class="scan-top"><span>${esc(S.label)}</span><span>${esc(p.name || kindName(k, p))}</span></div>
+      <div class="scan-body"><div class="scan-pic em">${pic(k, p)}</div>
+        <ul>${ticks.map((t) => `<li><i class="box"></i>${esc(t)}</li>`).join('')}</ul></div>
+    </div>`;
+  }).join('');
+  return `<section class="page props">${propHead(k, S.title, S.howTo)}<div class="scan-grid">${cards}</div></section>`;
+}
+
+// A floor map: a dotted trail from the start through five places to the end.
+function mapPage(k) {
+  const M = k.def.props.map;
+  const pts = [[12, 88], [42, 80], [78, 70], [60, 52], [22, 45], [40, 26], [80, 14]];
+  const stops = [M.start, ...M.places, M.end];
+  const d = pts.map(([x, y], i) => (i ? `L${x * 7.7},${y * 9.4}` : `M${x * 7.7},${y * 9.4}`)).join(' ');
+  const decor = { sea: ['🐳', '🌊', '🐠', '🌊'], land: ['🌲', '🌳', '🪨', '🌼'], space: ['⭐', '✨', '🛸', '⭐'] }[M.theme] || [];
+  const spots = [[85, 40], [8, 64], [62, 90], [30, 10]];
+  return `<section class="page props">${propHead(k, M.title, M.howTo)}
+    <div class="map map-${M.theme}">
+      <svg viewBox="0 0 770 940" preserveAspectRatio="none"><path d="${d}"/></svg>
+      ${decor.map((e, i) => `<span class="map-decor em" style="left:${spots[i][0]}%;top:${spots[i][1]}%">${e}</span>`).join('')}
+      <span class="map-rose em">🧭</span>
+      ${stops.map(([e, n], i) => `<div class="map-stop${i === 0 ? ' start' : i === stops.length - 1 ? ' end' : ''}" style="left:${pts[i][0]}%;top:${pts[i][1]}%"><b class="em">${e}</b><span>${esc(n)}</span></div>`).join('')}
+    </div>
+  </section>`;
+}
+
+function wantedPage(k) {
+  const W = k.def.props.wanted;
+  const posters = W.list.map(([e, name, why], i) => `<div class="wanted">
+      <div class="wanted-word">${esc(W.word)}</div>
+      <div class="wanted-pic em">${e}</div>
+      <div class="wanted-name">${esc(name)}</div>
+      <p>For ${esc(why.charAt(0).toLowerCase() + why.slice(1))}</p>
+      <div class="wanted-reward">Reward: ${esc(coins(k, 5 + i * 5))}</div>
+    </div>`).join('');
+  return `<section class="page props">${propHead(k, W.title, W.howTo)}<div class="wanted-grid">${posters}</div></section>`;
+}
+
+function cardsPage(k) {
+  const C = k.def.props.cards;
+  const cards = C.items.map(([e, n, c]) => `<div class="item"><b class="em">${e}</b><span>${esc(n)}</span><small>${esc(coins(k, c))}</small></div>`).join('');
+  return `<section class="page props">${propHead(k, C.title, C.howTo)}<div class="item-grid">${cards}</div></section>`;
+}
+
+function patchesPage(k) {
+  const P = k.def.props.patches;
+  const patches = P.items.map(([e, t]) => `<div class="patch"><b class="em">${e}</b><span>${esc(t)}</span></div>`).join('');
+  return `<section class="page props">${propHead(k, P.title, P.howTo)}<div class="patch-grid">${patches}</div></section>`;
+}
+
+function wearablePage(k) {
+  const W = k.def.props.wearable;
+  const hole = (x, y) => `<circle class="hole" cx="${x}" cy="${y}" r="9"/>`;
+  let body = '';
+  if (W.type === 'mask') {
+    const fills = ['var(--teal)', 'var(--orange)', 'var(--teal-d)'];
+    body = fills.map((f) => `<svg class="mask" viewBox="0 0 600 190"><path fill="${f}" d="M10,70 C30,15 150,5 300,35 C450,5 570,15 590,70 C585,140 520,180 420,160 C360,150 330,128 300,128 C270,128 240,150 180,160 C80,180 15,140 10,70 Z"/>
+      <ellipse class="eye" cx="170" cy="88" rx="68" ry="38"/><ellipse class="eye" cx="430" cy="88" rx="68" ry="38"/>${hole(32, 70)}${hole(568, 70)}
+      <text x="300" y="78" text-anchor="middle" class="emoji-svg">⚡</text></svg>`).join('');
+  } else if (W.type === 'eyepatch') {
+    body = `<div class="patch-row">${Array.from({ length: 6 }, () => `<svg class="eyepatch" viewBox="0 0 300 230"><path d="M28,48 Q150,12 272,48 Q292,150 150,215 Q8,150 28,48 Z"/>${hole(44, 52)}${hole(256, 52)}<text x="150" y="140" text-anchor="middle" class="emoji-svg">💀</text></svg>`).join('')}</div>`;
+  } else if (W.type === 'crown') {
+    const piece = (first) => `<svg class="crown" viewBox="0 0 760 300">
+      <path d="M${first ? 0 : 40},290 L${first ? 0 : 40},170 L70,40 L180,170 L290,40 L400,170 L510,40 L620,170 L730,40 L760,170 L760,290 Z" class="crown-gold"/>
+      ${first ? '' : '<rect x="0" y="170" width="40" height="120" class="tab"/><text x="20" y="235" text-anchor="middle" class="tab-t" transform="rotate(-90 20 235)">TAPE</text>'}
+      <rect x="${first ? 0 : 40}" y="200" width="${first ? 760 : 720}" height="70" class="crown-band"/>
+      ${[70, 290, 510, 730].map((x) => `<text x="${x}" y="105" text-anchor="middle" class="emoji-svg small">💎</text>`).join('')}
+      <text x="400" y="248" text-anchor="middle" class="crown-name">${first ? esc(k.lead) : '★ ★ ★'}</text></svg>`;
+    body = `${piece(true)}<div class="cut-h"></div>${piece(false)}`;
+  }
+  return `<section class="page props wear">${propHead(k, W.title, W.howTo)}<div class="cardstock">Best on cardstock</div><div class="wear-body wear-${W.type}">${body}</div></section>`;
+}
+
+function propsPages(k) {
+  const P = k.def.props || {};
+  const order = [['scans', scansPage], ['map', mapPage], ['wanted', wantedPage], ['cards', cardsPage], ['patches', patchesPage], ['wearable', wearablePage]];
+  return order.filter(([key]) => P[key]).map(([, fn]) => fn(k)).join('');
+}
+
+// Check-up forms, two to a page: one per subject plus a blank one.
+function recordHalf(k, p) {
+  const R = k.def.record;
+  const half = Math.ceil(R.checks.length / 2);
+  const col = (list) => `<table class="check mini"><thead><tr><th></th>${R.cols.map((c) => `<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>
+    ${list.map(([e, n]) => `<tr><td><span class="em">${e}</span> ${esc(n)}</td>${R.cols.map(() => '<td><span class="box"></span></td>').join('')}</tr>`).join('')}</tbody></table>`;
+  return `<div class="rec">
+    <header class="rec-head"><span class="em">${R.icon}</span><h2>${esc(R.title)}</h2><span class="clinic">${esc(k.placeName)}</span></header>
+    <div class="rec-top">
+      <div class="pet-pic small">${p ? pic(k, p) : `<span class="draw">${esc(R.drawLabel)}</span>`}</div>
+      <div class="rec-fields">${R.fields.map((f, i) => `<div class="field"><b>${esc(f)}</b><span class="fill">${p && i === 0 ? esc(p.name) : p && i === 1 ? esc(kindName(k, p)) : ''}</span></div>`).join('')}</div>
+    </div>
+    <div class="rec-checks">${col(R.checks.slice(0, half))}${col(R.checks.slice(half))}</div>
+    <div class="rec-foot"><b>${esc(R.moodLabel)}</b><div class="faces">${R.moods.map((m) => `<span>${m}</span>`).join('')}</div></div>
+  </div>`;
+}
+
+function recordsPages(k) {
+  const list = [...subjectsOrDefaults(k), null];
+  if (list.length % 2) list.push(null);
+  const out = [];
+  for (let i = 0; i < list.length; i += 2) out.push(`<section class="page recs">${recordHalf(k, list[i])}<div class="cut-h"></div>${recordHalf(k, list[i + 1])}</section>`);
+  return out.join('');
+}
+
 // ---------- document ----------
 
 const KITS = {
@@ -411,9 +530,8 @@ function buildKitHtml(cfg) {
     signsPages(k),
     gadgetPages(k),
     badgesPage(k),
-    logPage(k),
-    ...subjectsOrDefaults(k).map((p) => recordPage(k, p)),
-    recordPage(k, null),
+    propsPages(k),
+    recordsPages(k),
     ticketPage(k),
     passportsPages(k),
     menuPage(k),
@@ -452,13 +570,13 @@ h1, h2, h3 { font-family:'Fredoka', sans-serif; margin:0; line-height:1.1; }
 .guide-head { display:flex; gap:.2in; align-items:center; }
 .guide-icon { font-size:46pt; background:var(--mint); border-radius:50%; width:1.1in; height:1.1in; display:grid; place-items:center; flex:none; }
 .guide h1 { font-size:30pt; }
-.lead { font-size:15pt; line-height:1.55; margin:.35in 0; }
+.lead { font-size:14.5pt; line-height:1.5; margin:.24in 0; }
 .guide-cols { display:grid; grid-template-columns:1fr 1fr; gap:.3in; }
 .guide h3 { font-size:18pt; color:var(--teal-d); margin-bottom:.08in; }
-.guide ul, .guide ol { margin:0; padding-left:.25in; font-size:13.5pt; line-height:1.7; }
-.play { margin-top:.45in; }
-.with-hunt .lead { margin:.22in 0; font-size:14pt; } .with-hunt ul, .with-hunt ol { font-size:12.5pt; line-height:1.55; }
-.with-hunt .play { margin-top:.22in; } .with-hunt .play-grid div { padding:.12in .16in; font-size:12pt; }
+.guide ul, .guide ol { margin:0; padding-left:.25in; font-size:13pt; line-height:1.55; }
+.play { margin-top:.3in; }
+.with-hunt .lead { margin:.16in 0; font-size:13.5pt; } .with-hunt ul, .with-hunt ol { font-size:12.5pt; line-height:1.45; }
+.with-hunt .play { margin-top:.18in; } .with-hunt .play-grid div { padding:.12in .16in; font-size:12pt; }
 .play-grid { display:grid; grid-template-columns:1fr 1fr; gap:.15in; }
 .play-grid div { background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:.18in .2in; font-size:13pt; line-height:1.45; }
 .play-grid b { display:block; font:600 14.5pt 'Fredoka'; margin-bottom:3px; }
@@ -693,6 +811,75 @@ h1, h2, h3 { font-family:'Fredoka', sans-serif; margin:0; line-height:1.1; }
 .mirror-stand .round-keys b { width:.7in; height:.7in; font-size:19pt; background:#fdf3d6; box-shadow:0 4px 0 #8a6a1f; }
 .mirror-stand .round-keys small { color:#3b2a10; font-size:8.5pt; text-align:center; }
 .stand-tab { width:3in; height:.75in; border:2px dashed #b8901f; border-top-style:dotted; display:grid; place-items:center; font:600 9pt 'Fredoka'; color:#8a6a1f; background:#fdf3d6; }
+/* flat props */
+.props { padding:.4in .45in; display:flex; flex-direction:column; }
+.props .pg-sub { margin-bottom:.18in; }
+.scan-grid { flex:1; display:grid; grid-template-columns:1fr 1fr; gap:.16in; }
+.scan { background:#0f1b2d; background-image:linear-gradient(rgba(120,180,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(120,180,255,.08) 1px, transparent 1px); background-size:.25in .25in; border-radius:.14in; padding:.12in .16in; color:#dbe9ff; display:flex; flex-direction:column; border:2px dashed #b7c0cc; }
+.scan-top { display:flex; justify-content:space-between; font:600 10pt 'Fredoka'; letter-spacing:.08em; color:#8fc4ff; }
+.scan-top span:last-child { color:#fff; letter-spacing:0; font-size:12pt; }
+.scan-body { flex:1; display:flex; align-items:center; gap:.12in; }
+.scan-pic { font-size:70pt; line-height:1; filter:brightness(0) invert(1) drop-shadow(0 0 8px #7fc4ff) drop-shadow(0 0 2px #fff); opacity:.88; flex:none; width:1.45in; text-align:center; }
+.scan ul { list-style:none; margin:0; padding:0; display:grid; gap:.08in; font:500 10.5pt/1.2 'Fredoka'; }
+.scan li { display:flex; align-items:center; gap:.08in; } .scan .box { border-color:#dbe9ff; flex:none; }
+
+.map { flex:1; position:relative; border-radius:.2in; overflow:hidden; border:.08in solid #c9a96a; }
+.map svg { position:absolute; inset:0; width:100%; height:100%; }
+.map path { fill:none; stroke:#8a5a2b; stroke-width:7; stroke-dasharray:4 18; stroke-linecap:round; }
+.map-sea { background:radial-gradient(ellipse at 30% 30%, #f1e2b8 0 16%, transparent 17%), radial-gradient(ellipse at 75% 65%, #f1e2b8 0 14%, transparent 15%), radial-gradient(ellipse at 20% 85%, #f1e2b8 0 12%, transparent 13%), #bfe2ee; }
+.map-land { background:radial-gradient(circle at 70% 30%, #d5e8b8 0 18%, transparent 19%), radial-gradient(circle at 25% 70%, #d5e8b8 0 15%, transparent 16%), #efe2c2; }
+.map-space { background:radial-gradient(circle, #fff 1px, transparent 1.5px) 0 0 / .45in .45in, radial-gradient(circle, rgba(255,255,255,.6) 1px, transparent 1.5px) .2in .3in / .6in .6in, #1b2440; border-color:#33406a; }
+.map-space path { stroke:#ffd166; }
+.map-stop { position:absolute; transform:translate(-50%, -50%); display:flex; flex-direction:column; align-items:center; gap:3px; }
+.map-stop b { width:.95in; height:.95in; border-radius:50%; background:#fff; display:grid; place-items:center; font-size:38pt; box-shadow:0 0 0 5px var(--teal), 0 4px 10px rgba(0,0,0,.2); }
+.map-stop span { font:700 12pt 'Fredoka'; background:#fff; padding:2px 10px; border-radius:99px; color:var(--navy); white-space:nowrap; }
+.map-stop.start b { box-shadow:0 0 0 5px var(--orange), 0 4px 10px rgba(0,0,0,.2); }
+.map-stop.end b { width:1.2in; height:1.2in; font-size:50pt; box-shadow:0 0 0 6px var(--orange), 0 0 0 11px #fff, 0 4px 14px rgba(0,0,0,.25); }
+.map-decor { position:absolute; font-size:30pt; opacity:.75; }
+.map-rose { position:absolute; right:.15in; bottom:.15in; font-size:44pt; }
+
+.wanted-grid { flex:1; display:grid; grid-template-columns:1fr 1fr; gap:.18in; }
+.wanted { background:#f3e3bd; border:2px dashed #8a6a1f; border-radius:.06in; padding:.15in; display:flex; flex-direction:column; align-items:center; text-align:center; box-shadow:inset 0 0 0 .07in #e6cf98; }
+.wanted-word { font:700 34pt/1 'Fredoka'; letter-spacing:.06em; color:#5e3a17; }
+.wanted-pic { width:1.75in; height:1.6in; border:4px solid #5e3a17; background:#fbf3df; display:grid; place-items:center; font-size:72pt; margin:.08in 0; }
+.wanted-name { font:700 15pt 'Fredoka'; color:#3b2a10; }
+.wanted p { margin:.04in 0 .08in; font-size:10.5pt; color:#5e3a17; }
+.wanted-reward { margin-top:auto; font:700 12pt 'Fredoka'; background:#5e3a17; color:#f3e3bd; padding:.04in .16in; border-radius:99px; }
+
+.item-grid { flex:1; display:grid; grid-template-columns:repeat(3, 1fr); grid-template-rows:repeat(4, 1fr); gap:.12in; }
+.item { border:2px dashed #b7c0cc; border-radius:.16in; background:var(--mint-l); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.04in; text-align:center; padding:.06in; }
+.item b { font-size:50pt; line-height:1.1; } .item span { font:700 13pt/1.1 'Fredoka'; } .item small { font:600 9.5pt 'Fredoka'; color:var(--teal-d); background:#fff; border-radius:99px; padding:1px 9px; }
+
+.patch-grid { flex:1; display:grid; grid-template-columns:repeat(3, 1fr); gap:.2in; align-content:center; justify-items:center; }
+.patch { width:2.2in; height:2.2in; border-radius:50%; background:var(--teal); box-shadow:0 0 0 .08in #fff, 0 0 0 .14in var(--orange); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; color:#fff; padding:.2in; outline:2px dashed #b7c0cc; outline-offset:.2in; }
+.patch b { font-size:50pt; line-height:1.1; } .patch span { font:700 12.5pt/1.1 'Fredoka'; }
+.patch:nth-child(even) { background:var(--teal-d); }
+
+.cardstock { align-self:center; font:700 10pt 'Fredoka'; letter-spacing:.08em; text-transform:uppercase; background:var(--orange); color:var(--accent-ink); padding:.04in .16in; border-radius:99px; margin-bottom:.15in; }
+.wear-body { flex:1; display:flex; flex-direction:column; justify-content:space-evenly; align-items:center; }
+.emoji-svg { font-family:'Noto Color Emoji'; font-size:46px; } .emoji-svg.small { font-size:52px; }
+.mask { width:6.6in; } .mask path { stroke:#2b1d06; stroke-width:3; } .mask .eye { fill:#fff; stroke:#2b1d06; stroke-width:3; stroke-dasharray:8 6; }
+.hole { fill:#fff; stroke:#2b1d06; stroke-width:3; }
+.patch-row { display:grid; grid-template-columns:1fr 1fr; gap:.2in .4in; }
+.eyepatch { width:3.2in; } .eyepatch path { fill:#1f2433; stroke:#000; stroke-width:3; } .eyepatch text { font-size:64px; }
+.crown { width:7.6in; } .crown-gold { fill:#f0c94a; stroke:#8a6a1f; stroke-width:4; } .crown-band { fill:#e2b33c; }
+.tab { fill:#fff; stroke:#8a6a1f; stroke-width:3; stroke-dasharray:8 6; } .tab-t { font:700 16px 'Fredoka'; fill:#8a6a1f; }
+.crown-name { font:700 44px 'Fredoka'; fill:#5b3f08; }
+.wear .cut-h { align-self:stretch; }
+
+/* check-up forms, two per page */
+.recs { padding:.35in .45in; display:flex; flex-direction:column; }
+.rec { flex:1; display:flex; flex-direction:column; gap:.1in; }
+.rec-head { display:flex; align-items:center; gap:.1in; border-bottom:3px solid var(--teal); padding-bottom:.06in; }
+.rec-head .em { font-size:22pt; } .rec-head h2 { font-size:20pt; flex:1; }
+.rec-top { display:flex; gap:.2in; align-items:center; }
+.pet-pic.small { width:1.15in; height:1.15in; font-size:46pt; } .pet-pic.small .draw { font-size:8.5pt; }
+.rec-fields { flex:1; display:grid; grid-template-columns:1fr 1fr; gap:0 .2in; } .rec-fields .field { margin:.05in 0; font-size:10.5pt; }
+.rec-checks { display:grid; grid-template-columns:1fr 1fr; gap:.2in; }
+.check.mini { margin-top:0; font-size:10.5pt; } .check.mini th { font-size:9pt; padding:.04in .06in; text-align:center; } .check.mini td { height:.34in; } .check.mini td:not(:first-child) { width:.85in; }
+.check.mini .em { font-size:12pt; }
+.rec-foot { display:flex; align-items:center; gap:.2in; font-size:11pt; } .rec-foot .faces { flex:1; margin:0; font-size:22pt; }
+.recs .cut-h { margin:.12in -.45in; }
 .after-hunt { background:var(--mint-l); border-left:5px solid var(--orange); border-radius:.08in; padding:.12in .16in; margin:.15in 0 0; font-size:11pt; }
 .after-hunt b { display:block; font:700 12pt 'Fredoka'; color:var(--teal-d); margin-bottom:2px; }
 .extra { justify-content:space-evenly; align-items:center; }

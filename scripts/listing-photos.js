@@ -44,7 +44,7 @@ const pages = {
 };
 for (const k of Object.keys(KITS)) {
   pages[`kit-${k}`] = `<div class="mint"></div><div class="top" style="text-align:center"><h1>${KITS[k].name} Play Kit</h1>
-    <div class="sub">With a ${KITS[k].dashboard.gadget}, 17 printable pages</div></div>
+    <div class="sub">With a ${KITS[k].dashboard.gadget}, plus props to cut out</div></div>
     <img src="${img(`kit-${k}.png`)}" style="position:absolute;left:170px;top:200px;width:860px">`;
 }
 

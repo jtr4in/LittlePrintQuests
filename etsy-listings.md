@@ -134,12 +134,14 @@ THE HUNT
 • 6–10 custom rhyming clue cards (4" x 6", two per page)
 • Mission Accomplished Certificate with your child's name
 
-THE PLAY KIT (17 pages, matches your theme)
+THE PLAY KIT (17–19 pages, matches your theme)
 • 8 door signs with your child's name ("Leo's Mission Control")
 • A pretend gadget to match: a dino scanner, hero communicator, ship's wheel and
-  sea chart, mission control console or magic mirror, with a calendar,
-  a "next up" list and 3 screens to swap
-• ID badges, a job log, check-up forms for each of your child's pets or toys
+  sea chart, mission control console or magic mirror, with 3 screens to swap
+• Flat props to cut out and hold: fossil scans, star maps, treasure maps,
+  wanted posters, treasure and gear cards, and stickers
+• One cardstock wearable where it fits: hero masks, pirate eye patches or a royal crown
+• ID badges and check-up forms for each of your child's pets or toys
 • Tickets, passports, a menu with coins to cut out, and a certificate
 
 Choose "Hunt only" if you just want the scavenger hunt.
@@ -180,14 +182,20 @@ Personalized Pretend Play Kit, Printable Vet Clinic, Space, Dino, Pirate, Superh
 ```
 Turn the living room into a vet clinic, a pirate ship or mission control, with your child's name on every sign.
 
-★ WHAT YOU GET (17-page PDF, US Letter)
+★ WHAT YOU GET (17–19 page PDF, US Letter)
 • 8 door signs, including "[Name]'s Pet Clinic" (or Pirate Ship, Mission Control…)
 • A pretend gadget to match: a clinic laptop, dino scanner, hero communicator,
-  ship's wheel and sea chart, mission control console or magic mirror, with a calendar,
-  a "next patients" list and 3 screens to swap
+  ship's wheel and sea chart, mission control console or magic mirror, with 3 screens to swap
+• Flat props to cut out and hold: pet X-rays, star maps, fossil scans, treasure maps,
+  wanted posters, supply and treasure cards, and stickers
+• One cardstock wearable where it fits: hero masks, pirate eye patches or a royal crown
 • 8 ID badges for your child, family and friends
 • A check-up form and passport for each of your child's pets or toys
-• Tickets, a job log, a price list with coins to cut out, and a certificate
+• Tickets, a price list with coins to cut out, and a certificate
+
+★ BUILT FOR REAL PLAY
+Everything is flat and sturdy: cards, maps and posters kids can hold, trade and hide.
+Print the wearables on cardstock and they last all party.
 
 ★ HOW TO ORDER
 Fill in the personalization box with your child's name and up to 6 pets or toys.

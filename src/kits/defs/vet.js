@@ -66,6 +66,16 @@ module.exports = {
     dock: ['📅', '🩺', '💊', '🦴', '📞', '💬'],
     keys: [['🚨', 'Emergency'], ['💊', 'Pharmacy'], ['📞', 'Call owner'], ['🖨️', 'Print']],
   },
+  // Flat props to cut out and play with (see propsPages in engine.js).
+  props: {
+    scans: { title: 'Pet X-Rays', label: 'X-RAY', howTo: 'Cut out the X-rays. Hold one up to the window to “read” it, then tick what the vet found.',
+      findings: ['Swallowed a sock', 'Sore paw', 'Tummy full of treats', 'Wobbly tooth', 'Bent whisker', 'Ate a toy car'] },
+    cards: { title: 'Clinic Supplies', howTo: 'Cut out the supplies and keep them in a box in the Exam Room.',
+      items: [['🩹', 'Bandage', 1], ['💊', 'Pills', 1], ['🌡️', 'Thermometer', 2], ['💉', 'Vaccine', 2], ['🧴', 'Paw cream', 1], ['🦴', 'Treat', 1],
+        ['🪥', 'Toothbrush', 1], ['🛁', 'Bubble bath', 2], ['🥕', 'Healthy snack', 1], ['🧸', 'Cuddle toy', 2], ['🎀', 'Bow', 1], ['🧼', 'Soap', 1]] },
+    patches: { title: 'Brave Patient Stickers', howTo: 'Cut out and tape one on every brave patient.',
+      items: [['🏅', 'Brave patient'], ['⭐', 'Super pet'], ['💖', 'Get well soon'], ['🐾', 'Good boy'], ['🐾', 'Good girl'], ['🌈', 'All better'], ['🦷', 'Clean teeth'], ['💉', 'I had my vaccine'], ['😊', 'Happy & healthy']] },
+  },
   certificate: { title: 'Junior Vet Certificate', icon: '🏅', seal: '🐾', line: 'cared for every patient with kindness, gentle hands and a big heart.' },
   guide: {
     intro: 'Everything {child} needs to run a pretend vet clinic. Print on regular Letter paper, cut along the dashed lines, and gather some stuffed animals to be patients.',
@@ -76,7 +86,7 @@ module.exports = {
     ],
     play: [
       ['🩺 Full check-up', 'Go down the check-up form: eyes, ears, teeth, paws. Tick each box.'],
-      ['📅 Busy morning', 'The receptionist books patients; the vet calls them in one at a time.'],
+      ['🦴 X-ray time', 'Hold an X-ray up to the window and find out what’s wrong. Then treat it with the clinic supplies.'],
       ['🚑 Emergency!', 'A patient has a sore paw. Bandage it fast and write a prescription.'],
       ['🪙 Pay at the desk', 'Owners pay with paw coins. Great for early counting.'],
     ],
