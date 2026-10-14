@@ -1,0 +1,86 @@
+// Turns a buyer's free-text order notes into a hunt config using Claude.
+// Known spots map to the riddle library; anything else gets a new couplet.
+
+const Anthropic = require('@anthropic-ai/sdk');
+const { z } = require('zod');
+const { zodOutputFormat } = require('@anthropic-ai/sdk/helpers/zod');
+const SPOTS = require('../generator/spots');
+const THEMES = require('../generator/themes');
+
+const MODEL = process.env.CLAUDE_MODEL || 'claude-opus-5-5';
+const client = new Anthropic();
+
+const OrderSchema = z.object({
+  ok: z.boolean().describe('false if the order is missing information or cannot be fulfilled as written'),
+  problem: z.string().nullable().describe('When ok is false: a short note to the shop owner saying what is missing or unclear'),
+  childName: z.string().nullable(),
+  age: z.number().int().nullable(),
+  theme: z.enum(Object.keys(THEMES)).nullable(),
+  spots: z.array(
+    z.object({
+      libraryId: z.string().nullable().describe('id from the spot library when the spot matches one, else null'),
+      label: z.string().describe('short display name, e.g. "Grandma’s Piano"'),
+      tip: z.string().describe('where exactly the host should tuck the card'),
+      riddle: z.array(z.string()).describe('only for spots not in the library: exactly two rhyming lines, else an empty array'),
+    })
+  ),
+});
+
+const SYSTEM = `You set up personalized birthday scavenger hunts for children aged 3 to 8.
+You receive a buyer's order notes from an Etsy shop and return the hunt details.
+
+Themes (use the id): ${Object.values(THEMES).map((t) => `${t.id} = ${t.name}`).join('; ')}.
+
+Spot library (id: label):
+${Object.entries(SPOTS).map(([id, s]) => `${id}: ${s.label}`).join('\n')}
+
+Rules:
+- Keep the spots in the buyer's order. The last spot is where the prize goes.
+- Use a library id whenever the buyer's spot clearly means the same place (e.g. "washer" = washing_machine, "dog bed" = pet_bed, "sofa" = couch). Then leave riddle empty.
+- For any other spot, write a two-line rhyming riddle (AABB couplet, about 9 to 12 syllables per line, ending in "!" or "?") that describes the place so a young child can guess it, without naming it outright. Match the playful style of: "Where do you splash with your bubbles and boats? / Look in the place where your rubber duck floats!"
+- Never send children toward anything dangerous (stoves, ovens, knives, pools, roads, medicine). If the buyer lists one, set ok to false and explain in problem.
+- The theme may come from a separate "Theme" option; use it when present.
+- Set ok to false if the child's name, the theme, or at least 3 spots are missing, or if there are more than 12 spots.`;
+
+async function parseOrder({ personalization, options = {} }) {
+  const optionText = Object.entries(options)
+    .map(([k, v]) => `${k}: ${v}`)
+    .join('\n');
+  const response = await client.messages.parse({
+    model: MODEL,
+    max_tokens: 4000,
+    output_config: { effort: 'medium', format: zodOutputFormat(OrderSchema) },
+    system: SYSTEM,
+    messages: [
+      {
+        role: 'user',
+        content: `Order options:\n${optionText || '(none)'}\n\nBuyer's personalization text:\n"""\n${personalization}\n"""`,
+      },
+    ],
+  });
+  if (response.stop_reason === 'refusal' || !response.parsed_output) {
+    return { ok: false, problem: `Claude could not read this order (stop reason: ${response.stop_reason}).` };
+  }
+  return toHuntConfig(response.parsed_output);
+}
+
+// Validates Claude's answer and converts it to the generator's config shape.
+function toHuntConfig(p) {
+  if (!p.ok) return { ok: false, problem: p.problem || 'Order needs a look.', draft: p };
+  const problems = [];
+  if (!p.childName) problems.push('missing child’s name');
+  if (!p.theme || !THEMES[p.theme]) problems.push('missing theme');
+  if (!p.spots || p.spots.length < 3 || p.spots.length > 12) problems.push('needs 3 to 12 spots');
+  const spots = (p.spots || []).map((s) => {
+    if (s.libraryId && SPOTS[s.libraryId]) return s.libraryId;
+    if (!Array.isArray(s.riddle) || s.riddle.length !== 2) problems.push(`no riddle for “${s.label}”`);
+    return { label: s.label, tip: s.tip, riddle: s.riddle };
+  });
+  if (problems.length) return { ok: false, problem: problems.join('; '), draft: p };
+  return {
+    ok: true,
+    config: { theme: p.theme, childName: p.childName, ...(p.age ? { age: p.age } : {}), spots },
+  };
+}
+
+module.exports = { parseOrder, toHuntConfig, OrderSchema };
