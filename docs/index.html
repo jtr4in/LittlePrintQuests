@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LittlePrintQuests</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Personalized printable birthday scavenger hunts for kids ages 3 to 8. Your child's name, your home's hiding spots, rhyming clue cards ready to print in minutes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the printed clue card is the hero object; sections stack on a wide
+   single column, and the order builder pairs the form with a live trail. */
+:root {
+  --paper: #f7f8fc;      /* page: printer paper with a cool bias */
+  --sheet: #ffffff;      /* cards and panels */
+  --ink: #1e2a5a;        /* crayon navy, body text */
+  --ink-soft: #55608a;   /* secondary text */
+  --line: #d5daea;       /* hairlines, dashed cut lines */
+  --sun: #ffc93c;        /* sunflower accent: CTAs and the trail */
+  --sun-ink: #2a1f00;    /* text on sunflower */
+  --mint: #2f9e8f;       /* secondary accent: checks, success */
+  --tint: #eef1fa;       /* quiet panel fill */
+  --display: 'Fredoka', 'Trebuchet MS', system-ui, sans-serif;
+  --body: 'Atkinson Hyperlegible', 'Segoe UI', system-ui, sans-serif;
+  --mono: 'DM Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --r: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #12172e; --sheet: #1b2142; --ink: #eef0fa; --ink-soft: #a9b0d0; --line: #343c66;
+    --sun: #ffc93c; --sun-ink: #2a1f00; --mint: #5cc9b9; --tint: #1f2650; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #12172e; --sheet: #1b2142; --ink: #eef0fa; --ink-soft: #a9b0d0; --line: #343c66;
+  --sun: #ffc93c; --sun-ink: #2a1f00; --mint: #5cc9b9; --tint: #1f2650; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.6 var(--body); }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; line-height: 1.1; text-wrap: balance; margin: 0; }
+h2 { font-size: clamp(28px, 4.2vw, 40px); }
+h3 { font-size: 20px; font-weight: 600; }
+p { margin: 0; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.eyebrow { font: 500 13px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+.btn { display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 999px; padding: 14px 24px; font: 600 17px/1 var(--display); cursor: pointer; text-decoration: none; transition: transform .15s ease; }
+.btn:hover { transform: translateY(-2px); }
+.btn:focus-visible, input:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid var(--mint); outline-offset: 2px; }
+.btn-sun { background: var(--sun); color: var(--sun-ink); box-shadow: 0 3px 0 #d9a514; }
+.btn-ghost { background: transparent; color: var(--ink); border: 2px solid var(--line); }
+
+/* header */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; }
+.logo { display: flex; align-items: center; gap: 10px; font: 700 20px/1 var(--display); text-decoration: none; }
+.logo svg { width: 34px; height: 34px; flex: none; }
+.nav { display: flex; align-items: center; gap: 24px; font-size: 15px; }
+.nav a { text-decoration: none; color: var(--ink-soft); }
+.nav a:hover { color: var(--ink); }
+.nav a.btn { color: var(--sun-ink); }
+.nav .btn { padding: 10px 18px; font-size: 15px; }
+@media (max-width: 760px) { .nav a:not(.btn) { display: none; } }
+
+/* the trail */
+main { position: relative; }
+.stop { position: relative; padding-block: 48px; }
+.stop > .wrap { position: relative; }
+.pin { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.pin b { width: 12px; height: 12px; border-radius: 50%; background: var(--sun); box-shadow: 0 0 0 4px color-mix(in srgb, var(--sun) 30%, transparent); }
+
+/* hero */
+.hero { padding-block: 48px; }
+.hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
+.hero h1 { font-size: clamp(38px, 6vw, 64px); }
+.hero h1 em { font-style: normal; background: linear-gradient(transparent 62%, var(--sun) 62%); padding: 0 4px; }
+.hero .lede { font-size: 19px; color: var(--ink-soft); margin: 20px 0 28px; max-width: 34em; }
+.hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 28px; font: 14px/1.4 var(--mono); color: var(--ink-soft); padding: 0; list-style: none; }
+.facts li::before { content: '✓ '; color: var(--mint); font-weight: 700; }
+@media (max-width: 860px) { .hero .wrap { grid-template-columns: 1fr; } }
+
+/* clue card (mirrors the printed 4x6 card) */
+.deck { position: relative; aspect-ratio: 6 / 5; max-width: 100%; }
+.cut { position: absolute; inset: 0; margin: auto; width: 88%; aspect-ratio: 3 / 2; height: auto; border: 1.5px dashed var(--line); border-radius: 6px; padding: 10px; background: var(--sheet); }
+.cut::before { content: '✂'; position: absolute; top: -12px; left: 18px; background: var(--paper); padding: 0 4px; color: var(--ink-soft); font-size: 15px; line-height: 1; }
+.cut.back1 { transform: rotate(-7deg) translate(-6%, -6%); opacity: .7; }
+.cut.back2 { transform: rotate(5deg) translate(6%, -3%); opacity: .85; }
+.cut.front { transform: rotate(-1.5deg) translate(0, 6%); box-shadow: 0 18px 40px -18px rgba(20, 30, 70, .45); }
+.card { --c-paper: #f6f1e3; --c-ink: #3b3222; --c-main: #4f6b3a; --c-acc: #c98a2b;
+  height: 100%; background: var(--c-paper); color: var(--c-ink); border: 4px double var(--c-main); border-radius: 8px; display: flex; flex-direction: column; padding: 4% 6% 3%; transition: background .3s ease, border-color .3s ease; }
+.card-head { display: flex; align-items: center; gap: 8px; border-bottom: 2px solid var(--c-main); padding-bottom: 6px; color: var(--c-main); font: 700 clamp(10px, 1.4vw, 13px)/1.1 var(--display); text-transform: uppercase; letter-spacing: .03em; }
+.card-head svg { width: 18px; height: 18px; flex: none; }
+.card-head span { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-head i { font-style: normal; background: var(--c-acc); color: #fff; border-radius: 99px; padding: 3px 9px; font-size: .9em; white-space: nowrap; }
+.riddle { flex: 1; display: grid; place-items: center; text-align: center; font: 500 clamp(10px, 1.45vw, 15px)/1.45 var(--display); padding: 6px 0; }
+.card-foot { display: flex; justify-content: space-between; gap: 8px; border-top: 1px solid color-mix(in srgb, var(--c-main) 30%, transparent); padding-top: 5px; font: clamp(7px, .9vw, 10px)/1.2 var(--mono); opacity: .75; white-space: nowrap; }
+.card[data-theme-id="hero"] { --c-paper: #ffffff; --c-ink: #16181d; --c-main: #d62828; --c-acc: #1d3f91; border-style: solid; }
+.card[data-theme-id="pirate"] { --c-paper: #f5e8cc; --c-ink: #2a2418; --c-main: #1f2f4d; --c-acc: #b8901f; }
+.card[data-theme-id="space"] { --c-paper: #eef4fa; --c-ink: #0f1a3a; --c-main: #14245a; --c-acc: #f26b1d; border-style: solid; }
+.card[data-theme-id="royal"] { --c-paper: #fdf6f8; --c-ink: #3a2c40; --c-main: #7d5ba6; --c-acc: #b8901f; border-radius: 40% 40% 8px 8px / 14% 14% 8px 8px; }
+
+/* how it works */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 32px; }
+.step { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 24px; display: grid; gap: 10px; align-content: start; }
+.step .n { font: 700 15px/1 var(--mono); color: var(--ink-soft); }
+.step p { color: var(--ink-soft); }
+@media (max-width: 760px) { .steps { grid-template-columns: 1fr; } }
+
+/* kit */
+.kit { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 32px; }
+.page-thumb { background: var(--sheet); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 12px; align-content: start; }
+.mini { aspect-ratio: 8.5 / 11; border-radius: 4px; background: var(--tint); padding: 10%; display: flex; flex-direction: column; gap: 6%; overflow: hidden; }
+.mini i { display: block; height: 5%; border-radius: 2px; background: var(--line); }
+.mini i.w6 { width: 60%; } .mini i.w8 { width: 80%; } .mini i.h { height: 9%; width: 70%; background: var(--sun); }
+.mini .dash { flex: 1; border: 1.5px dashed var(--ink-soft); border-radius: 3px; opacity: .5; }
+.mini .seal { width: 28%; aspect-ratio: 1; border-radius: 50%; background: var(--sun); margin: auto auto 0; }
+.page-thumb p { font-size: 15px; color: var(--ink-soft); }
+@media (max-width: 860px) { .kit { grid-template-columns: repeat(2, 1fr); } }
+
+/* themes */
+.themes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 32px; }
+.theme { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; display: grid; gap: 10px; align-content: start; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.theme[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 0 2px var(--ink) inset; }
+.swatch { display: flex; height: 34px; border-radius: 8px; overflow: hidden; }
+.swatch span { flex: 1; }
+.theme small { font: 13px/1 var(--mono); color: var(--ink-soft); }
+.theme p { font-size: 14.5px; line-height: 1.45; color: var(--ink-soft); }
+@media (max-width: 980px) { .themes { grid-template-columns: repeat(2, 1fr); } .theme:last-child { grid-column: 1 / -1; } }
+
+/* order builder */
+.builder { display: grid; grid-template-columns: 1.25fr .9fr; gap: 28px; margin-top: 32px; align-items: start; }
+.panel { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 24px; display: grid; gap: 22px; min-width: 0; }
+.field { display: grid; gap: 8px; }
+.field label, .field legend { font: 700 15px/1.2 var(--body); padding: 0; }
+.field .hint { font-size: 14px; color: var(--ink-soft); }
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.row2 { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
+input[type="text"], input[type="number"], select { width: 100%; font: 17px/1.3 var(--body); color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); border-radius: 10px; padding: 11px 12px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font: 15px/1 var(--body); color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); border-radius: 999px; padding: 8px 12px; cursor: pointer; }
+.chip b { display: none; width: 20px; height: 20px; border-radius: 50%; background: var(--ink); color: var(--paper); font: 700 11px/20px var(--mono); text-align: center; }
+.chip[aria-pressed="true"] { border-color: var(--ink); background: var(--tint); }
+.chip[aria-pressed="true"] b { display: inline-block; }
+.chip.prize b { background: var(--sun); color: var(--sun-ink); }
+.addspot { display: flex; gap: 8px; }
+.addspot input { flex: 1; min-width: 0; }
+.addspot button { flex: none; }
+.summary { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 80px); }
+.route { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; font-size: 15px; }
+.route li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; padding: 7px 0; position: relative; }
+.route li::before { content: attr(data-n); width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--tint); font: 700 12px/1 var(--mono); }
+.route li:not(:last-child)::after { content: ''; position: absolute; left: 12px; top: 33px; bottom: -7px; border-left: 2px dashed var(--line); }
+.route li.prize::before { content: '★'; background: var(--sun); color: var(--sun-ink); }
+.route small { display: block; color: var(--ink-soft); font: 12.5px/1.3 var(--mono); }
+.empty { color: var(--ink-soft); font-size: 15px; }
+.total { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px dashed var(--line); padding-top: 16px; font-variant-numeric: tabular-nums; }
+.total strong { font: 700 30px/1 var(--display); }
+.status { font-size: 14.5px; color: var(--ink-soft); min-height: 1.4em; }
+.status.bad { color: #c2410c; }
+.alt { font-size: 14.5px; color: var(--ink-soft); text-align: center; }
+@media (max-width: 860px) { .builder { grid-template-columns: 1fr; } .summary { position: static; } }
+
+/* pricing */
+.plans { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 32px; max-width: 820px; }
+.plan { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 26px; display: grid; gap: 14px; align-content: start; }
+.plan.main { border: 2px solid var(--ink); }
+.plan .price { font: 700 40px/1 var(--display); font-variant-numeric: tabular-nums; }
+.plan .price small { font: 400 15px/1 var(--body); color: var(--ink-soft); }
+.plan ul { margin: 0; padding-left: 20px; color: var(--ink-soft); display: grid; gap: 6px; }
+@media (max-width: 700px) { .plans { grid-template-columns: 1fr; } }
+
+/* faq */
+.faq { margin-top: 28px; display: grid; gap: 10px; max-width: 780px; }
+.faq details { background: var(--sheet); border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; }
+.faq summary { cursor: pointer; font: 600 18px/1.3 var(--display); }
+.faq details p { margin-top: 10px; color: var(--ink-soft); }
+
+footer { border-top: 1px solid var(--line); padding-block: 36px 48px; color: var(--ink-soft); font-size: 15px; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="LittlePrintQuests home">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><rect x="3" y="7" width="34" height="26" rx="4" fill="var(--sun)"/><path d="M8 26c5-9 9 2 14-6s8-4 10-8" fill="none" stroke="var(--ink)" stroke-width="2.4" stroke-dasharray="3 3" stroke-linecap="round"/><path d="M29 9l5 5M34 9l-5 5" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round"/></svg>
+      LittlePrintQuests
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#how">How it works</a>
+      <a href="#themes">Themes</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn btn-sun" href="#order">Make my hunt</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Printable birthday scavenger hunts · ages 3 to 8</p>
+        <h1 style="margin-top:14px">A treasure hunt written for <em>your</em> house.</h1>
+        <p class="lede">Tell us your child’s name and the spots in your home you want to use. In a few minutes you get rhyming clue cards, a host checklist and a certificate, ready to print.</p>
+        <div class="ctas">
+          <a class="btn btn-sun" href="#order">Make my hunt · $9.99</a>
+          <a class="btn btn-ghost" href="#kit">See what’s inside</a>
+        </div>
+        <ul class="facts">
+          <li>30 to 45 minutes of screen-free play</li>
+          <li>Print at home on Letter paper</li>
+          <li>Delivered in minutes</li>
+        </ul>
+      </div>
+      <div class="deck" aria-label="Example clue card">
+        <div class="cut back1"><div class="card" data-theme-id="space"></div></div>
+        <div class="cut back2"><div class="card" data-theme-id="pirate"></div></div>
+        <div class="cut front">
+          <div class="card" id="heroCard" data-theme-id="dino">
+            <div class="card-head"><svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true" id="heroIcon"></svg><span id="heroHeader">Dino Ranger Expedition</span><i id="heroBadge">Field Note #3</i></div>
+            <div class="riddle"><p id="heroRiddle"></p></div>
+            <div class="card-foot"><span id="heroCheck">Hidden at Couch · leads to Dryer</span><span>Mission 3 of 8</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop" id="how">
+    <div class="wrap">
+      <div class="pin"><b></b><span class="eyebrow">How it works</span></div>
+      <h2>From form to first clue in about ten minutes</h2>
+      <div class="steps">
+        <div class="step"><span class="n">Step 1 · 60 seconds</span><h3>Tell us about the party</h3><p>Your child’s name and age, a theme, and 6 to 10 spots around your home. The last spot is where the cake or prizes wait.</p></div>
+        <div class="step"><span class="n">Step 2 · instant</span><h3>We write the hunt</h3><p>Every clue is a rhyme that leads to your next spot. Got a spot we haven’t seen before, like Grandma’s piano? We write a new rhyme for it.</p></div>
+        <div class="step"><span class="n">Step 3 · 10 minutes</span><h3>Print, cut and hide</h3><p>The host guide tells you exactly where each card goes. A tiny “parent check” on every card means you never mix them up.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop" id="kit">
+    <div class="wrap">
+      <div class="pin"><b></b><span class="eyebrow">What’s inside</span></div>
+      <h2>Everything you need, on Letter paper</h2>
+      <div class="kit">
+        <div class="page-thumb"><div class="mini"><i class="h"></i><i class="w8"></i><i></i><i class="w8"></i><i></i><i class="w6"></i><i class="w8"></i><i></i></div><h3>Host guide</h3><p>Your secret checklist: which card hides where, and where the prize goes.</p></div>
+        <div class="page-thumb"><div class="mini"><i class="h"></i><i></i><i class="w8"></i><i></i><i class="w6"></i><i></i><i class="w8"></i></div><h3>Mission briefing</h3><p>A story letter to read aloud that kicks off the adventure, addressed to your child.</p></div>
+        <div class="page-thumb"><div class="mini"><div class="dash"></div><div class="dash"></div></div><h3>Clue cards</h3><p>4 × 6 inch rhyming cards, two per page, with dashed cut lines and big read-aloud type.</p></div>
+        <div class="page-thumb"><div class="mini"><i class="h"></i><i class="w8"></i><i class="w6"></i><div class="seal"></div></div><h3>Certificate</h3><p>A “Mission Accomplished” certificate with your child’s name for the big finish.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop" id="themes">
+    <div class="wrap">
+      <div class="pin"><b></b><span class="eyebrow">Themes</span></div>
+      <h2>Five adventures to pick from</h2>
+      <div class="themes" id="themeList"></div>
+    </div>
+  </section>
+
+  <section class="stop" id="order">
+    <div class="wrap">
+      <div class="pin"><b></b><span class="eyebrow">Make your hunt</span></div>
+      <h2>Build your hunt</h2>
+      <form class="builder" id="orderForm" novalidate>
+        <div class="panel">
+          <div class="row2">
+            <div class="field"><label for="childName">Child’s first name</label><input type="text" id="childName" maxlength="24" autocomplete="off" value="Maya"></div>
+            <div class="field"><label for="childAge">Turning</label><input type="number" id="childAge" min="2" max="12" value="6"></div>
+          </div>
+          <div class="field"><label for="themeSelect">Theme</label><select id="themeSelect"></select></div>
+          <fieldset class="field">
+            <legend>Hiding spots, in order</legend>
+            <p class="hint">Tap 6 to 10 spots in the order the kids should find them. The last one is where the prize goes.</p>
+            <div class="chips" id="spotChips"></div>
+            <div class="addspot"><input type="text" id="customSpot" maxlength="30" placeholder="Add your own, like “Grandma’s piano”" aria-label="Add your own spot"><button type="button" class="btn btn-ghost" id="addSpot">Add</button></div>
+          </fieldset>
+        </div>
+        <aside class="panel summary" aria-live="polite">
+          <div class="field"><span class="eyebrow">Your trail</span><p id="trailTitle" style="font:600 20px/1.2 var(--display)"></p></div>
+          <ol class="route" id="route"></ol>
+          <div class="total"><span>Custom hunt, PDF</span><strong>$9.99</strong></div>
+          <button class="btn btn-sun" type="submit" style="justify-content:center">Continue to checkout</button>
+          <p class="status" id="formStatus"></p>
+          <p class="alt">Prefer Etsy? <a id="etsyLink" href="#" target="_blank" rel="noopener">Order the same hunt in our Etsy shop</a>.</p>
+        </aside>
+      </form>
+    </div>
+  </section>
+
+  <section class="stop" id="pricing">
+    <div class="wrap">
+      <div class="pin"><b></b><span class="eyebrow">Pricing</span></div>
+      <h2>One price, no subscription</h2>
+      <div class="plans">
+        <div class="plan main"><span class="eyebrow">Custom hunt</span><div class="price">$9.99 <small>per party</small></div><ul><li>Your child’s name on every page</li><li>6 to 10 of your home’s own spots</li><li>New rhymes for any spot you add</li><li>Host guide, briefing, cards and certificate</li></ul><a class="btn btn-sun" href="#order">Make my hunt</a></div>
+        <div class="plan"><span class="eyebrow">Theme pack</span><div class="price">$4.80 <small>on Etsy</small></div><ul><li>Ready-made hunt with 8 common spots</li><li>Couch, fridge, bed, bathtub and more</li><li>Instant download</li></ul><a class="btn btn-ghost" id="etsyLink2" href="#" target="_blank" rel="noopener">Browse on Etsy</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop" id="faq">
+    <div class="wrap">
+      <div class="pin"><b></b><span class="eyebrow">Questions</span></div>
+      <h2>Before you print</h2>
+      <div class="faq">
+        <details><summary>Is anything shipped to me?</summary><p>No. You get a PDF to print at home on regular Letter paper, in color or black and white.</p></details>
+        <details><summary>How fast will I get it?</summary><p>Usually within a few minutes of checkout. It shows on screen and arrives by email, so it works even the morning of the party.</p></details>
+        <details><summary>What if my house doesn’t have a spot on the list?</summary><p>Type any spot you like, such as “the hammock” or “Dad’s guitar”, and we’ll write a rhyme for it. We skip anything unsafe for little kids, like the oven.</p></details>
+        <details><summary>How many kids can play?</summary><p>One trail works well for 2 to 10 kids. For bigger groups, read each clue aloud and let a different child find each card.</p></details>
+        <details><summary>Can my 3-year-old do it?</summary><p>Yes, with a grown-up reading the clues. The rhymes are short and describe each spot in words little kids know.</p></details>
+        <details><summary>What if something looks wrong?</summary><p>Reply to your order email and we’ll fix it and send a new PDF free.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 LittlePrintQuests · Printable party games for kids</span>
+    <a id="etsyLink3" href="#" target="_blank" rel="noopener">Find us on Etsy</a>
+  </div>
+</footer>
+
+<script>
+// Set these two when the shop and checkout are live.
+const ETSY_SHOP_URL = 'https://www.etsy.com/';
+const CHECKOUT_URL = ''; // the order bot's /api/checkout endpoint
+
+const ICONS = {
+  dino: '<path d="M32 3c4 9 6 18 6 28H26c0-10 2-19 6-28z"/><path d="M6 13c9 4 16 12 20 21l-8 7C13 32 8 24 6 13z"/><path d="M58 13c-9 4-16 12-20 21l8 7c5-9 10-17 12-28z"/><path d="M19 39c5-7 21-7 26 0 4 9-4 20-13 22-9-2-17-13-13-22z"/>',
+  hero: '<polygon points="38,2 12,36 29,36 22,62 52,24 35,24 44,2"/>',
+  pirate: '<circle cx="32" cy="32" r="22" fill="none" stroke="currentColor" stroke-width="3"/><polygon points="32,2 37,27 62,32 37,37 32,62 27,37 2,32 27,27"/>',
+  space: '<path d="M32 3c11 9 14 25 10 41H22C18 28 21 12 32 3z"/><path d="M22 34l-9 12 10-2zM42 34l9 12-10-2z"/><path d="M26 47h12l-6 14z" opacity=".75"/>',
+  royal: '<polygon points="6,46 9,16 22,30 32,8 42,30 55,16 58,46"/><rect x="6" y="49" width="52" height="7" rx="2"/>',
+};
+const THEMES = [
+  { id: 'dino', name: 'Dino Fossil Recovery', ages: '3–6', header: 'Dino Ranger Expedition', badge: 'Field Note', colors: ['#4f6b3a', '#c98a2b', '#e3dcc2'],
+    hook: 'The volcano is rumbling and the dinosaur eggs are scattered. Junior Rangers to the rescue!',
+    opener: ['The ground gives a rumble, the lava is near,', 'But brave little rangers have nothing to fear!'] },
+  { id: 'hero', name: 'Superhero HQ Trial', ages: '4–8', header: 'Hero Alliance Trial', badge: 'Top Secret', colors: ['#d62828', '#1d3f91', '#ffd60a'],
+    hook: 'Crack the Hero Alliance’s secret clues to earn an official hero cape.',
+    opener: ['Pow! Zap! Kaboom! You cracked the code,', 'Now use your super-speed, switch to turbo mode!'] },
+  { id: 'pirate', name: 'Pirate’s Lost Ledger', ages: '3–7', header: 'Captain Barnaby’s Map', badge: 'Map Piece', colors: ['#1f2f4d', '#b8901f', '#e6d3a8'],
+    hook: 'The captain’s parrot scrambled the treasure map into rhymes. Follow it to the chest!',
+    opener: ['Yo ho ho, matey, you’re sharp as a hook!', 'The parrot squawks, “Here’s the next place to look!”'] },
+  { id: 'space', name: 'Deep Space Expedition', ages: '4–8', header: 'Ground Control Telemetry', badge: 'Beacon', colors: ['#14245a', '#f26b1d', '#5fd3e6'],
+    hook: 'Ground Control lost the signal. Track every radio beacon to fire the launch thrusters.',
+    opener: ['Beep-boop! Beacon found! The signal is clear,', 'Now blast off again, the next one is near!'] },
+  { id: 'royal', name: 'Royal Castle Quest', ages: '3–7', header: 'Royal Castle Quest', badge: 'Royal Decree', colors: ['#7d5ba6', '#b8901f', '#f3d3dc'],
+    hook: 'A playful pet dragon scattered the Crown Jewels. Knights and princesses, restore the court!',
+    opener: ['Huzzah! A jewel! The Queen will be glad,', 'Now on to the next one, the best quest we’ve had!'] },
+];
+const SPOTS = [
+  ['couch', 'Couch'], ['fridge', 'Fridge'], ['bed', 'Bed'], ['bathtub', 'Bathtub'], ['bookshelf', 'Bookshelf'],
+  ['front_door', 'Front Door'], ['toy_box', 'Toy Box'], ['kitchen_table', 'Kitchen Table'], ['coat_closet', 'Coat Closet'],
+  ['shoe_rack', 'Shoe Rack'], ['mailbox', 'Mailbox'], ['washing_machine', 'Washer'], ['dryer', 'Dryer'], ['pantry', 'Pantry'],
+  ['bathroom_sink', 'Bathroom Sink'], ['tv', 'TV'], ['stairs', 'Stairs'], ['pet_bed', 'Pet Bed'], ['plant', 'Plant'],
+  ['desk', 'Desk'], ['mirror', 'Mirror'], ['doormat', 'Doormat'], ['stuffed_animals', 'Stuffed Animals'], ['backpack', 'Backpack'],
+  ['swing', 'Swing'], ['slide', 'Slide'], ['sandbox', 'Sandbox'], ['tree', 'Big Tree'],
+];
+const DRYER = ['Head to the spot where wet clothes become dry,', 'It spins and it tumbles, so give it a try!'];
+
+const $ = (id) => document.getElementById(id);
+const state = { theme: 'dino', picks: ['front_door', 'shoe_rack', 'couch', 'dryer', 'bathtub', 'bookshelf', 'pet_bed', 'kitchen_table'], custom: {} };
+
+// Shop links
+['etsyLink', 'etsyLink2', 'etsyLink3'].forEach((id) => ($(id).href = ETSY_SHOP_URL));
+
+// Theme cards and select
+$('themeList').innerHTML = THEMES.map((t) => `
+  <button type="button" class="theme" data-id="${t.id}" aria-pressed="false">
+    <div class="swatch">${t.colors.map((c) => `<span style="background:${c}"></span>`).join('')}</div>
+    <h3>${t.name}</h3><small>Ages ${t.ages}</small><p>${t.hook}</p>
+  </button>`).join('');
+$('themeSelect').innerHTML = THEMES.map((t) => `<option value="${t.id}">${t.name} (ages ${t.ages})</option>`).join('');
+document.querySelectorAll('.theme').forEach((b) => b.addEventListener('click', () => { setTheme(b.dataset.id); $('order').scrollIntoView({ behavior: 'smooth' }); }));
+$('themeSelect').addEventListener('change', (e) => setTheme(e.target.value));
+
+function setTheme(id) {
+  state.theme = id;
+  $('themeSelect').value = id;
+  document.querySelectorAll('.theme').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.id === id)));
+  render();
+}
+
+// Spot chips
+function labelOf(key) { return state.custom[key] || (SPOTS.find((s) => s[0] === key) || [, key])[1]; }
+function drawChips() {
+  const all = [...SPOTS, ...Object.entries(state.custom)];
+  $('spotChips').innerHTML = all.map(([key, label]) => {
+    const i = state.picks.indexOf(key);
+    const last = i === state.picks.length - 1 && i >= 0;
+    return `<button type="button" class="chip${last ? ' prize' : ''}" data-key="${key}" aria-pressed="${i >= 0}"><b>${last ? '★' : i + 1}</b>${label}</button>`;
+  }).join('');
+  $('spotChips').querySelectorAll('.chip').forEach((c) => c.addEventListener('click', () => toggle(c.dataset.key)));
+}
+function toggle(key) {
+  const i = state.picks.indexOf(key);
+  if (i >= 0) state.picks.splice(i, 1);
+  else if (state.picks.length < 10) state.picks.push(key);
+  else return status('You’ve picked 10 spots, the most a hunt can hold. Tap one to remove it first.', true);
+  status('');
+  render();
+}
+$('addSpot').addEventListener('click', addCustom);
+$('customSpot').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addCustom(); } });
+function addCustom() {
+  const label = $('customSpot').value.trim();
+  if (!label) return;
+  const key = 'custom_' + Date.now();
+  state.custom[key] = label;
+  $('customSpot').value = '';
+  toggle(key);
+}
+
+function status(msg, bad) { $('formStatus').textContent = msg; $('formStatus').classList.toggle('bad', !!bad); }
+function esc(s) { return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]); }
+
+function render() {
+  const t = THEMES.find((x) => x.id === state.theme);
+  const name = $('childName').value.trim() || 'your child';
+  // hero card
+  $('heroCard').dataset.themeId = t.id;
+  $('heroIcon').innerHTML = ICONS[t.id];
+  $('heroHeader').textContent = t.header;
+  $('heroBadge').textContent = `${t.badge} #3`;
+  $('heroRiddle').innerHTML = `${esc(t.opener[0])}<br>${esc(t.opener[1])}<br><br>${esc(DRYER[0])}<br>${esc(DRYER[1])}`;
+  // trail summary
+  const age = parseInt($('childAge').value, 10);
+  $('trailTitle').textContent = `${t.name} for ${name}${age ? `, turning ${age}` : ''}`;
+  $('route').innerHTML = state.picks.length
+    ? state.picks.map((k, i) => {
+        const last = i === state.picks.length - 1;
+        const from = i === 0 ? 'Clue 1 is read after the briefing' : `Clue ${i + 1} hides at ${labelOf(state.picks[i - 1])}`;
+        return `<li data-n="${i + 1}" class="${last ? 'prize' : ''}"><span>${esc(labelOf(k))}${last ? ' · prize here' : ''}<small>${esc(from)}</small></span></li>`;
+      }).join('')
+    : '<li class="empty">Tap spots on the left to build your trail.</li>';
+  drawChips();
+}
+$('childName').addEventListener('input', render);
+$('childAge').addEventListener('input', render);
+
+$('orderForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const childName = $('childName').value.trim();
+  if (!childName) return status('Add your child’s first name so we can put it on the cards.', true), $('childName').focus();
+  if (state.picks.length < 6) return status(`Pick at least 6 spots. You have ${state.picks.length}.`, true);
+  const order = {
+    theme: state.theme,
+    childName,
+    age: parseInt($('childAge').value, 10) || null,
+    spots: state.picks.map((k) => (state.custom[k] ? { custom: state.custom[k] } : k)),
+  };
+  if (!CHECKOUT_URL) return status('Checkout opens here once payments are switched on. For now, order through our Etsy shop.');
+  status('Opening secure checkout…');
+  try {
+    const res = await fetch(CHECKOUT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(order) });
+    if (!res.ok) throw new Error(await res.text());
+    location.href = (await res.json()).url;
+  } catch (err) {
+    status('Checkout didn’t open. Please try again in a moment, or order on Etsy.', true);
+  }
+});
+
+render();
+</script>
+</body>
+</html>

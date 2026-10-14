@@ -45,3 +45,9 @@ Standard pack orders are ignored, since Etsy delivers those itself.
 ### Development
 
 `npm test` runs a smoke test with a fake Etsy and a fake Claude, and renders real PDFs.
+
+## Website
+
+`docs/index.html` is the LittlePrintQuests storefront: themes, what's inside, pricing, FAQ, and a hunt builder that collects the child's name, age, theme and spots. To publish it free on GitHub Pages: repo Settings > Pages > Deploy from a branch > `main` / `docs`.
+
+Two settings at the top of its script need filling in once they exist: `ETSY_SHOP_URL` (your shop) and `CHECKOUT_URL` (the order bot's checkout endpoint, once Stripe is connected). Until `CHECKOUT_URL` is set, the builder tells visitors to order on Etsy.
