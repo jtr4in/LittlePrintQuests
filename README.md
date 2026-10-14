@@ -27,7 +27,7 @@ npm run kit -- examples/kit-vet.json out/vet.pdf
 npm run kit -- examples/kit-space.json out/space.pdf --png out/space-pages
 ```
 
-Kits so far: `vet` (Vet Clinic) and `space` (Mission Control, the add-on for the Deep Space hunt).
+Kits: `vet` (Vet Clinic, stand-alone) plus one add-on per hunt theme: `dino` (Dino Dig Lab), `hero` (Hero HQ), `pirate` (Pirate Ship), `space` (Mission Control) and `royal` (Royal Castle). Each kit also has a fold-up themed gadget (laptop, console, scanner, communicator, ship’s helm or magic mirror) with three pretend screens.
 
 ## Etsy order bot
 

@@ -57,6 +57,15 @@ module.exports = {
     title: 'Treatment Prices', icon: '🪙', coinIcon: '🐾', coinWord: 'coin', coinsTitle: 'Paw coins',
     items: [['🩺', 'Check-up', 2], ['🩹', 'Bandage', 1], ['💉', 'Vaccine', 2], ['🦴', 'X-ray', 3], ['🦷', 'Teeth clean', 2], ['🛁', 'Bath & brush', 3], ['💅', 'Claw trim', 1], ['😷', 'Surgery', 5]],
   },
+  dashboard: {
+    gadget: 'clinic laptop', device: 'laptop', decor: '🩺',
+    appName: 'PawCare', appIcon: '🐾', scheduleTitle: 'Today at the clinic', monitorTitle: 'Patient monitor', alertHeader: 'New message',
+    calendarLabel: 'Appointments', nextLabel: '🩺 Next patients',
+    waveLabel: '❤️ Heartbeat', stats: [['🌡️', 'Temperature', '101°F'], ['⚖️', 'Weight', '12 lb'], ['😊', 'Mood', 'Happy']],
+    alertIcon: '🚑', alertTitle: 'Emergency!', alertText: 'A puppy with a sore paw is on the way. Please get the Exam Room ready!', alertButtons: ['On my way', 'Call the owner'],
+    dock: ['📅', '🩺', '💊', '🦴', '📞', '💬'],
+    keys: [['🚨', 'Emergency'], ['💊', 'Pharmacy'], ['📞', 'Call owner'], ['🖨️', 'Print']],
+  },
   certificate: { title: 'Junior Vet Certificate', icon: '🏅', seal: '🐾', line: 'cared for every patient with kindness, gentle hands and a big heart.' },
   guide: {
     intro: 'Everything {child} needs to run a pretend vet clinic. Print on regular Letter paper, cut along the dashed lines, and gather some stuffed animals to be patients.',

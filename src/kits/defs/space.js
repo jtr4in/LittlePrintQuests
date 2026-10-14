@@ -57,6 +57,15 @@ module.exports = {
     title: 'Space Snack Bar', icon: '🍽️', coinIcon: '⭐', coinWord: 'star credit', coinsTitle: 'Star credits',
     items: [['🧃', 'Moon juice', 1], ['🍕', 'Freeze-dried pizza', 3], ['🍦', 'Astronaut ice cream', 2], ['🍪', 'Comet cookie', 1], ['🥤', 'Rocket fuel shake', 2], ['🍎', 'Space apple', 1], ['🍫', 'Milky Way bar', 2], ['🎟️', 'Rocket ride', 5]],
   },
+  dashboard: {
+    gadget: 'mission control console', device: 'console', decor: '🚀',
+    appName: 'StarCommand', appIcon: '🛰️', scheduleTitle: 'Mission calendar', monitorTitle: 'Crew vital signs', alertHeader: 'Incoming transmission',
+    calendarLabel: 'Launch days', nextLabel: '🚀 Next launches',
+    waveLabel: '❤️ Astronaut heartbeat', stats: [['🫧', 'Oxygen', '98%'], ['⛽', 'Fuel', 'Full'], ['🌡️', 'Suit temp', '72°F']],
+    alertIcon: '☄️', alertTitle: 'Meteor shower!', alertText: 'Space rocks ahead! Steer left, buckle up, and keep your helmets on.', alertButtons: ['Steer left', 'Call Earth'],
+    dock: ['🗓️', '🛰️', '🌕', '🪐', '📡', '💬'],
+    keys: [['🔥', 'Launch'], ['🛑', 'Abort'], ['📡', 'Call Earth'], ['🗺️', 'Star map']],
+  },
   certificate: { title: 'Certified Space Cadet', icon: '🎖️', seal: '🚀', line: 'completed astronaut training and is cleared for launch to anywhere in the galaxy.' },
   guide: {
     intro: 'Everything {child} needs to run a pretend space mission. Print on regular Letter paper, cut along the dashed lines, and recruit some toys as the crew.',

@@ -211,6 +211,7 @@ function guidePage(k) {
   const signCount = d.signs.length + 1 - ((d.signs.length + 1) % 2);
   const inside = [
     `${signCount} signs for doors and walls`,
+    `A fold-up ${d.dashboard.gadget} with 3 screens`,
     '8 ID badges',
     d.log.title,
     `${d.record.title} forms for ${k.subjects.length ? `each of your ${d.subjectPlural}` : `four ${d.subjectPlural}`}, plus a blank one`,
@@ -233,11 +234,106 @@ function guidePage(k) {
   </section>`;
 }
 
+// ---------- pretend gadget ----------
+// One page folds into the kit's gadget: a screen on top, controls below (a keyboard for
+// the laptop, big buttons for everything else). A second page holds two more screens
+// to cut out and lay over the first. dashboard.device picks the look:
+// laptop, console, tablet, helm or mirror.
+
+function screenSchedule(k, S) {
+  const subs = subjectsOrDefaults(k);
+  const days = Array.from({ length: 35 }, (_, i) => i - 2);
+  const busy = new Set([3, 7, 8, 12, 15, 19, 22, 26]);
+  const cal = days
+    .map((d) => (d < 1 || d > 30 ? '<span></span>' : `<span class="${d === 14 ? 'today' : busy.has(d) ? 'busy' : ''}">${d}</span>`))
+    .join('');
+  const extra = k.def.defaultKinds.map((kind) => ({ name: '', kind })).filter((d) => !subs.some((x) => x.kind === d.kind));
+  const next = [...subs, ...extra].slice(0, 5)
+    .map((p, i) => `<li><span class="em">${pic(k, p)}</span><div><b>${esc(p.name || kindName(k, p))}</b><small>${esc(k.def.log.reasons[i % k.def.log.reasons.length])}</small></div><time>${esc(k.def.log.times[i])}</time></li>`)
+    .join('');
+  return `<div class="app-body two-col">
+    <div class="tile"><div class="tile-h">📅 ${esc(S.calendarLabel)}</div><div class="cal-head">${['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((x) => `<i>${x}</i>`).join('')}</div><div class="cal">${cal}</div></div>
+    <div class="tile"><div class="tile-h">${esc(S.nextLabel)}</div><ol class="next">${next}</ol></div>
+  </div>`;
+}
+
+function screenMonitor(k, S) {
+  const p = subjectsOrDefaults(k)[0];
+  return `<div class="app-body monitor">
+    <div class="tile who-tile"><div class="big-em">${pic(k, p)}</div><b>${esc(p.name || kindName(k, p))}</b><small>${esc(kindName(k, p))}</small></div>
+    <div class="tile wave-tile"><div class="tile-h">${esc(S.waveLabel)}</div>
+      <svg viewBox="0 0 300 70" class="wave"><polyline points="0,40 40,40 55,40 62,15 70,62 78,28 86,40 130,40 145,40 152,12 160,64 168,30 176,40 220,40 235,40 242,14 250,63 258,29 266,40 300,40"/></svg>
+      <div class="stats">${S.stats.map(([e, label, val]) => `<div><span class="em">${e}</span><small>${esc(label)}</small><b>${esc(val)}</b></div>`).join('')}</div>
+      <div class="acts">${S.keys.map(([e, n]) => `<span><b class="em">${e}</b>${esc(n)}</span>`).join('')}</div>
+    </div>
+  </div>`;
+}
+
+function screenAlert(k, S) {
+  return `<div class="app-body alert">
+    <div class="alert-icon">${S.alertIcon}</div>
+    <div class="alert-title">${esc(S.alertTitle)}</div>
+    <p>${esc(S.alertText)}</p>
+    <div class="alert-btns"><span class="ok">${esc(S.alertButtons[0])}</span><span>${esc(S.alertButtons[1])}</span></div>
+  </div>`;
+}
+
+function screen(k, which) {
+  const S = k.def.dashboard;
+  const body = { schedule: screenSchedule, monitor: screenMonitor, alert: screenAlert }[which](k, S);
+  const title = { schedule: S.scheduleTitle, monitor: S.monitorTitle, alert: S.alertHeader }[which];
+  return `<div class="bezel dev-${S.device || 'laptop'}"><div class="display">
+    <div class="app-bar"><span class="app-name">${S.appIcon} ${esc(S.appName)}</span><span class="app-title">${esc(title)}</span><span class="app-user">${esc(k.lead)} ▾</span></div>
+    ${body}
+    <div class="dock">${S.dock.map((d) => `<span>${d}</span>`).join('')}</div>
+  </div><div class="cam"></div></div>`;
+}
+
+function keyboard(k) {
+  const S = k.def.dashboard;
+  const rows = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'];
+  return `<div class="deck-base">
+    <div class="keys">
+      <div class="krow fn">${S.keys.map(([e, n]) => `<span class="fkey"><b class="em">${e}</b>${esc(n)}</span>`).join('')}</div>
+      ${rows.map((r) => `<div class="krow">${[...r].map((c) => `<span>${c}</span>`).join('')}</div>`).join('')}
+      <div class="krow"><span class="wide">Shift</span><span class="space">${esc(S.appName)}</span><span class="wide">Enter ⏎</span></div>
+    </div>
+    <div class="pad"></div>
+  </div>`;
+}
+
+function controlPanel(k) {
+  const S = k.def.dashboard;
+  return `<div class="deck-base panel-base dev-${S.device}">
+    <div class="panel-decor">${S.decor}</div>
+    <div class="big-keys">${S.keys.map(([e, n]) => `<span><b class="em">${e}</b>${esc(n)}</span>`).join('')}</div>
+    <div class="panel-name">${S.appIcon} ${esc(S.appName)}</div>
+  </div>`;
+}
+
+function laptopPages(k) {
+  return `<section class="page laptop">
+      <div class="fold-top">${screen(k, 'schedule')}</div>
+      <div class="fold-line"><span>Fold here, then stand the screen up</span></div>
+      <div class="fold-bottom">${(k.def.dashboard.device || 'laptop') === 'laptop' ? keyboard(k) : controlPanel(k)}</div>
+    </section>
+    <section class="page laptop extra">
+      <p class="pg-sub">More screens: cut out and lay over the ${esc(k.def.dashboard.appName)} screen.</p>
+      <div class="swap">${screen(k, 'monitor')}</div>
+      <div class="cut-h"></div>
+      <div class="swap">${screen(k, 'alert')}</div>
+    </section>`;
+}
+
 // ---------- document ----------
 
 const KITS = {
   vet: require('./defs/vet'),
   space: require('./defs/space'),
+  dino: require('./defs/dino'),
+  hero: require('./defs/hero'),
+  pirate: require('./defs/pirate'),
+  royal: require('./defs/royal'),
 };
 
 function buildKitHtml(cfg) {
@@ -247,6 +343,7 @@ function buildKitHtml(cfg) {
   const pages = [
     guidePage(k),
     signsPages(k),
+    laptopPages(k),
     badgesPage(k),
     logPage(k),
     ...subjectsOrDefaults(k).map((p) => recordPage(k, p)),
@@ -404,6 +501,79 @@ h1, h2, h3 { font-family:'Fredoka', sans-serif; margin:0; line-height:1.1; }
 .cert-row { display:flex; align-items:center; gap:.5in; margin-top:.5in; font:600 11pt 'Fredoka'; }
 .cert-row > div:not(.seal) { display:flex; flex-direction:column; gap:4px; width:2in; } .cert-row .fill { min-width:2in; }
 .seal { font-size:34pt; width:1.1in; height:1.1in; border-radius:50%; background:var(--orange); display:grid; place-items:center; box-shadow:0 0 0 5px #fff, 0 0 0 8px var(--orange); }
+
+/* pretend laptop */
+.laptop { padding:.35in .4in; display:flex; flex-direction:column; }
+.fold-top, .fold-bottom { flex:1; display:flex; align-items:center; justify-content:center; }
+.fold-top { align-items:flex-end; padding-bottom:.12in; } .fold-bottom { align-items:flex-start; padding-top:.12in; }
+.fold-line { border-top:2px dashed #b7c0cc; position:relative; height:0; margin:0 -.4in; }
+.fold-line span { position:absolute; left:50%; top:-.09in; transform:translateX(-50%); background:#fff; padding:0 .1in; font:500 8pt 'Fredoka'; color:#9aa3b8; white-space:nowrap; }
+.bezel { width:7.4in; height:4.6in; background:#2d3550; border-radius:.22in; padding:.2in .2in .26in; position:relative; }
+.cam { position:absolute; top:.07in; left:50%; width:.07in; height:.07in; margin-left:-.035in; border-radius:50%; background:#55607f; }
+.display { height:100%; background:#f4f8fb; border-radius:.06in; overflow:hidden; display:flex; flex-direction:column; }
+.app-bar { display:flex; align-items:center; gap:.15in; background:var(--teal); color:#fff; padding:.07in .14in; font:600 10pt 'Fredoka', 'Noto Color Emoji'; }
+.app-name { font-weight:700; } .app-title { flex:1; opacity:.85; } .app-user { background:rgba(255,255,255,.18); border-radius:99px; padding:2px 10px; font-size:9pt; }
+.app-body { flex:1; padding:.12in; min-height:0; }
+.dock { display:flex; justify-content:center; gap:.12in; padding:.05in; background:#e3e9f0; font-family:'Noto Color Emoji'; font-size:14pt; }
+.tile { background:#fff; border-radius:.08in; border:1px solid #dbe3ec; padding:.08in .1in; min-width:0; }
+.tile-h { font:600 9.5pt 'Fredoka', 'Noto Color Emoji'; color:var(--teal-d); margin-bottom:.05in; }
+.two-col { display:grid; grid-template-columns:1fr 1.1fr; gap:.12in; }
+.cal-head, .cal { display:grid; grid-template-columns:repeat(7, 1fr); text-align:center; }
+.cal-head i { font:600 7.5pt 'Fredoka'; color:#9aa3b8; font-style:normal; }
+.cal span { font:500 8.5pt/1 'Fredoka'; height:.33in; display:grid; place-items:center; border-radius:50%; margin:1px; }
+.cal .busy { background:var(--mint-l); color:var(--teal-d); }
+.cal .today { background:var(--orange); color:var(--accent-ink); font-weight:700; }
+.next { list-style:none; margin:0; padding:0; display:grid; gap:.06in; }
+.next li { display:flex; align-items:center; gap:.08in; background:var(--mint-l); border-radius:.06in; padding:.05in .08in; }
+.next .em { font-size:17pt; } .next div { flex:1; min-width:0; } .next b { display:block; font:600 10pt/1.1 'Fredoka'; } .next small { font-size:8pt; color:#66708f; }
+.next time { font:600 9pt 'Fredoka'; color:var(--teal-d); }
+.monitor { display:grid; grid-template-columns:1.5in 1fr; gap:.12in; }
+.who-tile { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+.big-em { font-family:'Noto Color Emoji'; font-size:46pt; } .who-tile b { font:700 13pt 'Fredoka'; } .who-tile small { color:#66708f; }
+.wave { width:100%; height:.85in; background:#11203a; border-radius:.06in; }
+.wave polyline { fill:none; stroke:#5cf0a2; stroke-width:2.5; stroke-linejoin:round; }
+.stats { display:grid; grid-template-columns:repeat(3, 1fr); gap:.08in; margin-top:.08in; }
+.stats div { background:var(--mint-l); border-radius:.06in; padding:.05in .07in; display:grid; }
+.stats .em { font-size:12pt; } .stats small { font-size:7.5pt; color:#66708f; } .stats b { font:700 13pt 'Fredoka'; color:var(--teal-d); }
+.acts { display:grid; grid-template-columns:repeat(2, 1fr); gap:.06in; margin-top:.08in; }
+.acts span { border:1.5px solid var(--teal); border-radius:99px; padding:.04in .08in; font:600 9pt 'Fredoka'; color:var(--teal-d); display:flex; align-items:center; gap:5px; } .acts .em { font-size:11pt; }
+.alert { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; background:linear-gradient(#fff4f0, #fff); }
+.alert-icon { font-family:'Noto Color Emoji'; font-size:40pt; }
+.alert-title { font:700 22pt 'Fredoka'; color:#c0392b; margin-top:.04in; }
+.alert p { font-size:11pt; margin:.06in 0 .12in; max-width:5in; }
+.alert-btns { display:flex; gap:.15in; } .alert-btns span { font:600 11pt 'Fredoka'; border:2px solid var(--navy); border-radius:99px; padding:.05in .25in; }
+.alert-btns .ok { background:var(--teal); border-color:var(--teal); color:#fff; }
+.deck-base { width:7.4in; height:4.5in; background:#d9dee8; border-radius:.2in .2in .28in .28in; padding:.2in .25in; display:flex; flex-direction:column; align-items:center; gap:.16in; }
+.keys { width:100%; display:grid; gap:.06in; }
+.krow { display:flex; gap:.05in; justify-content:center; }
+.krow span { flex:1; max-width:.58in; height:.42in; background:#fff; border-radius:.05in; box-shadow:0 2px 0 #aab3c4; display:grid; place-items:center; font:600 10pt 'Fredoka'; color:var(--navy); }
+.krow .wide { max-width:1.1in; font-size:9pt; } .krow .space { max-width:3.6in; font-size:8pt; color:#9aa3b8; }
+.krow.fn .fkey { max-width:1.4in; height:.5in; background:var(--mint-l); display:flex; gap:4px; font-size:8.5pt; padding:0 .06in; }
+.fkey .em { font-size:13pt; }
+.pad { width:2.4in; height:1.05in; border-radius:.1in; background:#c5ccd8; box-shadow:inset 0 1px 3px rgba(0,0,0,.15); }
+/* gadget looks */
+.panel-base { flex-direction:row; flex-wrap:wrap; justify-content:center; align-content:center; gap:.2in .3in; }
+.panel-decor { font-family:'Noto Color Emoji'; font-size:64pt; line-height:1; }
+.big-keys { display:grid; grid-template-columns:1fr 1fr; gap:.14in; }
+.big-keys span { width:1.7in; height:.75in; border-radius:.16in; background:#fff; box-shadow:0 4px 0 #aab3c4; display:flex; align-items:center; gap:.08in; padding:0 .14in; font:600 12pt 'Fredoka'; color:var(--navy); }
+.big-keys .em { font-size:20pt; }
+.panel-name { width:100%; text-align:center; font:700 12pt 'Fredoka', 'Noto Color Emoji'; color:var(--teal-d); letter-spacing:.05em; }
+.bezel.dev-console { background:#1b2440; border-radius:.1in; box-shadow:inset 0 0 0 4px #33406a; }
+.panel-base.dev-console { background:#2a3558; } .dev-console .big-keys span { background:#3b4a7a; color:#fff; box-shadow:0 4px 0 #141b33; }
+.dev-console .big-keys span:nth-child(1) { background:#e2483d; } .dev-console .big-keys span:nth-child(2) { background:#f2a640; color:#2b1d06; }
+.dev-console .panel-name { color:#c9d8f5; }
+.bezel.dev-tablet { background:var(--teal-d); border-radius:.38in; padding:.3in; }
+.panel-base.dev-tablet { background:var(--teal); border-radius:.38in; } .dev-tablet .panel-name { color:#fff; }
+.bezel.dev-helm { background:linear-gradient(135deg, #8a5a2b, #5e3a17); border-radius:.14in; padding:.26in; box-shadow:inset 0 0 0 5px #b8901f; }
+.panel-base.dev-helm { background:linear-gradient(135deg, #9b6a36, #6b431c); box-shadow:inset 0 0 0 5px #b8901f; border-radius:.14in; }
+.dev-helm .big-keys span { background:#f1d48f; box-shadow:0 4px 0 #8a6a1f; color:#3b2a10; } .dev-helm .panel-name { color:#f1d48f; }
+.bezel.dev-mirror { background:linear-gradient(135deg, #e6c56b, #b8901f); border-radius:1.5in 1.5in .3in .3in; padding:.42in .32in .3in; }
+.dev-mirror .display { border-radius:1.3in 1.3in .1in .1in; }
+.dev-mirror .app-bar { padding:.3in 1.1in .08in; }
+.panel-base.dev-mirror { background:var(--mint-l); border:5px solid #d4af4a; border-radius:.3in; } .dev-mirror .big-keys span { box-shadow:0 4px 0 #d4af4a; }
+.extra { justify-content:space-evenly; align-items:center; }
+.extra .pg-sub { margin:0; } .extra .cut-h { width:calc(100% + .8in); }
+.swap .bezel { background:transparent; padding:0; border:1.5px dashed #b7c0cc; height:4.3in; box-shadow:none; } .swap .cam { display:none; }
 `;
 }
 

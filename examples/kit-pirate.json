@@ -1,0 +1,1 @@
+{ "kit": "pirate", "childName": "Sam", "subjects": [{ "name": "Polly", "kind": "parrot" }, { "name": "Inky", "kind": "octopus" }, { "name": "Barnacle", "kind": "cat" }], "staff": ["Grandma", "Leo"] }
