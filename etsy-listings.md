@@ -2,6 +2,8 @@
 
 Copy-paste ready. Each standard listing uses its PDF from `output/standard/` as the digital file and its photo from `output/listing-photos/` as the main image.
 
+**Pricing:** Etsy shoppers in this category expect a sale price. Set the standard packs at $8.00 and run an ongoing 40% off sale (Shop Manager > Marketing > Sales and discounts), so buyers see $4.80 with the $8 crossed out.
+
 **Settings for every listing:** Type: Digital. Who made it: I did. What is it: A finished product. When was it made: 2020–2026. Category: Paper & Party Supplies > Party Supplies > Party Games.
 
 ---
@@ -36,7 +38,7 @@ This is a DIGITAL DOWNLOAD. No physical item will be shipped. Colors may vary sl
 
 ---
 
-## 1. Dino Fossil Recovery Mission ($7)
+## 1. Dino Fossil Recovery Mission (list $8.00, run a 40% sale → $4.80)
 
 **Title**
 Dinosaur Scavenger Hunt Printable, Kids Birthday Party Game, Dino Treasure Hunt Clues, Indoor Scavenger Hunt Ages 3-6, Instant Download
@@ -49,7 +51,7 @@ dinosaur party, dino scavenger hunt, scavenger hunt kids, treasure hunt clues, d
 
 ---
 
-## 2. Superhero Secret HQ Trial ($7)
+## 2. Superhero Secret HQ Trial (list $8.00, run a 40% sale → $4.80)
 
 **Title**
 Superhero Scavenger Hunt Printable, Kids Birthday Party Game, Hero Treasure Hunt Clues, Indoor Scavenger Hunt Ages 4-8, Instant Download
@@ -62,7 +64,7 @@ superhero party, hero scavenger hunt, scavenger hunt kids, treasure hunt clues, 
 
 ---
 
-## 3. Pirate Captain's Lost Ledger ($7)
+## 3. Pirate Captain's Lost Ledger (list $8.00, run a 40% sale → $4.80)
 
 **Title**
 Pirate Treasure Hunt Printable, Kids Birthday Party Game, Pirate Scavenger Hunt Clues, Indoor Treasure Map Game Ages 3-7, Instant Download
@@ -75,7 +77,7 @@ pirate party, pirate treasure hunt, scavenger hunt kids, treasure hunt clues, pi
 
 ---
 
-## 4. Deep Space Rover Expedition ($7)
+## 4. Deep Space Rover Expedition (list $8.00, run a 40% sale → $4.80)
 
 **Title**
 Space Scavenger Hunt Printable, Kids Birthday Party Game, Astronaut Treasure Hunt Clues, Indoor Scavenger Hunt Ages 4-8, Instant Download
@@ -88,7 +90,7 @@ space party, space scavenger hunt, scavenger hunt kids, treasure hunt clues, ast
 
 ---
 
-## 5. Royal Castle Garden Quest ($7)
+## 5. Royal Castle Garden Quest (list $8.00, run a 40% sale → $4.80)
 
 **Title**
 Princess Scavenger Hunt Printable, Knight Castle Birthday Party Game, Treasure Hunt Clues, Indoor Scavenger Hunt Ages 3-7, Instant Download
@@ -101,7 +103,9 @@ princess party, princess scavenger, scavenger hunt kids, treasure hunt clues, pr
 
 ---
 
-## 6. Custom Scavenger Hunt ($15)
+## 6. Custom Scavenger Hunt ($9.99 to start)
+
+Raise to $12.99, then $14.99, once you have 10 to 20 reviews. No sale needed on this one.
 
 **Title**
 Custom Scavenger Hunt for Kids, Personalized Birthday Party Game with Your Child's Name and Home, Rhyming Treasure Hunt Clues, Printable PDF
