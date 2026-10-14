@@ -37,14 +37,14 @@ const pages = {
     <div style="position:absolute;left:70px;bottom:40px;right:70px;display:flex;gap:16px">
       <span class="pill">Your child’s name on every page</span><span class="pill" style="background:#3f4a73;color:#fff">Printable PDF</span></div>`,
   'kits-main': `<div class="top" style="text-align:center"><h1>Pretend Play Kits</h1>
-    <div class="sub">Signs, badges and a fold-up dashboard with your child’s name</div></div>
+    <div class="sub">Signs, badges and a pretend gadget with your child’s name</div></div>
     <div class="grid">${['vet', 'space', 'dino', 'hero', 'pirate', 'royal']
       .map((k) => `<div><img src="${img(`kit-${k}.png`)}"><div class="label">${KITS[k].name}</div></div>`)
       .join('')}</div>`,
 };
 for (const k of Object.keys(KITS)) {
   pages[`kit-${k}`] = `<div class="mint"></div><div class="top" style="text-align:center"><h1>${KITS[k].name} Play Kit</h1>
-    <div class="sub">With a fold-up ${KITS[k].dashboard.gadget}, 17 printable pages</div></div>
+    <div class="sub">With a ${KITS[k].dashboard.gadget}, 17 printable pages</div></div>
     <img src="${img(`kit-${k}.png`)}" style="position:absolute;left:170px;top:200px;width:860px">`;
 }
 

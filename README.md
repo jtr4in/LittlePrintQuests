@@ -27,7 +27,7 @@ npm run kit -- examples/kit-vet.json out/vet.pdf
 npm run kit -- examples/kit-space.json out/space.pdf --png out/space-pages
 ```
 
-Kits: `vet` (Vet Clinic, stand-alone) plus one add-on per hunt theme: `dino` (Dino Dig Lab), `hero` (Hero HQ), `pirate` (Pirate Ship), `space` (Mission Control) and `royal` (Royal Castle). Each kit also has a fold-up themed gadget (laptop, console, scanner, communicator, ship’s helm or magic mirror) with three pretend screens.
+Kits: `vet` (Vet Clinic, stand-alone) plus one add-on per hunt theme: `dino` (Dino Dig Lab), `hero` (Hero HQ), `pirate` (Pirate Ship), `space` (Mission Control) and `royal` (Royal Castle). Each kit also has a pretend gadget shaped for its theme, with three screens: a fold-up clinic laptop or mission control console, a handheld dino scanner or hero communicator, a sea chart with a spinning ship’s wheel, or a standing magic mirror. When a kit is sold with its hunt (`withHunt: true`), the guide adds an “After the hunt” note that carries the hunt’s story into the kit.
 
 **Party Bundles.** A bundle order gets the hunt plus its theme's play kit as a second PDF (`/d/<token>-kit.pdf`), in the same email or Etsy message. Website orders send `product: "bundle"`; Etsy orders count as bundles when an option such as **Package** says "Bundle" or "play kit". Pets or toys the buyer lists ("Rover (dog)") become the kit's patients and crew.
 

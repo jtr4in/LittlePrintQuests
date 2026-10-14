@@ -5,7 +5,8 @@
 //   { kit: 'vet', childName: 'Maya', placeName?: 'Maya’s Pet Clinic',
 //     subjects?: [{ name: 'Biscuit', kind: 'dog' }, ...],  // pets, crew, guests... up to 6
 //     staff?: ['Leo', 'Grandpa'],                         // extra badge names, up to 7
-//     lenient?: true }  // unknown subject kinds fall back to the kit's defaults instead of throwing
+//     lenient?: true,   // unknown subject kinds fall back to the kit's defaults instead of throwing
+//     withHunt?: true }  // sold with the matching hunt: the guide explains how the two connect
 // Everything except kit and childName is optional; empty slots print as blanks to fill in.
 //
 // Pictures are Noto Color Emoji (SIL Open Font License), so they're free to use in a product.
@@ -32,6 +33,7 @@ function normalize(def, cfg) {
     lead: `${def.leadPrefix ? def.leadPrefix + ' ' : ''}${childName}`,
     placeName: String(cfg.placeName || cfg.clinicName || def.placeName(possessive(childName))).trim(),
     subjects,
+    withHunt: Boolean(cfg.withHunt),
     staff: (cfg.staff || []).slice(0, 7).map((s) => String(s).trim()).filter(Boolean),
   };
 }
@@ -212,7 +214,7 @@ function guidePage(k) {
   const signCount = d.signs.length + 1 - ((d.signs.length + 1) % 2);
   const inside = [
     `${signCount} signs for doors and walls`,
-    `A fold-up ${d.dashboard.gadget} with 3 screens`,
+    `${['laptop', 'console'].includes(d.dashboard.device) ? 'A fold-up' : 'A cut-out'} ${d.dashboard.gadget} with 3 screens`,
     '8 ID badges',
     d.log.title,
     `${d.record.title} forms for ${k.subjects.length ? `each of your ${d.subjectPlural}` : `four ${d.subjectPlural}`}, plus a blank one`,
@@ -221,13 +223,14 @@ function guidePage(k) {
     `${d.menu.title} and ${d.menu.coinsTitle.toLowerCase()}`,
     d.certificate.title,
   ];
-  return `<section class="page guide">
+  return `<section class="page guide${k.withHunt && G.afterHunt ? ' with-hunt' : ''}">
     <div class="guide-head"><div class="guide-icon">${d.icon}</div><div><div class="clinic">Grown-up guide</div><h1>Welcome to ${esc(k.placeName)}!</h1></div></div>
     <p class="lead">${esc(G.intro.replace('{child}', k.childName))}</p>
     <div class="guide-cols">
       <div><h3>What’s inside</h3><ul>${inside.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
       <div><h3>Set up in 10 minutes</h3><ol>${G.setup.map((x) => `<li>${esc(x)}</li>`).join('')}</ol></div>
     </div>
+    ${k.withHunt && G.afterHunt ? `<div class="after-hunt"><b>After the hunt</b>${esc(G.afterHunt.replace('{place}', k.placeName).replace('{child}', k.childName))}</div>` : ''}
     <div class="play"><h3>Play ideas</h3><div class="play-grid">
       ${G.play.map(([t, x]) => `<div><b>${esc(t)}</b>${esc(x)}</div>`).join('')}
     </div></div>
@@ -236,10 +239,12 @@ function guidePage(k) {
 }
 
 // ---------- pretend gadget ----------
-// One page folds into the kit's gadget: a screen on top, controls below (a keyboard for
-// the laptop, big buttons for everything else). A second page holds two more screens
-// to cut out and lay over the first. dashboard.device picks the look:
-// laptop, console, tablet, helm or mirror.
+// One page holds the kit's pretend gadget and a second page two more screens to cut out
+// and lay over the first. dashboard.device picks the shape:
+//   laptop, console  a screen that folds up behind a keyboard or control desk
+//   scanner, communicator  a handheld gadget with buttons under the screen
+//   helm     a sea chart plus a ship's wheel to cut out
+//   mirror   a standing magic mirror with a fold-back stand
 
 function screenSchedule(k, S) {
   const subs = subjectsOrDefaults(k);
@@ -306,19 +311,79 @@ function keyboard(k) {
 function controlPanel(k) {
   const S = k.def.dashboard;
   return `<div class="deck-base panel-base dev-${S.device}">
+    <div class="toggles">${['A', 'B', 'C', 'D', 'E', 'F'].map((x) => `<span><i></i>${x}</span>`).join('')}</div>
     <div class="panel-decor">${S.decor}</div>
     <div class="big-keys">${S.keys.map(([e, n]) => `<span><b class="em">${e}</b>${esc(n)}</span>`).join('')}</div>
+    <div class="dials"><span></span><span></span><span></span></div>
     <div class="panel-name">${S.appIcon} ${esc(S.appName)}</div>
   </div>`;
 }
 
-function laptopPages(k) {
-  return `<section class="page laptop">
-      <div class="fold-top">${screen(k, 'schedule')}</div>
-      <div class="fold-line"><span>Fold here, then stand the screen up</span></div>
-      <div class="fold-bottom">${(k.def.dashboard.device || 'laptop') === 'laptop' ? keyboard(k) : controlPanel(k)}</div>
-    </section>
-    <section class="page laptop extra">
+const roundKeys = (S) => `<div class="round-keys">${S.keys.map(([e, n]) => `<span><b class="em">${e}</b><small>${esc(n)}</small></span>`).join('')}</div>`;
+
+function foldPage(k) {
+  const S = k.def.dashboard;
+  return `<section class="page gadget fold">
+    <div class="fold-top">${screen(k, 'schedule')}</div>
+    <div class="fold-line"><span>Fold here, then stand the screen up</span></div>
+    <div class="fold-bottom">${S.device === 'console' ? controlPanel(k) : keyboard(k)}</div>
+  </section>`;
+}
+
+// A handheld gadget in one piece: lens or antenna on top, screen, then buttons.
+function handheldPage(k) {
+  const S = k.def.dashboard;
+  const top = S.device === 'communicator'
+    ? `<div class="antenna"></div><div class="grille">${'<i></i>'.repeat(7)}</div>`
+    : `<div class="lens"><i></i></div><div class="beam">SCAN</div>`;
+  return `<section class="page gadget">
+    <p class="pg-sub">Cut around the ${esc(S.gadget)}. Glue it onto cardboard to make it sturdy.</p>
+    <div class="handheld dev-${S.device}">
+      <div class="hh-top">${top}<span class="hh-name">${S.appIcon} ${esc(S.appName)}</span><span class="led"></span></div>
+      ${screen(k, 'schedule')}
+      <div class="hh-bottom"><div class="dpad"><i></i><i></i><i></i><i></i></div>${roundKeys(S)}</div>
+    </div>
+  </section>`;
+}
+
+// The sea chart stands up like a map board; the wheel is cut out and spins on a pencil.
+function helmPage(k) {
+  const S = k.def.dashboard;
+  const spokes = Array.from({ length: 8 }, (_, i) => {
+    const a = (i * Math.PI) / 4;
+    const [x1, y1, x2, y2] = [26 * Math.cos(a), 26 * Math.sin(a), 104 * Math.cos(a), 104 * Math.sin(a)];
+    return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/><circle cx="${x2.toFixed(1)}" cy="${y2.toFixed(1)}" r="9"/>`;
+  }).join('');
+  return `<section class="page gadget">
+    <p class="pg-sub">Cut out the sea chart and the ship’s wheel. Push a pencil through the middle of the wheel so it spins.</p>
+    <div class="chart">${screen(k, 'schedule')}</div>
+    <div class="cut-h"></div>
+    <div class="wheel-row">
+      <div class="wheel"><svg viewBox="-116 -116 232 232"><g class="spokes">${spokes}</g><circle class="rim" r="74"/><circle class="rim-in" r="66"/><circle class="hub" r="26"/></svg><span class="em">${S.decor}</span></div>
+      <div class="orders"><div class="orders-h">Captain’s orders</div>${roundKeys(S)}</div>
+    </div>
+  </section>`;
+}
+
+function mirrorPage(k) {
+  const S = k.def.dashboard;
+  return `<section class="page gadget">
+    <p class="pg-sub">Cut around the mirror and its stand. Fold the tab back so the mirror stands up.</p>
+    <div class="mirror">
+      <div class="mirror-crown em">👑</div>
+      <div class="mirror-frame"><div class="mirror-arch">✨ Mirror, mirror, what’s on today? ✨</div>${screen(k, 'schedule')}</div>
+      <div class="mirror-stand">${roundKeys(S)}</div>
+      <div class="stand-tab">Fold back to stand</div>
+    </div>
+  </section>`;
+}
+
+function gadgetPages(k) {
+  const device = k.def.dashboard.device || 'laptop';
+  const main = { laptop: foldPage, console: foldPage, scanner: handheldPage, communicator: handheldPage, helm: helmPage, mirror: mirrorPage }[device];
+  if (!main) throw new Error(`Unknown gadget device "${device}"`);
+  return `${main(k)}
+    <section class="page gadget extra">
       <p class="pg-sub">More screens: cut out and lay over the ${esc(k.def.dashboard.appName)} screen.</p>
       <div class="swap">${screen(k, 'monitor')}</div>
       <div class="cut-h"></div>
@@ -344,7 +409,7 @@ function buildKitHtml(cfg) {
   const pages = [
     guidePage(k),
     signsPages(k),
-    laptopPages(k),
+    gadgetPages(k),
     badgesPage(k),
     logPage(k),
     ...subjectsOrDefaults(k).map((p) => recordPage(k, p)),
@@ -392,6 +457,8 @@ h1, h2, h3 { font-family:'Fredoka', sans-serif; margin:0; line-height:1.1; }
 .guide h3 { font-size:18pt; color:var(--teal-d); margin-bottom:.08in; }
 .guide ul, .guide ol { margin:0; padding-left:.25in; font-size:13.5pt; line-height:1.7; }
 .play { margin-top:.45in; }
+.with-hunt .lead { margin:.22in 0; font-size:14pt; } .with-hunt ul, .with-hunt ol { font-size:12.5pt; line-height:1.55; }
+.with-hunt .play { margin-top:.22in; } .with-hunt .play-grid div { padding:.12in .16in; font-size:12pt; }
 .play-grid { display:grid; grid-template-columns:1fr 1fr; gap:.15in; }
 .play-grid div { background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:.18in .2in; font-size:13pt; line-height:1.45; }
 .play-grid b { display:block; font:600 14.5pt 'Fredoka'; margin-bottom:3px; }
@@ -503,8 +570,10 @@ h1, h2, h3 { font-family:'Fredoka', sans-serif; margin:0; line-height:1.1; }
 .cert-row > div:not(.seal) { display:flex; flex-direction:column; gap:4px; width:2in; } .cert-row .fill { min-width:2in; }
 .seal { font-size:34pt; width:1.1in; height:1.1in; border-radius:50%; background:var(--orange); display:grid; place-items:center; box-shadow:0 0 0 5px #fff, 0 0 0 8px var(--orange); }
 
-/* pretend laptop */
-.laptop { padding:.35in .4in; display:flex; flex-direction:column; }
+/* pretend gadgets */
+.gadget { padding:.35in .4in; display:flex; flex-direction:column; align-items:center; }
+.gadget > .pg-sub { margin:0 0 .15in; }
+.fold { align-items:stretch; }
 .fold-top, .fold-bottom { flex:1; display:flex; align-items:center; justify-content:center; }
 .fold-top { align-items:flex-end; padding-bottom:.12in; } .fold-bottom { align-items:flex-start; padding-top:.12in; }
 .fold-line { border-top:2px dashed #b7c0cc; position:relative; height:0; margin:0 -.4in; }
@@ -553,25 +622,79 @@ h1, h2, h3 { font-family:'Fredoka', sans-serif; margin:0; line-height:1.1; }
 .fkey .em { font-size:13pt; }
 .pad { width:2.4in; height:1.05in; border-radius:.1in; background:#c5ccd8; box-shadow:inset 0 1px 3px rgba(0,0,0,.15); }
 /* gadget looks */
-.panel-base { flex-direction:row; flex-wrap:wrap; justify-content:center; align-content:center; gap:.2in .3in; }
-.panel-decor { font-family:'Noto Color Emoji'; font-size:64pt; line-height:1; }
+.panel-base { flex-direction:row; flex-wrap:wrap; justify-content:center; align-content:center; gap:.16in .3in; }
+.panel-decor { font-family:'Noto Color Emoji'; font-size:52pt; line-height:1; }
 .big-keys { display:grid; grid-template-columns:1fr 1fr; gap:.14in; }
-.big-keys span { width:1.7in; height:.75in; border-radius:.16in; background:#fff; box-shadow:0 4px 0 #aab3c4; display:flex; align-items:center; gap:.08in; padding:0 .14in; font:600 12pt 'Fredoka'; color:var(--navy); }
+.big-keys span { width:1.7in; height:.7in; border-radius:.16in; background:#fff; box-shadow:0 4px 0 #aab3c4; display:flex; align-items:center; gap:.08in; padding:0 .14in; font:600 12pt 'Fredoka'; color:var(--navy); }
 .big-keys .em { font-size:20pt; }
-.panel-name { width:100%; text-align:center; font:700 12pt 'Fredoka', 'Noto Color Emoji'; color:var(--teal-d); letter-spacing:.05em; }
+.panel-name { width:100%; text-align:center; font:700 12pt 'Fredoka', 'Noto Color Emoji'; color:#c9d8f5; letter-spacing:.05em; }
 .bezel.dev-console { background:#1b2440; border-radius:.1in; box-shadow:inset 0 0 0 4px #33406a; }
-.panel-base.dev-console { background:#2a3558; } .dev-console .big-keys span { background:#3b4a7a; color:#fff; box-shadow:0 4px 0 #141b33; }
+.panel-base.dev-console { background:linear-gradient(#34406a, #222b4a); border-radius:.1in .1in .5in .5in; }
+.dev-console .big-keys span { background:#3b4a7a; color:#fff; box-shadow:0 4px 0 #141b33; }
 .dev-console .big-keys span:nth-child(1) { background:#e2483d; } .dev-console .big-keys span:nth-child(2) { background:#f2a640; color:#2b1d06; }
-.dev-console .panel-name { color:#c9d8f5; }
-.bezel.dev-tablet { background:var(--teal-d); border-radius:.38in; padding:.3in; }
-.panel-base.dev-tablet { background:var(--teal); border-radius:.38in; } .dev-tablet .panel-name { color:#fff; }
-.bezel.dev-helm { background:linear-gradient(135deg, #8a5a2b, #5e3a17); border-radius:.14in; padding:.26in; box-shadow:inset 0 0 0 5px #b8901f; }
-.panel-base.dev-helm { background:linear-gradient(135deg, #9b6a36, #6b431c); box-shadow:inset 0 0 0 5px #b8901f; border-radius:.14in; }
-.dev-helm .big-keys span { background:#f1d48f; box-shadow:0 4px 0 #8a6a1f; color:#3b2a10; } .dev-helm .panel-name { color:#f1d48f; }
-.bezel.dev-mirror { background:linear-gradient(135deg, #e6c56b, #b8901f); border-radius:1.5in 1.5in .3in .3in; padding:.42in .32in .3in; }
-.dev-mirror .display { border-radius:1.3in 1.3in .1in .1in; }
-.dev-mirror .app-bar { padding:.3in 1.1in .08in; }
-.panel-base.dev-mirror { background:var(--mint-l); border:5px solid #d4af4a; border-radius:.3in; } .dev-mirror .big-keys span { box-shadow:0 4px 0 #d4af4a; }
+.toggles { width:100%; display:flex; justify-content:center; gap:.22in; }
+.toggles span { display:flex; flex-direction:column; align-items:center; gap:3px; font:600 8pt 'Fredoka'; color:#c9d8f5; }
+.toggles i { width:.2in; height:.4in; border-radius:.1in; background:#141b33; position:relative; }
+.toggles i::after { content:''; position:absolute; left:.03in; top:.04in; width:.14in; height:.14in; border-radius:50%; background:#5cf0a2; }
+.toggles span:nth-child(even) i::after { top:auto; bottom:.04in; background:#f2a640; }
+.dials { display:flex; flex-direction:column; gap:.12in; }
+.dials span { width:.5in; height:.5in; border-radius:50%; background:conic-gradient(#5cf0a2 0 35%, #141b33 0); box-shadow:0 0 0 4px #3b4a7a; }
+
+.round-keys { display:grid; grid-template-columns:repeat(2, 1fr); gap:.12in .2in; }
+.round-keys span { display:flex; flex-direction:column; align-items:center; gap:3px; }
+.round-keys b { width:.85in; height:.85in; border-radius:50%; display:grid; place-items:center; font-size:24pt; background:#fff; box-shadow:0 5px 0 rgba(0,0,0,.25); }
+.round-keys small { font:600 10pt 'Fredoka'; }
+
+.handheld { width:7.7in; padding:.18in; border-radius:.5in .5in .9in .9in; background:var(--teal-d); position:relative; display:flex; flex-direction:column; gap:.16in; box-shadow:inset 0 0 0 .07in var(--teal); }
+.handheld .bezel { width:7.34in; height:4.5in; background:#141a2b; border-radius:.2in; padding:.16in; }
+.handheld .cam { display:none; }
+.hh-top { height:.8in; display:flex; align-items:center; gap:.2in; padding:0 .25in; }
+.hh-name { flex:1; text-align:center; font:700 15pt 'Fredoka', 'Noto Color Emoji'; color:#fff; letter-spacing:.06em; }
+.led { width:.22in; height:.22in; border-radius:50%; background:#ff5a4f; box-shadow:0 0 0 4px rgba(255,255,255,.25); }
+.lens { width:.62in; height:.62in; border-radius:50%; background:#0c2a1a; display:grid; place-items:center; box-shadow:0 0 0 5px var(--gold); }
+.lens i { width:.3in; height:.3in; border-radius:50%; background:radial-gradient(circle at 35% 35%, #c9ffe0, #2bd17a 55%, #0c5a32); }
+.beam { font:700 10pt 'Fredoka'; letter-spacing:.2em; color:var(--gold); }
+.antenna { position:absolute; left:.6in; top:-.55in; width:.16in; height:.75in; background:var(--teal-d); border-radius:.08in .08in 0 0; }
+.antenna::before { content:''; position:absolute; left:-.07in; top:-.16in; width:.3in; height:.3in; border-radius:50%; background:var(--orange); }
+.handheld.dev-communicator { margin-top:.5in; border-radius:.9in .9in .5in .5in; }
+.grille { display:grid; grid-template-columns:repeat(7, .07in); gap:.06in; } .grille i { height:.42in; border-radius:.04in; background:rgba(255,255,255,.3); }
+.hh-bottom { display:flex; align-items:center; justify-content:space-around; padding:.1in .2in .3in; }
+.handheld .round-keys small { color:#fff; }
+.handheld .round-keys b { background:var(--mint-l); box-shadow:0 5px 0 var(--orange); }
+.dpad { width:1.5in; height:1.5in; position:relative; }
+.dpad i { position:absolute; width:.5in; height:.5in; background:var(--mint); border-radius:.08in; }
+.dpad i:nth-child(1) { left:.5in; top:0; } .dpad i:nth-child(2) { left:.5in; bottom:0; } .dpad i:nth-child(3) { left:0; top:.5in; } .dpad i:nth-child(4) { right:0; top:.5in; }
+.dpad::after { content:''; position:absolute; left:.5in; top:.5in; width:.5in; height:.5in; background:var(--mint); }
+
+.chart { position:relative; padding:.22in 0; }
+.chart::before, .chart::after { content:''; position:absolute; left:-.15in; right:-.15in; height:.32in; border-radius:.16in; background:linear-gradient(#a8743c, #6b431c); }
+.chart::before { top:0; } .chart::after { bottom:0; }
+.chart .bezel { background:#e8d3a2; border-radius:0; padding:.14in .2in; height:4.4in; }
+.chart .display { background:#fbf3df; } .chart .cam { display:none; }
+.wheel-row { flex:1; width:100%; display:flex; align-items:center; justify-content:space-around; }
+.wheel { position:relative; width:4.3in; height:4.3in; }
+.wheel svg { width:100%; height:100%; }
+.wheel .spokes line { stroke:#7a4d22; stroke-width:12; stroke-linecap:round; } .wheel .spokes circle { fill:#9b6a36; stroke:#5e3a17; stroke-width:3; }
+.wheel .rim { fill:none; stroke:#8a5a2b; stroke-width:16; } .wheel .rim-in { fill:none; stroke:#b8901f; stroke-width:3; }
+.wheel .hub { fill:#e6c56b; stroke:#8a6a1f; stroke-width:4; }
+.wheel .em { position:absolute; left:50%; top:50%; transform:translate(-50%, -50%); font-size:30pt; }
+.orders { display:flex; flex-direction:column; align-items:center; gap:.14in; }
+.orders-h { font:700 14pt 'Fredoka'; color:#6b431c; }
+.orders .round-keys b { background:#f1d48f; box-shadow:0 5px 0 #8a6a1f; }
+
+.mirror { display:flex; flex-direction:column; align-items:center; }
+.mirror-crown { font-size:40pt; line-height:1; margin-bottom:-.12in; position:relative; z-index:1; }
+.mirror-frame { width:7.7in; padding:1.05in .22in .26in; border-radius:3.85in 3.85in .5in .5in; background:linear-gradient(135deg, #f0d47e, #b8901f 55%, #e6c56b); box-shadow:inset 0 0 0 .08in #fff3c4, inset 0 0 0 .14in #b8901f; position:relative; }
+.mirror-arch { position:absolute; left:0; right:0; top:.55in; text-align:center; font:700 13pt 'Fredoka', 'Noto Color Emoji'; color:#5b3f08; }
+.mirror .bezel { width:7.26in; height:4.4in; background:#fff6dc; border-radius:.3in; padding:.12in; }
+.mirror .display { border-radius:.2in; } .mirror .cam { display:none; }
+.mirror-stand { width:5.6in; padding:.2in .3in .25in; background:linear-gradient(#e6c56b, #b8901f); clip-path:polygon(8% 0, 92% 0, 100% 100%, 0 100%); display:flex; justify-content:center; }
+.mirror-stand .round-keys { grid-template-columns:repeat(4, 1fr); }
+.mirror-stand .round-keys b { width:.7in; height:.7in; font-size:19pt; background:#fdf3d6; box-shadow:0 4px 0 #8a6a1f; }
+.mirror-stand .round-keys small { color:#3b2a10; font-size:8.5pt; text-align:center; }
+.stand-tab { width:3in; height:.75in; border:2px dashed #b8901f; border-top-style:dotted; display:grid; place-items:center; font:600 9pt 'Fredoka'; color:#8a6a1f; background:#fdf3d6; }
+.after-hunt { background:var(--mint-l); border-left:5px solid var(--orange); border-radius:.08in; padding:.12in .16in; margin:.15in 0 0; font-size:11pt; }
+.after-hunt b { display:block; font:700 12pt 'Fredoka'; color:var(--teal-d); margin-bottom:2px; }
 .extra { justify-content:space-evenly; align-items:center; }
 .extra .pg-sub { margin:0; } .extra .cut-h { width:calc(100% + .8in); }
 .swap .bezel { background:transparent; padding:0; border:1.5px dashed #b7c0cc; height:4.3in; box-shadow:none; } .swap .cam { display:none; }

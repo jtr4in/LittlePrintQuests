@@ -136,8 +136,9 @@ THE HUNT
 
 THE PLAY KIT (17 pages, matches your theme)
 • 8 door signs with your child's name ("Leo's Mission Control")
-• A fold-up pretend dashboard with a calendar, a "next up" list and 3 screens
-  (dino scanner, hero communicator, ship's helm, mission control console or magic mirror)
+• A pretend gadget to match: a dino scanner, hero communicator, ship's wheel and
+  sea chart, mission control console or magic mirror, with a calendar,
+  a "next up" list and 3 screens to swap
 • ID badges, a job log, check-up forms for each of your child's pets or toys
 • Tickets, passports, a menu with coins to cut out, and a certificate
 
@@ -181,8 +182,8 @@ Turn the living room into a vet clinic, a pirate ship or mission control, with y
 
 ★ WHAT YOU GET (17-page PDF, US Letter)
 • 8 door signs, including "[Name]'s Pet Clinic" (or Pirate Ship, Mission Control…)
-• A fold-up pretend dashboard: a clinic laptop, dino scanner, hero communicator,
-  ship's helm, mission control console or magic mirror, with a calendar,
+• A pretend gadget to match: a clinic laptop, dino scanner, hero communicator,
+  ship's wheel and sea chart, mission control console or magic mirror, with a calendar,
   a "next patients" list and 3 screens to swap
 • 8 ID badges for your child, family and friends
 • A check-up form and passport for each of your child's pets or toys

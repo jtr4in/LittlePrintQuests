@@ -58,7 +58,7 @@ module.exports = {
     items: [['🛡️', 'Power shield', 3], ['🦸', 'New cape', 2], ['🎭', 'Secret mask', 1], ['🔦', 'Super torch', 1], ['📡', 'Hero radio', 2], ['🧃', 'Power juice', 1], ['👟', 'Speed shoes', 3], ['🚁', 'Heli ride', 5]],
   },
   dashboard: {
-    gadget: 'hero communicator', device: 'tablet', decor: '⚡',
+    gadget: 'hero communicator', device: 'communicator', decor: '⚡',
     appName: 'HeroNet', appIcon: '🦸', scheduleTitle: 'Mission calendar', monitorTitle: 'Hero power scan', alertHeader: 'Villain alert',
     calendarLabel: 'Mission days', nextLabel: '⚡ Heroes on call',
     waveLabel: '⚡ Power levels', stats: [['💪', 'Strength', 'Max'], ['⚡', 'Speed', 'Turbo'], ['🛡️', 'Shields', 'On']],
@@ -68,6 +68,7 @@ module.exports = {
   },
   certificate: { title: 'Official Superhero', icon: '🏆', seal: '⚡', line: 'trained hard, helped others, and saved the day with courage and kindness.' },
   guide: {
+    afterHunt: 'Every rookie who passed the Secret HQ Trial reports for duty at {place}. Hand out the hero badges as the prize, and let {child} take the first call on the hero communicator.',
     intro: 'Everything {child} needs to run a pretend superhero headquarters. Print on regular Letter paper, cut along the dashed lines, and recruit some toys for the hero team.',
     setup: [
       'Tape the Hero HQ sign and Heroes On Duty sign by the door.', 'Turn a couch or table into the Secret Hideout with a blanket.',

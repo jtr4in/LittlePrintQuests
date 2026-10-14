@@ -68,10 +68,11 @@ module.exports = {
   },
   certificate: { title: 'Royal Honor Award', icon: '🏅', seal: '👑', line: 'ruled the castle with kindness, welcomed every guest, and kept the crown jewels safe.' },
   guide: {
+    afterHunt: 'The Crown Jewels are safe again! Carry them to {place} and put them in the Treasure Vault. The Hero of the Realm opens the castle gates and asks the magic mirror who’s visiting today.',
     intro: 'Everything {child} needs to run a pretend royal castle. Print on regular Letter paper, cut along the dashed lines, and invite some toys to court.',
     setup: [
       'Tape the castle sign and Gates Open sign by the door.', 'Make a throne from a chair and a blanket in the Throne Room.',
-      'Fold the magic mirror and set it by the throne.', 'Set out the Royal Bakery with play food or real snacks.',
+      'Cut out the magic mirror, fold back its stand, and set it by the throne.', 'Set out the Royal Bakery with play food or real snacks.',
       'Pin on the badges, put on a crown, and open the gates!',
     ],
     play: [

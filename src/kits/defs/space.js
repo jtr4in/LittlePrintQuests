@@ -68,6 +68,7 @@ module.exports = {
   },
   certificate: { title: 'Certified Space Cadet', icon: '🎖️', seal: '🚀', line: 'completed astronaut training and is cleared for launch to anywhere in the galaxy.' },
   guide: {
+    afterHunt: 'The beacons are found and the thrusters are back on. Time to launch! Set up {place} next to the last beacon, and Mission Commander {child} runs the countdown.',
     intro: 'Everything {child} needs to run a pretend space mission. Print on regular Letter paper, cut along the dashed lines, and recruit some toys as the crew.',
     setup: [
       'Tape the Mission Control sign over a desk or table.', 'Make a rocket from a big box or a couch with blankets.',

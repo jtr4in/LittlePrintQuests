@@ -58,7 +58,7 @@ module.exports = {
     items: [['🐟', 'Fish stew', 2], ['🍌', 'Banana', 1], ['🥥', 'Coconut', 1], ['🍞', 'Ship biscuit', 1], ['🧃', 'Grog juice', 1], ['🍪', 'Captain’s cookie', 2], ['💎', 'Treasure gem', 3], ['🛶', 'Rowboat ride', 5]],
   },
   dashboard: {
-    gadget: 'ship’s helm', device: 'helm', decor: '🧭',
+    gadget: 'ship’s wheel and sea chart', device: 'helm', decor: '🧭',
     appName: 'SeaChart', appIcon: '🧭', scheduleTitle: 'Voyage calendar', monitorTitle: 'Ship’s status', alertHeader: 'Lookout report',
     calendarLabel: 'Sailing days', nextLabel: '🏴‍☠️ Crew on watch',
     waveLabel: '🌊 Waves ahead', stats: [['💨', 'Wind', 'Strong'], ['🧭', 'Heading', 'North'], ['💰', 'Treasure', '3 chests']],
@@ -68,9 +68,10 @@ module.exports = {
   },
   certificate: { title: 'Official Pirate Crew', icon: '🏴‍☠️', seal: '⚓', line: 'sailed the seven seas, followed the map, and shared the treasure fair and square.' },
   guide: {
+    afterHunt: 'The crew found Captain Barnaby’s treasure, and now they need a ship! Set up {place} right where the treasure was buried, and put the treasure in the Treasure Room. Captain {child} takes the wheel.',
     intro: 'Everything {child} needs to sail a pretend pirate ship. Print on regular Letter paper, cut along the dashed lines, and gather some toys for the crew.',
     setup: [
-      'Tape the Pirate Ship sign and All Aboard sign to the “ship” (a couch, a bed, or a big box).', 'Fold the ship’s helm and set it at the front of the ship.',
+      'Tape the Pirate Ship sign and All Aboard sign to the “ship” (a couch, a bed, or a big box).', 'Cut out the ship’s wheel and sea chart and set them at the front of the ship.',
       'Put the Treasure Room sign on a box of “gold” (coins, beads or chocolate coins).', 'Use a pillow or a tape line on the floor as the plank.',
       'Pin on the crew badges and set sail!',
     ],

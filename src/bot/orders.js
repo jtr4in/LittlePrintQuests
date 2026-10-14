@@ -67,7 +67,7 @@ async function generate(id) {
 }
 
 function kitConfig(order, kit) {
-  return { kit: kit.id, childName: order.config.childName, subjects: order.pets || [], lenient: true };
+  return { kit: kit.id, childName: order.config.childName, subjects: order.pets || [], lenient: true, withHunt: true };
 }
 
 // Parses and builds one order. Never throws: failures become "needs attention".
