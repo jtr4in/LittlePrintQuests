@@ -6,6 +6,12 @@
 <title>LittlePrintQuests</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Personalized printable birthday scavenger hunts for kids ages 3 to 8. Your child's name, your home's hiding spots, rhyming clue cards ready to print in minutes.">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<meta name="theme-color" content="#fbf8f1">
+<meta property="og:title" content="LittlePrintQuests · Printable Party Games &amp; Quests">
+<meta property="og:description" content="Personalized printable birthday scavenger hunts for kids ages 3 to 8.">
+<meta property="og:image" content="https://jtr4in.github.io/LittlePrintQuests/img/social.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&display=swap">
@@ -13,15 +19,20 @@
 /* Layout: the printed clue card is the hero object; sections stack on a wide
    single column, and the order builder pairs the form with a live trail. */
 :root {
-  --paper: #f7f8fc;      /* page: printer paper with a cool bias */
+  /* Brand colors come straight from the LittlePrintQuests logo. */
+  --paper: #fbf8f1;      /* page: the map's cream */
   --sheet: #ffffff;      /* cards and panels */
-  --ink: #1e2a5a;        /* crayon navy, body text */
-  --ink-soft: #55608a;   /* secondary text */
-  --line: #d5daea;       /* hairlines, dashed cut lines */
-  --sun: #ffc93c;        /* sunflower accent: CTAs and the trail */
-  --sun-ink: #2a1f00;    /* text on sunflower */
-  --mint: #2f9e8f;       /* secondary accent: checks, success */
-  --tint: #eef1fa;       /* quiet panel fill */
+  --ink: #3f4a73;        /* logo navy, body text */
+  --ink-soft: #646d8f;   /* secondary text */
+  --line: #e4dfd2;       /* hairlines, dashed cut lines */
+  --orange: #ef9d31;     /* logo orange: CTAs and the trail */
+  --orange-ink: #2b1d06; /* text on orange */
+  --orange-edge: #c97d1c;
+  --mint: #89dcb0;       /* logo mint: highlights and fills */
+  --mint-deep: #2f9a6b;  /* mint dark enough for small marks */
+  --word-little: #6fcf9c; --word-print: #ef9d31; --word-quests: #475379;
+  --tint: #f2f8f2;       /* quiet panel fill, a breath of mint */
+  --hl: var(--mint);     /* marker highlight behind hero words */
   --display: 'Fredoka', 'Trebuchet MS', system-ui, sans-serif;
   --body: 'Atkinson Hyperlegible', 'Segoe UI', system-ui, sans-serif;
   --mono: 'DM Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
@@ -29,13 +40,15 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --paper: #12172e; --sheet: #1b2142; --ink: #eef0fa; --ink-soft: #a9b0d0; --line: #343c66;
-    --sun: #ffc93c; --sun-ink: #2a1f00; --mint: #5cc9b9; --tint: #1f2650; color-scheme: dark;
+    --paper: #151a2e; --sheet: #1e2541; --ink: #f4f0e6; --ink-soft: #b4bad4; --line: #343c63;
+    --orange: #f2a640; --orange-ink: #2b1d06; --orange-edge: #b8721a; --mint: #89dcb0; --mint-deep: #89dcb0; --tint: #1d2c3a; --hl: color-mix(in srgb, #89dcb0 38%, transparent);
+    --word-little: #89dcb0; --word-print: #f2a640; --word-quests: #f4f0e6; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --paper: #12172e; --sheet: #1b2142; --ink: #eef0fa; --ink-soft: #a9b0d0; --line: #343c66;
-  --sun: #ffc93c; --sun-ink: #2a1f00; --mint: #5cc9b9; --tint: #1f2650; color-scheme: dark;
+  --paper: #151a2e; --sheet: #1e2541; --ink: #f4f0e6; --ink-soft: #b4bad4; --line: #343c63;
+  --orange: #f2a640; --orange-ink: #2b1d06; --orange-edge: #b8721a; --mint: #89dcb0; --mint-deep: #89dcb0; --tint: #1d2c3a; --hl: color-mix(in srgb, #89dcb0 38%, transparent);
+  --word-little: #89dcb0; --word-print: #f2a640; --word-quests: #f4f0e6; color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -49,19 +62,21 @@ p { margin: 0; }
 .eyebrow { font: 500 13px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
 .btn { display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 999px; padding: 14px 24px; font: 600 17px/1 var(--display); cursor: pointer; text-decoration: none; transition: transform .15s ease; }
 .btn:hover { transform: translateY(-2px); }
-.btn:focus-visible, input:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid var(--mint); outline-offset: 2px; }
-.btn-sun { background: var(--sun); color: var(--sun-ink); box-shadow: 0 3px 0 #d9a514; }
+.btn:focus-visible, input:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+.btn-orange { background: var(--orange); color: var(--orange-ink); box-shadow: 0 3px 0 var(--orange-edge); }
 .btn-ghost { background: transparent; color: var(--ink); border: 2px solid var(--line); }
 
 /* header */
 .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
 .top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; }
-.logo { display: flex; align-items: center; gap: 10px; font: 700 20px/1 var(--display); text-decoration: none; }
-.logo svg { width: 34px; height: 34px; flex: none; }
+.logo { display: flex; align-items: center; gap: 10px; font: 600 23px/1 var(--display); text-decoration: none; letter-spacing: -.01em; white-space: nowrap; }
+.logo img { width: 52px; height: auto; flex: none; }
+.wordmark .l { color: var(--word-little); } .wordmark .p { color: var(--word-print); } .wordmark .q { color: var(--word-quests); }
+@media (max-width: 400px) { .logo { font-size: 19px; } .logo img { width: 42px; } }
 .nav { display: flex; align-items: center; gap: 24px; font-size: 15px; }
 .nav a { text-decoration: none; color: var(--ink-soft); }
 .nav a:hover { color: var(--ink); }
-.nav a.btn { color: var(--sun-ink); }
+.nav a.btn { color: var(--orange-ink); }
 .nav .btn { padding: 10px 18px; font-size: 15px; }
 @media (max-width: 760px) { .nav a:not(.btn) { display: none; } }
 
@@ -70,17 +85,17 @@ main { position: relative; }
 .stop { position: relative; padding-block: 48px; }
 .stop > .wrap { position: relative; }
 .pin { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-.pin b { width: 12px; height: 12px; border-radius: 50%; background: var(--sun); box-shadow: 0 0 0 4px color-mix(in srgb, var(--sun) 30%, transparent); }
+.pin b { width: 12px; height: 12px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 4px color-mix(in srgb, var(--mint) 55%, transparent); }
 
 /* hero */
 .hero { padding-block: 48px; }
 .hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
 .hero h1 { font-size: clamp(38px, 6vw, 64px); }
-.hero h1 em { font-style: normal; background: linear-gradient(transparent 62%, var(--sun) 62%); padding: 0 4px; }
+.hero h1 em { font-style: normal; background: linear-gradient(transparent 60%, var(--hl) 60%); padding: 0 4px; }
 .hero .lede { font-size: 19px; color: var(--ink-soft); margin: 20px 0 28px; max-width: 34em; }
 .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; }
 .facts { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 28px; font: 14px/1.4 var(--mono); color: var(--ink-soft); padding: 0; list-style: none; }
-.facts li::before { content: '✓ '; color: var(--mint); font-weight: 700; }
+.facts li::before { content: '✓ '; color: var(--mint-deep); font-weight: 700; }
 @media (max-width: 860px) { .hero .wrap { grid-template-columns: 1fr; } }
 
 /* clue card (mirrors the printed 4x6 card) */
@@ -115,9 +130,9 @@ main { position: relative; }
 .page-thumb { background: var(--sheet); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 12px; align-content: start; }
 .mini { aspect-ratio: 8.5 / 11; border-radius: 4px; background: var(--tint); padding: 10%; display: flex; flex-direction: column; gap: 6%; overflow: hidden; }
 .mini i { display: block; height: 5%; border-radius: 2px; background: var(--line); }
-.mini i.w6 { width: 60%; } .mini i.w8 { width: 80%; } .mini i.h { height: 9%; width: 70%; background: var(--sun); }
+.mini i.w6 { width: 60%; } .mini i.w8 { width: 80%; } .mini i.h { height: 9%; width: 70%; background: var(--mint); }
 .mini .dash { flex: 1; border: 1.5px dashed var(--ink-soft); border-radius: 3px; opacity: .5; }
-.mini .seal { width: 28%; aspect-ratio: 1; border-radius: 50%; background: var(--sun); margin: auto auto 0; }
+.mini .seal { width: 28%; aspect-ratio: 1; border-radius: 50%; background: var(--orange); margin: auto auto 0; }
 .page-thumb p { font-size: 15px; color: var(--ink-soft); }
 @media (max-width: 860px) { .kit { grid-template-columns: repeat(2, 1fr); } }
 
@@ -145,7 +160,7 @@ input[type="text"], input[type="number"], select { width: 100%; font: 17px/1.3 v
 .chip b { display: none; width: 20px; height: 20px; border-radius: 50%; background: var(--ink); color: var(--paper); font: 700 11px/20px var(--mono); text-align: center; }
 .chip[aria-pressed="true"] { border-color: var(--ink); background: var(--tint); }
 .chip[aria-pressed="true"] b { display: inline-block; }
-.chip.prize b { background: var(--sun); color: var(--sun-ink); }
+.chip.prize b { background: var(--orange); color: var(--orange-ink); }
 .addspot { display: flex; gap: 8px; }
 .addspot input { flex: 1; min-width: 0; }
 .addspot button { flex: none; }
@@ -154,7 +169,7 @@ input[type="text"], input[type="number"], select { width: 100%; font: 17px/1.3 v
 .route li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; padding: 7px 0; position: relative; }
 .route li::before { content: attr(data-n); width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--tint); font: 700 12px/1 var(--mono); }
 .route li:not(:last-child)::after { content: ''; position: absolute; left: 12px; top: 33px; bottom: -7px; border-left: 2px dashed var(--line); }
-.route li.prize::before { content: '★'; background: var(--sun); color: var(--sun-ink); }
+.route li.prize::before { content: '★'; background: var(--orange); color: var(--orange-ink); }
 .route small { display: block; color: var(--ink-soft); font: 12.5px/1.3 var(--mono); }
 .empty { color: var(--ink-soft); font-size: 15px; }
 .total { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px dashed var(--line); padding-top: 16px; font-variant-numeric: tabular-nums; }
@@ -180,7 +195,10 @@ input[type="text"], input[type="number"], select { width: 100%; font: 17px/1.3 v
 .faq details p { margin-top: 10px; color: var(--ink-soft); }
 
 footer { border-top: 1px solid var(--line); padding-block: 36px 48px; color: var(--ink-soft); font-size: 15px; }
-footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; }
+footer .brand { display: flex; align-items: center; gap: 14px; }
+footer .brand img { width: 64px; height: auto; }
+footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
@@ -190,15 +208,15 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 <header class="top">
   <div class="wrap">
     <a class="logo" href="#top" aria-label="LittlePrintQuests home">
-      <svg viewBox="0 0 40 40" aria-hidden="true"><rect x="3" y="7" width="34" height="26" rx="4" fill="var(--sun)"/><path d="M8 26c5-9 9 2 14-6s8-4 10-8" fill="none" stroke="var(--ink)" stroke-width="2.4" stroke-dasharray="3 3" stroke-linecap="round"/><path d="M29 9l5 5M34 9l-5 5" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round"/></svg>
-      LittlePrintQuests
+      <img src="img/mark.png" alt="" width="52" height="40">
+      <span class="wordmark"><span class="l">Little</span><span class="p">Print</span><span class="q">Quests</span></span>
     </a>
     <nav class="nav" aria-label="Main">
       <a href="#how">How it works</a>
       <a href="#themes">Themes</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
-      <a class="btn btn-sun" href="#order">Make my hunt</a>
+      <a class="btn btn-orange" href="#order">Make my hunt</a>
     </nav>
   </div>
 </header>
@@ -211,7 +229,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
         <h1 style="margin-top:14px">A treasure hunt written for <em>your</em> house.</h1>
         <p class="lede">Tell us your child’s name and the spots in your home you want to use. In a few minutes you get rhyming clue cards, a host checklist and a certificate, ready to print.</p>
         <div class="ctas">
-          <a class="btn btn-sun" href="#order">Make my hunt · $9.99</a>
+          <a class="btn btn-orange" href="#order">Make my hunt · $9.99</a>
           <a class="btn btn-ghost" href="#kit">See what’s inside</a>
         </div>
         <ul class="facts">
@@ -289,7 +307,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
           <div class="field"><span class="eyebrow">Your trail</span><p id="trailTitle" style="font:600 20px/1.2 var(--display)"></p></div>
           <ol class="route" id="route"></ol>
           <div class="total"><span>Custom hunt, PDF</span><strong>$9.99</strong></div>
-          <button class="btn btn-sun" type="submit" style="justify-content:center">Continue to checkout</button>
+          <button class="btn btn-orange" type="submit" style="justify-content:center">Continue to checkout</button>
           <p class="status" id="formStatus"></p>
           <p class="alt">Prefer Etsy? <a id="etsyLink" href="#" target="_blank" rel="noopener">Order the same hunt in our Etsy shop</a>.</p>
         </aside>
@@ -302,7 +320,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
       <div class="pin"><b></b><span class="eyebrow">Pricing</span></div>
       <h2>One price, no subscription</h2>
       <div class="plans">
-        <div class="plan main"><span class="eyebrow">Custom hunt</span><div class="price">$9.99 <small>per party</small></div><ul><li>Your child’s name on every page</li><li>6 to 10 of your home’s own spots</li><li>New rhymes for any spot you add</li><li>Host guide, briefing, cards and certificate</li></ul><a class="btn btn-sun" href="#order">Make my hunt</a></div>
+        <div class="plan main"><span class="eyebrow">Custom hunt</span><div class="price">$9.99 <small>per party</small></div><ul><li>Your child’s name on every page</li><li>6 to 10 of your home’s own spots</li><li>New rhymes for any spot you add</li><li>Host guide, briefing, cards and certificate</li></ul><a class="btn btn-orange" href="#order">Make my hunt</a></div>
         <div class="plan"><span class="eyebrow">Theme pack</span><div class="price">$4.80 <small>on Etsy</small></div><ul><li>Ready-made hunt with 8 common spots</li><li>Couch, fridge, bed, bathtub and more</li><li>Instant download</li></ul><a class="btn btn-ghost" id="etsyLink2" href="#" target="_blank" rel="noopener">Browse on Etsy</a></div>
       </div>
     </div>
@@ -326,7 +344,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 
 <footer>
   <div class="wrap">
-    <span>© 2026 LittlePrintQuests · Printable party games for kids</span>
+    <div class="brand"><img src="img/mark.png" alt="" width="64" height="49"><span><b class="wordmark"><span class="l">Little</span><span class="p">Print</span><span class="q">Quests</span></b>Printable Party Games &amp; Quests · © 2026</span></div>
     <a id="etsyLink3" href="#" target="_blank" rel="noopener">Find us on Etsy</a>
   </div>
 </footer>
