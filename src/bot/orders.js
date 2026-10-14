@@ -1,4 +1,5 @@
-// Order pipeline: Etsy receipt -> parsed hunt config -> PDF -> ready-to-send message.
+// Order pipelines. Etsy: receipt -> parsed hunt config -> PDF -> ready-to-send message.
+// Website: form -> Stripe payment -> PDF -> emailed to the buyer.
 
 const crypto = require('crypto');
 const path = require('path');
@@ -6,7 +7,9 @@ const store = require('./store');
 const etsy = require('./etsy');
 const { parseOrder } = require('./parse');
 const { renderPdf } = require('../generator/render');
+const { sendHuntEmail } = require('./email');
 const THEMES = require('../generator/themes');
+const SPOTS = require('../generator/spots');
 
 const CUSTOM_LISTING_IDS = (process.env.CUSTOM_LISTING_IDS || '')
   .split(',')
@@ -70,7 +73,7 @@ function addOrder(fields) {
 }
 
 async function pollEtsy() {
-  if (!etsy.isConnected()) return;
+  if (!etsy.configured() || !etsy.isConnected()) return;
   const s = store.get();
   // Look back a day on the first run, then overlap each poll by an hour; ids dedupe.
   const since = Math.floor((s.lastPollAt ? new Date(s.lastPollAt).getTime() - 3600_000 : Date.now() - 86400_000) / 1000);
@@ -115,4 +118,64 @@ async function notify(order) {
   }
 }
 
-module.exports = { addOrder, processOrder, generate, pollEtsy };
+// ---------- website orders ----------
+
+// Checks the website's order form. Returns a clean form or throws a message for the buyer.
+function validateWebForm(body) {
+  const theme = String(body.theme || '');
+  if (!THEMES[theme]) throw new Error('Please pick a theme.');
+  const childName = String(body.childName || '').trim().slice(0, 24);
+  if (!childName) throw new Error('Please add your child’s first name.');
+  const age = Number.isInteger(body.age) && body.age > 0 && body.age < 16 ? body.age : null;
+  const spots = Array.isArray(body.spots) ? body.spots : [];
+  if (spots.length < 3 || spots.length > 12) throw new Error('Please pick between 3 and 12 hiding spots.');
+  const clean = spots.map((s) => {
+    if (typeof s === 'string' && SPOTS[s]) return s;
+    const label = String(s?.custom || '').trim().slice(0, 40);
+    if (!label) throw new Error('One of the hiding spots is empty.');
+    return { custom: label };
+  });
+  return { theme, childName, age, spots: clean };
+}
+
+function addWebOrder(form) {
+  return addOrder({
+    id: `web-${crypto.randomBytes(12).toString('base64url')}`,
+    source: 'web',
+    status: 'awaiting_payment',
+    form,
+    personalization: formAsText(form),
+    options: { Theme: THEMES[form.theme].name },
+  });
+}
+
+function formAsText(f) {
+  const spots = f.spots.map((s) => (typeof s === 'string' ? SPOTS[s].label : s.custom));
+  return `${f.childName}${f.age ? `, turning ${f.age}` : ''}. Spots in order: ${spots.join(', ')} (prize at the last one).`;
+}
+
+// Called once Stripe confirms payment. Builds the PDF and emails it.
+async function fulfillWebOrder(id, { email, buyerName }) {
+  const order = store.get().orders[id];
+  if (!order || order.status !== 'awaiting_payment') return; // already handled (Stripe can resend)
+  store.update((s) => Object.assign(s.orders[id], { status: 'processing', email, buyerName, paidAt: new Date().toISOString() }));
+  const f = order.form;
+  try {
+    if (f.spots.every((s) => typeof s === 'string')) {
+      // Every spot is in the library, so no need to ask Claude.
+      store.update((s) => (s.orders[id].config = { theme: f.theme, childName: f.childName, ...(f.age ? { age: f.age } : {}), spots: f.spots }));
+    } else {
+      const parsed = await parseOrder({ personalization: order.personalization, options: order.options });
+      if (!parsed.ok) throw new Error(parsed.problem);
+      store.update((s) => (s.orders[id].config = { ...parsed.config, theme: f.theme }));
+    }
+    await generate(id);
+    await sendHuntEmail(store.get().orders[id]);
+    store.update((s) => Object.assign(s.orders[id], { sent: true, deliveredAt: new Date().toISOString() }));
+  } catch (err) {
+    store.update((s) => Object.assign(s.orders[id], { status: 'needs_attention', problem: err.message }));
+  }
+  await notify(store.get().orders[id]);
+}
+
+module.exports = { addOrder, processOrder, generate, pollEtsy, validateWebForm, addWebOrder, fulfillWebOrder };

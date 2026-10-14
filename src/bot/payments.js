@@ -1,0 +1,42 @@
+// Stripe Checkout for orders placed on the website.
+
+const Stripe = require('stripe');
+const THEMES = require('../generator/themes');
+
+const PRICE_CENTS = Number(process.env.PRICE_CENTS || 999);
+let client = null;
+const stripe = () => (client ||= new Stripe(process.env.STRIPE_SECRET_KEY));
+
+const enabled = () => Boolean(process.env.STRIPE_SECRET_KEY && process.env.STRIPE_WEBHOOK_SECRET);
+
+async function createCheckout(order) {
+  const theme = THEMES[order.form.theme];
+  const session = await stripe().checkout.sessions.create({
+    mode: 'payment',
+    line_items: [
+      {
+        quantity: 1,
+        price_data: {
+          currency: 'usd',
+          unit_amount: PRICE_CENTS,
+          product_data: {
+            name: `Custom ${theme.name}`,
+            description: `Printable scavenger hunt for ${order.form.childName} · ${order.form.spots.length} clues · PDF`,
+          },
+        },
+      },
+    ],
+    client_reference_id: order.id,
+    metadata: { order_id: order.id },
+    success_url: `${process.env.PUBLIC_URL}/order/${order.id}`,
+    cancel_url: `${process.env.SITE_URL || process.env.PUBLIC_URL}#order`,
+  });
+  return session;
+}
+
+// Verifies Stripe's signature; throws if the request didn't come from Stripe.
+function readWebhook(rawBody, signature) {
+  return stripe().webhooks.constructEvent(rawBody, signature, process.env.STRIPE_WEBHOOK_SECRET);
+}
+
+module.exports = { enabled, createCheckout, readWebhook, stripe, PRICE_CENTS };

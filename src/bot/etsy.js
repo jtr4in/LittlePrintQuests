@@ -83,4 +83,10 @@ async function paidReceiptsSince(since) {
   }
 }
 
-module.exports = { startAuth, finishAuth, paidReceiptsSince, isConnected: () => Boolean(store.get().etsy?.shop_id) };
+module.exports = {
+  startAuth,
+  finishAuth,
+  paidReceiptsSince,
+  configured: () => Boolean(KEYSTRING && SHARED_SECRET),
+  isConnected: () => Boolean(store.get().etsy?.shop_id),
+};
