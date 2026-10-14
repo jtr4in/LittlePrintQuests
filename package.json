@@ -1,0 +1,33 @@
+{
+  "name": "littleprintquests",
+  "version": "1.0.0",
+  "description": "Personalized printable scavenger hunts for kids, plus an Etsy order bot",
+  "main": "src/bot/server.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "start": "node src/bot/server.js",
+    "test": "node test/smoke.js",
+    "hunt": "node src/generator/render.js",
+    "standard-packs": "node scripts/standard-packs.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jtr4in/littleprintquests.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jtr4in/littleprintquests/issues"
+  },
+  "homepage": "https://github.com/jtr4in/littleprintquests#readme",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.134.0",
+    "playwright": "1.56.1",
+    "zod": "^4.6.7"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "private": true
+}
