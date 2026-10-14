@@ -4,7 +4,8 @@
 // Order config shape:
 //   { kit: 'vet', childName: 'Maya', placeName?: 'Maya’s Pet Clinic',
 //     subjects?: [{ name: 'Biscuit', kind: 'dog' }, ...],  // pets, crew, guests... up to 6
-//     staff?: ['Leo', 'Grandpa'] }                         // extra badge names, up to 7
+//     staff?: ['Leo', 'Grandpa'],                         // extra badge names, up to 7
+//     lenient?: true }  // unknown subject kinds fall back to the kit's defaults instead of throwing
 // Everything except kit and childName is optional; empty slots print as blanks to fill in.
 //
 // Pictures are Noto Color Emoji (SIL Open Font License), so they're free to use in a product.
@@ -19,9 +20,9 @@ function normalize(def, cfg) {
   const childName = String(cfg.childName || '').trim();
   if (!childName) throw new Error('childName is required');
   const aliases = def.kindAliases || {};
-  const subjects = (cfg.subjects || cfg.pets || []).slice(0, 6).map((p) => {
+  const subjects = (cfg.subjects || cfg.pets || []).slice(0, 6).map((p, i) => {
     const key = String(p.kind || '').toLowerCase().replace(/\s+/g, '_');
-    const kind = def.kinds[key] ? key : aliases[key];
+    const kind = (def.kinds[key] ? key : aliases[key]) || (cfg.lenient ? def.defaultKinds[i % def.defaultKinds.length] : null);
     if (!kind) throw new Error(`Unknown ${def.subjectWord} kind "${p.kind}". Use one of: ${Object.keys(def.kinds).join(', ')}`);
     return { name: String(p.name || '').trim(), kind };
   });
@@ -577,4 +578,7 @@ h1, h2, h3 { font-family:'Fredoka', sans-serif; margin:0; line-height:1.1; }
 `;
 }
 
-module.exports = { buildKitHtml, KITS };
+// The kit that goes with a hunt theme (dino -> Dino Dig Lab, ...).
+const kitForHunt = (theme) => Object.values(KITS).find((k) => k.hunt === theme) || null;
+
+module.exports = { buildKitHtml, KITS, kitForHunt };

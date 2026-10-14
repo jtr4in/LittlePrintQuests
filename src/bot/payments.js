@@ -2,8 +2,11 @@
 
 const Stripe = require('stripe');
 const THEMES = require('../generator/themes');
+const { kitForHunt } = require('../kits/engine');
 
-const PRICE_CENTS = Number(process.env.PRICE_CENTS || 999);
+const PRICE_CENTS = Number(process.env.PRICE_CENTS || 999); // custom hunt only
+const BUNDLE_PRICE_CENTS = Number(process.env.BUNDLE_PRICE_CENTS || 1699); // hunt + matching play kit
+const priceFor = (product) => (product === 'bundle' ? BUNDLE_PRICE_CENTS : PRICE_CENTS);
 let client = null;
 const stripe = () => (client ||= new Stripe(process.env.STRIPE_SECRET_KEY));
 
@@ -11,6 +14,7 @@ const enabled = () => Boolean(process.env.STRIPE_SECRET_KEY && process.env.STRIP
 
 async function createCheckout(order) {
   const theme = THEMES[order.form.theme];
+  const bundle = order.form.product === 'bundle';
   const session = await stripe().checkout.sessions.create({
     mode: 'payment',
     line_items: [
@@ -18,10 +22,10 @@ async function createCheckout(order) {
         quantity: 1,
         price_data: {
           currency: 'usd',
-          unit_amount: PRICE_CENTS,
+          unit_amount: priceFor(order.form.product),
           product_data: {
-            name: `Custom ${theme.name}`,
-            description: `Printable scavenger hunt for ${order.form.childName} · ${order.form.spots.length} clues · PDF`,
+            name: bundle ? `Party Bundle: ${theme.name} + ${kitForHunt(theme.id).name} play kit` : `Custom ${theme.name}`,
+            description: `Printable scavenger hunt for ${order.form.childName} · ${order.form.spots.length} clues${bundle ? ' · matching pretend play kit' : ''} · PDF`,
           },
         },
       },
@@ -39,4 +43,4 @@ function readWebhook(rawBody, signature) {
   return stripe().webhooks.constructEvent(rawBody, signature, process.env.STRIPE_WEBHOOK_SECRET);
 }
 
-module.exports = { enabled, createCheckout, readWebhook, stripe, PRICE_CENTS };
+module.exports = { enabled, createCheckout, readWebhook, stripe, PRICE_CENTS, BUNDLE_PRICE_CENTS, priceFor };

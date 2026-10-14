@@ -29,6 +29,8 @@ npm run kit -- examples/kit-space.json out/space.pdf --png out/space-pages
 
 Kits: `vet` (Vet Clinic, stand-alone) plus one add-on per hunt theme: `dino` (Dino Dig Lab), `hero` (Hero HQ), `pirate` (Pirate Ship), `space` (Mission Control) and `royal` (Royal Castle). Each kit also has a fold-up themed gadget (laptop, console, scanner, communicator, ship’s helm or magic mirror) with three pretend screens.
 
+**Party Bundles.** A bundle order gets the hunt plus its theme's play kit as a second PDF (`/d/<token>-kit.pdf`), in the same email or Etsy message. Website orders send `product: "bundle"`; Etsy orders count as bundles when an option such as **Package** says "Bundle" or "play kit". Pets or toys the buyer lists ("Rover (dog)") become the kit's patients and crew.
+
 ## Etsy order bot
 
 The bot checks your Etsy shop every few minutes. When a custom order comes in, it reads the buyer's personalization notes with Claude, writes riddles for any spots that aren't in the library, builds the PDF, and hosts it at a private download link. Your dashboard then shows a ready-to-send message for the buyer: copy it, paste it into the Etsy conversation, and click **Mark as sent**. Etsy's API doesn't let apps message buyers or attach files to an order, so that one step stays manual.

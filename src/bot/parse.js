@@ -6,6 +6,7 @@ const { z } = require('zod');
 const { zodOutputFormat } = require('@anthropic-ai/sdk/helpers/zod');
 const SPOTS = require('../generator/spots');
 const THEMES = require('../generator/themes');
+const { kitForHunt } = require('../kits/engine');
 
 const MODEL = process.env.CLAUDE_MODEL || 'claude-opus-5-5';
 const client = new Anthropic();
@@ -16,6 +17,9 @@ const OrderSchema = z.object({
   childName: z.string().nullable(),
   age: z.number().int().nullable(),
   theme: z.enum(Object.keys(THEMES)).nullable(),
+  pets: z
+    .array(z.object({ name: z.string(), kind: z.string().describe('one of the kinds listed for the theme') }))
+    .describe('pets or toys the buyer named for the play kit, up to 6; empty if none'),
   spots: z.array(
     z.object({
       libraryId: z.string().nullable().describe('id from the spot library when the spot matches one, else null'),
@@ -40,6 +44,9 @@ Rules:
 - For any other spot, write a two-line rhyming riddle (AABB couplet, about 9 to 12 syllables per line, ending in "!" or "?") that describes the place so a young child can guess it, without naming it outright. Match the playful style of: "Where do you splash with your bubbles and boats? / Look in the place where your rubber duck floats!"
 - Never send children toward anything dangerous (stoves, ovens, knives, pools, roads, medicine). If the buyer lists one, set ok to false and explain in problem.
 - The theme may come from a separate "Theme" option; use it when present.
+- Buyers of a party bundle may list up to 6 pets or toys for the play kit, like "Rover (dog), Teddy (bear)". Put them in pets, with kind set to the closest of these for the theme (empty list if none):
+${Object.keys(THEMES).map((t) => `  ${t}: ${Object.keys(kitForHunt(t).kinds).join(', ')}`).join('\n')}
+  Pets are never hiding spots, and missing pets are never a problem.
 - Set ok to false if the child's name, the theme, or at least 3 spots are missing, or if there are more than 12 spots.`;
 
 async function parseOrder({ personalization, options = {} }) {
@@ -80,6 +87,7 @@ function toHuntConfig(p) {
   return {
     ok: true,
     config: { theme: p.theme, childName: p.childName, ...(p.age ? { age: p.age } : {}), spots },
+    pets: (p.pets || []).slice(0, 6),
   };
 }
 

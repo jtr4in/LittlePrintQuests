@@ -59,6 +59,7 @@ const cors = () => ({
   'Access-Control-Allow-Headers': 'Content-Type',
   Vary: 'Origin',
 });
+const kitLink = (o, label) => (o.kitReady ? ` · <a href="/d/${esc(o.downloadToken)}-kit.pdf" target="_blank">${label}</a>` : '');
 const sendJson = (res, code, obj) => send(res, code, JSON.stringify(obj), { 'Content-Type': 'application/json', ...cors() });
 
 // Public page the buyer lands on after paying. Order ids are long and random.
@@ -69,6 +70,7 @@ function orderPage(o) {
     o.status === 'ready'
       ? `<h1>${esc(o.config.childName)}’s hunt is ready! 🎉</h1>
          <p><a class="btn" href="/d/${esc(o.downloadToken)}.pdf" target="_blank">Download your hunt (PDF)</a></p>
+         ${o.kitReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-kit.pdf" target="_blank">Download your play kit (PDF)</a></p>` : ''}
          <p>${o.email ? `We also emailed the link to <b>${esc(o.email)}</b>.` : ''} Print at “Actual Size / 100%”, cut out the clue cards, and follow the Host Guide on page 1.</p>`
       : working
         ? `<h1>Building ${esc(o.form.childName)}’s ${esc(theme.name)}…</h1>
@@ -102,11 +104,11 @@ function orderCard(o) {
     ${o.problem ? `<p class="problem">${esc(o.problem)}</p>` : ''}
     ${
       o.status === 'ready' && o.source === 'web'
-        ? `<p><a href="/d/${esc(o.downloadToken)}.pdf" target="_blank">Preview PDF</a> · ${o.deliveredAt ? `Emailed to ${esc(o.email)}` : 'Not emailed yet'}</p>
+        ? `<p><a href="/d/${esc(o.downloadToken)}.pdf" target="_blank">Preview PDF</a>${kitLink(o, 'Play kit PDF')} · ${o.deliveredAt ? `Emailed to ${esc(o.email)}` : 'Not emailed yet'}</p>
            ${o.sent ? '' : `<form method="post" action="/admin/orders/${esc(o.id)}/email"><button>Email it to ${esc(o.email)}</button></form>`}`
         : o.status === 'ready'
-        ? `<p><a href="/d/${esc(o.downloadToken)}.pdf" target="_blank">Preview PDF</a></p>
-           <textarea readonly rows="7">${esc(o.message)}</textarea>
+        ? `<p><a href="/d/${esc(o.downloadToken)}.pdf" target="_blank">Preview PDF</a>${kitLink(o, 'Play kit PDF')}</p>
+           <textarea readonly rows="${o.kitReady ? 10 : 7}">${esc(o.message)}</textarea>
            <div class="row"><button type="button" onclick="copyMsg(this)">Copy message</button>
            ${o.sent ? '' : `<form method="post" action="/admin/orders/${esc(o.id)}/sent"><button>Mark as sent</button></form>`}</div>`
         : ''
@@ -158,14 +160,14 @@ button.secondary{background:#fff;color:#2d6a4f;border:1px solid #2d6a4f;margin-t
 </div>
 <div class="panel">${
     payments.enabled()
-      ? `<b>Website checkout on.</b> <span class="muted">$${(payments.PRICE_CENTS / 100).toFixed(2)} per custom hunt, built and emailed automatically.${unpaid.length ? ` ${unpaid.length} checkout${unpaid.length === 1 ? '' : 's'} started but not paid.` : ''}</span>`
+      ? `<b>Website checkout on.</b> <span class="muted">$${(payments.BUNDLE_PRICE_CENTS / 100).toFixed(2)} per party bundle, $${(payments.PRICE_CENTS / 100).toFixed(2)} per hunt only, built and emailed automatically.${unpaid.length ? ` ${unpaid.length} checkout${unpaid.length === 1 ? '' : 's'} started but not paid.` : ''}</span>`
       : `<b>Website checkout off.</b> <span class="muted">Add STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET to take orders on your site.</span>`
   }</div>
 <details class="panel"><summary><b>Make a hunt by hand</b> <span class="muted">(paste order notes, or test the bot)</span></summary>
   <form method="post" action="/admin/orders">
     <p><input name="buyerName" placeholder="Buyer name (optional)"></p>
-    <textarea name="personalization" rows="4" placeholder="Maya, turning 6, space theme. Spots: front door, shoe rack, washer, dryer, grandma's piano, dog bed, kitchen table (prize)"></textarea>
-    <div class="row"><button>Make hunt</button></div>
+    <textarea name="personalization" rows="4" placeholder="Maya, turning 6, space theme. Spots: front door, shoe rack, washer, dryer, grandma's piano, dog bed, kitchen table (prize). Pets: Rover (dog)"></textarea>
+    <div class="row"><label><input type="checkbox" name="bundle" value="1" checked> Include the matching play kit</label><button>Make hunt</button></div>
   </form>
 </details>
 <h2>To send (${open.length})</h2>${open.map(orderCard).join('') || '<p class="muted">Nothing waiting.</p>'}
@@ -186,7 +188,7 @@ async function route(req, res) {
   if (dl) {
     const file = path.join(store.PDF_DIR, `${dl[1]}.pdf`);
     if (!fs.existsSync(file)) return send(res, 404, 'Not found');
-    res.writeHead(200, { 'Content-Type': 'application/pdf', 'Content-Disposition': 'inline; filename="scavenger-hunt.pdf"' });
+    res.writeHead(200, { 'Content-Type': 'application/pdf', 'Content-Disposition': `inline; filename="${dl[1].endsWith('-kit') ? 'play-kit' : 'scavenger-hunt'}.pdf"` });
     return fs.createReadStream(file).pipe(res);
   }
 
@@ -261,7 +263,7 @@ async function route(req, res) {
   if (p === '/admin/orders') {
     const f = await readForm(req);
     if (!f.personalization?.trim()) return redirect(res, '/admin');
-    const id = orders.addOrder({ source: 'manual', buyerName: f.buyerName || '', personalization: f.personalization, options: {} });
+    const id = orders.addOrder({ source: 'manual', buyerName: f.buyerName || '', personalization: f.personalization, options: {}, product: f.bundle ? 'bundle' : 'hunt' });
     orders.processOrder(id);
     return redirect(res, `/admin#${id}`);
   }

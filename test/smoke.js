@@ -20,6 +20,7 @@ const parse = require('../src/bot/parse');
 const realToConfig = parse.toHuntConfig;
 parse.parseOrder = async ({ personalization }) => realToConfig({
   ok: true, problem: null, childName: personalization.startsWith('Leo') ? 'Leo' : 'Maya', age: 6, theme: 'space',
+  pets: personalization.startsWith('Leo') ? [{ name: 'Rover', kind: 'dog' }, { name: 'Zip', kind: 'spaceship' }] : [],
   spots: [
     { libraryId: 'front_door', label: 'Front Door', tip: '', riddle: [] },
     { libraryId: null, label: 'Grandma’s Piano', tip: 'On the bench', riddle: ['Plink goes the piano, plonk goes the key,', 'Check by the bench, what will you see?'] },
@@ -30,7 +31,11 @@ parse.parseOrder = async ({ personalization }) => realToConfig({
 
 // Fake Stripe Checkout session creation (webhooks are signed for real below).
 const payments = require('../src/bot/payments');
-payments.createCheckout = async (order) => ({ id: 'cs_test_1', url: `https://checkout.stripe.com/c/pay/${order.id}` });
+const charged = [];
+payments.createCheckout = async (order) => {
+  charged.push(payments.priceFor(order.form.product));
+  return { id: 'cs_test_1', url: `https://checkout.stripe.com/c/pay/${order.id}` };
+};
 
 // Fake Etsy receipts endpoint and Resend.
 const realFetch = global.fetch;
@@ -43,6 +48,7 @@ global.fetch = async (url, opts = {}) => {
       { receipt_id: 900, name: 'Pat Buyer', transactions: [
         { transaction_id: 1, listing_id: 555, title: 'Custom Hunt', variations: [
           { property_id: 513, formatted_name: 'Theme', formatted_value: 'Space', question_id: 0 },
+          { property_id: 514, formatted_name: 'Package', formatted_value: 'Party Bundle: hunt + play kit', question_id: 0 },
           { property_id: 54, formatted_name: 'Personalization', formatted_value: 'Leo, 6, front door, piano, dog bed, table', question_id: 77 },
         ] },
       ] },
@@ -74,6 +80,9 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.ok(!state.orders['etsy-901-2'], 'standard pack order should be ignored');
   assert.equal(o.options.Theme, 'Space');
   assert.match(o.message, /Hi Pat!.*Deep Space Rover Expedition for Leo/s);
+  assert.equal(o.product, 'bundle');
+  assert.ok(o.kitReady);
+  assert.match(o.message, /Mission Control play kit:\s+https:\/\/bot\.example\.com\/d\/[\w-]+-kit\.pdf/);
   assert.equal(seen[0].headers['x-api-key'], 'key:secret');
   assert.match(seen[0].u, /shops\/42\/receipts\?was_paid=true/);
 
@@ -83,6 +92,9 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const pdf = await realFetch(`${base}/d/${o.downloadToken}.pdf`);
   assert.equal(pdf.headers.get('content-type'), 'application/pdf');
   assert.ok((await pdf.arrayBuffer()).byteLength > 50000);
+  const kitPdf = await realFetch(`${base}/d/${o.downloadToken}-kit.pdf`);
+  assert.equal(kitPdf.headers.get('content-disposition'), 'inline; filename="play-kit.pdf"');
+  assert.ok((await kitPdf.arrayBuffer()).byteLength > 50000);
 
   // Manual order through the form.
   await realFetch(base + '/admin/orders', { method: 'POST', headers: { ...auth, 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -94,6 +106,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   }
   const manual = Object.values(state.orders).find((x) => x.source === 'manual');
   assert.equal(manual.status, 'ready');
+  assert.ok(!manual.kitReady, 'unchecked play kit box means hunt only');
 
   // Bad config edit becomes "needs attention" instead of crashing.
   await realFetch(`${base}/admin/orders/${manual.id}/config`, { method: 'POST', headers: { ...auth, 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -109,9 +122,9 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.match((await bad.json()).error, /between 3 and 12/);
   const pre = await realFetch(base + '/api/checkout', { method: 'OPTIONS' });
   assert.equal(pre.headers.get('access-control-allow-origin'), '*');
-  for (const spots of [['front_door', 'pet_bed', 'kitchen_table'], ['front_door', { custom: 'Grandma’s piano' }, 'kitchen_table']]) {
+  for (const [product, spots] of [['bundle', ['front_door', 'pet_bed', 'kitchen_table']], [undefined, ['front_door', { custom: 'Grandma’s piano' }, 'kitchen_table']]]) {
     const co = await realFetch(base + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ theme: 'dino', childName: 'Ava', age: 5, spots }) });
+      body: JSON.stringify({ product, theme: 'dino', childName: 'Ava', age: 5, spots, pets: [{ name: 'Rex', kind: 'trex' }] }) });
     assert.equal(co.status, 200);
     const orderId = (await co.json()).url.split('/').pop();
     assert.match(orderId, /^web-/);
@@ -138,12 +151,15 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     const mail = emails.at(-1);
     assert.deepEqual(mail.to, ['ava.parent@example.com']);
     assert.ok(mail.html.includes(`/d/${w.downloadToken}.pdf`));
+    assert.equal(mail.html.includes(`/d/${w.downloadToken}-kit.pdf`), product === 'bundle');
+    assert.equal(Boolean(w.kitReady), product === 'bundle');
     assert.match(await (await realFetch(`${base}/order/${orderId}`)).text(), /hunt is ready/);
     // Stripe retries the same event: no second email.
     await realFetch(base + '/webhooks/stripe', { method: 'POST', body: payload, headers: { 'stripe-signature': sig } });
   }
   await wait(500);
   assert.equal(emails.length, 2);
+  assert.deepEqual(charged, [1699, 999]);
   assert.equal((await realFetch(base + '/order/manual-1')).status, 401); // only web orders are public
   assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Emailed to ava\.parent@example\.com/);
 

@@ -1,6 +1,7 @@
 // Sends the finished hunt to website buyers through Resend (resend.com).
 
 const THEMES = require('../generator/themes');
+const { kitForHunt } = require('../kits/engine');
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -8,11 +9,14 @@ async function sendHuntEmail(order) {
   if (!process.env.RESEND_API_KEY || !process.env.EMAIL_FROM) throw new Error('Email is not set up (RESEND_API_KEY and EMAIL_FROM)');
   const theme = THEMES[order.config.theme];
   const pdf = `${process.env.PUBLIC_URL}/d/${order.downloadToken}.pdf`;
+  const kit = order.kitReady ? kitForHunt(order.config.theme) : null;
+  const btn = (href, label) => `<p><a href="${href}" style="display:inline-block;background:#ef9d31;color:#2a1f00;padding:12px 22px;border-radius:99px;text-decoration:none;font-weight:bold">${label}</a></p>`;
   const html = `<div style="font-family:Arial,sans-serif;max-width:520px;margin:auto;color:#1e2a5a;line-height:1.5">
     <h2 style="margin-bottom:4px">${esc(order.config.childName)}’s ${esc(theme.name)} is ready!</h2>
-    <p>Thanks for your order! Your printable scavenger hunt is ready to download.</p>
-    <p><a href="${pdf}" style="display:inline-block;background:#ffc93c;color:#2a1f00;padding:12px 22px;border-radius:99px;text-decoration:none;font-weight:bold">Download your hunt (PDF)</a></p>
-    <p><b>Quick setup:</b> print at “Actual Size / 100%”, cut out the clue cards, and use the Host Guide on page 1 to hide them. Read the Mission Briefing aloud to start.</p>
+    <p>Thanks for your order! Your printable scavenger hunt${kit ? ` and ${esc(kit.name)} play kit are` : ' is'} ready to download.</p>
+    ${btn(pdf, 'Download your hunt (PDF)')}
+    ${kit ? btn(pdf.replace(/\.pdf$/, '-kit.pdf'), `Download the ${esc(kit.name)} play kit (PDF)`) : ''}
+    <p><b>Quick setup:</b> print at “Actual Size / 100%”, cut out the clue cards, and use the Host Guide on page 1 to hide them. Read the Mission Briefing aloud to start.${kit ? ' The play kit has its own grown-up guide on page 1.' : ''}</p>
     <p>Something not right? Just reply to this email and we’ll fix it.</p>
     <p>Have an amazing party! 🎉<br>LittlePrintQuests</p></div>`;
   const res = await fetch('https://api.resend.com/emails', {
