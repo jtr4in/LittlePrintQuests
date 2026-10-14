@@ -193,15 +193,16 @@ function menuPage(k) {
   </section>`;
 }
 
-function certificatePage(k) {
+// The child's own certificate, then a blank copy to print for guests and siblings.
+function certificatePage(k, blank = false) {
   const C = k.def.certificate;
-  return `<section class="page cert">
+  return `<section class="page cert${blank ? ' blank' : ''}">
     <div class="cert-in">
       <div class="cert-icon">${C.icon}</div>
       <div class="cert-kicker">${esc(k.placeName)}</div>
       <h1>${esc(C.title)}</h1>
       <p>This certifies that</p>
-      <div class="cert-name">${esc(k.lead)}</div>
+      <div class="cert-name">${blank ? '&nbsp;' : esc(k.lead)}</div>
       <p>${esc(C.line)}</p>
       <div class="cert-row"><div><span class="fill"></span>Date</div><div class="seal">${C.seal}</div><div><span class="fill"></span>Signed</div></div>
     </div>
@@ -221,7 +222,7 @@ function guidePage(k) {
     `${d.ticket.title} cards`,
     d.passport.pageTitle,
     `${d.menu.title} and ${d.menu.coinsTitle.toLowerCase()}`,
-    d.certificate.title,
+    `${d.certificate.title} (named + blank)`,
   ];
   return `<section class="page guide${k.withHunt && G.afterHunt ? ' with-hunt' : ''}">
     <div class="guide-head"><div class="guide-icon">${d.icon}</div><div><div class="clinic">Grown-up guide</div><h1>Welcome to ${esc(k.placeName)}!</h1></div></div>
@@ -536,6 +537,7 @@ function buildKitHtml(cfg) {
     passportsPages(k),
     menuPage(k),
     certificatePage(k),
+    certificatePage(k, true),
   ].join('');
   return `<!doctype html><html><head><meta charset="utf-8"><style>${css(def.colors)}</style></head><body>${pages}</body></html>`;
 }
@@ -683,6 +685,7 @@ h1, h2, h3 { font-family:'Fredoka', sans-serif; margin:0; line-height:1.1; }
 .cert-kicker { font:600 13pt 'Fredoka'; letter-spacing:.12em; text-transform:uppercase; color:var(--teal); }
 .cert h1 { font-size:40pt; color:var(--teal-d); }
 .cert p { font-size:15pt; max-width:5.5in; margin:0; }
+.cert.blank .cert-name { min-width:5in; }
 .cert-name { font:700 46pt 'Fredoka'; color:var(--orange); border-bottom:3px solid var(--orange); padding:0 .3in .05in; margin:.05in 0 .1in; }
 .cert-row { display:flex; align-items:center; gap:.5in; margin-top:.5in; font:600 11pt 'Fredoka'; }
 .cert-row > div:not(.seal) { display:flex; flex-direction:column; gap:4px; width:2in; } .cert-row .fill { min-width:2in; }
