@@ -10,8 +10,8 @@ async function sendHuntEmail(order) {
   const theme = THEMES[order.config.theme];
   const pdf = `${process.env.PUBLIC_URL}/d/${order.downloadToken}.pdf`;
   const kit = order.kitReady ? kitForHunt(order.config.theme) : null;
-  const btn = (href, label) => `<p><a href="${href}" style="display:inline-block;background:#ef9d31;color:#2a1f00;padding:12px 22px;border-radius:99px;text-decoration:none;font-weight:bold">${label}</a></p>`;
-  const html = `<div style="font-family:Arial,sans-serif;max-width:520px;margin:auto;color:#1e2a5a;line-height:1.5">
+  const btn = (href, label) => `<p><a href="${href}" style="display:inline-block;background:#ef9d31;color:#2b1d06;padding:12px 22px;border-radius:99px;text-decoration:none;font-weight:bold">${label}</a></p>`;
+  const html = `<div style="font-family:Arial,sans-serif;max-width:520px;margin:auto;color:#3f4a73;line-height:1.5">
     <h2 style="margin-bottom:4px">${esc(order.config.childName)}’s ${esc(theme.name)} is ready!</h2>
     <p>Thanks for your order! Your printable scavenger hunt${kit ? ` and ${esc(kit.name)} play kit are` : ' is'} ready to download.</p>
     ${btn(pdf, 'Download your hunt (PDF)')}
