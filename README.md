@@ -18,6 +18,17 @@ Each hunt is a PDF with a host guide (where to hide every card), a read-aloud mi
 
 Fonts in `fonts/` are from Google Fonts under the SIL Open Font License, which allows commercial use.
 
+## Pretend play kits
+
+`src/kits/` builds personalized pretend play kits: signs, ID badges, a schedule, check-up forms, ticket cards, passports, a price list with play money, and a certificate. Each kit is one definition file in `src/kits/defs/` listing its words, roles and pictures, so a new kit is mostly writing that list. Pictures are Noto Color Emoji (SIL Open Font License), which is fine to use in products for sale.
+
+```
+npm run kit -- examples/kit-vet.json out/vet.pdf
+npm run kit -- examples/kit-space.json out/space.pdf --png out/space-pages
+```
+
+Kits so far: `vet` (Vet Clinic) and `space` (Mission Control, the add-on for the Deep Space hunt).
+
 ## Etsy order bot
 
 The bot checks your Etsy shop every few minutes. When a custom order comes in, it reads the buyer's personalization notes with Claude, writes riddles for any spots that aren't in the library, builds the PDF, and hosts it at a private download link. Your dashboard then shows a ready-to-send message for the buyer: copy it, paste it into the Etsy conversation, and click **Mark as sent**. Etsy's API doesn't let apps message buyers or attach files to an order, so that one step stays manual.

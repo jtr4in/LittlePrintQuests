@@ -10,7 +10,8 @@
     "start": "node src/bot/server.js",
     "test": "node test/smoke.js",
     "hunt": "node src/generator/render.js",
-    "standard-packs": "node scripts/standard-packs.js"
+    "standard-packs": "node scripts/standard-packs.js",
+    "kit": "node src/kits/render-kit.js"
   },
   "repository": {
     "type": "git",

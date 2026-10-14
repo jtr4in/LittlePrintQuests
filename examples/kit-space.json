@@ -1,0 +1,1 @@
+{ "kit": "space", "childName": "Leo", "subjects": [{ "name": "Rover", "kind": "dog" }, { "name": "Beep", "kind": "robot" }, { "name": "Teddy", "kind": "bear" }], "staff": ["Maya", "Dad"] }
