@@ -1,4 +1,5 @@
-// Order bot web server: owner dashboard, Etsy connect flow, PDF downloads, and the poller.
+// Order bot web server: owner dashboard, Etsy connect flow, website checkout,
+// Stripe webhook, order status pages, PDF downloads, and the poller.
 
 const fs = require('fs');
 const http = require('http');
@@ -6,11 +7,13 @@ const path = require('path');
 const store = require('./store');
 const etsy = require('./etsy');
 const orders = require('./orders');
+const payments = require('./payments');
+const { sendHuntEmail } = require('./email');
 const THEMES = require('../generator/themes');
 
 const PORT = Number(process.env.PORT || 3000);
 const POLL_MINUTES = Number(process.env.POLL_MINUTES || 5);
-const REQUIRED = ['PUBLIC_URL', 'ADMIN_PASSWORD', 'ANTHROPIC_API_KEY', 'ETSY_KEYSTRING', 'ETSY_SHARED_SECRET'];
+const REQUIRED = ['PUBLIC_URL', 'ADMIN_PASSWORD', 'ANTHROPIC_API_KEY'];
 const missing = REQUIRED.filter((k) => !process.env[k]);
 if (missing.length) {
   console.error(`Missing environment variables: ${missing.join(', ')}`);
@@ -39,19 +42,69 @@ const send = (res, code, body, headers = {}) => {
 };
 const redirect = (res, to) => send(res, 303, '', { Location: to });
 
+async function readRaw(req, limit = 100_000) {
+  const chunks = [];
+  let size = 0;
+  for await (const chunk of req) {
+    size += chunk.length;
+    if (size > limit) throw Object.assign(new Error('Request too large'), { status: 413 });
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks);
+}
+
+const cors = () => ({
+  'Access-Control-Allow-Origin': process.env.SITE_ORIGIN || '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  Vary: 'Origin',
+});
+const sendJson = (res, code, obj) => send(res, code, JSON.stringify(obj), { 'Content-Type': 'application/json', ...cors() });
+
+// Public page the buyer lands on after paying. Order ids are long and random.
+function orderPage(o) {
+  const theme = THEMES[o.form.theme];
+  const working = o.status === 'awaiting_payment' || o.status === 'processing';
+  const body =
+    o.status === 'ready'
+      ? `<h1>${esc(o.config.childName)}’s hunt is ready! 🎉</h1>
+         <p><a class="btn" href="/d/${esc(o.downloadToken)}.pdf" target="_blank">Download your hunt (PDF)</a></p>
+         <p>${o.email ? `We also emailed the link to <b>${esc(o.email)}</b>.` : ''} Print at “Actual Size / 100%”, cut out the clue cards, and follow the Host Guide on page 1.</p>`
+      : working
+        ? `<h1>Building ${esc(o.form.childName)}’s ${esc(theme.name)}…</h1>
+           <p>${o.status === 'awaiting_payment' ? 'Confirming your payment.' : 'Writing clues and laying out the cards.'} This page updates by itself, and we’ll email you the link too.</p>
+           <div class="spin"></div>`
+        : `<h1>Thanks for your order!</h1>
+           <p>Your payment went through. We’re giving ${esc(o.form.childName)}’s hunt a quick hand check and will email it to ${esc(o.email || 'you')} shortly.</p>`;
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Your scavenger hunt</title>${working ? '<meta http-equiv="refresh" content="4">' : ''}<style>
+:root{--bg:#fbf6ec;--ink:#1e2a5a;--muted:#5b6386;--sun:#ffc93c;--sun-ink:#2a1f00}
+@media (prefers-color-scheme:dark){:root{--bg:#141a33;--ink:#f4efe4;--muted:#b6bbd6}}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 system-ui,sans-serif}
+main{max-width:560px;margin:12vh auto;padding:0 16px;text-align:center}
+h1{font-size:28px;line-height:1.2}p{color:var(--muted)}p b{color:var(--ink)}
+.btn{display:inline-block;background:var(--sun);color:var(--sun-ink);padding:14px 26px;border-radius:99px;text-decoration:none;font-weight:700}
+.spin{width:36px;height:36px;margin:24px auto;border:4px solid var(--muted);border-top-color:var(--sun);border-radius:50%;animation:s 1s linear infinite}
+@keyframes s{to{transform:rotate(1turn)}}
+</style></head><body><main>${body}</main></body></html>`;
+}
+
 function orderCard(o) {
-  const badge = { ready: 'Ready to send', needs_attention: 'Needs a look', processing: 'Working…' }[o.status] || o.status;
+  const badge = { ready: 'Ready to send', needs_attention: 'Needs a look', processing: 'Working…', awaiting_payment: 'Not paid' }[o.status] || o.status;
   const theme = o.config && THEMES[o.config.theme];
   return `<article id="${esc(o.id)}" class="order ${o.sent ? 'sent' : o.status}">
     <header><span class="badge">${o.sent ? 'Sent' : esc(badge)}</span>
-      <b>${esc(o.config?.childName || o.buyerName || 'Order')}</b>${theme ? ` · ${esc(theme.name)}` : ''}
-      <small>${esc(o.buyerName || '')} · ${esc(new Date(o.createdAt).toLocaleString('en-US'))}${o.receiptId ? ` · receipt ${esc(o.receiptId)}` : ''}</small></header>
+      <b>${esc(o.config?.childName || o.form?.childName || o.buyerName || 'Order')}</b>${theme ? ` · ${esc(theme.name)}` : ''}
+      <small>${o.source === 'web' ? 'Website · ' : ''}${esc(o.buyerName || '')}${o.email ? ` &lt;${esc(o.email)}&gt;` : ''} · ${esc(new Date(o.createdAt).toLocaleString('en-US'))}${o.receiptId ? ` · receipt ${esc(o.receiptId)}` : ''}</small></header>
     <details><summary>Buyer’s notes</summary><pre>${esc(o.personalization)}</pre>${
       Object.keys(o.options || {}).length ? `<pre>${esc(Object.entries(o.options).map(([k, v]) => `${k}: ${v}`).join('\n'))}</pre>` : ''
     }</details>
     ${o.problem ? `<p class="problem">${esc(o.problem)}</p>` : ''}
     ${
-      o.status === 'ready'
+      o.status === 'ready' && o.source === 'web'
+        ? `<p><a href="/d/${esc(o.downloadToken)}.pdf" target="_blank">Preview PDF</a> · ${o.deliveredAt ? `Emailed to ${esc(o.email)}` : 'Not emailed yet'}</p>
+           ${o.sent ? '' : `<form method="post" action="/admin/orders/${esc(o.id)}/email"><button>Email it to ${esc(o.email)}</button></form>`}`
+        : o.status === 'ready'
         ? `<p><a href="/d/${esc(o.downloadToken)}.pdf" target="_blank">Preview PDF</a></p>
            <textarea readonly rows="7">${esc(o.message)}</textarea>
            <div class="row"><button type="button" onclick="copyMsg(this)">Copy message</button>
@@ -71,7 +124,8 @@ function orderCard(o) {
 function dashboard() {
   const s = store.get();
   const list = Object.values(s.orders).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
-  const open = list.filter((o) => !o.sent);
+  const unpaid = list.filter((o) => o.status === 'awaiting_payment');
+  const open = list.filter((o) => !o.sent && o.status !== 'awaiting_payment');
   const done = list.filter((o) => o.sent);
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Order Bot</title><style>
@@ -92,7 +146,9 @@ button.secondary{background:#fff;color:#2d6a4f;border:1px solid #2d6a4f;margin-t
 <h1>Order Bot</h1>
 <div class="panel">
   ${
-    etsy.isConnected()
+    !etsy.configured()
+      ? `<b>Etsy not set up.</b> <span class="muted">Add ETSY_KEYSTRING and ETSY_SHARED_SECRET to turn on Etsy orders.</span>`
+      : etsy.isConnected()
       ? `<b>Etsy shop connected.</b> <span class="muted">Checks for new orders every ${POLL_MINUTES} min. Last check: ${esc(s.lastPollAt ? new Date(s.lastPollAt).toLocaleString('en-US') : 'not yet')}</span>
          ${s.lastPollError ? `<p class="problem">Last check failed: ${esc(s.lastPollError)}</p>` : ''}
          <form method="post" action="/admin/poll"><button class="secondary">Check now</button></form>`
@@ -100,6 +156,11 @@ button.secondary{background:#fff;color:#2d6a4f;border:1px solid #2d6a4f;margin-t
          <a href="/auth/etsy/start"><button>Connect Etsy shop</button></a>`
   }
 </div>
+<div class="panel">${
+    payments.enabled()
+      ? `<b>Website checkout on.</b> <span class="muted">$${(payments.PRICE_CENTS / 100).toFixed(2)} per custom hunt, built and emailed automatically.${unpaid.length ? ` ${unpaid.length} checkout${unpaid.length === 1 ? '' : 's'} started but not paid.` : ''}</span>`
+      : `<b>Website checkout off.</b> <span class="muted">Add STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET to take orders on your site.</span>`
+  }</div>
 <details class="panel"><summary><b>Make a hunt by hand</b> <span class="muted">(paste order notes, or test the bot)</span></summary>
   <form method="post" action="/admin/orders">
     <p><input name="buyerName" placeholder="Buyer name (optional)"></p>
@@ -127,6 +188,51 @@ async function route(req, res) {
     if (!fs.existsSync(file)) return send(res, 404, 'Not found');
     res.writeHead(200, { 'Content-Type': 'application/pdf', 'Content-Disposition': 'inline; filename="scavenger-hunt.pdf"' });
     return fs.createReadStream(file).pipe(res);
+  }
+
+  if (p === '/api/checkout') {
+    if (req.method === 'OPTIONS') return send(res, 204, '', cors());
+    if (req.method !== 'POST') return sendJson(res, 405, { error: 'Use POST' });
+    if (!payments.enabled()) return sendJson(res, 503, { error: 'Online ordering is not open yet.' });
+    let form;
+    try {
+      form = orders.validateWebForm(JSON.parse((await readRaw(req, 20_000)).toString() || '{}'));
+    } catch (err) {
+      return sendJson(res, 400, { error: err instanceof SyntaxError ? 'Bad request' : err.message });
+    }
+    const id = orders.addWebOrder(form);
+    try {
+      const session = await payments.createCheckout(store.get().orders[id]);
+      store.update((s) => (s.orders[id].checkoutId = session.id));
+      return sendJson(res, 200, { url: session.url });
+    } catch (err) {
+      console.error('Stripe checkout failed:', err.message);
+      return sendJson(res, 502, { error: 'Checkout is having trouble right now. Please try again in a minute.' });
+    }
+  }
+
+  if (p === '/webhooks/stripe' && req.method === 'POST') {
+    let event;
+    try {
+      event = payments.readWebhook(await readRaw(req), req.headers['stripe-signature']);
+    } catch (err) {
+      return send(res, 400, `Webhook error: ${esc(err.message)}`, { 'Content-Type': 'text/plain' });
+    }
+    const session = event.data?.object;
+    if (event.type === 'checkout.session.completed' && session.payment_status === 'paid' && session.metadata?.order_id) {
+      // Answer Stripe right away; building the PDF takes a few seconds.
+      orders
+        .fulfillWebOrder(session.metadata.order_id, { email: session.customer_details?.email, buyerName: session.customer_details?.name || '' })
+        .catch((err) => console.error('Fulfillment failed:', err));
+    }
+    return send(res, 200, 'ok', { 'Content-Type': 'text/plain' });
+  }
+
+  const op = p.match(/^\/order\/(web-[A-Za-z0-9_-]{16,})$/);
+  if (op) {
+    const o = store.get().orders[op[1]];
+    if (!o) return send(res, 404, 'Order not found');
+    return send(res, 200, orderPage(o));
   }
 
   if (p === '/auth/etsy/callback') {
@@ -159,10 +265,18 @@ async function route(req, res) {
     orders.processOrder(id);
     return redirect(res, `/admin#${id}`);
   }
-  const m = p.match(/^\/admin\/orders\/([\w-]+)\/(sent|retry|config)$/);
+  const m = p.match(/^\/admin\/orders\/([\w-]+)\/(sent|retry|config|email)$/);
   if (m && store.get().orders[m[1]]) {
     const [, id, action] = m;
     if (action === 'sent') store.update((s) => (s.orders[id].sent = true));
+    if (action === 'email') {
+      try {
+        await sendHuntEmail(store.get().orders[id]);
+        store.update((s) => Object.assign(s.orders[id], { sent: true, deliveredAt: new Date().toISOString(), problem: null }));
+      } catch (err) {
+        store.update((s) => (s.orders[id].problem = err.message));
+      }
+    }
     if (action === 'retry') {
       store.update((s) => (s.orders[id].status = 'processing'));
       orders.processOrder(id);
@@ -186,7 +300,7 @@ http
   .createServer((req, res) =>
     route(req, res).catch((err) => {
       console.error(err);
-      if (!res.headersSent) send(res, 500, `Something went wrong: ${esc(err.message)}`);
+      if (!res.headersSent) send(res, err.status || 500, `Something went wrong: ${esc(err.message)}`);
     })
   )
   .listen(PORT, () => console.log(`Order bot listening on :${PORT}`));

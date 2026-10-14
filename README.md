@@ -31,7 +31,7 @@ Standard pack orders are ignored, since Etsy delivers those itself.
 1. **Deploy.** On [railway.com](https://railway.com), create a project from this GitHub repo. Railway builds the `Dockerfile` automatically.
 2. **Add a volume** to the service, mounted at `/data`. Orders and PDFs live there, so they survive restarts.
 3. **Get a public address** under Settings > Networking > Generate Domain.
-4. **Set the variables** listed in `.env.example` under the service's Variables tab. Never commit real keys.
+4. **Set the variables** listed in `.env.example` (the Etsy and Stripe sections are each optional) under the service's Variables tab. Never commit real keys.
 5. **Register the callback in Etsy.** In etsy.com/developers > Your Apps, add `<PUBLIC_URL>/auth/etsy/callback` as a callback URL.
 6. **Connect your shop.** Open `<PUBLIC_URL>/admin`, sign in with any username and your `ADMIN_PASSWORD`, and click **Connect Etsy shop**.
 7. **Optional phone alerts.** Install the ntfy app, subscribe to the topic you set in `NTFY_TOPIC`, and you'll get a notification for each new order.
@@ -42,8 +42,19 @@ Standard pack orders are ignored, since Etsy delivers those itself.
 - Put the listing's id in `CUSTOM_LISTING_IDS` so only that listing triggers the bot.
 - You can test the whole flow without Etsy: the dashboard's **Make a hunt by hand** box takes pasted order notes.
 
+## Website orders (Stripe)
+
+The website's hunt builder sends its form to the bot, which opens a Stripe Checkout page. When Stripe confirms the payment, the bot builds the PDF, emails the download link to the buyer, and shows them an order page that updates by itself. Nothing for you to do unless an order lands in **Needs a look**; once you fix it, click **Email it to …** on the dashboard. Etsy isn't involved, so this is allowed under Etsy's rules.
+
+1. **Stripe.** Create an account at [stripe.com](https://stripe.com). Under Developers > API keys, copy the secret key into `STRIPE_SECRET_KEY` (start with the `sk_test_` key).
+2. **Webhook.** Under Developers > Webhooks, add the endpoint `<PUBLIC_URL>/webhooks/stripe` with the event `checkout.session.completed`, then copy its signing secret into `STRIPE_WEBHOOK_SECRET`.
+3. **Email.** Create a [Resend](https://resend.com) account, verify a domain you own, create an API key, and set `RESEND_API_KEY` and `EMAIL_FROM` (an address on that domain).
+4. **Website.** In `docs/index.html`, set `CHECKOUT_URL` to `<PUBLIC_URL>/api/checkout`. Set `SITE_URL` (and optionally `SITE_ORIGIN`) on the bot.
+5. **Test.** With test keys, order on your site using card `4242 4242 4242 4242`, any future date and any CVC. You should get the email within a minute. Then swap in the live keys and a live webhook.
+
 ### Development
 
+`npm test` runs a smoke test with a fake Etsy, Claude, Stripe and Resend, and renders real PDFs.
 `npm test` runs a smoke test with a fake Etsy and a fake Claude, and renders real PDFs.
 
 ## Website
