@@ -186,7 +186,7 @@ function hostPage(order, { stateUrl, sidekickUrl, downloads, items = ['hunt'] })
   const first = SECTIONS.find(([k]) => has[k])[0];
   const what = has.hunt ? theme.name : has.kit ? `${kit.name} play kit` : 'party';
   const body = `${topBar(theme, `${possessive(name)} ${what}`, `Host Mode · ${has.hunt ? 'keep this screen secret!' : 'your party helper'}`)}
-<div class="sections">${SECTIONS.map(([k, icon, label]) => `<button data-sec="${k}"${has[k] ? '' : ' class="off" aria-disabled="true"'}><span>${icon}</span>${label}${has[k] ? '' : '<small>Not in this order</small>'}</button>`).join('')}</div>
+<div class="sections">${SECTIONS.map(([k, icon, label]) => `<button data-sec="${k}" data-label="${label}"${has[k] ? '' : ' class="off" aria-disabled="true"'}><span>${icon}</span>${label}${has[k] ? '' : '<small>Not in this order</small>'}</button>`).join('')}</div>
 <section id="sec-hunt" hidden>
   <div class="tabs"><button data-phase="setup">1 · Hide</button><button data-phase="play">2 · Play</button></div>
   <div class="bar"><i id="bar"></i></div>
@@ -204,7 +204,7 @@ const get=(k)=>{try{return localStorage.getItem(k)}catch(e){return null}},put=(k
 // Tabs
 function show(sec){const btn=document.querySelector('[data-sec="'+sec+'"]');const off=btn.classList.contains('off');
   document.querySelectorAll('section').forEach(s=>s.hidden=true);$(off?'sec-off':'sec-'+sec).hidden=false;
-  if(off)$('off-title').textContent=btn.textContent.replace('Not in this order','').trim();
+  if(off)$('off-title').textContent=btn.dataset.label;
   document.querySelectorAll('.sections button').forEach(b=>b.classList.toggle('on',b===btn));
   if(!off)put(KEY+':tab',sec);window.scrollTo(0,0)}
 document.querySelectorAll('.sections button').forEach(b=>b.onclick=()=>show(b.dataset.sec));
