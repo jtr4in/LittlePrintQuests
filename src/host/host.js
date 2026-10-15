@@ -1,12 +1,20 @@
-// Host Mode: a phone page that walks the grown-up through hiding the cards and running the
-// hunt, one tap at a time, with lines to say, hints and quick challenges. A second link
-// gives a helper (the "sidekick") their own cues, following the host's progress.
+// Host Mode: the grown-up's phone page for everything in the order, in three tabs.
+//  - Hunt: hiding the cards and running the hunt, one tap at a time, with lines to say, hints
+//    and quick challenges. A second link gives a helper (the "sidekick") their own cues.
+//  - Play Kit: setup, pretend-play scenarios, things to say and games for the kit.
+//  - Party: a planning checklist from the invitations to the thank-you cards.
+// Tabs for things the order doesn't include are greyed out.
 //
 // These pages come with Etsy orders too, so they stay plain: no shop links, prices or offers.
 
 const THEMES = require('../generator/themes');
 const { planHunt } = require('../generator/build');
 const SCRIPTS = require('./scripts');
+const { KITS, kitForHunt } = require('../kits/engine');
+const { checklist } = require('./party');
+
+const possessive = (name) => (/s$/i.test(name) ? `${name}’` : `${name}’s`);
+const play = (kit) => { try { return require(`./play/${kit.id}`); } catch { return null; } };
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const fill = (text, ctx) => text.replace(/\{(\w+)\}/g, (_, k) => ctx[k] ?? '');
@@ -88,6 +96,16 @@ function shell(theme, title, body, script) {
 *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}
 .top{background:var(--main);color:#fff;padding:14px 16px calc(14px) 16px;display:flex;align-items:center;gap:10px}
 .top svg{width:30px;height:30px;flex:none}.top b{display:block;font-size:16px;line-height:1.2}.top small{opacity:.85;font-size:13px}
+.sections{display:flex;gap:6px;padding:10px 16px 0;max-width:560px;margin:0 auto}
+.sections button{flex:1;padding:8px 4px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:700 14px system-ui;display:flex;flex-direction:column;align-items:center;gap:1px}
+.sections button span{font-size:20px}.sections button.on{background:var(--main);color:#fff;border-color:var(--main)}
+.sections button.off{opacity:.45;border-style:dashed}.sections button small{font:500 10px system-ui}
+.sections button.off.on{background:var(--card);color:var(--ink);border-color:var(--line)}
+h2{font-size:20px;margin:22px 0 4px}
+.tick{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--line)}.tick:last-child{border:0}
+.tick input{width:22px;height:22px;flex:none;margin-top:2px;accent-color:var(--main)}.tick input:checked+span{color:var(--muted);text-decoration:line-through}
+details.sc summary{cursor:pointer;font-size:18px;list-style:none}details.sc summary::after{content:' ›';color:var(--muted)}details.sc[open] summary::after{content:''}
+ul.lines{padding-left:18px;margin:4px 0}ul.lines li{margin:4px 0}
 .tabs{display:flex;gap:6px;padding:10px 16px 0}.tabs button{flex:1;padding:9px;border-radius:99px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:600 15px system-ui}
 .tabs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .bar{height:6px;background:var(--line);margin:12px 16px 0;border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent);transition:width .3s}
@@ -118,24 +136,88 @@ function topBar(theme, line1, line2) {
   return `<div class="top" aria-hidden="false">${theme.icon}<div><b>${esc(line1)}</b><small>${esc(line2)}</small></div></div>`;
 }
 
-// The host's page. `stateUrl` saves progress so the sidekick can follow along.
-function hostPage(order, { stateUrl, sidekickUrl, downloads }) {
-  const p = plan(order, sidekickUrl);
-  const steps = p.steps.map(({ cue, ...st }) => st);
-  if (downloads) steps[0].download = downloads;
-  const body = `${topBar(p.theme, `${p.name}’s ${p.theme.name}`, 'Host Mode · keep this screen secret!')}
-<div class="tabs"><button data-phase="setup">1 · Hide</button><button data-phase="play">2 · Play</button></div>
-<div class="bar"><i id="bar"></i></div>
-<main id="main"></main>
-<div class="nav"><button class="back" id="back">Back</button><button class="next" id="next">Next</button></div>`;
+// The Play Kit tab: setup, scenarios to start, lines for both players and quick games.
+function kitSection(kit, name) {
+  const P = play(kit);
+  const ctx = { name, child: name, place: kit.placeName(possessive(name)) };
+  const f = (t) => esc(fill(t, ctx));
+  const setup = [kit.guide.setup[0], 'Hang the welcome poster, then tape up the menu and specials.', ...kit.guide.setup.slice(1)];
+  const checks = (key, items) => items.map((x, i) => `<label class="tick"><input type="checkbox" data-key="${key}:${i}"><span>${f(x)}</span></label>`).join('');
+  let h = `<h1>${f(ctx.place)}</h1><p class="small">${f(kit.tagline)}. Ideas for playing with the printed kit, any day.</p>
+  <div class="box"><div class="k">Set up the shop</div>${checks('kit-setup', setup)}</div>`;
+  if (P) {
+    h += `<h2>Pretend-play scenarios</h2><p class="small">Pick one, or let the phone choose.</p>
+    <button class="btn" id="surprise">🎲 Surprise me</button><div id="picked"></div>
+    ${P.scenarios.map((sc, i) => `<details class="box sc" data-sc="${i}"><summary><b>${f(sc.title)}</b></summary>
+      <p>${f(sc.setup)}</p><div class="box say"><div class="k">Say this</div>“${f(sc.say)}”</div><p class="small"><b>Twist:</b> ${f(sc.twist)}</p></details>`).join('')}
+    <h2>Things to say</h2>
+    <div class="box"><div class="k">${esc(name)} can say</div><ul class="lines">${P.lines.kid.map((x) => `<li>“${f(x)}”</li>`).join('')}</ul></div>
+    <div class="box"><div class="k">You can say</div><ul class="lines">${P.lines.grownup.map((x) => `<li>“${f(x)}”</li>`).join('')}</ul></div>
+    <h2>Quick games</h2>
+    ${P.games.map((g) => `<div class="box"><div class="head">${f(g.title)}</div><p>${f(g.how)}</p><p class="small">Uses: ${f(g.uses)}</p></div>`).join('')}`;
+  }
+  h += `<h2>More ideas from the guide</h2>${kit.guide.play.map(([t, x]) => `<div class="box"><div class="head">${f(t)}</div><p>${f(x)}</p></div>`).join('')}`;
+  return h;
+}
+
+// The Party tab: a checklist that remembers what's done on this phone.
+function partySection(theme, name, has) {
+  const groups = checklist(theme, { name, hunt: has.hunt, kit: has.kit });
+  const total = groups.reduce((n, g) => n + g.items.length, 0);
+  return `<h1>${esc(possessive(name))} party plan</h1><p class="small">Tick things off as you go. Your ticks are saved on this phone.</p>
+  <div class="box"><div class="k">Done</div><div class="head"><span id="done">0</span> of ${total}</div><div class="bar" style="margin:8px 0 0"><i id="pbar"></i></div></div>
+  ${groups.map((g, gi) => `<h2>${esc(g.when)}</h2><div class="box">${g.items.map((x, i) => `<label class="tick"><input type="checkbox" data-key="party:${gi}:${i}" data-party><span>${esc(x)}</span></label>`).join('')}</div>`).join('')}`;
+}
+
+const SECTIONS = [['hunt', '🗺️', 'Hunt'], ['kit', '🎭', 'Play Kit'], ['party', '🎉', 'Party']];
+
+// The host's page. `stateUrl` saves the hunt's progress so the sidekick can follow along.
+// `items` says what the order includes (hunt, kit, party); the other tabs are greyed out.
+function hostPage(order, { stateUrl, sidekickUrl, downloads, items = ['hunt'] }) {
+  const cfg = order.config;
+  const has = { hunt: items.includes('hunt'), kit: items.includes('kit'), party: items.includes('party') };
+  const kit = has.kit ? KITS[cfg.kit] || kitForHunt(cfg.theme) : null;
+  if (!kit) has.kit = false;
+  const theme = THEMES[cfg.theme] || THEMES[kit?.hunt];
+  const name = cfg.childName || 'our birthday star';
+  const p = has.hunt ? plan(order, sidekickUrl) : null;
+  const steps = p ? p.steps.map(({ cue, ...st }) => st) : [];
+  if (downloads && steps.length) steps[0].download = downloads;
+  const first = SECTIONS.find(([k]) => has[k])[0];
+  const what = has.hunt ? theme.name : has.kit ? `${kit.name} play kit` : 'party';
+  const body = `${topBar(theme, `${possessive(name)} ${what}`, `Host Mode · ${has.hunt ? 'keep this screen secret!' : 'your party helper'}`)}
+<div class="sections">${SECTIONS.map(([k, icon, label]) => `<button data-sec="${k}"${has[k] ? '' : ' class="off" aria-disabled="true"'}><span>${icon}</span>${label}${has[k] ? '' : '<small>Not in this order</small>'}</button>`).join('')}</div>
+<section id="sec-hunt" hidden>
+  <div class="tabs"><button data-phase="setup">1 · Hide</button><button data-phase="play">2 · Play</button></div>
+  <div class="bar"><i id="bar"></i></div>
+  <main id="main"></main>
+  <div class="nav"><button class="back" id="back">Back</button><button class="next" id="next">Next</button></div>
+</section>
+<section id="sec-kit" hidden><main>${kit ? kitSection(kit, name) : ''}</main></section>
+<section id="sec-party" hidden><main>${has.party ? partySection(theme, name, has) : ''}</main></section>
+<section id="sec-off" hidden><main><h1 id="off-title"></h1><p>This part isn’t included in this order. Everything that is lives in the other tabs.</p></main></section>`;
   const script = `
-const STEPS=${JSON.stringify(steps).replace(/</g, '\\u003c')},STATE=${JSON.stringify(stateUrl)},KEY='host:'+STATE;
-let i=0;try{i=Math.min(STEPS.length-1,+localStorage.getItem(KEY)||0)}catch(e){}
+const STEPS=${JSON.stringify(steps).replace(/</g, '\\u003c')},STATE=${JSON.stringify(stateUrl)},KEY='host:'+STATE,FIRST=${JSON.stringify(first)};
 const $=(id)=>document.getElementById(id);
 const t=(s)=>String(s).replace(/[&<>"]/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const get=(k)=>{try{return localStorage.getItem(k)}catch(e){return null}},put=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+// Tabs
+function show(sec){const btn=document.querySelector('[data-sec="'+sec+'"]');const off=btn.classList.contains('off');
+  document.querySelectorAll('section').forEach(s=>s.hidden=true);$(off?'sec-off':'sec-'+sec).hidden=false;
+  if(off)$('off-title').textContent=btn.textContent.replace('Not in this order','').trim();
+  document.querySelectorAll('.sections button').forEach(b=>b.classList.toggle('on',b===btn));
+  if(!off)put(KEY+':tab',sec);window.scrollTo(0,0)}
+document.querySelectorAll('.sections button').forEach(b=>b.onclick=()=>show(b.dataset.sec));
+// Checklists
+function partyCount(){const all=[...document.querySelectorAll('[data-party]')],n=all.filter(x=>x.checked).length;if($('done')){$('done').textContent=n;$('pbar').style.width=(100*n/all.length)+'%'}}
+document.querySelectorAll('input[data-key]').forEach(c=>{c.checked=get(KEY+':'+c.dataset.key)==='1';c.onchange=()=>{put(KEY+':'+c.dataset.key,c.checked?'1':'0');partyCount()}});partyCount();
+// Play kit: surprise me
+const sur=$('surprise');if(sur)sur.onclick=()=>{const all=[...document.querySelectorAll('.sc')];all.forEach(d=>d.open=false);const d=all[Math.floor(Math.random()*all.length)];d.open=true;d.scrollIntoView({behavior:'smooth',block:'center'})};
+// Hunt
+let i=0;try{i=Math.min(STEPS.length-1,+get(KEY)||0)}catch(e){}
 const box=(k,html,cls='')=>'<div class="box '+cls+'"><div class="k">'+k+'</div>'+html+'</div>';
 let saveTimer;
-function save(){try{localStorage.setItem(KEY,i)}catch(e){}clearTimeout(saveTimer);saveTimer=setTimeout(()=>fetch(STATE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({step:i})}).catch(()=>{}),300)}
+function save(){put(KEY,i);clearTimeout(saveTimer);saveTimer=setTimeout(()=>fetch(STATE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({step:i})}).catch(()=>{}),300)}
 function draw(){
   const s=STEPS[i],ph=STEPS.filter(x=>x.phase===s.phase),n=ph.indexOf(s)+1;let h='';
   h+='<p class="count">'+(s.phase==='setup'?'Hiding':'The hunt')+' · '+n+' of '+ph.length+'</p><h1>'+t(s.title)+'</h1>';
@@ -148,22 +230,25 @@ function draw(){
   if(s.download)h+='<p><a class="btn" href="'+t(s.download)+'" target="_blank">Open the printable PDF</a></p>';
   if(s.hints)h+=box('The kids are heading to','<div class="head">'+t(s.heading)+'</div>')+'<button class="btn" id="stuck">They’re stuck 🤔</button>'+s.hints.map((x,k)=>'<div class="box hint" data-h="'+k+'"><div class="k">Hint '+(k+1)+'</div>'+t(x)+'</div>').join('');
   if(s.share)h+='<button class="btn" id="share">Send the sidekick link</button> <span class="small" id="shared"></span>';
-  if(s.check){let done=false;try{done=localStorage.getItem(KEY+':'+i)==='1'}catch(e){}h+='<label class="check"><input type="checkbox" id="chk"'+(done?' checked':'')+'> Hidden!</label>'}
+  if(s.check){const done=get(KEY+':'+i)==='1';h+='<label class="check"><input type="checkbox" id="chk"'+(done?' checked':'')+'> Hidden!</label>'}
   $('main').innerHTML=h;
   $('bar').style.width=(100*(i+1)/STEPS.length)+'%';
   document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.phase===s.phase));
   $('back').disabled=i===0;$('next').textContent=i===STEPS.length-1?'Done 🎉':s.check?'Hidden, next':'Next';
   let shown=0;const st=$('stuck');if(st)st.onclick=()=>{const el=document.querySelector('[data-h="'+shown+'"]');if(el){el.classList.add('show');shown++}if(shown>=s.hints.length)st.style.display='none';else st.textContent='Still stuck?'};
   const sh=$('share');if(sh)sh.onclick=async()=>{const url=s.share;try{if(navigator.share){await navigator.share({title:'Be my hunt sidekick',text:'Your secret role for the scavenger hunt:',url});return}await navigator.clipboard.writeText(url);$('shared').textContent='Link copied!'}catch(e){$('shared').textContent=url}};
-  const c=$('chk');if(c)c.onchange=()=>{try{localStorage.setItem(KEY+':'+i,c.checked?'1':'0')}catch(e){}};
+  const c=$('chk');if(c)c.onchange=()=>put(KEY+':'+i,c.checked?'1':'0');
   window.scrollTo(0,0);save();
 }
-$('next').onclick=()=>{const c=$('chk');if(c&&!c.checked){c.checked=true;c.onchange()}if(i<STEPS.length-1){i++;draw()}};
-$('back').onclick=()=>{if(i>0){i--;draw()}};
-document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{i=STEPS.findIndex(s=>s.phase===b.dataset.phase);draw()});
-draw();
-fetch(STATE).then(r=>r.json()).then(d=>{if(Number.isInteger(d.step)&&d.step>i&&d.step<STEPS.length){i=d.step;draw()}}).catch(()=>{});`;
-  return shell(p.theme, `${p.name}’s hunt · Host Mode`, body, script);
+if(STEPS.length){
+  $('next').onclick=()=>{const c=$('chk');if(c&&!c.checked){c.checked=true;c.onchange()}if(i<STEPS.length-1){i++;draw()}};
+  $('back').onclick=()=>{if(i>0){i--;draw()}};
+  document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{i=STEPS.findIndex(s=>s.phase===b.dataset.phase);draw()});
+  draw();
+  fetch(STATE).then(r=>r.json()).then(d=>{if(Number.isInteger(d.step)&&d.step>i&&d.step<STEPS.length){i=d.step;draw()}}).catch(()=>{});
+}
+const saved=get(KEY+':tab');show(saved&&document.querySelector('[data-sec="'+saved+'"]:not(.off)')?saved:FIRST);`;
+  return shell(theme, `${possessive(name)} ${has.hunt ? 'hunt' : 'party'} · Host Mode`, body, script);
 }
 
 // The sidekick's page: their jobs, plus a live cue that follows the host's screen.

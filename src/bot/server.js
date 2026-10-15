@@ -91,7 +91,7 @@ function orderPage(o) {
          <p><a class="btn" href="/d/${esc(o.downloadToken)}.pdf" target="_blank">Download your ${what} (PDF)</a></p>
          ${o.kitReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-kit.pdf" target="_blank">Download your play kit (PDF)</a></p>` : ''}
          ${o.partyReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-party.pdf" target="_blank">Download your party printables (PDF)</a></p>` : ''}
-         ${o.hostToken ? `<p><a class="btn alt" href="/h/${esc(o.hostToken)}">Open Host Mode</a><br><small>Step-by-step help on your phone for hiding the cards and running the hunt.</small></p>` : ''}
+         ${o.hostToken ? `<p><a class="btn alt" href="/h/${esc(o.hostToken)}">Open Host Mode</a><br><small>Help on your phone for ${esc(products.has(o, 'hunt') ? 'hiding the cards and running the hunt' : products.has(o, 'kit') ? 'playing with the kit' : 'planning the party')}.</small></p>` : ''}
          <p>${o.email ? `We also emailed the link to <b>${esc(o.email)}</b>.` : ''} Print at “Actual Size / 100%”${{ hunt: ', cut out the clue cards, and follow the Host Guide on page 1.', kit: ', and start with the grown-up guide on page 1.', party: ', on cardstock if you have it.' }[main]}</p>`
       : working
         ? `<h1>Building ${esc(o.form.childName)}’s ${esc(main === 'hunt' ? theme.name : `${theme.label} ${what}`)}…</h1>
@@ -336,7 +336,7 @@ async function route(req, res) {
     if (state) return send(res, 200, JSON.stringify({ step: o.hostStep?.step ?? 0 }), { 'Content-Type': 'application/json', ...noStore });
     const stateUrl = `/h/${o.hostToken}/state`;
     const page = kind === 'h'
-      ? host.hostPage(o, { stateUrl, sidekickUrl: `${process.env.PUBLIC_URL}/s/${o.sidekickToken}`, downloads: `/d/${o.downloadToken}.pdf` })
+      ? host.hostPage(o, { stateUrl, items: products.itemsOf(o), sidekickUrl: o.sidekickToken && `${process.env.PUBLIC_URL}/s/${o.sidekickToken}`, downloads: `/d/${o.downloadToken}.pdf` })
       : host.sidekickPage(o, { stateUrl: `/s/${o.sidekickToken}/state` });
     return send(res, 200, page, noStore);
   }

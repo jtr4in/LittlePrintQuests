@@ -153,9 +153,10 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.match(o.message, /Mission Control play kit:\s+https:\/\/bot\.example\.com\/d\/[\w-]+-kit\.pdf/);
   assert.ok(o.partyReady);
   assert.match(o.message, /party printables[^\n]*:\s+https:\/\/bot\.example\.com\/d\/[\w-]+-party\.pdf/);
-  // Host Mode: hunts get a private host link in the Etsy message; kit-only orders don't.
+  // Host Mode: every order gets a private host link in the Etsy message; only hunts get a sidekick.
   assert.ok(o.message.includes(`https://bot.example.com/h/${o.hostToken}`) && o.sidekickToken);
-  assert.ok(!kitOrder.hostToken && !/\/h\//.test(kitOrder.message));
+  assert.ok(kitOrder.message.includes(`/h/${kitOrder.hostToken}`) && !kitOrder.sidekickToken);
+  assert.match(kitOrder.message, /^Open Host Mode on your phone\. It has pretend-play scenarios/m);
   assert.equal(seen[0].headers['x-api-key'], 'key:secret');
   assert.match(seen[0].u, /shops\/42\/receipts\?was_paid=true/);
 
@@ -247,8 +248,18 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     }
     if (product === 'bundle') assert.equal((await realFetch(`${base}/d/${w.downloadToken}-party.pdf`)).headers.get('content-disposition'), 'inline; filename="party-printables.pdf"');
     assert.match(await (await realFetch(`${base}/order/${orderId}`)).text(), { hunt: /hunt is ready/, kit: /play kit is ready/, party: /party pack is ready/ }[main]);
-    assert.equal(Boolean(w.hostToken), main === 'hunt');
-    assert.equal(mail.html.includes(`/h/${w.hostToken}`), main === 'hunt');
+    assert.ok(w.hostToken && mail.html.includes(`/h/${w.hostToken}`));
+    assert.equal(Boolean(w.sidekickToken), has.includes('hunt'));
+    // Host Mode has a tab for each thing bought; the others are greyed out.
+    const tabsHtml = await (await realFetch(`${base}/h/${w.hostToken}`)).text();
+    for (const [item, label] of [['hunt', 'Hunt'], ['kit', 'Play Kit'], ['party', 'Party']]) {
+      const greyed = new RegExp(`class="off"[^>]*><span>[^<]+</span>${label}<small>Not in this order`).test(tabsHtml);
+      assert.equal(greyed, !has.includes(item), `${product}: ${label} tab`);
+    }
+    if (has.includes('kit')) assert.match(tabsHtml, /Pretend-play scenarios[\s\S]*Surprise me[\s\S]*Ava can say/);
+    if (has.includes('party')) assert.match(tabsHtml, /Ava’s party plan[\s\S]*Hand out or mail the invitations/);
+    assert.ok(!/\{\w+\}/.test(tabsHtml.replace(/<script>[\s\S]*<\/script>/, '')), 'no unfilled placeholders');
+    assert.ok(!/etsy\.com|github\.io|\$\d/i.test(tabsHtml), 'Host Mode must not link to the shop or show prices');
     if (main === 'hunt') {
       // Host Mode and the sidekick page share progress, and stay free of shop links and prices (Etsy buyers get them too).
       const hostHtml = await (await realFetch(`${base}/h/${w.hostToken}`)).text();
