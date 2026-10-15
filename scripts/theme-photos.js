@@ -35,15 +35,18 @@ h1 { font: 700 62px/1.05 Fredoka; margin: 0; letter-spacing: -.01em; }
 const grid = (items) => `<div class="grid">${items.map(([src, label]) => `<figure><img src="${src}">${label ? `<figcaption>${label}</figcaption>` : ''}</figure>`).join('')}</div>`;
 
 function kitPhotos(k, p, n) {
-  // Page 1 is the grown-up guide, 2 the welcome poster, 3–6 the signs, 7–8 the hands-on toys;
-  // the shop set (menu, specials, money) sits just before the two certificates at the end.
-  const pick = [2, 7, 8, 3, 9, n - 4, n - 3, n - 2].filter((i, j, a) => i > 1 && i <= n && a.indexOf(i) === j);
+  // Page 1 is the grown-up guide, 2 the welcome poster, 3–6 the signs, 7–8 the station signs,
+  // 9–10 the counter signs, 11 the bin labels, 12–13 the hands-on toys; the shop set (menu,
+  // specials, money) sits just before the two certificates at the end.
+  // Shop kits have a play kitchen sign at page 3, so everything after it sits one page later.
+  const o = k.hunt ? 0 : 1;
+  const pick = [2, 3, 7 + o, 9 + o, 11 + o, 12 + o, 13 + o, n - 3].filter((i, j, a) => i > 1 && i <= n && a.indexOf(i) === j);
   return {
     inside: `<div class="top"><h1>What’s Inside</h1><div class="sub">${n}-page printable ${k.name} play kit · US Letter</div></div>${grid(pick.map((i) => [p(i)]))}`,
     feature: `<div class="top"><h1>Your Child’s Name All Over the Shop</h1></div>
       <div class="page" style="left:150px;top:170px;width:440px;transform:rotate(-4deg)"><img src="${p(2)}"></div>
-      <div class="page" style="left:620px;top:180px;width:440px;transform:rotate(3deg)"><img src="${p(7)}"></div>
-      <div class="bar">${k.toys.map((t) => t.title.toUpperCase()).join(' · ')} · MENU · PLAY MONEY</div>`,
+      <div class="page" style="left:620px;top:180px;width:440px;transform:rotate(3deg)"><img src="${p(12 + o)}"></div>
+      <div class="bar">${k.toys.map((t) => t.title.toUpperCase()).join(' · ')} · SIGNS · MENU · PLAY MONEY</div>`,
   };
 }
 
@@ -97,7 +100,7 @@ function partyPhotos(t, p, n) {
     if (process.env.FAN_DIR) {
       const fan = await browser.newPage({ viewport: { width: 677, height: 497 }, deviceScaleFactor: 2 });
       const sheet = (n, x, y, r, w = 340) => `<img src="${dataUrl(path.join(dir, `page-${n}.png`))}" style="position:absolute;left:${x}px;top:${y}px;width:${w}px;transform:rotate(${r}deg);box-shadow:0 10px 28px rgba(40,50,90,.25)">`;
-      await fan.setContent(`<body style="margin:0;background:transparent">${sheet(2, 0, 40, -8)}${sheet(8, 330, 30, 7)}${sheet(7, 150, 4, 0, 380)}</body>`);
+      await fan.setContent(`<body style="margin:0;background:transparent">${sheet(2, 0, 40, -8)}${sheet(13, 330, 30, 7)}${sheet(8, 150, 4, 0, 380)}</body>`);
       await fan.screenshot({ path: path.join(process.env.FAN_DIR, `kit-${kit.id}.png`), omitBackground: true });
       await fan.close();
     }

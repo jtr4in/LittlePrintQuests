@@ -144,7 +144,7 @@ svg.pic { display:inline-block; vertical-align:middle; flex:none; }
 .bill::before { content:''; position:absolute; inset:6px; border:2px solid var(--mint); border-radius:8px; }
 .corner { position:absolute; font:700 17pt 'Fredoka'; color:var(--teal-d); } .tl { top:.05in; left:.14in; } .tr { top:.05in; right:.14in; } .bl { bottom:.05in; left:.14in; } .br { bottom:.05in; right:.14in; }
 .bill-mid { width:1in; height:1in; border-radius:50%; background:#fff; border:3px solid var(--gold); display:flex; align-items:center; justify-content:center; flex:none; }
-.bill-txt small { display:block; font:600 8pt 'Fredoka'; text-transform:uppercase; letter-spacing:.04em; color:#66708f; white-space:nowrap; }
+.bill-txt small { display:block; font:600 8pt 'Fredoka'; text-transform:uppercase; letter-spacing:.04em; line-height:1.15; color:#66708f; }
 .bill-txt b { font:700 19pt/1.1 'Fredoka'; color:var(--teal-d); }
 .coins2 { display:grid; grid-template-columns:repeat(6, 1fr); gap:.12in; margin-top:.3in; justify-items:center; }
 .coin2 { width:1.05in; height:1.05in; border-radius:50%; background:radial-gradient(circle at 35% 30%, #fff3cf, var(--gold) 65%); border:2px dashed #b77818; display:flex; flex-direction:column; align-items:center; justify-content:center; }

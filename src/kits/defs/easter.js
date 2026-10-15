@@ -76,6 +76,9 @@ module.exports = {
     keys: [['🎨', 'Paint'], ['🧺', 'Pack'], ['🐰', 'Hop'], ['🔔', 'Ding']],
   },
   props: {
+    recipe: { title: 'How to Decorate an Egg', steps: [['🥚', 'Pick a plain egg from the basket.'], ['🎨', 'Choose two bright colors.'], ['🖌️', 'Paint stripes, dots or zigzags.'], ['✨', 'Add some sparkle.'], ['🧺', 'Let it dry, then pack it in a basket.'], ['🐰', 'Hop it to the right door for delivery!']] },
+    labels: { title: 'Egg Factory Labels', howTo: 'Cut out, fold along the dotted line and stand a label by each basket or bowl.',
+      items: [['🥚', 'Plain eggs'], ['🎨', 'Paint'], ['✨', 'Sparkles'], ['🌈', 'Painted eggs'], ['🧺', 'Ready to go'], ['🚚', 'Deliveries']] },
     map: { title: 'Bunny Delivery Map', theme: 'land', howTo: 'Lay the map on the floor and hop each basket from stop to stop.',
       start: ['🏭', 'Egg Factory'], places: [['🥕', 'Carrot Patch'], ['🌷', 'Tulip Garden'], ['🦆', 'Duck Pond'], ['🐣', 'Chick Coop'], ['🍄', 'Mushroom Ring']], end: ['🧺', 'Big Basket'] },
     wanted: { title: 'Help Wanted Posters', word: 'HIRING!', howTo: 'Tape them up around the factory. Who will take each job?',

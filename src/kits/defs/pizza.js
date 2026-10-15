@@ -48,7 +48,7 @@ module.exports = {
   },
   passport: {
     pageTitle: 'Pizza Club Cards', word: 'Pizza Club', emblem: '🍕', drawLabel: 'Draw yourself',
-    fields: ['Name', 'Favorite pizza', 'Member since', 'Table'], stampsLabel: 'Pizzas eaten',
+    fields: ['Name', 'Who', 'Favorite pizza', 'Member since'], stampsLabel: 'Pizzas eaten',
     howTo: 'Cut along the dashed line and fold in the middle. Stamp a circle for every pizza. Fill them all for a free slice!',
   },
   menu: {

@@ -150,13 +150,14 @@ THE HUNT
 • Mission Accomplished Certificate with your child's name
 • HOST MODE, your Host Guide on your phone: a private step-by-step link that shows where each card goes, then runs the hunt with you. Lines to say in character, quick challenges between clues, a "they're stuck" button with hints, and a secret sidekick role for a second grown-up. Works in any phone browser, nothing to download
 
-THE PLAY KIT (22–23 pages, matches your theme)
+THE PLAY KIT (27–31 pages, matches your theme)
 • Two hands-on toys made for your theme: a steering wheel and spinning speedometer,
   a T-Rex puzzle and hatching egg, a lift-the-flap potion cauldron, a pirate spyglass,
   a Planet Picker spinner, bunny ears, a fire helmet, reindeer antlers and more
 • A whole shop to set up: a "Welcome to Leo's Mission Control" poster, a menu board,
   Today's Specials, order slips and play money (bills and coins)
-• 8 door signs with your child's name
+• A wall full of signs with your child's name: 8 door signs, 4 big station signs,
+  8 counter signs (open, closed, pay here, our hours and more) and 15 shelf and bin labels
 • Flat props to cut out and hold: fossil scans, star maps, treasure maps,
   wanted posters, treasure and gear cards, and stickers
 • One cardstock wearable where it fits: hero masks, pirate eye patches or a crown
@@ -216,13 +217,14 @@ Personalized Pretend Play Kit, Printable Vet, Space, Dino, Pirate, Superhero, Ca
 ```
 Turn the living room into a vet clinic, a pizzeria, a grocery store or mission control, with your child's name on every sign.
 
-★ WHAT YOU GET (22–23 page PDF, US Letter)
+★ WHAT YOU GET (27–31 page PDF, US Letter)
 • Two hands-on toys made for your kit: a vet's lift-the-flap doctor bag and X-ray machine,
   a Planet Picker spinner and blast-off rocket, a T-Rex puzzle and hatching egg,
   a pirate spyglass and treasure chest, a Super Power Spinner, a seashell tiara and more
 • A whole shop to set up: a "Welcome to [Name]'s Pet Clinic" poster, a menu board,
   Today's Specials, order slips and play money (bills and coins)
-• 8 door signs with your child's name
+• A wall full of signs with your child's name: 8 door signs, 4 big station signs,
+  8 counter signs (open, closed, pay here, our hours and more) and 15 shelf and bin labels
 • Flat props to cut out and hold: pet X-rays, star maps, fossil scans, treasure maps,
   wanted posters, supply and treasure cards, and stickers
 • One cardstock wearable where it fits: hero masks, pirate eye patches or a crown
@@ -372,10 +374,10 @@ The same kits as listing 7, each on its own listing so it can have its own title
 ```
 {opening}
 
-★ WHAT YOU GET (22–23 page PDF, US Letter)
+★ WHAT YOU GET (27–31 page PDF, US Letter)
 • {toys}
 • A whole shop to set up: a "Welcome to {place}" poster, a menu board, Today's Specials, order slips and play money
-• Door signs with your child's name
+• A wall full of signs with your child's name: door signs, big station signs, counter signs (open, closed, pay here, our hours) and shelf and bin labels
 • Flat props to cut out and play with: {props}
 • 8 ID badges for your child, family and friends
 • {forms} for each of your child's {subjects} (stuffed animals and toys count!)
@@ -564,6 +566,54 @@ Personalized Post Office Dramatic Play Printable, Kids Pretend Mail Set, Stamps,
 Your child runs the town post office, selling stamps, weighing parcels and sorting the mail, with their name on every sign.
 **Tags**
 post office play, dramatic play, pretend mail, play stamps, printable postcards, letter writing kids, kids role play, pretend play kit, printable play set, mail carrier play, personalized kids, homeschool play, preschool center
+
+### library
+**Title**
+Personalized Library Dramatic Play Printable, Kids Pretend Library Set, Library Cards, Checkout Slips, Book Review and Shelf Labels
+**Opening line**
+Your child runs their very own library, checking out books, stamping library cards and hosting story time, with their name on every sign.
+**Tags**
+library play, dramatic play, pretend library, library card kids, book review kids, story time, kids role play, pretend play kit, printable play set, reading center, personalized kids, homeschool play, preschool center
+
+### police
+**Title**
+Personalized Police Station Dramatic Play Printable, Kids Pretend Police Set, Officer Badges, Steering Wheel, Parking Tickets and Signs
+**Opening line**
+Your child is the friendly police chief of their own station, finding lost toys, keeping the roads safe and handing out silly parking tickets.
+**Tags**
+police dramatic play, police station play, pretend police, community helpers, police badge kids, road safety kids, kids role play, pretend play kit, printable play set, play steering wheel, personalized kids, homeschool play, preschool center
+
+### petshop
+**Title**
+Personalized Pet Shop Dramatic Play Printable, Kids Pretend Pet Store Set, Adoption Papers, Grooming, Cash Register and Price Board
+**Opening line**
+Your child runs their very own pet shop, with adoption papers for their stuffed animals, a bubble-bath grooming station, a cash register and signs with their name on them.
+**Tags**
+pet shop printable, pet store pretend, dramatic play, pet adoption kids, pet grooming play, kids role play, pretend play kit, printable play set, stuffed animal play, play cash register, personalized kids, homeschool play, preschool center
+
+### coffee
+**Title**
+Personalized Coffee Shop Dramatic Play Printable, Kids Pretend Cafe Set, Hot Cocoa Menu, Cash Register, Drink Orders and Signs
+**Opening line**
+Your child is the head barista at their very own café, serving hot cocoa, smoothies and muffins from a menu board, register and signs with their name on them.
+**Tags**
+coffee shop play, cafe dramatic play, pretend cafe, hot cocoa stand, dramatic play, kids role play, pretend play kit, printable play set, play kitchen sign, play cash register, personalized kids, homeschool play, preschool center
+
+### italian
+**Title**
+Personalized Italian Restaurant Dramatic Play Printable, Kids Pretend Restaurant Set, Waiter Order Pad, Menu, Cash Register, Play Food
+**Opening line**
+Your child is the head chef at their very own Italian trattoria, with a dinner menu, a waiter’s order pad, table cards and a cash register with their name on it.
+**Tags**
+restaurant play, italian restaurant, pretend restaurant, dramatic play, play food printable, waiter order pad, kids role play, pretend play kit, printable play set, play cash register, personalized kids, homeschool play, preschool center
+
+### auto
+**Title**
+Personalized Auto Repair Shop Dramatic Play Printable, Kids Pretend Mechanic and Car Wash Set, Toolbox, Cash Register, Car Check-Up
+**Opening line**
+Your child is the head mechanic at their very own auto shop, with a lift-the-flap toolbox, car check-up forms, a car wash and a cash register with their name on it.
+**Tags**
+mechanic play, auto shop printable, car wash pretend, dramatic play, kids role play, pretend play kit, printable play set, toy car play, play cash register, personalized kids, homeschool play, preschool center, car repair kids
 
 ---
 

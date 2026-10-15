@@ -81,6 +81,9 @@ module.exports = {
     keys: [['🔔', 'Jingle'], ['⬆️', 'Fly up'], ['⬇️', 'Land'], ['🎁', 'Drop gift']],
   },
   props: {
+    recipe: { title: 'How to Wrap a Present', steps: [['🧸', 'Pick a toy from the workshop shelf.'], ['📦', 'Put it in a box.'], ['📜', 'Fold the paper all the way around.'], ['✂️', 'Tape the ends down neat and tight.'], ['🎀', 'Add a big bow on top.'], ['🏷️', 'Write a gift tag from the Nice List.'], ['🛷', 'Load it on the sleigh!']] },
+    labels: { title: 'Toy Bin Labels', howTo: 'Cut out, fold along the dotted line and stand a label by each toy bin in the workshop.',
+      items: [['🧸', 'Teddy bears'], ['🚂', 'Trains'], ['🪀', 'Yo-yos'], ['🧱', 'Blocks'], ['📚', 'Books'], ['🎁', 'Wrapped gifts']] },
     wanted: { title: 'Nice List Posters', word: 'NICE LIST', howTo: 'Tape them up in the workshop. Who else made the Nice List today?',
       list: [['🧸', 'Teddy Bear', 'Sharing hugs with everyone'], ['🦌', 'Twinkle Reindeer', 'Pulling the sleigh with a smile'], ['⛄', 'Snowy Sam', 'Helping build the snow fort'], ['🐧', 'Pip the Penguin', 'Tidying up the toy shelf']] },
     cards: { title: 'Workshop Supplies', howTo: 'Cut out the supplies. Buy them with elf stars and use them to make the toys.',
