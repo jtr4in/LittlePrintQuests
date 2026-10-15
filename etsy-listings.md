@@ -135,7 +135,7 @@ A scavenger hunt made for YOUR child and YOUR home.
 
 Tell us your child's name, age, theme and 6–10 hiding spots in your house or yard, and we'll create a personalized, print-ready hunt with custom rhyming clues that lead from spot to spot, ending at the cake or prize.
 
-You also get Host Mode: your Host Guide on your phone, walking you through hiding the cards and running the hunt one tap at a time.
+You also get Host Mode, your party helper on your phone, with a tab for each part: the hunt one tap at a time, pretend-play ideas for the kit, and a party-planning checklist.
 
 ★ CHOOSE A THEME
 Dinosaurs · Superheroes · Pirates · Outer Space · Princess & Knights · Unicorns · Mermaids · Construction · Pet Vet · Race Cars · Firefighters · Ice Kingdom
@@ -162,12 +162,14 @@ THE PLAY KIT (22–23 pages, matches your theme)
 • One cardstock wearable where it fits: hero masks, pirate eye patches or a crown
 • ID badges and check-up forms for each of your child's pets or toys
 • Tickets, passports and a certificate (plus a blank one for guests)
+• Play Kit tab in Host Mode: 8 pretend-play scenarios with lines to say and silly twists, a "Surprise me" button, and quick games
 
 THE PARTY PACK (matches your theme, with your child's name)
 • Invitations (5" x 7") with write-in or filled-in party details
 • Thank-you cards, cupcake toppers and favor tags
 • A HAPPY BIRTHDAY banner that spells your child's name
 • Food tent cards with themed snack names
+• Party tab in Host Mode: a planning checklist from the invitations to the thank-you cards
 
 Pick your package: everything for $16.99, the hunt + play kit, the hunt + party pack, or just the hunt.
 
@@ -227,6 +229,7 @@ Turn the living room into a vet clinic, a pirate ship or mission control, with y
 • 8 ID badges for your child, family and friends
 • A check-up form and passport for each of your child's pets or toys
 • Tickets and a certificate (plus a blank one for guests)
+• HOST MODE on your phone: 8 pretend-play scenarios for your kit with lines to say and silly twists, a "Surprise me" button, and quick games. Works in any phone browser, nothing to download
 
 ★ BUILT FOR REAL PLAY
 Things that spin, slide, lift and go on your head, plus cards, maps and posters kids can hold, trade and hide.
@@ -234,7 +237,7 @@ Print the toys and wearables on cardstock and they last all party.
 
 ★ HOW TO ORDER
 Fill in the personalization box with your child's name and up to 6 pets or toys.
-We send your PDF through Etsy messages, usually within a few hours.
+We send your PDF and your Host Mode link through Etsy messages, usually within a few hours.
 
 ★ WHAT YOU'LL NEED
 • Cardstock (65–110 lb) for the toys, badges, wearables and props. Regular paper is fine for the forms and tickets.
@@ -277,6 +280,7 @@ Everything for the party table, matched to your theme and made with your child's
 • Favor tags for goodie bags
 • A HAPPY BIRTHDAY banner that spells your child's name
 • Food tent cards with themed snack names, plus blank ones to fill in
+• HOST MODE on your phone: a party-planning checklist from the invitations to the thank-you cards. Tick things off as you go
 
 ★ THEMES
 Dinosaurs · Superheroes · Pirates · Outer Space · Princess & Knights · Unicorns · Mermaids · Construction · Pet Vet · Race Cars · Firefighters · Ice Kingdom
@@ -285,7 +289,7 @@ Holidays: Halloween · Christmas · Easter · Valentine's
 ★ HOW TO ORDER
 Pick your theme and write your child's name and age in the personalization box.
 Add your party date, time and place if you'd like them printed on the invitations.
-We send your PDF through Etsy messages, usually within a few hours.
+We send your PDF and your Host Mode link through Etsy messages, usually within a few hours.
 
 ★ WHAT YOU'LL NEED
 • Cardstock (65–110 lb) for the invitations, thank-you cards, toppers, tags and banner
@@ -377,13 +381,14 @@ The same kits as listing 7, each on its own listing so it can have its own title
 • A check-up form and passport for each of your child's {subjects} (stuffed animals and toys count!)
 • Tickets and a certificate (plus a blank one for guests)
 • A grown-up guide with setup steps and play ideas
+• HOST MODE on your phone: 8 pretend-play scenarios with lines to say and silly twists, a "Surprise me" button, and quick games. Works in any phone browser, nothing to download
 
 ★ PERFECT WITH
 Our {hunt} scavenger hunt: the trail ends at the {kit}, so the party keeps going. Find it in our shop, or get the hunt, this kit and a matching party pack together in our Custom Party Bundle.
 
 ★ HOW TO ORDER
 Fill in the personalization box with your child's name and up to 6 pets or toys.
-We send your PDF through Etsy messages, usually within a few hours.
+We send your PDF and your Host Mode link through Etsy messages, usually within a few hours.
 
 ★ WHAT YOU'LL NEED
 • Cardstock (65–110 lb) for the toys, badges and props. Regular paper is fine for the forms and tickets.
@@ -546,6 +551,7 @@ The same party packs as listing 8, each on its own listing. The bot fills `{them
 • A HAPPY BIRTHDAY banner that spells your child's name
 • Food tent cards with {theme} snack names ({foods}), plus blank ones to fill in
 • Water bottle labels
+• HOST MODE on your phone: a party-planning checklist for your {theme} party, from the invitations to the thank-you cards. Tick things off as you go
 
 ★ PERFECT WITH
 Our {hunt} scavenger hunt, the main event of the party. Find it in our shop, or get the hunt, a matching play kit and this party pack together in our Custom Party Bundle.
@@ -553,7 +559,7 @@ Our {hunt} scavenger hunt, the main event of the party. Find it in our shop, or 
 ★ HOW TO ORDER
 Write your child's name and the age they're turning in the personalization box.
 Add your party date, time and place if you'd like them printed on the invitations.
-We send your PDF through Etsy messages, usually within a few hours.
+We send your PDF and your Host Mode link through Etsy messages, usually within a few hours.
 
 ★ WHAT YOU'LL NEED
 • Cardstock (65–110 lb) for the invitations, thank-you cards, toppers, tags and banner
