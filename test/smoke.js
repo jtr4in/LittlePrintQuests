@@ -68,7 +68,7 @@ global.fetch = async (url, opts = {}) => {
       { receipt_id: 900, name: 'Pat Buyer', transactions: [
         { transaction_id: 1, listing_id: 555, title: 'Custom Hunt', variations: [
           { property_id: 513, formatted_name: 'Theme', formatted_value: 'Space', question_id: 0 },
-          { property_id: 514, formatted_name: 'Package', formatted_value: 'Hunt + Play Kit', question_id: 0 },
+          { property_id: 514, formatted_name: 'Package', formatted_value: 'Hunt + Play Kit + Party Pack', question_id: 0 },
           { property_id: 54, formatted_name: 'Personalization', formatted_value: 'Leo, 6, front door, piano, dog bed, table', question_id: 77 },
         ] },
       ] },
@@ -103,6 +103,22 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.ok(!hunt({ age: 7 }).includes('class="pic-hint"'));
   assert.ok(hunt({ age: 7, pictures: true }).includes('class="pic-hint"'));
 
+  // Party Pack: builds for every theme, fills party details or leaves write-in lines, renders a real PDF.
+  const { buildPartyHtml } = require('../src/party/build');
+  const { renderParty } = require('../src/party/render-party');
+  for (const theme of Object.keys(require('../src/generator/themes'))) {
+    const party = buildPartyHtml({ theme, childName: 'Maximilian', age: 6, party: { date: 'June 3', place: 'The Park' } });
+    assert.match(party, /Maximilian’s/);
+    assert.match(party, /6th Birthday!/);
+    assert.ok(party.includes('June 3') && party.includes('The Park'));
+    assert.equal((party.match(/class="item flag"/g) || []).length, 5 + 1 + 8 + 1 + 10);
+    assert.ok(buildPartyHtml({ theme, childName: 'Bo' }).includes('Birthday Party!'));
+  }
+  assert.throws(() => buildPartyHtml({ theme: 'dino' }), /childName is required/);
+  const partyPdf = path.join(dataDir, 'party.pdf');
+  await renderParty({ theme: 'space', childName: 'Bo', age: 3 }, partyPdf);
+  assert.ok(fs.statSync(partyPdf).size > 50000);
+
   for (let i = 0; i < 60; i++) {
     const s = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
     if (s.orders['etsy-900-1']?.status === 'ready' && s.orders['etsy-902-3']?.status === 'ready') break;
@@ -122,6 +138,8 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal(o.product, 'bundle');
   assert.ok(o.kitReady);
   assert.match(o.message, /Mission Control play kit:\s+https:\/\/bot\.example\.com\/d\/[\w-]+-kit\.pdf/);
+  assert.ok(o.partyReady);
+  assert.match(o.message, /party printables[^\n]*:\s+https:\/\/bot\.example\.com\/d\/[\w-]+-party\.pdf/);
   assert.equal(seen[0].headers['x-api-key'], 'key:secret');
   assert.match(seen[0].u, /shops\/42\/receipts\?was_paid=true/);
 
@@ -161,9 +179,10 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.match((await bad.json()).error, /between 3 and 12/);
   const pre = await realFetch(base + '/api/checkout', { method: 'OPTIONS' });
   assert.equal(pre.headers.get('access-control-allow-origin'), '*');
-  for (const [product, spots] of [['bundle', ['front_door', 'pet_bed', 'kitchen_table']], [undefined, ['front_door', { custom: 'Grandma’s piano' }, 'kitchen_table']]]) {
+  const webOrders = [['bundle', ['front_door', 'pet_bed', 'kitchen_table']], [undefined, ['front_door', { custom: 'Grandma’s piano' }, 'kitchen_table']], ['party', []]];
+  for (const [product, spots] of webOrders) {
     const co = await realFetch(base + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ product, theme: 'dino', childName: 'Ava', age: 5, spots, pets: [{ name: 'Rex', kind: 'trex' }] }) });
+      body: JSON.stringify({ product, theme: 'dino', childName: 'Ava', age: 5, spots, pets: [{ name: 'Rex', kind: 'trex' }], party: { date: 'Saturday, June 3', place: '' } }) });
     assert.equal(co.status, 200);
     const orderId = (await co.json()).url.split('/').pop();
     assert.match(orderId, /^web-/);
@@ -192,13 +211,21 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.ok(mail.html.includes(`/d/${w.downloadToken}.pdf`));
     assert.equal(mail.html.includes(`/d/${w.downloadToken}-kit.pdf`), product === 'bundle');
     assert.equal(Boolean(w.kitReady), product === 'bundle');
-    assert.match(await (await realFetch(`${base}/order/${orderId}`)).text(), /hunt is ready/);
+    assert.equal(mail.html.includes(`/d/${w.downloadToken}-party.pdf`), product === 'bundle');
+    assert.equal(Boolean(w.partyReady), product === 'bundle');
+    if (product !== undefined) assert.deepEqual(w.party || w.config.party, { date: 'Saturday, June 3' });
+    if (product === 'party') {
+      assert.match(mail.subject, /Dinosaur party pack for Ava/);
+      assert.equal((await realFetch(`${base}/d/${w.downloadToken}.pdf`)).headers.get('content-disposition'), 'inline; filename="scavenger-hunt.pdf"');
+    }
+    if (product === 'bundle') assert.equal((await realFetch(`${base}/d/${w.downloadToken}-party.pdf`)).headers.get('content-disposition'), 'inline; filename="party-printables.pdf"');
+    assert.match(await (await realFetch(`${base}/order/${orderId}`)).text(), product === 'party' ? /party pack is ready/ : /hunt is ready/);
     // Stripe retries the same event: no second email.
     await realFetch(base + '/webhooks/stripe', { method: 'POST', body: payload, headers: { 'stripe-signature': sig } });
   }
   await wait(500);
-  assert.equal(emails.length, 2);
-  assert.deepEqual(charged, [1699, 999]);
+  assert.equal(emails.length, 3);
+  assert.deepEqual(charged, [1699, 999, 699]);
   assert.equal((await realFetch(base + '/order/manual-1')).status, 401); // only web orders are public
   assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Emailed to ava\.parent@example\.com/);
 
@@ -225,7 +252,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     for (let i = 0; i < 240; i++) {
       await wait(500);
       const l = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8')).listings || {};
-      if (Object.keys(l).length === 7 && Object.values(l).every((x) => x.ready || (x.error && !x.working))) return l;
+      if (Object.keys(l).length === 11 && Object.values(l).every((x) => x.ready || (x.error && !x.working))) return l;
     }
     throw new Error('listings never finished');
   };
@@ -233,12 +260,12 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   await createListings();
   let listed = await listingsDone();
   assert.match(listed.kits.error, /Temporary upload problem/);
-  assert.equal(Object.values(listed).filter((x) => x.ready).length, 6);
+  assert.equal(Object.values(listed).filter((x) => x.ready).length, 10);
   await createListings();
   listed = await listingsDone();
   assert.ok(Object.values(listed).every((x) => x.ready));
   const creates = etsyCalls.filter((c) => c.p === '/shops/42/listings');
-  assert.equal(creates.length, 7, 'resuming must not create a second kits listing');
+  assert.equal(creates.length, 11, 'resuming must not create a second kits listing');
   const pack = creates[0].body;
   assert.equal(pack.type, 'download');
   assert.equal(pack.price, '8.00');
@@ -247,14 +274,16 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.match(pack.description, /^Roar!.*WHAT'S INCLUDED/s);
   const bundleId = listed.bundle.id;
   const inv = etsyCalls.find((c) => c.p === `/listings/${bundleId}/inventory`).body;
-  assert.deepEqual(inv.products.map((x) => [x.property_values[0].values[0], x.offerings[0].price]), [['Hunt + Play Kit', 16.99], ['Hunt only', 9.99]]);
+  assert.deepEqual(inv.products.map((x) => [x.property_values[0].values[0], x.offerings[0].price]), [['Hunt + Play Kit + Party Pack', 16.99], ['Hunt only', 9.99]]);
   const kitInv = etsyCalls.find((c) => c.p === `/listings/${listed.kits.id}/inventory`).body;
-  assert.equal(kitInv.products.length, 6);
+  assert.equal(kitInv.products.length, 9);
+  const partyInv = etsyCalls.find((c) => c.p === `/listings/${listed.party.id}/inventory`).body;
+  assert.deepEqual(partyInv.products.map((x) => x.property_values[0].values[0]).slice(0, 2), ['Dinosaur', 'Superhero']);
   const q = etsyCalls.find((c) => c.p === `/shops/42/listings/${bundleId}/personalization`).body.personalization_questions[0];
   assert.ok(q.required && q.question_text.length <= 45 && /pets or toys/.test(q.instructions));
-  assert.equal(etsyCalls.filter((c) => c.p === `/shops/42/listings/${listed.kits.id}/images`).length, 8); // 7 photos + 1 failed try
+  assert.equal(etsyCalls.filter((c) => c.p === `/shops/42/listings/${listed.kits.id}/images`).length, 11); // 10 photos + 1 failed try
   const files = etsyCalls.filter((c) => /\/files$/.test(c.p));
-  assert.equal(files.length, 7);
+  assert.equal(files.length, 11);
   assert.ok(files.every((f) => f.body.file.size > 10000 && f.body.file.type === 'application/pdf'));
   assert.ok(!etsyCalls.some((c) => c.p.includes(`/listings/${listed['pack-dino'].id}/personalization`)));
 
