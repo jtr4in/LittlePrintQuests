@@ -72,12 +72,18 @@ function plan(order, sidekickUrl) {
   return { theme, steps, name, sidekick: { voice: s.voice, jobs: [`Radio calls as ${s.voice}`, ...s.sounds.slice(0, 2).map((x) => `Sound effect: ${x}`), 'Sneaking ahead to check the next card is still hidden'] } };
 }
 
+// Dark text on light accents, white text on dark ones (race car black, Christmas green).
+function textOn(hex) {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.2 ? '#1d1406' : '#fff'; // whichever contrasts more
+}
+
 function shell(theme, title, body, script) {
   const [main, accent, soft] = [theme.colors.primary, theme.colors.accent, theme.colors.soft];
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex"><meta name="referrer" content="no-referrer"><meta name="theme-color" content="${esc(main)}">
 <title>${esc(title)}</title><style>
-:root{--main:${main};--accent:${accent};--soft:${soft};--bg:#fbf8f1;--card:#fff;--ink:#2c3352;--muted:#646d8f;--line:#e4dfd3}
+:root{--main:${main};--accent:${accent};--on-accent:${textOn(accent)};--soft:${soft};--bg:#fbf8f1;--card:#fff;--ink:#2c3352;--muted:#646d8f;--line:#e4dfd3}
 @media (prefers-color-scheme:dark){:root{--bg:#151a2e;--card:#1f2540;--ink:#f4f0e6;--muted:#b4bad4;--line:#353c5c}}
 *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}
 .top{background:var(--main);color:#fff;padding:14px 16px calc(14px) 16px;display:flex;align-items:center;gap:10px}
@@ -101,7 +107,7 @@ h1{font-size:26px;line-height:1.2;margin:0 0 12px}
 .nav{position:fixed;left:0;right:0;bottom:0;display:flex;gap:10px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-top:1px solid var(--line)}
 .nav button{flex:1;padding:16px;border-radius:16px;border:0;font:800 18px system-ui}
 .nav .back{flex:0 0 30%;background:var(--card);color:var(--ink);border:1.5px solid var(--line)}
-.nav .next{background:var(--accent);color:#1d1406}
+.nav .next{background:var(--accent);color:var(--on-accent)}
 .check{display:flex;align-items:center;gap:10px;font-weight:700;margin-top:6px}.check input{width:26px;height:26px;accent-color:var(--main)}
 ul.jobs{padding-left:20px;margin:6px 0}.live{display:inline-block;width:9px;height:9px;border-radius:50%;background:#2fbf71;margin-right:6px;animation:p 1.6s infinite}
 @keyframes p{50%{opacity:.3}}

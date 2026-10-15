@@ -1,6 +1,7 @@
 // Builds the website's per-theme pictures in docs/img/: the theme card pages (pages/<id>-hunt|kit|party.webp:
 // a clue card sheet, the invitation and the kit's gadget),
-// the play kit card (kit-<id>.webp) and the Host Mode phone (host/<id>-play.webp).
+// the four hunt pages for "What's in the box" (pages/<id>-guide|briefing|cards|cert.webp),
+// the play kit card (kit-<id>.webp) and the Host Mode phones (host/<id>-hide|play|sidekick.webp).
 // Usage: node scripts/site-images.js [theme ...]
 const fs = require('fs');
 const os = require('os');
@@ -10,7 +11,7 @@ const { renderPdf } = require('../src/generator/render');
 const { renderKit } = require('../src/kits/render-kit');
 const { renderParty } = require('../src/party/render-party');
 const { kitForHunt } = require('../src/kits/engine');
-const { plan, hostPage } = require('../src/host/host');
+const { plan, hostPage, sidekickPage } = require('../src/host/host');
 const THEMES = require('../src/generator/themes');
 
 const IMG = path.join(__dirname, '..', 'docs', 'img');
@@ -40,17 +41,26 @@ const dataUrl = (f) => `data:image/png;base64,${fs.readFileSync(f).toString('bas
       await fan.close();
     }
 
-    // Host Mode phone on the "They found Card 3" step, at 240x480.
+    // Host Mode phones: hiding Card 3, then "They found Card 3" for the host and the sidekick, at 240x480.
     const order = { config: { theme: id, childName: 'Maya', age: 6, spots: SPOTS } };
-    const step = plan(order, null).steps.findIndex((s) => /Card 3/.test(s.title) && s.phase === 'play');
-    const phone = await browser.newPage({ viewport: { width: 360, height: 720 }, deviceScaleFactor: 1 });
-    await phone.route('http://host.test/**', (route) => route.request().url().endsWith('/h')
-      ? route.fulfill({ contentType: 'text/html', body: hostPage(order, { stateUrl: '/s', sidekickUrl: null, downloads: [] }) })
-      : route.fulfill({ contentType: 'application/json', body: JSON.stringify({ step }) }));
-    await phone.goto('http://host.test/h');
-    await phone.waitForTimeout(400);
-    await phone.screenshot({ path: path.join(tmp, `host-${id}.png`) });
-    await phone.close();
+    const steps = plan(order, null).steps;
+    const hide = steps.findIndex((s) => /Card 3/.test(s.title) && s.phase === 'setup');
+    const play = steps.findIndex((s) => /Card 3/.test(s.title) && s.phase === 'play');
+    const screens = [
+      ['hide', hostPage(order, { stateUrl: '/s', sidekickUrl: null, downloads: [] }), hide],
+      ['play', hostPage(order, { stateUrl: '/s', sidekickUrl: null, downloads: [] }), play],
+      ['sidekick', sidekickPage(order, { stateUrl: '/s' }), play],
+    ];
+    for (const [name, html, step] of screens) {
+      const phone = await browser.newPage({ viewport: { width: 360, height: 720 }, deviceScaleFactor: 1 });
+      await phone.route('http://host.test/**', (route) => route.request().url().endsWith('/h')
+        ? route.fulfill({ contentType: 'text/html', body: html })
+        : route.fulfill({ contentType: 'application/json', body: JSON.stringify({ step }) }));
+      await phone.goto('http://host.test/h');
+      await phone.waitForTimeout(400);
+      await phone.screenshot({ path: path.join(tmp, `host-${id}-${name}.png`) });
+      await phone.close();
+    }
     console.log('Rendered', id);
   }
   await browser.close();
@@ -65,11 +75,15 @@ for f in os.listdir(tmp):
     if f.startswith('kit-') and f.endswith('.png'):
         Image.open(p).save(os.path.join(img, f[:-4] + '.webp'), 'WEBP', quality=82)
     elif f.startswith('host-') and f.endswith('.png'):
-        Image.open(p).convert('RGB').resize((240, 480), Image.LANCZOS).save(os.path.join(img, 'host', f[5:-4] + '-play.webp'), 'WEBP', quality=85)
+        Image.open(p).convert('RGB').resize((240, 480), Image.LANCZOS).save(os.path.join(img, 'host', f[5:-4] + '.webp'), 'WEBP', quality=85)
     elif os.path.isdir(p):
         theme, kind = f.rsplit('-', 1)
         n = {'hunt': 3, 'party': 2, 'kit': 6}[kind]
         Image.open(os.path.join(p, f'page-{n}.png')).convert('RGB').resize((400, 518), Image.LANCZOS).save(os.path.join(img, 'pages', f'{theme}-{kind}.webp'), 'WEBP', quality=80)
+        if kind == 'hunt':
+            pages = sorted(os.listdir(p), key=lambda x: int(x[5:-4]))
+            for part, page in (('guide', pages[0]), ('briefing', pages[1]), ('cards', pages[2]), ('cert', pages[-1])):
+                Image.open(os.path.join(p, page)).convert('RGB').resize((480, 621), Image.LANCZOS).save(os.path.join(img, 'pages', f'{theme}-{part}.webp'), 'WEBP', quality=80)
 `, tmp, IMG]);
   console.log('Wrote docs/img for', only.length ? only.join(', ') : 'every theme');
 })();

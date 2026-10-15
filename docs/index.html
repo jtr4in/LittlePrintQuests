@@ -377,20 +377,20 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         <label class="box-theme">Theme <select id="boxSelect"></select></label>
       </div>
       <div class="box-panel" data-panel="hunt">
-        <p class="kits-lede">A host guide, a read-aloud briefing, rhyming clue cards and a certificate, all with your child’s name. Real pages from a Deep Space hunt made for Maya’s 6th birthday:</p>
+        <p class="kits-lede">A host guide, a read-aloud briefing, rhyming clue cards and a certificate, all with your child’s name. Real <span id="huntName">Deep Space Expedition</span> pages, made for Maya’s 6th birthday:</p>
         <div class="kit">
-        <div class="page-thumb"><img class="mini-img" src="img/hunt-guide.webp" alt="Host guide page listing where each clue card hides" width="480" height="621" loading="lazy"><h3>Host guide</h3><p>Your secret checklist: which card hides where, and where the prize goes.</p></div>
-        <div class="page-thumb"><img class="mini-img" src="img/hunt-briefing.webp" alt="Mission briefing letter addressed to Maya" width="480" height="621" loading="lazy"><h3>Mission briefing</h3><p>A story letter to read aloud that kicks off the adventure, addressed to your child.</p></div>
-        <div class="page-thumb"><img class="mini-img" src="img/hunt-cards.webp" alt="Two rhyming clue cards with dashed cut lines" width="480" height="621" loading="lazy"><h3>Clue cards</h3><p>4 × 6 inch rhyming cards, two per page, with dashed cut lines and big read-aloud type.</p></div>
-        <div class="page-thumb"><img class="mini-img" src="img/hunt-certificate.webp" alt="Mission Accomplished certificate with Maya’s name" width="480" height="621" loading="lazy"><h3>Certificate</h3><p>A “Mission Accomplished” certificate with your child’s name for the big finish.</p></div>
+        <div class="page-thumb"><img class="mini-img" id="huntGuide" src="img/pages/space-guide.webp" alt="Host guide page listing where each clue card hides" width="480" height="621" loading="lazy"><h3>Host guide</h3><p>Your secret checklist: which card hides where, and where the prize goes.</p></div>
+        <div class="page-thumb"><img class="mini-img" id="huntBriefing" src="img/pages/space-briefing.webp" alt="Read-aloud story briefing addressed to Maya" width="480" height="621" loading="lazy"><h3>Story briefing</h3><p>A story letter to read aloud that kicks off the adventure, addressed to your child.</p></div>
+        <div class="page-thumb"><img class="mini-img" id="huntCards" src="img/pages/space-cards.webp" alt="Two rhyming clue cards with dashed cut lines" width="480" height="621" loading="lazy"><h3>Clue cards</h3><p>4 × 6 inch rhyming cards, two per page, with dashed cut lines and big read-aloud type.</p></div>
+        <div class="page-thumb"><img class="mini-img" id="huntCert" src="img/pages/space-cert.webp" alt="Certificate with Maya’s name" width="480" height="621" loading="lazy"><h3>Certificate</h3><p>A themed certificate with your child’s name and a special title for the big finish.</p></div>
       </div>
       </div>
       <div class="box-panel" data-panel="host" hidden>
         <p class="kits-lede">Every hunt comes with a private Host Mode link. It walks you through hiding the cards, then runs the hunt with you one tap at a time, so you can keep the fun going instead of juggling paper.</p>
         <div class="phones">
-        <figure><span class="phone"><img src="img/host/space-hide.webp" alt="Host Mode screen: Hide Card 3 at the Shoe Rack, with a Hidden checkbox" width="360" height="720" loading="lazy"></span><figcaption><b>1 · Hide the cards</b>One card per screen, in your exact hiding order. Tick “Hidden!” and move on.</figcaption></figure>
-        <figure><span class="phone"><img src="img/host/space-play.webp" alt="Host Mode screen: They found Card 3, with a quick challenge, a line to say in character, and the clue to read" width="360" height="720" loading="lazy"></span><figcaption><b>2 · Play along</b>A quick challenge before each card, a line to say in character, and the clue to read aloud.</figcaption></figure>
-        <figure><span class="phone"><img src="img/host/space-sidekick.webp" alt="Sidekick screen: a radio call to say as Ground Control, following the host live" width="360" height="720" loading="lazy"></span><figcaption><b>3 · Bring a sidekick</b>Send a second grown-up their own link with radio calls and sound effects that follow your screen.</figcaption></figure>
+        <figure><span class="phone"><img id="hostHide" src="img/host/space-hide.webp" alt="Host Mode screen: Hide Card 3 at the Shoe Rack, with a Hidden checkbox" width="360" height="720" loading="lazy"></span><figcaption><b>1 · Hide the cards</b>One card per screen, in your exact hiding order. Tick “Hidden!” and move on.</figcaption></figure>
+        <figure><span class="phone"><img id="hostPlay" src="img/host/space-play.webp" alt="Host Mode screen: They found Card 3, with a quick challenge, a line to say in character, and the clue to read" width="360" height="720" loading="lazy"></span><figcaption><b>2 · Play along</b>A quick challenge before each card, a line to say in character, and the clue to read aloud.</figcaption></figure>
+        <figure><span class="phone"><img id="hostSidekick" src="img/host/space-sidekick.webp" alt="Sidekick screen: a line to say in character, following the host live" width="360" height="720" loading="lazy"></span><figcaption><b>3 · Bring a sidekick</b>Send a second grown-up their own link with lines to say in character and sound effects that follow your screen.</figcaption></figure>
       </div>
         <ul class="host-points">
         <li>Your child’s name, theme and hiding spots, already filled in</li>
@@ -673,6 +673,9 @@ function drawBox() {
   $('kitImg').alt = k.alt;
   $('kitName').textContent = k.name;
   $('kitBlurb').textContent = k.blurb;
+  $('huntName').textContent = t.name;
+  for (const [el, part] of [['huntGuide', 'guide'], ['huntBriefing', 'briefing'], ['huntCards', 'cards'], ['huntCert', 'cert']]) $(el).src = `img/pages/${t.id}-${part}.webp`;
+  for (const [el, part] of [['hostHide', 'hide'], ['hostPlay', 'play'], ['hostSidekick', 'sidekick']]) $(el).src = `img/host/${t.id}-${part}.webp`;
   $('partyImg').src = `img/pages/${t.id}-party.webp`;
   $('partyImg').alt = `${t.name} party invitation with your child’s name`;
 }
