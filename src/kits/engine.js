@@ -17,6 +17,7 @@ const { welcomePage, menuBoard, specialsPage, moneyPage, shopCss } = require('./
 const art = require('./art');
 const { SHOP_PROPS, shopkitCss, kitchenSignPage } = require('./shopkit');
 const { stationPages, counterPages, labelsPage, signageCss, signageCount } = require('./signage');
+const { activityPages, activityCss, ACTIVITY_COUNT } = require('./activities');
 
 const FONT_DIR = path.join(__dirname, '..', '..', 'fonts');
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -213,6 +214,7 @@ function guidePage(k) {
     `${signCount} signs for doors and walls, plus ${signageCount(d)} big station signs, 8 counter signs (open, closed, pay here, our hours and more) and 15 shelf and bin labels`,
     ...(d.toys ? d.toys.map((t) => t.inside) : [`${['laptop', 'console'].includes(d.dashboard.device) ? 'A fold-up' : 'A cut-out'} ${d.dashboard.gadget} with 3 screens`]),
     '8 ID badges',
+    `${ACTIVITY_COUNT} Wipe & Play activity pages to use again and again in a sheet protector: clean-up time, tracing, matching, counting, I spy, a maze and invent-a-treat`,
     ...(d.props ? [`Props to cut out: ${Object.values(d.props).map((x) => x.title).join(', ')}`] : []),
     `${d.record.title} forms, two to a page, for ${k.subjects.length ? `each of your ${d.subjectPlural}` : `four ${d.subjectPlural}`} plus a blank one`,
     `${d.ticket.title} cards`,
@@ -556,6 +558,7 @@ function buildKitHtml(cfg) {
     gadgetPages(k),
     badgesPage(k),
     propsPages(k),
+    activityPages(k),
     recordsPages(k),
     ticketPage(k),
     passportsPages(k),
@@ -578,6 +581,7 @@ ${font('Nunito', 'Nunito.ttf', '200 1000')}
 ${toyCss}
 ${shopkitCss}
 ${signageCss}
+${activityCss}
 ${shopCss(font)}
 :root { --teal:${c.main}; --teal-d:${c.dark}; --mint:${c.soft}; --mint-l:${c.light}; --orange:${c.accent}; --accent-ink:${c.accentInk || '#2b1d06'}; --navy:#3f4a73; --cream:#fbf8f1; --line:#c9d6d0; --gold:${c.gold || '#f1d48f'}; }
 * { box-sizing:border-box; }

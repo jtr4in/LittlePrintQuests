@@ -330,7 +330,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const createListings = () => realFetch(base + '/admin/etsy/listings', { method: 'POST', headers: auth, redirect: 'manual' });
   const N = require('../src/bot/listings').CATALOG.length;
   for (const c of require('../src/bot/listings').CATALOG) {
-    assert.ok(c.photos.length <= 10, `${c.key} has more than 10 photos`);
+    assert.ok(c.photos.length <= 20, `${c.key} has more than 20 photos`);
     for (const f of c.photos) assert.ok(fs.existsSync(path.join(__dirname, '..', 'listing-assets', f)), `missing listing-assets/${f}`);
   }
   assert.equal(N, 61); // 16 packs, the bundle, both dropdown listings, a party pack per theme and a listing per kit (16 theme kits + 10 shop kits)
@@ -370,7 +370,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.deepEqual(partyInv.products.map((x) => x.property_values[0].values[0]).slice(0, 2), ['Dinosaur', 'Superhero']);
   const q = etsyCalls.find((c) => c.p === `/shops/42/listings/${bundleId}/personalization`).body.personalization_questions[0];
   assert.ok(q.required && q.question_text.length <= 45 && /pets or toys/.test(q.instructions));
-  assert.equal(etsyCalls.filter((c) => c.p === `/shops/42/listings/${listed.kits.id}/images`).length, 11); // 10 photos + 1 failed try
+  assert.equal(etsyCalls.filter((c) => c.p === `/shops/42/listings/${listed.kits.id}/images`).length, 21); // 20 photos + 1 failed try
   const files = etsyCalls.filter((c) => /\/files$/.test(c.p));
   assert.equal(files.length, N);
   // Theme packs get 5 photos each.
@@ -390,7 +390,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   // The update also re-sends option prices, so the bundle's new Package choices reach old drafts.
   assert.equal(etsyCalls.filter((c) => c.p === `/listings/${bundleId}/inventory`).length, bundleInvBefore + 1);
   // A draft made with an older photo list gets the new photo in place: every rank from it on is
-  // re-uploaded with overwrite, so the listing never goes past Etsy's 10 photos.
+  // re-uploaded with overwrite, so the listing never goes past Etsy's 20 photos.
   const store = require('../src/bot/store');
   const oldPhotos = ['bundle-main.jpg', 'party-main.jpg', 'hunt-space.jpg', 'kit-unicorn.jpg', 'kit-dino.jpg', 'kit-mermaid.jpg', 'kit-hero.jpg', 'kit-construction.jpg', 'kit-pirate.jpg', 'kit-royal.jpg'];
   store.update((st) => (st.listings.bundle.steps = [...st.listings.bundle.steps.filter((x) => !x.startsWith('photo:')), ...oldPhotos.map((x) => `photo:${x}`)]));
@@ -425,11 +425,12 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const dinoPatch = etsyCalls.slice(callsBefore3).find((c) => c.method === 'PATCH' && c.p === `/shops/42/listings/${listed['kit-dino'].id}`);
   assert.match(dinoPatch.body.title, /Dino/);
   assert.ok(!store.get().listings['kit-dino'].titleKept);
-  // Per-theme listings: their own copy, three photos, and orders that know their kit or theme.
+  // Per-theme listings: their own copy, three photos plus a page close-up for each pair of pages, and orders that know their kit or theme.
   const pirateKit = creates.find((c) => /Pirate Ship Pretend Play/.test(c.body.title)).body;
   assert.match(pirateKit.description, /^Ahoy, Captain!.*Pirate Ship".*Treasure Map, Wanted Posters/s);
   assert.doesNotMatch(pirateKit.description, /\{\w+\}/);
-  assert.equal(etsyCalls.filter((c) => c.method === 'POST' && c.p === `/shops/42/listings/${listed['kit-pirate'].id}/images`).length, 3);
+  assert.equal(etsyCalls.filter((c) => c.method === 'POST' && c.p === `/shops/42/listings/${listed['kit-pirate'].id}/images`).length, require('../src/bot/listings').CATALOG.find((c) => c.key === 'kit-pirate').photos.length);
+  assert.ok(require('../src/bot/listings').CATALOG.find((c) => c.key === 'kit-pirate').photos.length > 10);
   const { customRequest } = require('../src/bot/orders');
   const name = [{ formatted_name: 'Personalization', formatted_value: 'Maya, Teddy (bear)', question_id: 1 }];
   assert.deepEqual(customRequest({ listing_id: listed['kit-pirate'].id, title: 'x', variations: name }), { personalization: 'Maya, Teddy (bear)', options: {}, product: 'kit', kit: 'pirate' });

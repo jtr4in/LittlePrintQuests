@@ -150,7 +150,7 @@ THE HUNT
 • Mission Accomplished Certificate with your child's name
 • HOST MODE, your Host Guide on your phone: a private step-by-step link that shows where each card goes, then runs the hunt with you. Lines to say in character, quick challenges between clues, a "they're stuck" button with hints, and a secret sidekick role for a second grown-up. Works in any phone browser, nothing to download
 
-THE PLAY KIT (27–31 pages, matches your theme)
+THE PLAY KIT (34–38 pages, matches your theme)
 • Two hands-on toys made for your theme: a steering wheel and spinning speedometer,
   a T-Rex puzzle and hatching egg, a lift-the-flap potion cauldron, a pirate spyglass,
   a Planet Picker spinner, bunny ears, a fire helmet, reindeer antlers and more
@@ -158,6 +158,8 @@ THE PLAY KIT (27–31 pages, matches your theme)
   Today's Specials, order slips and play money (bills and coins)
 • A wall full of signs with your child's name: 8 door signs, 4 big station signs,
   8 counter signs (open, closed, pay here, our hours and more) and 15 shelf and bin labels
+• 7 WIPE & PLAY activity pages to use again and again in a sheet protector or laminated:
+  clean-up time (draw a mess, wipe it clean!), tracing, matching, counting, I spy, a maze and invent-a-treat
 • Flat props to cut out and hold: fossil scans, star maps, treasure maps,
   wanted posters, treasure and gear cards, and stickers
 • One cardstock wearable where it fits: hero masks, pirate eye patches or a crown
@@ -217,7 +219,7 @@ Personalized Pretend Play Kit, Printable Vet, Space, Dino, Pirate, Superhero, Ca
 ```
 Turn the living room into a vet clinic, a pizzeria, a grocery store or mission control, with your child's name on every sign.
 
-★ WHAT YOU GET (27–31 page PDF, US Letter)
+★ WHAT YOU GET (34–38 page PDF, US Letter)
 • Two hands-on toys made for your kit: a vet's lift-the-flap doctor bag and X-ray machine,
   a Planet Picker spinner and blast-off rocket, a T-Rex puzzle and hatching egg,
   a pirate spyglass and treasure chest, a Super Power Spinner, a seashell tiara and more
@@ -225,6 +227,8 @@ Turn the living room into a vet clinic, a pizzeria, a grocery store or mission c
   Today's Specials, order slips and play money (bills and coins)
 • A wall full of signs with your child's name: 8 door signs, 4 big station signs,
   8 counter signs (open, closed, pay here, our hours and more) and 15 shelf and bin labels
+• 7 WIPE & PLAY activity pages to use again and again in a sheet protector or laminated:
+  clean-up time (draw a mess, wipe it clean!), tracing, matching, counting, I spy, a maze and invent-a-treat
 • Flat props to cut out and hold: pet X-rays, star maps, fossil scans, treasure maps,
   wanted posters, supply and treasure cards, and stickers
 • One cardstock wearable where it fits: hero masks, pirate eye patches or a crown
@@ -374,10 +378,11 @@ The same kits as listing 7, each on its own listing so it can have its own title
 ```
 {opening}
 
-★ WHAT YOU GET (27–31 page PDF, US Letter)
+★ WHAT YOU GET (34–38 page PDF, US Letter)
 • {toys}
 • A whole shop to set up: a "Welcome to {place}" poster, a menu board, Today's Specials, order slips and play money
 • A wall full of signs with your child's name: door signs, big station signs, counter signs (open, closed, pay here, our hours) and shelf and bin labels
+• 7 Wipe & Play activity pages to use again and again with a dry-erase marker: clean-up time, tracing, matching, counting, I spy, a maze and invent-a-treat
 • Flat props to cut out and play with: {props}
 • 8 ID badges for your child, family and friends
 • {forms} for each of your child's {subjects} (stuffed animals and toys count!)
