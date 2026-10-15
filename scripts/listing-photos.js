@@ -62,7 +62,7 @@ const pages = {
 };
 for (const k of Object.keys(KITS)) {
   pages[`kit-${k}`] = `<div class="mint"></div><div class="top" style="text-align:center"><h1>${KITS[k].name} Play Kit</h1>
-    <div class="sub">${KITS[k].toys.map((t) => t.title).join(' + ')} + a whole shop to set up</div></div>
+    <div class="sub">${KITS[k].toys.slice(0, 2).map((t) => t.title).join(' + ')} + a whole shop to set up</div></div>
     <img src="${img(`kit-${k}.png`)}" style="position:absolute;left:170px;top:200px;width:860px">`;
 }
 

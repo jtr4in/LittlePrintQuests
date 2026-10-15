@@ -25,6 +25,7 @@ const STATIONS = {
   italian: [['Pasta Station', '🍝'], ['Pizza Oven', '🍕'], ['Gelato Bar', '🍨'], ['Bread Basket', '🥖']],
   library: [['Picture Books', '🖍️'], ['Chapter Books', '📖'], ['Library Cards', '🪪'], ['Book Drop', '📥']],
   mermaid: [['Treasure Cave', '💎'], ['Turtle Beach', '🐢'], ['Bubble Spa', '🫧'], ['Dolphin Show', '🐬']],
+  dentist: [['Exam Room', '🦷'], ['X-Ray Room', '📸'], ['Prize Box', '🎁'], ['Brushing Station', '🪥']],
   petshop: [['Fish Tanks', '🐠'], ['Bird Cages', '🐦'], ['Pet Toys', '🎾'], ['Puppy Corner', '🐶']],
   pirate: [['Map Room', '🗺️'], ['Anchor Bay', '⚓'], ['Parrot Perch', '🦜'], ['Lookout', '🔭']],
   pizza: [['Toppings Bar', '🍄'], ['Dough Station', '🫓'], ['Delivery Station', '🛵'], ['Sides and Drinks', '🥤']],

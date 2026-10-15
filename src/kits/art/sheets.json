@@ -623,5 +623,24 @@
   "fill-a-bucket-with-warm-soapy-water",
   "spray-the-car-all-over-with-water",
   "dry-it-with-a-soft-towel"
+ ],
+ "dentist-1": [
+  "check-in",
+  "x-ray",
+  "23f0",
+  "1f49b",
+  "toothpaste",
+  "flossed",
+  "gloves",
+  "tooth-mirror"
+ ],
+ "dentist-2": [
+  "next-visit",
+  "card",
+  "cheese",
+  "rinsed",
+  "broccoli",
+  "brush-the-top-teeth-in-little-circles",
+  "brush-your-tongue-tickly"
  ]
 }

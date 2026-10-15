@@ -6,6 +6,7 @@
 //   register  a flat cash register with a keypad and cash drawer, plus play bank cards
 //   burger    big burger layers to stack, plus order cards to build from
 //   pizza     a big pizza base and a sheet of toppings, plus order cards to build from
+//   teeth     a big wipe-clean smile to brush, plus a cut-out toothbrush
 // Props (def.props, next to the ones in engine.js):
 //   food      big play food with price tags, 9 to a page
 //   labels    fold-in-half tent labels for shelves and bins, 6 to a page
@@ -248,7 +249,54 @@ function kitchenSignPage(k) {
   </section>`;
 }
 
-const SHOP_TOYS = { register, burger, pizza };
+
+// ---------- wipe-clean teeth ----------
+
+// A big open smile with 16 teeth to brush, and a cut-out toothbrush. In a sheet protector,
+// a grown-up draws sugar bugs on the teeth with a dry-erase marker and the dentist brushes them away.
+function teeth(T, k) {
+  const tooth = (cx, cy, ang, w, h, molar) => `<g transform="translate(${cx.toFixed(1)},${cy.toFixed(1)}) rotate(${ang.toFixed(1)})">
+      <path d="M${-w / 2},${-h / 2} Q${-w / 2},${-h / 2 - 8} ${-w / 4},${-h / 2 - 6} Q0,${-h / 2 + 4} ${w / 4},${-h / 2 - 6} Q${w / 2},${-h / 2 - 8} ${w / 2},${-h / 2}
+        L${w / 2 - 4},${h / 2 - 10} Q${w / 2 - 6},${h / 2} ${w / 2 - 18},${h / 2} L${-w / 2 + 18},${h / 2} Q${-w / 2 + 6},${h / 2} ${-w / 2 + 4},${h / 2 - 10} Z"
+        fill="#fff" stroke="#9aa3b8" stroke-width="4" stroke-linejoin="round"/>
+      ${molar ? `<path d="M${-w / 4},${-h / 2 + 14} q${w / 4},10 ${w / 2},0" fill="none" stroke="#d5dae6" stroke-width="4" stroke-linecap="round"/>` : ''}
+    </g>`;
+  const arch = (cy, ry, from, to, flip) => Array.from({ length: 8 }, (_, i) => {
+    const a = (from + ((to - from) * (i + 0.5)) / 8) * Math.PI / 180;
+    const x = 380 + 255 * Math.cos(a); const y = cy + ry * Math.sin(a);
+    const edge = i === 0 || i === 7 || i === 1 || i === 6;
+    const ang = (Math.atan2(ry * Math.cos(a), -255 * Math.sin(a)) * 180) / Math.PI + (flip ? 180 : 0);
+    return tooth(x, y, ang, edge ? 60 : 56, edge ? 66 : 84, edge);
+  }).join('');
+  // the gums: a thick pink band along each arch, under the teeth
+  const gum = (cy, ry, from, to) => {
+    const pt = (d) => [380 + 255 * Math.cos((d * Math.PI) / 180), cy + ry * Math.sin((d * Math.PI) / 180)].map((v) => v.toFixed(1)).join(',');
+    return `<path d="M${pt(from)} A255,${ry} 0 0 ${to > from ? 1 : 0} ${pt(to)}" fill="none" stroke="#f4a3b2" stroke-width="64" stroke-linecap="round"/>`;
+  };
+  const brush = `<g transform="translate(70,0)">
+      <rect x="0" y="40" width="430" height="46" rx="23" fill="var(--teal)" stroke="var(--teal-d)" stroke-width="4"/>
+      <text x="215" y="72" text-anchor="middle" font-family="Fredoka" font-weight="600" font-size="26" fill="#fff">${esc(fill(T.brushLabel || 'Dr. {child}', k))}</text>
+      <rect x="430" y="48" width="70" height="30" rx="10" fill="var(--teal-d)"/>
+      <rect x="500" y="34" width="120" height="58" rx="12" fill="#fff" stroke="var(--teal-d)" stroke-width="4"/>
+      ${Array.from({ length: 9 }, (_, i) => `<rect x="${506 + i * 12.5}" y="2" width="9" height="36" rx="4" fill="${i % 2 ? '#8fd3ff' : '#ffffff'}" stroke="#7d86a3" stroke-width="2"/>`).join('')}
+    </g>`;
+  return `<section class="page toy">${toyHead(T, k)}
+    <svg viewBox="0 0 760 640" style="width:100%;display:block;margin-top:.15in">
+      <path d="M40,320 Q40,40 380,40 Q720,40 720,320 Q720,610 380,610 Q40,610 40,320 Z" fill="#e85d75" stroke="#b83a52" stroke-width="8"/>
+      <path d="M95,320 Q95,95 380,95 Q665,95 665,320 Q665,555 380,555 Q95,555 95,320 Z" fill="#7a2335"/>
+      <ellipse cx="380" cy="430" rx="190" ry="95" fill="#f28a9b"/>
+      <path d="M380,360 L380,470" stroke="#d96479" stroke-width="6" stroke-linecap="round"/>
+      ${gum(330, 200, 198, 342)}${gum(320, 200, 18, 162)}
+      ${arch(330, 185, 200, 340, false)}
+      ${arch(320, 185, 20, 160, true)}
+    </svg>
+    <div class="cut-h" style="margin:.15in -.45in .1in"></div>
+    <svg viewBox="0 0 760 100" style="width:88%;display:block;margin:0 auto">${brush}</svg>
+    <p class="toy-tip">${esc(fill(T.tip || 'Grown-ups: draw sugar bugs on the teeth with a dry-erase marker. Dentist: wrap a tissue round the toothbrush and brush them all away!', k))}</p>
+  </section>`;
+}
+
+const SHOP_TOYS = { register, burger, pizza, teeth };
 const SHOP_PROPS = [['food', foodPages], ['labels', labelsPages], ['recipe', recipePage], ['coupons', couponsPage], ['stamps', stampsPage], ['postcards', postcardsPage], ['letters', lettersPage]];
 
 const shopkitCss = `

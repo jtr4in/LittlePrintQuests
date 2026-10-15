@@ -21,7 +21,7 @@ const CLEAN = {
   valentine: ['📬', 'mailbox', 'smudges'], fire: ['🚒', 'fire engine', 'soot'], ice: ['⛸️', 'ice skate', 'slush'],
   racecar: ['🏎️', 'race car', 'mud'], pizza: ['🍽️', 'plate', 'sauce and crumbs'], burger: ['🍳', 'grill pan', 'grease'],
   grocery: ['🍎', 'apple', 'dirt'], post: ['📦', 'parcel', 'muddy footprints'], library: ['📖', 'book', 'crayon scribbles'],
-  police: ['🚓', 'police car', 'mud'], petshop: ['🐶', 'puppy', 'mud'], coffee: ['☕', 'coffee mug', 'coffee stains'],
+  police: ['🚓', 'police car', 'mud'], petshop: ['🐶', 'puppy', 'mud'], dentist: ['🦷', 'tooth', 'sugar bugs'], coffee: ['☕', 'coffee mug', 'coffee stains'],
   italian: ['🍽️', 'plate', 'sauce and crumbs'], auto: ['🚗', 'car', 'mud and oil'],
 };
 
