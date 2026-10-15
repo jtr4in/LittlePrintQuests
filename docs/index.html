@@ -708,10 +708,11 @@ $('orderForm').addEventListener('submit', async (e) => {
   status('Opening secure checkout…');
   try {
     const res = await fetch(CHECKOUT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(order) });
-    if (!res.ok) throw new Error(await res.text());
-    location.href = (await res.json()).url;
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.url) throw new Error(data.error || '');
+    location.href = data.url;
   } catch (err) {
-    status('Checkout didn’t open. Please try again in a moment, or order on Etsy.', true);
+    status(err.message || 'Checkout didn’t open. Please try again in a moment, or order on Etsy.', true);
   }
 });
 
