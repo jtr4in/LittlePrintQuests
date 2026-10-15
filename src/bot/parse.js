@@ -26,6 +26,7 @@ const OrderSchema = z.object({
       label: z.string().describe('short display name, e.g. "Grandma’s Piano"'),
       tip: z.string().describe('where exactly the host should tuck the card'),
       riddle: z.array(z.string()).describe('only for spots not in the library: exactly two rhyming lines, else an empty array'),
+      pic: z.string().nullable().describe('only for spots not in the library: one emoji that pictures the place for kids who cannot read yet, else null'),
     })
   ),
 });
@@ -81,7 +82,7 @@ function toHuntConfig(p) {
   const spots = (p.spots || []).map((s) => {
     if (s.libraryId && SPOTS[s.libraryId]) return s.libraryId;
     if (!Array.isArray(s.riddle) || s.riddle.length !== 2) problems.push(`no riddle for “${s.label}”`);
-    return { label: s.label, tip: s.tip, riddle: s.riddle };
+    return { label: s.label, tip: s.tip, riddle: s.riddle, ...(s.pic ? { pic: s.pic } : {}) };
   });
   if (problems.length) return { ok: false, problem: problems.join('; '), draft: p };
   return {

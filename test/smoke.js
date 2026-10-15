@@ -95,6 +95,14 @@ const base = 'http://localhost:3917';
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 (async () => {
+  // Picture clues: on for ages 3 to 5, off for older kids unless asked for.
+  const { buildHtml } = require('../src/generator/build');
+  const hunt = (cfg) => buildHtml({ theme: 'dino', spots: ['couch', 'fridge', { label: 'Piano', tip: 'Bench', riddle: ['a,', 'b!'], pic: '🎹' }], ...cfg });
+  assert.equal((hunt({ age: 4 }).match(/class="pic-hint"/g) || []).length, 3);
+  assert.ok(hunt({ age: 4 }).includes('🎹') && hunt({ age: 4 }).includes('<svg viewBox="0 0 64 64" fill="none"'));
+  assert.ok(!hunt({ age: 7 }).includes('class="pic-hint"'));
+  assert.ok(hunt({ age: 7, pictures: true }).includes('class="pic-hint"'));
+
   for (let i = 0; i < 60; i++) {
     const s = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
     if (s.orders['etsy-900-1']?.status === 'ready' && s.orders['etsy-902-3']?.status === 'ready') break;

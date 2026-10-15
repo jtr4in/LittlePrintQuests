@@ -13,6 +13,18 @@ const SPOTS = require('./spots');
 
 const FONT_DIR = path.join(__dirname, '..', '..', 'fonts');
 
+// Simple drawings for spots that have no good emoji (see `pic` in spots.js).
+const PICTOS = {
+  fridge: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"><rect x="15" y="4" width="34" height="56" rx="5"/><path d="M15 24h34M21 11v7M21 30v12"/></svg>`,
+  washer: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"><rect x="8" y="6" width="48" height="52" rx="5"/><path d="M8 18h48"/><circle cx="32" cy="38" r="13"/><circle cx="16" cy="12" r="1.5" fill="currentColor"/><circle cx="23" cy="12" r="1.5" fill="currentColor"/><path d="M24 40c4-4 12 4 16 0" stroke-width="3"/></svg>`,
+  swing: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 60L16 6h32l10 54M16 6h32"/><path d="M24 8v34M40 8v34"/><rect x="20" y="42" width="24" height="6" rx="2" fill="currentColor"/></svg>`,
+};
+
+function picHtml(spot) {
+  const pic = spot.pic || '🔍';
+  return pic.startsWith('svg:') ? `<span class="picto">${PICTOS[pic.slice(4)] || '🔍'}</span>` : `<span class="emoji">${esc(pic)}</span>`;
+}
+
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 function ordinal(n) {
@@ -63,7 +75,9 @@ function planHunt(cfg) {
       lines: [...opener, ...target.riddle],
     };
   });
-  return { theme, spots, cards, prize: spots[spots.length - 1] };
+  // Picture clues: on for ages 3 to 5 unless the order says otherwise.
+  const pictures = cfg.pictures !== undefined ? Boolean(cfg.pictures) : Boolean(cfg.age && cfg.age <= 5);
+  return { theme, spots, cards, prize: spots[spots.length - 1], pictures };
 }
 
 function fill(text, ctx) {
@@ -109,7 +123,9 @@ function hostGuide(plan, cfg) {
       </tbody>
     </table>
     <div class="tips">
-      <div><b>Ages 3–4:</b> read each riddle aloud and give little hints. <b>Ages 6–8:</b> let the kids take turns reading.</div>
+      ${plan.pictures
+        ? '<div><b>Picture clues:</b> every card shows a picture of the next spot, so kids who can’t read yet can solve it themselves. Read the riddle aloud for extra fun.</div>'
+        : '<div><b>Ages 3–4:</b> read each riddle aloud and give little hints. <b>Ages 6–8:</b> let the kids take turns reading.</div>'}
       <div><b>Bonus fun:</b> tuck a sticker or small treat (like a toy ${esc(theme.treasureWord)}) with each card.</div>
       <div><b>Safety:</b> only hide cards in spots that are safe for little hands to open.</div>
     </div>
@@ -139,7 +155,7 @@ function briefing(plan, cfg) {
   </section>`;
 }
 
-function card(c, theme) {
+function card(c, theme, pictures) {
   const footerLeft = c.hiddenAt
     ? `Parent check: hidden at <b>${esc(c.hiddenAt.label)}</b> · leads to <b>${esc(c.leadsTo.label)}</b>`
     : `Parent check: read after the briefing · leads to <b>${esc(c.leadsTo.label)}</b>`;
@@ -151,9 +167,12 @@ function card(c, theme) {
         <span class="card-title">${esc(theme.cardHeader)}</span>
         <span class="badge">${esc(theme.badge)} #${c.n}</span>
       </div>
-      <div class="riddle">
-        <p>${esc(c.lines[0])}<br>${esc(c.lines[1])}</p>
-        <p>${esc(c.lines[2])}<br>${esc(c.lines[3])}</p>
+      <div class="body${pictures ? ' with-pic' : ''}">
+        <div class="riddle">
+          <p>${esc(c.lines[0])}<br>${esc(c.lines[1])}</p>
+          <p>${esc(c.lines[2])}<br>${esc(c.lines[3])}</p>
+        </div>
+        ${pictures ? `<div class="pic-hint"><div class="pic">${picHtml(c.leadsTo)}</div><span>Look here!</span></div>` : ''}
       </div>
       <div class="card-foot">
         <span>${footerLeft}</span>
@@ -167,7 +186,7 @@ function cardSheets(plan) {
   const out = [];
   for (let i = 0; i < plan.cards.length; i += 2) {
     const pair = plan.cards.slice(i, i + 2);
-    out.push(`<section class="page sheet">${pair.map((c) => card(c, plan.theme)).join('<div class="gap"></div>')}</section>`);
+    out.push(`<section class="page sheet">${pair.map((c) => card(c, plan.theme, plan.pictures)).join('<div class="gap"></div>')}</section>`);
   }
   return out.join('');
 }
@@ -263,6 +282,15 @@ h1, .card-title, .badge, .cert-title, .award, .signer, .kicker {
 .badge { font-size:10.5pt; background:var(--accent); color:#fff; padding:.03in .12in; border-radius:20px; white-space:nowrap; }
 .riddle { flex:1; display:flex; flex-direction:column; justify-content:center; text-align:center; font-size:15.5pt; line-height:1.48; font-weight:500; }
 .riddle p { margin:.05in 0; }
+.body { flex:1; display:flex; align-items:center; gap:.1in; min-height:0; }
+.body .riddle { align-self:stretch; }
+.body.with-pic .riddle { font-size:12.5pt; line-height:1.4; }
+.body.with-pic .riddle p { white-space:nowrap; }
+.pic-hint { flex:none; width:1.2in; text-align:center; font-family:'Fredoka', sans-serif; font-weight:600; font-size:10pt; color:var(--primary); text-transform:uppercase; letter-spacing:.04em; }
+.pic { width:1.1in; height:1.1in; margin:0 auto .05in; border-radius:50%; background:#fff; border:3px dashed var(--accent); display:grid; place-items:center; }
+.pic .emoji { font-family:'Noto Color Emoji', sans-serif; font-size:42pt; line-height:1; }
+.pic .picto { width:.7in; height:.7in; color:var(--primary); display:block; }
+.pic .picto svg { width:100%; height:100%; display:block; }
 .card-foot { display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--soft); padding-top:.05in; font-size:7.5pt; color:#7a7a7a; gap:.1in; }
 .progress { white-space:nowrap; display:flex; align-items:center; gap:.06in; font-weight:600; }
 .gauge { display:inline-flex; gap:2px; }
