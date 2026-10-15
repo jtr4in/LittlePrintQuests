@@ -227,10 +227,12 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     { product: 'party', spots: [], has: ['party'] },
     { items: ['hunt', 'kit'], spots: ['front_door', 'pet_bed', 'kitchen_table'], has: ['hunt', 'kit'] },
     { items: ['party', 'kit'], spots: [], has: ['kit', 'party'] },
+    // A shop kit has no theme of its own, so it always comes on its own.
+    { kit: 'pizza', items: ['hunt', 'kit'], spots: [], has: ['kit'] },
   ];
-  for (const { product, items, spots, has } of webOrders) {
+  for (const { product, items, spots, has, kit } of webOrders) {
     const co = await realFetch(base + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ product, items, theme: 'dino', childName: 'Ava', age: 5, spots, pets: [{ name: 'Rex', kind: 'trex' }], party: { date: 'Saturday, June 3', place: '' } }) });
+      body: JSON.stringify({ product, items, kit, theme: 'dino', childName: 'Ava', age: 5, spots, pets: [{ name: 'Rex', kind: 'trex' }], party: { date: 'Saturday, June 3', place: '' } }) });
     assert.equal(co.status, 200);
     const orderId = (await co.json()).url.split('/').pop();
     assert.match(orderId, /^web-/);
@@ -252,7 +254,8 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     }
     const w = state.orders[orderId];
     assert.equal(w.status, 'ready', JSON.stringify(w));
-    assert.equal(w.config.theme, 'dino');
+    assert.equal(w.config.theme, kit ? undefined : 'dino');
+    if (kit) assert.equal(w.config.kit, kit);
     assert.ok(w.sent && w.deliveredAt);
     const mail = emails.at(-1);
     assert.deepEqual(mail.to, ['ava.parent@example.com']);
@@ -265,7 +268,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.equal(mail.html.includes(`/d/${w.downloadToken}-party.pdf`), extraParty);
     assert.equal(Boolean(w.partyReady), extraParty);
     if (has.includes('party')) assert.deepEqual(w.party || w.config.party, { date: 'Saturday, June 3' });
-    if (main === 'kit') assert.match(mail.subject, /Dino Dig Lab play kit for Ava/);
+    if (main === 'kit') assert.match(mail.subject, kit ? /Pizza Shop play kit for Ava/ : /Dino Dig Lab play kit for Ava/);
     if (product === 'party') {
       assert.match(mail.subject, /Dinosaur party pack for Ava/);
       assert.equal((await realFetch(`${base}/d/${w.downloadToken}.pdf`)).headers.get('content-disposition'), 'inline; filename="scavenger-hunt.pdf"');
@@ -301,8 +304,8 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     await realFetch(base + '/webhooks/stripe', { method: 'POST', body: payload, headers: { 'stripe-signature': sig } });
   }
   await wait(500);
-  assert.equal(emails.length, 5);
-  assert.deepEqual(charged, [1699, 999, 699, 1499, 1299]);
+  assert.equal(emails.length, 6);
+  assert.deepEqual(charged, [1699, 999, 699, 1499, 1299, 799]);
   assert.equal((await realFetch(base + '/order/manual-1')).status, 401); // only web orders are public
   assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Emailed to ava\.parent@example\.com/);
 

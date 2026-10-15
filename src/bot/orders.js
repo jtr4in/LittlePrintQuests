@@ -194,18 +194,20 @@ async function notify(order) {
 
 // Checks the website's order form. Returns a clean form or throws a message for the buyer.
 function validateWebForm(body) {
-  const theme = String(body.theme || '');
-  if (!THEMES[theme]) throw new Error('Please pick a theme.');
+  // A shop kit (pizza, library...) has no hunt or party theme, so it is ordered on its own.
+  const shopKit = KITS[body.kit] && !KITS[body.kit].hunt ? KITS[body.kit].id : null;
+  const theme = shopKit ? null : String(body.theme || '');
+  if (!shopKit && !THEMES[theme]) throw new Error('Please pick a theme.');
   const childName = String(body.childName || '').trim().slice(0, 24);
   if (!childName) throw new Error('Please add your child’s first name.');
   const age = Number.isInteger(body.age) && body.age > 0 && body.age < 16 ? body.age : null;
   // Newer forms send items; older ones send a product name.
-  const items = products.normalize(Array.isArray(body.items) ? body.items : products.itemsOf({ product: body.product === 'bundle' || body.product === 'party' ? body.product : 'hunt' }));
+  const items = shopKit ? ['kit'] : products.normalize(Array.isArray(body.items) ? body.items : products.itemsOf({ product: body.product === 'bundle' || body.product === 'party' ? body.product : 'hunt' }));
   if (!items.length) throw new Error('Please pick the hunt, the play kit or the party pack.');
   const pets = (Array.isArray(body.pets) ? body.pets : []).slice(0, 6)
     .map((p) => ({ name: String(p?.name || '').trim().slice(0, 20), kind: String(p?.kind || '').trim().slice(0, 20) }))
     .filter((p) => p.name || p.kind);
-  const form = { items, product: products.productFor(items), theme, childName, age, spots: [], pets, party: items.includes('party') ? cleanParty(body.party) : null };
+  const form = { items, product: products.productFor(items), theme, ...(shopKit ? { kit: shopKit } : {}), childName, age, spots: [], pets, party: items.includes('party') ? cleanParty(body.party) : null };
   if (!items.includes('hunt')) return form;
   const spots = Array.isArray(body.spots) ? body.spots : [];
   if (spots.length < 3 || spots.length > 12) throw new Error('Please pick between 3 and 12 hiding spots.');
@@ -240,7 +242,7 @@ function addWebOrder(form) {
     party: form.party,
     form,
     personalization: formAsText(form),
-    options: { Theme: THEMES[form.theme].name, Package: products.packageName(form.items) },
+    options: { Theme: form.kit ? KITS[form.kit].name : THEMES[form.theme].name, Package: products.packageName(form.items) },
   });
 }
 
@@ -259,7 +261,7 @@ async function fulfillWebOrder(id, { email, buyerName }) {
   try {
     const main = products.mainOf(order);
     if (main === 'kit') {
-      store.update((s) => (s.orders[id].config = { kit: kitForHunt(f.theme).id, theme: f.theme, childName: f.childName, ...(f.age ? { age: f.age } : {}), subjects: f.pets || [], lenient: true }));
+      store.update((s) => (s.orders[id].config = { kit: f.kit || kitForHunt(f.theme).id, ...(f.theme ? { theme: f.theme } : {}), childName: f.childName, ...(f.age ? { age: f.age } : {}), subjects: f.pets || [], lenient: true }));
     } else if (main === 'party') {
       store.update((s) => (s.orders[id].config = { theme: f.theme, childName: f.childName, ...(f.age ? { age: f.age } : {}), ...(f.party ? { party: f.party } : {}) }));
     } else if (f.spots.every((s) => typeof s === 'string')) {

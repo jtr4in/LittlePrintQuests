@@ -94,7 +94,7 @@ function orderPage(o) {
          ${o.hostToken ? `<p><a class="btn alt" href="/h/${esc(o.hostToken)}">Open Host Mode</a><br><small>Help on your phone for ${esc(products.has(o, 'hunt') ? 'hiding the cards and running the hunt' : products.has(o, 'kit') ? 'playing with the kit' : 'planning the party')}.</small></p>` : ''}
          <p>${o.email ? `We also emailed the link to <b>${esc(o.email)}</b>.` : ''} Print at “Actual Size / 100%”${{ hunt: ', cut out the clue cards, and follow the Host Guide on page 1.', kit: ', and start with the grown-up guide on page 1.', party: ', on cardstock if you have it.' }[main]}</p>`
       : working
-        ? `<h1>Building ${esc(o.form.childName)}’s ${esc(main === 'hunt' ? theme.name : `${theme.label} ${what}`)}…</h1>
+        ? `<h1>Building ${esc(o.form.childName)}’s ${esc(main === 'hunt' ? theme.name : theme ? `${theme.label} ${what}` : `${KITS[o.form.kit]?.name || ''} ${what}`)}…</h1>
            <p>${o.status === 'awaiting_payment' ? 'Confirming your payment.' : 'Writing clues and laying out the cards.'} This page updates by itself, and we’ll email you the link too.</p>
            <div class="spin"></div>`
         : `<h1>Thanks for your order!</h1>
@@ -125,10 +125,11 @@ function listingsPanel(s) {
     return `<li><b>${esc(c.label)}</b> · ${state}${l.titleKept ? ' <span class="muted">· keeping the title from Etsy</span>' : ''}</li>`;
   }).join('');
   const allReady = listings.CATALOG.every((c) => st[c.key]?.ready);
+  const someReady = listings.CATALOG.some((c) => st[c.key]?.ready);
   const action = !etsy.canWriteListings()
     ? `<p class="muted">To let the bot create listings, reconnect your shop once and allow listing access.</p><a href="/auth/etsy/start"><button class="secondary">Reconnect Etsy shop</button></a>`
-    : `<form method="post" action="/admin/etsy/listings"><button${working ? ' disabled' : ''}>${working ? 'Working on Etsy…' : allReady ? 'Update listings on Etsy' : 'Create drafts on Etsy'}</button></form>
-       ${allReady ? '<p class="muted">Sends the latest titles, descriptions, tags, option prices, shop sections and any new photos to these listings, including ones you’ve already published.</p>' : ''}`;
+    : `<form method="post" action="/admin/etsy/listings"><button${working ? ' disabled' : ''}>${working ? 'Working on Etsy…' : allReady ? 'Update listings on Etsy' : someReady ? 'Update listings and create new drafts' : 'Create drafts on Etsy'}</button></form>
+       ${someReady ? `<p class="muted">Sends the latest titles, descriptions, tags, option prices, shop sections and any new photos to these listings, including ones you’ve already published.${allReady ? '' : ' Listings marked Not created are made as new drafts.'}</p>` : ''}`;
   return `<div class="panel"><b>Etsy listings</b> <span class="muted">Created as drafts with photos, files, prices and options. Nothing goes live until you publish it in Shop Manager.</span>
   <ul>${rows}</ul>${s.listingsError ? `<p class="problem">${esc(s.listingsError)}</p>` : ''}${action}
   ${working ? '<script>setTimeout(()=>location.reload(),4000)</script>' : ''}</div>`;
