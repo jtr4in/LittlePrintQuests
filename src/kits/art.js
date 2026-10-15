@@ -30,6 +30,9 @@ function inner(svg) {
 
 // An emoji centered on (x, y) inside an SVG.
 function em(x, y, size, e, extra = '') {
+  note(e);
+  const png = illustration(e);
+  if (png) return `<g ${extra}><image href="${png}" x="${(x - size / 2).toFixed(1)}" y="${(y - size / 2).toFixed(1)}" width="${size}" height="${size}" preserveAspectRatio="xMidYMid meet"/></g>`;
   const svg = emojiSvg(e);
   if (!svg) return `<text x="${x}" y="${y}" font-size="${size}" text-anchor="middle" dominant-baseline="central" class="toy-em" ${extra}>${e}</text>`;
   const { viewBox, body } = inner(svg);
@@ -38,6 +41,9 @@ function em(x, y, size, e, extra = '') {
 
 // An emoji as an inline HTML element, `size` in any CSS unit.
 function pic(e, size, cls = '') {
+  note(e);
+  const png = illustration(e);
+  if (png) return `<img class="pic ${cls}" src="${png}" style="width:${size};height:${size};object-fit:contain;vertical-align:middle">`;
   const svg = emojiSvg(e);
   if (!svg) return `<span class="em pic ${cls}" style="font-size:${size};line-height:1">${e}</span>`;
   const { viewBox, body } = inner(svg);
@@ -71,3 +77,62 @@ function awning(w, stripes = 12) {
 }
 
 module.exports = { em, pic, confetti, awning, emojiSvg };
+
+// ---------- illustrations ----------
+// A kit can swap any emoji for a real illustration: drop a PNG named after the picture's slug
+// into src/kits/art/<kit id>/ (scripts/art-list.js lists every slug with a drawing prompt, and
+// scripts/art-import.py cleans up and names uploaded images). Missing files keep the emoji.
+
+const ART_DIR = path.join(__dirname, 'art');
+const slug = (s) => String(s).toLowerCase().normalize('NFKD').replace(/[^\w\s-]/g, '').trim().replace(/[\s_]+/g, '-').slice(0, 40);
+const isEmoji = (v) => typeof v === 'string' && v.length <= 8 && /^\p{Extended_Pictographic}/u.test(v);
+
+// Every picture a kit uses, with a name to describe it: [{ e, name, slug }].
+function kitPictures(def) {
+  const seen = new Map();
+  const add = (e, name) => { if (!seen.has(e) || (!seen.get(e).named && name)) seen.set(e, { e, name: name || '', named: Boolean(name) }); };
+  const walk = (v, key) => {
+    if (isEmoji(v)) return add(v, '');
+    if (Array.isArray(v)) {
+      if (isEmoji(v[0]) && typeof v[1] === 'string' && !isEmoji(v[1])) add(v[0], v[1]);
+      return v.forEach((x) => walk(x, key));
+    }
+    if (v && typeof v === 'object') {
+      if (isEmoji(v.e) && typeof v.text === 'string') add(v.e, v.text);
+      for (const [kk, x] of Object.entries(v)) walk(x, kk);
+    }
+  };
+  walk(def);
+  if (seen.has(def.icon)) seen.get(def.icon).name ||= `${def.name} logo`;
+  if (seen.has(def.menu.coinIcon)) seen.get(def.menu.coinIcon).name ||= def.menu.coinWord;
+  return [...seen.values()].map((p) => ({ e: p.e, name: p.name, slug: slug(p.name || codeOf(p.e)) }));
+}
+
+// Pictures drawn while building the current kit, in first-use order (for scripts/art-list.js).
+let used = [];
+function note(e) { if (current && !used.includes(e)) used.push(e); }
+
+let current = null; // { dir, files: { emoji: path } } for the kit being built
+function setKit(def) {
+  const dir = path.join(ART_DIR, def.id);
+  const files = {};
+  if (fs.existsSync(dir)) {
+    for (const p of kitPictures(def)) {
+      const f = path.join(dir, `${p.slug}.png`);
+      if (fs.existsSync(f)) files[p.e] = f;
+    }
+  }
+  current = { files };
+  used = [];
+}
+const pngCache = {};
+function illustration(e) {
+  const f = current && current.files[e];
+  if (!f) return null;
+  return (pngCache[f] ||= `data:image/png;base64,${fs.readFileSync(f).toString('base64')}`);
+}
+
+module.exports.kitPictures = kitPictures;
+module.exports.setKit = setKit;
+module.exports.slug = slug;
+module.exports.usedPictures = () => used.slice();

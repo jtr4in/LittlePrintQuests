@@ -532,6 +532,7 @@ function buildKitHtml(cfg) {
   if (!def) throw new Error(`Unknown kit "${cfg.kit}". Use one of: ${Object.keys(KITS).join(', ')}`);
   const k = normalize(def, cfg);
   signSeed = 0;
+  art.setKit(def);
   const pages = [
     guidePage(k),
     welcomePage(k),
