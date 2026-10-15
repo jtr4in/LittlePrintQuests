@@ -1,5 +1,5 @@
-// Creates the shop's Etsy listings as drafts: the five theme packs, the custom Party Bundle
-// and the play kit. Titles, descriptions and tags come from etsy-listings.md; prices,
+// Creates the shop's Etsy listings as drafts: one pack per theme, the custom Party Bundle,
+// the play kit and the party pack. Titles, descriptions and tags come from etsy-listings.md; prices,
 // photos, files and variations are set here.
 
 const fs = require('fs');
@@ -17,25 +17,27 @@ const DOC = path.join(ROOT, 'etsy-listings.md');
 
 const PACK_SPOTS = ['couch', 'fridge', 'bed', 'bathtub', 'bookshelf', 'front_door', 'toy_box', 'kitchen_table'];
 const PACK_PROMO = 'Want a hunt with your child’s name and your own hiding spots? Order a Custom Hunt from our Etsy shop.';
-const KIT_ORDER = ['vet', 'space', 'dino', 'hero', 'pirate', 'royal'];
+const KIT_ORDER = ['vet', 'space', 'dino', 'hero', 'pirate', 'royal', 'unicorn', 'mermaid', 'construction'];
+// etsy-listings.md section for each theme's pack (the newer themes come after the bundle, kit and party pack).
+const PACK_SECTIONS = { dino: 1, hero: 2, pirate: 3, space: 4, royal: 5, unicorn: 9, mermaid: 10, construction: 11 };
 
 const CATALOG = [
-  ...['dino', 'hero', 'pirate', 'space', 'royal'].map((theme, i) => ({
+  ...Object.keys(THEMES).map((theme) => ({
     key: `pack-${theme}`,
-    section: i + 1,
+    section: PACK_SECTIONS[theme],
     label: `${THEMES[theme].name} pack`,
     price: 8.0,
     photos: [`hunt-${theme}.jpg`],
-    file: { name: `${theme}-scavenger-hunt.pdf`, build: (out) => renderPdf({ theme, spots: PACK_SPOTS, promo: PACK_PROMO }, out) },
+    file: { name: `${theme}-scavenger-hunt.pdf`, build: (out) => renderPdf({ theme, spots: PACK_SPOTS, pictures: true, promo: PACK_PROMO }, out) },
   })),
   {
     key: 'bundle',
     section: 6,
     label: 'Custom Party Bundle',
     price: 16.99,
-    variation: { name: 'Package', options: [{ value: 'Hunt + Play Kit', price: 16.99 }, { value: 'Hunt only', price: 9.99 }] },
+    variation: { name: 'Package', options: [{ value: 'Hunt + Play Kit + Party Pack', price: 16.99 }, { value: 'Hunt only', price: 9.99 }] },
     personalization: { question: 'Name, age, theme, spots and pets' },
-    photos: ['bundle-main.jpg', 'hunt-space.jpg', ...['dino', 'hero', 'pirate', 'space', 'royal'].map((k) => `kit-${k}.jpg`)],
+    photos: ['bundle-main.jpg', 'party-main.jpg', 'hunt-space.jpg', ...['unicorn', 'dino', 'mermaid', 'hero', 'construction', 'pirate', 'royal'].map((k) => `kit-${k}.jpg`)],
     file: { name: 'your-custom-party-bundle.pdf', build: (out) => thankYouPdf(out, 'party bundle') },
   },
   {
@@ -47,6 +49,16 @@ const CATALOG = [
     personalization: { question: 'Child’s name and pets or toys' },
     photos: ['kits-main.jpg', ...KIT_ORDER.map((k) => `kit-${k}.jpg`)],
     file: { name: 'your-pretend-play-kit.pdf', build: (out) => thankYouPdf(out, 'play kit') },
+  },
+  {
+    key: 'party',
+    section: 8,
+    label: 'Party Pack',
+    price: 6.99,
+    variation: { name: 'Theme', options: Object.values(THEMES).map((t) => ({ value: t.label, price: 6.99 })) },
+    personalization: { question: 'Child’s name and age' },
+    photos: ['party-main.jpg', ...Object.keys(THEMES).map((k) => `party-${k}.jpg`)],
+    file: { name: 'your-party-printables.pdf', build: (out) => thankYouPdf(out, 'party printables') },
   },
 ];
 

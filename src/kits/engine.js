@@ -520,6 +520,9 @@ const KITS = {
   hero: require('./defs/hero'),
   pirate: require('./defs/pirate'),
   royal: require('./defs/royal'),
+  unicorn: require('./defs/unicorn'),
+  mermaid: require('./defs/mermaid'),
+  construction: require('./defs/construction'),
 };
 
 function buildKitHtml(cfg) {

@@ -9,6 +9,7 @@ const etsy = require('./etsy');
 const orders = require('./orders');
 const payments = require('./payments');
 const listings = require('./listings');
+const sample = require('./sample');
 const { KITS } = require('../kits/engine');
 const { sendHuntEmail } = require('./email');
 const THEMES = require('../generator/themes');
@@ -61,27 +62,32 @@ const cors = () => ({
   'Access-Control-Allow-Headers': 'Content-Type',
   Vary: 'Origin',
 });
-const kitLink = (o, label) => (o.kitReady ? ` · <a href="/d/${esc(o.downloadToken)}-kit.pdf" target="_blank">${label}</a>` : '');
+const kitLink = (o, label) =>
+  (o.kitReady ? ` · <a href="/d/${esc(o.downloadToken)}-kit.pdf" target="_blank">${label}</a>` : '') +
+  (o.partyReady ? ` · <a href="/d/${esc(o.downloadToken)}-party.pdf" target="_blank">Party pack</a>` : '');
 const sendJson = (res, code, obj) => send(res, code, JSON.stringify(obj), { 'Content-Type': 'application/json', ...cors() });
 
 // Public page the buyer lands on after paying. Order ids are long and random.
 function orderPage(o) {
   const theme = THEMES[o.form.theme];
   const working = o.status === 'awaiting_payment' || o.status === 'processing';
+  const party = o.form.product === 'party';
+  const what = party ? 'party pack' : 'hunt';
   const body =
     o.status === 'ready'
-      ? `<h1>${esc(o.config.childName)}’s hunt is ready! 🎉</h1>
-         <p><a class="btn" href="/d/${esc(o.downloadToken)}.pdf" target="_blank">Download your hunt (PDF)</a></p>
+      ? `<h1>${esc(o.config.childName)}’s ${what} is ready! 🎉</h1>
+         <p><a class="btn" href="/d/${esc(o.downloadToken)}.pdf" target="_blank">Download your ${what} (PDF)</a></p>
          ${o.kitReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-kit.pdf" target="_blank">Download your play kit (PDF)</a></p>` : ''}
-         <p>${o.email ? `We also emailed the link to <b>${esc(o.email)}</b>.` : ''} Print at “Actual Size / 100%”, cut out the clue cards, and follow the Host Guide on page 1.</p>`
+         ${o.partyReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-party.pdf" target="_blank">Download your party printables (PDF)</a></p>` : ''}
+         <p>${o.email ? `We also emailed the link to <b>${esc(o.email)}</b>.` : ''} Print at “Actual Size / 100%”${party ? ', on cardstock if you have it.' : ', cut out the clue cards, and follow the Host Guide on page 1.'}</p>`
       : working
-        ? `<h1>Building ${esc(o.form.childName)}’s ${esc(theme.name)}…</h1>
+        ? `<h1>Building ${esc(o.form.childName)}’s ${esc(party ? `${theme.label} party pack` : theme.name)}…</h1>
            <p>${o.status === 'awaiting_payment' ? 'Confirming your payment.' : 'Writing clues and laying out the cards.'} This page updates by itself, and we’ll email you the link too.</p>
            <div class="spin"></div>`
         : `<h1>Thanks for your order!</h1>
-           <p>Your payment went through. We’re giving ${esc(o.form.childName)}’s hunt a quick hand check and will email it to ${esc(o.email || 'you')} shortly.</p>`;
+           <p>Your payment went through. We’re giving ${esc(o.form.childName)}’s ${what} a quick hand check and will email it to ${esc(o.email || 'you')} shortly.</p>`;
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Your scavenger hunt</title>${working ? '<meta http-equiv="refresh" content="4">' : ''}<style>
+<title>Your ${party ? 'party pack' : 'scavenger hunt'}</title>${working ? '<meta http-equiv="refresh" content="4">' : ''}<style>
 :root{--bg:#fbf8f1;--ink:#3f4a73;--muted:#646d8f;--sun:#ef9d31;--sun-ink:#2b1d06}
 @media (prefers-color-scheme:dark){:root{--bg:#151a2e;--ink:#f4f0e6;--muted:#b4bad4}}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 system-ui,sans-serif}
@@ -119,7 +125,7 @@ function orderCard(o) {
   const theme = o.config && (THEMES[o.config.theme] || KITS[o.config.kit]);
   return `<article id="${esc(o.id)}" class="order ${o.sent ? 'sent' : o.status}">
     <header><span class="badge">${o.sent ? 'Sent' : esc(badge)}</span>
-      <b>${esc(o.config?.childName || o.form?.childName || o.buyerName || 'Order')}</b>${theme ? ` · ${esc(theme.name)}` : ''}
+      <b>${esc(o.config?.childName || o.form?.childName || o.buyerName || 'Order')}</b>${theme ? ` · ${esc(o.product === 'party' ? `${theme.label} party pack` : theme.name)}` : ''}
       <small>${o.source === 'web' ? 'Website · ' : ''}${esc(o.buyerName || '')}${o.email ? ` &lt;${esc(o.email)}&gt;` : ''} · ${esc(new Date(o.createdAt).toLocaleString('en-US'))}${o.receiptId ? ` · receipt ${esc(o.receiptId)}` : ''}</small></header>
     <details><summary>Buyer’s notes</summary><pre>${esc(o.personalization)}</pre>${
       Object.keys(o.options || {}).length ? `<pre>${esc(Object.entries(o.options).map(([k, v]) => `${k}: ${v}`).join('\n'))}</pre>` : ''
@@ -183,15 +189,16 @@ button.secondary{background:#fff;color:#2d6a4f;border:1px solid #2d6a4f;margin-t
 </div>
 <div class="panel">${
     payments.enabled()
-      ? `<b>Website checkout on.</b> <span class="muted">$${(payments.BUNDLE_PRICE_CENTS / 100).toFixed(2)} per party bundle, $${(payments.PRICE_CENTS / 100).toFixed(2)} per hunt only, built and emailed automatically.${unpaid.length ? ` ${unpaid.length} checkout${unpaid.length === 1 ? '' : 's'} started but not paid.` : ''}</span>`
+      ? `<b>Website checkout on.</b> <span class="muted">$${(payments.BUNDLE_PRICE_CENTS / 100).toFixed(2)} per party bundle, $${(payments.PRICE_CENTS / 100).toFixed(2)} per hunt only, $${(payments.PARTY_PRICE_CENTS / 100).toFixed(2)} per party pack, built and emailed automatically.${unpaid.length ? ` ${unpaid.length} checkout${unpaid.length === 1 ? '' : 's'} started but not paid.` : ''}</span>`
       : `<b>Website checkout off.</b> <span class="muted">Add STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET to take orders on your site.</span>`
   }</div>
 ${listingsPanel(s)}
+<div class="panel"><b>Mailing list:</b> ${Object.values(s.subscribers || {}).filter((x) => !x.unsubscribedAt).length} people from the free sample. <a href="/admin/subscribers.csv">Download CSV</a></div>
 <details class="panel"><summary><b>Make a hunt by hand</b> <span class="muted">(paste order notes, or test the bot)</span></summary>
   <form method="post" action="/admin/orders">
     <p><input name="buyerName" placeholder="Buyer name (optional)"></p>
     <textarea name="personalization" rows="4" placeholder="Maya, turning 6, space theme. Spots: front door, shoe rack, washer, dryer, grandma's piano, dog bed, kitchen table (prize). Pets: Rover (dog)"></textarea>
-    <div class="row"><label><input type="checkbox" name="bundle" value="1" checked> Include the matching play kit</label><button>Make hunt</button></div>
+    <div class="row"><select name="product"><option value="bundle">Party bundle (hunt, play kit and party pack)</option><option value="hunt">Hunt only</option><option value="party">Party pack only</option></select><button>Make it</button></div>
   </form>
 </details>
 <h2>To send (${open.length})</h2>${open.map(orderCard).join('') || '<p class="muted">Nothing waiting.</p>'}
@@ -212,8 +219,34 @@ async function route(req, res) {
   if (dl) {
     const file = path.join(store.PDF_DIR, `${dl[1]}.pdf`);
     if (!fs.existsSync(file)) return send(res, 404, 'Not found');
-    res.writeHead(200, { 'Content-Type': 'application/pdf', 'Content-Disposition': `inline; filename="${dl[1].endsWith('-kit') ? 'play-kit' : 'scavenger-hunt'}.pdf"` });
+    res.writeHead(200, { 'Content-Type': 'application/pdf', 'Content-Disposition': `inline; filename="${dl[1].endsWith('-kit') ? 'play-kit' : dl[1].endsWith('-party') ? 'party-printables' : 'scavenger-hunt'}.pdf"` });
     return fs.createReadStream(file).pipe(res);
+  }
+
+  if (p === '/api/sample') {
+    if (req.method === 'OPTIONS') return send(res, 204, '', cors());
+    if (req.method !== 'POST') return sendJson(res, 405, { error: 'Use POST' });
+    try {
+      const body = JSON.parse((await readRaw(req, 5_000)).toString() || '{}');
+      await sample.requestSample(body, req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket.remoteAddress);
+      return sendJson(res, 200, { ok: true });
+    } catch (err) {
+      if (err instanceof SyntaxError) return sendJson(res, 400, { error: 'Bad request' });
+      if (!err.status) console.error('Sample request failed:', err.message);
+      return sendJson(res, err.status || 502, { error: err.status ? err.message : 'Something went wrong. Please try again in a minute.' });
+    }
+  }
+
+  const sp = p.match(/^\/sample\/([a-z]+)\.pdf$/);
+  if (sp && THEMES[sp[1]]) {
+    const file = await sample.samplePdf(sp[1]);
+    res.writeHead(200, { 'Content-Type': 'application/pdf', 'Content-Disposition': 'inline; filename="mini-scavenger-hunt.pdf"' });
+    return fs.createReadStream(file).pipe(res);
+  }
+
+  if (p === '/unsubscribe') {
+    const ok = sample.unsubscribe(url.searchParams.get('e'), url.searchParams.get('t'));
+    return send(res, ok ? 200 : 400, `<!doctype html><meta name="viewport" content="width=device-width"><body style="font-family:Arial,sans-serif;color:#3f4a73;text-align:center;padding:60px 16px">${ok ? '<h2>You’re unsubscribed</h2><p>You won’t get any more emails from us.</p>' : '<h2>That link didn’t work</h2><p>Reply to any of our emails and we’ll remove you by hand.</p>'}</body>`);
   }
 
   if (p === '/api/checkout') {
@@ -273,6 +306,7 @@ async function route(req, res) {
   if (!authorized(req)) return send(res, 401, 'Login required', { 'WWW-Authenticate': 'Basic realm="Order Bot"' });
 
   if (p === '/' || p === '/admin') return send(res, 200, dashboard());
+  if (p === '/admin/subscribers.csv') return send(res, 200, sample.subscribersCsv(), { 'Content-Type': 'text/csv', 'Content-Disposition': 'attachment; filename="subscribers.csv"' });
   if (p === '/auth/etsy/start') {
     const auth = etsy.startAuth();
     pendingAuth = { state: auth.state, verifier: auth.verifier };
@@ -292,7 +326,8 @@ async function route(req, res) {
   if (p === '/admin/orders') {
     const f = await readForm(req);
     if (!f.personalization?.trim()) return redirect(res, '/admin');
-    const id = orders.addOrder({ source: 'manual', buyerName: f.buyerName || '', personalization: f.personalization, options: {}, product: f.bundle ? 'bundle' : 'hunt' });
+    const product = ['bundle', 'hunt', 'party'].includes(f.product) ? f.product : f.bundle ? 'bundle' : 'hunt';
+    const id = orders.addOrder({ source: 'manual', buyerName: f.buyerName || '', personalization: f.personalization, options: {}, product });
     orders.processOrder(id);
     return redirect(res, `/admin#${id}`);
   }

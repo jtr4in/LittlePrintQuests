@@ -1,5 +1,5 @@
 // Builds the Etsy photos for the Party Bundle and Play Kit listings (2400x1800 JPGs in listing-assets/).
-// Usage: node scripts/listing-photos.js <dir with hunt-1.png, hunt-3.png, hunt-7.png and kit-<id>.png fans>
+// Usage: node scripts/listing-photos.js <dir with hunt-1.png, hunt-3.png, hunt-7.png, party-space.png (party pack page 2) and kit-<id>.png fans>
 const fs = require('fs');
 const path = require('path');
 const { chromium } = require('playwright');
@@ -29,16 +29,17 @@ h1 { font: 700 70px/1 Fredoka; margin: 0; letter-spacing: -.01em; }
 
 const pages = {
   'bundle-main': `<div class="mint"></div><div class="top"><h1>Custom Party Bundle</h1>
-    <div class="sub">A scavenger hunt for your home + a matching pretend play kit</div></div>
+    <div class="sub">A scavenger hunt for your home + a matching play kit + party printables</div></div>
     <div class="page" style="left:70px;top:290px;width:300px;transform:rotate(-7deg)"><img src="${img('hunt-1.png')}"></div>
     <div class="page" style="left:250px;top:270px;width:300px;transform:rotate(4deg)"><img src="${img('hunt-3.png')}"></div>
     <div class="plus" style="left:585px;top:470px">+</div>
     <img src="${img('kit-space.png')}" style="position:absolute;left:640px;top:250px;width:540px">
+    <div class="page" style="left:905px;top:470px;width:250px;transform:rotate(6deg)"><img src="${img('party-space.png')}"></div>
     <div style="position:absolute;left:70px;bottom:40px;right:70px;display:flex;gap:16px">
       <span class="pill">Your child’s name on every page</span><span class="pill" style="background:#3f4a73;color:#fff">Printable PDF</span></div>`,
   'kits-main': `<div class="top" style="text-align:center"><h1>Pretend Play Kits</h1>
-    <div class="sub">Signs, badges and a pretend gadget with your child’s name</div></div>
-    <div class="grid">${['vet', 'space', 'dino', 'hero', 'pirate', 'royal']
+    <div class="sub">9 kits with signs, props and a pretend gadget, all with your child’s name</div></div>
+    <div class="grid">${['vet', 'unicorn', 'dino', 'mermaid', 'construction', 'pirate']
       .map((k) => `<div><img src="${img(`kit-${k}.png`)}"><div class="label">${KITS[k].name}</div></div>`)
       .join('')}</div>`,
 };
