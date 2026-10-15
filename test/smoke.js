@@ -179,10 +179,17 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.match((await bad.json()).error, /between 3 and 12/);
   const pre = await realFetch(base + '/api/checkout', { method: 'OPTIONS' });
   assert.equal(pre.headers.get('access-control-allow-origin'), '*');
-  const webOrders = [['bundle', ['front_door', 'pet_bed', 'kitchen_table']], [undefined, ['front_door', { custom: 'Grandma’s piano' }, 'kitchen_table']], ['party', []]];
-  for (const [product, spots] of webOrders) {
+  // Older forms send a product name; newer ones send any mix of items.
+  const webOrders = [
+    { product: 'bundle', spots: ['front_door', 'pet_bed', 'kitchen_table'], has: ['hunt', 'kit', 'party'] },
+    { spots: ['front_door', { custom: 'Grandma’s piano' }, 'kitchen_table'], has: ['hunt'] },
+    { product: 'party', spots: [], has: ['party'] },
+    { items: ['hunt', 'kit'], spots: ['front_door', 'pet_bed', 'kitchen_table'], has: ['hunt', 'kit'] },
+    { items: ['party', 'kit'], spots: [], has: ['kit', 'party'] },
+  ];
+  for (const { product, items, spots, has } of webOrders) {
     const co = await realFetch(base + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ product, theme: 'dino', childName: 'Ava', age: 5, spots, pets: [{ name: 'Rex', kind: 'trex' }], party: { date: 'Saturday, June 3', place: '' } }) });
+      body: JSON.stringify({ product, items, theme: 'dino', childName: 'Ava', age: 5, spots, pets: [{ name: 'Rex', kind: 'trex' }], party: { date: 'Saturday, June 3', place: '' } }) });
     assert.equal(co.status, 200);
     const orderId = (await co.json()).url.split('/').pop();
     assert.match(orderId, /^web-/);
@@ -209,23 +216,27 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     const mail = emails.at(-1);
     assert.deepEqual(mail.to, ['ava.parent@example.com']);
     assert.ok(mail.html.includes(`/d/${w.downloadToken}.pdf`));
-    assert.equal(mail.html.includes(`/d/${w.downloadToken}-kit.pdf`), product === 'bundle');
-    assert.equal(Boolean(w.kitReady), product === 'bundle');
-    assert.equal(mail.html.includes(`/d/${w.downloadToken}-party.pdf`), product === 'bundle');
-    assert.equal(Boolean(w.partyReady), product === 'bundle');
-    if (product !== undefined) assert.deepEqual(w.party || w.config.party, { date: 'Saturday, June 3' });
+    const main = has[0];
+    const extraKit = main !== 'kit' && has.includes('kit');
+    const extraParty = main !== 'party' && has.includes('party');
+    assert.equal(mail.html.includes(`/d/${w.downloadToken}-kit.pdf`), extraKit);
+    assert.equal(Boolean(w.kitReady), extraKit);
+    assert.equal(mail.html.includes(`/d/${w.downloadToken}-party.pdf`), extraParty);
+    assert.equal(Boolean(w.partyReady), extraParty);
+    if (has.includes('party')) assert.deepEqual(w.party || w.config.party, { date: 'Saturday, June 3' });
+    if (main === 'kit') assert.match(mail.subject, /Dino Dig Lab play kit for Ava/);
     if (product === 'party') {
       assert.match(mail.subject, /Dinosaur party pack for Ava/);
       assert.equal((await realFetch(`${base}/d/${w.downloadToken}.pdf`)).headers.get('content-disposition'), 'inline; filename="scavenger-hunt.pdf"');
     }
     if (product === 'bundle') assert.equal((await realFetch(`${base}/d/${w.downloadToken}-party.pdf`)).headers.get('content-disposition'), 'inline; filename="party-printables.pdf"');
-    assert.match(await (await realFetch(`${base}/order/${orderId}`)).text(), product === 'party' ? /party pack is ready/ : /hunt is ready/);
+    assert.match(await (await realFetch(`${base}/order/${orderId}`)).text(), { hunt: /hunt is ready/, kit: /play kit is ready/, party: /party pack is ready/ }[main]);
     // Stripe retries the same event: no second email.
     await realFetch(base + '/webhooks/stripe', { method: 'POST', body: payload, headers: { 'stripe-signature': sig } });
   }
   await wait(500);
-  assert.equal(emails.length, 3);
-  assert.deepEqual(charged, [1699, 999, 699]);
+  assert.equal(emails.length, 5);
+  assert.deepEqual(charged, [1699, 999, 699, 1499, 1299]);
   assert.equal((await realFetch(base + '/order/manual-1')).status, 401); // only web orders are public
   assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Emailed to ava\.parent@example\.com/);
 

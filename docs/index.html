@@ -444,10 +444,10 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <div class="pin"><b></b><span class="eyebrow">Pricing</span></div>
       <h2>Everything for the party, one price</h2>
       <div class="plans">
-        <div class="plan main"><span class="eyebrow">Party bundle · most popular</span><div class="price">$16.99 <small>per party</small></div><p class="was"><s>$24.97</s> value: the hunt, its play kit and party printables</p><ul><li>Custom hunt with your child’s name and your home’s own spots</li><li>Matching play kit with a pretend gadget and hands-on props</li><li>Matching invitations, cupcake toppers, favor tags, a name banner and more</li><li>Delivered to your inbox in minutes</li></ul><a class="btn btn-orange" href="#order" data-pick="bundle">Make my party bundle</a></div>
+        <div class="plan main"><span class="eyebrow">Party bundle · most popular</span><div class="price">$16.99 <small>per party</small></div><p class="was"><s>$24.97</s> value: the hunt, its play kit and party printables</p><ul><li>Custom hunt with your child’s name and your home’s own spots</li><li>Matching play kit with a pretend gadget and hands-on props</li><li>Matching invitations, cupcake toppers, favor tags, a name banner and more</li><li>Delivered to your inbox in minutes</li></ul><a class="btn btn-orange" href="#order" data-pick="hunt kit party">Make my party bundle</a></div>
         <div class="plan"><span class="eyebrow">Hunt only</span><div class="price">$9.99</div><ul><li>Your child’s name on every page</li><li>6 to 10 of your home’s own spots</li><li>Host guide, briefing, cards and certificate</li></ul><a class="btn btn-ghost" href="#order" data-pick="hunt">Make just the hunt</a></div>
         <div class="plan"><span class="eyebrow">Party pack only</span><div class="price">$6.99</div><ul><li>Invitations and thank-you cards</li><li>Cupcake toppers, favor tags and food cards</li><li>A HAPPY BIRTHDAY banner with your child’s name</li></ul><a class="btn btn-ghost" href="#order" data-pick="party">Make a party pack</a></div>
-        <div class="plan"><span class="eyebrow">Play kit only</span><div class="price">$7.99</div><ul><li>Any of the nine kits, including Vet Clinic</li><li>Signs, badges and dashboard with your child’s name</li><li>Great for a rainy day or a party table</li></ul><a class="btn btn-ghost" href="#kits">See the kits</a></div>
+        <div class="plan"><span class="eyebrow">Play kit only</span><div class="price">$7.99</div><ul><li>The kit that matches your theme</li><li>Signs, badges and a pretend gadget with your child’s name</li><li>Great for a rainy day or a party table</li></ul><a class="btn btn-ghost" href="#order" data-pick="kit">Make a play kit</a></div>
       </div>
       <p class="hint" style="margin-top:16px">Prefer Etsy? Ready-made theme packs are in <a id="etsyLink2" href="#" target="_blank" rel="noopener">our Etsy shop</a>.</p>
     </div>
@@ -635,34 +635,33 @@ $('childName').addEventListener('input', render);
 $('childAge').addEventListener('input', render);
 
 // The cart is a stack of papers: the hunt, its play kit and the party pack.
-// The site sells three products, so each tap moves between them: the hunt with
-// anything else is the Party Bundle, which always includes all three.
+// Pick any mix; two together cost less, and all three is the Party Bundle.
 const LAYERS = [
   { id: 'hunt', name: 'Custom scavenger hunt', note: 'Clue cards, host guide, briefing and certificate', price: 9.99 },
   { id: 'kit', name: 'Pretend play kit', note: 'Signs, a pretend gadget and props with their name', price: 7.99 },
   { id: 'party', name: 'Party pack', note: 'Invitations, toppers, banner, favor tags and more', price: 6.99 },
 ];
-const PRODUCTS = {
-  bundle: { price: 16.99, label: 'Party bundle, PDF', has: ['hunt', 'kit', 'party'] },
-  hunt: { price: 9.99, label: 'Custom hunt, PDF', has: ['hunt'] },
-  party: { price: 6.99, label: 'Party pack, PDF', has: ['party'] },
-};
+// Must match PRICES in the order bot (src/bot/products.js).
+const PRICES = { hunt: 9.99, kit: 7.99, party: 6.99, 'hunt+kit': 14.99, 'hunt+party': 13.99, 'kit+party': 12.99, bundle: 16.99 };
+const LABELS = { hunt: 'Custom hunt', kit: 'Play kit', party: 'Party pack' };
+const picked = new Set(['hunt', 'kit', 'party']);
 let product = 'bundle';
 const money = (n) => '$' + n.toFixed(2);
 
-// What tapping a row does, from each product: [tapped row] -> new product
-const TAPS = {
-  bundle: { hunt: 'party', kit: 'hunt', party: 'hunt' },
-  hunt: { hunt: null, kit: 'bundle', party: 'bundle' },
-  party: { hunt: 'bundle', kit: 'bundle', party: null },
-  null: { hunt: 'hunt', kit: 'bundle', party: 'party' },
-};
-function pick(id) { setProduct(TAPS[product][id]); }
-function setProduct(next) { product = next; drawCart(); }
+function pick(id) {
+  picked.has(id) ? picked.delete(id) : picked.add(id);
+  drawCart();
+}
+function setPicks(ids) {
+  picked.clear();
+  ids.forEach((k) => picked.add(k));
+  drawCart();
+}
 function drawCart() {
-  const gets = product ? PRODUCTS[product].has : [];
+  const gets = LAYERS.map((l) => l.id).filter((k) => picked.has(k));
+  product = gets.length === 3 ? 'bundle' : gets.length ? gets.join('+') : null;
   // papers fan out wider as the stack grows
-  const pos = { 1: [[0, 0]], 3: [[-62, -9], [62, 9], [0, -1]] }[gets.length] || [];
+  const pos = { 1: [[0, 0]], 2: [[-38, -6], [38, 5]], 3: [[-62, -9], [62, 9], [0, -1]] }[gets.length] || [];
   const order = ['hunt', 'party', 'kit'].filter((k) => gets.includes(k));
   $('stack').querySelectorAll('img').forEach((img) => img.classList.toggle('out', !gets.includes(img.dataset.k)));
   order.forEach((k, i) => {
@@ -674,31 +673,35 @@ function drawCart() {
   $('layers').innerHTML = LAYERS.map((l) => `<li><button type="button" class="layer" data-id="${l.id}" aria-pressed="${gets.includes(l.id)}">
       <span class="box">✓</span><span><b>${l.name}</b><small>${l.note}</small></span><span class="amt">${money(l.price)}</span></button></li>`).join('');
   $('layers').querySelectorAll('.layer').forEach((b) => b.addEventListener('click', () => pick(b.dataset.id)));
-  $('saveNote').innerHTML = product === 'bundle' ? '<s>$24.97</s> bundled for $16.99, so you save $7.98.'
-    : product === 'hunt' ? 'Add the play kit and party pack together for $7.00 more.'
-    : product === 'party' ? 'Add the hunt and play kit together for $10.00 more.' : 'Pick at least one thing to print.';
-  $('totalLabel').textContent = product ? PRODUCTS[product].label : 'Nothing picked yet';
-  $('totalPrice').textContent = money(product ? PRODUCTS[product].price : 0);
-  // A party pack needs no hiding spots, and only the bundle and party pack have invitations.
-  $('spotsField').hidden = product === 'party';
-  $('route').hidden = product === 'party';
-  document.querySelector('.party-details').hidden = product === 'hunt';
+  const value = gets.reduce((sum, k) => sum + LAYERS.find((l) => l.id === k).price, 0);
+  const price = product ? PRICES[product] : 0;
+  const missing = LAYERS.filter((l) => !gets.includes(l.id));
+  $('saveNote').innerHTML = !product ? 'Pick at least one thing to print.'
+    : gets.length > 1 ? `<s>${money(value)}</s> together for ${money(price)}, so you save ${money(value - price)}.${missing.length ? ` Add the ${missing[0].name.toLowerCase()} for ${money(PRICES.bundle - price)} more.` : ''}`
+    : `Add another one and save. All three are ${money(PRICES.bundle)}.`;
+  $('totalLabel').textContent = !product ? 'Nothing picked yet' : gets.length === 3 ? 'Party bundle, PDF' : `${gets.map((k) => LABELS[k]).join(' + ')}, PDF`;
+  $('totalPrice').textContent = money(price);
+  // Hiding spots are only for the hunt, and invitations only come in the party pack.
+  $('spotsField').hidden = !picked.has('hunt');
+  $('route').hidden = !picked.has('hunt');
+  document.querySelector('.party-details').hidden = !picked.has('party');
 }
 $('stack').innerHTML = ['hunt', 'kit', 'party'].map((k) => `<img data-k="${k}" class="out" alt="" width="400" height="518">`).join('');
-document.querySelectorAll('[data-pick]').forEach((a) => a.addEventListener('click', () => setProduct(a.dataset.pick)));
+document.querySelectorAll('[data-pick]').forEach((a) => a.addEventListener('click', () => setPicks(a.dataset.pick.split(' '))));
 
 $('orderForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const childName = $('childName').value.trim();
   if (!childName) return status('Add your child’s first name so we can put it on the cards.', true), $('childName').focus();
-  if (!product) return status('Pick the hunt, the party pack or both.', true);
-  if (product !== 'party' && state.picks.length < 6) return status(`Pick at least 6 spots. You have ${state.picks.length}.`, true);
+  if (!product) return status('Pick the hunt, the play kit or the party pack.', true);
+  if (picked.has('hunt') && state.picks.length < 6) return status(`Pick at least 6 spots. You have ${state.picks.length}.`, true);
   const order = {
     product,
+    items: [...picked],
     theme: state.theme,
     childName,
     age: parseInt($('childAge').value, 10) || null,
-    spots: product === 'party' ? [] : state.picks.map((k) => (state.custom[k] ? { custom: state.custom[k] } : k)),
+    spots: picked.has('hunt') ? state.picks.map((k) => (state.custom[k] ? { custom: state.custom[k] } : k)) : [],
     party: { date: $('partyDate').value, time: $('partyTime').value, place: $('partyPlace').value, rsvp: $('partyRsvp').value },
   };
   if (!CHECKOUT_URL) return status('Checkout opens here once payments are switched on. For now, order through our Etsy shop.');

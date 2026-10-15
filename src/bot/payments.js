@@ -4,10 +4,11 @@ const Stripe = require('stripe');
 const THEMES = require('../generator/themes');
 const { kitForHunt } = require('../kits/engine');
 
-const PRICE_CENTS = Number(process.env.PRICE_CENTS || 999); // custom hunt only
-const BUNDLE_PRICE_CENTS = Number(process.env.BUNDLE_PRICE_CENTS || 1699); // hunt + matching play kit + party pack
-const PARTY_PRICE_CENTS = Number(process.env.PARTY_PRICE_CENTS || 699); // party pack only
-const priceFor = (product) => ({ bundle: BUNDLE_PRICE_CENTS, party: PARTY_PRICE_CENTS })[product] || PRICE_CENTS;
+const products = require('./products');
+const { PRICES, priceFor } = products;
+const PRICE_CENTS = PRICES.hunt; // custom hunt only
+const BUNDLE_PRICE_CENTS = PRICES.bundle; // hunt + matching play kit + party pack
+const PARTY_PRICE_CENTS = PRICES.party; // party pack only
 let client = null;
 const stripe = () => (client ||= new Stripe(process.env.STRIPE_SECRET_KEY));
 
@@ -15,7 +16,14 @@ const enabled = () => Boolean(process.env.STRIPE_SECRET_KEY && process.env.STRIP
 
 async function createCheckout(order) {
   const theme = THEMES[order.form.theme];
-  const bundle = order.form.product === 'bundle';
+  const items = products.itemsOf(order.form);
+  const kit = kitForHunt(theme.id);
+  const parts = { hunt: `Custom ${theme.name}`, kit: `${kit.name} play kit`, party: `${theme.label} party pack` };
+  const details = {
+    hunt: `scavenger hunt with ${order.form.spots.length} clues`,
+    kit: 'pretend play kit',
+    party: 'invitations, toppers, tags, banner and more',
+  };
   const session = await stripe().checkout.sessions.create({
     mode: 'payment',
     line_items: [
@@ -25,12 +33,8 @@ async function createCheckout(order) {
           currency: 'usd',
           unit_amount: priceFor(order.form.product),
           product_data: {
-            name: order.form.product === 'party'
-              ? `${theme.label} Party Pack`
-              : bundle ? `Party Bundle: ${theme.name} + ${kitForHunt(theme.id).name} play kit + party pack` : `Custom ${theme.name}`,
-            description: order.form.product === 'party'
-              ? `Printable invitations, toppers, tags, banner and more for ${order.form.childName} · PDF`
-              : `Printable scavenger hunt for ${order.form.childName} · ${order.form.spots.length} clues${bundle ? ' · matching pretend play kit · party printables' : ''} · PDF`,
+            name: items.length === 3 ? `Party Bundle: ${items.map((i) => parts[i]).join(' + ')}` : items.map((i) => parts[i]).join(' + '),
+            description: `Printable ${items.map((i) => details[i]).join(' · ')} for ${order.form.childName} · PDF`,
           },
         },
       },
@@ -48,4 +52,4 @@ function readWebhook(rawBody, signature) {
   return stripe().webhooks.constructEvent(rawBody, signature, process.env.STRIPE_WEBHOOK_SECRET);
 }
 
-module.exports = { enabled, createCheckout, readWebhook, stripe, PRICE_CENTS, BUNDLE_PRICE_CENTS, PARTY_PRICE_CENTS, priceFor };
+module.exports = { enabled, createCheckout, readWebhook, stripe, PRICES, PRICE_CENTS, BUNDLE_PRICE_CENTS, PARTY_PRICE_CENTS, priceFor };
