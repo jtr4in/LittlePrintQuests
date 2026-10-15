@@ -125,9 +125,23 @@ function setKit(def) {
   current = { files };
   used = [];
 }
+// Pictures any kit has, by emoji (src/kits/art/catalog.json, see scripts/art-catalog.py), so a kit
+// without its own picture of something borrows one drawn for another theme.
+let library = null;
+function borrowed(e) {
+  if (!library) {
+    library = {};
+    const f = path.join(ART_DIR, 'catalog.json');
+    for (const p of fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : []) {
+      library[codeOf(p.emoji)] ||= path.join(ART_DIR, p.file);
+    }
+  }
+  return library[codeOf(e)];
+}
+
 const pngCache = {};
 function illustration(e) {
-  const f = current && current.files[e];
+  const f = current && (current.files[e] || borrowed(e));
   if (!f) return null;
   return (pngCache[f] ||= `data:image/webp;base64,${fs.readFileSync(f).toString('base64')}`);
 }
@@ -135,4 +149,5 @@ function illustration(e) {
 module.exports.kitPictures = kitPictures;
 module.exports.setKit = setKit;
 module.exports.slug = slug;
+module.exports.borrowed = (e) => Boolean(borrowed(e));
 module.exports.usedPictures = () => used.slice();

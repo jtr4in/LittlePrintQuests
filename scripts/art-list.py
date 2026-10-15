@@ -1,7 +1,9 @@
 # Writes the illustration shopping list for the play kits: every picture each kit prints,
 # grouped into 3x3 sheets with a ready-to-paste prompt for an image generator.
 # Make each sheet, then run scripts/art-import.py on it to cut it into src/kits/art/<kit>/.
-# Usage: python3 scripts/art-list.py [kit ...] > kit-art-prompts.md   (also writes art-sheets.json)
+# Pictures the kit already has, or can borrow from another kit (src/kits/art/catalog.json), are
+# left out unless you pass --all.
+# Usage: python3 scripts/art-list.py [--all] [kit ...] > kit-art-prompts.md   (also adds to src/kits/art/sheets.json)
 import json, os, subprocess, sys, unicodedata
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
@@ -27,19 +29,36 @@ def describe(e):
     names = [unicodedata.name(c, '').lower() for c in e if unicodedata.name(c, '') and c not in '️‍']
     return ' '.join(n for n in names if 'selector' not in n and 'modifier' not in n)
 
+def code(e):
+    return '-'.join(f'{ord(c):x}' for c in e if c != '\ufe0f')
+
 def main():
-    kits = json.loads(subprocess.check_output(['node', '-e', JS, json.dumps(sys.argv[1:])], cwd=ROOT))
-    sheets = {}
+    args = sys.argv[1:]
+    everything = '--all' in args
+    args = [a for a in args if a != '--all']
+    kits = json.loads(subprocess.check_output(['node', '-e', JS, json.dumps(args)], cwd=ROOT))
+    art = os.path.join(ROOT, 'src', 'kits', 'art')
+    sheets_file = os.path.join(art, 'sheets.json')
+    sheets = json.load(open(sheets_file)) if os.path.exists(sheets_file) else {}
+    catalog = json.load(open(os.path.join(art, 'catalog.json'))) if os.path.exists(os.path.join(art, 'catalog.json')) else []
+    library = {code(p['emoji']): p['file'] for p in catalog}
     print('# Play kit illustrations\n')
     print('Each sheet below is one image. Paste the prompt into your image tool, keep the result square, '
           'and upload it here saying which kit and sheet it is. The nine pictures are read left to right, top to bottom.\n')
     for k in kits:
         pics = k['pictures']
+        if not everything:
+            have = [p for p in pics if os.path.exists(os.path.join(art, k['id'], p['slug'] + '.webp')) or code(p['e']) in library]
+            pics = [p for p in pics if p not in have]
+            if not pics:
+                print(f"## {k['name']} ({k['id']}): all {len(have)} pictures done\n")
+                continue
+        first = 1 + max([int(s.rsplit('-', 1)[1]) for s in sheets if s.rsplit('-', 1)[0] == k['id']] or [0]) if not everything else 1
         count = -(-len(pics) // PER_SHEET)
         cuts = [round(i * len(pics) / count) for i in range(count + 1)]
         groups = [pics[a:b] for a, b in zip(cuts, cuts[1:])]
         print(f"## {k['name']} ({k['id']}): {len(pics)} pictures, {len(groups)} sheets\n")
-        for n, group in enumerate(groups, 1):
+        for n, group in enumerate(groups, first):
             items = []
             for p in group:
                 d = describe(p['e'])
@@ -54,7 +73,7 @@ def main():
             print(f"### Sheet {k['id']}-{n}\n")
             print(f"```\n{style} Theme: a kids' pretend {k['name'].lower()} ({k['tagline'].lower()}). "
                   f"The objects, left to right, top to bottom: {listing}\n```\n")
-    with open(os.path.join(ROOT, 'src', 'kits', 'art', 'sheets.json'), 'w') as f:
+    with open(sheets_file, 'w') as f:
         json.dump(sheets, f, indent=1, ensure_ascii=False)
         f.write('\n')
 

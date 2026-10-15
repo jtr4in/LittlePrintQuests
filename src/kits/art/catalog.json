@@ -1,0 +1,2403 @@
+[
+ {
+  "file": "christmas/1f4dc.webp",
+  "kit": "christmas",
+  "emoji": "📜",
+  "label": "",
+  "shows": "scroll"
+ },
+ {
+  "file": "christmas/cookie.webp",
+  "kit": "christmas",
+  "emoji": "🍪",
+  "label": "Cookie",
+  "shows": "cookie"
+ },
+ {
+  "file": "christmas/cupcake.webp",
+  "kit": "christmas",
+  "emoji": "🧁",
+  "label": "Cupcake",
+  "shows": "cupcake"
+ },
+ {
+  "file": "christmas/donut.webp",
+  "kit": "christmas",
+  "emoji": "🍩",
+  "label": "Donut",
+  "shows": "doughnut"
+ },
+ {
+  "file": "christmas/flying.webp",
+  "kit": "christmas",
+  "emoji": "💨",
+  "label": "Flying",
+  "shows": "dash symbol"
+ },
+ {
+  "file": "christmas/hammer.webp",
+  "kit": "christmas",
+  "emoji": "🔨",
+  "label": "Hammer",
+  "shows": "hammer"
+ },
+ {
+  "file": "christmas/hot-cocoa.webp",
+  "kit": "christmas",
+  "emoji": "☕",
+  "label": "Hot cocoa",
+  "shows": "hot beverage"
+ },
+ {
+  "file": "christmas/jingle.webp",
+  "kit": "christmas",
+  "emoji": "🔔",
+  "label": "Jingle",
+  "shows": "bell"
+ },
+ {
+  "file": "christmas/merry-christmas.webp",
+  "kit": "christmas",
+  "emoji": "🎄",
+  "label": "Merry Christmas",
+  "shows": "christmas tree"
+ },
+ {
+  "file": "christmas/milk.webp",
+  "kit": "christmas",
+  "emoji": "🥛",
+  "label": "Milk",
+  "shows": "glass of milk"
+ },
+ {
+  "file": "christmas/moon-fast.webp",
+  "kit": "christmas",
+  "emoji": "🌙",
+  "label": "Moon fast",
+  "shows": "crescent moon"
+ },
+ {
+  "file": "christmas/nice.webp",
+  "kit": "christmas",
+  "emoji": "🙂",
+  "label": "Nice",
+  "shows": "slightly smiling face"
+ },
+ {
+  "file": "christmas/nicest.webp",
+  "kit": "christmas",
+  "emoji": "🌟",
+  "label": "NICEST!",
+  "shows": "glowing star"
+ },
+ {
+  "file": "christmas/peppermint.webp",
+  "kit": "christmas",
+  "emoji": "🍬",
+  "label": "Peppermint",
+  "shows": "candy"
+ },
+ {
+  "file": "christmas/presents.webp",
+  "kit": "christmas",
+  "emoji": "🎁",
+  "label": "Presents",
+  "shows": "wrapped present"
+ },
+ {
+  "file": "christmas/reindeer-carrot.webp",
+  "kit": "christmas",
+  "emoji": "🥕",
+  "label": "Reindeer carrot",
+  "shows": "carrot"
+ },
+ {
+  "file": "christmas/reindeer.webp",
+  "kit": "christmas",
+  "emoji": "🦌",
+  "label": "Reindeer",
+  "shows": "deer"
+ },
+ {
+  "file": "christmas/rocket-fast.webp",
+  "kit": "christmas",
+  "emoji": "🚀",
+  "label": "Rocket fast",
+  "shows": "rocket"
+ },
+ {
+  "file": "christmas/santa.webp",
+  "kit": "christmas",
+  "emoji": "🎅",
+  "label": "Santa",
+  "shows": "father christmas"
+ },
+ {
+  "file": "christmas/sleigh-ride.webp",
+  "kit": "christmas",
+  "emoji": "🛷",
+  "label": "Sleigh ride",
+  "shows": "sled"
+ },
+ {
+  "file": "christmas/smile.webp",
+  "kit": "christmas",
+  "emoji": "😊",
+  "label": "Smile",
+  "shows": "smiling face with smiling eyes"
+ },
+ {
+  "file": "christmas/super-nice.webp",
+  "kit": "christmas",
+  "emoji": "🤩",
+  "label": "Super nice",
+  "shows": "grinning face with star eyes"
+ },
+ {
+  "file": "christmas/teddy-bear.webp",
+  "kit": "christmas",
+  "emoji": "🧸",
+  "label": "Teddy bear",
+  "shows": "teddy bear"
+ },
+ {
+  "file": "christmas/tree-star.webp",
+  "kit": "christmas",
+  "emoji": "⭐",
+  "label": "Tree star",
+  "shows": "white medium star"
+ },
+ {
+  "file": "construction/1f319.webp",
+  "kit": "construction",
+  "emoji": "🌙",
+  "label": "",
+  "shows": "crescent moon"
+ },
+ {
+  "file": "construction/apple.webp",
+  "kit": "construction",
+  "emoji": "🍎",
+  "label": "Apple",
+  "shows": "red apple"
+ },
+ {
+  "file": "construction/barrier.webp",
+  "kit": "construction",
+  "emoji": "🚧",
+  "label": "Barrier",
+  "shows": "construction sign"
+ },
+ {
+  "file": "construction/bolts.webp",
+  "kit": "construction",
+  "emoji": "🔩",
+  "label": "Bolts",
+  "shows": "nut and bolt"
+ },
+ {
+  "file": "construction/builder.webp",
+  "kit": "construction",
+  "emoji": "👷",
+  "label": "Builder",
+  "shows": "construction worker"
+ },
+ {
+  "file": "construction/cookie.webp",
+  "kit": "construction",
+  "emoji": "🍪",
+  "label": "Cookie",
+  "shows": "cookie"
+ },
+ {
+  "file": "construction/crane.webp",
+  "kit": "construction",
+  "emoji": "🏗️",
+  "label": "Crane",
+  "shows": "building construction"
+ },
+ {
+  "file": "construction/digger.webp",
+  "kit": "construction",
+  "emoji": "🚜",
+  "label": "Digger",
+  "shows": "tractor"
+ },
+ {
+  "file": "construction/donut.webp",
+  "kit": "construction",
+  "emoji": "🍩",
+  "label": "Donut",
+  "shows": "doughnut"
+ },
+ {
+  "file": "construction/hammer.webp",
+  "kit": "construction",
+  "emoji": "🔨",
+  "label": "Hammer",
+  "shows": "hammer"
+ },
+ {
+  "file": "construction/hot-dog.webp",
+  "kit": "construction",
+  "emoji": "🌭",
+  "label": "Hot dog",
+  "shows": "hot dog"
+ },
+ {
+  "file": "construction/milk.webp",
+  "kit": "construction",
+  "emoji": "🥛",
+  "label": "Milk",
+  "shows": "glass of milk"
+ },
+ {
+  "file": "construction/ruler.webp",
+  "kit": "construction",
+  "emoji": "📏",
+  "label": "Ruler",
+  "shows": "straight ruler"
+ },
+ {
+  "file": "construction/safety-star.webp",
+  "kit": "construction",
+  "emoji": "🦺",
+  "label": "Safety star",
+  "shows": "safety vest"
+ },
+ {
+  "file": "construction/sandwich.webp",
+  "kit": "construction",
+  "emoji": "🥪",
+  "label": "Sandwich",
+  "shows": "sandwich"
+ },
+ {
+  "file": "construction/saw.webp",
+  "kit": "construction",
+  "emoji": "🪚",
+  "label": "Saw",
+  "shows": "carpentry saw"
+ },
+ {
+  "file": "construction/screwdriver.webp",
+  "kit": "construction",
+  "emoji": "🪛",
+  "label": "Screwdriver",
+  "shows": "screwdriver"
+ },
+ {
+  "file": "construction/site-office.webp",
+  "kit": "construction",
+  "emoji": "📐",
+  "label": "Site Office",
+  "shows": "triangular ruler"
+ },
+ {
+  "file": "construction/stack-bricks.webp",
+  "kit": "construction",
+  "emoji": "🧱",
+  "label": "Stack bricks",
+  "shows": "brick"
+ },
+ {
+  "file": "construction/wrench.webp",
+  "kit": "construction",
+  "emoji": "🔧",
+  "label": "Wrench",
+  "shows": "wrench"
+ },
+ {
+  "file": "dino/1f33f.webp",
+  "kit": "dino",
+  "emoji": "🌿",
+  "label": "",
+  "shows": "herb"
+ },
+ {
+  "file": "dino/1f3db.webp",
+  "kit": "dino",
+  "emoji": "🏛️",
+  "label": "",
+  "shows": "classical building"
+ },
+ {
+  "file": "dino/1f634.webp",
+  "kit": "dino",
+  "emoji": "😴",
+  "label": "",
+  "shows": "sleeping face"
+ },
+ {
+  "file": "dino/2601.webp",
+  "kit": "dino",
+  "emoji": "☁️",
+  "label": "",
+  "shows": "cloud"
+ },
+ {
+  "file": "dino/bone-pit.webp",
+  "kit": "dino",
+  "emoji": "🦴",
+  "label": "Bone pit",
+  "shows": "bone"
+ },
+ {
+  "file": "dino/dino-coloring.webp",
+  "kit": "dino",
+  "emoji": "🖍️",
+  "label": "Dino coloring",
+  "shows": "lower left crayon"
+ },
+ {
+  "file": "dino/dino-egg.webp",
+  "kit": "dino",
+  "emoji": "🥚",
+  "label": "Dino egg",
+  "shows": "egg"
+ },
+ {
+  "file": "dino/dino-ride.webp",
+  "kit": "dino",
+  "emoji": "🎟️",
+  "label": "Dino ride",
+  "shows": "admission tickets"
+ },
+ {
+  "file": "dino/eyes.webp",
+  "kit": "dino",
+  "emoji": "👀",
+  "label": "Eyes",
+  "shows": "eyes"
+ },
+ {
+  "file": "dino/fern-forest.webp",
+  "kit": "dino",
+  "emoji": "🌴",
+  "label": "Fern Forest",
+  "shows": "palm tree"
+ },
+ {
+  "file": "dino/lab-tour.webp",
+  "kit": "dino",
+  "emoji": "🔬",
+  "label": "Lab tour",
+  "shows": "microscope"
+ },
+ {
+  "file": "dino/long-neck.webp",
+  "kit": "dino",
+  "emoji": "🦕",
+  "label": "Long-neck",
+  "shows": "sauropod"
+ },
+ {
+  "file": "dino/magnifier.webp",
+  "kit": "dino",
+  "emoji": "🔍",
+  "label": "Magnifier",
+  "shows": "left-pointing magnifying glass"
+ },
+ {
+  "file": "dino/pickaxe.webp",
+  "kit": "dino",
+  "emoji": "⛏️",
+  "label": "Pickaxe",
+  "shows": "pick"
+ },
+ {
+  "file": "dino/ranger-hat.webp",
+  "kit": "dino",
+  "emoji": "🧢",
+  "label": "Ranger hat",
+  "shows": "billed cap"
+ },
+ {
+  "file": "dino/shiny-rock.webp",
+  "kit": "dino",
+  "emoji": "🪨",
+  "label": "Shiny rock",
+  "shows": "rock"
+ },
+ {
+  "file": "dino/t-rex.webp",
+  "kit": "dino",
+  "emoji": "🦖",
+  "label": "T-Rex",
+  "shows": "t-rex"
+ },
+ {
+  "file": "dino/volcano-show.webp",
+  "kit": "dino",
+  "emoji": "🌋",
+  "label": "Volcano show",
+  "shows": "volcano"
+ },
+ {
+  "file": "easter/1f319.webp",
+  "kit": "easter",
+  "emoji": "🌙",
+  "label": "",
+  "shows": "crescent moon"
+ },
+ {
+  "file": "easter/1f33c.webp",
+  "kit": "easter",
+  "emoji": "🌼",
+  "label": "",
+  "shows": "blossom"
+ },
+ {
+  "file": "easter/1f69a.webp",
+  "kit": "easter",
+  "emoji": "🚚",
+  "label": "",
+  "shows": "delivery truck"
+ },
+ {
+  "file": "easter/basket-ribbon.webp",
+  "kit": "easter",
+  "emoji": "🎀",
+  "label": "Basket ribbon",
+  "shows": "ribbon"
+ },
+ {
+  "file": "easter/bunny.webp",
+  "kit": "easter",
+  "emoji": "🐰",
+  "label": "Bunny",
+  "shows": "rabbit face"
+ },
+ {
+  "file": "easter/carrot-patch.webp",
+  "kit": "easter",
+  "emoji": "🥕",
+  "label": "Carrot Patch",
+  "shows": "carrot"
+ },
+ {
+  "file": "easter/chick.webp",
+  "kit": "easter",
+  "emoji": "🐣",
+  "label": "Chick",
+  "shows": "hatching chick"
+ },
+ {
+  "file": "easter/chocolate-egg.webp",
+  "kit": "easter",
+  "emoji": "🍫",
+  "label": "Chocolate egg",
+  "shows": "chocolate bar"
+ },
+ {
+  "file": "easter/flowers.webp",
+  "kit": "easter",
+  "emoji": "🌸",
+  "label": "Flowers",
+  "shows": "cherry blossom"
+ },
+ {
+  "file": "easter/full-basket.webp",
+  "kit": "easter",
+  "emoji": "🧺",
+  "label": "Full basket",
+  "shows": "basket"
+ },
+ {
+  "file": "easter/golden-egg.webp",
+  "kit": "easter",
+  "emoji": "🌟",
+  "label": "Golden egg",
+  "shows": "glowing star"
+ },
+ {
+  "file": "easter/painted-egg.webp",
+  "kit": "easter",
+  "emoji": "🎨",
+  "label": "Painted egg",
+  "shows": "artist palette"
+ },
+ {
+  "file": "easter/plain-egg.webp",
+  "kit": "easter",
+  "emoji": "🥚",
+  "label": "Plain egg",
+  "shows": "egg"
+ },
+ {
+  "file": "easter/tulip-garden.webp",
+  "kit": "easter",
+  "emoji": "🌷",
+  "label": "Tulip Garden",
+  "shows": "tulip"
+ },
+ {
+  "file": "fire/1f319.webp",
+  "kit": "fire",
+  "emoji": "🌙",
+  "label": "",
+  "shows": "crescent moon"
+ },
+ {
+  "file": "fire/1f372.webp",
+  "kit": "fire",
+  "emoji": "🍲",
+  "label": "",
+  "shows": "pot of food"
+ },
+ {
+  "file": "fire/1f9d1-200d-1f692.webp",
+  "kit": "fire",
+  "emoji": "🧑‍🚒",
+  "label": "",
+  "shows": "adult fire engine"
+ },
+ {
+  "file": "fire/2b07.webp",
+  "kit": "fire",
+  "emoji": "⬇️",
+  "label": "",
+  "shows": "downwards black arrow"
+ },
+ {
+  "file": "fire/apple.webp",
+  "kit": "fire",
+  "emoji": "🍎",
+  "label": "Apple",
+  "shows": "red apple"
+ },
+ {
+  "file": "fire/boots.webp",
+  "kit": "fire",
+  "emoji": "👢",
+  "label": "Boots",
+  "shows": "womans boots"
+ },
+ {
+  "file": "fire/call-base.webp",
+  "kit": "fire",
+  "emoji": "📻",
+  "label": "Call base",
+  "shows": "radio"
+ },
+ {
+  "file": "fire/chiefs-chili.webp",
+  "kit": "fire",
+  "emoji": "🌶️",
+  "label": "Chief’s chili",
+  "shows": "hot pepper"
+ },
+ {
+  "file": "fire/cookie.webp",
+  "kit": "fire",
+  "emoji": "🍪",
+  "label": "Cookie",
+  "shows": "cookie"
+ },
+ {
+  "file": "fire/dog-treat.webp",
+  "kit": "fire",
+  "emoji": "🦴",
+  "label": "Dog treat",
+  "shows": "bone"
+ },
+ {
+  "file": "fire/extinguisher.webp",
+  "kit": "fire",
+  "emoji": "🧯",
+  "label": "Extinguisher",
+  "shows": "fire extinguisher"
+ },
+ {
+  "file": "fire/fire-grab-the-hose.webp",
+  "kit": "fire",
+  "emoji": "🔥",
+  "label": "Fire! Grab the hose!",
+  "shows": "fire"
+ },
+ {
+  "file": "fire/fire-truck.webp",
+  "kit": "fire",
+  "emoji": "🚒",
+  "label": "Fire truck",
+  "shows": "fire engine"
+ },
+ {
+  "file": "fire/fires-out-hooray.webp",
+  "kit": "fire",
+  "emoji": "🏆",
+  "label": "Fire’s out! Hooray!",
+  "shows": "trophy"
+ },
+ {
+  "file": "fire/hot-dog.webp",
+  "kit": "fire",
+  "emoji": "🌭",
+  "label": "Hot dog",
+  "shows": "hot dog"
+ },
+ {
+  "file": "fire/juice-box.webp",
+  "kit": "fire",
+  "emoji": "🧃",
+  "label": "Juice box",
+  "shows": "beverage box"
+ },
+ {
+  "file": "fire/milk.webp",
+  "kit": "fire",
+  "emoji": "🥛",
+  "label": "Milk",
+  "shows": "glass of milk"
+ },
+ {
+  "file": "fire/rescue-star.webp",
+  "kit": "fire",
+  "emoji": "⭐",
+  "label": "Rescue star",
+  "shows": "white medium star"
+ },
+ {
+  "file": "fire/smoke-alarm.webp",
+  "kit": "fire",
+  "emoji": "🔔",
+  "label": "Smoke alarm",
+  "shows": "bell"
+ },
+ {
+  "file": "fire/spray-spray-spray.webp",
+  "kit": "fire",
+  "emoji": "💦",
+  "label": "Spray, spray, spray!",
+  "shows": "splashing sweat symbol"
+ },
+ {
+  "file": "halloween/1f4da.webp",
+  "kit": "halloween",
+  "emoji": "📚",
+  "label": "",
+  "shows": "books"
+ },
+ {
+  "file": "halloween/1fa84.webp",
+  "kit": "halloween",
+  "emoji": "🪄",
+  "label": "",
+  "shows": "magic wand"
+ },
+ {
+  "file": "halloween/1fad9.webp",
+  "kit": "halloween",
+  "emoji": "🫙",
+  "label": "",
+  "shows": "jar"
+ },
+ {
+  "file": "halloween/2697.webp",
+  "kit": "halloween",
+  "emoji": "⚗️",
+  "label": "",
+  "shows": "alembic"
+ },
+ {
+  "file": "halloween/bat.webp",
+  "kit": "halloween",
+  "emoji": "🦇",
+  "label": "Bat",
+  "shows": "bat"
+ },
+ {
+  "file": "halloween/bounces.webp",
+  "kit": "halloween",
+  "emoji": "🦘",
+  "label": "Bounces",
+  "shows": "kangaroo"
+ },
+ {
+  "file": "halloween/broom-ride.webp",
+  "kit": "halloween",
+  "emoji": "🧹",
+  "label": "Broom ride",
+  "shows": "broom"
+ },
+ {
+  "file": "halloween/candy-drop.webp",
+  "kit": "halloween",
+  "emoji": "🍬",
+  "label": "Candy drop",
+  "shows": "candy"
+ },
+ {
+  "file": "halloween/fizzle.webp",
+  "kit": "halloween",
+  "emoji": "🫧",
+  "label": "Fizzle",
+  "shows": "bubbles"
+ },
+ {
+  "file": "halloween/friendly-ghost.webp",
+  "kit": "halloween",
+  "emoji": "👻",
+  "label": "Friendly ghost",
+  "shows": "ghost"
+ },
+ {
+  "file": "halloween/frog.webp",
+  "kit": "halloween",
+  "emoji": "🐸",
+  "label": "Frog",
+  "shows": "frog face"
+ },
+ {
+  "file": "halloween/ghost-party.webp",
+  "kit": "halloween",
+  "emoji": "🎉",
+  "label": "Ghost party",
+  "shows": "party popper"
+ },
+ {
+  "file": "halloween/giggles.webp",
+  "kit": "halloween",
+  "emoji": "😂",
+  "label": "Giggles",
+  "shows": "face with tears of joy"
+ },
+ {
+  "file": "halloween/glowing.webp",
+  "kit": "halloween",
+  "emoji": "🌟",
+  "label": "Glowing",
+  "shows": "glowing star"
+ },
+ {
+  "file": "halloween/hmm.webp",
+  "kit": "halloween",
+  "emoji": "👀",
+  "label": "Hmm…",
+  "shows": "eyes"
+ },
+ {
+  "file": "halloween/lollipop.webp",
+  "kit": "halloween",
+  "emoji": "🍭",
+  "label": "Lollipop",
+  "shows": "lollipop"
+ },
+ {
+  "file": "halloween/moonbeam.webp",
+  "kit": "halloween",
+  "emoji": "🌙",
+  "label": "Moonbeam",
+  "shows": "crescent moon"
+ },
+ {
+  "file": "halloween/no-ghosts.webp",
+  "kit": "halloween",
+  "emoji": "😴",
+  "label": "No ghosts",
+  "shows": "sleeping face"
+ },
+ {
+  "file": "halloween/potion-pro.webp",
+  "kit": "halloween",
+  "emoji": "🧪",
+  "label": "Potion pro",
+  "shows": "test tube"
+ },
+ {
+  "file": "halloween/pumpkin.webp",
+  "kit": "halloween",
+  "emoji": "🎃",
+  "label": "Pumpkin",
+  "shows": "jack-o-lantern"
+ },
+ {
+  "file": "halloween/rainbow-hair.webp",
+  "kit": "halloween",
+  "emoji": "🌈",
+  "label": "Rainbow hair",
+  "shows": "rainbow"
+ },
+ {
+  "file": "halloween/sleepy-yawns.webp",
+  "kit": "halloween",
+  "emoji": "💤",
+  "label": "Sleepy yawns",
+  "shows": "sleeping symbol"
+ },
+ {
+  "file": "halloween/sparkles.webp",
+  "kit": "halloween",
+  "emoji": "✨",
+  "label": "Sparkles",
+  "shows": "sparkles"
+ },
+ {
+  "file": "halloween/star-dust.webp",
+  "kit": "halloween",
+  "emoji": "⭐",
+  "label": "Star dust",
+  "shows": "white medium star"
+ },
+ {
+  "file": "halloween/stir.webp",
+  "kit": "halloween",
+  "emoji": "🥄",
+  "label": "Stir",
+  "shows": "spoon"
+ },
+ {
+  "file": "hero/1f319.webp",
+  "kit": "hero",
+  "emoji": "🌙",
+  "label": "",
+  "shows": "crescent moon"
+ },
+ {
+  "file": "hero/1f3cb.webp",
+  "kit": "hero",
+  "emoji": "🏋️",
+  "label": "",
+  "shows": "weight lifter"
+ },
+ {
+  "file": "hero/1f512.webp",
+  "kit": "hero",
+  "emoji": "🔒",
+  "label": "",
+  "shows": "lock"
+ },
+ {
+  "file": "hero/1f527.webp",
+  "kit": "hero",
+  "emoji": "🔧",
+  "label": "",
+  "shows": "wrench"
+ },
+ {
+  "file": "hero/1f92b.webp",
+  "kit": "hero",
+  "emoji": "🤫",
+  "label": "",
+  "shows": "face with finger covering closed lips"
+ },
+ {
+  "file": "hero/alert.webp",
+  "kit": "hero",
+  "emoji": "🚨",
+  "label": "Alert!",
+  "shows": "police cars revolving light"
+ },
+ {
+  "file": "hero/all-clear.webp",
+  "kit": "hero",
+  "emoji": "😊",
+  "label": "All clear",
+  "shows": "smiling face with smiling eyes"
+ },
+ {
+  "file": "hero/fly.webp",
+  "kit": "hero",
+  "emoji": "🦅",
+  "label": "Fly",
+  "shows": "eagle"
+ },
+ {
+  "file": "hero/freeze-ray.webp",
+  "kit": "hero",
+  "emoji": "❄️",
+  "label": "Freeze ray",
+  "shows": "snowflake"
+ },
+ {
+  "file": "hero/heli-ride.webp",
+  "kit": "hero",
+  "emoji": "🚁",
+  "label": "Heli ride",
+  "shows": "helicopter"
+ },
+ {
+  "file": "hero/hero-radio.webp",
+  "kit": "hero",
+  "emoji": "📡",
+  "label": "Hero radio",
+  "shows": "satellite antenna"
+ },
+ {
+  "file": "hero/hmm.webp",
+  "kit": "hero",
+  "emoji": "🤔",
+  "label": "Hmm…",
+  "shows": "thinking face"
+ },
+ {
+  "file": "hero/mask.webp",
+  "kit": "hero",
+  "emoji": "🎭",
+  "label": "Mask",
+  "shows": "performing arts"
+ },
+ {
+  "file": "hero/power-juice.webp",
+  "kit": "hero",
+  "emoji": "🧃",
+  "label": "Power juice",
+  "shows": "beverage box"
+ },
+ {
+  "file": "hero/ready.webp",
+  "kit": "hero",
+  "emoji": "🙂",
+  "label": "Ready",
+  "shows": "slightly smiling face"
+ },
+ {
+  "file": "hero/resting.webp",
+  "kit": "hero",
+  "emoji": "😴",
+  "label": "Resting",
+  "shows": "sleeping face"
+ },
+ {
+  "file": "hero/shield.webp",
+  "kit": "hero",
+  "emoji": "🛡️",
+  "label": "Shield",
+  "shows": "shield"
+ },
+ {
+  "file": "hero/speed-shoes.webp",
+  "kit": "hero",
+  "emoji": "👟",
+  "label": "Speed shoes",
+  "shows": "athletic shoe"
+ },
+ {
+  "file": "hero/super-speed.webp",
+  "kit": "hero",
+  "emoji": "⚡",
+  "label": "Super speed",
+  "shows": "high voltage sign"
+ },
+ {
+  "file": "hero/super-strength.webp",
+  "kit": "hero",
+  "emoji": "💪",
+  "label": "Super strength",
+  "shows": "flexed biceps"
+ },
+ {
+  "file": "hero/super-torch.webp",
+  "kit": "hero",
+  "emoji": "🔦",
+  "label": "Super torch",
+  "shows": "electric torch"
+ },
+ {
+  "file": "hero/superhero.webp",
+  "kit": "hero",
+  "emoji": "🦸",
+  "label": "Superhero",
+  "shows": "superhero"
+ },
+ {
+  "file": "hero/trouble.webp",
+  "kit": "hero",
+  "emoji": "😈",
+  "label": "Trouble",
+  "shows": "smiling face with horns"
+ },
+ {
+  "file": "hero/x-ray-vision.webp",
+  "kit": "hero",
+  "emoji": "👀",
+  "label": "X-ray vision",
+  "shows": "eyes"
+ },
+ {
+  "file": "ice/1f319.webp",
+  "kit": "ice",
+  "emoji": "🌙",
+  "label": "",
+  "shows": "crescent moon"
+ },
+ {
+  "file": "ice/2b50.webp",
+  "kit": "ice",
+  "emoji": "⭐",
+  "label": "",
+  "shows": "white medium star"
+ },
+ {
+  "file": "ice/big-wind.webp",
+  "kit": "ice",
+  "emoji": "🌬️",
+  "label": "Big wind",
+  "shows": "wind blowing face"
+ },
+ {
+  "file": "ice/catching-flakes.webp",
+  "kit": "ice",
+  "emoji": "❄️",
+  "label": "Catching flakes",
+  "shows": "snowflake"
+ },
+ {
+  "file": "ice/cocoa-sipping.webp",
+  "kit": "ice",
+  "emoji": "☕",
+  "label": "Cocoa sipping",
+  "shows": "hot beverage"
+ },
+ {
+  "file": "ice/crystal-ball.webp",
+  "kit": "ice",
+  "emoji": "🔮",
+  "label": "Crystal ball",
+  "shows": "crystal ball"
+ },
+ {
+  "file": "ice/freeze.webp",
+  "kit": "ice",
+  "emoji": "🧊",
+  "label": "Freeze!",
+  "shows": "ice cube"
+ },
+ {
+  "file": "ice/frosty-cupcake.webp",
+  "kit": "ice",
+  "emoji": "🧁",
+  "label": "Frosty cupcake",
+  "shows": "cupcake"
+ },
+ {
+  "file": "ice/frosty-forest.webp",
+  "kit": "ice",
+  "emoji": "🌲",
+  "label": "Frosty Forest",
+  "shows": "evergreen tree"
+ },
+ {
+  "file": "ice/ice-cream.webp",
+  "kit": "ice",
+  "emoji": "🍦",
+  "label": "Ice cream",
+  "shows": "soft ice cream"
+ },
+ {
+  "file": "ice/ice-gem.webp",
+  "kit": "ice",
+  "emoji": "💎",
+  "label": "Ice gem",
+  "shows": "gem stone"
+ },
+ {
+  "file": "ice/ice-palace.webp",
+  "kit": "ice",
+  "emoji": "🏰",
+  "label": "Ice Palace",
+  "shows": "european castle"
+ },
+ {
+  "file": "ice/melt-it.webp",
+  "kit": "ice",
+  "emoji": "☀️",
+  "label": "Melt it",
+  "shows": "black sun with rays"
+ },
+ {
+  "file": "ice/penguin.webp",
+  "kit": "ice",
+  "emoji": "🐧",
+  "label": "Penguin",
+  "shows": "penguin"
+ },
+ {
+  "file": "ice/peppermint.webp",
+  "kit": "ice",
+  "emoji": "🍬",
+  "label": "Peppermint",
+  "shows": "candy"
+ },
+ {
+  "file": "ice/skating.webp",
+  "kit": "ice",
+  "emoji": "⛸️",
+  "label": "Skating",
+  "shows": "ice skate"
+ },
+ {
+  "file": "ice/sleigh-ride.webp",
+  "kit": "ice",
+  "emoji": "🛷",
+  "label": "Sleigh ride",
+  "shows": "sled"
+ },
+ {
+  "file": "ice/snow-cookie.webp",
+  "kit": "ice",
+  "emoji": "🍪",
+  "label": "Snow cookie",
+  "shows": "cookie"
+ },
+ {
+  "file": "ice/snowman.webp",
+  "kit": "ice",
+  "emoji": "⛄",
+  "label": "Snowman",
+  "shows": "snowman without snow"
+ },
+ {
+  "file": "ice/tiara.webp",
+  "kit": "ice",
+  "emoji": "👑",
+  "label": "Tiara",
+  "shows": "crown"
+ },
+ {
+  "file": "ice/warm-soup.webp",
+  "kit": "ice",
+  "emoji": "🥣",
+  "label": "Warm soup",
+  "shows": "bowl with spoon"
+ },
+ {
+  "file": "mermaid/1f319.webp",
+  "kit": "mermaid",
+  "emoji": "🌙",
+  "label": "",
+  "shows": "crescent moon"
+ },
+ {
+  "file": "mermaid/1f33f.webp",
+  "kit": "mermaid",
+  "emoji": "🌿",
+  "label": "",
+  "shows": "herb"
+ },
+ {
+  "file": "mermaid/dolphin.webp",
+  "kit": "mermaid",
+  "emoji": "🐬",
+  "label": "Dolphin",
+  "shows": "dolphin"
+ },
+ {
+  "file": "mermaid/fins-tail.webp",
+  "kit": "mermaid",
+  "emoji": "🐟",
+  "label": "Fins & tail",
+  "shows": "fish"
+ },
+ {
+  "file": "mermaid/kelp-bubble-tea.webp",
+  "kit": "mermaid",
+  "emoji": "🧋",
+  "label": "Kelp bubble tea",
+  "shows": "bubble tea"
+ },
+ {
+  "file": "mermaid/mermaid.webp",
+  "kit": "mermaid",
+  "emoji": "🧜‍♀️",
+  "label": "Mermaid",
+  "shows": "merperson female sign"
+ },
+ {
+  "file": "mermaid/octopus.webp",
+  "kit": "mermaid",
+  "emoji": "🐙",
+  "label": "Octopus",
+  "shows": "octopus"
+ },
+ {
+  "file": "mermaid/pearl-bed.webp",
+  "kit": "mermaid",
+  "emoji": "🦪",
+  "label": "Pearl Bed",
+  "shows": "oyster"
+ },
+ {
+  "file": "mermaid/puffer-fish.webp",
+  "kit": "mermaid",
+  "emoji": "🐡",
+  "label": "Puffer fish",
+  "shows": "blowfish"
+ },
+ {
+  "file": "mermaid/sea-glass.webp",
+  "kit": "mermaid",
+  "emoji": "💎",
+  "label": "Sea glass",
+  "shows": "gem stone"
+ },
+ {
+  "file": "mermaid/sea-rescue.webp",
+  "kit": "mermaid",
+  "emoji": "🩺",
+  "label": "Sea rescue",
+  "shows": "stethoscope"
+ },
+ {
+  "file": "mermaid/shell-or-scales.webp",
+  "kit": "mermaid",
+  "emoji": "🐚",
+  "label": "Shell or scales",
+  "shows": "spiral shell"
+ },
+ {
+  "file": "mermaid/starfish.webp",
+  "kit": "mermaid",
+  "emoji": "⭐",
+  "label": "Starfish",
+  "shows": "white medium star"
+ },
+ {
+  "file": "mermaid/swimming.webp",
+  "kit": "mermaid",
+  "emoji": "🌊",
+  "label": "Swimming",
+  "shows": "water wave"
+ },
+ {
+  "file": "mermaid/tropical-fish.webp",
+  "kit": "mermaid",
+  "emoji": "🐠",
+  "label": "Tropical fish",
+  "shows": "tropical fish"
+ },
+ {
+  "file": "mermaid/watermelon.webp",
+  "kit": "mermaid",
+  "emoji": "🍉",
+  "label": "Watermelon",
+  "shows": "watermelon"
+ },
+ {
+  "file": "pirate/1f319.webp",
+  "kit": "pirate",
+  "emoji": "🌙",
+  "label": "",
+  "shows": "crescent moon"
+ },
+ {
+  "file": "pirate/1f372.webp",
+  "kit": "pirate",
+  "emoji": "🍲",
+  "label": "",
+  "shows": "pot of food"
+ },
+ {
+  "file": "pirate/2b50.webp",
+  "kit": "pirate",
+  "emoji": "⭐",
+  "label": "",
+  "shows": "white medium star"
+ },
+ {
+  "file": "pirate/a-ship.webp",
+  "kit": "pirate",
+  "emoji": "⛵",
+  "label": "A ship",
+  "shows": "sailboat"
+ },
+ {
+  "file": "pirate/banana.webp",
+  "kit": "pirate",
+  "emoji": "🍌",
+  "label": "Banana",
+  "shows": "banana"
+ },
+ {
+  "file": "pirate/captains-cookie.webp",
+  "kit": "pirate",
+  "emoji": "🍪",
+  "label": "Captain’s cookie",
+  "shows": "cookie"
+ },
+ {
+  "file": "pirate/coconut.webp",
+  "kit": "pirate",
+  "emoji": "🥥",
+  "label": "Coconut",
+  "shows": "coconut"
+ },
+ {
+  "file": "pirate/crown.webp",
+  "kit": "pirate",
+  "emoji": "👑",
+  "label": "Crown",
+  "shows": "crown"
+ },
+ {
+  "file": "pirate/drop-anchor.webp",
+  "kit": "pirate",
+  "emoji": "⚓",
+  "label": "Drop anchor",
+  "shows": "anchor"
+ },
+ {
+  "file": "pirate/fish-stew.webp",
+  "kit": "pirate",
+  "emoji": "🐟",
+  "label": "Fish stew",
+  "shows": "fish"
+ },
+ {
+  "file": "pirate/friendly-shark.webp",
+  "kit": "pirate",
+  "emoji": "🦈",
+  "label": "Friendly shark",
+  "shows": "shark"
+ },
+ {
+  "file": "pirate/gold-coin.webp",
+  "kit": "pirate",
+  "emoji": "🪙",
+  "label": "Gold coin",
+  "shows": "coin"
+ },
+ {
+  "file": "pirate/gold.webp",
+  "kit": "pirate",
+  "emoji": "💰",
+  "label": "Gold!",
+  "shows": "money bag"
+ },
+ {
+  "file": "pirate/grog-juice.webp",
+  "kit": "pirate",
+  "emoji": "🧃",
+  "label": "Grog juice",
+  "shows": "beverage box"
+ },
+ {
+  "file": "pirate/heading.webp",
+  "kit": "pirate",
+  "emoji": "🧭",
+  "label": "Heading",
+  "shows": "compass"
+ },
+ {
+  "file": "pirate/map-reading.webp",
+  "kit": "pirate",
+  "emoji": "🗺️",
+  "label": "Map reading",
+  "shows": "world map"
+ },
+ {
+  "file": "pirate/octopus.webp",
+  "kit": "pirate",
+  "emoji": "🐙",
+  "label": "Octopus",
+  "shows": "octopus"
+ },
+ {
+  "file": "pirate/old-key.webp",
+  "kit": "pirate",
+  "emoji": "🗝️",
+  "label": "Old key",
+  "shows": "old key"
+ },
+ {
+  "file": "pirate/parrot.webp",
+  "kit": "pirate",
+  "emoji": "🦜",
+  "label": "Parrot",
+  "shows": "parrot"
+ },
+ {
+  "file": "pirate/pearls.webp",
+  "kit": "pirate",
+  "emoji": "📿",
+  "label": "Pearls",
+  "shows": "prayer beads"
+ },
+ {
+  "file": "pirate/pirate-ship-logo.webp",
+  "kit": "pirate",
+  "emoji": "🏴‍☠️",
+  "label": "Pirate Ship logo",
+  "shows": "waving black flag skull and crossbones"
+ },
+ {
+  "file": "pirate/rowboat-ride.webp",
+  "kit": "pirate",
+  "emoji": "🛶",
+  "label": "Rowboat ride",
+  "shows": "canoe"
+ },
+ {
+  "file": "pirate/ruby-ring.webp",
+  "kit": "pirate",
+  "emoji": "💍",
+  "label": "Ruby ring",
+  "shows": "ring"
+ },
+ {
+  "file": "pirate/shell-beach.webp",
+  "kit": "pirate",
+  "emoji": "🐚",
+  "label": "Shell Beach",
+  "shows": "spiral shell"
+ },
+ {
+  "file": "pirate/ship-biscuit.webp",
+  "kit": "pirate",
+  "emoji": "🍞",
+  "label": "Ship biscuit",
+  "shows": "bread"
+ },
+ {
+  "file": "pirate/spyglass.webp",
+  "kit": "pirate",
+  "emoji": "🔭",
+  "label": "Spyglass",
+  "shows": "telescope"
+ },
+ {
+  "file": "pirate/treasure-eyes.webp",
+  "kit": "pirate",
+  "emoji": "💎",
+  "label": "Treasure eyes",
+  "shows": "gem stone"
+ },
+ {
+  "file": "pirate/treasure-island.webp",
+  "kit": "pirate",
+  "emoji": "🏝️",
+  "label": "Treasure Island",
+  "shows": "desert island"
+ },
+ {
+  "file": "racecar/1f319.webp",
+  "kit": "racecar",
+  "emoji": "🌙",
+  "label": "",
+  "shows": "crescent moon"
+ },
+ {
+  "file": "racecar/car.webp",
+  "kit": "racecar",
+  "emoji": "🚗",
+  "label": "Car",
+  "shows": "automobile"
+ },
+ {
+  "file": "racecar/clean-and-shiny.webp",
+  "kit": "racecar",
+  "emoji": "🧽",
+  "label": "Clean and shiny",
+  "shows": "sponge"
+ },
+ {
+  "file": "racecar/drivers-pretzel.webp",
+  "kit": "racecar",
+  "emoji": "🥨",
+  "label": "Driver’s pretzel",
+  "shows": "pretzel"
+ },
+ {
+  "file": "racecar/empty.webp",
+  "kit": "racecar",
+  "emoji": "😟",
+  "label": "Empty",
+  "shows": "worried face"
+ },
+ {
+  "file": "racecar/fast.webp",
+  "kit": "racecar",
+  "emoji": "💨",
+  "label": "Fast",
+  "shows": "dash symbol"
+ },
+ {
+  "file": "racecar/fuel-tank.webp",
+  "kit": "racecar",
+  "emoji": "⛽",
+  "label": "Fuel tank",
+  "shows": "fuel pump"
+ },
+ {
+  "file": "racecar/full.webp",
+  "kit": "racecar",
+  "emoji": "😁",
+  "label": "Full!",
+  "shows": "grinning face with smiling eyes"
+ },
+ {
+  "file": "racecar/grand-prix.webp",
+  "kit": "racecar",
+  "emoji": "🏁",
+  "label": "Grand Prix",
+  "shows": "chequered flag"
+ },
+ {
+  "file": "racecar/half.webp",
+  "kit": "racecar",
+  "emoji": "🙂",
+  "label": "Half",
+  "shows": "slightly smiling face"
+ },
+ {
+  "file": "racecar/headlights.webp",
+  "kit": "racecar",
+  "emoji": "💡",
+  "label": "Headlights",
+  "shows": "electric light bulb"
+ },
+ {
+  "file": "racecar/honk-honk.webp",
+  "kit": "racecar",
+  "emoji": "📯",
+  "label": "HONK! HONK!",
+  "shows": "postal horn"
+ },
+ {
+  "file": "racecar/juice-box.webp",
+  "kit": "racecar",
+  "emoji": "🧃",
+  "label": "Juice box",
+  "shows": "beverage box"
+ },
+ {
+  "file": "racecar/low.webp",
+  "kit": "racecar",
+  "emoji": "🥤",
+  "label": "Low",
+  "shows": "cup with straw"
+ },
+ {
+  "file": "racecar/new-paint.webp",
+  "kit": "racecar",
+  "emoji": "🎨",
+  "label": "New paint",
+  "shows": "artist palette"
+ },
+ {
+  "file": "racecar/oil-change.webp",
+  "kit": "racecar",
+  "emoji": "🛢️",
+  "label": "Oil change",
+  "shows": "oil drum"
+ },
+ {
+  "file": "racecar/quick-fix.webp",
+  "kit": "racecar",
+  "emoji": "🔧",
+  "label": "Quick fix",
+  "shows": "wrench"
+ },
+ {
+  "file": "racecar/race-car.webp",
+  "kit": "racecar",
+  "emoji": "🏎️",
+  "label": "Race car",
+  "shows": "racing car"
+ },
+ {
+  "file": "racecar/starting-line.webp",
+  "kit": "racecar",
+  "emoji": "🚦",
+  "label": "Starting Line",
+  "shows": "vertical traffic light"
+ },
+ {
+  "file": "racecar/tires.webp",
+  "kit": "racecar",
+  "emoji": "🛞",
+  "label": "Tires",
+  "shows": "wheel"
+ },
+ {
+  "file": "racecar/token.webp",
+  "kit": "racecar",
+  "emoji": "⚙️",
+  "label": "token",
+  "shows": "gear"
+ },
+ {
+  "file": "racecar/trophy-polish.webp",
+  "kit": "racecar",
+  "emoji": "🏆",
+  "label": "Trophy polish",
+  "shows": "trophy"
+ },
+ {
+  "file": "racecar/turbo-turtle.webp",
+  "kit": "racecar",
+  "emoji": "🐢",
+  "label": "Turbo turtle",
+  "shows": "turtle"
+ },
+ {
+  "file": "racecar/turbo.webp",
+  "kit": "racecar",
+  "emoji": "🚀",
+  "label": "Turbo",
+  "shows": "rocket"
+ },
+ {
+  "file": "royal/1f319.webp",
+  "kit": "royal",
+  "emoji": "🌙",
+  "label": "",
+  "shows": "crescent moon"
+ },
+ {
+  "file": "royal/1f6a9.webp",
+  "kit": "royal",
+  "emoji": "🚩",
+  "label": "",
+  "shows": "triangular flag on post"
+ },
+ {
+  "file": "royal/2728.webp",
+  "kit": "royal",
+  "emoji": "✨",
+  "label": "",
+  "shows": "sparkles"
+ },
+ {
+  "file": "royal/a-gift.webp",
+  "kit": "royal",
+  "emoji": "🎁",
+  "label": "A gift",
+  "shows": "wrapped present"
+ },
+ {
+  "file": "royal/cake-feast.webp",
+  "kit": "royal",
+  "emoji": "🍰",
+  "label": "Cake feast",
+  "shows": "shortcake"
+ },
+ {
+  "file": "royal/castle-tour.webp",
+  "kit": "royal",
+  "emoji": "🏰",
+  "label": "Castle tour",
+  "shows": "european castle"
+ },
+ {
+  "file": "royal/crown-cookie.webp",
+  "kit": "royal",
+  "emoji": "🍪",
+  "label": "Crown cookie",
+  "shows": "cookie"
+ },
+ {
+  "file": "royal/crown.webp",
+  "kit": "royal",
+  "emoji": "👑",
+  "label": "Crown",
+  "shows": "crown"
+ },
+ {
+  "file": "royal/cupcake.webp",
+  "kit": "royal",
+  "emoji": "🧁",
+  "label": "Cupcake",
+  "shows": "cupcake"
+ },
+ {
+  "file": "royal/dancing.webp",
+  "kit": "royal",
+  "emoji": "💃",
+  "label": "Dancing",
+  "shows": "dancer"
+ },
+ {
+  "file": "royal/frog-prince.webp",
+  "kit": "royal",
+  "emoji": "🐸",
+  "label": "Frog prince",
+  "shows": "frog face"
+ },
+ {
+  "file": "royal/horse-ride.webp",
+  "kit": "royal",
+  "emoji": "🐎",
+  "label": "Horse ride",
+  "shows": "horse"
+ },
+ {
+  "file": "royal/jewels.webp",
+  "kit": "royal",
+  "emoji": "💎",
+  "label": "Jewels",
+  "shows": "gem stone"
+ },
+ {
+  "file": "royal/pet-dragon.webp",
+  "kit": "royal",
+  "emoji": "🐉",
+  "label": "Pet dragon",
+  "shows": "dragon"
+ },
+ {
+  "file": "royal/prince.webp",
+  "kit": "royal",
+  "emoji": "🤴",
+  "label": "Prince",
+  "shows": "prince"
+ },
+ {
+  "file": "royal/princess.webp",
+  "kit": "royal",
+  "emoji": "👸",
+  "label": "Princess",
+  "shows": "princess"
+ },
+ {
+  "file": "royal/ring-bells.webp",
+  "kit": "royal",
+  "emoji": "🔔",
+  "label": "Ring bells",
+  "shows": "bell"
+ },
+ {
+  "file": "royal/royal-parade.webp",
+  "kit": "royal",
+  "emoji": "🎉",
+  "label": "Royal parade",
+  "shows": "party popper"
+ },
+ {
+  "file": "royal/royal-tart.webp",
+  "kit": "royal",
+  "emoji": "🥧",
+  "label": "Royal tart",
+  "shows": "pie"
+ },
+ {
+  "file": "royal/singing.webp",
+  "kit": "royal",
+  "emoji": "🎶",
+  "label": "Singing",
+  "shows": "multiple musical notes"
+ },
+ {
+  "file": "royal/strawberries.webp",
+  "kit": "royal",
+  "emoji": "🍓",
+  "label": "Strawberries",
+  "shows": "strawberry"
+ },
+ {
+  "file": "royal/tea-pouring.webp",
+  "kit": "royal",
+  "emoji": "🍵",
+  "label": "Tea pouring",
+  "shows": "teacup without handle"
+ },
+ {
+  "file": "royal/unicorn.webp",
+  "kit": "royal",
+  "emoji": "🦄",
+  "label": "Unicorn",
+  "shows": "unicorn face"
+ },
+ {
+  "file": "royal/wizard.webp",
+  "kit": "royal",
+  "emoji": "🧙",
+  "label": "Wizard",
+  "shows": "mage"
+ },
+ {
+  "file": "space/1f37d.webp",
+  "kit": "space",
+  "emoji": "🍽️",
+  "label": "",
+  "shows": "fork and knife with plate"
+ },
+ {
+  "file": "space/1f52c.webp",
+  "kit": "space",
+  "emoji": "🔬",
+  "label": "",
+  "shows": "microscope"
+ },
+ {
+  "file": "space/1f634.webp",
+  "kit": "space",
+  "emoji": "😴",
+  "label": "",
+  "shows": "sleeping face"
+ },
+ {
+  "file": "space/1f6aa.webp",
+  "kit": "space",
+  "emoji": "🚪",
+  "label": "",
+  "shows": "door"
+ },
+ {
+  "file": "space/1f6cf.webp",
+  "kit": "space",
+  "emoji": "🛏️",
+  "label": "",
+  "shows": "bed"
+ },
+ {
+  "file": "space/23f1.webp",
+  "kit": "space",
+  "emoji": "⏱️",
+  "label": "",
+  "shows": "stopwatch"
+ },
+ {
+  "file": "space/3-2-1.webp",
+  "kit": "space",
+  "emoji": "🚀",
+  "label": "3… 2… 1…",
+  "shows": "rocket"
+ },
+ {
+  "file": "space/a-comet.webp",
+  "kit": "space",
+  "emoji": "☄️",
+  "label": "A comet",
+  "shows": "comet"
+ },
+ {
+  "file": "space/astronaut-ice-cream.webp",
+  "kit": "space",
+  "emoji": "🍦",
+  "label": "Astronaut ice cream",
+  "shows": "soft ice cream"
+ },
+ {
+  "file": "space/astronaut.webp",
+  "kit": "space",
+  "emoji": "🧑‍🚀",
+  "label": "Astronaut",
+  "shows": "adult rocket"
+ },
+ {
+  "file": "space/back-to-earth.webp",
+  "kit": "space",
+  "emoji": "🌍",
+  "label": "Back to Earth",
+  "shows": "earth globe europe-africa"
+ },
+ {
+  "file": "space/comet-cookie.webp",
+  "kit": "space",
+  "emoji": "🍪",
+  "label": "Comet cookie",
+  "shows": "cookie"
+ },
+ {
+  "file": "space/freeze-dried-pizza.webp",
+  "kit": "space",
+  "emoji": "🍕",
+  "label": "Freeze-dried pizza",
+  "shows": "slice of pizza"
+ },
+ {
+  "file": "space/friendly-alien.webp",
+  "kit": "space",
+  "emoji": "👽",
+  "label": "Friendly alien",
+  "shows": "extraterrestrial alien"
+ },
+ {
+  "file": "space/liftoff.webp",
+  "kit": "space",
+  "emoji": "💨",
+  "label": "Liftoff!",
+  "shows": "dash symbol"
+ },
+ {
+  "file": "space/milky-way-bar.webp",
+  "kit": "space",
+  "emoji": "🍫",
+  "label": "Milky Way bar",
+  "shows": "chocolate bar"
+ },
+ {
+  "file": "space/moon-juice.webp",
+  "kit": "space",
+  "emoji": "🧃",
+  "label": "Moon juice",
+  "shows": "beverage box"
+ },
+ {
+  "file": "space/rocket-fuel-shake.webp",
+  "kit": "space",
+  "emoji": "🥤",
+  "label": "Rocket fuel shake",
+  "shows": "cup with straw"
+ },
+ {
+  "file": "space/rocket-ride.webp",
+  "kit": "space",
+  "emoji": "🎟️",
+  "label": "Rocket ride",
+  "shows": "admission tickets"
+ },
+ {
+  "file": "space/saturn.webp",
+  "kit": "space",
+  "emoji": "🪐",
+  "label": "Saturn",
+  "shows": "ringed planet"
+ },
+ {
+  "file": "space/space-apple.webp",
+  "kit": "space",
+  "emoji": "🍎",
+  "label": "Space apple",
+  "shows": "red apple"
+ },
+ {
+  "file": "space/sun.webp",
+  "kit": "space",
+  "emoji": "☀️",
+  "label": "Sun",
+  "shows": "black sun with rays"
+ },
+ {
+  "file": "space/the-moon.webp",
+  "kit": "space",
+  "emoji": "🌕",
+  "label": "The Moon",
+  "shows": "full moon symbol"
+ },
+ {
+  "file": "space/the-stars.webp",
+  "kit": "space",
+  "emoji": "⭐",
+  "label": "The stars",
+  "shows": "white medium star"
+ },
+ {
+  "file": "unicorn/1f337.webp",
+  "kit": "unicorn",
+  "emoji": "🌷",
+  "label": "",
+  "shows": "tulip"
+ },
+ {
+  "file": "unicorn/1fa7a.webp",
+  "kit": "unicorn",
+  "emoji": "🩺",
+  "label": "",
+  "shows": "stethoscope"
+ },
+ {
+  "file": "unicorn/appetite.webp",
+  "kit": "unicorn",
+  "emoji": "🥕",
+  "label": "Appetite",
+  "shows": "carrot"
+ },
+ {
+  "file": "unicorn/apple.webp",
+  "kit": "unicorn",
+  "emoji": "🍎",
+  "label": "Apple",
+  "shows": "red apple"
+ },
+ {
+  "file": "unicorn/big-hug.webp",
+  "kit": "unicorn",
+  "emoji": "💖",
+  "label": "Big hug",
+  "shows": "sparkling heart"
+ },
+ {
+  "file": "unicorn/blossom-trail.webp",
+  "kit": "unicorn",
+  "emoji": "🌸",
+  "label": "Blossom Trail",
+  "shows": "cherry blossom"
+ },
+ {
+  "file": "unicorn/candy-hills.webp",
+  "kit": "unicorn",
+  "emoji": "🍭",
+  "label": "Candy Hills",
+  "shows": "lollipop"
+ },
+ {
+  "file": "unicorn/cloud-meadow.webp",
+  "kit": "unicorn",
+  "emoji": "☁️",
+  "label": "Cloud Meadow",
+  "shows": "cloud"
+ },
+ {
+  "file": "unicorn/cupcake.webp",
+  "kit": "unicorn",
+  "emoji": "🧁",
+  "label": "Cupcake",
+  "shows": "cupcake"
+ },
+ {
+  "file": "unicorn/horn-polish.webp",
+  "kit": "unicorn",
+  "emoji": "✨",
+  "label": "Horn polish",
+  "shows": "sparkles"
+ },
+ {
+  "file": "unicorn/mane-tail.webp",
+  "kit": "unicorn",
+  "emoji": "🎀",
+  "label": "Mane & tail",
+  "shows": "ribbon"
+ },
+ {
+  "file": "unicorn/moon-pond.webp",
+  "kit": "unicorn",
+  "emoji": "🌙",
+  "label": "Moon Pond",
+  "shows": "crescent moon"
+ },
+ {
+  "file": "unicorn/rainbow-butterfly.webp",
+  "kit": "unicorn",
+  "emoji": "🦋",
+  "label": "Rainbow butterfly",
+  "shows": "butterfly"
+ },
+ {
+  "file": "unicorn/rainbow-gem.webp",
+  "kit": "unicorn",
+  "emoji": "💎",
+  "label": "Rainbow gem",
+  "shows": "gem stone"
+ },
+ {
+  "file": "unicorn/rainbow-glow.webp",
+  "kit": "unicorn",
+  "emoji": "🌈",
+  "label": "Rainbow glow",
+  "shows": "rainbow"
+ },
+ {
+  "file": "unicorn/rainbow-oats.webp",
+  "kit": "unicorn",
+  "emoji": "🌾",
+  "label": "Rainbow oats",
+  "shows": "ear of rice"
+ },
+ {
+  "file": "unicorn/star-falls.webp",
+  "kit": "unicorn",
+  "emoji": "⭐",
+  "label": "Star Falls",
+  "shows": "white medium star"
+ },
+ {
+  "file": "unicorn/unicorn.webp",
+  "kit": "unicorn",
+  "emoji": "🦄",
+  "label": "Unicorn",
+  "shows": "unicorn face"
+ },
+ {
+  "file": "valentine/1f319.webp",
+  "kit": "valentine",
+  "emoji": "🌙",
+  "label": "",
+  "shows": "crescent moon"
+ },
+ {
+  "file": "valentine/1f495.webp",
+  "kit": "valentine",
+  "emoji": "💕",
+  "label": "",
+  "shows": "two hearts"
+ },
+ {
+  "file": "valentine/1f6cd.webp",
+  "kit": "valentine",
+  "emoji": "🛍️",
+  "label": "",
+  "shows": "shopping bags"
+ },
+ {
+  "file": "valentine/2702.webp",
+  "kit": "valentine",
+  "emoji": "✂️",
+  "label": "",
+  "shows": "black scissors"
+ },
+ {
+  "file": "valentine/a-song.webp",
+  "kit": "valentine",
+  "emoji": "🎵",
+  "label": "A song",
+  "shows": "musical note"
+ },
+ {
+  "file": "valentine/balloon.webp",
+  "kit": "valentine",
+  "emoji": "🎈",
+  "label": "Balloon",
+  "shows": "balloon"
+ },
+ {
+  "file": "valentine/candy-heart.webp",
+  "kit": "valentine",
+  "emoji": "🍬",
+  "label": "Candy heart",
+  "shows": "candy"
+ },
+ {
+  "file": "valentine/chocolate.webp",
+  "kit": "valentine",
+  "emoji": "🍫",
+  "label": "Chocolate",
+  "shows": "chocolate bar"
+ },
+ {
+  "file": "valentine/crayons.webp",
+  "kit": "valentine",
+  "emoji": "🖍️",
+  "label": "Crayons",
+  "shows": "lower left crayon"
+ },
+ {
+  "file": "valentine/cupcake.webp",
+  "kit": "valentine",
+  "emoji": "🧁",
+  "label": "Cupcake",
+  "shows": "cupcake"
+ },
+ {
+  "file": "valentine/drew-a-picture.webp",
+  "kit": "valentine",
+  "emoji": "🎨",
+  "label": "Drew a picture",
+  "shows": "artist palette"
+ },
+ {
+  "file": "valentine/express-mail.webp",
+  "kit": "valentine",
+  "emoji": "🚚",
+  "label": "Express mail",
+  "shows": "delivery truck"
+ },
+ {
+  "file": "valentine/gave-a-hug.webp",
+  "kit": "valentine",
+  "emoji": "🤗",
+  "label": "Gave a hug",
+  "shows": "hugging face"
+ },
+ {
+  "file": "valentine/glitter.webp",
+  "kit": "valentine",
+  "emoji": "✨",
+  "label": "Glitter",
+  "shows": "sparkles"
+ },
+ {
+  "file": "valentine/hearts.webp",
+  "kit": "valentine",
+  "emoji": "💗",
+  "label": "Hearts",
+  "shows": "growing heart"
+ },
+ {
+  "file": "valentine/high-five.webp",
+  "kit": "valentine",
+  "emoji": "👏",
+  "label": "High five",
+  "shows": "clapping hands sign"
+ },
+ {
+  "file": "valentine/letter-paper.webp",
+  "kit": "valentine",
+  "emoji": "📝",
+  "label": "Letter paper",
+  "shows": "memo"
+ },
+ {
+  "file": "valentine/made-them-smile.webp",
+  "kit": "valentine",
+  "emoji": "😊",
+  "label": "Made them smile",
+  "shows": "smiling face with smiling eyes"
+ },
+ {
+  "file": "valentine/rose.webp",
+  "kit": "valentine",
+  "emoji": "🌹",
+  "label": "Rose",
+  "shows": "rose"
+ },
+ {
+  "file": "valentine/send.webp",
+  "kit": "valentine",
+  "emoji": "📮",
+  "label": "Send",
+  "shows": "postbox"
+ },
+ {
+  "file": "valentine/sent-a-valentine.webp",
+  "kit": "valentine",
+  "emoji": "💌",
+  "label": "Sent a valentine",
+  "shows": "love letter"
+ },
+ {
+  "file": "valentine/shared-a-snack.webp",
+  "kit": "valentine",
+  "emoji": "🍪",
+  "label": "Shared a snack",
+  "shows": "cookie"
+ },
+ {
+  "file": "valentine/sort.webp",
+  "kit": "valentine",
+  "emoji": "🗂️",
+  "label": "Sort",
+  "shows": "card index dividers"
+ },
+ {
+  "file": "valentine/teddy-bear.webp",
+  "kit": "valentine",
+  "emoji": "🧸",
+  "label": "Teddy bear",
+  "shows": "teddy bear"
+ },
+ {
+  "file": "vet/1f319.webp",
+  "kit": "vet",
+  "emoji": "🌙",
+  "label": "",
+  "shows": "crescent moon"
+ },
+ {
+  "file": "vet/1fa91.webp",
+  "kit": "vet",
+  "emoji": "🪑",
+  "label": "",
+  "shows": "chair"
+ },
+ {
+  "file": "vet/1fa99.webp",
+  "kit": "vet",
+  "emoji": "🪙",
+  "label": "",
+  "shows": "coin"
+ },
+ {
+  "file": "vet/2705.webp",
+  "kit": "vet",
+  "emoji": "✅",
+  "label": "",
+  "shows": "white heavy check mark"
+ },
+ {
+  "file": "vet/bandage.webp",
+  "kit": "vet",
+  "emoji": "🩹",
+  "label": "Bandage",
+  "shows": "adhesive bandage"
+ },
+ {
+  "file": "vet/bubble-bath.webp",
+  "kit": "vet",
+  "emoji": "🛁",
+  "label": "Bubble bath",
+  "shows": "bathtub"
+ },
+ {
+  "file": "vet/check-up.webp",
+  "kit": "vet",
+  "emoji": "🩺",
+  "label": "Check-up",
+  "shows": "stethoscope"
+ },
+ {
+  "file": "vet/claw-trim.webp",
+  "kit": "vet",
+  "emoji": "💅",
+  "label": "Claw trim",
+  "shows": "nail polish"
+ },
+ {
+  "file": "vet/dog.webp",
+  "kit": "vet",
+  "emoji": "🐶",
+  "label": "Dog",
+  "shows": "dog face"
+ },
+ {
+  "file": "vet/flashlight.webp",
+  "kit": "vet",
+  "emoji": "🔦",
+  "label": "Flashlight",
+  "shows": "electric torch"
+ },
+ {
+  "file": "vet/paws.webp",
+  "kit": "vet",
+  "emoji": "🐾",
+  "label": "Paws",
+  "shows": "paw prints"
+ },
+ {
+  "file": "vet/pills.webp",
+  "kit": "vet",
+  "emoji": "💊",
+  "label": "Pills",
+  "shows": "pill"
+ },
+ {
+  "file": "vet/surgery.webp",
+  "kit": "vet",
+  "emoji": "😷",
+  "label": "Surgery",
+  "shows": "face with medical mask"
+ },
+ {
+  "file": "vet/teeth.webp",
+  "kit": "vet",
+  "emoji": "🦷",
+  "label": "Teeth",
+  "shows": "tooth"
+ },
+ {
+  "file": "vet/temperature.webp",
+  "kit": "vet",
+  "emoji": "🌡️",
+  "label": "Temperature",
+  "shows": "thermometer"
+ },
+ {
+  "file": "vet/toothbrush.webp",
+  "kit": "vet",
+  "emoji": "🪥",
+  "label": "Toothbrush",
+  "shows": "toothbrush"
+ },
+ {
+  "file": "vet/vaccine.webp",
+  "kit": "vet",
+  "emoji": "💉",
+  "label": "Vaccine",
+  "shows": "syringe"
+ },
+ {
+  "file": "vet/vet-clinic-logo.webp",
+  "kit": "vet",
+  "emoji": "🏥",
+  "label": "Vet Clinic logo",
+  "shows": "hospital"
+ },
+ {
+  "file": "vet/x-ray.webp",
+  "kit": "vet",
+  "emoji": "🦴",
+  "label": "X-ray",
+  "shows": "bone"
+ }
+]
