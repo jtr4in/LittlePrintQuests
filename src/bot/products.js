@@ -36,4 +36,14 @@ function describe(items) {
 const packageName = (items) =>
   items.length === 3 ? 'Hunt + Play Kit + Party Pack' : items.map((i) => ({ hunt: 'Hunt', kit: 'Play Kit', party: 'Party Pack' })[i]).join(' + ') + (items.length === 1 && items[0] === 'hunt' ? ' only' : '');
 
-module.exports = { ITEMS, PRICES, normalize, productFor, itemsOf, has, mainOf, priceFor, describe, packageName, NAMES };
+// What Host Mode does for this order, as the end of "Host Mode ...", for emails and messages.
+function hostHelps(order) {
+  const helps = [
+    has(order, 'hunt') && 'walks you through hiding each card and running the hunt, with lines to say, hints and a secret role for a second grown-up',
+    has(order, 'kit') && 'has pretend-play scenarios, things to say and games for the play kit',
+    has(order, 'party') && 'keeps a party-planning checklist, from the invitations to the thank-you cards',
+  ].filter(Boolean);
+  return helps.length > 1 ? `${helps.slice(0, -1).join(', ')}, and ${helps[helps.length - 1]}` : helps[0];
+}
+
+module.exports = { hostHelps, ITEMS, PRICES, normalize, productFor, itemsOf, has, mainOf, priceFor, describe, packageName, NAMES };

@@ -68,7 +68,7 @@ function buyerMessage(order) {
     party: () => `${theme.label} party pack`,
   }[main]();
   const host = order.hostToken
-    ? `\nOn party day, open Host Mode on your phone. It walks you through hiding each card and running the hunt, with lines to say, hints and a role for a second grown-up:\n\n${hostUrl(order)}\n`
+    ? `\n${products.has(order, 'hunt') ? 'On party day, open' : 'Open'} Host Mode on your phone. It ${products.hostHelps(order)}:\n\n${hostUrl(order)}\n`
     : '';
   const extras =
     (order.kitReady ? `\nAnd here's the matching ${kitOf(order).name} play kit:\n\n${base}-kit.pdf\n` : '') +
@@ -88,10 +88,9 @@ ${tips}`;
 async function generate(id) {
   const order = store.get().orders[id];
   const token = order.downloadToken || crypto.randomBytes(18).toString('base64url');
-  // Hunts get Host Mode: one private link for the host and one for a helper.
-  const hostTokens = products.has(order, 'hunt') && products.mainOf(order) === 'hunt'
-    ? { hostToken: order.hostToken || newToken(), sidekickToken: order.sidekickToken || newToken() }
-    : {};
+  // Every order gets Host Mode, a private phone page with a tab for each thing in it.
+  // Hunts also get a second link for a helper (the sidekick).
+  const hostTokens = { hostToken: order.hostToken || newToken(), ...(products.has(order, 'hunt') ? { sidekickToken: order.sidekickToken || newToken() } : {}) };
   const out = (suffix = '') => path.join(store.PDF_DIR, `${token}${suffix}.pdf`);
   const main = products.mainOf(order);
   if (main === 'kit') await renderKit(order.config, out());
