@@ -175,7 +175,7 @@ function setupPanel() {
   <p class="muted">Change settings in Railway's Variables tab. Railway restarts the bot when you save.</p></details>`;
 }
 
-function dashboard() {
+function dashboard(query = new URLSearchParams()) {
   const s = store.get();
   const list = Object.values(s.orders).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
   const unpaid = list.filter((o) => o.status === 'awaiting_payment');
@@ -198,6 +198,8 @@ button.secondary{background:#fff;color:#2d6a4f;border:1px solid #2d6a4f;margin-t
 .muted{color:#777;font-size:13px}
 </style></head><body>
 <h1>Order Bot</h1>
+${query.get('empty') ? '<div class="panel problem">Type or paste the order details first (the grey example text doesn’t count). Tap “Use the sample” to try it.</div>' : ''}
+${query.get('made') && s.orders[query.get('made')] ? `<div class="panel"><b>Making it now.</b> <span class="muted">It’s under “To send” below and finishes in about a minute; this page refreshes by itself.</span> <a href="#${esc(query.get('made'))}">Jump to it</a></div>` : ''}
 ${setupPanel()}
 <div class="panel">
   ${
@@ -221,7 +223,8 @@ ${listingsPanel(s)}
 <details class="panel"><summary><b>Make a hunt by hand</b> <span class="muted">(paste order notes, or test the bot)</span></summary>
   <form method="post" action="/admin/orders">
     <p><input name="buyerName" placeholder="Buyer name (optional)"></p>
-    <textarea name="personalization" rows="4" placeholder="Maya, turning 6, space theme. Spots: front door, shoe rack, washer, dryer, grandma's piano, dog bed, kitchen table (prize). Pets: Rover (dog)"></textarea>
+    <textarea name="personalization" rows="4" required placeholder="Maya, turning 6, space theme. Spots: front door, shoe rack, washer, dryer, grandma's piano, dog bed, kitchen table (prize). Pets: Rover (dog)"></textarea>
+    <button type="button" class="secondary" onclick="const t=this.form.personalization;t.value=t.placeholder;t.focus()">Use the sample</button>
     <div class="row"><select name="product"><option value="bundle">Party bundle (hunt, play kit and party pack)</option><option value="hunt">Hunt only</option><option value="party">Party pack only</option></select><button>Make it</button></div>
   </form>
 </details>
@@ -359,7 +362,7 @@ async function route(req, res) {
 
   if (!authorized(req)) return send(res, 401, 'Login required', { 'WWW-Authenticate': 'Basic realm="Order Bot"' });
 
-  if (p === '/' || p === '/admin') return send(res, 200, dashboard());
+  if (p === '/' || p === '/admin') return send(res, 200, dashboard(url.searchParams));
   if (p === '/admin/subscribers.csv') return send(res, 200, sample.subscribersCsv(), { 'Content-Type': 'text/csv', 'Content-Disposition': 'attachment; filename="subscribers.csv"' });
   if (p === '/auth/etsy/start') {
     const auth = etsy.startAuth();
@@ -379,11 +382,11 @@ async function route(req, res) {
   }
   if (p === '/admin/orders') {
     const f = await readForm(req);
-    if (!f.personalization?.trim()) return redirect(res, '/admin');
+    if (!f.personalization?.trim()) return redirect(res, '/admin?empty=1');
     const product = ['bundle', 'hunt', 'party'].includes(f.product) ? f.product : f.bundle ? 'bundle' : 'hunt';
     const id = orders.addOrder({ source: 'manual', buyerName: f.buyerName || '', personalization: f.personalization, options: {}, product });
     orders.processOrder(id);
-    return redirect(res, `/admin#${id}`);
+    return redirect(res, `/admin?made=${encodeURIComponent(id)}#${id}`);
   }
   const m = p.match(/^\/admin\/orders\/([\w-]+)\/(sent|retry|config|email)$/);
   if (m && store.get().orders[m[1]]) {
@@ -411,7 +414,7 @@ async function route(req, res) {
         store.update((s) => Object.assign(s.orders[id], { status: 'needs_attention', problem: `Rebuild failed: ${err.message}` }));
       }
     }
-    return redirect(res, `/admin#${id}`);
+    return redirect(res, `/admin?made=${encodeURIComponent(id)}#${id}`);
   }
   return send(res, 404, 'Not found');
 }
