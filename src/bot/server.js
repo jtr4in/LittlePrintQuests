@@ -10,6 +10,7 @@ const orders = require('./orders');
 const payments = require('./payments');
 const listings = require('./listings');
 const sample = require('./sample');
+const health = require('./health');
 const { KITS } = require('../kits/engine');
 const { sendHuntEmail } = require('./email');
 const THEMES = require('../generator/themes');
@@ -152,6 +153,15 @@ function orderCard(o) {
   </article>`;
 }
 
+function setupPanel() {
+  const rows = health.checks();
+  const bad = rows.filter((r) => !r[1]);
+  return `<details class="panel"${bad.length || health.recent.length ? ' open' : ''}><summary><b>Setup check</b> <span class="muted">${bad.length ? `${bad.length} setting${bad.length === 1 ? '' : 's'} to fix` : 'all settings look right'}</span></summary>
+  <ul style="padding-left:18px">${rows.map(([label, ok, hint]) => `<li>${ok ? '✅' : '❌'} ${esc(label)}${ok ? '' : ` <span class="muted">${esc(hint)}</span>`}</li>`).join('')}</ul>
+  ${health.recent.length ? `<b>Recent problems</b><ul style="padding-left:18px">${health.recent.map((e) => `<li><span class="muted">${esc(new Date(e.at).toLocaleString('en-US'))} · ${esc(e.area)}</span><br>${esc(e.message)}</li>`).join('')}</ul>` : ''}
+  <p class="muted">Change settings in Railway's Variables tab. Railway restarts the bot when you save.</p></details>`;
+}
+
 function dashboard() {
   const s = store.get();
   const list = Object.values(s.orders).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
@@ -175,6 +185,7 @@ button.secondary{background:#fff;color:#2d6a4f;border:1px solid #2d6a4f;margin-t
 .muted{color:#777;font-size:13px}
 </style></head><body>
 <h1>Order Bot</h1>
+${setupPanel()}
 <div class="panel">
   ${
     !etsy.configured()
@@ -232,7 +243,10 @@ async function route(req, res) {
       return sendJson(res, 200, { ok: true });
     } catch (err) {
       if (err instanceof SyntaxError) return sendJson(res, 400, { error: 'Bad request' });
-      if (!err.status) console.error('Sample request failed:', err.message);
+      if (!err.status) {
+        console.error('Sample request failed:', err.message);
+        health.recordError('Free sample email', err.message);
+      }
       return sendJson(res, err.status || 502, { error: err.status ? err.message : 'Something went wrong. Please try again in a minute.' });
     }
   }
@@ -266,6 +280,7 @@ async function route(req, res) {
       return sendJson(res, 200, { url: session.url });
     } catch (err) {
       console.error('Stripe checkout failed:', err.message);
+      health.recordError('Website checkout', err.message);
       return sendJson(res, 502, { error: 'Checkout is having trouble right now. Please try again in a minute.' });
     }
   }
@@ -282,7 +297,10 @@ async function route(req, res) {
       // Answer Stripe right away; building the PDF takes a few seconds.
       orders
         .fulfillWebOrder(session.metadata.order_id, { email: session.customer_details?.email, buyerName: session.customer_details?.name || '' })
-        .catch((err) => console.error('Fulfillment failed:', err));
+        .catch((err) => {
+          console.error('Fulfillment failed:', err);
+          health.recordError('Building a website order', err.message);
+        });
     }
     return send(res, 200, 'ok', { 'Content-Type': 'text/plain' });
   }
