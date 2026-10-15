@@ -175,10 +175,12 @@ async function setPersonalization(listingId, { question, instructions }) {
   });
 }
 
+// Replaces whatever image sits at that rank, so re-uploading a changed photo list never piles up extras.
 async function uploadListingImage(listingId, { name, data, type }, rank) {
   const fd = new FormData();
   fd.append('image', new Blob([data], { type }), name);
   fd.append('rank', String(rank));
+  fd.append('overwrite', 'true');
   return api('POST', `/application/shops/${shopId()}/listings/${listingId}/images`, null, fd);
 }
 
