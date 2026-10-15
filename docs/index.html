@@ -222,7 +222,6 @@ input[type="text"], input[type="number"], input[type="email"], select { width: 1
 .status { font-size: 14.5px; color: var(--ink-soft); min-height: 1.4em; }
 .status.bad { color: #c2410c; }
 [hidden] { display: none !important; }
-.party-shot { width: 100%; height: auto; display: block; margin-top: 24px; border-radius: var(--r); }
 .party-details summary { cursor: pointer; font: 600 16px/1.3 var(--display); }
 .party-details[open] summary { margin-bottom: 10px; }
 .party-details .field { margin-top: 10px; }
@@ -234,14 +233,29 @@ input[type="text"], input[type="number"], input[type="email"], select { width: 1
 /* pretend play kits */
 .kits-lede { color: var(--ink-soft); font-size: 18px; max-width: 40em; margin-top: 12px; }
 .kit-points { margin: 18px 0 0; padding-left: 20px; color: var(--ink-soft); display: grid; gap: 4px; max-width: 720px; }
-.kit-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 28px; }
-.kit-card { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; display: grid; gap: 10px; align-content: start; }
-.kit-card img { width: 100%; height: auto; aspect-ratio: 677 / 497; background: var(--tint); border-radius: 10px; }
-.kit-card .tag { justify-self: start; font: 500 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 6px 10px; border-radius: 99px; background: var(--tint); color: var(--mint-deep); }
-.kit-card p { color: var(--ink-soft); font-size: 15.5px; }
-@media (max-width: 1180px) { .kit-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 960px) { .kit-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 600px) { .kit-grid { grid-template-columns: 1fr; } }
+
+/* theme groups and tabs */
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.tabs button { font: 600 15px/1 var(--display); padding: 10px 16px; border-radius: 99px; border: 1px solid var(--line); background: var(--sheet); color: var(--ink); cursor: pointer; }
+.tabs button[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.more-row { text-align: center; margin-top: 22px; }
+.theme { position: relative; }
+.theme .now { position: absolute; top: 24px; left: 24px; z-index: 1; font: 600 12px/1 var(--mono); letter-spacing: .05em; text-transform: uppercase; background: #ef9d31; color: #2b1d06; padding: 6px 10px; border-radius: 99px; }
+/* what's in the box */
+.box-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px; }
+.box-theme { display: flex; align-items: center; gap: 10px; margin-top: 22px; font: 600 15px/1 var(--display); }
+.box-theme select { max-width: 260px; }
+.box-panel { margin-top: 18px; }
+.box-split { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: center; margin-top: 10px; }
+.box-split > img { width: 100%; height: auto; border-radius: var(--r); background: var(--tint); }
+.box-split > img.party-page { max-width: 380px; justify-self: center; background: #fff; border: 1px solid var(--line); box-shadow: 0 16px 34px -18px rgba(40, 50, 90, .45); border-radius: 6px; transform: rotate(-2deg); }
+.box-split .tag { display: inline-block; font: 500 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 6px 10px; border-radius: 99px; background: var(--tint); color: var(--mint-deep); }
+.box-split h3 { margin-top: 12px; font-size: 28px; }
+@media (max-width: 860px) { .box-split { grid-template-columns: 1fr; } }
+/* seasonal banner */
+.season-wrap { padding-bottom: 0; }
+.season { display: inline-flex; align-items: center; gap: 10px; font: 600 15px/1.3 var(--display); padding: 10px 16px; border-radius: 99px; border: 1px solid var(--line); background: var(--sheet); color: var(--ink); cursor: pointer; margin-bottom: 18px; text-align: left; }
+.season b { color: #c46a00; }
 
 /* pricing */
 .plans { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 20px; margin-top: 32px; }
@@ -281,8 +295,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
     <nav class="nav" aria-label="Main">
       <a href="#how">How it works</a>
       <a href="#themes">Themes</a>
-      <a href="#host">Host Mode</a>
-      <a href="#kits">Play kits</a>
+      <a href="#inside">What’s included</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
       <a class="btn btn-orange" href="#order">Make my hunt</a>
@@ -292,6 +305,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 
 <main id="top">
   <section class="hero">
+    <div class="wrap season-wrap"><button type="button" class="season" id="season" hidden></button></div>
     <div class="wrap">
       <div>
         <p class="eyebrow">Printable birthday scavenger hunts · ages 3 to 8</p>
@@ -299,7 +313,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         <p class="lede">Tell us your child’s name and the spots in your home you want to use. In a few minutes you get rhyming clue cards, a host checklist and a certificate, ready to print.</p>
         <div class="ctas">
           <a class="btn btn-orange" href="#order">Make my party bundle · $16.99</a>
-          <a class="btn btn-ghost" href="#kit">See what’s inside</a>
+          <a class="btn btn-ghost" href="#inside">See what’s inside</a>
         </div>
         <ul class="facts">
           <li>30 to 45 minutes of screen-free play</li>
@@ -333,31 +347,52 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
     </div>
   </section>
 
-  <section class="stop" id="kit">
+
+
+  <section class="stop" id="themes">
     <div class="wrap">
-      <div class="pin"><b></b><span class="eyebrow">What’s inside</span></div>
-      <h2>Everything you need, on Letter paper</h2>
-      <p class="kits-lede">Real pages from a Deep Space hunt made for Maya’s 6th birthday.</p>
-      <div class="kit">
+      <div class="pin"><b></b><span class="eyebrow">Themes</span></div>
+      <h2>Sixteen adventures to pick from</h2>
+      <div class="tabs" role="tablist" aria-label="Theme groups" id="themeTabs">
+        <button type="button" role="tab" data-group="all" aria-selected="true">All</button>
+        <button type="button" role="tab" data-group="everyday" aria-selected="false">Everyday</button>
+        <button type="button" role="tab" data-group="holiday" aria-selected="false">Holidays</button>
+      </div>
+      <div class="themes" id="themeList"></div>
+      <p class="more-row"><button type="button" class="btn btn-ghost" id="showAll" hidden>Show all 16 themes</button></p>
+    </div>
+  </section>
+
+  <section class="stop" id="inside">
+    <div class="wrap">
+      <div class="pin"><b></b><span class="eyebrow">What’s in the box</span></div>
+      <h2>Everything in the <span id="boxTheme">Dino Fossil Recovery</span> bundle</h2>
+      <div class="box-bar">
+        <div class="tabs" role="tablist" aria-label="What’s included">
+          <button type="button" role="tab" data-tab="hunt" aria-selected="true">The hunt</button>
+          <button type="button" role="tab" data-tab="host" aria-selected="false">Host Mode</button>
+          <button type="button" role="tab" data-tab="kit" aria-selected="false">Play kit</button>
+          <button type="button" role="tab" data-tab="party" aria-selected="false">Party pack</button>
+        </div>
+        <label class="box-theme">Theme <select id="boxSelect"></select></label>
+      </div>
+      <div class="box-panel" data-panel="hunt">
+        <p class="kits-lede">A host guide, a read-aloud briefing, rhyming clue cards and a certificate, all with your child’s name. Real pages from a Deep Space hunt made for Maya’s 6th birthday:</p>
+        <div class="kit">
         <div class="page-thumb"><img class="mini-img" src="img/hunt-guide.webp" alt="Host guide page listing where each clue card hides" width="480" height="621" loading="lazy"><h3>Host guide</h3><p>Your secret checklist: which card hides where, and where the prize goes.</p></div>
         <div class="page-thumb"><img class="mini-img" src="img/hunt-briefing.webp" alt="Mission briefing letter addressed to Maya" width="480" height="621" loading="lazy"><h3>Mission briefing</h3><p>A story letter to read aloud that kicks off the adventure, addressed to your child.</p></div>
         <div class="page-thumb"><img class="mini-img" src="img/hunt-cards.webp" alt="Two rhyming clue cards with dashed cut lines" width="480" height="621" loading="lazy"><h3>Clue cards</h3><p>4 × 6 inch rhyming cards, two per page, with dashed cut lines and big read-aloud type.</p></div>
         <div class="page-thumb"><img class="mini-img" src="img/hunt-certificate.webp" alt="Mission Accomplished certificate with Maya’s name" width="480" height="621" loading="lazy"><h3>Certificate</h3><p>A “Mission Accomplished” certificate with your child’s name for the big finish.</p></div>
       </div>
-    </div>
-  </section>
-
-  <section class="stop" id="host">
-    <div class="wrap">
-      <div class="pin"><b></b><span class="eyebrow">Host Mode · included with every hunt</span></div>
-      <h2>Run the whole party from your phone</h2>
-      <p class="kits-lede">Every hunt comes with a private Host Mode link. It walks you through hiding the cards, then runs the hunt with you one tap at a time, so you can keep the fun going instead of juggling paper.</p>
-      <div class="phones">
+      </div>
+      <div class="box-panel" data-panel="host" hidden>
+        <p class="kits-lede">Every hunt comes with a private Host Mode link. It walks you through hiding the cards, then runs the hunt with you one tap at a time, so you can keep the fun going instead of juggling paper.</p>
+        <div class="phones">
         <figure><span class="phone"><img src="img/host/space-hide.webp" alt="Host Mode screen: Hide Card 3 at the Shoe Rack, with a Hidden checkbox" width="360" height="720" loading="lazy"></span><figcaption><b>1 · Hide the cards</b>One card per screen, in your exact hiding order. Tick “Hidden!” and move on.</figcaption></figure>
         <figure><span class="phone"><img src="img/host/space-play.webp" alt="Host Mode screen: They found Card 3, with a quick challenge, a line to say in character, and the clue to read" width="360" height="720" loading="lazy"></span><figcaption><b>2 · Play along</b>A quick challenge before each card, a line to say in character, and the clue to read aloud.</figcaption></figure>
         <figure><span class="phone"><img src="img/host/space-sidekick.webp" alt="Sidekick screen: a radio call to say as Ground Control, following the host live" width="360" height="720" loading="lazy"></span><figcaption><b>3 · Bring a sidekick</b>Send a second grown-up their own link with radio calls and sound effects that follow your screen.</figcaption></figure>
       </div>
-      <ul class="host-points">
+        <ul class="host-points">
         <li>Your child’s name, theme and hiding spots, already filled in</li>
         <li>“They’re stuck” button with three gentle hints</li>
         <li>Quick challenges between clues: stomp, roar, moonwalk</li>
@@ -365,14 +400,31 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         <li>Works in any phone browser. Nothing to download</li>
         <li>Prefer paper? The printed Host Guide is still in your PDF</li>
       </ul>
-    </div>
-  </section>
-
-  <section class="stop" id="themes">
-    <div class="wrap">
-      <div class="pin"><b></b><span class="eyebrow">Themes</span></div>
-      <h2>Sixteen adventures to pick from</h2>
-      <div class="themes" id="themeList"></div>
+      </div>
+      <div class="box-panel" data-panel="kit" hidden>
+        <div class="box-split">
+          <img id="kitImg" src="img/kit-dino.webp" alt="" width="677" height="497" loading="lazy">
+          <div>
+            <span class="tag">Matching play kit</span>
+            <h3 id="kitName">Dino Dig Lab</h3>
+            <p id="kitBlurb" class="kits-lede"></p>
+            <ul class="kit-points"><li>8 door signs with your child’s name</li><li>A pretend gadget that fits the theme, with 3 screens to swap</li><li>Flat props kids can hold: maps, X-rays, wanted posters, treasure cards and stickers</li><li>ID badges, check-up forms, tickets, passports, a menu with coins and a certificate</li></ul>
+            <p class="hint" style="margin-top:14px">Every theme has its own kit. Switch the theme above to see the others.</p>
+          </div>
+        </div>
+      </div>
+      <div class="box-panel" data-panel="party" hidden>
+        <div class="box-split">
+          <img id="partyImg" class="party-page" src="img/pages/dino-party.webp" alt="" width="400" height="518" loading="lazy">
+          <div>
+            <span class="tag">Matching party pack</span>
+            <h3>Party printables in the same theme</h3>
+            <p class="kits-lede">Made with your child’s name. Add your party details and the invitations come filled in.</p>
+            <ul class="kit-points"><li>Invitations and thank-you cards</li><li>Cupcake toppers and favor tags</li><li>A HAPPY BIRTHDAY banner that spells your child’s name</li><li>Food tent cards and water bottle labels</li></ul>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top:26px"><a class="btn btn-orange" href="#order">Make this party bundle</a></p>
     </div>
   </section>
 
@@ -421,112 +473,6 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
     </div>
   </section>
 
-  <section class="stop" id="kits">
-    <div class="wrap">
-      <div class="pin"><b></b><span class="eyebrow">Pretend play kits</span></div>
-      <h2>Keep the adventure going after the hunt</h2>
-      <p class="kits-lede">Every hunt comes with a matching play kit: 18 to 20 printable pages with your child’s name on the signs, badges and certificate, and their own pets or toys as the patients, passengers and crew.</p>
-      <ul class="kit-points"><li>8 door signs with your child’s name</li><li>A pretend gadget that fits the theme, with 3 screens to swap</li><li>Flat props kids can hold: maps, X-rays, wanted posters, treasure cards and stickers</li><li>ID badges, check-up forms, tickets, passports, a menu with coins and a certificate</li></ul>
-      <div class="kit-grid">
-        <article class="kit-card">
-          <img src="img/kit-dino.webp" alt="Dino Dig Lab kit pages: a sign, a dino field scanner with a calendar screen, and passports" width="677" height="497" loading="lazy">
-          <span class="tag">Pairs with Dino Fossil Recovery</span>
-          <h3>Dino Dig Lab</h3>
-          <p>Run a fossil lab with a dino scanner that tracks today’s digs, scientist badges and a dino passport for every toy.</p>
-        </article>
-        <article class="kit-card">
-          <img src="img/kit-hero.webp" alt="Hero HQ kit pages: a sign, a hero communicator with a calendar screen, and passports" width="677" height="497" loading="lazy">
-          <span class="tag">Pairs with Superhero HQ Trial</span>
-          <h3>Hero HQ</h3>
-          <p>Answer alerts on the hero communicator, hand out hero badges and log every rescue on the mission board.</p>
-        </article>
-        <article class="kit-card">
-          <img src="img/kit-pirate.webp" alt="Pirate Ship kit pages: a sign, a ship’s wheel and sea chart, and passports" width="677" height="497" loading="lazy">
-          <span class="tag">Pairs with Pirate’s Lost Ledger</span>
-          <h3>Pirate Ship</h3>
-          <p>Spin the ship’s wheel, check the crew’s sea legs, sell voyage tickets and pay in gold doubloons.</p>
-        </article>
-        <article class="kit-card">
-          <img src="img/kit-space.webp" alt="Mission Control kit pages: a sign, a mission control console with a calendar screen, and passports" width="677" height="497" loading="lazy">
-          <span class="tag">Pairs with Deep Space Rover</span>
-          <h3>Mission Control</h3>
-          <p>Launch from the mission control console, with crew badges, boarding passes and astronaut health checks.</p>
-        </article>
-        <article class="kit-card">
-          <img src="img/kit-royal.webp" alt="Royal Castle kit pages: a sign, a magic mirror with a calendar screen, and passports" width="677" height="497" loading="lazy">
-          <span class="tag">Pairs with Royal Castle Garden Quest</span>
-          <h3>Royal Castle</h3>
-          <p>Greet guests at the magic mirror, crown the royal court and stamp a royal pass for every visitor.</p>
-        </article>
-        <article class="kit-card">
-          <img src="img/kit-unicorn.webp" alt="Unicorn Stable kit pages: a sign, a rainbow sparkle finder, and a trail map" width="677" height="497" loading="lazy">
-          <span class="tag">Pairs with Unicorn Rainbow Quest</span>
-          <h3>Unicorn Stable</h3>
-          <p>Groom and feed the unicorns, scan for sparkles with the rainbow finder and hand out rainbow rosettes.</p>
-        </article>
-        <article class="kit-card">
-          <img src="img/kit-mermaid.webp" alt="Mermaid Lagoon kit pages: a sign, a shell phone, and a lagoon map" width="677" height="497" loading="lazy">
-          <span class="tag">Pairs with Mermaid Lagoon Treasure</span>
-          <h3>Mermaid Lagoon</h3>
-          <p>Take calls on the shell phone, rescue sea creatures, run the shell shop and wear the mermaid crown.</p>
-        </article>
-        <article class="kit-card">
-          <img src="img/kit-construction.webp" alt="Construction Site kit pages: a sign, a crane control panel, and a building site map" width="677" height="497" loading="lazy">
-          <span class="tag">Pairs with Construction Big Build</span>
-          <h3>Construction Site</h3>
-          <p>Work the crane controls, hand out work orders, inspect every digger and pay the crew in golden bolts.</p>
-        </article>
-        <article class="kit-card">
-          <img src="img/kit-vet.webp" alt="Vet Clinic kit pages: a sign, a clinic laptop with a calendar screen, and passports" width="677" height="497" loading="lazy">
-          <span class="tag">Pairs with Pet Rescue Vet Quest</span>
-          <h3>Vet Clinic</h3>
-          <p>Turn the living room into a pet clinic with a clinic laptop, check-up forms for every pet and prescriptions.</p>
-        </article>
-        <article class="kit-card">
-          <img src="img/kit-racecar.webp" alt="Pit Stop Garage kit pages: a sign, a race car dashboard, and a race track map" width="677" height="497" loading="lazy">
-          <span class="tag">Pairs with Race Car Grand Prix</span>
-          <h3>Pit Stop Garage</h3>
-          <p>Run a pit stop garage with a race car dashboard, repair orders, racing goggles and a racing license for every car.</p>
-        </article>
-        <article class="kit-card">
-          <img src="img/kit-fire.webp" alt="Fire Station kit pages: a sign, a dispatch radio with a calendar screen, and a town rescue map" width="677" height="497" loading="lazy">
-          <span class="tag">Pairs with Fire Station Rescue Run</span>
-          <h3>Fire Station</h3>
-          <p>Answer calls on the dispatch radio, rescue a kitten up a tree, hand out rescue equipment and pay the crew in golden bells.</p>
-        </article>
-        <article class="kit-card">
-          <img src="img/kit-ice.webp" alt="Ice Palace kit pages: a palace sign, a crystal ball tablet with a calendar screen, a snowflake tiara and palace passes" width="677" height="497" loading="lazy">
-          <span class="tag">Pairs with Ice Palace Snowflake Quest</span>
-          <h3>Ice Palace</h3>
-          <p>Rule a sparkly Ice Palace with a crystal ball tablet that tracks the winter ball, a snowflake tiara and a palace pass for every snowy guest.</p>
-        </article>
-        <article class="kit-card">
-          <img src="img/kit-halloween.webp" alt="Potion Shop kit pages: a sign, a cauldron control panel with a calendar screen, and ingredient cards" width="677" height="497" loading="lazy">
-          <span class="tag">Pairs with Not-So-Spooky Halloween Hunt</span>
-          <h3>Potion Shop</h3>
-          <p>Run a silly potion shop with a cauldron control panel, ingredient cards, potion recipes and costume masks for every toy customer.</p>
-        </article>
-        <article class="kit-card">
-          <img src="img/kit-christmas.webp" alt="Santa’s Workshop kit pages: a sign, a sleigh dashboard with a calendar screen, and elf passports" width="677" height="497" loading="lazy">
-          <span class="tag">Pairs with Santa’s Jingle Bell Rescue</span>
-          <h3>Santa’s Workshop</h3>
-          <p>Run Santa’s toy workshop with a sleigh dashboard that counts down to Christmas, a Nice List and gift tags for every toy.</p>
-        </article>
-        <article class="kit-card">
-          <img src="img/kit-valentine.webp" alt="Valentine Post Office kit pages: a sign, a mail scanner with a calendar screen, and friend passes" width="677" height="497" loading="lazy">
-          <span class="tag">Pairs with Valentine Friendship Delivery</span>
-          <h3>Valentine Post Office</h3>
-          <p>Run a Valentine Post Office with a mail scanner that tracks today’s deliveries, heart stamps and a friend pass for every toy.</p>
-        </article>
-        <article class="kit-card">
-          <img src="img/kit-easter.webp" alt="Bunny Egg Factory kit pages: a sign, a bunny delivery tablet with a calendar screen, and a delivery map" width="677" height="497" loading="lazy">
-          <span class="tag">Pairs with Golden Egg Easter Hunt</span>
-          <h3>Bunny Egg Factory</h3>
-          <p>Paint eggs in the Bunny Egg Factory, fill basket orders for every toy and hop deliveries out with the bunny tablet.</p>
-        </article>
-      </div>
-    </div>
-  </section>
 
   <section class="stop" id="pricing">
     <div class="wrap">
@@ -542,15 +488,6 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
     </div>
   </section>
 
-  <section class="stop" id="party">
-    <div class="wrap">
-      <div class="pin"><b></b><span class="eyebrow">Party printables</span></div>
-      <h2>The whole party, matched to the hunt</h2>
-      <p class="kits-lede">Every party bundle also comes with printables in the same theme, made with your child’s name. Add your party details and the invitations come filled in.</p>
-      <ul class="kit-points"><li>Invitations and thank-you cards</li><li>Cupcake toppers and favor tags</li><li>A HAPPY BIRTHDAY banner that spells your child’s name</li><li>Food tent cards and water bottle labels</li></ul>
-      <img class="party-shot" src="img/party.webp" alt="Party invitations in eight of our themes: dinosaur, superhero, pirate, space, royal, unicorn, mermaid and construction" width="1200" height="645" loading="lazy">
-    </div>
-  </section>
 
   <section class="stop" id="sample">
     <div class="wrap">
@@ -680,21 +617,81 @@ const state = { theme: 'dino', picks: ['front_door', 'shoe_rack', 'couch', 'drye
 // Shop links
 ['etsyLink', 'etsyLink2', 'etsyLink3'].forEach((id) => ($(id).href = ETSY_SHOP_URL));
 
-// Theme cards and select
-$('themeList').innerHTML = THEMES.map((t) => `
-  <button type="button" class="theme" data-id="${t.id}" aria-pressed="false">
+// Theme cards: everyday themes and holidays. The holiday coming up goes first with a "Now" badge.
+const KITS = {"dino": {"name": "Dino Dig Lab", "blurb": "Run a fossil lab with a dino scanner that tracks today’s digs, scientist badges and a dino passport for every toy.", "alt": "Dino Dig Lab kit pages: a sign, a dino field scanner with a calendar screen, and passports"}, "hero": {"name": "Hero HQ", "blurb": "Answer alerts on the hero communicator, hand out hero badges and log every rescue on the mission board.", "alt": "Hero HQ kit pages: a sign, a hero communicator with a calendar screen, and passports"}, "pirate": {"name": "Pirate Ship", "blurb": "Spin the ship’s wheel, check the crew’s sea legs, sell voyage tickets and pay in gold doubloons.", "alt": "Pirate Ship kit pages: a sign, a ship’s wheel and sea chart, and passports"}, "space": {"name": "Mission Control", "blurb": "Launch from the mission control console, with crew badges, boarding passes and astronaut health checks.", "alt": "Mission Control kit pages: a sign, a mission control console with a calendar screen, and passports"}, "royal": {"name": "Royal Castle", "blurb": "Greet guests at the magic mirror, crown the royal court and stamp a royal pass for every visitor.", "alt": "Royal Castle kit pages: a sign, a magic mirror with a calendar screen, and passports"}, "unicorn": {"name": "Unicorn Stable", "blurb": "Groom and feed the unicorns, scan for sparkles with the rainbow finder and hand out rainbow rosettes.", "alt": "Unicorn Stable kit pages: a sign, a rainbow sparkle finder, and a trail map"}, "mermaid": {"name": "Mermaid Lagoon", "blurb": "Take calls on the shell phone, rescue sea creatures, run the shell shop and wear the mermaid crown.", "alt": "Mermaid Lagoon kit pages: a sign, a shell phone, and a lagoon map"}, "construction": {"name": "Construction Site", "blurb": "Work the crane controls, hand out work orders, inspect every digger and pay the crew in golden bolts.", "alt": "Construction Site kit pages: a sign, a crane control panel, and a building site map"}, "vet": {"name": "Vet Clinic", "blurb": "Turn the living room into a pet clinic with a clinic laptop, check-up forms for every pet and prescriptions.", "alt": "Vet Clinic kit pages: a sign, a clinic laptop with a calendar screen, and passports"}, "racecar": {"name": "Pit Stop Garage", "blurb": "Run a pit stop garage with a race car dashboard, repair orders, racing goggles and a racing license for every car.", "alt": "Pit Stop Garage kit pages: a sign, a race car dashboard, and a race track map"}, "fire": {"name": "Fire Station", "blurb": "Answer calls on the dispatch radio, rescue a kitten up a tree, hand out rescue equipment and pay the crew in golden bells.", "alt": "Fire Station kit pages: a sign, a dispatch radio with a calendar screen, and a town rescue map"}, "ice": {"name": "Ice Palace", "blurb": "Rule a sparkly Ice Palace with a crystal ball tablet that tracks the winter ball, a snowflake tiara and a palace pass for every snowy guest.", "alt": "Ice Palace kit pages: a palace sign, a crystal ball tablet with a calendar screen, a snowflake tiara and palace passes"}, "halloween": {"name": "Potion Shop", "blurb": "Run a silly potion shop with a cauldron control panel, ingredient cards, potion recipes and costume masks for every toy customer.", "alt": "Potion Shop kit pages: a sign, a cauldron control panel with a calendar screen, and ingredient cards"}, "christmas": {"name": "Santa’s Workshop", "blurb": "Run Santa’s toy workshop with a sleigh dashboard that counts down to Christmas, a Nice List and gift tags for every toy.", "alt": "Santa’s Workshop kit pages: a sign, a sleigh dashboard with a calendar screen, and elf passports"}, "valentine": {"name": "Valentine Post Office", "blurb": "Run a Valentine Post Office with a mail scanner that tracks today’s deliveries, heart stamps and a friend pass for every toy.", "alt": "Valentine Post Office kit pages: a sign, a mail scanner with a calendar screen, and friend passes"}, "easter": {"name": "Bunny Egg Factory", "blurb": "Paint eggs in the Bunny Egg Factory, fill basket orders for every toy and hop deliveries out with the bunny tablet.", "alt": "Bunny Egg Factory kit pages: a sign, a bunny delivery tablet with a calendar screen, and a delivery map"}};
+const HOLIDAYS = {
+  halloween: { from: [9, 1], to: [10, 31], icon: '🎃', line: 'Halloween is almost here' },
+  christmas: { from: [11, 1], to: [12, 25], icon: '🎄', line: 'Christmas is coming' },
+  valentine: { from: [1, 10], to: [2, 14], icon: '💌', line: 'Valentine’s Day is coming' },
+  easter: { from: [3, 1], to: [4, 20], icon: '🐣', line: 'Easter is coming' },
+};
+const SHOWN = 8;
+const today = new Date();
+const md = (m, d) => m * 100 + d;
+const now = md(today.getMonth() + 1, today.getDate());
+const seasonal = Object.keys(HOLIDAYS).find((id) => { const h = HOLIDAYS[id]; return now >= md(...h.from) && now <= md(...h.to); });
+const ordered = seasonal ? [THEMES.find((t) => t.id === seasonal), ...THEMES.filter((t) => t.id !== seasonal)] : THEMES;
+const view = { group: 'all', all: false };
+
+function drawThemes() {
+  const list = ordered.filter((t) => view.group === 'all' || (view.group === 'holiday') === Boolean(HOLIDAYS[t.id]));
+  const shown = view.group === 'all' && !view.all ? list.slice(0, SHOWN) : list;
+  $('themeList').innerHTML = shown.map((t) => `
+  <button type="button" class="theme" data-id="${t.id}" aria-pressed="${t.id === state.theme}">
+    ${t.id === seasonal ? '<span class="now">Now</span>' : ''}
     <div class="fan" style="background:color-mix(in srgb, ${t.colors[2]} 35%, #fbf8f1)">${['hunt', 'party', 'kit'].map((k) => `<img src="img/pages/${t.id}-${k}.webp" alt="" width="400" height="518" loading="lazy">`).join('')}</div>
     <span class="gets">Hunt · play kit · party pack</span>
     <h3>${t.name}</h3><small>Ages ${t.ages}</small><p>${t.hook}</p>
   </button>`).join('');
-$('themeSelect').innerHTML = THEMES.map((t) => `<option value="${t.id}">${t.name} (ages ${t.ages})</option>`).join('');
-document.querySelectorAll('.theme').forEach((b) => b.addEventListener('click', () => { setTheme(b.dataset.id); $('order').scrollIntoView({ behavior: 'smooth' }); }));
+  $('showAll').hidden = !(view.group === 'all' && !view.all && list.length > SHOWN);
+  $('showAll').textContent = `Show all ${list.length} themes`;
+  $('themeList').querySelectorAll('.theme').forEach((b) => b.addEventListener('click', () => { setTheme(b.dataset.id); $('inside').scrollIntoView({ behavior: 'smooth' }); }));
+}
+$('themeTabs').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
+  view.group = b.dataset.group;
+  $('themeTabs').querySelectorAll('button').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+  drawThemes();
+}));
+$('showAll').addEventListener('click', () => { view.all = true; drawThemes(); });
+
+const options = ordered.map((t) => `<option value="${t.id}">${t.name} (ages ${t.ages})</option>`).join('');
+$('themeSelect').innerHTML = options;
+$('boxSelect').innerHTML = options;
 $('themeSelect').addEventListener('change', (e) => setTheme(e.target.value));
+$('boxSelect').addEventListener('change', (e) => setTheme(e.target.value));
+
+// What's in the box: one set of tabs that follows the chosen theme.
+document.querySelectorAll('#inside [role="tab"]').forEach((b) => b.addEventListener('click', () => {
+  document.querySelectorAll('#inside [role="tab"]').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+  document.querySelectorAll('#inside .box-panel').forEach((p) => (p.hidden = p.dataset.panel !== b.dataset.tab));
+}));
+function drawBox() {
+  const t = THEMES.find((x) => x.id === state.theme);
+  const k = KITS[t.id];
+  $('boxTheme').textContent = t.name;
+  $('kitImg').src = `img/kit-${t.id}.webp`;
+  $('kitImg').alt = k.alt;
+  $('kitName').textContent = k.name;
+  $('kitBlurb').textContent = k.blurb;
+  $('partyImg').src = `img/pages/${t.id}-party.webp`;
+  $('partyImg').alt = `${t.name} party invitation with your child’s name`;
+}
+
+// Seasonal banner
+if (seasonal) {
+  const h = HOLIDAYS[seasonal];
+  const t = THEMES.find((x) => x.id === seasonal);
+  $('season').innerHTML = `<span aria-hidden="true">${h.icon}</span><span>${h.line}: <b>${t.name}</b>, with its own play kit and party pack →</span>`;
+  $('season').hidden = false;
+  $('season').addEventListener('click', () => { setTheme(seasonal); $('inside').scrollIntoView({ behavior: 'smooth' }); });
+}
 
 function setTheme(id) {
   state.theme = id;
   $('themeSelect').value = id;
+  $('boxSelect').value = id;
   document.querySelectorAll('.theme').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.id === id)));
+  drawBox();
   render();
 }
 
@@ -736,6 +733,9 @@ function render() {
   const name = $('childName').value.trim() || 'your child';
   // hero card
   $('heroCard').dataset.themeId = t.id;
+  // Themes without their own card style take their colors from the theme.
+  const styled = ['dino', 'hero', 'pirate', 'space', 'royal'].includes(t.id);
+  $('heroCard').style.cssText = styled ? '' : `--c-main:${t.colors[0]};--c-acc:${t.colors[1]};--c-paper:color-mix(in srgb, ${t.colors[2]} 22%, #fff);--c-ink:#2b2b33`;
   $('heroIcon').innerHTML = ICONS[t.id];
   $('heroHeader').textContent = t.header;
   $('heroBadge').textContent = `${t.badge} #3`;
@@ -867,7 +867,8 @@ $('sampleForm').addEventListener('submit', async (e) => {
   }
 });
 
-render();
+drawThemes();
+setTheme(seasonal || state.theme);
 </script>
 </body>
 </html>
