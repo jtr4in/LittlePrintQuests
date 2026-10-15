@@ -58,7 +58,7 @@ module.exports = {
     items: [['🦖', 'Toy T-Rex', 3], ['🥚', 'Chocolate egg', 1], ['🦴', 'Bone puzzle', 2], ['🖍️', 'Dino coloring', 1], ['🪨', 'Shiny rock', 1], ['🧢', 'Ranger hat', 3], ['🔍', 'Magnifier', 2], ['🎟️', 'Dino ride', 5]],
   },
   dashboard: {
-    gadget: 'dino scanner', device: 'tablet', decor: '🔍',
+    gadget: 'dino scanner', device: 'scanner', decor: '🔍',
     appName: 'DinoTrack', appIcon: '🦖', scheduleTitle: 'Dig calendar', monitorTitle: 'Dino tracker', alertHeader: 'Ranger alert',
     calendarLabel: 'Dig days', nextLabel: '🦕 Dinos to check',
     waveLabel: '❤️ Dino heartbeat', stats: [['📏', 'Length', '40 ft'], ['⚖️', 'Weight', '7 tons'], ['🍖', 'Diet', 'Meat']],
@@ -66,8 +66,18 @@ module.exports = {
     dock: ['🗓️', '🦖', '🥚', '🔬', '🗺️', '💬'],
     keys: [['🌋', 'Volcano'], ['🥚', 'Hatchery'], ['📡', 'Call ranger'], ['🗺️', 'Dig map']],
   },
+  props: {
+    scans: { title: 'Fossil Scans', label: 'FOSSIL SCAN', howTo: 'Cut out the scans. Match each scan to a dinosaur, then tick what the lab found.',
+      findings: ['Big sharp teeth', 'Very long neck', 'Eats only plants', 'Super fast runner', 'Baby dinosaur', 'Brand new species'] },
+    map: { title: 'Dig Site Map', theme: 'land', howTo: 'Hide a toy dinosaur at each spot, then follow the map to dig them all up.',
+      start: ['⛺', 'Base camp'], places: [['🌋', 'Volcano'], ['🌴', 'Fern Forest'], ['🏜️', 'Sandy Dunes'], ['🦴', 'Bone Bed'], ['💧', 'Swamp']], end: ['🥚', 'Nest'] },
+    cards: { title: 'Fossil Finds', howTo: 'Cut out the finds. Hide them for a dig, then sell them in the Gift Shop.',
+      items: [['🦴', 'Dino bone', 2], ['🦷', 'T. rex tooth', 3], ['🥚', 'Dino egg', 3], ['🐚', 'Sea shell', 1], ['🍂', 'Fossil leaf', 1], ['🪨', 'Lucky rock', 1],
+        ['🐾', 'Footprint', 2], ['💎', 'Amber', 3], ['🖌️', 'Dig brush', 1], ['🔍', 'Magnifier', 1], ['⛏️', 'Pickaxe', 2], ['🧢', 'Ranger cap', 2]] },
+  },
   certificate: { title: 'Junior Paleontologist', icon: '🏅', seal: '🦖', line: 'dug up fossils, cared for every dinosaur, and saved the eggs from the volcano.' },
   guide: {
+    afterHunt: 'The Junior Rangers rescued every dinosaur egg! Set up {place} where the last egg was found, and bring the eggs in for a check-up. The Master Fossil Hunter runs the lab first.',
     intro: 'Everything {child} needs to run a pretend dinosaur dig. Print on regular Letter paper, cut along the dashed lines, and gather some toy dinosaurs to discover.',
     setup: [
       'Tape the Dig Lab sign and Dig Site Open sign by the door.', 'Hide toy dinosaurs in a sandbox, a bin of rice, or under pillows.',
@@ -75,7 +85,7 @@ module.exports = {
       'Pin on the badges and start digging!',
     ],
     play: [
-      ['⛏️ The big dig', 'Brush away the “dirt” to find each dino, then fill in its check-up form.'],
+      ['⛏️ The big dig', 'Hide the fossil finds around the room, follow the dig site map, then match each dino to its fossil scan.'],
       ['🏛️ Museum day', 'Line up your finds, sell tickets, and give a guided tour.'],
       ['🌋 Volcano alert!', 'The volcano rumbles! Rescue the eggs and carry them to the Hatchery.'],
       ['🦴 Gift shop', 'Visitors pay with fossil coins. Great for early counting.'],

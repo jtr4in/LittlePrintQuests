@@ -16,6 +16,9 @@ THEMES = {
     'pirate': ('Pirate Treasure Hunt', 'Ages 3–7', '#ecdcb6', '#1f2f4d'),
     'space': ('Outer Space Scavenger Hunt', 'Ages 4–8', '#d7e6f3', '#14245a'),
     'royal': ('Princess & Knight Castle Quest', 'Ages 3–7', '#f3dde4', '#7d5ba6'),
+    'unicorn': ('Unicorn Rainbow Scavenger Hunt', 'Ages 3–7', '#efe3f8', '#8e5cc4'),
+    'mermaid': ('Mermaid Treasure Hunt', 'Ages 3–7', '#d9f1ee', '#11798a'),
+    'construction': ('Construction Scavenger Hunt', 'Ages 3–7', '#fde9a8', '#33373d'),
 }
 W, H = 2400, 1800
 
@@ -48,7 +51,7 @@ def build(png_root, out_dir):
         c = Image.new('RGBA', (W, H), bg)
         d = ImageDraw.Draw(c)
         d.text((W // 2, 120), title, font=font(118, 700), fill=ink, anchor='mm')
-        d.text((W // 2, 230), f'Printable Birthday Party Game · {ages} · 8 Rhyming Clues', font=font(56, 500), fill=ink, anchor='mm')
+        d.text((W // 2, 230), f'Printable Birthday Party Game · {ages} · 8 Picture Clues', font=font(56, 500), fill=ink, anchor='mm')
         placed(c, pages(2), 1180, (560, 1060), 5)
         placed(c, pages(n_pages), 1180, (1840, 1060), -5)
         placed(c, pages(3), 1300, (1200, 1080), 0)

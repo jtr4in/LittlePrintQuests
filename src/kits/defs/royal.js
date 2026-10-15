@@ -66,17 +66,26 @@ module.exports = {
     dock: ['📜', '👑', '🍰', '🐉', '💎', '💬'],
     keys: [['🔔', 'Ring bells'], ['🌉', 'Drawbridge'], ['📜', 'Royal decree'], ['🗺️', 'Kingdom map']],
   },
+  props: {
+    map: { title: 'Map of the Kingdom', theme: 'land', howTo: 'Lay the map on the floor and take the royal guests on a tour of the kingdom.',
+      start: ['🏰', 'The Castle'], places: [['🌹', 'Rose Garden'], ['🐉', 'Dragon Cave'], ['🌲', 'Enchanted Wood'], ['🦄', 'Unicorn Meadow'], ['🌉', 'Royal Bridge']], end: ['💎', 'Jewel Tower'] },
+    cards: { title: 'Royal Treasures', howTo: 'Cut out the treasures. Guests buy treats at the Royal Bakery and jewels for the Treasure Vault.',
+      items: [['🧁', 'Cupcake', 1], ['🍰', 'Royal cake', 3], ['🍪', 'Cookie', 1], ['🫖', 'Tea pot', 2], ['🍓', 'Strawberries', 1], ['🍭', 'Lollipop', 1],
+        ['👑', 'Crown', 5], ['💍', 'Ring', 3], ['📿', 'Necklace', 2], ['🗝️', 'Castle key', 2], ['📜', 'Royal scroll', 1], ['🌹', 'Rose', 1]] },
+    wearable: { type: 'crown', title: 'Royal Crown', howTo: 'Print on cardstock. Cut out both pieces and tape them into a ring that fits.' },
+  },
   certificate: { title: 'Royal Honor Award', icon: '🏅', seal: '👑', line: 'ruled the castle with kindness, welcomed every guest, and kept the crown jewels safe.' },
   guide: {
+    afterHunt: 'The Crown Jewels are safe again! Carry them to {place} and put them in the Treasure Vault. The Hero of the Realm opens the castle gates and asks the magic mirror who’s visiting today.',
     intro: 'Everything {child} needs to run a pretend royal castle. Print on regular Letter paper, cut along the dashed lines, and invite some toys to court.',
     setup: [
       'Tape the castle sign and Gates Open sign by the door.', 'Make a throne from a chair and a blanket in the Throne Room.',
-      'Fold the magic mirror and set it by the throne.', 'Set out the Royal Bakery with play food or real snacks.',
+      'Cut out the magic mirror, fold back its stand, and set it by the throne.', 'Set out the Royal Bakery with play food or real snacks.',
       'Pin on the badges, put on a crown, and open the gates!',
     ],
     play: [
       ['💌 Royal invitations', 'Write invitations, deliver them, and greet each guest at the gate.'],
-      ['🗡️ Knighting', 'Tap each guest on the shoulder and give them a royal title.'],
+      ['👑 Crowning day', 'Crown each guest, tap them on the shoulder, and give them a royal title.'],
       ['🐉 Dragon on the loose!', 'The dragon took the jewels! Search the castle and bring them back.'],
       ['💎 Royal bakery', 'Guests pay with crown jewels. Great for early counting.'],
     ],

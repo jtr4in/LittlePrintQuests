@@ -27,13 +27,15 @@ npm run kit -- examples/kit-vet.json out/vet.pdf
 npm run kit -- examples/kit-space.json out/space.pdf --png out/space-pages
 ```
 
-Kits: `vet` (Vet Clinic, stand-alone) plus one add-on per hunt theme: `dino` (Dino Dig Lab), `hero` (Hero HQ), `pirate` (Pirate Ship), `space` (Mission Control) and `royal` (Royal Castle). Each kit also has a fold-up themed gadget (laptop, console, scanner, communicator, ship’s helm or magic mirror) with three pretend screens.
+Kits: `vet` (Vet Clinic, stand-alone) plus one add-on per hunt theme: `dino` (Dino Dig Lab), `hero` (Hero HQ), `pirate` (Pirate Ship), `space` (Mission Control) and `royal` (Royal Castle). Each kit also has a pretend gadget shaped for its theme, with three screens: a fold-up clinic laptop or mission control console, a handheld dino scanner or hero communicator, a sea chart with a spinning ship’s wheel, or a standing magic mirror. Each kit also has flat props to cut out (`props` in its def: scan cards, a map, wanted posters, item cards, round stickers, and one cardstock wearable where it fits, like hero masks, eye patches or a two-piece crown). When a kit is sold with its hunt (`withHunt: true`), the guide adds an “After the hunt” note that carries the hunt’s story into the kit.
 
 **Party Bundles.** A bundle order gets the hunt plus its theme's play kit as a second PDF (`/d/<token>-kit.pdf`), in the same email or Etsy message. Website orders send `product: "bundle"`; Etsy orders count as bundles when an option such as **Package** says "Bundle" or "play kit". Pets or toys the buyer lists ("Rover (dog)") become the kit's patients and crew.
 
 ## Etsy order bot
 
 The bot checks your Etsy shop every few minutes. When a custom order comes in, it reads the buyer's personalization notes with Claude, writes riddles for any spots that aren't in the library, builds the PDF, and hosts it at a private download link. Your dashboard then shows a ready-to-send message for the buyer: copy it, paste it into the Etsy conversation, and click **Mark as sent**. Etsy's API doesn't let apps message buyers or attach files to an order, so that one step stays manual.
+
+**Creating your listings.** Once your shop is connected, click **Create drafts on Etsy** on the dashboard. The bot creates all seven listings as drafts: the five theme packs, the custom Party Bundle (with its Hunt + Play Kit / Hunt only prices) and the Pretend Play Kit (one option per kit). Each one gets its photos from `listing-assets/`, its PDF, and the title, description and tags from `etsy-listings.md`. Review each draft in Shop Manager and publish it. Play kit orders are filled like custom hunts: the bot reads the child's name and pets, builds the kit and writes the message. `scripts/listing-photos.js` rebuilds the bundle and kit photos.
 
 Orders the bot can't read confidently (missing name, unclear spots, an unsafe hiding place) show up as **Needs a look**, with a box to fix the details and rebuild.
 

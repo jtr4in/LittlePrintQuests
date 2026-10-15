@@ -58,7 +58,7 @@ module.exports = {
     items: [['🛡️', 'Power shield', 3], ['🦸', 'New cape', 2], ['🎭', 'Secret mask', 1], ['🔦', 'Super torch', 1], ['📡', 'Hero radio', 2], ['🧃', 'Power juice', 1], ['👟', 'Speed shoes', 3], ['🚁', 'Heli ride', 5]],
   },
   dashboard: {
-    gadget: 'hero communicator', device: 'tablet', decor: '⚡',
+    gadget: 'hero communicator', device: 'communicator', decor: '⚡',
     appName: 'HeroNet', appIcon: '🦸', scheduleTitle: 'Mission calendar', monitorTitle: 'Hero power scan', alertHeader: 'Villain alert',
     calendarLabel: 'Mission days', nextLabel: '⚡ Heroes on call',
     waveLabel: '⚡ Power levels', stats: [['💪', 'Strength', 'Max'], ['⚡', 'Speed', 'Turbo'], ['🛡️', 'Shields', 'On']],
@@ -66,8 +66,17 @@ module.exports = {
     dock: ['📋', '🦸', '🛡️', '🗺️', '📡', '💬'],
     keys: [['🚨', 'Alarm'], ['🛡️', 'Shields'], ['📡', 'Call team'], ['🗺️', 'City map']],
   },
+  props: {
+    wanted: { title: 'Villain Wanted Posters', word: 'WANTED', howTo: 'Tape the posters up at Hero HQ. Catch a villain and send them to Villain Jail!',
+      list: [['🦹', 'The Cookie Bandit', 'Stealing every last cookie'], ['🤖', 'Robo-Mess', 'Leaving toys on the stairs'], ['👾', 'Captain Gloop', 'Sliming the bathtub'], ['🐙', 'Doctor Tickle', 'Tickling heroes at bedtime']] },
+    cards: { title: 'Hero Gear', howTo: 'Cut out the gear. Heroes pick two before every mission.',
+      items: [['🛡️', 'Shield', 2], ['🦸', 'Cape', 2], ['🔦', 'Flashlight', 1], ['🪢', 'Hero rope', 1], ['📡', 'Walkie-talkie', 2], ['🔭', 'Spy glass', 1],
+        ['🧲', 'Super magnet', 2], ['⚡', 'Power bolt', 3], ['🥤', 'Power shake', 1], ['🍌', 'Banana boost', 1], ['🗺️', 'City map', 1], ['🔑', 'Jail key', 2]] },
+    wearable: { type: 'mask', title: 'Hero Masks', howTo: 'Print on cardstock. Cut out, cut the eye holes, then tie on with string or elastic.' },
+  },
   certificate: { title: 'Official Superhero', icon: '🏆', seal: '⚡', line: 'trained hard, helped others, and saved the day with courage and kindness.' },
   guide: {
+    afterHunt: 'Every rookie who passed the Secret HQ Trial reports for duty at {place}. Hand out the hero badges as the prize, and let {child} take the first call on the hero communicator.',
     intro: 'Everything {child} needs to run a pretend superhero headquarters. Print on regular Letter paper, cut along the dashed lines, and recruit some toys for the hero team.',
     setup: [
       'Tape the Hero HQ sign and Heroes On Duty sign by the door.', 'Turn a couch or table into the Secret Hideout with a blanket.',
@@ -76,7 +85,7 @@ module.exports = {
     ],
     play: [
       ['💪 Hero training', 'Run the training check: speed, strength, bravery. Tick each box.'],
-      ['📋 Mission board', 'Hand out mission cards and race to complete each one.'],
+      ['🦹 Wanted!', 'Pick a villain from the wanted posters, grab two pieces of hero gear, and track them down.'],
       ['🚨 Villain alert!', 'The Cookie Bandit escaped! Track them down and lock up Villain Jail.'],
       ['⚡ Gadget shop', 'Heroes buy gear with hero coins. Great for early counting.'],
     ],

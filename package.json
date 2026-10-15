@@ -11,7 +11,8 @@
     "test": "node test/smoke.js",
     "hunt": "node src/generator/render.js",
     "standard-packs": "node scripts/standard-packs.js",
-    "kit": "node src/kits/render-kit.js"
+    "kit": "node src/kits/render-kit.js",
+    "party": "node src/party/render-party.js"
   },
   "repository": {
     "type": "git",

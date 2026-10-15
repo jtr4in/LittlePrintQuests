@@ -1,4 +1,4 @@
-// Etsy Open API v3: OAuth 2.0 (PKCE) and the few read calls the bot needs.
+// Etsy Open API v3: OAuth 2.0 (PKCE), reading paid orders, and creating draft listings.
 
 const crypto = require('crypto');
 const store = require('./store');
@@ -6,7 +6,8 @@ const store = require('./store');
 const API = 'https://api.etsy.com/v3';
 const KEYSTRING = process.env.ETSY_KEYSTRING;
 const SHARED_SECRET = process.env.ETSY_SHARED_SECRET;
-const SCOPES = 'transactions_r listings_r';
+// listings_w lets the bot create draft listings. Shops connected before it was added reconnect once.
+const SCOPES = 'transactions_r listings_r listings_w shops_r';
 
 const redirectUri = () => `${process.env.PUBLIC_URL}/auth/etsy/callback`;
 const b64url = (buf) => buf.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
@@ -41,7 +42,7 @@ async function tokenRequest(params) {
 
 async function finishAuth(code, verifier) {
   const tokens = await tokenRequest({ grant_type: 'authorization_code', code, code_verifier: verifier, redirect_uri: redirectUri() });
-  store.update((s) => (s.etsy = { ...tokens }));
+  store.update((s) => (s.etsy = { ...tokens, scopes: SCOPES }));
   const me = await api('GET', '/application/users/me');
   store.update((s) => Object.assign(s.etsy, { user_id: me.user_id, shop_id: me.shop_id }));
   return me;
@@ -56,13 +57,16 @@ async function accessToken() {
   return tokens.access_token;
 }
 
-async function api(method, path, query) {
+// body: a plain object is sent as a form, `{ json }` as JSON, and a FormData as multipart.
+async function api(method, path, query, body) {
   const url = new URL(API + path);
   if (query) url.search = new URLSearchParams(query);
-  const res = await fetch(url, {
-    method,
-    headers: { 'x-api-key': `${KEYSTRING}:${SHARED_SECRET}`, Authorization: `Bearer ${await accessToken()}` },
-  });
+  const headers = { 'x-api-key': `${KEYSTRING}:${SHARED_SECRET}`, Authorization: `Bearer ${await accessToken()}` };
+  let payload;
+  if (body instanceof FormData) payload = body;
+  else if (body?.json) [payload, headers['Content-Type']] = [JSON.stringify(body.json), 'application/json'];
+  else if (body) [payload, headers['Content-Type']] = [new URLSearchParams(body), 'application/x-www-form-urlencoded'];
+  const res = await fetch(url, { method, headers, body: payload });
   if (!res.ok) throw new Error(`Etsy ${method} ${path} failed: ${res.status} ${await res.text()}`);
   return res.json();
 }
@@ -83,8 +87,93 @@ async function paidReceiptsSince(since) {
   }
 }
 
+// ---------- listings ----------
+
+const shopId = () => store.get().etsy.shop_id;
+
+// Finds a seller taxonomy id by name, e.g. "Party Games", searching the whole tree.
+async function taxonomyId(pattern) {
+  const { results } = await api('GET', '/application/seller-taxonomy/nodes');
+  const stack = [...results];
+  let fallback = null;
+  while (stack.length) {
+    const n = stack.shift();
+    if (pattern.test(n.name)) return n.id;
+    if (!fallback && /^games$/i.test(n.name)) fallback = n.id;
+    stack.push(...(n.children || []));
+  }
+  if (fallback) return fallback;
+  throw new Error('Could not find an Etsy category for party games');
+}
+
+// Creates a draft digital listing. Etsy only shows it once you publish it in Shop Manager.
+async function createDraftListing(l, taxonomy) {
+  const form = {
+    quantity: '999',
+    title: l.title,
+    description: l.description,
+    price: l.price.toFixed(2),
+    who_made: 'i_did',
+    when_made: 'made_to_order',
+    taxonomy_id: String(taxonomy),
+    type: 'download',
+    is_supply: 'false',
+    should_auto_renew: 'true',
+    tags: l.tags.join(','),
+  };
+  return api('POST', `/application/shops/${shopId()}/listings`, null, form);
+}
+
+// One required text box for the buyer's details (Etsy's personalization questions API).
+async function setPersonalization(listingId, { question, instructions }) {
+  return api('POST', `/application/shops/${shopId()}/listings/${listingId}/personalization`, null, {
+    json: {
+      personalization_questions: [
+        { question_text: question, instructions, question_type: 'text_input', required: true, max_allowed_characters: 500 },
+      ],
+    },
+  });
+}
+
+async function uploadListingImage(listingId, { name, data, type }, rank) {
+  const fd = new FormData();
+  fd.append('image', new Blob([data], { type }), name);
+  fd.append('rank', String(rank));
+  return api('POST', `/application/shops/${shopId()}/listings/${listingId}/images`, null, fd);
+}
+
+async function uploadListingFile(listingId, { name, data }) {
+  const fd = new FormData();
+  fd.append('file', new Blob([data], { type: 'application/pdf' }), name);
+  fd.append('name', name);
+  return api('POST', `/application/shops/${shopId()}/listings/${listingId}/files`, null, fd);
+}
+
+// One custom variation (Etsy's custom property 513) with a price per option.
+async function setVariationPrices(listingId, name, options) {
+  return api('PUT', `/application/listings/${listingId}/inventory`, null, {
+    json: {
+      products: options.map((o) => ({
+        sku: '',
+        property_values: [{ property_id: 513, property_name: name, value_ids: [], values: [o.value] }],
+        offerings: [{ price: o.price, quantity: 999, is_enabled: true, readiness_state_id: null }],
+      })),
+      price_on_property: [513],
+      quantity_on_property: [],
+      sku_on_property: [],
+    },
+  });
+}
+
 module.exports = {
   startAuth,
+  taxonomyId,
+  createDraftListing,
+  uploadListingImage,
+  uploadListingFile,
+  setVariationPrices,
+  setPersonalization,
+  canWriteListings: () => /listings_w/.test(store.get().etsy?.scopes || ''),
   finishAuth,
   paidReceiptsSince,
   configured: () => Boolean(KEYSTRING && SHARED_SECRET),
