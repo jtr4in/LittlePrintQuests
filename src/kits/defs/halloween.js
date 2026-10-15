@@ -62,6 +62,16 @@ module.exports = {
     title: 'Potion Prices', icon: '🧪', coinIcon: '🎃', coinWord: 'coin', coinsTitle: 'Pumpkin coins',
     items: [['😂', 'Giggle potion', 2], ['✨', 'Sparkle potion', 2], ['🌈', 'Rainbow potion', 3], ['💤', 'Sleepy potion', 1], ['🦘', 'Bouncy potion', 2], ['🌟', 'Glow potion', 3], ['🍭', 'Lollipop', 1], ['🧹', 'Broom ride', 5]],
   },
+  toys: [
+    { type: 'flaps', inside: 'A lift-the-flap potion cauldron with six secret ingredients', title: 'Bubbling Potion Cauldron', howTo: 'Lift a door, find a secret ingredient, and add it to the potion. Can you find all six?',
+      vessel: 'cauldron', label: '{childs} Cauldron',
+      items: [['🐸', 'Frog giggle'], ['⭐', 'Star dust'], ['🍬', 'Candy drop'], ['🌈', 'Rainbow juice'], ['🦇', 'Bat whisper'], ['🌙', 'Moonbeam']] },
+    { type: 'gauges', inside: 'A Ghost-o-Meter and a Spell-o-Meter with needles that spin', title: 'Spooky Meters', howTo: 'Cut out the meters and needles. Point the Ghost-o-Meter around the room to find friendly ghosts!',
+      gauges: [
+        { name: 'Ghost-o-Meter', needle: '👻', zones: [['😴', 'No ghosts'], ['👀', 'Hmm…'], ['👻', 'Boo!'], ['🎉', 'Ghost party']] },
+        { name: '{childs} Spell-o-Meter', needle: '🪄', zones: [['🫧', 'Fizzle'], ['✨', 'Sparkle'], ['🌟', 'Glow'], ['🎃', 'Pumpkin power!']] },
+      ] },
+  ],
   dashboard: {
     gadget: 'cauldron control panel', device: 'console', decor: '🔮',
     appName: 'BubbleBrew', appIcon: '🧪', scheduleTitle: 'Potion calendar', monitorTitle: 'Cauldron check', alertHeader: 'Crystal ball message',
