@@ -1,5 +1,6 @@
 // Order pipelines. Etsy: receipt -> parsed hunt config -> PDF -> ready-to-send message.
 // Website: form -> Stripe payment -> PDF -> emailed to the buyer.
+// A Party Bundle order also gets the theme's matching play kit as a second PDF.
 
 const crypto = require('crypto');
 const path = require('path');
@@ -8,6 +9,8 @@ const etsy = require('./etsy');
 const { parseOrder } = require('./parse');
 const { renderPdf } = require('../generator/render');
 const { sendHuntEmail } = require('./email');
+const { renderKit } = require('../kits/render-kit');
+const { kitForHunt } = require('../kits/engine');
 const THEMES = require('../generator/themes');
 const SPOTS = require('../generator/spots');
 
@@ -24,16 +27,18 @@ function customRequest(tx) {
   const isCustom = CUSTOM_LISTING_IDS.length ? CUSTOM_LISTING_IDS.includes(String(tx.listing_id)) : personal.length > 0;
   if (!isCustom) return null;
   const options = Object.fromEntries(variations.filter((v) => !personal.includes(v)).map((v) => [v.formatted_name, v.formatted_value]));
-  return { personalization: personal.map((v) => v.formatted_value).join('\n'), options };
+  const bundle = Object.values(options).some((v) => /bundle|play kit/i.test(v)) || /bundle|play kit/i.test(tx.title || '');
+  return { personalization: personal.map((v) => v.formatted_value).join('\n'), options, product: bundle ? 'bundle' : 'hunt' };
 }
 
 function buyerMessage(order) {
   const first = (order.buyerName || '').split(' ')[0] || 'there';
   const theme = THEMES[order.config.theme];
+  const kit = order.kitReady ? kitForHunt(order.config.theme) : null;
   return `Hi ${first}! Your custom ${theme.name} for ${order.config.childName} is ready. Download your printable PDF here:
 
 ${process.env.PUBLIC_URL}/d/${order.downloadToken}.pdf
-
+${kit ? `\nAnd here's the matching ${kit.name} play kit:\n\n${process.env.PUBLIC_URL}/d/${order.downloadToken}-kit.pdf\n` : ''}
 Print at "Actual Size / 100%", cut out the clue cards, and use the Host Guide on page 1 to hide them. Have an amazing party! 🎉`;
 }
 
@@ -41,10 +46,16 @@ async function generate(id) {
   const order = store.get().orders[id];
   const token = order.downloadToken || crypto.randomBytes(18).toString('base64url');
   await renderPdf(order.config, path.join(store.PDF_DIR, `${token}.pdf`));
+  const kit = order.product === 'bundle' ? kitForHunt(order.config.theme) : null;
+  if (kit) await renderKit(kitConfig(order, kit), path.join(store.PDF_DIR, `${token}-kit.pdf`));
   store.update((s) => {
-    Object.assign(s.orders[id], { downloadToken: token, status: 'ready', problem: null, generatedAt: new Date().toISOString() });
+    Object.assign(s.orders[id], { downloadToken: token, kitReady: Boolean(kit), status: 'ready', problem: null, generatedAt: new Date().toISOString() });
     s.orders[id].message = buyerMessage(s.orders[id]);
   });
+}
+
+function kitConfig(order, kit) {
+  return { kit: kit.id, childName: order.config.childName, subjects: order.pets || [], lenient: true };
 }
 
 // Parses and builds one order. Never throws: failures become "needs attention".
@@ -55,7 +66,7 @@ async function processOrder(id) {
     if (!parsed.ok) {
       store.update((s) => Object.assign(s.orders[id], { status: 'needs_attention', problem: parsed.problem, draft: parsed.draft || null }));
     } else {
-      store.update((s) => (s.orders[id].config = parsed.config));
+      store.update((s) => Object.assign(s.orders[id], { config: parsed.config, pets: parsed.pets || [] }));
       await generate(id);
     }
   } catch (err) {
@@ -135,7 +146,11 @@ function validateWebForm(body) {
     if (!label) throw new Error('One of the hiding spots is empty.');
     return { custom: label };
   });
-  return { theme, childName, age, spots: clean };
+  const product = body.product === 'bundle' ? 'bundle' : 'hunt';
+  const pets = (Array.isArray(body.pets) ? body.pets : []).slice(0, 6)
+    .map((p) => ({ name: String(p?.name || '').trim().slice(0, 20), kind: String(p?.kind || '').trim().slice(0, 20) }))
+    .filter((p) => p.name || p.kind);
+  return { product, theme, childName, age, spots: clean, pets };
 }
 
 function addWebOrder(form) {
@@ -143,9 +158,11 @@ function addWebOrder(form) {
     id: `web-${crypto.randomBytes(12).toString('base64url')}`,
     source: 'web',
     status: 'awaiting_payment',
+    product: form.product,
+    pets: form.pets,
     form,
     personalization: formAsText(form),
-    options: { Theme: THEMES[form.theme].name },
+    options: { Theme: THEMES[form.theme].name, Package: form.product === 'bundle' ? 'Party Bundle: hunt + play kit' : 'Hunt only' },
   });
 }
 

@@ -8,8 +8,12 @@ const path = require('path');
 const { chromium } = require('playwright');
 const { buildHtml } = require('./build');
 
-async function renderPdf(cfg, outPdf, { pngDir } = {}) {
-  const html = buildHtml(cfg);
+async function renderPdf(cfg, outPdf, opts) {
+  return renderHtml(buildHtml(cfg), outPdf, opts);
+}
+
+// Renders any print HTML whose pages are `.page` elements (hunts and kits alike).
+async function renderHtml(html, outPdf, { pngDir } = {}) {
   const tmp = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'hunt-')), 'hunt.html');
   fs.writeFileSync(tmp, html);
   const browser = await chromium.launch();
@@ -32,7 +36,7 @@ async function renderPdf(cfg, outPdf, { pngDir } = {}) {
   return outPdf;
 }
 
-module.exports = { renderPdf };
+module.exports = { renderPdf, renderHtml };
 
 if (require.main === module) {
   const [cfgPath, out, flag, pngDir] = process.argv.slice(2);
