@@ -133,7 +133,7 @@ main { position: relative; }
 @media (max-width: 860px) { .kit { grid-template-columns: repeat(2, 1fr); } }
 
 /* themes */
-.themes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 32px; }
+.themes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 32px; }
 .theme { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 10px; align-content: start; text-align: left; font: inherit; color: inherit; cursor: pointer; transition: transform .15s ease; }
 .theme:hover { transform: translateY(-3px); }
 .theme[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 0 2px var(--ink) inset; }
@@ -324,7 +324,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
   <section class="stop" id="themes">
     <div class="wrap">
       <div class="pin"><b></b><span class="eyebrow">Themes</span></div>
-      <h2>Eight adventures to pick from</h2>
+      <h2>Nine adventures to pick from</h2>
       <div class="themes" id="themeList"></div>
     </div>
   </section>
@@ -431,7 +431,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         </article>
         <article class="kit-card">
           <img src="img/kit-vet.webp" alt="Vet Clinic kit pages: a sign, a clinic laptop with a calendar screen, and passports" width="677" height="497" loading="lazy">
-          <span class="tag">Stand-alone kit</span>
+          <span class="tag">Pairs with Pet Rescue Vet Quest</span>
           <h3>Vet Clinic</h3>
           <p>Turn the living room into a pet clinic with a clinic laptop, check-up forms for every pet and prescriptions.</p>
         </article>
@@ -459,7 +459,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <h2>The whole party, matched to the hunt</h2>
       <p class="kits-lede">Every party bundle also comes with printables in the same theme, made with your child’s name. Add your party details and the invitations come filled in.</p>
       <ul class="kit-points"><li>Invitations and thank-you cards</li><li>Cupcake toppers and favor tags</li><li>A HAPPY BIRTHDAY banner that spells your child’s name</li><li>Food tent cards and water bottle labels</li></ul>
-      <img class="party-shot" src="img/party.webp" alt="Party invitations in eight themes: dinosaur, superhero, pirate, space, royal, unicorn, mermaid and construction" width="1200" height="645" loading="lazy">
+      <img class="party-shot" src="img/party.webp" alt="Party invitations in eight of our themes: dinosaur, superhero, pirate, space, royal, unicorn, mermaid and construction" width="1200" height="645" loading="lazy">
     </div>
   </section>
 
@@ -515,6 +515,7 @@ const ICONS = {
   unicorn: '<path d="M33 62c-1-8-4-12-8-15l-12 2c-5 1-8-3-6-7l12-16c2-4 5-6 8-7l4-9 3 9c12 3 20 14 22 28v15z"/><polygon points="18,24 7,2 26,19"/><path d="M14.5 16.5l5-3.5M11.5 10.5l4-3" stroke="#fff" stroke-width="2"/><circle cx="23" cy="31" r="2.6" fill="#fff"/><path d="M40 23c5 6 3 11 8 16M46 26c4 6 3 10 7 14" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M54 4l1.5 3.5L59 9l-3.5 1.5L54 14l-1.5-3.5L49 9l3.5-1.5z"/>',
   mermaid: '<path d="M32 54L8 34Q3 27 7 20Q10 13 17 12Q22 5 28 7Q32 3 36 7Q42 5 47 12Q54 13 57 20Q61 27 56 34z"/><path d="M19 49l13 6 13-6-2 10H21z"/><path d="M32 51V10M32 51L19 13M32 51L45 13M32 51L10 22M32 51L54 22" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>',
   construction: '<path d="M8 44C8 26 18 14 32 14s24 12 24 30z"/><path d="M2 43h60q0 9-8 9H10q-8 0-8-9z"/><path d="M27 17v26M37 17v26" stroke="#fff" stroke-width="2.6"/><path d="M15 30c1-5 3-8 6-11" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>',
+  vet: '<ellipse cx="14" cy="27" rx="6.5" ry="8.5" transform="rotate(-20 14 27)"/><ellipse cx="25" cy="15" rx="6.5" ry="9"/><ellipse cx="39" cy="15" rx="6.5" ry="9"/><ellipse cx="50" cy="27" rx="6.5" ry="8.5" transform="rotate(20 50 27)"/><path d="M32 32c-9 0-18 10-18 18 0 6 5 9 10 8 3-1 5-2 8-2s5 1 8 2c5 1 10-2 10-8 0-8-9-18-18-18z"/>',
 };
 const THEMES = [
   { id: 'dino', name: 'Dino Fossil Recovery', ages: '3–6', header: 'Dino Ranger Expedition', badge: 'Field Note', colors: ['#4f6b3a', '#c98a2b', '#e3dcc2'],
@@ -541,6 +542,9 @@ const THEMES = [
   { id: 'construction', name: 'Construction Big Build', ages: '3–7', header: 'Big Build Work Order', badge: 'Blueprint', colors: ['#33373d', '#f2a900', '#ffd23f'],
     hook: 'The wind blew the blueprint to pieces. Find them all so the crew can start the Big Build!',
     opener: ['Beep, beep, beep! The truck backs up slow,', 'You found a piece, crew! Now off we go!'] },
+  { id: 'vet', name: 'Pet Rescue Vet Quest', ages: '3–7', header: 'Pet Rescue Patrol', badge: 'Paw Print', colors: ['#2a9d8f', '#ef9d31', '#bfe9d6'],
+    hook: 'Someone left the clinic gate open and the pets wandered off. Junior Vets, follow the paw prints!',
+    opener: ['Woof! A paw print! You found a clue,', 'A puppy is waiting somewhere for you!'] },
 ];
 const SPOTS = [
   ['couch', 'Couch'], ['fridge', 'Fridge'], ['bed', 'Bed'], ['bathtub', 'Bathtub'], ['bookshelf', 'Bookshelf'],

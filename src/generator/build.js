@@ -426,6 +426,18 @@ function themeCss(theme) {
 .cert-title { font-size:52pt; }
 .award { font-size:28pt; }
 .seal { background:var(--primary); outline-color:var(--primary); }`;
+    case 'vet':
+      return `
+.card { border-radius:18px; background:
+  radial-gradient(circle at 94% 70%, rgba(42,157,143,.10) 0 .32in, transparent .33in),
+  radial-gradient(circle at 6% 14%, rgba(239,157,49,.10) 0 .26in, transparent .27in), linear-gradient(180deg, #fff, var(--paper)); }
+.card-head { border-bottom:2px dashed var(--primary); }
+.card-head .icon { color:var(--accent); }
+.card-title { font-size:15pt; }
+.badge { border-radius:99px; }
+.frame { border-radius:24px; outline-color:var(--accent); }
+.briefing h1 { font-size:30pt; }
+.seal { background:var(--primary); }`;
     case 'construction':
       return `
 .card { border:.09in solid transparent; border-radius:6px; background:

@@ -1,7 +1,8 @@
-// Vet Clinic: a stand-alone pretend play kit.
+// Vet Clinic: the play kit for the Pet Rescue Vet Quest hunt.
 module.exports = {
   id: 'vet',
   name: 'Vet Clinic',
+  hunt: 'vet',
   colors: { main: '#2a9d8f', dark: '#1f6f66', soft: '#bfe9d6', light: '#eaf7f0', accent: '#ef9d31' },
   icon: '🏥',
   placeName: (who) => `${who} Pet Clinic`,
@@ -78,6 +79,7 @@ module.exports = {
   },
   certificate: { title: 'Junior Vet Certificate', icon: '🏅', seal: '🐾', line: 'cared for every patient with kindness, gentle hands and a big heart.' },
   guide: {
+    afterHunt: 'Every lost pet is found! Set up {place} at the end of the trail and give each rescued pet a check-up. Super Pet Rescuer {child} is the head vet today.',
     intro: 'Everything {child} needs to run a pretend vet clinic. Print on regular Letter paper, cut along the dashed lines, and gather some stuffed animals to be patients.',
     setup: [
       'Tape the clinic sign and Open sign by the “front door”.', 'Line up chairs for the Waiting Room.',

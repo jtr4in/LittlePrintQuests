@@ -19,6 +19,7 @@ THEMES = {
     'unicorn': ('Unicorn Rainbow Scavenger Hunt', 'Ages 3–7', '#efe3f8', '#8e5cc4'),
     'mermaid': ('Mermaid Treasure Hunt', 'Ages 3–7', '#d9f1ee', '#11798a'),
     'construction': ('Construction Scavenger Hunt', 'Ages 3–7', '#fde9a8', '#33373d'),
+    'vet': ('Pet Vet Scavenger Hunt', 'Ages 3–7', '#d8f1e6', '#1f6f66'),
 }
 W, H = 2400, 1800
 

@@ -22,6 +22,7 @@ THEMES = {
     'unicorn': ('Unicorn', '#efe3f8', '#8e5cc4'),
     'mermaid': ('Mermaid', '#d9f1ee', '#11798a'),
     'construction': ('Construction', '#fde9a8', '#33373d'),
+    'vet': ('Pet Vet', '#d8f1e6', '#1f6f66'),
 }
 
 
