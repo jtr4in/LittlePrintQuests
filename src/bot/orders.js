@@ -40,6 +40,9 @@ function customRequest(tx) {
   return { personalization, options, product: bundle ? 'bundle' : 'hunt' };
 }
 
+const newToken = () => crypto.randomBytes(18).toString('base64url');
+const hostUrl = (order) => `${process.env.PUBLIC_URL}/h/${order.hostToken}`;
+
 // The kit an order's play kit uses: named by an Etsy kit order, else the theme's match.
 const kitOf = (order) => KITS[order.config.kit] || kitForHunt(order.config.theme);
 
@@ -53,6 +56,9 @@ function buyerMessage(order) {
     kit: () => `${kitOf(order).name} play kit`,
     party: () => `${theme.label} party pack`,
   }[main]();
+  const host = order.hostToken
+    ? `\nOn party day, open Host Mode on your phone. It walks you through hiding each card and running the hunt, with lines to say, hints and a role for a second grown-up:\n\n${hostUrl(order)}\n`
+    : '';
   const extras =
     (order.kitReady ? `\nAnd here's the matching ${kitOf(order).name} play kit:\n\n${base}-kit.pdf\n` : '') +
     (order.partyReady ? `\nAnd your party printables (invitations, toppers, tags, banner and more):\n\n${base}-party.pdf\n` : '');
@@ -64,13 +70,17 @@ function buyerMessage(order) {
   return `Hi ${first}! Your ${title} for ${order.config.childName} is ready. Download your printable PDF here:
 
 ${base}.pdf
-${extras}
+${extras}${host}
 ${tips}`;
 }
 
 async function generate(id) {
   const order = store.get().orders[id];
   const token = order.downloadToken || crypto.randomBytes(18).toString('base64url');
+  // Hunts get Host Mode: one private link for the host and one for a helper.
+  const hostTokens = products.has(order, 'hunt') && products.mainOf(order) === 'hunt'
+    ? { hostToken: order.hostToken || newToken(), sidekickToken: order.sidekickToken || newToken() }
+    : {};
   const out = (suffix = '') => path.join(store.PDF_DIR, `${token}${suffix}.pdf`);
   const main = products.mainOf(order);
   if (main === 'kit') await renderKit(order.config, out());
@@ -81,7 +91,7 @@ async function generate(id) {
   if (kit) await renderKit(kitConfig(order, kit), out('-kit'));
   if (party) await renderParty(partyConfig(order), out('-party'));
   store.update((s) => {
-    Object.assign(s.orders[id], { downloadToken: token, kitReady: Boolean(kit), partyReady: party, status: 'ready', problem: null, generatedAt: new Date().toISOString() });
+    Object.assign(s.orders[id], hostTokens, { downloadToken: token, kitReady: Boolean(kit), partyReady: party, status: 'ready', problem: null, generatedAt: new Date().toISOString() });
     s.orders[id].message = buyerMessage(s.orders[id]);
   });
 }
@@ -259,4 +269,4 @@ async function fulfillWebOrder(id, { email, buyerName }) {
   await notify(store.get().orders[id]);
 }
 
-module.exports = { addOrder, processOrder, generate, pollEtsy, validateWebForm, addWebOrder, fulfillWebOrder };
+module.exports = { hostUrl, addOrder, processOrder, generate, pollEtsy, validateWebForm, addWebOrder, fulfillWebOrder };

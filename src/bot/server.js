@@ -15,6 +15,7 @@ const products = require('./products');
 const { KITS, kitForHunt } = require('../kits/engine');
 const { sendHuntEmail } = require('./email');
 const THEMES = require('../generator/themes');
+const host = require('../host/host');
 
 const PORT = Number(process.env.PORT || 3000);
 const POLL_MINUTES = Number(process.env.POLL_MINUTES || 5);
@@ -90,6 +91,7 @@ function orderPage(o) {
          <p><a class="btn" href="/d/${esc(o.downloadToken)}.pdf" target="_blank">Download your ${what} (PDF)</a></p>
          ${o.kitReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-kit.pdf" target="_blank">Download your play kit (PDF)</a></p>` : ''}
          ${o.partyReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-party.pdf" target="_blank">Download your party printables (PDF)</a></p>` : ''}
+         ${o.hostToken ? `<p><a class="btn alt" href="/h/${esc(o.hostToken)}">Open Host Mode</a><br><small>Step-by-step help on your phone for hiding the cards and running the hunt.</small></p>` : ''}
          <p>${o.email ? `We also emailed the link to <b>${esc(o.email)}</b>.` : ''} Print at “Actual Size / 100%”${{ hunt: ', cut out the clue cards, and follow the Host Guide on page 1.', kit: ', and start with the grown-up guide on page 1.', party: ', on cardstock if you have it.' }[main]}</p>`
       : working
         ? `<h1>Building ${esc(o.form.childName)}’s ${esc(main === 'hunt' ? theme.name : `${theme.label} ${what}`)}…</h1>
@@ -104,7 +106,7 @@ function orderPage(o) {
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 system-ui,sans-serif}
 main{max-width:560px;margin:12vh auto;padding:0 16px;text-align:center}
 h1{font-size:28px;line-height:1.2}p{color:var(--muted)}p b{color:var(--ink)}
-.btn{display:inline-block;background:var(--sun);color:var(--sun-ink);padding:14px 26px;border-radius:99px;text-decoration:none;font-weight:700}
+.btn{display:inline-block;background:var(--sun);color:var(--sun-ink);padding:14px 26px;border-radius:99px;text-decoration:none;font-weight:700}.btn.alt{background:transparent;color:var(--ink);border:2px solid var(--sun)}small{color:var(--muted)}
 .spin{width:36px;height:36px;margin:24px auto;border:4px solid var(--muted);border-top-color:var(--sun);border-radius:50%;animation:s 1s linear infinite}
 @keyframes s{to{transform:rotate(1turn)}}
 </style></head><body><main>${body}</main></body></html>`;
@@ -148,7 +150,7 @@ function orderCard(o) {
            ${o.sent ? '' : `<form method="post" action="/admin/orders/${esc(o.id)}/email"><button>Email it to ${esc(o.email)}</button></form>`}`
         : o.status === 'ready'
         ? `<p><a href="/d/${esc(o.downloadToken)}.pdf" target="_blank">Preview PDF</a>${kitLink(o, 'Play kit PDF')}</p>
-           <textarea readonly rows="${o.kitReady ? 10 : 7}">${esc(o.message)}</textarea>
+           <textarea readonly rows="${7 + (o.kitReady ? 3 : 0) + (o.partyReady ? 3 : 0) + (o.hostToken ? 4 : 0)}">${esc(o.message)}</textarea>
            <div class="row"><button type="button" onclick="copyMsg(this)">Copy message</button>
            ${o.sent ? '' : `<form method="post" action="/admin/orders/${esc(o.id)}/sent"><button>Mark as sent</button></form>`}</div>`
         : ''
@@ -313,6 +315,29 @@ async function route(req, res) {
         });
     }
     return send(res, 200, 'ok', { 'Content-Type': 'text/plain' });
+  }
+
+  // Host Mode (/h/<token>) and the sidekick page (/s/<token>). /state keeps them in step.
+  const hm = p.match(/^\/(h|s)\/([A-Za-z0-9_-]{20,})(\/state)?$/);
+  if (hm) {
+    const [, kind, token, state] = hm;
+    const field = kind === 'h' ? 'hostToken' : 'sidekickToken';
+    const o = Object.values(store.get().orders).find((x) => x[field] === token && x.status === 'ready');
+    if (!o) return send(res, 404, 'This link isn’t working. Check that you copied all of it.');
+    const noStore = { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' };
+    if (state && req.method === 'POST' && kind === 'h') {
+      try {
+        const step = JSON.parse((await readRaw(req, 1_000)).toString()).step;
+        if (Number.isInteger(step) && step >= 0 && step < 200) store.update((s) => (s.orders[o.id].hostStep = { step, at: new Date().toISOString() }));
+      } catch {}
+      return send(res, 204, '', noStore);
+    }
+    if (state) return send(res, 200, JSON.stringify({ step: o.hostStep?.step ?? 0 }), { 'Content-Type': 'application/json', ...noStore });
+    const stateUrl = `/h/${o.hostToken}/state`;
+    const page = kind === 'h'
+      ? host.hostPage(o, { stateUrl, sidekickUrl: `${process.env.PUBLIC_URL}/s/${o.sidekickToken}`, downloads: `/d/${o.downloadToken}.pdf` })
+      : host.sidekickPage(o, { stateUrl: `/s/${o.sidekickToken}/state` });
+    return send(res, 200, page, noStore);
   }
 
   const op = p.match(/^\/order\/(web-[A-Za-z0-9_-]{16,})$/);
