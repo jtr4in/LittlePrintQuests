@@ -150,7 +150,7 @@ main { position: relative; }
 .field .hint { font-size: 14px; color: var(--ink-soft); }
 fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 .row2 { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
-input[type="text"], input[type="number"], select { width: 100%; font: 17px/1.3 var(--body); color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); border-radius: 10px; padding: 11px 12px; }
+input[type="text"], input[type="number"], input[type="email"], select { width: 100%; font: 17px/1.3 var(--body); color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); border-radius: 10px; padding: 11px 12px; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip { display: inline-flex; align-items: center; gap: 6px; font: 15px/1 var(--body); color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); border-radius: 999px; padding: 8px 12px; cursor: pointer; }
 .chip b { display: none; width: 20px; height: 20px; border-radius: 50%; background: var(--ink); color: var(--paper); font: 700 11px/20px var(--mono); text-align: center; }
@@ -172,6 +172,8 @@ input[type="text"], input[type="number"], select { width: 100%; font: 17px/1.3 v
 .total strong { font: 700 30px/1 var(--display); }
 .status { font-size: 14.5px; color: var(--ink-soft); min-height: 1.4em; }
 .status.bad { color: #c2410c; }
+.sample-form { display: grid; grid-template-columns: 1.4fr 1fr auto; gap: 12px; align-items: end; max-width: 760px; margin-top: 18px; }
+@media (max-width: 760px) { .sample-form { grid-template-columns: 1fr; } }
 .alt { font-size: 14.5px; color: var(--ink-soft); text-align: center; }
 @media (max-width: 860px) { .builder { grid-template-columns: 1fr; } .summary { position: static; } }
 
@@ -334,7 +336,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
     <div class="wrap">
       <div class="pin"><b></b><span class="eyebrow">Pretend play kits</span></div>
       <h2>Keep the adventure going after the hunt</h2>
-      <p class="kits-lede">Every hunt comes with a matching play kit: 17 printable pages with your child’s name on the signs, badges and certificate, and their own pets or toys as the patients, passengers and crew.</p>
+      <p class="kits-lede">Every hunt comes with a matching play kit: 18 to 20 printable pages with your child’s name on the signs, badges and certificate, and their own pets or toys as the patients, passengers and crew.</p>
       <ul class="kit-points"><li>8 door signs with your child’s name</li><li>A pretend gadget that fits the theme, with 3 screens to swap</li><li>Flat props kids can hold: maps, X-rays, wanted posters, treasure cards and stickers</li><li>ID badges, check-up forms, tickets, passports, a menu with coins and a certificate</li></ul>
       <div class="kit-grid">
         <article class="kit-card">
@@ -390,6 +392,21 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
     </div>
   </section>
 
+  <section class="stop" id="sample">
+    <div class="wrap">
+      <div class="pin"><b></b><span class="eyebrow">Free sample</span></div>
+      <h2>Try a mini hunt free</h2>
+      <p class="kits-lede">Get a 4-clue picture hunt by email and play it today. Every card shows a picture of the next spot, so even 3-year-olds can follow along.</p>
+      <form id="sampleForm" class="sample-form" novalidate>
+        <div class="field"><label for="sampleEmail">Your email</label><input id="sampleEmail" type="email" autocomplete="email" placeholder="you@example.com" required></div>
+        <div class="field"><label for="sampleTheme">Theme</label><select id="sampleTheme"></select></div>
+        <button class="btn btn-orange" type="submit">Email my free hunt</button>
+      </form>
+      <p class="hint">We’ll also send the occasional party idea. Unsubscribe anytime.</p>
+      <p class="status" id="sampleStatus" role="status"></p>
+    </div>
+  </section>
+
   <section class="stop" id="faq">
     <div class="wrap">
       <div class="pin"><b></b><span class="eyebrow">Questions</span></div>
@@ -399,7 +416,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         <details><summary>How fast will I get it?</summary><p>Usually within a few minutes of checkout. It shows on screen and arrives by email, so it works even the morning of the party.</p></details>
         <details><summary>What if my house doesn’t have a spot on the list?</summary><p>Type any spot you like, such as “the hammock” or “Dad’s guitar”, and we’ll write a rhyme for it. We skip anything unsafe for little kids, like the oven.</p></details>
         <details><summary>How many kids can play?</summary><p>One trail works well for 2 to 10 kids. For bigger groups, read each clue aloud and let a different child find each card.</p></details>
-        <details><summary>Can my 3-year-old do it?</summary><p>Yes, with a grown-up reading the clues. The rhymes are short and describe each spot in words little kids know.</p></details>
+        <details><summary>Can my 3-year-old do it?</summary><p>Yes. For ages 3 to 5, every clue card also shows a picture of the next spot, so kids who can’t read yet can solve it themselves while a grown-up reads the rhyme.</p></details>
         <details><summary>What if something looks wrong?</summary><p>Reply to your order email and we’ll fix it and send a new PDF free.</p></details>
       </div>
     </div>
@@ -560,6 +577,27 @@ $('orderForm').addEventListener('submit', async (e) => {
     location.href = (await res.json()).url;
   } catch (err) {
     status('Checkout didn’t open. Please try again in a moment, or order on Etsy.', true);
+  }
+});
+
+// Free sample signup: posts to the order bot next to /api/checkout.
+const SAMPLE_URL = CHECKOUT_URL.replace(/\/api\/checkout$/, '/api/sample');
+$('sampleTheme').innerHTML = $('themeSelect').innerHTML;
+$('sampleForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const say = (t, bad) => { $('sampleStatus').textContent = t; $('sampleStatus').classList.toggle('bad', Boolean(bad)); };
+  const email = $('sampleEmail').value.trim();
+  if (!/^\S+@\S+\.\S+$/.test(email)) return say('Please enter your email address.', true), $('sampleEmail').focus();
+  if (!SAMPLE_URL) return say('Free samples open here soon. Check back in a few days!');
+  say('Sending…');
+  try {
+    const res = await fetch(SAMPLE_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, theme: $('sampleTheme').value }) });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || 'Something went wrong');
+    say('Sent! Check your inbox for your free mini hunt.');
+    $('sampleForm').reset();
+  } catch (err) {
+    say(err.message || 'That didn’t go through. Please try again.', true);
   }
 });
 

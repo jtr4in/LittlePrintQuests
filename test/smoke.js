@@ -202,6 +202,23 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal((await realFetch(base + '/order/manual-1')).status, 401); // only web orders are public
   assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Emailed to ava\.parent@example\.com/);
 
+  // Free sample: email signup sends a mini picture-clue hunt and joins the list; unsubscribe works.
+  const ask = (body) => realFetch(base + '/api/sample', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  assert.equal((await ask({ email: 'nope' })).status, 400);
+  assert.equal((await ask({ email: 'Jo@Example.com', theme: 'pirate' })).status, 200);
+  const sampleMail = emails.at(-1);
+  assert.deepEqual(sampleMail.to, ['jo@example.com']);
+  assert.match(sampleMail.html, /\/sample\/pirate\.pdf/);
+  await ask({ email: 'jo@example.com', theme: 'pirate' });
+  assert.equal(emails.filter((e) => e.to[0] === 'jo@example.com').length, 1, 'one sample email a day');
+  const samplePdf = await realFetch(base + '/sample/pirate.pdf');
+  assert.equal(samplePdf.headers.get('content-type'), 'application/pdf');
+  assert.match(await (await realFetch(base + '/admin/subscribers.csv', { headers: auth })).text(), /"jo@example\.com","pirate"/);
+  const unsub = sampleMail.html.match(/href="https:\/\/bot\.example\.com(\/unsubscribe\?[^"]+)"/)[1].replace(/&amp;/g, '&');
+  assert.equal((await realFetch(base + unsub)).status, 200);
+  assert.doesNotMatch(await (await realFetch(base + '/admin/subscribers.csv', { headers: auth })).text(), /jo@example/);
+  assert.equal((await realFetch(base + '/unsubscribe?e=jo@example.com&t=wrong')).status, 400);
+
   // Etsy listings: drafts with photos, files and variation prices; a failed step resumes on the next click.
   const createListings = () => realFetch(base + '/admin/etsy/listings', { method: 'POST', headers: auth, redirect: 'manual' });
   const listingsDone = async () => {

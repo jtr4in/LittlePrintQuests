@@ -9,6 +9,7 @@ const etsy = require('./etsy');
 const orders = require('./orders');
 const payments = require('./payments');
 const listings = require('./listings');
+const sample = require('./sample');
 const { KITS } = require('../kits/engine');
 const { sendHuntEmail } = require('./email');
 const THEMES = require('../generator/themes');
@@ -187,6 +188,7 @@ button.secondary{background:#fff;color:#2d6a4f;border:1px solid #2d6a4f;margin-t
       : `<b>Website checkout off.</b> <span class="muted">Add STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET to take orders on your site.</span>`
   }</div>
 ${listingsPanel(s)}
+<div class="panel"><b>Mailing list:</b> ${Object.values(s.subscribers || {}).filter((x) => !x.unsubscribedAt).length} people from the free sample. <a href="/admin/subscribers.csv">Download CSV</a></div>
 <details class="panel"><summary><b>Make a hunt by hand</b> <span class="muted">(paste order notes, or test the bot)</span></summary>
   <form method="post" action="/admin/orders">
     <p><input name="buyerName" placeholder="Buyer name (optional)"></p>
@@ -214,6 +216,32 @@ async function route(req, res) {
     if (!fs.existsSync(file)) return send(res, 404, 'Not found');
     res.writeHead(200, { 'Content-Type': 'application/pdf', 'Content-Disposition': `inline; filename="${dl[1].endsWith('-kit') ? 'play-kit' : 'scavenger-hunt'}.pdf"` });
     return fs.createReadStream(file).pipe(res);
+  }
+
+  if (p === '/api/sample') {
+    if (req.method === 'OPTIONS') return send(res, 204, '', cors());
+    if (req.method !== 'POST') return sendJson(res, 405, { error: 'Use POST' });
+    try {
+      const body = JSON.parse((await readRaw(req, 5_000)).toString() || '{}');
+      await sample.requestSample(body, req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket.remoteAddress);
+      return sendJson(res, 200, { ok: true });
+    } catch (err) {
+      if (err instanceof SyntaxError) return sendJson(res, 400, { error: 'Bad request' });
+      if (!err.status) console.error('Sample request failed:', err.message);
+      return sendJson(res, err.status || 502, { error: err.status ? err.message : 'Something went wrong. Please try again in a minute.' });
+    }
+  }
+
+  const sp = p.match(/^\/sample\/([a-z]+)\.pdf$/);
+  if (sp && THEMES[sp[1]]) {
+    const file = await sample.samplePdf(sp[1]);
+    res.writeHead(200, { 'Content-Type': 'application/pdf', 'Content-Disposition': 'inline; filename="mini-scavenger-hunt.pdf"' });
+    return fs.createReadStream(file).pipe(res);
+  }
+
+  if (p === '/unsubscribe') {
+    const ok = sample.unsubscribe(url.searchParams.get('e'), url.searchParams.get('t'));
+    return send(res, ok ? 200 : 400, `<!doctype html><meta name="viewport" content="width=device-width"><body style="font-family:Arial,sans-serif;color:#3f4a73;text-align:center;padding:60px 16px">${ok ? '<h2>You’re unsubscribed</h2><p>You won’t get any more emails from us.</p>' : '<h2>That link didn’t work</h2><p>Reply to any of our emails and we’ll remove you by hand.</p>'}</body>`);
   }
 
   if (p === '/api/checkout') {
@@ -273,6 +301,7 @@ async function route(req, res) {
   if (!authorized(req)) return send(res, 401, 'Login required', { 'WWW-Authenticate': 'Basic realm="Order Bot"' });
 
   if (p === '/' || p === '/admin') return send(res, 200, dashboard());
+  if (p === '/admin/subscribers.csv') return send(res, 200, sample.subscribersCsv(), { 'Content-Type': 'text/csv', 'Content-Disposition': 'attachment; filename="subscribers.csv"' });
   if (p === '/auth/etsy/start') {
     const auth = etsy.startAuth();
     pendingAuth = { state: auth.state, verifier: auth.verifier };
