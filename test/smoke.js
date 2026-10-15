@@ -12,7 +12,7 @@ Object.assign(process.env, {
   STRIPE_SECRET_KEY: 'sk_test_fake', STRIPE_WEBHOOK_SECRET: 'whsec_test', RESEND_API_KEY: 're_test', EMAIL_FROM: 'Hunts <hi@example.com>',
 });
 fs.writeFileSync(path.join(dataDir, 'state.json'), JSON.stringify({
-  etsy: { access_token: '1.a', refresh_token: '1.r', expires_at: Date.now() + 3600e3, user_id: 1, shop_id: 42, scopes: 'transactions_r listings_r listings_w shops_r' }, orders: {},
+  etsy: { access_token: '1.a', refresh_token: '1.r', expires_at: Date.now() + 3600e3, user_id: 1, shop_id: 42, scopes: 'transactions_r listings_r listings_w shops_r shops_w' }, orders: {},
 }));
 
 // Fake Claude: return a structured answer for whatever order text arrives.
@@ -46,12 +46,17 @@ const realFetch = global.fetch;
 const seen = [];
 const etsyCalls = [];
 let failImageOnce = true;
+const shopSections = [];
 const etsyListingApi = async (u, opts) => {
   const p = new URL(u).pathname.replace('/v3/application', '');
   const body = opts.body instanceof FormData ? Object.fromEntries(opts.body) : opts.body instanceof URLSearchParams ? Object.fromEntries(opts.body) : opts.body && JSON.parse(opts.body);
   etsyCalls.push({ method: opts.method, p, body });
   const json = (o, status = 200) => new Response(JSON.stringify(o), { status });
   if (p === '/seller-taxonomy/nodes') return json({ results: [{ id: 1, name: 'Paper & Party Supplies', children: [{ id: 2, name: 'Party Supplies', children: [{ id: 1250, name: 'Party Games', children: [] }] }] }] });
+  if (p === '/shops/42/sections') {
+    if (opts.method === 'POST') shopSections.push({ shop_section_id: 300 + shopSections.length, title: body.title });
+    return json(opts.method === 'POST' ? shopSections.at(-1) : { results: shopSections });
+  }
   if (p === '/shops/42/listings') return json({ listing_id: 7000 + etsyCalls.filter((c) => c.p === p).length });
   if (/\/images$/.test(p) && body.image.name === 'kits-main.jpg' && failImageOnce) {
     failImageOnce = false;
@@ -136,6 +141,11 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal(o.options.Theme, 'Space');
   assert.match(o.message, /Hi Pat!.*Deep Space Rover Expedition for Leo/s);
   assert.equal(o.product, 'bundle');
+  // Each bundle Package option maps to the right mix.
+  const pkgItems = (value) => require('../src/bot/orders').customRequest({ listing_id: 1, title: 'Custom Party Bundle', variations: [
+    { formatted_name: 'Package', formatted_value: value }, { formatted_name: 'Personalization', formatted_value: 'Leo', question_id: 9 }] });
+  assert.deepEqual(['Hunt + Play Kit + Party Pack', 'Hunt + Play Kit', 'Hunt + Party Pack', 'Hunt only'].map((v) => pkgItems(v).product), ['bundle', 'hunt+kit', 'hunt+party', 'hunt']);
+  assert.deepEqual(pkgItems('Hunt + Party Pack').items, ['hunt', 'party']);
   assert.ok(o.kitReady);
   assert.match(o.message, /Mission Control play kit:\s+https:\/\/bot\.example\.com\/d\/[\w-]+-kit\.pdf/);
   assert.ok(o.partyReady);
@@ -296,6 +306,9 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const creates = etsyCalls.filter((c) => c.p === '/shops/42/listings');
   assert.equal(creates.length, 12, 'resuming must not create a second kits listing');
   const pack = creates[0].body;
+  // Four shop sections, each made once and reused.
+  assert.deepEqual(shopSections.map((s) => s.title), ['Scavenger Hunt Packs', 'Custom Party Bundles', 'Pretend Play Kits', 'Party Printables']);
+  assert.deepEqual([...new Set(creates.map((c) => c.body.shop_section_id))], ['300', '301', '302', '303']);
   assert.equal(pack.type, 'download');
   assert.equal(pack.price, '8.00');
   assert.equal(pack.taxonomy_id, '1250');
@@ -303,7 +316,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.match(pack.description, /^Roar!.*WHAT'S INCLUDED/s);
   const bundleId = listed.bundle.id;
   const inv = etsyCalls.find((c) => c.p === `/listings/${bundleId}/inventory`).body;
-  assert.deepEqual(inv.products.map((x) => [x.property_values[0].values[0], x.offerings[0].price]), [['Hunt + Play Kit + Party Pack', 16.99], ['Hunt only', 9.99]]);
+  assert.deepEqual(inv.products.map((x) => [x.property_values[0].values[0], x.offerings[0].price]), [['Hunt + Play Kit + Party Pack', 16.99], ['Hunt + Play Kit', 14.99], ['Hunt + Party Pack', 13.99], ['Hunt only', 9.99]]);
   const kitInv = etsyCalls.find((c) => c.p === `/listings/${listed.kits.id}/inventory`).body;
   assert.equal(kitInv.products.length, 9);
   const partyInv = etsyCalls.find((c) => c.p === `/listings/${listed.party.id}/inventory`).body;
@@ -313,6 +326,22 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal(etsyCalls.filter((c) => c.p === `/shops/42/listings/${listed.kits.id}/images`).length, 11); // 10 photos + 1 failed try
   const files = etsyCalls.filter((c) => /\/files$/.test(c.p));
   assert.equal(files.length, 12);
+  // Theme packs get 5 photos each.
+  assert.equal(etsyCalls.filter((c) => c.p === `/shops/42/listings/${listed['pack-dino'].id}/images`).length, 5);
+  // Clicking again once everything is ready updates the listings in place: no new drafts or photos.
+  const imagesBefore = etsyCalls.filter((c) => /\/images$/.test(c.p)).length;
+  const patchesBefore = etsyCalls.filter((c) => c.method === 'PATCH').length;
+  const bundleInvBefore = etsyCalls.filter((c) => c.p === `/listings/${bundleId}/inventory`).length;
+  assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Update listings on Etsy/);
+  await createListings();
+  for (let i = 0; i < 120 && etsyCalls.filter((c) => c.method === 'PATCH').length < patchesBefore + 12; i++) await wait(250);
+  const patches = etsyCalls.filter((c) => c.method === 'PATCH').slice(patchesBefore);
+  assert.equal(patches.length, 12);
+  assert.ok(patches.every((c) => c.body.shop_section_id && c.body.title && c.body.tags));
+  assert.equal(etsyCalls.filter((c) => c.p === '/shops/42/listings').length, 12);
+  assert.equal(etsyCalls.filter((c) => /\/images$/.test(c.p)).length, imagesBefore);
+  // The update also re-sends option prices, so the bundle's new Package choices reach old drafts.
+  assert.equal(etsyCalls.filter((c) => c.p === `/listings/${bundleId}/inventory`).length, bundleInvBefore + 1);
   assert.ok(files.every((f) => f.body.file.size > 10000 && f.body.file.type === 'application/pdf'));
   assert.ok(!etsyCalls.some((c) => c.p.includes(`/listings/${listed['pack-dino'].id}/personalization`)));
 

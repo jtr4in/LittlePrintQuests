@@ -33,11 +33,15 @@ function customRequest(tx) {
   // The play kit listing has a "Kit" option naming the kit.
   const kit = Object.values(KITS).find((k) => Object.values(options).some((v) => v.toLowerCase() === k.name.toLowerCase()));
   if (kit) return { personalization, options, product: 'kit', kit: kit.id };
-  // The bundle listing has a "Package" option; without one, go by the listing title.
+  // The bundle listing has a "Package" option ("Hunt + Party Pack", "Hunt only"…): the hunt plus
+  // whatever else it names. Without one, go by the listing title.
   const pkg = options.Package;
-  const bundle = pkg ? /bundle|play kit/i.test(pkg) : /bundle|play kit/i.test(tx.title || '');
-  if (!bundle && !pkg && /party (pack|printables)/i.test(tx.title || '')) return { personalization, options, product: 'party' };
-  return { personalization, options, product: bundle ? 'bundle' : 'hunt' };
+  if (pkg) {
+    const items = products.normalize(['hunt', /play kit|bundle/i.test(pkg) && 'kit', /party|bundle/i.test(pkg) && 'party']);
+    return { personalization, options, product: products.productFor(items), items };
+  }
+  if (/party (pack|printables)/i.test(tx.title || '') && !/bundle|play kit/i.test(tx.title || '')) return { personalization, options, product: 'party' };
+  return { personalization, options, product: /bundle|play kit/i.test(tx.title || '') ? 'bundle' : 'hunt' };
 }
 
 const newToken = () => crypto.randomBytes(18).toString('base64url');
@@ -269,4 +273,4 @@ async function fulfillWebOrder(id, { email, buyerName }) {
   await notify(store.get().orders[id]);
 }
 
-module.exports = { hostUrl, addOrder, processOrder, generate, pollEtsy, validateWebForm, addWebOrder, fulfillWebOrder };
+module.exports = { customRequest, hostUrl, addOrder, processOrder, generate, pollEtsy, validateWebForm, addWebOrder, fulfillWebOrder };

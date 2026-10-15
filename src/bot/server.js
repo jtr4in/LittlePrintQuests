@@ -127,7 +127,8 @@ function listingsPanel(s) {
   const allReady = listings.CATALOG.every((c) => st[c.key]?.ready);
   const action = !etsy.canWriteListings()
     ? `<p class="muted">To let the bot create listings, reconnect your shop once and allow listing access.</p><a href="/auth/etsy/start"><button class="secondary">Reconnect Etsy shop</button></a>`
-    : allReady ? '' : `<form method="post" action="/admin/etsy/listings"><button${working ? ' disabled' : ''}>${working ? 'Creating drafts…' : 'Create drafts on Etsy'}</button></form>`;
+    : `<form method="post" action="/admin/etsy/listings"><button${working ? ' disabled' : ''}>${working ? 'Working on Etsy…' : allReady ? 'Update listings on Etsy' : 'Create drafts on Etsy'}</button></form>
+       ${allReady ? '<p class="muted">Sends the latest titles, descriptions, tags, option prices, shop sections and any new photos to these listings, including ones you’ve already published.</p>' : ''}`;
   return `<div class="panel"><b>Etsy listings</b> <span class="muted">Created as drafts with photos, files, prices and options. Nothing goes live until you publish it in Shop Manager.</span>
   <ul>${rows}</ul>${s.listingsError ? `<p class="problem">${esc(s.listingsError)}</p>` : ''}${action}
   ${working ? '<script>setTimeout(()=>location.reload(),4000)</script>' : ''}</div>`;

@@ -6,8 +6,9 @@ const store = require('./store');
 const API = 'https://api.etsy.com/v3';
 const KEYSTRING = process.env.ETSY_KEYSTRING;
 const SHARED_SECRET = process.env.ETSY_SHARED_SECRET;
-// listings_w lets the bot create draft listings. Shops connected before it was added reconnect once.
-const SCOPES = 'transactions_r listings_r listings_w shops_r';
+// listings_w lets the bot create draft listings, and shops_w lets it make shop sections for them.
+// Shops connected before these were added reconnect once.
+const SCOPES = 'transactions_r listings_r listings_w shops_r shops_w';
 
 const redirectUri = () => `${process.env.PUBLIC_URL}/auth/etsy/callback`;
 const b64url = (buf) => buf.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
@@ -120,8 +121,27 @@ async function createDraftListing(l, taxonomy) {
     is_supply: 'false',
     should_auto_renew: 'true',
     tags: l.tags.join(','),
+    ...(l.sectionId ? { shop_section_id: String(l.sectionId) } : {}),
   };
   return api('POST', `/application/shops/${shopId()}/listings`, null, form);
+}
+
+// Updates a listing's text and section (works on drafts and published listings).
+async function updateListing(listingId, { title, description, tags, sectionId }) {
+  return api('PATCH', `/application/shops/${shopId()}/listings/${listingId}`, null, {
+    title,
+    description,
+    tags: tags.join(','),
+    ...(sectionId ? { shop_section_id: String(sectionId) } : {}),
+  });
+}
+
+// The id of the shop section with this title, made if the shop doesn't have it yet.
+async function shopSectionId(title) {
+  const { results = [] } = await api('GET', `/application/shops/${shopId()}/sections`);
+  const found = results.find((s) => s.title.toLowerCase() === title.toLowerCase());
+  if (found) return found.shop_section_id;
+  return (await api('POST', `/application/shops/${shopId()}/sections`, null, { title })).shop_section_id;
 }
 
 // One required text box for the buyer's details (Etsy's personalization questions API).
@@ -169,11 +189,13 @@ module.exports = {
   startAuth,
   taxonomyId,
   createDraftListing,
+  shopSectionId,
+  updateListing,
   uploadListingImage,
   uploadListingFile,
   setVariationPrices,
   setPersonalization,
-  canWriteListings: () => /listings_w/.test(store.get().etsy?.scopes || ''),
+  canWriteListings: () => /listings_w/.test(store.get().etsy?.scopes || '') && /shops_w/.test(store.get().etsy?.scopes || ''),
   finishAuth,
   paidReceiptsSince,
   configured: () => Boolean(KEYSTRING && SHARED_SECRET),

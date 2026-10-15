@@ -1,10 +1,12 @@
 # Etsy listings
 
-The order bot can create all of these as Etsy drafts for you: open its dashboard and click **Create drafts on Etsy**, then review and publish each one in Shop Manager. The bot reads the titles, descriptions and tags from this file, so edit them here.
+The order bot can create all of these as Etsy drafts for you: open its dashboard and click **Create drafts on Etsy**, then review and publish each one in Shop Manager. The bot reads the titles, descriptions and tags from this file, so edit them here. Once the drafts exist, the same button says **Update listings on Etsy**: it sends your latest edits, option prices, shop sections and any new photos to every listing, including published ones.
 
 To do it by hand instead, everything is copy-paste ready. Each standard listing uses its PDF from `output/standard/` as the digital file and its photo from `output/listing-photos/` as the main image.
 
 **Pricing:** Etsy shoppers in this category expect a sale price. Set the standard packs at $8.00 and run an ongoing 40% off sale (Shop Manager > Marketing > Sales and discounts), so buyers see $4.80 with the $8 crossed out.
+
+**Shop sections:** the bot puts each listing in a section, making the sections the first time: **Scavenger Hunt Packs** (the 9 theme packs), **Custom Party Bundles**, **Pretend Play Kits** and **Party Printables**. Rename or reorder them any time in Shop Manager > Listings > Sections.
 
 **Settings for every listing:** Type: Digital. Who made it: I did. What is it: A finished product. When was it made: 2020–2026. Category: Paper & Party Supplies > Party Supplies > Party Games.
 
@@ -110,6 +112,8 @@ princess party, princess scavenger, scavenger hunt kids, treasure hunt clues, pr
 
 Add a variation called **Package** with prices per option:
 - **Hunt + Play Kit + Party Pack**: $16.99 (make this the first option, so it's the default shown)
+- **Hunt + Play Kit**: $14.99
+- **Hunt + Party Pack**: $13.99
 - **Hunt only**: $9.99
 
 The bot dashboard's **Create drafts on Etsy** button sets all of this up for you, including this variation.
@@ -135,6 +139,7 @@ THE HUNT
 • 6–10 custom rhyming clue cards (4" x 6", two per page)
 • Picture clues for ages 3–5: each card shows the next spot, so pre-readers can play
 • Mission Accomplished Certificate with your child's name
+• NEW: Host Mode, a private step-by-step guide for your phone. It shows where each card goes, lines to say in character, quick challenges between clues, hints if the kids get stuck, and a secret role for a second grown-up
 
 THE PLAY KIT (18–20 pages, matches your theme)
 • 8 door signs with your child's name ("Leo's Mission Control")
@@ -152,12 +157,12 @@ THE PARTY PACK (matches your theme, with your child's name)
 • A HAPPY BIRTHDAY banner that spells your child's name
 • Food tent cards with themed snack names
 
-Choose "Hunt only" if you just want the scavenger hunt.
+Pick your package: everything for $16.99, the hunt + play kit, the hunt + party pack, or just the hunt.
 
 ★ HOW TO ORDER
 1. Fill in the personalization box (see the example below)
 2. Check out
-3. We send your PDF through Etsy messages, usually within a few hours
+3. We send your PDF and your Host Mode link through Etsy messages, usually within a few hours
 
 Personalization example:
 Maya, turning 6, Space. Spots: front door, shoe rack, coat closet, washer, dryer, piano, dog bed, kitchen table (prize). Pets/toys: Rover (dog), Teddy (bear)
