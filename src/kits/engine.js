@@ -13,6 +13,8 @@
 
 const path = require('path');
 const { toyPages, toyCss } = require('./toys');
+const { welcomePage, menuBoard, specialsPage, moneyPage, shopCss } = require('./shop');
+const art = require('./art');
 
 const FONT_DIR = path.join(__dirname, '..', '..', 'fonts');
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -45,9 +47,11 @@ const subjectsOrDefaults = (k) => (k.subjects.length ? k.subjects : k.def.defaul
 
 // ---------- pieces ----------
 
+let signSeed = 0;
 function sign(title, sub, icon, cls = '') {
   return `<div class="sign ${cls}"><div class="sign-in">
-    <div class="sign-icon">${icon}</div>
+    <svg class="sign-deco" viewBox="0 0 700 440" preserveAspectRatio="none">${art.confetti(++signSeed, 700, 440, 26, [110, 40, 480, 360])}</svg>
+    <div class="sign-icon">${art.pic(icon, '1.15in')}</div>
     <div class="sign-title">${esc(title)}</div>
     ${sub ? `<div class="sign-sub">${esc(sub)}</div>` : ''}
   </div></div>`;
@@ -183,17 +187,6 @@ function passportsPages(k) {
   return out.join('');
 }
 
-function menuPage(k) {
-  const M = k.def.menu;
-  const coins = Array.from({ length: 20 }, () => `<div class="coin"><span>${M.coinIcon}</span><b>1</b></div>`).join('');
-  return `<section class="page menu">
-    ${formHead(k, M.title, M.icon)}
-    <div class="price-list">${M.items.map(([e, n, c]) => `<div class="price"><span class="em">${e}</span><span class="pn">${esc(n)}</span><span class="dots"></span><span class="pc">${c} ${c === 1 ? M.coinWord : M.coinWord + 's'}</span></div>`).join('')}</div>
-    <h3 class="coins-title">${esc(M.coinsTitle)} <small>Cut out and use to pay</small></h3>
-    <div class="coins">${coins}</div>
-  </section>`;
-}
-
 // The child's own certificate, then a blank copy to print for guests and siblings.
 function certificatePage(k, blank = false) {
   const C = k.def.certificate;
@@ -222,7 +215,9 @@ function guidePage(k) {
     `${d.record.title} forms, two to a page, for ${k.subjects.length ? `each of your ${d.subjectPlural}` : `four ${d.subjectPlural}`} plus a blank one`,
     `${d.ticket.title} cards`,
     d.passport.pageTitle,
-    `${d.menu.title} and ${d.menu.coinsTitle.toLowerCase()}`,
+    `A big “Welcome to ${k.placeName}” poster`,
+    `${d.menu.title} board, a Today’s Specials board and order slips`,
+    `${d.menu.coinsTitle}: bills and coins to cut out`,
     `${d.certificate.title} (named + blank)`,
   ];
   return `<section class="page guide${k.withHunt && G.afterHunt ? ' with-hunt' : ''}">
@@ -538,8 +533,10 @@ function buildKitHtml(cfg) {
   const def = KITS[cfg.kit];
   if (!def) throw new Error(`Unknown kit "${cfg.kit}". Use one of: ${Object.keys(KITS).join(', ')}`);
   const k = normalize(def, cfg);
+  signSeed = 0;
   const pages = [
     guidePage(k),
+    welcomePage(k),
     signsPages(k),
     gadgetPages(k),
     badgesPage(k),
@@ -547,7 +544,9 @@ function buildKitHtml(cfg) {
     recordsPages(k),
     ticketPage(k),
     passportsPages(k),
-    menuPage(k),
+    menuBoard(k),
+    specialsPage(k),
+    moneyPage(k),
     certificatePage(k),
     certificatePage(k, true),
   ].join('');
@@ -561,6 +560,7 @@ ${font('Fredoka', 'Fredoka.ttf', '300 700')}
 ${font('Nunito', 'Nunito.ttf', '200 1000')}
 @page { size: letter; margin: 0; }
 ${toyCss}
+${shopCss(font)}
 :root { --teal:${c.main}; --teal-d:${c.dark}; --mint:${c.soft}; --mint-l:${c.light}; --orange:${c.accent}; --accent-ink:${c.accentInk || '#2b1d06'}; --navy:#3f4a73; --cream:#fbf8f1; --line:#c9d6d0; --gold:${c.gold || '#f1d48f'}; }
 * { box-sizing:border-box; }
 html, body { margin:0; padding:0; }
@@ -601,7 +601,9 @@ h1, h2, h3 { font-family:'Fredoka', sans-serif; margin:0; line-height:1.1; }
 .sign { flex:1; padding:.12in; }
 .cut-h { border-top:2px dashed #b7c0cc; margin:.06in -.3in; }
 .sign-in { height:100%; border-radius:22px; background:var(--mint-l); border:5px solid var(--teal); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; position:relative; padding:.2in; }
-.sign-icon { font-size:68pt; line-height:1; }
+.sign-icon { font-size:68pt; line-height:1; position:relative; } .sign-title, .sign-sub { position:relative; }
+.sign-deco { position:absolute; inset:0; width:100%; height:100%; border-radius:18px; }
+.sign.hero .sign-title { font-family:'Pacifico', 'Fredoka'; font-weight:400; }
 .sign-title { font:700 54pt/1.05 'Fredoka'; color:var(--teal-d); margin-top:.1in; }
 .sign-sub { font:500 16pt 'Fredoka'; margin-top:.1in; color:var(--navy); }
 .sign.hero .sign-in { background:var(--teal); border-color:var(--teal-d); }

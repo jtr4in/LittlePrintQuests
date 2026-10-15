@@ -7,35 +7,11 @@
 //   slider    a card with a window and a strip to pull through it (an egg that hatches...)
 //   puzzle    a big picture with the child's name, printed with jigsaw cut lines
 
-const fs = require('fs');
-const path = require('path');
-
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const possessive = (name) => (/s$/i.test(name) ? `${name}’` : `${name}’s`);
 const fill = (s, k) => String(s).replace('{child}', k.childName).replace('{childs}', possessive(k.childName));
 const head = (T, k) => `<h2 class="pg-title">${esc(fill(T.title, k))}</h2><p class="pg-sub">${esc(T.howTo)}</p><div class="cardstock">Best on cardstock</div>`;
-// Toy pictures are drawn from vendored Noto emoji SVGs (src/kits/emoji, see scripts/vendor-emoji.py)
-// so they stay sharp at full-page size; any emoji without a file falls back to the font.
-const EMOJI_DIR = path.join(__dirname, 'emoji');
-const svgCache = {};
-let uid = 0;
-const codeOf = (e) => [...e].map((c) => c.codePointAt(0).toString(16).toUpperCase()).filter((c) => c !== 'FE0F').join('-');
-function emojiSvg(e) {
-  const code = codeOf(e);
-  if (!(code in svgCache)) {
-    const f = path.join(EMOJI_DIR, `${code}.svg`);
-    svgCache[code] = fs.existsSync(f) ? fs.readFileSync(f, 'utf8').trim() : null;
-  }
-  return svgCache[code];
-}
-function em(x, y, size, e, extra = '') {
-  const svg = emojiSvg(e);
-  if (!svg) return `<text x="${x}" y="${y}" font-size="${size}" text-anchor="middle" dominant-baseline="central" class="toy-em" ${extra}>${e}</text>`;
-  const n = ++uid;
-  const [, viewBox, inner] = svg.match(/viewBox="([^"]+)"[^>]*>([\s\S]*)<\/svg>$/);
-  const body = inner.replace(/id="([^"]+)"/g, `id="$1_${n}"`).replace(/url\(#([^)]+)\)/g, `url(#$1_${n})`).replace(/href="#([^"]+)"/g, `href="#$1_${n}"`);
-  return `<g ${extra}><svg x="${(x - size / 2).toFixed(1)}" y="${(y - size / 2).toFixed(1)}" width="${size}" height="${size}" viewBox="${viewBox}">${body}</svg></g>`;
-}
+const { em } = require('./art');
 const pt = (cx, cy, r, deg) => [cx + r * Math.cos((deg * Math.PI) / 180), cy - r * Math.sin((deg * Math.PI) / 180)].map((v) => v.toFixed(1));
 
 // ---------- steering wheel ----------
@@ -267,7 +243,7 @@ const toyCss = `
 .pz-cut { stroke:#ffffff; stroke-width:5; } .pz-edge { stroke:var(--teal-d); stroke-width:6; }
 `;
 
-// Every emoji the toys draw, for scripts/vendor-emoji.py.
+// Every emoji the kits draw (toys, shop pieces, signs...), for scripts/vendor-emoji.py.
 function toyEmoji() {
   const { KITS } = require('./engine');
   const out = new Set(['🫧']);
@@ -275,7 +251,7 @@ function toyEmoji() {
     if (typeof v === 'string' && v.length <= 8 && /^\p{Extended_Pictographic}/u.test(v)) out.add(v);
     else if (v && typeof v === 'object') Object.values(v).forEach(walk);
   };
-  Object.values(KITS).forEach((d) => walk(d.toys));
+  Object.values(KITS).forEach(walk);
   return [...out];
 }
 
