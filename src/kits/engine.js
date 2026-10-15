@@ -536,6 +536,7 @@ const KITS = {
   library: require('./defs/library'),
   police: require('./defs/police'),
   petshop: require('./defs/petshop'),
+  dentist: require('./defs/dentist'),
   coffee: require('./defs/coffee'),
   italian: require('./defs/italian'),
   auto: require('./defs/auto'),
@@ -607,7 +608,7 @@ h1, h2, h3 { font-family:'Fredoka', sans-serif; margin:0; line-height:1.1; }
 .guide-head { display:flex; gap:.2in; align-items:center; }
 .guide-icon { font-size:46pt; background:var(--mint); border-radius:50%; width:1.1in; height:1.1in; display:grid; place-items:center; flex:none; }
 .guide h1 { font-size:30pt; }
-.lead { font-size:13.5pt; line-height:1.45; margin:.2in 0; }
+p.lead { font-size:13.5pt; line-height:1.45; margin:.2in 0; }
 .guide-cols { display:grid; grid-template-columns:1fr 1fr; gap:.3in; }
 .guide h3 { font-size:18pt; color:var(--teal-d); margin-bottom:.08in; }
 .guide ul, .guide ol { margin:0; padding-left:.25in; font-size:12.5pt; line-height:1.42; }

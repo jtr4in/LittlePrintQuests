@@ -596,6 +596,14 @@ Your child runs their very own pet shop, with adoption papers for their stuffed 
 **Tags**
 pet shop printable, pet store pretend, dramatic play, pet adoption kids, pet grooming play, kids role play, pretend play kit, printable play set, stuffed animal play, play cash register, personalized kids, homeschool play, preschool center
 
+### dentist
+**Title**
+Personalized Dentist Office Dramatic Play Printable, Kids Pretend Dentist Set, Wipe Clean Teeth to Brush, Tooth Chart, Dentist Bag
+**Opening line**
+Your child is the head dentist at their very own dental office, with a big wipe-clean smile to brush, a lift-the-flap dentist bag, tooth charts and signs with their name on them.
+**Tags**
+dentist play, pretend dentist, dental office kids, dramatic play, brush teeth game, tooth chart kids, kids role play, pretend play kit, printable play set, play cash register, personalized kids, homeschool play, preschool center
+
 ### coffee
 **Title**
 Personalized Coffee Shop Dramatic Play Printable, Kids Pretend Cafe Set, Hot Cocoa Menu, Cash Register, Drink Orders and Signs
