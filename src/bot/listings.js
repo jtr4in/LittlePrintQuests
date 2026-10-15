@@ -18,9 +18,12 @@ const DOC = path.join(ROOT, 'etsy-listings.md');
 
 const PACK_SPOTS = ['couch', 'fridge', 'bed', 'bathtub', 'bookshelf', 'front_door', 'toy_box', 'kitchen_table'];
 const PACK_PROMO = 'Want a hunt with your child’s name and your own hiding spots? Order a Custom Hunt from our Etsy shop.';
-const KIT_ORDER = ['vet', 'space', 'dino', 'hero', 'pirate', 'royal', 'unicorn', 'mermaid', 'construction'];
+const KIT_ORDER = ['vet', 'space', 'dino', 'hero', 'pirate', 'royal', 'unicorn', 'mermaid', 'construction', 'easter', 'halloween', 'christmas', 'valentine', 'fire', 'ice', 'racecar'];
 // etsy-listings.md section for each theme's pack (the newer themes come after the bundle, kit and party pack).
-const PACK_SECTIONS = { dino: 1, hero: 2, pirate: 3, space: 4, royal: 5, unicorn: 9, mermaid: 10, construction: 11, vet: 12 };
+const PACK_SECTIONS = { dino: 1, hero: 2, pirate: 3, space: 4, royal: 5, unicorn: 9, mermaid: 10, construction: 11, vet: 12, easter: 15, halloween: 16, christmas: 17, valentine: 18, fire: 19, ice: 20, racecar: 21 };
+
+// Etsy takes up to 10 photos per listing.
+const MAX_PHOTOS = 10;
 
 const CATALOG = [
   ...Object.keys(THEMES).map((theme) => ({
@@ -56,7 +59,7 @@ const CATALOG = [
     price: 7.99,
     variation: { name: 'Kit', options: KIT_ORDER.map((k) => ({ value: KITS[k].name, price: 7.99 })) },
     personalization: { question: 'Child’s name and pets or toys' },
-    photos: ['kits-main.jpg', ...KIT_ORDER.map((k) => `kit-${k}.jpg`)],
+    photos: ['kits-main.jpg', ...KIT_ORDER.map((k) => `kit-${k}.jpg`)].slice(0, MAX_PHOTOS),
     file: { name: 'your-pretend-play-kit.pdf', build: (out) => thankYouPdf(out, 'play kit') },
   },
   {
@@ -67,7 +70,7 @@ const CATALOG = [
     price: 6.99,
     variation: { name: 'Theme', options: Object.values(THEMES).map((t) => ({ value: t.label, price: 6.99 })) },
     personalization: { question: 'Child’s name and age' },
-    photos: ['party-main.jpg', ...Object.keys(THEMES).map((k) => `party-${k}.jpg`)],
+    photos: ['party-main.jpg', ...Object.keys(THEMES).map((k) => `party-${k}.jpg`)].slice(0, MAX_PHOTOS),
     file: { name: 'your-party-printables.pdf', build: (out) => thankYouPdf(out, 'party printables') },
   },
   // One play kit and one party pack listing per theme as well, so each shows up in its own searches.

@@ -1,5 +1,6 @@
 // Builds the Etsy photos for the Party Bundle and Play Kit listings (2400x1800 JPGs in listing-assets/).
-// Usage: node scripts/listing-photos.js <dir with hunt-1.png, hunt-3.png, hunt-7.png, party-space.png (party pack page 2) and kit-<id>.png fans>
+// Usage: node scripts/listing-photos.js <dir with hunt-1.png, hunt-3.png, hunt-7.png, party-space.png (party pack page 2) and kit-<id>.png fans> [photo name ...]
+// Name photos (like kit-vet) to build only those; site-images.js writes the kit-<id>.png fans when FAN_DIR is set.
 const fs = require('fs');
 const path = require('path');
 const { chromium } = require('playwright');
@@ -8,7 +9,8 @@ const { KITS } = require('../src/kits/engine');
 const SRC = process.argv[2];
 const OUT = path.join(__dirname, '..', 'listing-assets');
 const FONTS = path.join(__dirname, '..', 'fonts');
-const img = (f) => `data:image/png;base64,${fs.readFileSync(path.join(SRC, f)).toString('base64')}`;
+// Missing pictures come out blank, so one kit's photo can be built without the others' source pages.
+const img = (f) => (fs.existsSync(path.join(SRC, f)) ? `data:image/png;base64,${fs.readFileSync(path.join(SRC, f)).toString('base64')}` : '');
 const font = (f) => `data:font/ttf;base64,${fs.readFileSync(path.join(FONTS, f)).toString('base64')}`;
 
 const css = `
@@ -53,7 +55,8 @@ for (const k of Object.keys(KITS)) {
   fs.mkdirSync(OUT, { recursive: true });
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1200, height: 900 }, deviceScaleFactor: 2 });
-  for (const [name, html] of Object.entries(pages)) {
+  const only = process.argv.slice(3);
+  for (const [name, html] of Object.entries(pages).filter(([n]) => !only.length || only.includes(n))) {
     await page.setContent(`<style>${css}</style>${html}`);
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: path.join(OUT, `${name}.jpg`), type: 'jpeg', quality: 85 });

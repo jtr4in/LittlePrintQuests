@@ -457,7 +457,8 @@ function themeCss(theme) {
 .award { font-size:38pt; color:#d98a00; text-shadow:2px 2px 0 var(--ink); letter-spacing:.04em; }
 .seal { background:var(--soft); color:var(--ink); outline-color:var(--ink); }`;
     default:
-      return '';
+      // Newer themes carry their own styling.
+      return theme.css || '';
   }
 }
 

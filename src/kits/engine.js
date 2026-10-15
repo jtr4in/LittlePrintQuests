@@ -523,6 +523,13 @@ const KITS = {
   unicorn: require('./defs/unicorn'),
   mermaid: require('./defs/mermaid'),
   construction: require('./defs/construction'),
+  easter: require('./defs/easter'),
+  halloween: require('./defs/halloween'),
+  christmas: require('./defs/christmas'),
+  valentine: require('./defs/valentine'),
+  fire: require('./defs/fire'),
+  ice: require('./defs/ice'),
+  racecar: require('./defs/racecar'),
 };
 
 function buildKitHtml(cfg) {

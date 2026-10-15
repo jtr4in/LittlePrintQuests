@@ -23,6 +23,13 @@ THEMES = {
     'mermaid': ('Mermaid', '#d9f1ee', '#11798a'),
     'construction': ('Construction', '#fde9a8', '#33373d'),
     'vet': ('Pet Vet', '#d8f1e6', '#1f6f66'),
+    'easter': ('Easter', '#ece5f7', '#6f58a8'),
+    'halloween': ('Halloween', '#ffe2c4', '#4a2475'),
+    'christmas': ('Christmas', '#f6e3c3', '#b3202a'),
+    'valentine': ('Valentine’s', '#fde0e8', '#a61e4d'),
+    'fire': ('Firefighter', '#ffe1d6', '#8e1b1b'),
+    'ice': ('Ice Kingdom', '#dbe8f7', '#24467e'),
+    'racecar': ('Race Car', '#ffe8a3', '#b81d17'),
 }
 
 

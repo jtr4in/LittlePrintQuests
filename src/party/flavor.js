@@ -12,6 +12,13 @@ const FLAVOR = {
   mermaid: { party: 'Mermaid Party', tagline: 'Make a splash under the sea!', foods: ['Mermaid Tails', 'Ocean Water', 'Seashell Snacks'] },
   vet: { party: 'Pet Vet Party', tagline: 'Paws up, it’s party time!', foods: ['Puppy Chow', 'Kitty Milk', 'Bunny Bites'] },
   construction: { party: 'Construction Party', tagline: 'Hard hats on, let’s build fun!', foods: ['Dump Truck Dirt', 'Traffic Cones', 'Rocks & Rubble'] },
+  easter: { party: 'Easter Party', tagline: 'Hop on over for spring fun!', foods: ['Bunny Bait', 'Carrot Juice', 'Golden Eggs'] },
+  halloween: { party: 'Halloween Party', tagline: 'Boo! Come party in costume!', foods: ['Pumpkin Bites', 'Bubbling Brew', 'Ghost Puffs'] },
+  christmas: { party: 'Christmas Party', tagline: 'Ho ho ho, let’s celebrate!', foods: ['Reindeer Food', 'Hot Cocoa', 'Snowball Bites'] },
+  valentine: { party: 'Valentine’s Party', tagline: 'Come share the love!', foods: ['Sweetheart Snacks', 'Cupid’s Punch', 'Love Bug Bites'] },
+  fire: { party: 'Firefighter Party', tagline: 'Sirens on, it’s party time!', foods: ['Hydrant Punch', 'Ladder Pretzels', 'Dalmatian Bites'] },
+  ice: { party: 'Winter Wonderland Party', tagline: 'Bundle up for a snowy celebration!', foods: ['Snowballs', 'Snowflake Punch', 'Icicle Sticks'] },
+  racecar: { party: 'Race Car Party', tagline: 'Start your engines, it’s party time!', foods: ['Racing Fuel', 'Spare Tires', 'Stoplight Bites'] },
 };
 
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
