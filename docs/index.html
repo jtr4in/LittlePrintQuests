@@ -133,14 +133,39 @@ main { position: relative; }
 @media (max-width: 860px) { .kit { grid-template-columns: repeat(2, 1fr); } }
 
 /* themes */
-.themes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 32px; }
-.theme { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; display: grid; gap: 10px; align-content: start; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.themes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 32px; }
+.theme { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 10px; align-content: start; text-align: left; font: inherit; color: inherit; cursor: pointer; transition: transform .15s ease; }
+.theme:hover { transform: translateY(-3px); }
 .theme[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 0 2px var(--ink) inset; }
-.swatch { display: flex; height: 34px; border-radius: 8px; overflow: hidden; }
-.swatch span { flex: 1; }
 .theme small { font: 13px/1 var(--mono); color: var(--ink-soft); }
 .theme p { font-size: 14.5px; line-height: 1.45; color: var(--ink-soft); }
-@media (max-width: 980px) { .themes { grid-template-columns: repeat(2, 1fr); } .theme:last-child { grid-column: 1 / -1; } }
+.theme .gets { font: 500 12px/1.3 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--mint-deep); }
+/* three real pages from the theme, fanned like papers on a table */
+.fan { position: relative; aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden; }
+.fan img { position: absolute; width: 44%; height: auto; aspect-ratio: 400 / 518; background: #fff; border-radius: 3px; box-shadow: 0 8px 18px -8px rgba(40, 50, 90, .45); transition: transform .25s ease; }
+.fan img:nth-child(1) { left: 5%; top: 14%; transform: rotate(-9deg); }
+.fan img:nth-child(2) { right: 5%; top: 14%; transform: rotate(8deg); }
+.fan img:nth-child(3) { left: 28%; top: 6%; transform: rotate(-1deg); }
+.theme:hover .fan img:nth-child(1) { transform: rotate(-13deg) translateX(-4%); }
+.theme:hover .fan img:nth-child(2) { transform: rotate(12deg) translateX(4%); }
+@media (max-width: 980px) { .themes { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .themes { grid-template-columns: 1fr; } }
+
+/* checkout stack: one paper per thing in the cart */
+.stack { position: relative; height: 210px; border-radius: 12px; overflow: hidden; }
+.stack img { position: absolute; left: 50%; top: 18px; width: 128px; height: auto; aspect-ratio: 400 / 518; background: #fff; border-radius: 3px; box-shadow: 0 10px 22px -10px rgba(40, 50, 90, .5); transition: transform .35s cubic-bezier(.2, .9, .3, 1.2), opacity .25s ease; }
+.stack img.out { opacity: 0; transform: translate(-50%, 40px) scale(.85) !important; }
+.layers { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.layer { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--paper); cursor: pointer; font: inherit; color: inherit; text-align: left; width: 100%; }
+.layer[aria-pressed="true"] { border-color: var(--ink); background: var(--tint); }
+.layer .box { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--line); display: grid; place-items: center; font: 700 13px/1 var(--mono); color: transparent; background: var(--sheet); }
+.layer[aria-pressed="true"] .box { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.layer b { display: block; font: 600 16px/1.2 var(--display); }
+.layer small { display: block; color: var(--ink-soft); font-size: 13.5px; line-height: 1.3; }
+.layer .amt { font: 500 15px/1 var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.layer .amt.free { color: var(--mint-deep); }
+.save { font-size: 14px; color: var(--mint-deep); min-height: 1.3em; }
+.save s { color: var(--ink-soft); }
 
 /* order builder */
 .builder { display: grid; grid-template-columns: 1.25fr .9fr; gap: 28px; margin-top: 32px; align-items: start; }
@@ -160,7 +185,7 @@ input[type="text"], input[type="number"], input[type="email"], select { width: 1
 .addspot { display: flex; gap: 8px; }
 .addspot input { flex: 1; min-width: 0; }
 .addspot button { flex: none; }
-.summary { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 80px); }
+.summary { position: static; }
 .route { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; font-size: 15px; }
 .route li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; padding: 7px 0; position: relative; }
 .route li::before { content: attr(data-n); width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--tint); font: 700 12px/1 var(--mono); }
@@ -335,12 +360,12 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         <aside class="panel summary" aria-live="polite">
           <div class="field"><span class="eyebrow">Your trail</span><p id="trailTitle" style="font:600 20px/1.2 var(--display)"></p></div>
           <ol class="route" id="route"></ol>
-          <div class="chips" role="group" aria-label="What to include">
-            <button type="button" class="chip product" data-product="bundle" data-price="16.99" data-label="Hunt + play kit + party pack, PDF" aria-pressed="true">Party bundle</button>
-            <button type="button" class="chip product" data-product="hunt" data-price="9.99" data-label="Custom hunt, PDF" aria-pressed="false">Hunt only</button>
-            <button type="button" class="chip product" data-product="party" data-price="6.99" data-label="Party pack, PDF" aria-pressed="false">Party pack only</button>
+          <div class="field"><span class="eyebrow">What’s in your order</span>
+            <div class="stack" id="stack" aria-hidden="true"></div>
+            <ul class="layers" id="layers" role="group" aria-label="What to include"></ul>
+            <p class="save" id="saveNote"></p>
           </div>
-          <div class="total"><span id="totalLabel">Hunt + play kit + party pack, PDF</span><strong id="totalPrice">$16.99</strong></div>
+          <div class="total"><span id="totalLabel">Party bundle, PDF</span><strong id="totalPrice">$16.99</strong></div>
           <button class="btn btn-orange" type="submit" style="justify-content:center">Continue to checkout</button>
           <p class="status" id="formStatus"></p>
           <p class="alt">Prefer Etsy? <a id="etsyLink" href="#" target="_blank" rel="noopener">Order the same hunt in our Etsy shop</a>.</p>
@@ -419,9 +444,9 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <div class="pin"><b></b><span class="eyebrow">Pricing</span></div>
       <h2>Everything for the party, one price</h2>
       <div class="plans">
-        <div class="plan main"><span class="eyebrow">Party bundle · most popular</span><div class="price">$16.99 <small>per party</small></div><p class="was"><s>$24.97</s> value: the hunt, its play kit and party printables</p><ul><li>Custom hunt with your child’s name and your home’s own spots</li><li>Matching play kit with a pretend gadget and hands-on props</li><li>Matching invitations, cupcake toppers, favor tags, a name banner and more</li><li>Delivered to your inbox in minutes</li></ul><a class="btn btn-orange" href="#order">Make my party bundle</a></div>
-        <div class="plan"><span class="eyebrow">Hunt only</span><div class="price">$9.99</div><ul><li>Your child’s name on every page</li><li>6 to 10 of your home’s own spots</li><li>Host guide, briefing, cards and certificate</li></ul><a class="btn btn-ghost" href="#order">Make just the hunt</a></div>
-        <div class="plan"><span class="eyebrow">Party pack only</span><div class="price">$6.99</div><ul><li>Invitations and thank-you cards</li><li>Cupcake toppers, favor tags and food cards</li><li>A HAPPY BIRTHDAY banner with your child’s name</li></ul><a class="btn btn-ghost" href="#order">Make a party pack</a></div>
+        <div class="plan main"><span class="eyebrow">Party bundle · most popular</span><div class="price">$16.99 <small>per party</small></div><p class="was"><s>$24.97</s> value: the hunt, its play kit and party printables</p><ul><li>Custom hunt with your child’s name and your home’s own spots</li><li>Matching play kit with a pretend gadget and hands-on props</li><li>Matching invitations, cupcake toppers, favor tags, a name banner and more</li><li>Delivered to your inbox in minutes</li></ul><a class="btn btn-orange" href="#order" data-pick="bundle">Make my party bundle</a></div>
+        <div class="plan"><span class="eyebrow">Hunt only</span><div class="price">$9.99</div><ul><li>Your child’s name on every page</li><li>6 to 10 of your home’s own spots</li><li>Host guide, briefing, cards and certificate</li></ul><a class="btn btn-ghost" href="#order" data-pick="hunt">Make just the hunt</a></div>
+        <div class="plan"><span class="eyebrow">Party pack only</span><div class="price">$6.99</div><ul><li>Invitations and thank-you cards</li><li>Cupcake toppers, favor tags and food cards</li><li>A HAPPY BIRTHDAY banner with your child’s name</li></ul><a class="btn btn-ghost" href="#order" data-pick="party">Make a party pack</a></div>
         <div class="plan"><span class="eyebrow">Play kit only</span><div class="price">$7.99</div><ul><li>Any of the nine kits, including Vet Clinic</li><li>Signs, badges and dashboard with your child’s name</li><li>Great for a rainy day or a party table</li></ul><a class="btn btn-ghost" href="#kits">See the kits</a></div>
       </div>
       <p class="hint" style="margin-top:16px">Prefer Etsy? Ready-made theme packs are in <a id="etsyLink2" href="#" target="_blank" rel="noopener">our Etsy shop</a>.</p>
@@ -536,7 +561,8 @@ const state = { theme: 'dino', picks: ['front_door', 'shoe_rack', 'couch', 'drye
 // Theme cards and select
 $('themeList').innerHTML = THEMES.map((t) => `
   <button type="button" class="theme" data-id="${t.id}" aria-pressed="false">
-    <div class="swatch">${t.colors.map((c) => `<span style="background:${c}"></span>`).join('')}</div>
+    <div class="fan" style="background:color-mix(in srgb, ${t.colors[2]} 35%, #fbf8f1)">${['hunt', 'party', 'kit'].map((k) => `<img src="img/pages/${t.id}-${k}.webp" alt="" width="400" height="518" loading="lazy">`).join('')}</div>
+    <span class="gets">Hunt · play kit · party pack</span>
     <h3>${t.name}</h3><small>Ages ${t.ages}</small><p>${t.hook}</p>
   </button>`).join('');
 $('themeSelect').innerHTML = THEMES.map((t) => `<option value="${t.id}">${t.name} (ages ${t.ages})</option>`).join('');
@@ -603,26 +629,69 @@ function render() {
       }).join('')
     : '<li class="empty">Tap spots on the left to build your trail.</li>';
   drawChips();
+  if (typeof drawCart === 'function' && $('stack').children.length) drawCart();
 }
 $('childName').addEventListener('input', render);
 $('childAge').addEventListener('input', render);
 
+// The cart is a stack of papers: the hunt, its play kit and the party pack.
+// The site sells three products, so each tap moves between them: the hunt with
+// anything else is the Party Bundle, which always includes all three.
+const LAYERS = [
+  { id: 'hunt', name: 'Custom scavenger hunt', note: 'Clue cards, host guide, briefing and certificate', price: 9.99 },
+  { id: 'kit', name: 'Pretend play kit', note: 'Signs, a pretend gadget and props with their name', price: 7.99 },
+  { id: 'party', name: 'Party pack', note: 'Invitations, toppers, banner, favor tags and more', price: 6.99 },
+];
+const PRODUCTS = {
+  bundle: { price: 16.99, label: 'Party bundle, PDF', has: ['hunt', 'kit', 'party'] },
+  hunt: { price: 9.99, label: 'Custom hunt, PDF', has: ['hunt'] },
+  party: { price: 6.99, label: 'Party pack, PDF', has: ['party'] },
+};
 let product = 'bundle';
-document.querySelectorAll('.product').forEach((b) => b.addEventListener('click', () => {
-  product = b.dataset.product;
-  document.querySelectorAll('.product').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-  $('totalLabel').textContent = b.dataset.label;
-  $('totalPrice').textContent = '$' + b.dataset.price;
+const money = (n) => '$' + n.toFixed(2);
+
+// What tapping a row does, from each product: [tapped row] -> new product
+const TAPS = {
+  bundle: { hunt: 'party', kit: 'hunt', party: 'hunt' },
+  hunt: { hunt: null, kit: 'bundle', party: 'bundle' },
+  party: { hunt: 'bundle', kit: 'bundle', party: null },
+  null: { hunt: 'hunt', kit: 'bundle', party: 'party' },
+};
+function pick(id) { setProduct(TAPS[product][id]); }
+function setProduct(next) { product = next; drawCart(); }
+function drawCart() {
+  const gets = product ? PRODUCTS[product].has : [];
+  // papers fan out wider as the stack grows
+  const pos = { 1: [[0, 0]], 3: [[-62, -9], [62, 9], [0, -1]] }[gets.length] || [];
+  const order = ['hunt', 'party', 'kit'].filter((k) => gets.includes(k));
+  $('stack').querySelectorAll('img').forEach((img) => img.classList.toggle('out', !gets.includes(img.dataset.k)));
+  order.forEach((k, i) => {
+    const img = $('stack').querySelector(`[data-k="${k}"]`);
+    img.src = `img/pages/${state.theme}-${k}.webp`;
+    img.style.zIndex = i + 1;
+    img.style.transform = `translate(calc(-50% + ${pos[i][0]}px), ${Math.abs(pos[i][0]) / 5}px) rotate(${pos[i][1]}deg)`;
+  });
+  $('layers').innerHTML = LAYERS.map((l) => `<li><button type="button" class="layer" data-id="${l.id}" aria-pressed="${gets.includes(l.id)}">
+      <span class="box">✓</span><span><b>${l.name}</b><small>${l.note}</small></span><span class="amt">${money(l.price)}</span></button></li>`).join('');
+  $('layers').querySelectorAll('.layer').forEach((b) => b.addEventListener('click', () => pick(b.dataset.id)));
+  $('saveNote').innerHTML = product === 'bundle' ? '<s>$24.97</s> bundled for $16.99, so you save $7.98.'
+    : product === 'hunt' ? 'Add the play kit and party pack together for $7.00 more.'
+    : product === 'party' ? 'Add the hunt and play kit together for $10.00 more.' : 'Pick at least one thing to print.';
+  $('totalLabel').textContent = product ? PRODUCTS[product].label : 'Nothing picked yet';
+  $('totalPrice').textContent = money(product ? PRODUCTS[product].price : 0);
   // A party pack needs no hiding spots, and only the bundle and party pack have invitations.
   $('spotsField').hidden = product === 'party';
   $('route').hidden = product === 'party';
   document.querySelector('.party-details').hidden = product === 'hunt';
-}));
+}
+$('stack').innerHTML = ['hunt', 'kit', 'party'].map((k) => `<img data-k="${k}" class="out" alt="" width="400" height="518">`).join('');
+document.querySelectorAll('[data-pick]').forEach((a) => a.addEventListener('click', () => setProduct(a.dataset.pick)));
 
 $('orderForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const childName = $('childName').value.trim();
   if (!childName) return status('Add your child’s first name so we can put it on the cards.', true), $('childName').focus();
+  if (!product) return status('Pick the hunt, the party pack or both.', true);
   if (product !== 'party' && state.picks.length < 6) return status(`Pick at least 6 spots. You have ${state.picks.length}.`, true);
   const order = {
     product,
