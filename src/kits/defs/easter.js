@@ -59,6 +59,13 @@ module.exports = {
     title: 'Egg Shop Prices', icon: '🥚', coinIcon: '🥕', coinWord: 'carrot', coinsTitle: 'Carrot coins',
     items: [['🥚', 'Plain egg', 1], ['🎨', 'Painted egg', 2], ['🌟', 'Golden egg', 3], ['🍫', 'Chocolate egg', 2], ['🥕', 'Carrot snack', 1], ['🎀', 'Basket ribbon', 1], ['🧺', 'Full basket', 5], ['🐰', 'Bunny hop ride', 3]],
   },
+  toys: [
+    { type: 'headband', inside: 'Bunny ears to wear, with your child’s name', title: 'Bunny Ears', howTo: 'Hop, hop, hop! Wear your ears for the egg hunt.',
+      ornament: 'ears', piece: 'ears', bandIcons: ['🥕', '🥚', '🌷'] },
+    { type: 'flaps', inside: 'A lift-the-flap egg basket with six surprises', title: 'Surprise Egg Basket', howTo: 'Lift each flap to find what the bunny left in the basket!',
+      vessel: 'basket', label: '{childs} Basket',
+      items: [['🥚', 'Golden egg'], ['🐣', 'Baby chick'], ['🍫', 'Chocolate'], ['🥕', 'Carrot'], ['🐰', 'Bunny'], ['🌷', 'Tulip']] },
+  ],
   dashboard: {
     gadget: 'bunny delivery tablet', device: 'communicator', decor: '🧺',
     appName: 'HopDrop', appIcon: '🐰', scheduleTitle: 'Delivery calendar', monitorTitle: 'Egg counter', alertHeader: 'New order',
@@ -85,7 +92,7 @@ module.exports = {
     intro: 'Everything {child} needs to run a pretend Easter egg factory. Print on regular Letter paper, cut along the dashed lines, and gather some stuffed animals to be customers.',
     setup: [
       'Tape the Egg Factory sign and Factory Open sign by the door.', 'Set up a Paint Studio with crayons and the painted egg cards.',
-      'Cut out the delivery tablet and glue it onto cardboard.', 'Line a basket or box with paper “grass” for the orders.',
+      'Make the bunny ears and tape the headband to fit.', 'Line a basket or box with paper “grass” for the orders.',
       'Pin on the badges and open the factory!',
     ],
     play: [

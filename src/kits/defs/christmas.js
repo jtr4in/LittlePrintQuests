@@ -62,6 +62,15 @@ module.exports = {
     title: 'Cocoa Corner', icon: '☕', coinIcon: '⭐', coinWord: 'star', coinsTitle: 'Elf stars',
     items: [['☕', 'Hot cocoa', 2], ['🍪', 'Cookie', 1], ['🥛', 'Milk', 1], ['🍬', 'Peppermint', 1], ['🧁', 'Cupcake', 2], ['🍩', 'Donut', 2], ['🥕', 'Reindeer carrot', 1], ['🛷', 'Sleigh ride', 5]],
   },
+  toys: [
+    { type: 'headband', inside: 'Reindeer antlers to wear, with your child’s name', title: 'Reindeer Antlers', howTo: 'Put on your antlers and help pull Santa’s sleigh!',
+      ornament: 'antlers', piece: 'antlers', bandIcons: ['🔔', '🎁', '⭐'] },
+    { type: 'gauges', inside: 'A Nice-o-Meter and a Sleigh Speed meter with needles that spin', title: 'North Pole Meters', howTo: 'Cut out the meters and needles. Santa’s helpers check them every day!',
+      gauges: [
+        { name: '{childs} Nice-o-Meter', needle: '🎅', zones: [['🙂', 'Nice'], ['😊', 'Very nice'], ['🤩', 'Super nice'], ['🌟', 'NICEST!']] },
+        { name: 'Sleigh Speed', needle: '🛷', zones: [['🦌', 'Warm up'], ['💨', 'Flying'], ['🌙', 'Moon fast'], ['🚀', 'Rocket fast']] },
+      ] },
+  ],
   dashboard: {
     gadget: 'sleigh dashboard', device: 'console', decor: '🛷',
     appName: 'JingleNav', appIcon: '🔔', scheduleTitle: 'Countdown to Christmas', monitorTitle: 'Sleigh check', alertHeader: 'North Pole message',
@@ -87,7 +96,7 @@ module.exports = {
     intro: 'Everything {child} needs to run a pretend toy workshop. Print on regular Letter paper, cut along the dashed lines, and gather some toys to be helpers.',
     setup: [
       'Tape the Toy Workshop sign and Workshop Open sign by the door.', 'Set up a Toy Building table with blocks, crayons and tape.',
-      'Make a Wrapping Station with paper, ribbon and empty boxes.', 'Cut out the sleigh dashboard and fold the screen up.',
+      'Make a Wrapping Station with paper, ribbon and empty boxes.', 'Make the reindeer antlers and tape the headband to fit.',
       'Pin on the badges and start making toys!',
     ],
     play: [

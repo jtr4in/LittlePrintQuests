@@ -65,6 +65,7 @@ module.exports = {
       cardTitle: 'Dino Hatchery', cardIcons: ['🌋', '🥚', '🦕'], cardHint: 'Keep the eggs warm!',
       frames: [{ e: '🥚', text: 'Shh… it’s wobbling!' }, { shape: 'crack', e: '👀', text: 'Crack… crack… CRACK!' }, { shape: 'hatch', e: '🦕', text: 'Hello, baby dino!' }] },
   ],
+  shop: { hero: ['🦴', '🦖', '🥚'] },
   dashboard: {
     gadget: 'dino scanner', device: 'scanner', decor: '🔍',
     appName: 'DinoTrack', appIcon: '🦖', scheduleTitle: 'Dig calendar', monitorTitle: 'Dino tracker', alertHeader: 'Ranger alert',

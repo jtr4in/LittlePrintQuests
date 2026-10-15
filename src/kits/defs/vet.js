@@ -58,6 +58,14 @@ module.exports = {
     title: 'Treatment Prices', icon: '🪙', coinIcon: '🐾', coinWord: 'coin', coinsTitle: 'Paw coins',
     items: [['🩺', 'Check-up', 2], ['🩹', 'Bandage', 1], ['💉', 'Vaccine', 2], ['🦴', 'X-ray', 3], ['🦷', 'Teeth clean', 2], ['🛁', 'Bath & brush', 3], ['💅', 'Claw trim', 1], ['😷', 'Surgery', 5]],
   },
+  toys: [
+    { type: 'flaps', inside: 'A lift-the-flap doctor’s bag with six tools to find', title: 'Vet’s Doctor Bag', howTo: 'Lift a flap to find a tool, then use it on a patient. Can you find all six?',
+      vessel: 'bag', label: 'Dr. {child}’s Bag',
+      items: [['🩺', 'Stethoscope'], ['🌡️', 'Thermometer'], ['🩹', 'Bandage'], ['🦴', 'Yummy treat'], ['🪥', 'Toothbrush'], ['🔦', 'Flashlight']] },
+    { type: 'slider', inside: 'An X-ray machine: pull the tab to see inside a patient', title: 'X-Ray Machine', howTo: 'Pull the tab slowly to take an X-ray of your patient!',
+      cardTitle: 'X-Ray Room', cardIcons: ['🦴', '🐶', '🩹'], cardHint: 'Hold still, please!',
+      frames: [{ e: '🐶', text: 'Hold still, pup!' }, { e: '🦴', text: 'Look at those bones!' }, { e: '🩹', text: 'All better!' }] },
+  ],
   dashboard: {
     gadget: 'clinic laptop', device: 'laptop', decor: '🩺',
     appName: 'PawCare', appIcon: '🐾', scheduleTitle: 'Today at the clinic', monitorTitle: 'Patient monitor', alertHeader: 'New message',

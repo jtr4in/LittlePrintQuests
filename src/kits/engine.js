@@ -215,9 +215,7 @@ function guidePage(k) {
     `${d.record.title} forms, two to a page, for ${k.subjects.length ? `each of your ${d.subjectPlural}` : `four ${d.subjectPlural}`} plus a blank one`,
     `${d.ticket.title} cards`,
     d.passport.pageTitle,
-    `A big “Welcome to ${k.placeName}” poster`,
-    `${d.menu.title} board, a Today’s Specials board and order slips`,
-    `${d.menu.coinsTitle}: bills and coins to cut out`,
+    `Shop set: welcome poster, ${d.menu.title} board, Today’s Specials, order slips and ${d.menu.coinsTitle.toLowerCase()}`,
     `${d.certificate.title} (named + blank)`,
   ];
   return `<section class="page guide${k.withHunt && G.afterHunt ? ' with-hunt' : ''}">
@@ -225,7 +223,7 @@ function guidePage(k) {
     <p class="lead">${esc(G.intro.replace('{child}', k.childName))}</p>
     <div class="guide-cols">
       <div><h3>What’s inside</h3><ul>${inside.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
-      <div><h3>Set up in 10 minutes</h3><ol>${G.setup.map((x) => `<li>${esc(x)}</li>`).join('')}</ol></div>
+      <div><h3>Set up in 10 minutes</h3><ol>${[G.setup[0], 'Hang the welcome poster; tape up the menu and specials.', ...G.setup.slice(1)].map((x) => `<li>${esc(x)}</li>`).join('')}</ol></div>
     </div>
     ${k.withHunt && G.afterHunt ? `<div class="after-hunt"><b>After the hunt</b>${esc(G.afterHunt.replace('{place}', k.placeName).replace('{child}', k.childName))}</div>` : ''}
     <div class="play"><h3>Play ideas</h3><div class="play-grid">
@@ -585,12 +583,12 @@ h1, h2, h3 { font-family:'Fredoka', sans-serif; margin:0; line-height:1.1; }
 .guide-head { display:flex; gap:.2in; align-items:center; }
 .guide-icon { font-size:46pt; background:var(--mint); border-radius:50%; width:1.1in; height:1.1in; display:grid; place-items:center; flex:none; }
 .guide h1 { font-size:30pt; }
-.lead { font-size:14.5pt; line-height:1.5; margin:.24in 0; }
+.lead { font-size:13.5pt; line-height:1.45; margin:.2in 0; }
 .guide-cols { display:grid; grid-template-columns:1fr 1fr; gap:.3in; }
 .guide h3 { font-size:18pt; color:var(--teal-d); margin-bottom:.08in; }
-.guide ul, .guide ol { margin:0; padding-left:.25in; font-size:13pt; line-height:1.55; }
-.play { margin-top:.3in; }
-.with-hunt .lead { margin:.16in 0; font-size:13.5pt; } .with-hunt ul, .with-hunt ol { font-size:12.5pt; line-height:1.45; }
+.guide ul, .guide ol { margin:0; padding-left:.25in; font-size:12.5pt; line-height:1.42; }
+.play { margin-top:.22in; }
+.with-hunt .lead { margin:.16in 0; font-size:13.5pt; } .with-hunt ul, .with-hunt ol { font-size:11.5pt; line-height:1.36; }
 .with-hunt .play { margin-top:.18in; } .with-hunt .play-grid div { padding:.12in .16in; font-size:12pt; }
 .play-grid { display:grid; grid-template-columns:1fr 1fr; gap:.15in; }
 .play-grid div { background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:.18in .2in; font-size:13pt; line-height:1.45; }

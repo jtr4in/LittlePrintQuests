@@ -97,7 +97,7 @@ module.exports = {
     intro: 'Everything {child} needs to run a pretend potion shop. Print on regular Letter paper, cut along the dashed lines, and gather some stuffed animals to be customers.',
     setup: [
       'Tape the Potion Shop sign and Open sign by the door.', 'Use a big pot or bowl as the cauldron, with a wooden spoon.',
-      'Cut out the cauldron control panel and fold the screen up.', 'Fill a shelf with “ingredients”: the cards, cups, cotton balls and colored water.',
+      'Put the potion cauldron together: glue the back behind the doors.', 'Fill a shelf with “ingredients”: the cards, cups, cotton balls and colored water.',
       'Pin on the badges and open the shop!',
     ],
     play: [

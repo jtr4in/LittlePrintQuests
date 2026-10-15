@@ -47,9 +47,9 @@ function gauge(G, k) {
     const [x0, y0] = pt(300, 300, 280, a0); const [x1, y1] = pt(300, 300, 280, a1);
     const [x2, y2] = pt(300, 300, 120, a1); const [x3, y3] = pt(300, 300, 120, a0);
     const [ex, ey] = pt(300, 300, 235, (a0 + a1) / 2); const [lx, ly] = pt(300, 300, 168, (a0 + a1) / 2);
-    const dark = i % 6 === 3 || i % 6 === 5;
+    const ink = i % 6 === 3 || i % 6 === 5 ? ' light' : i % 6 === 2 ? ' on-accent' : '';
     return `<path d="M${x0},${y0} A280,280 0 0 1 ${x1},${y1} L${x2},${y2} A120,120 0 0 0 ${x3},${y3} Z" fill="${shades[i % 6]}" class="zone"/>
-      ${em(ex, ey, 46, e)}<text x="${lx}" y="${ly}" class="zone-t${dark ? ' light' : ''}" text-anchor="middle" dominant-baseline="central">${esc(label)}</text>`;
+      ${em(ex, ey, 46, e)}<text x="${lx}" y="${ly}" class="zone-t${ink}" text-anchor="middle" dominant-baseline="central">${esc(label)}</text>`;
   }).join('');
   const ticks = Array.from({ length: 19 }, (_, i) => {
     const [a, b] = pt(300, 300, 292, i * 10); const [c, d] = pt(300, 300, 280 + (i % 3 ? 0 : -14) + 4, i * 10);
@@ -85,6 +85,56 @@ const VESSELS = {
       <path d="M70,150 Q40,330 150,410 L150,450 L200,450 L215,425 Q350,450 485,425 L500,450 L550,450 L550,410 Q660,330 630,150 Z" class="v-body"/>
       <ellipse cx="350" cy="132" rx="270" ry="30" class="v-brew"/>
       ${em(230, 72, 50, '🫧')}${em(360, 40, 60, '🫧')}${em(480, 78, 44, '🫧')}`,
+  },
+  // A doctor's bag with a handle and a gold clasp.
+  bag: {
+    box: [130, 175, 440, 210],
+    art: () => `<path d="M260,118 Q260,40 350,40 Q440,40 440,118" fill="none" stroke="var(--teal-d)" stroke-width="30" stroke-linecap="round"/>
+      <rect x="70" y="110" width="560" height="345" rx="46" class="v-body"/><rect x="70" y="110" width="560" height="52" rx="26" class="v-lid"/>
+      <rect x="318" y="96" width="64" height="40" rx="8" class="v-gold"/>`,
+  },
+  // A treasure chest with a curved lid, metal bands and a lock.
+  chest: {
+    box: [130, 190, 440, 200],
+    art: () => `<path d="M70,180 L70,130 Q350,10 630,130 L630,180 Z" class="v-lid"/>
+      <rect x="70" y="170" width="560" height="285" rx="14" class="v-body"/>
+      <rect x="110" y="40" width="34" height="415" class="v-gold" opacity=".85"/><rect x="556" y="40" width="34" height="415" class="v-gold" opacity=".85"/>
+      <circle cx="350" cy="168" r="28" class="v-gold"/><rect x="342" y="160" width="16" height="22" rx="4" fill="var(--teal-d)"/>
+      ${em(200, 26, 50, '💎')}${em(500, 26, 50, '🪙')}`,
+  },
+  // A castle wall between two towers, with a window behind every door.
+  castle: {
+    box: [150, 190, 400, 200],
+    art: () => {
+      const crenel = (x0, x1, y) => Array.from({ length: Math.floor((x1 - x0) / 40) }, (_, i) => (i % 2 ? '' : `<rect x="${x0 + i * 40}" y="${y - 30}" width="40" height="32" class="v-body"/>`)).join('');
+      return `<rect x="40" y="90" width="130" height="365" class="v-body"/>${crenel(40, 170, 90)}<rect x="530" y="90" width="130" height="365" class="v-body"/>${crenel(530, 660, 90)}
+        <rect x="140" y="150" width="420" height="305" class="v-lid"/>${crenel(140, 560, 150)}
+        ${em(105, 30, 60, '🚩')}${em(595, 30, 60, '🚩')}`;
+    },
+  },
+  // A toolbox with a handle on top.
+  toolbox: {
+    box: [140, 190, 420, 200],
+    art: () => `<rect x="250" y="70" width="200" height="70" rx="20" fill="none" stroke="var(--teal-d)" stroke-width="26"/>
+      <path d="M70,140 L630,140 L605,455 L95,455 Z" class="v-body"/><rect x="70" y="140" width="560" height="44" class="v-lid"/>
+      <rect x="160" y="152" width="40" height="20" rx="4" class="v-gold"/><rect x="500" y="152" width="40" height="20" rx="4" class="v-gold"/>`,
+  },
+  // A woven basket with a big handle.
+  basket: {
+    box: [140, 205, 420, 185],
+    art: () => `<path d="M110,190 Q110,20 350,20 Q590,20 590,190" fill="none" stroke="var(--teal-d)" stroke-width="28"/>
+      <path d="M60,175 L640,175 L590,455 L110,455 Z" class="v-body"/>
+      ${Array.from({ length: 6 }, (_, i) => `<line x1="80" y1="${215 + i * 42}" x2="620" y2="${215 + i * 42}" stroke="var(--teal)" stroke-width="5" opacity=".5"/>`).join('')}
+      <rect x="50" y="160" width="600" height="40" rx="20" class="v-lid"/>
+      ${em(150, 150, 56, '🌷')}${em(550, 150, 56, '🌼')}`,
+  },
+  // A little mailbox house with a heart flag.
+  mailbox: {
+    box: [140, 205, 420, 185],
+    art: () => `<path d="M60,190 L350,40 L640,190 Z" class="v-lid"/>
+      <rect x="80" y="180" width="540" height="275" rx="12" class="v-body"/>
+      <rect x="628" y="120" width="14" height="190" fill="var(--teal-d)"/><path d="M642,120 L690,120 L690,170 L642,170 Z" fill="var(--orange)"/>
+      ${em(350, 125, 70, '💌')}`,
   },
 };
 
@@ -187,7 +237,102 @@ function puzzle(T, k) {
   </section>`;
 }
 
-const TYPES = { steering, gauges, flaps, slider, puzzle };
+
+// ---------- spinner ----------
+// Two discs on one paper fastener: spin the bottom one and a picture shows through the window.
+function spinner(T, k) {
+  const n = T.items.length;
+  const C = 220; const R = 212;
+  const seg = 360 / n;
+  const shades = ['var(--mint-l)', 'var(--gold)', 'var(--mint)', '#ffffff', 'var(--orange)', 'var(--mint-l)'];
+  const base = T.items.map(([e, label], i) => {
+    const a0 = 90 + seg / 2 - i * seg; const a1 = a0 - seg; const mid = a0 - seg / 2;
+    const [x0, y0] = pt(C, C, R, a0); const [x1, y1] = pt(C, C, R, a1);
+    const [ex, ey] = pt(C, C, 140, mid); const [lx, ly] = pt(C, C, 78, mid);
+    return `<path d="M${C},${C} L${x0},${y0} A${R},${R} 0 0 1 ${x1},${y1} Z" fill="${shades[i % 6]}" stroke="var(--teal-d)" stroke-width="3"/>
+      ${em(ex, ey, 82, e)}<text x="${lx}" y="${ly}" class="spin-t" text-anchor="middle" dominant-baseline="central" transform="rotate(${90 - mid} ${lx} ${ly})">${esc(label)}</text>`;
+  }).join('');
+  const [wx0, wy0] = pt(C, C, 205, 90 + seg / 2 - 2); const [wx1, wy1] = pt(C, C, 205, 90 - seg / 2 + 2);
+  const [wx2, wy2] = pt(C, C, 48, 90 - seg / 2 + 2); const [wx3, wy3] = pt(C, C, 48, 90 + seg / 2 - 2);
+  return `<section class="page toy">${head(T, k)}
+    <div class="spin-row">
+      <div class="spin-col"><div class="layer-h">Top</div>
+      <svg class="disc" viewBox="0 0 440 440">
+        <circle cx="${C}" cy="${C}" r="${R}" class="disc-top"/><circle cx="${C}" cy="${C}" r="${R - 14}" fill="none" stroke="var(--gold)" stroke-width="5" stroke-dasharray="2 14" stroke-linecap="round"/>
+        <path d="M${wx0},${wy0} A205,205 0 0 1 ${wx1},${wy1} L${wx2},${wy2} A48,48 0 0 0 ${wx3},${wy3} Z" class="window"/>
+        <text x="${C}" y="${C + 62}" class="disc-name" text-anchor="middle">${esc(fill(T.label, k))}</text>
+        <text x="${C}" y="${C + 100}" class="disc-sub" text-anchor="middle">${esc(T.sub)}</text>
+        ${em(C - 120, C + 150, 54, T.decor[0])}${em(C, C + 162, 54, T.decor[1])}${em(C + 120, C + 150, 54, T.decor[2])}
+        <circle cx="${C}" cy="${C}" r="9" class="pin"/>
+      </svg></div>
+      <div class="spin-col"><div class="layer-h">Bottom</div>
+      <svg class="disc" viewBox="0 0 440 440">${base}<circle cx="${C}" cy="${C}" r="9" class="pin"/></svg></div>
+    </div>
+    <p class="toy-tip">Cut out both circles and the window in the top one. Push a paper fastener (brad) through both middle dots, top circle on top. Spin it!</p>
+    ${T.game ? `<div class="spin-game"><b>${esc(T.game[0])}</b> ${esc(T.game[1])}</div>` : ''}
+  </section>`;
+}
+
+// ---------- headband ----------
+const ORNAMENTS = {
+  antlers: () => {
+    const antler = (m) => `<g transform="translate(${m ? 700 : 0},0) scale(${m ? -1 : 1},1)" fill="none" stroke="#8a5a2b" stroke-width="30" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M250,400 Q240,260 170,170 Q130,110 150,40"/><path d="M215,250 Q140,240 90,170"/><path d="M180,190 Q200,120 250,90"/><path d="M110,190 Q60,170 50,110"/></g>`;
+    return `<svg class="orn" viewBox="0 0 700 420">${antler(false)}${antler(true)}${em(350, 330, 110, '🎄')}${em(270, 380, 60, '🔔')}${em(430, 380, 60, '🔔')}</svg>`;
+  },
+  ears: () => `<svg class="orn" viewBox="0 0 700 420">
+      <g transform="rotate(-10 250 400)"><ellipse cx="250" cy="215" rx="95" ry="200" fill="#fff" stroke="var(--teal-d)" stroke-width="8"/><ellipse cx="250" cy="230" rx="52" ry="150" fill="#ffc9d9"/></g>
+      <g transform="rotate(10 450 400)"><ellipse cx="450" cy="215" rx="95" ry="200" fill="#fff" stroke="var(--teal-d)" stroke-width="8"/><ellipse cx="450" cy="230" rx="52" ry="150" fill="#ffc9d9"/></g>
+      ${em(350, 375, 80, '🌸')}</svg>`,
+  shield: (k, T) => `<svg class="orn" viewBox="0 0 700 420">
+      <path d="M350,10 L560,60 Q600,230 350,410 Q100,230 140,60 Z" fill="var(--teal)" stroke="var(--gold)" stroke-width="14"/>
+      <path d="M350,45 L530,88 Q560,225 350,372 Q140,225 170,88 Z" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="4 10"/>
+      <text x="350" y="110" class="shield-t" text-anchor="middle">${esc(T.shieldTop)}</text>
+      ${em(350, 205, 120, T.shieldIcon)}
+      <text x="350" y="318" class="shield-name" text-anchor="middle">${esc(k.childName.toUpperCase())}</text></svg>`,
+  snowcrown: () => {
+    const pts = Array.from({ length: 9 }, (_, i) => `${40 + i * 77.5},${i % 2 ? 260 : 60}`).join(' L');
+    return `<svg class="orn" viewBox="0 0 700 420"><path d="M40,400 L${pts} L660,400 Z" fill="#e8f3ff" stroke="var(--teal-d)" stroke-width="8" stroke-linejoin="round"/>
+      ${[0, 2, 4, 6, 8].map((i) => em(40 + i * 77.5, 110, 64, '❄️')).join('')}${em(350, 330, 90, '💎')}</svg>`;
+  },
+  shells: () => `<svg class="orn" viewBox="0 0 700 420"><path d="M40,400 Q350,250 660,400 Z" fill="var(--mint)" stroke="var(--teal-d)" stroke-width="6"/>
+      ${em(160, 300, 110, '🐚')}${em(540, 300, 110, '🐚')}${em(350, 170, 190, '🐚')}${em(255, 250, 70, '⭐')}${em(445, 250, 70, '⭐')}</svg>`,
+  hardhat: (k) => `<svg class="orn" viewBox="0 0 700 420"><path d="M100,330 Q100,60 350,60 Q600,60 600,330 Z" fill="var(--gold)" stroke="var(--teal-d)" stroke-width="10"/>
+      <rect x="320" y="60" width="60" height="270" fill="#f0c23a" opacity=".9"/><rect x="40" y="320" width="620" height="60" rx="30" fill="var(--orange)" stroke="var(--teal-d)" stroke-width="8"/>
+      <text x="350" y="364" class="shield-name dark" text-anchor="middle">${esc(k.childName.toUpperCase())}</text>${em(210, 210, 90, '🚧')}${em(490, 210, 90, '🔨')}</svg>`,
+};
+
+function headband(T, k) {
+  const band = (first) => `<svg class="band" viewBox="0 0 760 140">
+    <rect x="${first ? 0 : 40}" y="0" width="${first ? 760 : 720}" height="140" rx="16" class="band-p"/>
+    ${first ? '' : '<rect x="0" y="0" width="40" height="140" class="tab"/><text x="20" y="70" text-anchor="middle" class="tab-t" transform="rotate(-90 20 70)">TAPE</text>'}
+    ${(first ? [110, 650] : [150, 300, 460, 610]).map((x, i) => em(x, 70, 70, T.bandIcons[i % T.bandIcons.length])).join('')}
+    ${first ? `<text x="380" y="80" class="band-t" text-anchor="middle" dominant-baseline="central">${esc(k.childName)}</text>` : ''}</svg>`;
+  return `<section class="page toy">${head(T, k)}
+    ${ORNAMENTS[T.ornament](k, T)}
+    <div class="cut-h wide"></div>
+    ${band(true)}${band(false)}
+    <p class="toy-tip">Cut out the ${esc(T.piece)} and both strips. Tape the strips into a ring that fits the head, then glue the ${esc(T.piece)} to the front.</p>
+  </section>`;
+}
+
+// ---------- spyglass ----------
+function spyglass(T, k) {
+  const rings = [30, 363, 696].map((x) => `<rect x="${x}" y="0" width="34" height="400" class="v-gold"/>`).join('');
+  return `<section class="page toy">${head(T, k)}
+    <svg class="tube" viewBox="0 0 760 400">
+      <rect width="760" height="400" rx="12" class="tube-p"/>${rings}
+      ${em(200, 120, 100, T.decor[0])}${em(530, 280, 100, T.decor[1])}${em(630, 90, 60, T.decor[2])}
+      <text x="200" y="290" class="tube-t" text-anchor="middle">${esc(fill(T.label, k))}</text>
+      <text x="530" y="120" class="tube-sub" text-anchor="middle">${esc(T.sub)}</text>
+    </svg>
+    <p class="toy-tip">Cut out the rectangle, roll it into a tube with the picture outside and tape it closed.</p>
+    <div class="spot"><div class="spot-h">${esc(T.spotTitle)}</div>
+      <div class="spot-grid">${T.spot.map(([e, n]) => `<div><svg viewBox="0 0 100 100" class="spot-pic">${em(50, 50, 84, e)}</svg><span>${esc(n)}</span><i class="box"></i></div>`).join('')}</div></div>
+  </section>`;
+}
+
+const TYPES = { steering, gauges, flaps, slider, puzzle, spinner, headband, spyglass };
 
 function toyPages(k) {
   return k.def.toys.map((t) => {
@@ -197,6 +342,27 @@ function toyPages(k) {
 }
 
 const toyCss = `
+.v-lid { fill:var(--teal); } .v-gold { fill:var(--gold); }
+.spin-row { display:flex; gap:.3in; } .spin-col { display:flex; flex-direction:column; align-items:center; }
+.disc { width:3.55in; height:3.55in; }
+.disc-top { fill:var(--teal); stroke:var(--teal-d); stroke-width:6; }
+.spin-t { font:700 17px 'Fredoka'; fill:var(--navy); }
+.disc-name { font:400 34px 'Pacifico', 'Fredoka'; fill:#fff; } .disc-sub { font:600 19px 'Fredoka'; fill:#fff; opacity:.9; }
+.spin-game { margin-top:.25in; background:var(--mint-l); border:3px solid var(--mint); border-radius:18px; padding:.18in .3in; font:500 13pt/1.4 'Nunito'; max-width:6.6in; }
+.spin-game b { font-family:'Fredoka'; color:var(--teal-d); }
+.orn { width:6.4in; height:3.85in; }
+.cut-h.wide { align-self:stretch; margin:.12in -.4in; }
+.band { width:7.4in; margin-top:.15in; } .band-p { fill:var(--teal); stroke:var(--teal-d); stroke-width:4; }
+.band-t { font:400 54px 'Pacifico', 'Fredoka'; fill:#fff; }
+.shield-t { font:700 34px 'Fredoka'; fill:#fff; letter-spacing:4px; } .shield-name { font:700 44px 'Fredoka'; fill:#fff; letter-spacing:3px; } .shield-name.dark { fill:var(--accent-ink); }
+.tube { width:7.4in; } .tube-p { fill:var(--teal); stroke:var(--teal-d); stroke-width:6; }
+.tube-t { font:400 40px 'Pacifico', 'Fredoka'; fill:#fff; } .tube-sub { font:700 24px 'Fredoka'; fill:#fff; letter-spacing:3px; }
+.spot { width:100%; margin-top:.25in; border:4px solid var(--teal); border-radius:22px; padding:.18in .25in; }
+.spot-h { font:400 26pt 'Pacifico', 'Fredoka'; color:var(--orange); text-align:center; }
+.spot-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:.12in .2in; margin-top:.08in; }
+.spot-grid > div { display:flex; flex-direction:column; align-items:center; gap:3px; font:600 11pt 'Fredoka'; text-align:center; }
+.spot-pic { width:.8in; height:.8in; }
+
 .toy { padding:.35in .4in; display:flex; flex-direction:column; align-items:center; }
 .toy .pg-sub { margin:0 0 .08in; }
 .toy .cardstock { margin-bottom:.12in; }
@@ -215,7 +381,7 @@ const toyCss = `
 .gauge-row { display:flex; align-items:flex-end; gap:.35in; }
 .dial { width:5.9in; } .needle { width:.95in; }
 .dial-bg { fill:var(--teal-d); } .zone { stroke:#fff; stroke-width:4; }
-.zone-t { font:700 18px 'Fredoka'; fill:var(--navy); } .zone-t.light { fill:#fff; }
+.zone-t { font:700 18px 'Fredoka'; fill:var(--navy); } .zone-t.light { fill:#fff; } .zone-t.on-accent { fill:var(--accent-ink); }
 .tick { stroke:#fff; stroke-width:4; } .dial-hub { fill:var(--teal-d); } .pin { fill:#fff; stroke:var(--navy); stroke-width:3; }
 .needle-p { fill:var(--orange); stroke:var(--teal-d); stroke-width:5; }
 .layer-h { font:600 12pt 'Fredoka'; color:var(--teal-d); margin:.02in 0; }

@@ -57,6 +57,14 @@ module.exports = {
     title: 'Ship’s Galley', icon: '🍲', coinIcon: '🪙', coinWord: 'doubloon', coinsTitle: 'Gold doubloons',
     items: [['🐟', 'Fish stew', 2], ['🍌', 'Banana', 1], ['🥥', 'Coconut', 1], ['🍞', 'Ship biscuit', 1], ['🧃', 'Grog juice', 1], ['🍪', 'Captain’s cookie', 2], ['💎', 'Treasure gem', 3], ['🛶', 'Rowboat ride', 5]],
   },
+  toys: [
+    { type: 'spyglass', inside: 'A pirate spyglass to roll up, with a Spot It! list', title: 'Captain’s Spyglass', howTo: 'Roll it up, hold it to your eye, and look for treasure!',
+      label: 'Captain {child}', sub: 'LAND HO!', decor: ['🏴‍☠️', '🧭', '⭐'], spotTitle: 'Spot it through your spyglass!',
+      spot: [['🦜', 'A parrot'], ['🐙', 'An octopus'], ['🏝️', 'An island'], ['🦈', 'A shark'], ['⛵', 'A ship'], ['🐚', 'A shell'], ['🗺️', 'A map'], ['💰', 'Gold!']] },
+    { type: 'flaps', inside: 'A lift-the-flap treasure chest with six treasures', title: 'Treasure Chest', howTo: 'Lift each flap to find the treasure. Count your gold!',
+      vessel: 'chest', label: 'Captain {child}’s Loot',
+      items: [['💎', 'Diamond'], ['🪙', 'Gold coin'], ['👑', 'Crown'], ['📿', 'Pearls'], ['🗝️', 'Old key'], ['💍', 'Ruby ring']] },
+  ],
   dashboard: {
     gadget: 'ship’s wheel and sea chart', device: 'helm', decor: '🧭',
     appName: 'SeaChart', appIcon: '🧭', scheduleTitle: 'Voyage calendar', monitorTitle: 'Ship’s status', alertHeader: 'Lookout report',
@@ -81,7 +89,7 @@ module.exports = {
     afterHunt: 'The crew found Captain Barnaby’s treasure, and now they need a ship! Set up {place} right where the treasure was buried, and put the treasure in the Treasure Room. Captain {child} takes the wheel.',
     intro: 'Everything {child} needs to sail a pretend pirate ship. Print on regular Letter paper, cut along the dashed lines, and gather some toys for the crew.',
     setup: [
-      'Tape the Pirate Ship sign and All Aboard sign to the “ship” (a couch, a bed, or a big box).', 'Cut out the ship’s wheel and sea chart and set them at the front of the ship.',
+      'Tape the Pirate Ship sign and All Aboard sign to the “ship” (a couch, a bed, or a big box).', 'Roll up the spyglass and set the treasure chest at the front of the ship.',
       'Put the Treasure Room sign on a box of “gold” (coins, beads or chocolate coins).', 'Use a pillow or a tape line on the floor as the plank.',
       'Pin on the crew badges and set sail!',
     ],

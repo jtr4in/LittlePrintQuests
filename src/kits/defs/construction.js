@@ -63,6 +63,13 @@ module.exports = {
     title: 'Lunch Wagon', icon: '🥪', coinIcon: '🔩', coinWord: 'bolt', coinsTitle: 'Golden bolts',
     items: [['🥪', 'Sandwich', 2], ['🌭', 'Hot dog', 2], ['🍎', 'Apple', 1], ['🥛', 'Milk', 1], ['🍪', 'Cookie', 1], ['🍩', 'Donut', 2], ['🧱', 'Box of bricks', 3], ['🚜', 'Digger ride', 5]],
   },
+  toys: [
+    { type: 'headband', inside: 'A hard hat to wear, with your child’s name', title: 'Builder’s Hard Hat', howTo: 'Safety first! Put on your hard hat before you build.',
+      ornament: 'hardhat', piece: 'hard hat', bandIcons: ['🔨', '🔧', '🚧'] },
+    { type: 'flaps', inside: 'A lift-the-flap toolbox with six tools', title: 'Tool Box', howTo: 'Lift a flap, grab a tool, and fix something!',
+      vessel: 'toolbox', label: '{childs} Tools',
+      items: [['🔨', 'Hammer'], ['🔧', 'Wrench'], ['🪛', 'Screwdriver'], ['📏', 'Ruler'], ['🪚', 'Saw'], ['🔩', 'Bolts']] },
+  ],
   dashboard: {
     gadget: 'crane control panel', device: 'console', decor: '🏗️',
     appName: 'BuildBoss', appIcon: '🏗️', scheduleTitle: 'Build calendar', monitorTitle: 'Machine check', alertHeader: 'Site alert',
@@ -89,7 +96,7 @@ module.exports = {
     intro: 'Everything {child} needs to run a pretend construction site. Print on regular Letter paper, cut along the dashed lines, and gather toy trucks and building blocks.',
     setup: [
       'Tape the Construction Co. sign and Site Open sign by the door.', 'Mark the Dig Zone with tape and fill a bin with blocks.',
-      'Cut out the crane controls and fold the screen up.', 'Set up the Lunch Wagon with play food or real snacks.',
+      'Make the hard hat and tape the headband to fit.', 'Set up the Lunch Wagon with play food or real snacks.',
       'Pin on the badges and start building!',
     ],
     play: [

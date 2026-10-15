@@ -113,7 +113,7 @@ svg.pic { display:inline-block; vertical-align:middle; flex:none; }
 .board-head h1 { font-size:44pt; text-align:center; }
 .board { margin-top:.2in; padding-bottom:.4in !important; border:5px solid var(--teal); border-radius:30px; background:#fff; padding:.5in .45in .3in; position:relative; outline:3px solid var(--mint); outline-offset:6px; }
 .ribbon { position:absolute; top:-.28in; left:50%; transform:translateX(-50%); background:var(--teal); color:#fff; font:700 17pt 'Fredoka'; letter-spacing:.14em; text-transform:uppercase; padding:.07in .5in; border-radius:10px; white-space:nowrap; }
-.mrows { display:flex; flex-direction:column; gap:.3in; }
+.mrows { display:flex; flex-direction:column; gap:.21in; }
 .mrow { display:flex; align-items:center; gap:.16in; font:600 21pt 'Fredoka'; color:var(--navy); }
 .mrow .mn { white-space:nowrap; }
 .mrow .dots { flex:1; border-bottom:3px dotted var(--line); transform:translateY(.08in); }

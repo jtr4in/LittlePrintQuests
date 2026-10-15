@@ -57,6 +57,15 @@ module.exports = {
     title: 'Space Snack Bar', icon: '🍽️', coinIcon: '⭐', coinWord: 'star credit', coinsTitle: 'Star credits',
     items: [['🧃', 'Moon juice', 1], ['🍕', 'Freeze-dried pizza', 3], ['🍦', 'Astronaut ice cream', 2], ['🍪', 'Comet cookie', 1], ['🥤', 'Rocket fuel shake', 2], ['🍎', 'Space apple', 1], ['🍫', 'Milky Way bar', 2], ['🎟️', 'Rocket ride', 5]],
   },
+  toys: [
+    { type: 'spinner', inside: 'A Planet Picker spinner to choose where to fly next', title: 'Planet Picker', howTo: 'Spin to pick where the rocket flies next!',
+      label: '{childs} Rocket', sub: 'Where to next?', decor: ['⭐', '🚀', '⭐'],
+      items: [['🌍', 'Earth'], ['🌕', 'Moon'], ['🪐', 'Saturn'], ['☀️', 'Sun'], ['☄️', 'Comet'], ['👽', 'Alien land']],
+      game: ['Mission game:', 'Spin, then fly to that planet: hop to the Moon, tiptoe past the Sun, zoom around Saturn three times!'] },
+    { type: 'slider', inside: 'A launch pad card: pull the tab and the rocket blasts off', title: 'Blast Off!', howTo: 'Count down and pull the tab to launch the rocket!',
+      cardTitle: 'Launch Pad', cardIcons: ['🧑‍🚀', '🚀', '🌕'], cardHint: '3… 2… 1…',
+      frames: [{ e: '🚀', text: '3… 2… 1…' }, { e: '💨', text: 'Liftoff!' }, { e: '🌕', text: 'Hello, Moon!' }] },
+  ],
   dashboard: {
     gadget: 'mission control console', device: 'console', decor: '🚀',
     appName: 'StarCommand', appIcon: '🛰️', scheduleTitle: 'Mission calendar', monitorTitle: 'Crew vital signs', alertHeader: 'Incoming transmission',

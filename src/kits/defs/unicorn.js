@@ -59,6 +59,16 @@ module.exports = {
     title: 'Treat Barn', icon: '🥕', coinIcon: '💎', coinWord: 'gem', coinsTitle: 'Rainbow gems',
     items: [['🥕', 'Carrot', 1], ['🍎', 'Apple', 1], ['🌾', 'Rainbow oats', 2], ['🧁', 'Cupcake', 2], ['🍭', 'Lollipop', 1], ['🎀', 'Mane braid', 2], ['✨', 'Horn polish', 3], ['🌈', 'Rainbow ride', 5]],
   },
+  toys: [
+    { type: 'spinner', inside: 'A Rainbow Maker spinner with six magic surprises', title: 'Rainbow Maker', howTo: 'Spin the Rainbow Maker to see what magic appears!',
+      label: '{childs} Magic', sub: 'Spin for magic!', decor: ['🌈', '🦄', '✨'],
+      items: [['🌈', 'Rainbow'], ['⭐', 'Wishing star'], ['🦋', 'Butterfly'], ['🧁', 'Cupcake'], ['🌸', 'Flowers'], ['💖', 'Big hug']],
+      game: ['Magic game:', 'Spin, then make that magic: draw a rainbow in the air, flutter like a butterfly, or give someone a big hug!'] },
+    { type: 'puzzle', inside: 'A unicorn puzzle with your child’s name', title: 'Unicorn Puzzle', howTo: 'Cut along the white lines to make 9 pieces, then put the unicorn back together!',
+      hero: '🦄', banner: '{childs} Unicorn', scenery: [['🌈', 150, 140, 200], ['☁️', 560, 100, 110], ['⭐', 620, 260, 70], ['🌸', 90, 520, 90], ['🌷', 640, 560, 90], ['✨', 120, 330, 80]],
+      tip: 'Hide the pieces around the room, then follow the rainbow to find them all.' },
+  ],
+  shop: { hero: ['🌈', '🦄', '🧁'] },
   dashboard: {
     gadget: 'rainbow sparkle finder', device: 'scanner', decor: '🌈',
     appName: 'SparkleFinder', appIcon: '🦄', scheduleTitle: 'Stable calendar', monitorTitle: 'Sparkle scan', alertHeader: 'Rainbow alert',
@@ -85,7 +95,7 @@ module.exports = {
     intro: 'Everything {child} needs to run a pretend unicorn stable. Print on regular Letter paper, cut along the dashed lines, and gather some toy unicorns and ponies.',
     setup: [
       'Tape the Unicorn Stable sign and Stable Open sign by the door.', 'Make a cozy stall for each unicorn from a box or pillow.',
-      'Cut out the sparkle finder and glue it onto cardboard.', 'Set out the Treat Barn with play food or real snacks.',
+      'Put the Rainbow Maker together with a paper fastener.', 'Set out the Treat Barn with play food or real snacks.',
       'Pin on the badges and open the stable!',
     ],
     play: [
