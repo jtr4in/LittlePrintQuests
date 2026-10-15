@@ -8,7 +8,7 @@ const path = require('path');
 const { chromium } = require('playwright');
 const { renderKit } = require('../src/kits/render-kit');
 const { renderParty } = require('../src/party/render-party');
-const { KITS } = require('../src/kits/engine');
+const { KITS, buildKitHtml } = require('../src/kits/engine');
 const THEMES = require('../src/generator/themes');
 
 const OUT = path.join(__dirname, '..', 'listing-assets');
@@ -50,6 +50,43 @@ function kitPhotos(k, p, n) {
   };
 }
 
+// A name for each page of a kit, read from its HTML, so the close-up photos can say what they show.
+function pageNames(kit) {
+  const html = buildKitHtml({ kit: kit.id, ...SAMPLE, subjects: [], lenient: true });
+  const fallback = { poster: 'Welcome poster', 'signs st-page': 'Station signs', signs: 'Door signs', 'ct-page': 'Counter signs', rxs: kit.ticket.title };
+  return html.match(/<section class="page[\s\S]*?<\/section>(?=<section|<\/body>)/g).map((sec) => {
+    const cls = sec.match(/class="page ([^"]*)"/)[1];
+    const title = (sec.match(/class="pg-title"[^>]*>([^<]+)/) || sec.match(/<h1[^>]*>([^<]+)/) || [])[1];
+    const key = Object.keys(fallback).find((c) => cls.includes(c));
+    return (cls.includes('guide') ? 'Grown-up guide' : title || fallback[key] || 'Printable page').replace(/&amp;/g, '&');
+  });
+}
+
+// Close-ups for the rest of the listing's 20 photos: two pages at a time, each named.
+// Pages that repeat (three order forms, a second certificate) show once.
+function kitPagePhotos(kit, p, n, room) {
+  return pairPhotos(pageNames(kit).slice(0, n), p, room);
+}
+
+// The party pack's pages, in build order: the banner runs over several pages in the middle.
+function partyPagePhotos(p, n, room) {
+  const names = Array.from({ length: n }, (_, i) => ['Grown-up guide', 'Invitations', 'Thank-you cards', 'Cupcake toppers', 'Favor tags'][i]
+    || (i === n - 1 ? 'Bottle labels' : i >= n - 3 ? 'Food tent cards' : i === 5 ? 'Name banner' : 'Banner letters'));
+  return pairPhotos(names, p, room);
+}
+
+function pairPhotos(names, p, room) {
+  const pages = [];
+  names.forEach((name, i) => { if (i > 0 && !pages.some(([, m]) => m === name)) pages.push([i + 1, name]); });
+  const out = {};
+  for (let i = 0; i < pages.length && i / 2 < room; i += 2) {
+    const pair = pages.slice(i, i + 2);
+    out[`p${String(i / 2 + 1).padStart(2, '0')}`] = `<div class="top"><h1 style="font-size:48px">${pair.map(([, m]) => m).join(' · ')}</h1></div>
+      ${pair.map(([pg, m], j) => `<div class="page" style="left:${pair.length === 1 ? 365 : 110 + j * 510}px;top:165px;width:470px;transform:rotate(${j ? 1.5 : -1.5}deg)"><img src="${p(pg)}"></div>`).join('')}`;
+  }
+  return out;
+}
+
 function partyPhotos(t, p, n) {
   const items = [[2, 'Invitations'], [3, 'Thank-you cards'], [4, 'Cupcake toppers'], [5, 'Favor tags'], [6, 'Name banner'], [7, 'Banner letters'], [n - 2, 'Food tent cards'], [n, 'Bottle labels']];
   return {
@@ -83,11 +120,11 @@ function partyPhotos(t, p, n) {
     if (kit) {
       const dir = path.join(tmp, `kit-${id}`);
       await renderKit({ kit: kit.id, ...SAMPLE, subjects: [], lenient: true }, `${dir}.pdf`, { pngDir: dir });
-      await shoot(t, `kit-${kit.id}`, kitPhotos(kit, ...pages(dir)));
+      await shoot(t, `kit-${kit.id}`, { ...kitPhotos(kit, ...pages(dir)), ...kitPagePhotos(kit, ...pages(dir), 17) });
     }
     const dir = path.join(tmp, `party-${id}`);
     await renderParty({ theme: id, ...SAMPLE }, `${dir}.pdf`, { pngDir: dir });
-    await shoot(t, `party-${id}`, partyPhotos(t, ...pages(dir)));
+    await shoot(t, `party-${id}`, { ...partyPhotos(t, ...pages(dir)), ...partyPagePhotos(...pages(dir), 17) });
     console.log('Wrote', id);
   }
   // Shop kits (pizza, grocery...) have no hunt theme, so they take their colors from the kit.
@@ -96,7 +133,7 @@ function partyPhotos(t, p, n) {
     const t = { colors: { soft: kit.colors.soft, ink: '#3f4a73', primary: kit.colors.dark } };
     const dir = path.join(tmp, `kit-${kit.id}`);
     await renderKit({ kit: kit.id, ...SAMPLE, subjects: [], lenient: true }, `${dir}.pdf`, { pngDir: dir });
-    await shoot(t, `kit-${kit.id}`, kitPhotos(kit, ...pages(dir)));
+    await shoot(t, `kit-${kit.id}`, { ...kitPhotos(kit, ...pages(dir)), ...kitPagePhotos(kit, ...pages(dir), 17) });
     if (process.env.FAN_DIR) {
       const fan = await browser.newPage({ viewport: { width: 677, height: 497 }, deviceScaleFactor: 2 });
       const sheet = (n, x, y, r, w = 340) => `<img src="${dataUrl(path.join(dir, `page-${n}.png`))}" style="position:absolute;left:${x}px;top:${y}px;width:${w}px;transform:rotate(${r}deg);box-shadow:0 10px 28px rgba(40,50,90,.25)">`;

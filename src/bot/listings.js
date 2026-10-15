@@ -23,8 +23,10 @@ const KIT_ORDER = ['vet', 'pizza', 'space', 'grocery', 'dino', 'burger', 'hero',
 // etsy-listings.md section for each theme's pack (the newer themes come after the bundle, kit and party pack).
 const PACK_SECTIONS = { dino: 1, hero: 2, pirate: 3, space: 4, royal: 5, unicorn: 9, mermaid: 10, construction: 11, vet: 12, easter: 15, halloween: 16, christmas: 17, valentine: 18, fire: 19, ice: 20, racecar: 21 };
 
-// Etsy takes up to 10 photos per listing.
-const MAX_PHOTOS = 10;
+// Etsy takes up to 20 photos per listing.
+const MAX_PHOTOS = 20;
+// The page close-ups theme-photos.js makes for a listing (prefix-p01.jpg, prefix-p02.jpg...), in order.
+const closeUps = (prefix) => Array.from({ length: MAX_PHOTOS }, (_, i) => `${prefix}-p${String(i + 1).padStart(2, '0')}.jpg`).filter((f) => fs.existsSync(path.join(ASSETS, f)));
 
 const CATALOG = [
   ...Object.keys(THEMES).map((theme) => ({
@@ -84,7 +86,7 @@ const CATALOG = [
     price: 7.99,
     order: { product: 'kit', kit: k },
     personalization: { question: 'Child’s name and pets or toys' },
-    photos: [`kit-${k}.jpg`, `kit-${k}-inside.jpg`, `kit-${k}-feature.jpg`],
+    photos: [`kit-${k}.jpg`, `kit-${k}-inside.jpg`, `kit-${k}-feature.jpg`, ...closeUps(`kit-${k}`)].slice(0, MAX_PHOTOS),
     file: { name: 'your-pretend-play-kit.pdf', build: (out) => thankYouPdf(out, 'play kit') },
   })),
   ...Object.keys(THEMES).map((theme) => ({
@@ -96,7 +98,7 @@ const CATALOG = [
     price: 6.99,
     order: { product: 'party', theme },
     personalization: { question: 'Child’s name and age' },
-    photos: [`party-${theme}.jpg`, `party-${theme}-inside.jpg`, `party-${theme}-feature.jpg`],
+    photos: [`party-${theme}.jpg`, `party-${theme}-inside.jpg`, `party-${theme}-feature.jpg`, ...closeUps(`party-${theme}`)].slice(0, MAX_PHOTOS),
     file: { name: 'your-party-printables.pdf', build: (out) => thankYouPdf(out, 'party printables') },
   })),
 ];
