@@ -255,9 +255,17 @@ async function createOne(l, taxonomy, existing) {
 // Brings a finished draft up to date with etsy-listings.md and this catalog: title, description,
 // tags, section, buyer instructions and option prices, plus any photos added or redrawn since it was made.
 async function updateOne(l) {
-  const id = store.get().listings[l.key].id;
+  const rec = store.get().listings[l.key];
+  const id = rec.id;
   const sectionId = await etsy.shopSectionId(l.shopSection);
-  await etsy.updateListing(id, { ...l, sectionId });
+  // A title changed on Etsy (by hand, or by Etsy's title review) is kept, unless our own copy's
+  // title has changed since: then ours goes out.
+  const lastSent = rec.etsyTitle ?? l.title;
+  const lastCopy = rec.copyTitle ?? l.title;
+  const onEtsy = await etsy.listingTitle(id);
+  const title = onEtsy && onEtsy !== lastSent && l.title === lastCopy ? onEtsy : l.title;
+  await etsy.updateListing(id, { ...l, title, sectionId });
+  setStatus(l.key, { etsyTitle: title, copyTitle: l.title, titleKept: title !== l.title });
   if (l.personalization) await etsy.setPersonalization(id, { question: l.personalization.question, instructions: l.instructions });
   if (l.variation) await etsy.setVariationPrices(id, l.variation.name, l.variation.options);
   // From the first new or changed photo on, every rank is re-uploaded in place, so the order matches the list.

@@ -48,6 +48,7 @@ const etsyCalls = [];
 let failImageOnce = true;
 const shopSections = [];
 const shopDrafts = [];
+const etsyTitles = {};
 const etsyListingApi = async (u, opts) => {
   const p = new URL(u).pathname.replace('/v3/application', '');
   const body = opts.body instanceof FormData ? Object.fromEntries(opts.body) : opts.body instanceof URLSearchParams ? Object.fromEntries(opts.body) : opts.body && JSON.parse(opts.body);
@@ -61,6 +62,9 @@ const etsyListingApi = async (u, opts) => {
   if (p === '/shops/42/listings' && opts.method === 'GET') return json({ results: new URL(u).searchParams.get('state') === 'draft' ? shopDrafts : [] });
   if (p === '/shops/42/listings') return json({ listing_id: 7000 + etsyCalls.filter((c) => c.p === p && c.method === 'POST').length });
   if (opts.method === 'GET' && /\/(images|files)$/.test(p)) return json({ count: 1, results: [{}] });
+  const one = p.match(/^(?:\/shops\/42)?\/listings\/(\d+)$/);
+  if (one && opts.method === 'GET') return json({ listing_id: +one[1], title: etsyTitles[one[1]] });
+  if (one && opts.method === 'PATCH' && body.title) etsyTitles[one[1]] = body.title;
   if (/\/images$/.test(p) && body.image.name === 'kits-main.jpg' && failImageOnce) {
     failImageOnce = false;
     return json({ error: 'Temporary upload problem' }, 500);
@@ -386,6 +390,18 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal(redo2.length, 1);
   assert.equal(redo2[0].body.image.name, lastPhoto);
   assert.equal(String(redo2[0].body.rank), '10');
+  // A title changed on Etsy (say, by Etsy's title review) survives the next update.
+  const pirateId = String(listed['kit-pirate'].id);
+  etsyTitles[pirateId] = 'Pirate Pretend Play Printable, Ages 3-8 (Digital Download)';
+  const callsBefore3 = etsyCalls.length;
+  await createListings();
+  for (let i = 0; i < 120 && etsyCalls.filter((c) => c.method === 'PATCH').length < patchesBefore + 4 * N; i++) await wait(250);
+  const piratePatch = etsyCalls.slice(callsBefore3).find((c) => c.method === 'PATCH' && c.p === `/shops/42/listings/${pirateId}`);
+  assert.equal(piratePatch.body.title, 'Pirate Pretend Play Printable, Ages 3-8 (Digital Download)');
+  assert.ok(store.get().listings['kit-pirate'].titleKept);
+  const dinoPatch = etsyCalls.slice(callsBefore3).find((c) => c.method === 'PATCH' && c.p === `/shops/42/listings/${listed['kit-dino'].id}`);
+  assert.match(dinoPatch.body.title, /Dino/);
+  assert.ok(!store.get().listings['kit-dino'].titleKept);
   // Per-theme listings: their own copy, three photos, and orders that know their kit or theme.
   const pirateKit = creates.find((c) => /Pirate Ship Pretend Play/.test(c.body.title)).body;
   assert.match(pirateKit.description, /^Ahoy, Captain!.*Pirate Ship".*Treasure Map, Wanted Posters/s);
