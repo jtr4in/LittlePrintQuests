@@ -9,7 +9,7 @@
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const possessive = (name) => (/s$/i.test(name) ? `${name}’` : `${name}’s`);
-const fill = (s, k) => String(s).replace('{child}', k.childName).replace('{childs}', possessive(k.childName));
+const fill = (s, k) => String(s).replace(/\{place\}/g, k.placeName).replace(/\{childs\}/g, possessive(k.childName)).replace(/\{child\}/g, k.childName);
 const head = (T, k) => `<h2 class="pg-title">${esc(fill(T.title, k))}</h2><p class="pg-sub">${esc(T.howTo)}</p><div class="cardstock">Best on cardstock</div>`;
 const { em } = require('./art');
 const pt = (cx, cy, r, deg) => [cx + r * Math.cos((deg * Math.PI) / 180), cy - r * Math.sin((deg * Math.PI) / 180)].map((v) => v.toFixed(1));
@@ -332,7 +332,8 @@ function spyglass(T, k) {
   </section>`;
 }
 
-const TYPES = { steering, gauges, flaps, slider, puzzle, spinner, headband, spyglass };
+const { SHOP_TOYS } = require('./shopkit');
+const TYPES = { steering, gauges, flaps, slider, puzzle, spinner, headband, spyglass, ...SHOP_TOYS };
 
 function toyPages(k) {
   return k.def.toys.map((t) => {

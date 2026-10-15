@@ -15,6 +15,7 @@ const path = require('path');
 const { toyPages, toyCss } = require('./toys');
 const { welcomePage, menuBoard, specialsPage, moneyPage, shopCss } = require('./shop');
 const art = require('./art');
+const { SHOP_PROPS, shopkitCss } = require('./shopkit');
 
 const FONT_DIR = path.join(__dirname, '..', '..', 'fonts');
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -477,7 +478,7 @@ function wearablePage(k) {
 
 function propsPages(k) {
   const P = k.def.props || {};
-  const order = [['scans', scansPage], ['map', mapPage], ['wanted', wantedPage], ['cards', cardsPage], ['patches', patchesPage], ['wearable', wearablePage]];
+  const order = [['recipe', () => ''], ...SHOP_PROPS.filter(([key]) => key !== 'recipe'), ['scans', scansPage], ['map', mapPage], ['wanted', wantedPage], ['cards', cardsPage], ['patches', patchesPage], ['wearable', wearablePage]];
   return order.filter(([key]) => P[key]).map(([, fn]) => fn(k)).join('');
 }
 
@@ -525,6 +526,10 @@ const KITS = {
   fire: require('./defs/fire'),
   ice: require('./defs/ice'),
   racecar: require('./defs/racecar'),
+  pizza: require('./defs/pizza'),
+  burger: require('./defs/burger'),
+  grocery: require('./defs/grocery'),
+  post: require('./defs/post'),
 };
 
 function buildKitHtml(cfg) {
@@ -544,6 +549,7 @@ function buildKitHtml(cfg) {
     ticketPage(k),
     passportsPages(k),
     menuBoard(k),
+    k.def.props?.recipe ? SHOP_PROPS.find(([key]) => key === 'recipe')[1](k) : '',
     specialsPage(k),
     moneyPage(k),
     certificatePage(k),
@@ -559,6 +565,7 @@ ${font('Fredoka', 'Fredoka.ttf', '300 700')}
 ${font('Nunito', 'Nunito.ttf', '200 1000')}
 @page { size: letter; margin: 0; }
 ${toyCss}
+${shopkitCss}
 ${shopCss(font)}
 :root { --teal:${c.main}; --teal-d:${c.dark}; --mint:${c.soft}; --mint-l:${c.light}; --orange:${c.accent}; --accent-ink:${c.accentInk || '#2b1d06'}; --navy:#3f4a73; --cream:#fbf8f1; --line:#c9d6d0; --gold:${c.gold || '#f1d48f'}; }
 * { box-sizing:border-box; }
@@ -606,8 +613,8 @@ h1, h2, h3 { font-family:'Fredoka', sans-serif; margin:0; line-height:1.1; }
 .sign-title { font:700 54pt/1.05 'Fredoka'; color:var(--teal-d); margin-top:.1in; }
 .sign-sub { font:500 16pt 'Fredoka'; margin-top:.1in; color:var(--navy); }
 .sign.hero .sign-in { background:var(--teal); border-color:var(--teal-d); }
-.sign.hero .sign-title { color:#fff; font-size:46pt; }
-.sign.hero .sign-sub { color:var(--mint); }
+.sign.hero .sign-title { color:#fff; font-size:46pt; line-height:1.3; }
+.sign.hero .sign-sub { color:var(--mint); margin-top:.12in; }
 /* status signs */
 .sign.go .sign-in { background:#e6f6ea; border-color:#3aa35b; } .sign.go .sign-title { color:#2b7a44; font-size:80pt; }
 .sign.stop .sign-in { background:#fdecea; border-color:#e0675a; } .sign.stop .sign-title { color:#b8463a; font-size:80pt; }

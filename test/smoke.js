@@ -330,7 +330,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.ok(c.photos.length <= 10, `${c.key} has more than 10 photos`);
     for (const f of c.photos) assert.ok(fs.existsSync(path.join(__dirname, '..', 'listing-assets', f)), `missing listing-assets/${f}`);
   }
-  assert.equal(N, 51); // 16 packs, the bundle, both dropdown listings, and a kit and party pack per theme
+  assert.equal(N, 55); // 16 packs, the bundle, both dropdown listings, a party pack per theme and a listing per kit (16 theme kits + 4 shop kits)
   const listingsDone = async () => {
     for (let i = 0; i < 240; i++) {
       await wait(500);
@@ -362,7 +362,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const inv = etsyCalls.find((c) => c.p === `/listings/${bundleId}/inventory`).body;
   assert.deepEqual(inv.products.map((x) => [x.property_values[0].values[0], x.offerings[0].price]), [['Hunt + Play Kit + Party Pack', 16.99], ['Hunt + Play Kit', 14.99], ['Hunt + Party Pack', 13.99], ['Hunt only', 9.99]]);
   const kitInv = etsyCalls.find((c) => c.p === `/listings/${listed.kits.id}/inventory`).body;
-  assert.equal(kitInv.products.length, 16);
+  assert.equal(kitInv.products.length, 20);
   const partyInv = etsyCalls.find((c) => c.p === `/listings/${listed.party.id}/inventory`).body;
   assert.deepEqual(partyInv.products.map((x) => x.property_values[0].values[0]).slice(0, 2), ['Dinosaur', 'Superhero']);
   const q = etsyCalls.find((c) => c.p === `/shops/42/listings/${bundleId}/personalization`).body.personalization_questions[0];
@@ -450,6 +450,19 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.ok(!adoptPosts.some((c) => /\/files$/.test(c.p)));
   assert.ok(files.every((f) => f.body.file.size > 10000 && f.body.file.type === 'application/pdf'));
   assert.ok(!etsyCalls.some((c) => c.p.includes(`/listings/${listed['pack-dino'].id}/personalization`)));
+
+  // Shop kits (pizza, grocery...) have no matching hunt: their listing and Host Mode stand on their own.
+  const shopCopy = require('../src/bot/listings').readCopy().find((l) => l.key === 'kit-pizza');
+  assert.match(shopCopy.description, /Pizza Order forms and Pizza Club Cards/);
+  assert.match(shopCopy.description, /Any of our personalized scavenger hunts/);
+  assert.doesNotMatch(shopCopy.description, /\{\w+\}/);
+  const { hostPage } = require('../src/host/host');
+  for (const id of ['pizza', 'burger', 'grocery', 'post']) {
+    const html = hostPage({ config: { kit: id, childName: 'Ava' } }, { stateUrl: '/x', items: ['kit'] });
+    assert.match(html, new RegExp(`Ava’s ${require('../src/kits/engine').KITS[id].name} play kit`));
+    assert.match(html, /Surprise me/);
+    assert.doesNotMatch(html.replace(/<script>[\s\S]*?<\/script>/g, ''), /\{name\}|undefined/);
+  }
 
   console.log('All smoke checks passed');
   process.exit(0);

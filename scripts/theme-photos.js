@@ -87,5 +87,21 @@ function partyPhotos(t, p, n) {
     await shoot(t, `party-${id}`, partyPhotos(t, ...pages(dir)));
     console.log('Wrote', id);
   }
+  // Shop kits (pizza, grocery...) have no hunt theme, so they take their colors from the kit.
+  // They also get their kit-<id>.png fan here (site-images.js makes the theme kits' fans).
+  for (const kit of Object.values(KITS).filter((k) => !k.hunt && (!only.length || only.includes(k.id)))) {
+    const t = { colors: { soft: kit.colors.soft, ink: '#3f4a73', primary: kit.colors.dark } };
+    const dir = path.join(tmp, `kit-${kit.id}`);
+    await renderKit({ kit: kit.id, ...SAMPLE, subjects: [], lenient: true }, `${dir}.pdf`, { pngDir: dir });
+    await shoot(t, `kit-${kit.id}`, kitPhotos(kit, ...pages(dir)));
+    if (process.env.FAN_DIR) {
+      const fan = await browser.newPage({ viewport: { width: 677, height: 497 }, deviceScaleFactor: 2 });
+      const sheet = (n, x, y, r, w = 340) => `<img src="${dataUrl(path.join(dir, `page-${n}.png`))}" style="position:absolute;left:${x}px;top:${y}px;width:${w}px;transform:rotate(${r}deg);box-shadow:0 10px 28px rgba(40,50,90,.25)">`;
+      await fan.setContent(`<body style="margin:0;background:transparent">${sheet(2, 0, 40, -8)}${sheet(8, 330, 30, 7)}${sheet(7, 150, 4, 0, 380)}</body>`);
+      await fan.screenshot({ path: path.join(process.env.FAN_DIR, `kit-${kit.id}.png`), omitBackground: true });
+      await fan.close();
+    }
+    console.log('Wrote', kit.id);
+  }
   await browser.close();
 })();

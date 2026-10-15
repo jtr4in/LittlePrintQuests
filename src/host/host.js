@@ -132,6 +132,13 @@ ul.jobs{padding-left:20px;margin:6px 0}.live{display:inline-block;width:9px;heig
 </style></head><body>${body}<script>${script}</script></body></html>`;
 }
 
+// Shop kits (pizza, grocery...) have no matching hunt, so Host Mode takes its look from the kit.
+const kitLook = (kit) => ({
+  name: kit.name,
+  colors: { primary: kit.colors.dark, accent: kit.colors.accent, soft: kit.colors.soft },
+  icon: `<span style="font-size:26px;line-height:30px">${kit.icon}</span>`,
+});
+
 function topBar(theme, line1, line2) {
   return `<div class="top" aria-hidden="false">${theme.icon}<div><b>${esc(line1)}</b><small>${esc(line2)}</small></div></div>`;
 }
@@ -178,7 +185,7 @@ function hostPage(order, { stateUrl, sidekickUrl, downloads, items = ['hunt'] })
   const has = { hunt: items.includes('hunt'), kit: items.includes('kit'), party: items.includes('party') };
   const kit = has.kit ? KITS[cfg.kit] || kitForHunt(cfg.theme) : null;
   if (!kit) has.kit = false;
-  const theme = THEMES[cfg.theme] || THEMES[kit?.hunt];
+  const theme = THEMES[cfg.theme] || THEMES[kit?.hunt] || kitLook(kit);
   const name = cfg.childName || 'our birthday star';
   const p = has.hunt ? plan(order, sidekickUrl) : null;
   const steps = p ? p.steps.map(({ cue, ...st }) => st) : [];
