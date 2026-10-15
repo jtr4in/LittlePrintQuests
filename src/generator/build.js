@@ -386,6 +386,64 @@ function themeCss(theme) {
 .cert-title { font-size:42pt; }
 .award { font-size:26pt; }
 .seal { background:var(--accent); }`;
+    case 'unicorn':
+      return `
+.card { border-radius:20px; padding-top:.2in; background:
+  radial-gradient(circle at 97% 62%, rgba(232,85,143,.09) 0 .5in, transparent .51in),
+  radial-gradient(circle at 4% 10%, rgba(142,92,196,.08) 0 .4in, transparent .41in), linear-gradient(180deg, #fff, var(--paper)); }
+.card::before, .frame::before { content:''; position:absolute; left:0; right:0; top:0; height:.08in;
+  background:linear-gradient(90deg, #ff6b6b, #ffa94d, #ffd43b, #69db7c, #4dabf7, #9775fa); }
+.frame::before { left:.3in; right:.3in; top:.22in; border-radius:99px; }
+.card-head { border-bottom:2px dotted var(--primary); }
+.card-head .icon { color:var(--accent); }
+.card-title { font-size:15pt; }
+.badge { background:linear-gradient(90deg, var(--accent), var(--primary)); border-radius:99px; }
+.frame { border-radius:30px; border-color:var(--primary); outline-color:var(--accent); overflow:hidden;
+  background:radial-gradient(circle at 50% 108%, rgba(201,240,239,.9) 0 2.2in, transparent 2.21in), linear-gradient(180deg, #fff, var(--paper)); }
+.briefing h1 { font-size:34pt; }
+.cert-title { font-size:50pt; }
+.award { font-size:30pt; }
+.seal { background:linear-gradient(135deg, var(--accent), var(--primary)); outline-color:var(--primary); }`;
+    case 'mermaid':
+      return `
+@font-face{font-family:'Comic Neue';src:url('file://${FONT_DIR}/ComicNeue-Bold.ttf');font-weight:700;}
+.card { border-radius:16px; background:
+  radial-gradient(circle at 93% 30%, rgba(17,121,138,.13) 0 6px, transparent 7px),
+  radial-gradient(circle at 96% 42%, rgba(17,121,138,.13) 0 4px, transparent 5px),
+  radial-gradient(circle at 91% 52%, rgba(17,121,138,.13) 0 3px, transparent 4px),
+  radial-gradient(circle at 5% 70%, rgba(17,121,138,.10) 0 5px, transparent 6px),
+  linear-gradient(180deg, #fff 0%, var(--paper) 55%, var(--soft) 160%); }
+.card-head { border-bottom:2px dotted var(--primary); }
+.card-head .icon { color:var(--accent); }
+.card-title { font-size:17pt; }
+.badge { border-radius:16px 16px 16px 3px; font-size:12pt; }
+.riddle { font-family:'Comic Neue', 'Fredoka', sans-serif; font-weight:700; font-size:16.5pt; }
+.frame { border-radius:26px; outline-color:var(--accent); overflow:hidden;
+  background:linear-gradient(180deg, #fff 0%, var(--paper) 60%, var(--soft) 150%); }
+.frame::after { content:''; position:absolute; left:0; right:0; bottom:0; height:.32in; opacity:.5;
+  background:radial-gradient(circle at 50% 100%, var(--soft) 0 .2in, transparent .21in) 0 0/.5in .32in repeat-x; }
+.briefing h1 { font-size:36pt; }
+.cert-title { font-size:52pt; }
+.award { font-size:28pt; }
+.seal { background:var(--primary); outline-color:var(--primary); }`;
+    case 'construction':
+      return `
+.card { border:.09in solid transparent; border-radius:6px; background:
+  linear-gradient(var(--paper), var(--paper)) padding-box,
+  repeating-linear-gradient(-45deg, #f2a900 0 12px, #2b2b2b 12px 24px) border-box; }
+.card-head { border-bottom:2.5px solid var(--ink); }
+.card-head .icon { color:#e09a00; }
+.card-title { font-size:18pt; color:var(--ink); letter-spacing:.04em; }
+.badge { background:var(--ink); color:var(--soft); border-radius:3px; font-size:13pt; letter-spacing:.04em; }
+.card-foot { border-top-color:#e8dcb8; }
+.kicker { color:#b86a00; }
+.frame { border:.17in solid transparent; outline:none; border-radius:8px; background:
+  linear-gradient(var(--paper), var(--paper)) padding-box,
+  repeating-linear-gradient(-45deg, #f2a900 0 18px, #2b2b2b 18px 36px) border-box; }
+.briefing h1 { font-size:36pt; letter-spacing:.03em; }
+.cert-title { font-size:66pt; letter-spacing:.03em; }
+.award { font-size:38pt; color:#d98a00; text-shadow:2px 2px 0 var(--ink); letter-spacing:.04em; }
+.seal { background:var(--soft); color:var(--ink); outline-color:var(--ink); }`;
     default:
       return '';
   }
