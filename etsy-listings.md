@@ -37,6 +37,12 @@ Takes kids about 20–40 minutes. Great for birthday parties, playdates, rainy d
 ★ WANT IT PERSONALIZED?
 Get a hunt with your child's name, age and YOUR home's hiding spots (mailbox, dog bed, grandma's piano, anything!) in our Custom Scavenger Hunt listing.
 
+★ WHAT YOU'LL NEED
+• Printer paper works fine. Cardstock (65–110 lb) makes the clue cards sturdier and harder to peek through.
+• Scissors or a paper cutter
+• Painter's tape or sticky tack to hide cards without marking walls
+• Optional: laminating pouches (or clear self-seal sheets) so you can reuse the hunt, and small envelopes to tuck each clue in
+
 ★ PLEASE NOTE
 This is a DIGITAL DOWNLOAD. No physical item will be shipped. Colors may vary slightly by printer. For personal use only.
 ```
@@ -167,6 +173,13 @@ Pick your package: everything for $16.99, the hunt + play kit, the hunt + party 
 Personalization example:
 Maya, turning 6, Space. Spots: front door, shoe rack, coat closet, washer, dryer, piano, dog bed, kitchen table (prize). Pets/toys: Rover (dog), Teddy (bear)
 
+★ WHAT YOU'LL NEED
+• Cardstock (65–110 lb) for the clue cards, play kit props, invitations and toppers. Regular paper works for everything else.
+• Scissors or a paper cutter, plus painter's tape or sticky tack for hiding cards
+• Toothpicks and tape for the cupcake toppers, and a hole punch with ribbon or string for the banner and favor tags
+• Optional: laminating pouches for the pretend gadget, signs and badges (add a dry-erase marker for the forms), and small envelopes for the clues
+• A phone for Host Mode
+
 ★ PLEASE NOTE
 This is a DIGITAL file. No physical item will be shipped.
 ```
@@ -215,6 +228,12 @@ Print the wearables on cardstock and they last all party.
 Fill in the personalization box with your child's name and up to 6 pets or toys.
 We send your PDF through Etsy messages, usually within a few hours.
 
+★ WHAT YOU'LL NEED
+• Cardstock (65–110 lb) for the gadget, badges, wearables and props. Regular paper is fine for the forms and tickets.
+• Scissors, plus a hole punch and string or a lanyard for the ID badges
+• Elastic or ribbon for the masks, eye patches or crown, and tape or a stapler
+• Optional: laminating pouches so the gadget, signs and badges survive lots of play, and a dry-erase marker to fill in the check-up forms again and again
+
 ★ PLEASE NOTE
 This is a DIGITAL file. No physical item will be shipped. For personal use only.
 ```
@@ -258,8 +277,12 @@ Pick your theme and write your child's name and age in the personalization box.
 Add your party date, time and place if you'd like them printed on the invitations.
 We send your PDF through Etsy messages, usually within a few hours.
 
-★ TIP
-Print the invitations, toppers and banner on cardstock for a sturdier finish.
+★ WHAT YOU'LL NEED
+• Cardstock (65–110 lb) for the invitations, thank-you cards, toppers, tags and banner
+• Scissors or a paper cutter
+• Toothpicks or lollipop sticks and tape for the cupcake toppers
+• A hole punch and ribbon or string for the banner and favor tags
+• Optional: a corner rounder for a polished look, and envelopes (A7 fits the 5" x 7" invitations)
 
 ★ PLEASE NOTE
 This is a DIGITAL file. No physical item will be shipped. For personal use only.
