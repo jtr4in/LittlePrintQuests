@@ -151,10 +151,32 @@ main { position: relative; }
 @media (max-width: 980px) { .themes { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 520px) { .themes { grid-template-columns: 1fr; } }
 
+/* Host Mode: phone frames */
+.phone { display: block; background: #161b2e; padding: 7px; border-radius: 30px; box-shadow: 0 18px 40px -18px rgba(20, 28, 60, .55); }
+.phone img { display: block; width: 100%; height: auto; aspect-ratio: 1 / 2; border-radius: 23px; background: #fbf8f1; }
+.phones { display: grid; grid-template-columns: repeat(3, minmax(0, 250px)); gap: 28px; margin-top: 32px; justify-content: start; align-items: start; }
+.phones figure { margin: 0; }
+.phones figure:nth-child(2) { margin-top: 28px; }
+.phones figcaption { margin-top: 14px; font-size: 15px; color: var(--ink-soft); line-height: 1.45; }
+.phones figcaption b { display: block; font: 600 18px/1.25 var(--display); color: var(--ink); margin-bottom: 2px; }
+@media (max-width: 760px) { .phones { grid-template-columns: repeat(3, 72vw); overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; } .phones figure { scroll-snap-align: start; } .phones figure:nth-child(2) { margin-top: 0; } }
+.host-points { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 28px; margin: 28px 0 0; padding: 0; list-style: none; max-width: 820px; }
+.host-points li { padding-left: 28px; position: relative; }
+.host-points li::before { content: '✓'; position: absolute; left: 0; color: var(--mint-deep); font-weight: 700; }
+@media (max-width: 640px) { .host-points { grid-template-columns: 1fr; } }
+.included { display: inline-flex; align-items: center; gap: 6px; font: 500 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; background: var(--tint); color: var(--ink); border-radius: 99px; padding: 6px 10px 6px 8px; }
+.plan-host { display: flex; gap: 12px; align-items: center; background: var(--tint); border-radius: 12px; padding: 10px 12px; font-size: 14px; line-height: 1.35; }
+.plan-host .phone { width: 46px; flex: none; padding: 3px; border-radius: 10px; box-shadow: none; }
+.plan-host .phone img { border-radius: 7px; }
+.plan-host b { display: block; font: 600 15px/1.2 var(--display); }
+
 /* checkout stack: one paper per thing in the cart */
 .stack { position: relative; height: 210px; border-radius: 12px; overflow: hidden; }
-.stack img { position: absolute; left: 50%; top: 18px; width: 128px; height: auto; aspect-ratio: 400 / 518; background: #fff; border-radius: 3px; box-shadow: 0 10px 22px -10px rgba(40, 50, 90, .5); transition: transform .35s cubic-bezier(.2, .9, .3, 1.2), opacity .25s ease; }
-.stack img.out { opacity: 0; transform: translate(-50%, 40px) scale(.85) !important; }
+.stack > img { position: absolute; left: 50%; top: 18px; width: 128px; height: auto; aspect-ratio: 400 / 518; background: #fff; border-radius: 3px; box-shadow: 0 10px 22px -10px rgba(40, 50, 90, .5); transition: transform .35s cubic-bezier(.2, .9, .3, 1.2), opacity .25s ease; }
+.stack .phone { position: absolute; right: 14px; bottom: -36px; width: 74px; padding: 4px; border-radius: 14px; z-index: 9; transition: transform .35s cubic-bezier(.2, .9, .3, 1.2), opacity .25s ease; transform: rotate(6deg); }
+.stack .phone img { border-radius: 10px; }
+.stack .phone.out { opacity: 0; transform: translateY(40px) rotate(6deg); }
+.stack > img.out { opacity: 0; transform: translate(-50%, 40px) scale(.85) !important; }
 .layers { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .layer { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--paper); cursor: pointer; font: inherit; color: inherit; text-align: left; width: 100%; }
 .layer[aria-pressed="true"] { border-color: var(--ink); background: var(--tint); }
@@ -256,6 +278,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
     <nav class="nav" aria-label="Main">
       <a href="#how">How it works</a>
       <a href="#themes">Themes</a>
+      <a href="#host">Host Mode</a>
       <a href="#kits">Play kits</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
@@ -302,7 +325,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <div class="steps">
         <div class="step"><span class="n">Step 1 · 60 seconds</span><h3>Tell us about the party</h3><p>Your child’s name and age, a theme, and 6 to 10 spots around your home. The last spot is where the cake or prizes wait.</p></div>
         <div class="step"><span class="n">Step 2 · instant</span><h3>We write the hunt</h3><p>Every clue is a rhyme that leads to your next spot. Got a spot we haven’t seen before, like Grandma’s piano? We write a new rhyme for it.</p></div>
-        <div class="step"><span class="n">Step 3 · 10 minutes</span><h3>Print, cut and hide</h3><p>The host guide tells you exactly where each card goes. A tiny “parent check” on every card means you never mix them up.</p></div>
+        <div class="step"><span class="n">Step 3 · 10 minutes</span><h3>Print, cut and hide</h3><p>The host guide tells you exactly where each card goes. A tiny “parent check” on every card means you never mix them up, and Host Mode on your phone walks you through it.</p></div>
       </div>
     </div>
   </section>
@@ -318,6 +341,27 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         <div class="page-thumb"><img class="mini-img" src="img/hunt-cards.webp" alt="Two rhyming clue cards with dashed cut lines" width="480" height="621" loading="lazy"><h3>Clue cards</h3><p>4 × 6 inch rhyming cards, two per page, with dashed cut lines and big read-aloud type.</p></div>
         <div class="page-thumb"><img class="mini-img" src="img/hunt-certificate.webp" alt="Mission Accomplished certificate with Maya’s name" width="480" height="621" loading="lazy"><h3>Certificate</h3><p>A “Mission Accomplished” certificate with your child’s name for the big finish.</p></div>
       </div>
+    </div>
+  </section>
+
+  <section class="stop" id="host">
+    <div class="wrap">
+      <div class="pin"><b></b><span class="eyebrow">Host Mode · included with every hunt</span></div>
+      <h2>Run the whole party from your phone</h2>
+      <p class="kits-lede">Every hunt comes with a private Host Mode link. It walks you through hiding the cards, then runs the hunt with you one tap at a time, so you can keep the fun going instead of juggling paper.</p>
+      <div class="phones">
+        <figure><span class="phone"><img src="img/host/space-hide.webp" alt="Host Mode screen: Hide Card 3 at the Shoe Rack, with a Hidden checkbox" width="360" height="720" loading="lazy"></span><figcaption><b>1 · Hide the cards</b>One card per screen, in your exact hiding order. Tick “Hidden!” and move on.</figcaption></figure>
+        <figure><span class="phone"><img src="img/host/space-play.webp" alt="Host Mode screen: They found Card 3, with a quick challenge, a line to say in character, and the clue to read" width="360" height="720" loading="lazy"></span><figcaption><b>2 · Play along</b>A quick challenge before each card, a line to say in character, and the clue to read aloud.</figcaption></figure>
+        <figure><span class="phone"><img src="img/host/space-sidekick.webp" alt="Sidekick screen: a radio call to say as Ground Control, following the host live" width="360" height="720" loading="lazy"></span><figcaption><b>3 · Bring a sidekick</b>Send a second grown-up their own link with radio calls and sound effects that follow your screen.</figcaption></figure>
+      </div>
+      <ul class="host-points">
+        <li>Your child’s name, theme and hiding spots, already filled in</li>
+        <li>“They’re stuck” button with three gentle hints</li>
+        <li>Quick challenges between clues: stomp, roar, moonwalk</li>
+        <li>A big-finish script for handing out the certificate</li>
+        <li>Works in any phone browser. Nothing to download</li>
+        <li>Prefer paper? The printed Host Guide is still in your PDF</li>
+      </ul>
     </div>
   </section>
 
@@ -444,8 +488,8 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <div class="pin"><b></b><span class="eyebrow">Pricing</span></div>
       <h2>Everything for the party, one price</h2>
       <div class="plans">
-        <div class="plan main"><span class="eyebrow">Party bundle · most popular</span><div class="price">$16.99 <small>per party</small></div><p class="was"><s>$24.97</s> value: the hunt, its play kit and party printables</p><ul><li>Custom hunt with your child’s name and your home’s own spots</li><li>Matching play kit with a pretend gadget and hands-on props</li><li>Matching invitations, cupcake toppers, favor tags, a name banner and more</li><li>Delivered to your inbox in minutes</li></ul><a class="btn btn-orange" href="#order" data-pick="hunt kit party">Make my party bundle</a></div>
-        <div class="plan"><span class="eyebrow">Hunt only</span><div class="price">$9.99</div><ul><li>Your child’s name on every page</li><li>6 to 10 of your home’s own spots</li><li>Host guide, briefing, cards and certificate</li></ul><a class="btn btn-ghost" href="#order" data-pick="hunt">Make just the hunt</a></div>
+        <div class="plan main"><span class="eyebrow">Party bundle · most popular</span><div class="price">$16.99 <small>per party</small></div><p class="was"><s>$24.97</s> value: the hunt, its play kit and party printables</p><ul><li>Custom hunt with your child’s name and your home’s own spots</li><li>Matching play kit with a pretend gadget and hands-on props</li><li>Matching invitations, cupcake toppers, favor tags, a name banner and more</li><li>Delivered to your inbox in minutes</li></ul><div class="plan-host"><span class="phone"><img src="img/host/space-play.webp" alt="" width="360" height="720" loading="lazy"></span><span><b>+ Host Mode included</b>Step-by-step phone guide for party day</span></div><a class="btn btn-orange" href="#order" data-pick="hunt kit party">Make my party bundle</a></div>
+        <div class="plan"><span class="eyebrow">Hunt only</span><div class="price">$9.99</div><ul><li>Your child’s name on every page</li><li>6 to 10 of your home’s own spots</li><li>Host guide, briefing, cards and certificate</li></ul><div class="plan-host"><span class="phone"><img src="img/host/space-play.webp" alt="" width="360" height="720" loading="lazy"></span><span><b>+ Host Mode included</b>Step-by-step phone guide for party day</span></div><a class="btn btn-ghost" href="#order" data-pick="hunt">Make just the hunt</a></div>
         <div class="plan"><span class="eyebrow">Party pack only</span><div class="price">$6.99</div><ul><li>Invitations and thank-you cards</li><li>Cupcake toppers, favor tags and food cards</li><li>A HAPPY BIRTHDAY banner with your child’s name</li></ul><a class="btn btn-ghost" href="#order" data-pick="party">Make a party pack</a></div>
         <div class="plan"><span class="eyebrow">Play kit only</span><div class="price">$7.99</div><ul><li>The kit that matches your theme</li><li>Signs, badges and a pretend gadget with your child’s name</li><li>Great for a rainy day or a party table</li></ul><a class="btn btn-ghost" href="#order" data-pick="kit">Make a play kit</a></div>
       </div>
@@ -488,6 +532,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         <details><summary>What if my house doesn’t have a spot on the list?</summary><p>Type any spot you like, such as “the hammock” or “Dad’s guitar”, and we’ll write a rhyme for it. We skip anything unsafe for little kids, like the oven.</p></details>
         <details><summary>How many kids can play?</summary><p>One trail works well for 2 to 10 kids. For bigger groups, read each clue aloud and let a different child find each card.</p></details>
         <details><summary>Can my 3-year-old do it?</summary><p>Yes. For ages 3 to 5, every clue card also shows a picture of the next spot, so kids who can’t read yet can solve it themselves while a grown-up reads the rhyme.</p></details>
+        <details><summary>What is Host Mode? Do I need an app?</summary><p>Host Mode is a private page for your phone that comes with every hunt. It shows where each card goes, what to say in character, quick challenges and hints if the kids get stuck. It opens in your phone’s browser from the link in your email, so there’s nothing to install.</p></details>
         <details><summary>What if something looks wrong?</summary><p>Reply to your order email and we’ll fix it and send a new PDF free.</p></details>
       </div>
     </div>
@@ -667,16 +712,21 @@ function drawCart() {
   // papers fan out wider as the stack grows
   const pos = { 1: [[0, 0]], 2: [[-38, -6], [38, 5]], 3: [[-62, -9], [62, 9], [0, -1]] }[gets.length] || [];
   const order = ['hunt', 'party', 'kit'].filter((k) => gets.includes(k));
-  $('stack').querySelectorAll('img').forEach((img) => img.classList.toggle('out', !gets.includes(img.dataset.k)));
+  $('stack').querySelectorAll(':scope > img').forEach((img) => img.classList.toggle('out', !gets.includes(img.dataset.k)));
   order.forEach((k, i) => {
     const img = $('stack').querySelector(`[data-k="${k}"]`);
     img.src = `img/pages/${state.theme}-${k}.webp`;
     img.style.zIndex = i + 1;
     img.style.transform = `translate(calc(-50% + ${pos[i][0]}px), ${Math.abs(pos[i][0]) / 5}px) rotate(${pos[i][1]}deg)`;
   });
+  // Host Mode rides along with the hunt.
+  const phone = $('stack').querySelector('.phone');
+  phone.classList.toggle('out', !gets.includes('hunt'));
+  phone.querySelector('img').src = `img/host/${state.theme}-play.webp`;
   $('layers').innerHTML = LAYERS.map((l) => `<li><button type="button" class="layer" data-id="${l.id}" aria-pressed="${gets.includes(l.id)}">
-      <span class="box">✓</span><span><b>${l.name}</b><small>${l.note}</small></span><span class="amt">${money(l.price)}</span></button></li>`).join('');
-  $('layers').querySelectorAll('.layer').forEach((b) => b.addEventListener('click', () => pick(b.dataset.id)));
+      <span class="box">✓</span><span><b>${l.name}</b><small>${l.note}</small></span><span class="amt">${money(l.price)}</span></button></li>`).join('')
+    + (gets.includes('hunt') ? '<li class="layer" aria-pressed="true" style="cursor:default"><span class="box">✓</span><span><b>Host Mode phone guide</b><small>Hiding steps, lines to say, hints and a sidekick link</small></span><span class="amt free">Included</span></li>' : '');
+  $('layers').querySelectorAll('button.layer').forEach((b) => b.addEventListener('click', () => pick(b.dataset.id)));
   const value = gets.reduce((sum, k) => sum + LAYERS.find((l) => l.id === k).price, 0);
   const price = product ? PRICES[product] : 0;
   const missing = LAYERS.filter((l) => !gets.includes(l.id));
@@ -690,7 +740,8 @@ function drawCart() {
   $('route').hidden = !picked.has('hunt');
   document.querySelector('.party-details').hidden = !picked.has('party');
 }
-$('stack').innerHTML = ['hunt', 'kit', 'party'].map((k) => `<img data-k="${k}" class="out" alt="" width="400" height="518">`).join('');
+$('stack').innerHTML = ['hunt', 'kit', 'party'].map((k) => `<img data-k="${k}" class="out" alt="" width="400" height="518">`).join('')
+  + '<span class="phone out"><img alt="" width="240" height="480"></span>';
 document.querySelectorAll('[data-pick]').forEach((a) => a.addEventListener('click', () => setPicks(a.dataset.pick.split(' '))));
 
 $('orderForm').addEventListener('submit', async (e) => {
