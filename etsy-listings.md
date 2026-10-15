@@ -1,6 +1,6 @@
 # Etsy listings
 
-The order bot can create all of these as Etsy drafts for you: open its dashboard and click **Create drafts on Etsy**, then review and publish each one in Shop Manager. The bot reads the titles, descriptions and tags from this file, so edit them here. Once the drafts exist, the same button says **Update listings on Etsy**: it sends your latest edits, shop sections and any new photos to every listing, including published ones.
+The order bot can create all of these as Etsy drafts for you: open its dashboard and click **Create drafts on Etsy**, then review and publish each one in Shop Manager. The bot reads the titles, descriptions and tags from this file, so edit them here. Once the drafts exist, the same button says **Update listings on Etsy**: it sends your latest edits, option prices, shop sections and any new photos to every listing, including published ones.
 
 To do it by hand instead, everything is copy-paste ready. Each standard listing uses its PDF from `output/standard/` as the digital file and its photo from `output/listing-photos/` as the main image.
 
@@ -112,6 +112,8 @@ princess party, princess scavenger, scavenger hunt kids, treasure hunt clues, pr
 
 Add a variation called **Package** with prices per option:
 - **Hunt + Play Kit + Party Pack**: $16.99 (make this the first option, so it's the default shown)
+- **Hunt + Play Kit**: $14.99
+- **Hunt + Party Pack**: $13.99
 - **Hunt only**: $9.99
 
 The bot dashboard's **Create drafts on Etsy** button sets all of this up for you, including this variation.
@@ -155,7 +157,7 @@ THE PARTY PACK (matches your theme, with your child's name)
 • A HAPPY BIRTHDAY banner that spells your child's name
 • Food tent cards with themed snack names
 
-Choose "Hunt only" if you just want the scavenger hunt.
+Pick your package: everything for $16.99, the hunt + play kit, the hunt + party pack, or just the hunt.
 
 ★ HOW TO ORDER
 1. Fill in the personalization box (see the example below)

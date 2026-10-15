@@ -37,7 +37,12 @@ const CATALOG = [
     shopSection: 'Custom Party Bundles',
     label: 'Custom Party Bundle',
     price: 16.99,
-    variation: { name: 'Package', options: [{ value: 'Hunt + Play Kit + Party Pack', price: 16.99 }, { value: 'Hunt only', price: 9.99 }] },
+    variation: { name: 'Package', options: [
+      { value: 'Hunt + Play Kit + Party Pack', price: 16.99 },
+      { value: 'Hunt + Play Kit', price: 14.99 },
+      { value: 'Hunt + Party Pack', price: 13.99 },
+      { value: 'Hunt only', price: 9.99 },
+    ] },
     personalization: { question: 'Name, age, theme, spots and pets' },
     photos: ['bundle-main.jpg', 'party-main.jpg', 'hunt-space.jpg', ...['unicorn', 'dino', 'mermaid', 'hero', 'construction', 'pirate', 'royal'].map((k) => `kit-${k}.jpg`)],
     file: { name: 'your-custom-party-bundle.pdf', build: (out) => thankYouPdf(out, 'party bundle') },
@@ -163,11 +168,13 @@ async function createOne(l, taxonomy) {
 }
 
 // Brings a finished draft up to date with etsy-listings.md and this catalog: title, description,
-// tags and section, plus any photos added since it was made.
+// tags, section, buyer instructions and option prices, plus any photos added since it was made.
 async function updateOne(l) {
   const id = store.get().listings[l.key].id;
   const sectionId = await etsy.shopSectionId(l.shopSection);
   await etsy.updateListing(id, { ...l, sectionId });
+  if (l.personalization) await etsy.setPersonalization(id, { question: l.personalization.question, instructions: l.instructions });
+  if (l.variation) await etsy.setVariationPrices(id, l.variation.name, l.variation.options);
   const steps = () => store.get().listings[l.key].steps || [];
   for (const [i, name] of l.photos.entries()) {
     if (steps().includes(`photo:${name}`)) continue;

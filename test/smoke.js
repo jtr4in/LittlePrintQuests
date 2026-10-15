@@ -141,6 +141,11 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal(o.options.Theme, 'Space');
   assert.match(o.message, /Hi Pat!.*Deep Space Rover Expedition for Leo/s);
   assert.equal(o.product, 'bundle');
+  // Each bundle Package option maps to the right mix.
+  const pkgItems = (value) => require('../src/bot/orders').customRequest({ listing_id: 1, title: 'Custom Party Bundle', variations: [
+    { formatted_name: 'Package', formatted_value: value }, { formatted_name: 'Personalization', formatted_value: 'Leo', question_id: 9 }] });
+  assert.deepEqual(['Hunt + Play Kit + Party Pack', 'Hunt + Play Kit', 'Hunt + Party Pack', 'Hunt only'].map((v) => pkgItems(v).product), ['bundle', 'hunt+kit', 'hunt+party', 'hunt']);
+  assert.deepEqual(pkgItems('Hunt + Party Pack').items, ['hunt', 'party']);
   assert.ok(o.kitReady);
   assert.match(o.message, /Mission Control play kit:\s+https:\/\/bot\.example\.com\/d\/[\w-]+-kit\.pdf/);
   assert.ok(o.partyReady);
@@ -311,7 +316,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.match(pack.description, /^Roar!.*WHAT'S INCLUDED/s);
   const bundleId = listed.bundle.id;
   const inv = etsyCalls.find((c) => c.p === `/listings/${bundleId}/inventory`).body;
-  assert.deepEqual(inv.products.map((x) => [x.property_values[0].values[0], x.offerings[0].price]), [['Hunt + Play Kit + Party Pack', 16.99], ['Hunt only', 9.99]]);
+  assert.deepEqual(inv.products.map((x) => [x.property_values[0].values[0], x.offerings[0].price]), [['Hunt + Play Kit + Party Pack', 16.99], ['Hunt + Play Kit', 14.99], ['Hunt + Party Pack', 13.99], ['Hunt only', 9.99]]);
   const kitInv = etsyCalls.find((c) => c.p === `/listings/${listed.kits.id}/inventory`).body;
   assert.equal(kitInv.products.length, 9);
   const partyInv = etsyCalls.find((c) => c.p === `/listings/${listed.party.id}/inventory`).body;
@@ -326,6 +331,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   // Clicking again once everything is ready updates the listings in place: no new drafts or photos.
   const imagesBefore = etsyCalls.filter((c) => /\/images$/.test(c.p)).length;
   const patchesBefore = etsyCalls.filter((c) => c.method === 'PATCH').length;
+  const bundleInvBefore = etsyCalls.filter((c) => c.p === `/listings/${bundleId}/inventory`).length;
   assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Update listings on Etsy/);
   await createListings();
   for (let i = 0; i < 120 && etsyCalls.filter((c) => c.method === 'PATCH').length < patchesBefore + 12; i++) await wait(250);
@@ -334,6 +340,8 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.ok(patches.every((c) => c.body.shop_section_id && c.body.title && c.body.tags));
   assert.equal(etsyCalls.filter((c) => c.p === '/shops/42/listings').length, 12);
   assert.equal(etsyCalls.filter((c) => /\/images$/.test(c.p)).length, imagesBefore);
+  // The update also re-sends option prices, so the bundle's new Package choices reach old drafts.
+  assert.equal(etsyCalls.filter((c) => c.p === `/listings/${bundleId}/inventory`).length, bundleInvBefore + 1);
   assert.ok(files.every((f) => f.body.file.size > 10000 && f.body.file.type === 'application/pdf'));
   assert.ok(!etsyCalls.some((c) => c.p.includes(`/listings/${listed['pack-dino'].id}/personalization`)));
 
