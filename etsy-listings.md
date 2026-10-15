@@ -126,7 +126,7 @@ A scavenger hunt made for YOUR child and YOUR home.
 Tell us your child's name, age, theme and 6–10 hiding spots in your house or yard, and we'll create a personalized, print-ready hunt with custom rhyming clues that lead from spot to spot, ending at the cake or prize.
 
 ★ CHOOSE A THEME
-Dinosaurs · Superheroes · Pirates · Outer Space · Princess & Knights · Unicorns · Mermaids · Construction
+Dinosaurs · Superheroes · Pirates · Outer Space · Princess & Knights · Unicorns · Mermaids · Construction · Pet Vet
 
 ★ PARTY BUNDLE: THE HUNT + A MATCHING PLAY KIT + PARTY PACK ($24.97 value)
 THE HUNT
@@ -169,7 +169,7 @@ This is a DIGITAL file. No physical item will be shipped.
 **Personalization:** On, required. Max characters 500.
 Instructions to buyer:
 ```
-Child's name, age, theme (Dino, Superhero, Pirate, Space, Princess, Unicorn, Mermaid, Construction), and 6–10 spots in order. The LAST spot is where the prize goes. Bundle: add up to 6 pets or toys for the play kit, like "Rover (dog)".
+Child's name, age, theme (Dino, Superhero, Pirate, Space, Princess, Unicorn, Mermaid, Construction, Pet Vet), and 6–10 spots in order. The LAST spot is where the prize goes. Bundle: add up to 6 pets or toys for the play kit, like "Rover (dog)".
 ```
 
 **Digital file:** Etsy requires one. Upload a one-page "Thank you, your custom hunt is on its way" PDF, or reuse a standard pack as a bonus.
@@ -181,7 +181,7 @@ custom hunt for kids, personalized game, scavenger hunt kids, treasure hunt clue
 
 ## 7. Personalized Pretend Play Kit ($7.99)
 
-One listing with a **Kit** variation: Vet Clinic, Mission Control, Dino Dig Lab, Hero HQ, Pirate Ship, Royal Castle, Unicorn Stable, Mermaid Lagoon, Construction Site. The Vet Clinic kit is the stand-alone one that doesn't match a hunt, so put it first in the photos.
+One listing with a **Kit** variation: Vet Clinic, Mission Control, Dino Dig Lab, Hero HQ, Pirate Ship, Royal Castle, Unicorn Stable, Mermaid Lagoon, Construction Site. Every kit matches a hunt theme; the Vet Clinic kit pairs with Pet Rescue Vet Quest.
 
 **Title**
 Personalized Pretend Play Kit, Printable Vet, Space, Dino, Pirate, Superhero, Castle, Unicorn, Mermaid or Construction Role Play Set
@@ -246,7 +246,7 @@ Everything for the party table, matched to your theme and made with your child's
 • Food tent cards with themed snack names, plus blank ones to fill in
 
 ★ THEMES
-Dinosaurs · Superheroes · Pirates · Outer Space · Princess & Knights · Unicorns · Mermaids · Construction
+Dinosaurs · Superheroes · Pirates · Outer Space · Princess & Knights · Unicorns · Mermaids · Construction · Pet Vet
 
 ★ HOW TO ORDER
 Pick your theme and write your child's name and age in the personalization box.
@@ -266,7 +266,7 @@ Child's first name and the age they're turning. Optional: party date, time, plac
 ```
 
 **Tags (13)**
-birthday printables, party printables, kids invitation, cupcake toppers, favor tags, birthday banner, name banner, thank you cards, dinosaur party, unicorn party, mermaid party, construction party, personalized party
+birthday printables, party printables, kids invitation, cupcake toppers, favor tags, birthday banner, name banner, thank you cards, dinosaur party, unicorn party, mermaid party, construction party, vet party
 
 ---
 
@@ -306,3 +306,16 @@ Beep beep! The wind blew Foreman Fran's blueprint to pieces! Your Construction C
 
 **Tags (13)**
 construction party, digger party, scavenger hunt kids, treasure hunt clues, truck birthday, kids party game, printable party game, indoor scavenger, dump truck party, rhyming clues, toddler party game, birthday activity, builder party game
+
+---
+
+## 12. Pet Rescue Vet Quest (list $8.00, run a 40% sale → $4.80)
+
+**Title**
+Pet Vet Scavenger Hunt Printable, Kids Birthday Party Game, Puppy and Kitten Treasure Hunt Clues, Indoor Scavenger Hunt Ages 3-7, Download
+
+**Opening line**
+Woof! Someone left the clinic gate open and the pets wandered off! Your Junior Vets follow 8 rhyming clues around the house to rescue every lost pet.
+
+**Tags (13)**
+vet party, pet vet party, scavenger hunt kids, treasure hunt clues, puppy birthday, kids party game, printable party game, indoor scavenger, kitten party, rhyming clues, toddler party game, birthday activity, animal party game

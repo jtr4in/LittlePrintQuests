@@ -10,6 +10,7 @@ const FLAVOR = {
   royal: { party: 'Royal Party', tagline: 'Join the royal celebration!', foods: ['Crown Jewels', 'Royal Tea', 'Dragon Eggs'] },
   unicorn: { party: 'Unicorn Party', tagline: 'Join the magical celebration!', foods: ['Unicorn Horns', 'Rainbow Punch', 'Magic Clouds'] },
   mermaid: { party: 'Mermaid Party', tagline: 'Make a splash under the sea!', foods: ['Mermaid Tails', 'Ocean Water', 'Seashell Snacks'] },
+  vet: { party: 'Pet Vet Party', tagline: 'Paws up, it’s party time!', foods: ['Puppy Chow', 'Kitty Milk', 'Bunny Bites'] },
   construction: { party: 'Construction Party', tagline: 'Hard hats on, let’s build fun!', foods: ['Dump Truck Dirt', 'Traffic Cones', 'Rocks & Rubble'] },
 };
 

@@ -263,7 +263,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     for (let i = 0; i < 240; i++) {
       await wait(500);
       const l = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8')).listings || {};
-      if (Object.keys(l).length === 11 && Object.values(l).every((x) => x.ready || (x.error && !x.working))) return l;
+      if (Object.keys(l).length === 12 && Object.values(l).every((x) => x.ready || (x.error && !x.working))) return l;
     }
     throw new Error('listings never finished');
   };
@@ -271,12 +271,12 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   await createListings();
   let listed = await listingsDone();
   assert.match(listed.kits.error, /Temporary upload problem/);
-  assert.equal(Object.values(listed).filter((x) => x.ready).length, 10);
+  assert.equal(Object.values(listed).filter((x) => x.ready).length, 11);
   await createListings();
   listed = await listingsDone();
   assert.ok(Object.values(listed).every((x) => x.ready));
   const creates = etsyCalls.filter((c) => c.p === '/shops/42/listings');
-  assert.equal(creates.length, 11, 'resuming must not create a second kits listing');
+  assert.equal(creates.length, 12, 'resuming must not create a second kits listing');
   const pack = creates[0].body;
   assert.equal(pack.type, 'download');
   assert.equal(pack.price, '8.00');
@@ -294,7 +294,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.ok(q.required && q.question_text.length <= 45 && /pets or toys/.test(q.instructions));
   assert.equal(etsyCalls.filter((c) => c.p === `/shops/42/listings/${listed.kits.id}/images`).length, 11); // 10 photos + 1 failed try
   const files = etsyCalls.filter((c) => /\/files$/.test(c.p));
-  assert.equal(files.length, 11);
+  assert.equal(files.length, 12);
   assert.ok(files.every((f) => f.body.file.size > 10000 && f.body.file.type === 'application/pdf'));
   assert.ok(!etsyCalls.some((c) => c.p.includes(`/listings/${listed['pack-dino'].id}/personalization`)));
 
