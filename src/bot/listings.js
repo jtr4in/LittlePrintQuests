@@ -5,6 +5,7 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const crypto = require('crypto');
 const store = require('./store');
 const etsy = require('./etsy');
 const { renderPdf, renderHtml } = require('../generator/render');
@@ -185,6 +186,12 @@ function thankYouPdf(out, what) {
 }
 
 const photo = (name) => ({ name, type: 'image/jpeg', data: fs.readFileSync(path.join(ASSETS, name)) });
+// A fingerprint of a photo's contents, so a regenerated photo with the same name still gets re-sent.
+const photoHash = (name) => crypto.createHash('sha1').update(fs.readFileSync(path.join(ASSETS, name))).digest('hex').slice(0, 16);
+function photoSent(key, name) {
+  const l = store.get().listings[key];
+  setStatus(key, { steps: [...(l.steps || []), `photo:${name}`], photoHashes: { ...(l.photoHashes || {}), [name]: photoHash(name) } });
+}
 
 // ---------- creating drafts ----------
 
@@ -232,7 +239,11 @@ async function createOne(l, taxonomy, existing) {
   };
   if (l.personalization) await step('personalization', () => etsy.setPersonalization(id, { question: l.personalization.question, instructions: l.instructions }));
   if (l.variation) await step('variation', () => etsy.setVariationPrices(id, l.variation.name, l.variation.options));
-  for (const [i, name] of l.photos.entries()) await step(`photo:${name}`, () => etsy.uploadListingImage(id, photo(name), i + 1));
+  for (const [i, name] of l.photos.entries()) {
+    if (done().steps?.includes(`photo:${name}`)) continue;
+    await etsy.uploadListingImage(id, photo(name), i + 1);
+    photoSent(l.key, name);
+  }
   await step('file', async () => {
     const tmp = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'listing-')), l.file.name);
     await l.file.build(tmp);
@@ -242,23 +253,24 @@ async function createOne(l, taxonomy, existing) {
 }
 
 // Brings a finished draft up to date with etsy-listings.md and this catalog: title, description,
-// tags, section, buyer instructions and option prices, plus any photos added since it was made.
+// tags, section, buyer instructions and option prices, plus any photos added or redrawn since it was made.
 async function updateOne(l) {
   const id = store.get().listings[l.key].id;
   const sectionId = await etsy.shopSectionId(l.shopSection);
   await etsy.updateListing(id, { ...l, sectionId });
   if (l.personalization) await etsy.setPersonalization(id, { question: l.personalization.question, instructions: l.instructions });
   if (l.variation) await etsy.setVariationPrices(id, l.variation.name, l.variation.options);
-  // From the first new photo on, every rank is re-uploaded in place, so the order matches the list.
+  // From the first new or changed photo on, every rank is re-uploaded in place, so the order matches the list.
   const steps = () => store.get().listings[l.key].steps || [];
-  const from = l.photos.findIndex((name) => !steps().includes(`photo:${name}`));
+  const hashes = store.get().listings[l.key].photoHashes || {};
+  const from = l.photos.findIndex((name) => !steps().includes(`photo:${name}`) || hashes[name] !== photoHash(name));
   if (from >= 0) {
     const keep = steps().filter((x) => !x.startsWith('photo:') || l.photos.slice(0, from).includes(x.slice(6)));
     setStatus(l.key, { steps: keep });
     for (const [i, name] of l.photos.entries()) {
       if (i < from) continue;
       await etsy.uploadListingImage(id, photo(name), i + 1);
-      setStatus(l.key, { steps: [...steps(), `photo:${name}`] });
+      photoSent(l.key, name);
     }
   }
   setStatus(l.key, { error: null, updatedAt: new Date().toISOString() });

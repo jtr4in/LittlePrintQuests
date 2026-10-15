@@ -365,6 +365,16 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal(String(redo[0].body.rank), '2');
   assert.ok(redo.every((c) => String(c.body.overwrite) === 'true'));
   assert.ok(!store.get().listings.bundle.steps.includes('photo:kit-royal.jpg'));
+  // A photo regenerated under the same name (new art) is re-sent at its rank on the next update.
+  const lastPhoto = store.get().listings.bundle.steps.filter((x) => x.startsWith('photo:')).pop().slice(6);
+  store.update((st) => (st.listings.bundle.photoHashes[lastPhoto] = 'stale'));
+  const callsBefore2 = etsyCalls.length;
+  await createListings();
+  for (let i = 0; i < 120 && etsyCalls.filter((c) => c.method === 'PATCH').length < patchesBefore + 3 * N; i++) await wait(250);
+  const redo2 = etsyCalls.slice(callsBefore2).filter((c) => c.method === 'POST' && /\/images$/.test(c.p));
+  assert.equal(redo2.length, 1);
+  assert.equal(redo2[0].body.image.name, lastPhoto);
+  assert.equal(String(redo2[0].body.rank), '10');
   // Per-theme listings: their own copy, three photos, and orders that know their kit or theme.
   const pirateKit = creates.find((c) => /Pirate Ship Pretend Play/.test(c.body.title)).body;
   assert.match(pirateKit.description, /^Ahoy, Captain!.*Pirate Ship".*Treasure Map, Wanted Posters/s);
