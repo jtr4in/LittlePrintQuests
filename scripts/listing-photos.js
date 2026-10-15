@@ -56,7 +56,7 @@ const pages = {
     <div class="cap" style="left:955px;top:725px">3 · Sidekick role</div>`,
   'kits-main': `<div class="top" style="text-align:center"><h1>Pretend Play Kits</h1>
     <div class="sub">${Object.keys(KITS).length} kits with hands-on toys, a shop to set up and signs, all with your child’s name</div></div>
-    <div class="grid">${['vet', 'unicorn', 'dino', 'mermaid', 'construction', 'pirate']
+    <div class="grid">${['pizza', 'vet', 'grocery', 'unicorn', 'burger', 'dino']
       .map((k) => `<div><img src="${img(`kit-${k}.png`)}"><div class="label">${KITS[k].name}</div></div>`)
       .join('')}</div>`,
 };

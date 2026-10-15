@@ -431,5 +431,81 @@
   "new-paint",
   "drivers-pretzel",
   "juice-box"
+ ],
+ "pizza-1": [
+  "extra-cheese",
+  "1f4e3",
+  "wash-your-hands-and-put-on-your-apron",
+  "mushrooms",
+  "peppers",
+  "olives",
+  "pineapple",
+  "receipt"
+ ],
+ "pizza-2": [
+  "card",
+  "delivery",
+  "garlic-bread",
+  "pasta",
+  "salad",
+  "chicken-wings",
+  "ice-cream",
+  "spread-on-the-tomato-sauce",
+  "stretch-the-dough-into-a-big-circle"
+ ],
+ "burger-1": [
+  "burger",
+  "cheese",
+  "1f4e3",
+  "wash-your-hands-and-put-on-your-apron",
+  "receipt",
+  "card",
+  "fries",
+  "chicken-bites"
+ ],
+ "burger-2": [
+  "corn-cob",
+  "salad",
+  "tomato",
+  "pickles",
+  "bacon",
+  "lettuce",
+  "serve-it-with-fries-and-a-smile"
+ ],
+ "grocery-1": [
+  "cart-champ",
+  "1f9fe",
+  "card",
+  "cheese",
+  "grapes",
+  "veggies"
+ ],
+ "grocery-2": [
+  "corn",
+  "tomato",
+  "butter",
+  "croissants",
+  "soup",
+  "pasta"
+ ],
+ "post-1": [
+  "letter",
+  "postcard",
+  "weigh",
+  "receipt",
+  "parcel",
+  "delivered-knock-knock",
+  "lion",
+  "2"
+ ],
+ "post-2": [
+  "1",
+  "3",
+  "hello-from-the-beach",
+  "greetings-from-the-hills",
+  "wish-you-were-here",
+  "air-mail",
+  "sign-for-it",
+  "pop-it-in-the-mail-box"
  ]
 }

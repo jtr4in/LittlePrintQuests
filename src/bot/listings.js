@@ -19,7 +19,7 @@ const DOC = path.join(ROOT, 'etsy-listings.md');
 
 const PACK_SPOTS = ['couch', 'fridge', 'bed', 'bathtub', 'bookshelf', 'front_door', 'toy_box', 'kitchen_table'];
 const PACK_PROMO = 'Want a hunt with your child’s name and your own hiding spots? Order a Custom Hunt from our Etsy shop.';
-const KIT_ORDER = ['vet', 'space', 'dino', 'hero', 'pirate', 'royal', 'unicorn', 'mermaid', 'construction', 'easter', 'halloween', 'christmas', 'valentine', 'fire', 'ice', 'racecar'];
+const KIT_ORDER = ['vet', 'pizza', 'space', 'grocery', 'dino', 'burger', 'hero', 'post', 'pirate', 'royal', 'unicorn', 'mermaid', 'construction', 'easter', 'halloween', 'christmas', 'valentine', 'fire', 'ice', 'racecar'];
 // etsy-listings.md section for each theme's pack (the newer themes come after the bundle, kit and party pack).
 const PACK_SECTIONS = { dino: 1, hero: 2, pirate: 3, space: 4, royal: 5, unicorn: 9, mermaid: 10, construction: 11, vet: 12, easter: 15, halloween: 16, christmas: 17, valentine: 18, fire: 19, ice: 20, racecar: 21 };
 
@@ -130,7 +130,11 @@ function placeholders(c) {
     const k = KITS[c.perTheme];
     return {
       kit: k.name, place: k.placeName('[Name]’s'), toys: k.toys.map((t) => t.inside).join('\n• '), subjects: k.subjectPlural,
-      props: list(Object.values(k.props).map((p) => p.title)), hunt: THEMES[k.hunt].name,
+      props: list(Object.values(k.props).map((p) => p.title)),
+      forms: `${k.record.title} forms and ${k.passport.pageTitle}`,
+      pairing: k.hunt
+        ? `Our ${THEMES[k.hunt].name} scavenger hunt: the trail ends at the ${k.name}, so the party keeps going. Find it in our shop, or get the hunt, this kit and a matching party pack together in our Custom Party Bundle.`
+        : 'Any of our personalized scavenger hunts, for a party that keeps going. Find them in our shop.',
     };
   }
   const t = THEMES[c.perTheme];

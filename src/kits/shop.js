@@ -56,11 +56,11 @@ function specialsPage(k) {
   const M = k.def.menu;
   const S = k.def.shop || {};
   const picks = S.specials || [M.items[1], M.items[0], M.items[M.items.length - 1]].map(([e, n]) => [e, n]);
-  const tags = ['Yum!', 'Tasty!', 'Wow!'];
+  const tags = S.specialTags || ['Yum!', 'Tasty!', 'Wow!'];
   const card = ([e, n], i) => `<div class="special">${pic(e, '1.45in')}<b>${esc(n)}</b><span class="pill">${tags[i]}</span></div>`;
   const slip = () => `<div class="slip">
-    <div class="slip-head">${pic(M.icon, '.42in')}<div><small>${esc(k.placeName)}</small><b>Order slip</b></div><span class="no">No. ____</span></div>
-    ${['Customer', 'Order', 'Extras'].map((f) => `<div class="line"><span>${f}</span><i></i></div>`).join('')}
+    <div class="slip-head">${pic(M.icon, '.42in')}<div><small>${esc(k.placeName)}</small><b>${esc(S.slipTitle || 'Order slip')}</b></div><span class="no">No. ____</span></div>
+    ${(S.slipFields || ['Customer', 'Order', 'Extras']).map((f) => `<div class="line"><span>${f}</span><i></i></div>`).join('')}
     <div class="line"><span>How many</span><span class="ticks">${[1, 2, 3, 4].map((n) => `<em>${n}</em>`).join('')}</span></div>
     <div class="line"><span>Total</span><i class="short"></i>${pic(M.coinIcon, '.3in')}</div>
     <div class="slip-foot">Thank you! Come again!</div>
@@ -137,14 +137,14 @@ svg.pic { display:inline-block; vertical-align:middle; flex:none; }
 .slip .ticks { display:flex; gap:.1in; } .slip .ticks em { font-style:normal; width:.3in; height:.3in; border:2px solid var(--teal); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10pt; }
 .slip-foot { text-align:center; margin-top:.12in; font:600 11pt 'Fredoka'; color:var(--orange); }
 .money-page { padding:.4in .45in; }
-.money-page h1 { font-size:36pt; }
+.money-page h1 { font-size:36pt; line-height:1.35; }
 .money-page .pg-sub { margin:.02in 0 .18in; }
 .bills { display:grid; grid-template-columns:1fr 1fr; gap:.16in .22in; }
 .bill { position:relative; height:1.55in; border-radius:12px; background:var(--mint-l); border:3px solid var(--teal); outline:2px dashed #b7c0cc; outline-offset:5px; display:flex; align-items:center; gap:.15in; padding:0 .45in; overflow:hidden; }
 .bill::before { content:''; position:absolute; inset:6px; border:2px solid var(--mint); border-radius:8px; }
 .corner { position:absolute; font:700 17pt 'Fredoka'; color:var(--teal-d); } .tl { top:.05in; left:.14in; } .tr { top:.05in; right:.14in; } .bl { bottom:.05in; left:.14in; } .br { bottom:.05in; right:.14in; }
 .bill-mid { width:1in; height:1in; border-radius:50%; background:#fff; border:3px solid var(--gold); display:flex; align-items:center; justify-content:center; flex:none; }
-.bill-txt small { display:block; font:600 8pt 'Fredoka'; text-transform:uppercase; letter-spacing:.08em; color:#66708f; }
+.bill-txt small { display:block; font:600 8pt 'Fredoka'; text-transform:uppercase; letter-spacing:.04em; color:#66708f; white-space:nowrap; }
 .bill-txt b { font:700 19pt/1.1 'Fredoka'; color:var(--teal-d); }
 .coins2 { display:grid; grid-template-columns:repeat(6, 1fr); gap:.12in; margin-top:.3in; justify-items:center; }
 .coin2 { width:1.05in; height:1.05in; border-radius:50%; background:radial-gradient(circle at 35% 30%, #fff3cf, var(--gold) 65%); border:2px dashed #b77818; display:flex; flex-direction:column; align-items:center; justify-content:center; }

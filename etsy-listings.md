@@ -214,7 +214,7 @@ Personalized Pretend Play Kit, Printable Vet, Space, Dino, Pirate, Superhero, Ca
 
 **Description**
 ```
-Turn the living room into a vet clinic, a pirate ship or mission control, with your child's name on every sign.
+Turn the living room into a vet clinic, a pizzeria, a grocery store or mission control, with your child's name on every sign.
 
 ★ WHAT YOU GET (22–23 page PDF, US Letter)
 • Two hands-on toys made for your kit: a vet's lift-the-flap doctor bag and X-ray machine,
@@ -366,7 +366,7 @@ vet party, pet vet party, scavenger hunt kids, treasure hunt clues, puppy birthd
 
 ## 13. Play kit, one listing per theme ($7.99)
 
-The same kits as listing 7, each on its own listing so it can have its own title, tags and search terms. The bot fills `{kit}`, `{place}`, `{toys}`, `{props}`, `{subjects}` and `{hunt}` in the template below from each kit, and puts the theme's opening line at `{opening}`. Orders on these listings already know their kit, so there's no dropdown.
+The same kits as listing 7, each on its own listing so it can have its own title, tags and search terms. The bot fills `{kit}`, `{place}`, `{toys}`, `{props}`, `{subjects}`, `{forms}` and `{pairing}` in the template below from each kit, and puts the theme's opening line at `{opening}`. Orders on these listings already know their kit, so there's no dropdown.
 
 **Description template**
 ```
@@ -378,13 +378,13 @@ The same kits as listing 7, each on its own listing so it can have its own title
 • Door signs with your child's name
 • Flat props to cut out and play with: {props}
 • 8 ID badges for your child, family and friends
-• A check-up form and passport for each of your child's {subjects} (stuffed animals and toys count!)
+• {forms} for each of your child's {subjects} (stuffed animals and toys count!)
 • Tickets and a certificate (plus a blank one for guests)
 • A grown-up guide with setup steps and play ideas
 • HOST MODE on your phone: 8 pretend-play scenarios with lines to say and silly twists, a "Surprise me" button, and quick games. Works in any phone browser, nothing to download
 
 ★ PERFECT WITH
-Our {hunt} scavenger hunt: the trail ends at the {kit}, so the party keeps going. Find it in our shop, or get the hunt, this kit and a matching party pack together in our Custom Party Bundle.
+{pairing}
 
 ★ HOW TO ORDER
 Fill in the personalization box with your child's name and up to 6 pets or toys.
@@ -532,6 +532,38 @@ Personalized Race Car Garage Pretend Play Printable, Kids Pit Stop Mechanic Role
 Start your engines! Your child runs their own Pit Stop Garage, fixing and fueling every toy car before the big race.
 **Tags**
 race car play, pit stop printable, car mechanic play, racing goggles, dramatic play, kids role play, pretend play kit, printable play set, race car party, car birthday, personalized kids, homeschool play, car activity
+
+### pizza
+**Title**
+Personalized Pizza Shop Dramatic Play Printable, Kids Pretend Pizzeria Set, Play Food Toppings, Cash Register, Menu and Order Forms
+**Opening line**
+Your child is the head chef at their very own pizzeria, with a big pizza to top and slice, a cash register and a menu with their name on it.
+**Tags**
+pizza dramatic play, pizza shop printable, pretend pizzeria, play food printable, dramatic play, kids role play, pretend play kit, printable play set, pizza party kids, play cash register, personalized kids, homeschool play, preschool center
+
+### grocery
+**Title**
+Personalized Grocery Store Dramatic Play Printable, Kids Pretend Supermarket Set, Play Food, Cash Register, Coupons and Shopping Lists
+**Opening line**
+Turn the kitchen into your child's own grocery store, with play food to stock, aisle signs, coupons and a cash register to ring it all up.
+**Tags**
+grocery store play, supermarket play, pretend supermarket, play food printable, dramatic play, kids role play, pretend play kit, printable play set, play cash register, shopping list kids, personalized kids, homeschool play, preschool center
+
+### burger
+**Title**
+Personalized Burger Shop Dramatic Play Printable, Kids Pretend Restaurant Set, Build a Burger Game, Play Food, Menu and Cash Register
+**Opening line**
+Order up! Your child runs their own burger shop, stacking big burgers to match each order and ringing up fries and shakes.
+**Tags**
+burger dramatic play, burger shop play, pretend restaurant, build a burger, dramatic play, kids role play, pretend play kit, printable play set, play food printable, play cash register, personalized kids, homeschool play, preschool center
+
+### post
+**Title**
+Personalized Post Office Dramatic Play Printable, Kids Pretend Mail Set, Stamps, Postcards, Letters, Parcel Labels and Cash Register
+**Opening line**
+Your child runs the town post office, selling stamps, weighing parcels and sorting the mail, with their name on every sign.
+**Tags**
+post office play, dramatic play, pretend mail, play stamps, printable postcards, letter writing kids, kids role play, pretend play kit, printable play set, mail carrier play, personalized kids, homeschool play, preschool center
 
 ---
 
