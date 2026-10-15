@@ -48,7 +48,7 @@ const CATALOG = [
       { value: 'Hunt only', price: 9.99 },
     ] },
     personalization: { question: 'Name, age, theme, spots and pets' },
-    photos: ['bundle-main.jpg', 'party-main.jpg', 'hunt-space.jpg', ...['unicorn', 'dino', 'mermaid', 'hero', 'construction', 'pirate', 'royal'].map((k) => `kit-${k}.jpg`)],
+    photos: ['bundle-main.jpg', 'bundle-host.jpg', 'party-main.jpg', 'hunt-space.jpg', ...['unicorn', 'dino', 'mermaid', 'hero', 'construction', 'pirate'].map((k) => `kit-${k}.jpg`)],
     file: { name: 'your-custom-party-bundle.pdf', build: (out) => thankYouPdf(out, 'party bundle') },
   },
   {
@@ -207,7 +207,10 @@ async function adopt(l, existing) {
   const found = (await existing()).find((x) => title(x.title) === title(l.title));
   if (!found) return false;
   const has = await etsy.listingContents(found.listing_id);
-  const steps = [...l.photos.slice(0, has.images).map((p) => `photo:${p}`), ...(has.files ? ['file'] : [])];
+  // A draft with every photo may hold an older photo list, so those get re-uploaded in place;
+  // a half-finished one was uploaded in this order and only needs the rest.
+  const partial = has.images < l.photos.length;
+  const steps = [...(partial ? l.photos.slice(0, has.images).map((p) => `photo:${p}`) : []), ...(has.files ? ['file'] : [])];
   setStatus(l.key, { id: found.listing_id, steps, adopted: true });
   await etsy.updateListing(found.listing_id, { ...l, sectionId: await etsy.shopSectionId(l.shopSection) });
   return true;
@@ -246,11 +249,17 @@ async function updateOne(l) {
   await etsy.updateListing(id, { ...l, sectionId });
   if (l.personalization) await etsy.setPersonalization(id, { question: l.personalization.question, instructions: l.instructions });
   if (l.variation) await etsy.setVariationPrices(id, l.variation.name, l.variation.options);
+  // From the first new photo on, every rank is re-uploaded in place, so the order matches the list.
   const steps = () => store.get().listings[l.key].steps || [];
-  for (const [i, name] of l.photos.entries()) {
-    if (steps().includes(`photo:${name}`)) continue;
-    await etsy.uploadListingImage(id, photo(name), i + 1);
-    setStatus(l.key, { steps: [...steps(), `photo:${name}`] });
+  const from = l.photos.findIndex((name) => !steps().includes(`photo:${name}`));
+  if (from >= 0) {
+    const keep = steps().filter((x) => !x.startsWith('photo:') || l.photos.slice(0, from).includes(x.slice(6)));
+    setStatus(l.key, { steps: keep });
+    for (const [i, name] of l.photos.entries()) {
+      if (i < from) continue;
+      await etsy.uploadListingImage(id, photo(name), i + 1);
+      setStatus(l.key, { steps: [...steps(), `photo:${name}`] });
+    }
   }
   setStatus(l.key, { error: null, updatedAt: new Date().toISOString() });
 }

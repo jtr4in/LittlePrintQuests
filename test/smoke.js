@@ -351,6 +351,20 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal(etsyCalls.filter((c) => /\/images$/.test(c.p) && c.method === 'POST').length, imagesBefore);
   // The update also re-sends option prices, so the bundle's new Package choices reach old drafts.
   assert.equal(etsyCalls.filter((c) => c.p === `/listings/${bundleId}/inventory`).length, bundleInvBefore + 1);
+  // A draft made with an older photo list gets the new photo in place: every rank from it on is
+  // re-uploaded with overwrite, so the listing never goes past Etsy's 10 photos.
+  const store = require('../src/bot/store');
+  const oldPhotos = ['bundle-main.jpg', 'party-main.jpg', 'hunt-space.jpg', 'kit-unicorn.jpg', 'kit-dino.jpg', 'kit-mermaid.jpg', 'kit-hero.jpg', 'kit-construction.jpg', 'kit-pirate.jpg', 'kit-royal.jpg'];
+  store.update((st) => (st.listings.bundle.steps = [...st.listings.bundle.steps.filter((x) => !x.startsWith('photo:')), ...oldPhotos.map((x) => `photo:${x}`)]));
+  const callsBefore = etsyCalls.length;
+  await createListings();
+  for (let i = 0; i < 120 && etsyCalls.filter((c) => c.method === 'PATCH').length < patchesBefore + 2 * N; i++) await wait(250);
+  const redo = etsyCalls.slice(callsBefore).filter((c) => c.method === 'POST' && c.p === `/shops/42/listings/${bundleId}/images`);
+  assert.equal(redo.length, 9);
+  assert.equal(redo[0].body.image.name, 'bundle-host.jpg');
+  assert.equal(String(redo[0].body.rank), '2');
+  assert.ok(redo.every((c) => String(c.body.overwrite) === 'true'));
+  assert.ok(!store.get().listings.bundle.steps.includes('photo:kit-royal.jpg'));
   // Per-theme listings: their own copy, three photos, and orders that know their kit or theme.
   const pirateKit = creates.find((c) => /Pirate Ship Pretend Play/.test(c.body.title)).body;
   assert.match(pirateKit.description, /^Ahoy, Captain!.*Pirate Ship".*Treasure Map, Wanted Posters/s);

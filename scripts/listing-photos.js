@@ -1,5 +1,6 @@
 // Builds the Etsy photos for the Party Bundle and Play Kit listings (2400x1800 JPGs in listing-assets/).
-// Usage: node scripts/listing-photos.js <dir with hunt-1.png, hunt-3.png, hunt-7.png, party-space.png (party pack page 2) and kit-<id>.png fans> [photo name ...]
+// Usage: node scripts/listing-photos.js <dir with hunt-1.png, hunt-3.png, hunt-7.png, party-space.png (party pack page 2),
+// host-hide|play|sidekick.png (360x720 Host Mode screens at 2x) and kit-<id>.png fans> [photo name ...]
 // Name photos (like kit-vet) to build only those; site-images.js writes the kit-<id>.png fans when FAN_DIR is set.
 const fs = require('fs');
 const path = require('path');
@@ -27,7 +28,10 @@ h1 { font: 700 70px/1 Fredoka; margin: 0; letter-spacing: -.01em; }
 .label { font: 600 26px/1 Fredoka; text-align: center; margin-top: 4px; }
 .grid { position: absolute; left: 40px; right: 40px; top: 230px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 20px; }
 .grid img { width: 100%; display: block; }
-.mint { position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: #89dcb0; opacity: .25; }`;
+.mint { position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: #89dcb0; opacity: .25; }
+.phone { position: absolute; width: 200px; padding: 8px; border-radius: 34px; background: #1f2540; box-shadow: 0 16px 40px rgba(40,50,90,.3); }
+.phone img { width: 100%; display: block; border-radius: 26px; }
+.cap { position: absolute; width: 236px; text-align: center; font: 600 24px/1.15 Fredoka; }`;
 
 const pages = {
   'bundle-main': `<div class="mint"></div><div class="top"><h1>Custom Party Bundle</h1>
@@ -39,6 +43,17 @@ const pages = {
     <div class="page" style="left:905px;top:470px;width:250px;transform:rotate(6deg)"><img src="${img('party-space.png')}"></div>
     <div style="position:absolute;left:70px;bottom:40px;right:70px;display:flex;gap:16px">
       <span class="pill">Your child’s name on every page</span><span class="pill" style="background:#3f4a73;color:#fff">Printable PDF</span></div>`,
+  'bundle-host': `<div class="mint"></div><div class="top"><h1>Host Guide + Host Mode</h1>
+    <div class="sub">Every custom hunt includes the printed guide and a private phone guide: where each card goes, lines to say, hints and a sidekick role</div></div>
+    <div class="page" style="left:70px;top:285px;width:330px;transform:rotate(-4deg)"><img src="${img('hunt-1.png')}"></div>
+    <div class="cap" style="left:110px;top:725px">Printed Host Guide</div>
+    <div class="plus" style="left:428px;top:445px">+</div>
+    <div class="phone" style="left:505px;top:270px"><img src="${img('host-hide.png')}"></div>
+    <div class="phone" style="left:735px;top:270px"><img src="${img('host-play.png')}"></div>
+    <div class="phone" style="left:965px;top:270px"><img src="${img('host-sidekick.png')}"></div>
+    <div class="cap" style="left:495px;top:725px">1 · Hide the cards</div>
+    <div class="cap" style="left:725px;top:725px">2 · Play along</div>
+    <div class="cap" style="left:955px;top:725px">3 · Sidekick role</div>`,
   'kits-main': `<div class="top" style="text-align:center"><h1>Pretend Play Kits</h1>
     <div class="sub">9 kits with signs, props and a pretend gadget, all with your child’s name</div></div>
     <div class="grid">${['vet', 'unicorn', 'dino', 'mermaid', 'construction', 'pirate']

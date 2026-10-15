@@ -135,18 +135,20 @@ A scavenger hunt made for YOUR child and YOUR home.
 
 Tell us your child's name, age, theme and 6–10 hiding spots in your house or yard, and we'll create a personalized, print-ready hunt with custom rhyming clues that lead from spot to spot, ending at the cake or prize.
 
+You also get Host Mode: your Host Guide on your phone, walking you through hiding the cards and running the hunt one tap at a time.
+
 ★ CHOOSE A THEME
 Dinosaurs · Superheroes · Pirates · Outer Space · Princess & Knights · Unicorns · Mermaids · Construction · Pet Vet · Race Cars · Firefighters · Ice Kingdom
 Holidays: Halloween · Christmas · Easter · Valentine's
 
 ★ PARTY BUNDLE: THE HUNT + A MATCHING PLAY KIT + PARTY PACK ($24.97 value)
 THE HUNT
-• Host Guide with your exact hiding order
+• Host Guide with your exact hiding order, printed AND on your phone with Host Mode (see below)
 • Mission Briefing letter addressed to your child
 • 6–10 custom rhyming clue cards (4" x 6", two per page)
 • Picture clues for ages 3–5: each card shows the next spot, so pre-readers can play
 • Mission Accomplished Certificate with your child's name
-• NEW: Host Mode, a private step-by-step guide for your phone. It shows where each card goes, lines to say in character, quick challenges between clues, hints if the kids get stuck, and a secret role for a second grown-up
+• HOST MODE, your Host Guide on your phone: a private step-by-step link that shows where each card goes, then runs the hunt with you. Lines to say in character, quick challenges between clues, a "they're stuck" button with hints, and a secret sidekick role for a second grown-up. Works in any phone browser, nothing to download
 
 THE PLAY KIT (18–20 pages, matches your theme)
 • 8 door signs with your child's name ("Leo's Mission Control")
