@@ -28,7 +28,7 @@ const CATALOG = [
     shopSection: 'Scavenger Hunt Packs',
     label: `${THEMES[theme].name} pack`,
     price: 8.0,
-    photos: [`hunt-${theme}.jpg`],
+    photos: [`hunt-${theme}.jpg`, ...['inside', 'cards', 'how', 'finish'].map((k) => `pack-${theme}-${k}.jpg`)],
     file: { name: `${theme}-scavenger-hunt.pdf`, build: (out) => renderPdf({ theme, spots: PACK_SPOTS, pictures: true, promo: PACK_PROMO }, out) },
   })),
   {
@@ -162,18 +162,33 @@ async function createOne(l, taxonomy) {
   setStatus(l.key, { ready: true, error: null, finishedAt: new Date().toISOString() });
 }
 
+// Brings a finished draft up to date with etsy-listings.md and this catalog: title, description,
+// tags and section, plus any photos added since it was made.
+async function updateOne(l) {
+  const id = store.get().listings[l.key].id;
+  const sectionId = await etsy.shopSectionId(l.shopSection);
+  await etsy.updateListing(id, { ...l, sectionId });
+  const steps = () => store.get().listings[l.key].steps || [];
+  for (const [i, name] of l.photos.entries()) {
+    if (steps().includes(`photo:${name}`)) continue;
+    await etsy.uploadListingImage(id, photo(name), i + 1);
+    setStatus(l.key, { steps: [...steps(), `photo:${name}`] });
+  }
+  setStatus(l.key, { error: null, updatedAt: new Date().toISOString() });
+}
+
 async function createDrafts() {
   if (running) return;
   running = true;
   try {
     const listings = readCopy();
-    const todo = listings.filter((l) => !store.get().listings?.[l.key]?.ready);
-    if (!todo.length) return;
-    const taxonomy = await etsy.taxonomyId(/^party games$/i);
-    for (const l of todo) {
+    // New listings are created; finished ones are updated to match the latest copy and photos.
+    const isReady = (l) => store.get().listings?.[l.key]?.ready;
+    const taxonomy = listings.some((l) => !isReady(l)) ? await etsy.taxonomyId(/^party games$/i) : null;
+    for (const l of listings) {
       try {
         setStatus(l.key, { error: null, working: true });
-        await createOne(l, taxonomy);
+        await (isReady(l) ? updateOne(l) : createOne(l, taxonomy));
       } catch (err) {
         setStatus(l.key, { error: err.message });
       } finally {

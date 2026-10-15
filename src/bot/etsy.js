@@ -126,6 +126,16 @@ async function createDraftListing(l, taxonomy) {
   return api('POST', `/application/shops/${shopId()}/listings`, null, form);
 }
 
+// Updates a listing's text and section (works on drafts and published listings).
+async function updateListing(listingId, { title, description, tags, sectionId }) {
+  return api('PATCH', `/application/shops/${shopId()}/listings/${listingId}`, null, {
+    title,
+    description,
+    tags: tags.join(','),
+    ...(sectionId ? { shop_section_id: String(sectionId) } : {}),
+  });
+}
+
 // The id of the shop section with this title, made if the shop doesn't have it yet.
 async function shopSectionId(title) {
   const { results = [] } = await api('GET', `/application/shops/${shopId()}/sections`);
@@ -180,6 +190,7 @@ module.exports = {
   taxonomyId,
   createDraftListing,
   shopSectionId,
+  updateListing,
   uploadListingImage,
   uploadListingFile,
   setVariationPrices,

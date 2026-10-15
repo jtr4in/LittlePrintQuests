@@ -1,6 +1,6 @@
 # Etsy listings
 
-The order bot can create all of these as Etsy drafts for you: open its dashboard and click **Create drafts on Etsy**, then review and publish each one in Shop Manager. The bot reads the titles, descriptions and tags from this file, so edit them here.
+The order bot can create all of these as Etsy drafts for you: open its dashboard and click **Create drafts on Etsy**, then review and publish each one in Shop Manager. The bot reads the titles, descriptions and tags from this file, so edit them here. Once the drafts exist, the same button says **Update listings on Etsy**: it sends your latest edits, shop sections and any new photos to every listing, including published ones.
 
 To do it by hand instead, everything is copy-paste ready. Each standard listing uses its PDF from `output/standard/` as the digital file and its photo from `output/listing-photos/` as the main image.
 

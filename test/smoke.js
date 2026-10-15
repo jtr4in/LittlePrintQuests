@@ -321,6 +321,19 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal(etsyCalls.filter((c) => c.p === `/shops/42/listings/${listed.kits.id}/images`).length, 11); // 10 photos + 1 failed try
   const files = etsyCalls.filter((c) => /\/files$/.test(c.p));
   assert.equal(files.length, 12);
+  // Theme packs get 5 photos each.
+  assert.equal(etsyCalls.filter((c) => c.p === `/shops/42/listings/${listed['pack-dino'].id}/images`).length, 5);
+  // Clicking again once everything is ready updates the listings in place: no new drafts or photos.
+  const imagesBefore = etsyCalls.filter((c) => /\/images$/.test(c.p)).length;
+  const patchesBefore = etsyCalls.filter((c) => c.method === 'PATCH').length;
+  assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Update listings on Etsy/);
+  await createListings();
+  for (let i = 0; i < 120 && etsyCalls.filter((c) => c.method === 'PATCH').length < patchesBefore + 12; i++) await wait(250);
+  const patches = etsyCalls.filter((c) => c.method === 'PATCH').slice(patchesBefore);
+  assert.equal(patches.length, 12);
+  assert.ok(patches.every((c) => c.body.shop_section_id && c.body.title && c.body.tags));
+  assert.equal(etsyCalls.filter((c) => c.p === '/shops/42/listings').length, 12);
+  assert.equal(etsyCalls.filter((c) => /\/images$/.test(c.p)).length, imagesBefore);
   assert.ok(files.every((f) => f.body.file.size > 10000 && f.body.file.type === 'application/pdf'));
   assert.ok(!etsyCalls.some((c) => c.p.includes(`/listings/${listed['pack-dino'].id}/personalization`)));
 
