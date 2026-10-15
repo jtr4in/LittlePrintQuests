@@ -11,6 +11,16 @@ const { kitForHunt, KITS } = require('../kits/engine');
 const MODEL = process.env.CLAUDE_MODEL || 'claude-opus-5-5';
 const client = new Anthropic();
 
+const PartySchema = z
+  .object({
+    date: z.string().nullable(),
+    time: z.string().nullable(),
+    place: z.string().nullable(),
+    rsvp: z.string().nullable().describe('who to RSVP to and how, e.g. "Text Sam 555-0102"'),
+  })
+  .nullable()
+  .describe('party details for the invitations, only if the buyer gave any; else null');
+
 const OrderSchema = z.object({
   ok: z.boolean().describe('false if the order is missing information or cannot be fulfilled as written'),
   problem: z.string().nullable().describe('When ok is false: a short note to the shop owner saying what is missing or unclear'),
@@ -20,6 +30,7 @@ const OrderSchema = z.object({
   pets: z
     .array(z.object({ name: z.string(), kind: z.string().describe('one of the kinds listed for the theme') }))
     .describe('pets or toys the buyer named for the play kit, up to 6; empty if none'),
+  party: PartySchema,
   spots: z.array(
     z.object({
       libraryId: z.string().nullable().describe('id from the spot library when the spot matches one, else null'),
@@ -48,6 +59,7 @@ Rules:
 - Buyers of a party bundle may list up to 6 pets or toys for the play kit, like "Rover (dog), Teddy (bear)". Put them in pets, with kind set to the closest of these for the theme (empty list if none):
 ${Object.keys(THEMES).map((t) => `  ${t}: ${Object.keys(kitForHunt(t).kinds).join(', ')}`).join('\n')}
   Pets are never hiding spots, and missing pets are never a problem.
+- Buyers may add party details (date, time, place, RSVP) for the invitations. Copy them into party as written; they are never hiding spots.
 - Set ok to false if the child's name, the theme, or at least 3 spots are missing, or if there are more than 12 spots.`;
 
 async function parseOrder({ personalization, options = {} }) {
@@ -89,7 +101,14 @@ function toHuntConfig(p) {
     ok: true,
     config: { theme: p.theme, childName: p.childName, ...(p.age ? { age: p.age } : {}), spots },
     pets: (p.pets || []).slice(0, 6),
+    party: cleanParty(p.party),
   };
+}
+
+function cleanParty(party) {
+  if (!party) return null;
+  const out = Object.fromEntries(['date', 'time', 'place', 'rsvp'].filter((k) => party[k]?.trim()).map((k) => [k, party[k].trim().slice(0, 60)]));
+  return Object.keys(out).length ? out : null;
 }
 
 // ---------- play kit only orders ----------
@@ -119,4 +138,35 @@ Missing pets are fine. Set ok to false only if there's no child's name.`,
   return { ok: true, config: { kit, childName: p.childName.trim(), subjects: p.pets.slice(0, 6), lenient: true } };
 }
 
-module.exports = { parseOrder, parseKitOrder, toHuntConfig, OrderSchema };
+// ---------- party pack only orders ----------
+
+const PartyOrderSchema = z.object({
+  ok: z.boolean().describe('false if the child’s first name or the theme is missing'),
+  problem: z.string().nullable().describe('When ok is false: a short note to the shop owner saying what is missing'),
+  childName: z.string().nullable(),
+  age: z.number().int().nullable().describe('the age the child is turning, if given'),
+  theme: z.enum(Object.keys(THEMES)).nullable(),
+  party: PartySchema,
+});
+
+// Reads a party pack order: the child's name and age, the theme, and optional party details.
+async function parsePartyOrder({ personalization, options = {} }) {
+  const optionText = Object.entries(options).map(([k, v]) => `${k}: ${v}`).join('\n');
+  const response = await client.messages.parse({
+    model: MODEL,
+    max_tokens: 1000,
+    output_config: { effort: 'low', format: zodOutputFormat(PartyOrderSchema) },
+    system: `You set up personalized birthday party printables (invitations, cupcake toppers, banner) for children from a buyer's Etsy order notes.
+Themes (use the id): ${Object.values(THEMES).map((t) => `${t.id} = ${t.label}`).join('; ')}. The theme usually comes from a "Theme" option.
+Return the child's first name, the age they're turning, the theme, and any party details for the invitations exactly as written.
+Set ok to false only if the child's name or the theme is missing.`,
+    messages: [{ role: 'user', content: `Order options:\n${optionText || '(none)'}\n\nBuyer's personalization text:\n"""\n${personalization}\n"""` }],
+  });
+  const p = response.parsed_output;
+  if (!p) return { ok: false, problem: `Claude could not read this order (stop reason: ${response.stop_reason}).` };
+  if (!p.ok || !p.childName || !THEMES[p.theme]) return { ok: false, problem: p.problem || 'missing child’s name or theme', draft: p };
+  const party = cleanParty(p.party);
+  return { ok: true, config: { theme: p.theme, childName: p.childName.trim(), ...(p.age ? { age: p.age } : {}), ...(party ? { party } : {}) } };
+}
+
+module.exports = { parseOrder, parseKitOrder, parsePartyOrder, toHuntConfig, OrderSchema };

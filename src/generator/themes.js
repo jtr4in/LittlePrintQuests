@@ -1,4 +1,4 @@
-// Theme definitions: story, rhyming openers, palette, fonts and icon.
+// Theme definitions: short label (for menus), story, rhyming openers, palette, fonts and icon.
 // Placeholders in story text: {kids} (who the letter is addressed to),
 // {name}, {age}, {count} (number of clues), {prize} (final spot label).
 
@@ -17,6 +17,7 @@ module.exports = {
   dino: {
     id: 'dino',
     name: 'Dino Fossil Recovery Mission',
+    label: 'Dinosaur',
     ages: '3–6',
     cardHeader: 'Dino Ranger Expedition',
     badge: 'Field Note',
@@ -63,6 +64,7 @@ module.exports = {
   hero: {
     id: 'hero',
     name: 'Superhero Secret HQ Trial',
+    label: 'Superhero',
     ages: '4–8',
     cardHeader: 'Hero Alliance Trial',
     badge: 'Top Secret',
@@ -109,6 +111,7 @@ module.exports = {
   pirate: {
     id: 'pirate',
     name: 'Pirate Captain’s Lost Ledger',
+    label: 'Pirate',
     ages: '3–7',
     cardHeader: 'Captain Barnaby’s Map',
     badge: 'Map Piece',
@@ -154,6 +157,7 @@ module.exports = {
   space: {
     id: 'space',
     name: 'Deep Space Rover Expedition',
+    label: 'Outer Space',
     ages: '4–8',
     cardHeader: 'Ground Control Telemetry',
     badge: 'Beacon',
@@ -200,6 +204,7 @@ module.exports = {
   royal: {
     id: 'royal',
     name: 'Royal Castle Garden Quest',
+    label: 'Princess & Knights',
     ages: '3–7',
     cardHeader: 'Royal Castle Quest',
     badge: 'Royal Decree',
@@ -245,6 +250,7 @@ module.exports = {
   unicorn: {
     id: 'unicorn',
     name: 'Unicorn Rainbow Quest',
+    label: 'Unicorn',
     ages: '3–7',
     cardHeader: 'Rainbow Riders Quest',
     badge: 'Rainbow Gem',
@@ -291,6 +297,7 @@ module.exports = {
   mermaid: {
     id: 'mermaid',
     name: 'Mermaid Lagoon Treasure',
+    label: 'Mermaid',
     ages: '3–7',
     cardHeader: 'Mermaid Lagoon',
     badge: 'Pearl',
@@ -337,6 +344,7 @@ module.exports = {
   construction: {
     id: 'construction',
     name: 'Construction Crew Big Build',
+    label: 'Construction',
     ages: '3–7',
     cardHeader: 'Big Build Work Order',
     badge: 'Blueprint',

@@ -37,8 +37,8 @@ const pages = {
     <div style="position:absolute;left:70px;bottom:40px;right:70px;display:flex;gap:16px">
       <span class="pill">Your child’s name on every page</span><span class="pill" style="background:#3f4a73;color:#fff">Printable PDF</span></div>`,
   'kits-main': `<div class="top" style="text-align:center"><h1>Pretend Play Kits</h1>
-    <div class="sub">Signs, badges and a pretend gadget with your child’s name</div></div>
-    <div class="grid">${['vet', 'space', 'dino', 'hero', 'pirate', 'royal']
+    <div class="sub">9 kits with signs, props and a pretend gadget, all with your child’s name</div></div>
+    <div class="grid">${['vet', 'unicorn', 'dino', 'mermaid', 'construction', 'pirate']
       .map((k) => `<div><img src="${img(`kit-${k}.png`)}"><div class="label">${KITS[k].name}</div></div>`)
       .join('')}</div>`,
 };

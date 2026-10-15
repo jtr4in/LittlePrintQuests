@@ -10,6 +10,7 @@ const parse = require('./parse');
 const { renderPdf } = require('../generator/render');
 const { sendHuntEmail } = require('./email');
 const { renderKit } = require('../kits/render-kit');
+const { renderParty } = require('../party/render-party');
 const { kitForHunt, KITS } = require('../kits/engine');
 const THEMES = require('../generator/themes');
 const SPOTS = require('../generator/spots');
@@ -31,7 +32,10 @@ function customRequest(tx) {
   // The play kit listing has a "Kit" option naming the kit.
   const kit = Object.values(KITS).find((k) => Object.values(options).some((v) => v.toLowerCase() === k.name.toLowerCase()));
   if (kit) return { personalization, options, product: 'kit', kit: kit.id };
-  const bundle = Object.values(options).some((v) => /bundle|play kit/i.test(v)) || /bundle|play kit/i.test(tx.title || '');
+  // The bundle listing has a "Package" option; without one, go by the listing title.
+  const pkg = options.Package;
+  const bundle = pkg ? /bundle|play kit/i.test(pkg) : /bundle|play kit/i.test(tx.title || '');
+  if (!bundle && !pkg && /party (pack|printables)/i.test(tx.title || '')) return { personalization, options, product: 'party' };
   return { personalization, options, product: bundle ? 'bundle' : 'hunt' };
 }
 
@@ -45,25 +49,41 @@ ${process.env.PUBLIC_URL}/d/${order.downloadToken}.pdf
 Print at "Actual Size / 100%" and start with the grown-up guide on page 1. Have fun! 🎉`;
   }
   const theme = THEMES[order.config.theme];
+  if (order.product === 'party') {
+    return `Hi ${first}! Your ${theme.label} party pack for ${order.config.childName} is ready. Download your printable PDF here:
+
+${process.env.PUBLIC_URL}/d/${order.downloadToken}.pdf
+
+Print at "Actual Size / 100%". Invitations, toppers and the banner look best on cardstock. Have an amazing party! 🎉`;
+  }
   const kit = order.kitReady ? kitForHunt(order.config.theme) : null;
   return `Hi ${first}! Your custom ${theme.name} for ${order.config.childName} is ready. Download your printable PDF here:
 
 ${process.env.PUBLIC_URL}/d/${order.downloadToken}.pdf
-${kit ? `\nAnd here's the matching ${kit.name} play kit:\n\n${process.env.PUBLIC_URL}/d/${order.downloadToken}-kit.pdf\n` : ''}
+${kit ? `\nAnd here's the matching ${kit.name} play kit:\n\n${process.env.PUBLIC_URL}/d/${order.downloadToken}-kit.pdf\n` : ''}${order.partyReady ? `\nAnd your party printables (invitations, toppers, tags, banner and more):\n\n${process.env.PUBLIC_URL}/d/${order.downloadToken}-party.pdf\n` : ''}
 Print at "Actual Size / 100%", cut out the clue cards, and use the Host Guide on page 1 to hide them. Have an amazing party! 🎉`;
 }
 
 async function generate(id) {
   const order = store.get().orders[id];
   const token = order.downloadToken || crypto.randomBytes(18).toString('base64url');
-  if (order.product === 'kit') await renderKit(order.config, path.join(store.PDF_DIR, `${token}.pdf`));
-  else await renderPdf(order.config, path.join(store.PDF_DIR, `${token}.pdf`));
-  const kit = order.product === 'bundle' ? kitForHunt(order.config.theme) : null;
-  if (kit) await renderKit(kitConfig(order, kit), path.join(store.PDF_DIR, `${token}-kit.pdf`));
+  const out = (suffix = '') => path.join(store.PDF_DIR, `${token}${suffix}.pdf`);
+  if (order.product === 'kit') await renderKit(order.config, out());
+  else if (order.product === 'party') await renderParty(order.config, out());
+  else await renderPdf(order.config, out());
+  const bundle = order.product === 'bundle';
+  const kit = bundle ? kitForHunt(order.config.theme) : null;
+  if (kit) await renderKit(kitConfig(order, kit), out('-kit'));
+  if (bundle) await renderParty(partyConfig(order), out('-party'));
   store.update((s) => {
-    Object.assign(s.orders[id], { downloadToken: token, kitReady: Boolean(kit), status: 'ready', problem: null, generatedAt: new Date().toISOString() });
+    Object.assign(s.orders[id], { downloadToken: token, kitReady: Boolean(kit), partyReady: bundle, status: 'ready', problem: null, generatedAt: new Date().toISOString() });
     s.orders[id].message = buyerMessage(s.orders[id]);
   });
+}
+
+function partyConfig(order) {
+  const { theme, childName, age } = order.config;
+  return { theme, childName, ...(age ? { age } : {}), ...(order.party ? { party: order.party } : {}) };
 }
 
 function kitConfig(order, kit) {
@@ -76,11 +96,13 @@ async function processOrder(id) {
   try {
     const parsed = order.product === 'kit'
       ? await parse.parseKitOrder({ personalization: order.personalization, kit: order.kit })
+      : order.product === 'party'
+      ? await parse.parsePartyOrder({ personalization: order.personalization, options: order.options })
       : await parse.parseOrder({ personalization: order.personalization, options: order.options });
     if (!parsed.ok) {
       store.update((s) => Object.assign(s.orders[id], { status: 'needs_attention', problem: parsed.problem, draft: parsed.draft || null }));
     } else {
-      store.update((s) => Object.assign(s.orders[id], { config: parsed.config, pets: parsed.pets || [] }));
+      store.update((s) => Object.assign(s.orders[id], { config: parsed.config, pets: parsed.pets || [], party: parsed.party || null }));
       await generate(id);
     }
   } catch (err) {
@@ -132,7 +154,7 @@ async function notify(order) {
     await fetch(`https://ntfy.sh/${encodeURIComponent(topic)}`, {
       method: 'POST',
       headers: {
-        Title: ready ? `${order.product === 'kit' ? 'Play kit' : 'Hunt'} ready for ${order.config.childName}` : 'Order needs a look',
+        Title: ready ? `${{ kit: 'Play kit', party: 'Party pack' }[order.product] || 'Hunt'} ready for ${order.config.childName}` : 'Order needs a look',
         Click: `${process.env.PUBLIC_URL}/admin#${order.id}`,
         Tags: ready ? 'tada' : 'warning',
       },
@@ -152,6 +174,7 @@ function validateWebForm(body) {
   const childName = String(body.childName || '').trim().slice(0, 24);
   if (!childName) throw new Error('Please add your child’s first name.');
   const age = Number.isInteger(body.age) && body.age > 0 && body.age < 16 ? body.age : null;
+  if (body.product === 'party') return { product: 'party', theme, childName, age, spots: [], pets: [], party: cleanParty(body.party) };
   const spots = Array.isArray(body.spots) ? body.spots : [];
   if (spots.length < 3 || spots.length > 12) throw new Error('Please pick between 3 and 12 hiding spots.');
   const clean = spots.map((s) => {
@@ -164,7 +187,18 @@ function validateWebForm(body) {
   const pets = (Array.isArray(body.pets) ? body.pets : []).slice(0, 6)
     .map((p) => ({ name: String(p?.name || '').trim().slice(0, 20), kind: String(p?.kind || '').trim().slice(0, 20) }))
     .filter((p) => p.name || p.kind);
-  return { product, theme, childName, age, spots: clean, pets };
+  return { product, theme, childName, age, spots: clean, pets, party: product === 'bundle' ? cleanParty(body.party) : null };
+}
+
+// Optional party details for the invitations.
+function cleanParty(p) {
+  if (!p || typeof p !== 'object') return null;
+  const out = {};
+  for (const k of ['date', 'time', 'place', 'rsvp']) {
+    const v = String(p[k] || '').trim().slice(0, 60);
+    if (v) out[k] = v;
+  }
+  return Object.keys(out).length ? out : null;
 }
 
 function addWebOrder(form) {
@@ -174,13 +208,15 @@ function addWebOrder(form) {
     status: 'awaiting_payment',
     product: form.product,
     pets: form.pets,
+    party: form.party,
     form,
     personalization: formAsText(form),
-    options: { Theme: THEMES[form.theme].name, Package: form.product === 'bundle' ? 'Hunt + Play Kit' : 'Hunt only' },
+    options: { Theme: THEMES[form.theme].name, Package: { bundle: 'Hunt + Play Kit + Party Pack', party: 'Party Pack' }[form.product] || 'Hunt only' },
   });
 }
 
 function formAsText(f) {
+  if (f.product === 'party') return `${f.childName}${f.age ? `, turning ${f.age}` : ''}. Party pack.`;
   const spots = f.spots.map((s) => (typeof s === 'string' ? SPOTS[s].label : s.custom));
   return `${f.childName}${f.age ? `, turning ${f.age}` : ''}. Spots in order: ${spots.join(', ')} (prize at the last one).`;
 }
@@ -192,7 +228,9 @@ async function fulfillWebOrder(id, { email, buyerName }) {
   store.update((s) => Object.assign(s.orders[id], { status: 'processing', email, buyerName, paidAt: new Date().toISOString() }));
   const f = order.form;
   try {
-    if (f.spots.every((s) => typeof s === 'string')) {
+    if (f.product === 'party') {
+      store.update((s) => (s.orders[id].config = { theme: f.theme, childName: f.childName, ...(f.age ? { age: f.age } : {}), ...(f.party ? { party: f.party } : {}) }));
+    } else if (f.spots.every((s) => typeof s === 'string')) {
       // Every spot is in the library, so no need to ask Claude.
       store.update((s) => (s.orders[id].config = { theme: f.theme, childName: f.childName, ...(f.age ? { age: f.age } : {}), spots: f.spots }));
     } else {

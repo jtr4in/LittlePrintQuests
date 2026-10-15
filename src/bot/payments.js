@@ -5,8 +5,9 @@ const THEMES = require('../generator/themes');
 const { kitForHunt } = require('../kits/engine');
 
 const PRICE_CENTS = Number(process.env.PRICE_CENTS || 999); // custom hunt only
-const BUNDLE_PRICE_CENTS = Number(process.env.BUNDLE_PRICE_CENTS || 1699); // hunt + matching play kit
-const priceFor = (product) => (product === 'bundle' ? BUNDLE_PRICE_CENTS : PRICE_CENTS);
+const BUNDLE_PRICE_CENTS = Number(process.env.BUNDLE_PRICE_CENTS || 1699); // hunt + matching play kit + party pack
+const PARTY_PRICE_CENTS = Number(process.env.PARTY_PRICE_CENTS || 699); // party pack only
+const priceFor = (product) => ({ bundle: BUNDLE_PRICE_CENTS, party: PARTY_PRICE_CENTS })[product] || PRICE_CENTS;
 let client = null;
 const stripe = () => (client ||= new Stripe(process.env.STRIPE_SECRET_KEY));
 
@@ -24,8 +25,12 @@ async function createCheckout(order) {
           currency: 'usd',
           unit_amount: priceFor(order.form.product),
           product_data: {
-            name: bundle ? `Party Bundle: ${theme.name} + ${kitForHunt(theme.id).name} play kit` : `Custom ${theme.name}`,
-            description: `Printable scavenger hunt for ${order.form.childName} · ${order.form.spots.length} clues${bundle ? ' · matching pretend play kit' : ''} · PDF`,
+            name: order.form.product === 'party'
+              ? `${theme.label} Party Pack`
+              : bundle ? `Party Bundle: ${theme.name} + ${kitForHunt(theme.id).name} play kit + party pack` : `Custom ${theme.name}`,
+            description: order.form.product === 'party'
+              ? `Printable invitations, toppers, tags, banner and more for ${order.form.childName} · PDF`
+              : `Printable scavenger hunt for ${order.form.childName} · ${order.form.spots.length} clues${bundle ? ' · matching pretend play kit · party printables' : ''} · PDF`,
           },
         },
       },
@@ -43,4 +48,4 @@ function readWebhook(rawBody, signature) {
   return stripe().webhooks.constructEvent(rawBody, signature, process.env.STRIPE_WEBHOOK_SECRET);
 }
 
-module.exports = { enabled, createCheckout, readWebhook, stripe, PRICE_CENTS, BUNDLE_PRICE_CENTS, priceFor };
+module.exports = { enabled, createCheckout, readWebhook, stripe, PRICE_CENTS, BUNDLE_PRICE_CENTS, PARTY_PRICE_CENTS, priceFor };
