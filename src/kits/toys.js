@@ -28,7 +28,7 @@ function steering(T, k) {
       <path d="M-300,-28 L300,-28 L300,28 L-300,28 Z" class="spoke"/><path d="M-34,0 L34,0 L60,300 L-60,300 Z" class="spoke"/>
       <circle r="150" class="hub"/><circle r="128" class="hub-in"/>
       ${em(0, -52, 84, T.horn[0])}
-      <text y="30" class="hub-name" text-anchor="middle">${esc(k.childName.toUpperCase())}</text>
+      <text y="30" class="hub-name" text-anchor="middle"${k.childName.length > 8 ? ' textLength="250" lengthAdjust="spacingAndGlyphs"' : ''}>${esc(k.childName.toUpperCase())}</text>
       <text y="70" class="hub-t" text-anchor="middle">${esc(T.horn[1])}</text>
       ${btn(b1, -230, -95)}${btn(b2, -230, 95)}${btn(b3, 230, -95)}${btn(b4, 230, 95)}
       <text y="-320" class="rim-t" text-anchor="middle">${esc(T.rimText)}</text>

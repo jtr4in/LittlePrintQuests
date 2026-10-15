@@ -15,7 +15,8 @@ const path = require('path');
 const { toyPages, toyCss } = require('./toys');
 const { welcomePage, menuBoard, specialsPage, moneyPage, shopCss } = require('./shop');
 const art = require('./art');
-const { SHOP_PROPS, shopkitCss } = require('./shopkit');
+const { SHOP_PROPS, shopkitCss, kitchenSignPage } = require('./shopkit');
+const { stationPages, counterPages, labelsPage, signageCss, signageCount } = require('./signage');
 
 const FONT_DIR = path.join(__dirname, '..', '..', 'fonts');
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -209,7 +210,7 @@ function guidePage(k) {
   const d = k.def;
   const signCount = d.signs.length + 1 - ((d.signs.length + 1) % 2);
   const inside = [
-    `${signCount} signs for doors and walls`,
+    `${signCount} signs for doors and walls, plus ${signageCount(d)} big station signs, 8 counter signs (open, closed, pay here, our hours and more) and 15 shelf and bin labels`,
     ...(d.toys ? d.toys.map((t) => t.inside) : [`${['laptop', 'console'].includes(d.dashboard.device) ? 'A fold-up' : 'A cut-out'} ${d.dashboard.gadget} with 3 screens`]),
     '8 ID badges',
     ...(d.props ? [`Props to cut out: ${Object.values(d.props).map((x) => x.title).join(', ')}`] : []),
@@ -530,6 +531,12 @@ const KITS = {
   burger: require('./defs/burger'),
   grocery: require('./defs/grocery'),
   post: require('./defs/post'),
+  library: require('./defs/library'),
+  police: require('./defs/police'),
+  petshop: require('./defs/petshop'),
+  coffee: require('./defs/coffee'),
+  italian: require('./defs/italian'),
+  auto: require('./defs/auto'),
 };
 
 function buildKitHtml(cfg) {
@@ -541,7 +548,11 @@ function buildKitHtml(cfg) {
   const pages = [
     guidePage(k),
     welcomePage(k),
+    def.hunt ? '' : kitchenSignPage(k),
     signsPages(k),
+    stationPages(k),
+    counterPages(k),
+    labelsPage(k),
     gadgetPages(k),
     badgesPage(k),
     propsPages(k),
@@ -566,6 +577,7 @@ ${font('Nunito', 'Nunito.ttf', '200 1000')}
 @page { size: letter; margin: 0; }
 ${toyCss}
 ${shopkitCss}
+${signageCss}
 ${shopCss(font)}
 :root { --teal:${c.main}; --teal-d:${c.dark}; --mint:${c.soft}; --mint-l:${c.light}; --orange:${c.accent}; --accent-ink:${c.accentInk || '#2b1d06'}; --navy:#3f4a73; --cream:#fbf8f1; --line:#c9d6d0; --gold:${c.gold || '#f1d48f'}; }
 * { box-sizing:border-box; }

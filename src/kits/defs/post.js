@@ -49,7 +49,7 @@ module.exports = {
   },
   passport: {
     pageTitle: 'Mail Carrier Licences', word: 'Mail Carrier', emblem: '✉️', drawLabel: 'Draw yourself',
-    fields: ['Name', 'Mail route', 'Started on', 'Truck number'], stampsLabel: 'Deliveries',
+    fields: ['Name', 'Who', 'Mail route', 'Truck number'], stampsLabel: 'Deliveries',
     howTo: 'Cut along the dashed line and fold in the middle. Stamp or tick a box for every delivery you make.',
   },
   menu: {

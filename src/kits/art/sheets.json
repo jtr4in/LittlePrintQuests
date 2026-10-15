@@ -507,5 +507,121 @@
   "air-mail",
   "sign-for-it",
   "pop-it-in-the-mail-box"
+ ],
+ "library-1": [
+  "story-book",
+  "bookmark",
+  "bring-it-back-on-time",
+  "1f6cb",
+  "take-it-and-your-library-card-to-the-des",
+  "late-fee",
+  "1f49b"
+ ],
+ "library-2": [
+  "fairy-tale",
+  "pencil",
+  "chapter-book",
+  "due-in-1-week",
+  "receipt",
+  "owl",
+  "take-it-home-and-read-it"
+ ],
+ "police-1": [
+  "police-station",
+  "front-desk",
+  "missed-stop",
+  "1f6b8",
+  "silly-spot",
+  "1f4de",
+  "1f415",
+  "23f0"
+ ],
+ "police-2": [
+  "1f49b",
+  "car-keys",
+  "parking-ticket",
+  "bike-licence",
+  "grandmas-house",
+  "oh-no-teddy-is-lost",
+  "hold-a-grown-ups-hand",
+  "listen-for-cars",
+  "walk-across-dont-run"
+ ],
+ "petshop-1": [
+  "cat",
+  "bird",
+  "1f3be",
+  "23f0",
+  "1f49b",
+  "hamster",
+  "walk"
+ ],
+ "petshop-2": [
+  "brushed",
+  "card",
+  "scrub-a-dub-with-lots-of-bubbles",
+  "playtime",
+  "yarn-ball",
+  "get-the-shampoo-a-towel-and-a-brush",
+  "fresh-water"
+ ],
+ "coffee-1": [
+  "pick-up",
+  "1f4f6",
+  "croissant",
+  "pot-of-tea",
+  "23f0",
+  "1f49b",
+  "napkins"
+ ],
+ "coffee-2": [
+  "honey",
+  "card",
+  "lemonade",
+  "bagel",
+  "waffle",
+  "wash-your-hands-and-put-on-your-apron",
+  "blow-on-it-and-serve-it-warm"
+ ],
+ "italian-1": [
+  "garlic-bread",
+  "gelato",
+  "spaghetti",
+  "1f4d6",
+  "1f468-200d-1f373",
+  "23f0"
+ ],
+ "italian-2": [
+  "1f49b",
+  "table-2",
+  "table-5",
+  "meatballs",
+  "salad",
+  "lemonade",
+  "bill"
+ ],
+ "italian-3": [
+  "card",
+  "boil-the-water",
+  "buon-appetito",
+  "extra-cheese",
+  "wash-your-hands-and-put-on-your-apron",
+  "warm-up-the-red-tomato-sauce"
+ ],
+ "auto-1": [
+  "1f9f0",
+  "23f0",
+  "1f49b",
+  "battery",
+  "brakes",
+  "wipers"
+ ],
+ "auto-2": [
+  "receipt",
+  "card",
+  "keys",
+  "fill-a-bucket-with-warm-soapy-water",
+  "spray-the-car-all-over-with-water",
+  "dry-it-with-a-soft-towel"
  ]
 }

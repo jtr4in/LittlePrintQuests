@@ -123,7 +123,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.match(party, /Maximilian’s/);
     assert.match(party, /6th Birthday!/);
     assert.ok(party.includes('June 3') && party.includes('The Park'));
-    assert.equal((party.match(/class="item flag"/g) || []).length, 5 + 1 + 8 + 1 + 10);
+    assert.equal((party.match(/class="item flag[ "]/g) || []).length, 5 + 1 + 8 + 1 + 10);
     assert.ok(buildPartyHtml({ theme, childName: 'Bo' }).includes('Birthday Party!'));
   }
   assert.throws(() => buildPartyHtml({ theme: 'dino' }), /childName is required/);
@@ -330,7 +330,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.ok(c.photos.length <= 10, `${c.key} has more than 10 photos`);
     for (const f of c.photos) assert.ok(fs.existsSync(path.join(__dirname, '..', 'listing-assets', f)), `missing listing-assets/${f}`);
   }
-  assert.equal(N, 55); // 16 packs, the bundle, both dropdown listings, a party pack per theme and a listing per kit (16 theme kits + 4 shop kits)
+  assert.equal(N, 61); // 16 packs, the bundle, both dropdown listings, a party pack per theme and a listing per kit (16 theme kits + 10 shop kits)
   const listingsDone = async () => {
     for (let i = 0; i < 240; i++) {
       await wait(500);
@@ -362,7 +362,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const inv = etsyCalls.find((c) => c.p === `/listings/${bundleId}/inventory`).body;
   assert.deepEqual(inv.products.map((x) => [x.property_values[0].values[0], x.offerings[0].price]), [['Hunt + Play Kit + Party Pack', 16.99], ['Hunt + Play Kit', 14.99], ['Hunt + Party Pack', 13.99], ['Hunt only', 9.99]]);
   const kitInv = etsyCalls.find((c) => c.p === `/listings/${listed.kits.id}/inventory`).body;
-  assert.equal(kitInv.products.length, 20);
+  assert.equal(kitInv.products.length, 26);
   const partyInv = etsyCalls.find((c) => c.p === `/listings/${listed.party.id}/inventory`).body;
   assert.deepEqual(partyInv.products.map((x) => x.property_values[0].values[0]).slice(0, 2), ['Dinosaur', 'Superhero']);
   const q = etsyCalls.find((c) => c.p === `/shops/42/listings/${bundleId}/personalization`).body.personalization_questions[0];
@@ -457,7 +457,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.match(shopCopy.description, /Any of our personalized scavenger hunts/);
   assert.doesNotMatch(shopCopy.description, /\{\w+\}/);
   const { hostPage } = require('../src/host/host');
-  for (const id of ['pizza', 'burger', 'grocery', 'post']) {
+  for (const id of ['pizza', 'burger', 'grocery', 'post', 'library', 'police', 'petshop', 'coffee', 'italian', 'auto']) {
     const html = hostPage({ config: { kit: id, childName: 'Ava' } }, { stateUrl: '/x', items: ['kit'] });
     assert.match(html, new RegExp(`Ava’s ${require('../src/kits/engine').KITS[id].name} play kit`));
     assert.match(html, /Surprise me/);

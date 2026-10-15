@@ -176,7 +176,7 @@ function favorTag(ctx, x, y, w, h) {
 }
 
 const FLAG = { w: 3.7, strip: 0.55, h: 7.4 };
-function pennant(ctx, flag, x, y, i, total) {
+function pennant(ctx, flag, x, y, i, total, flip = false) {
   const { theme } = ctx;
   const { w, strip, h } = FLAG;
   const ins = 0.13;
@@ -190,7 +190,7 @@ function pennant(ctx, flag, x, y, i, total) {
   const face = flag.letter
     ? `<div class="flag-letter fit" data-group="banner" style="color:${flag.fg}">${esc(flag.letter)}</div>`
     : `<div class="icon flag-icon" style="color:${flag.fg}">${theme.icon}</div>`;
-  return `<div class="item flag" style="${at(x, y, w, strip + h)}">
+  return `<div class="item flag${flip ? ' flip' : ''}" style="${at(x, y, w, strip + h)}">
     <svg class="flag-bg" viewBox="0 0 ${w} ${strip + h}">
       <rect x="0" y="0" width="${w}" height="${strip}" class="strip"/>
       <polygon points="${tri}" fill="${flag.bg}"/>
@@ -321,7 +321,7 @@ function buildPartyHtml(cfg = {}) {
   add('Favor tags', '10 per page. Punch the dot and tie to favor bags with ribbon.', 'Cardstock or paper',
     page('sheet', tags.join('') + guides(tagCuts)));
 
-  // 5. Banner: HAPPY [icon] BIRTHDAY [icon] NAME, 2 pennants per page.
+  // 5. Banner: HAPPY [icon] BIRTHDAY [icon] NAME, 3 pennants per page.
   const colors = [c.primary, c.accent, c.soft];
   // Letters, digits and a few marks get a flag; spaces, hyphens and the like become icon spacers.
   const seq = [...'HAPPY', null, ...'BIRTHDAY', null, ...name.toUpperCase()]
@@ -334,19 +334,29 @@ function buildPartyHtml(cfg = {}) {
     return { letter: ch, bg, fg: textOn(bg, c.ink) };
   });
   const bannerPages = [];
-  const fy = (11 - (FLAG.strip + FLAG.h) - 0.3) / 2;
-  for (let i = 0; i < flags.length; i += 2) {
-    const pair = flags.slice(i, i + 2);
-    const xs = pair.map((_, j) => 0.35 + j * (FLAG.w + 0.4));
+  // Three flags nest on each page: the middle one prints upside down between the other two,
+  // sharing their slanted edges, so one cut frees both.
+  const { w: FW, strip: FS, h: FH } = FLAG;
+  const fy = (11 - (2 * FS + FH)) / 2;
+  const fx = (8.5 - 2 * FW) / 2;
+  for (let i = 0; i < flags.length; i += 3) {
+    const trio = flags.slice(i, i + 3);
     const cuts = [];
-    pair.forEach((_, j) => {
-      const x = xs[j];
-      cuts.push({ poly: [[x, fy], [x + FLAG.w, fy], [x + FLAG.w, fy + FLAG.strip], [x + FLAG.w / 2, fy + FLAG.strip + FLAG.h], [x, fy + FLAG.strip]] });
-      cuts.push({ fold: [x, fy + FLAG.strip, x + FLAG.w, fy + FLAG.strip] });
+    const items = trio.map((f, j) => {
+      const x = fx + (j * FW) / 2;
+      if (j === 1) {
+        const y = fy + FS;
+        cuts.push({ poly: [[x, y + FH + FS], [x + FW, y + FH + FS], [x + FW, y + FH], [x + FW / 2, y], [x, y + FH]] });
+        cuts.push({ fold: [x, y + FH, x + FW, y + FH] });
+        return pennant(ctx, f, x, y, i + j, flags.length, true);
+      }
+      cuts.push({ poly: [[x, fy], [x + FW, fy], [x + FW, fy + FS], [x + FW / 2, fy + FS + FH], [x, fy + FS]] });
+      cuts.push({ fold: [x, fy + FS, x + FW, fy + FS] });
+      return pennant(ctx, f, x, fy, i + j, flags.length);
     });
-    bannerPages.push(page('sheet', pair.map((f, j) => pennant(ctx, f, xs[j], fy, i + j, flags.length)).join('') + guides(cuts)));
+    bannerPages.push(page('sheet', items.join('') + guides(cuts)));
   }
-  add('Birthday banner', `${flags.length} flags spelling HAPPY BIRTHDAY ${esc(name.toUpperCase())}, 2 per page. Fold the top strip over string and tape.`, 'Cardstock', bannerPages);
+  add('Birthday banner', `${flags.length} flags spelling HAPPY BIRTHDAY ${esc(name.toUpperCase())}, 3 per page (the middle one prints upside down). Fold the top strip over string and tape.`, 'Cardstock', bannerPages);
 
   // 6. Food tent cards, 4 per page: 3 themed + 5 blank.
   const foods = [...flavor.foods.slice(0, 3), '', '', '', '', ''];
@@ -517,7 +527,7 @@ body { font-family:'Fredoka', sans-serif; color:var(--ink); -webkit-print-color-
 .tag-icon { position:absolute; right:.2in; top:50%; width:.42in; height:.42in; margin-top:-.21in; color:var(--accent); }
 
 /* banner */
-.flag { overflow:visible; }
+.flag { overflow:visible; } .flag.flip { transform:rotate(180deg); } .flag.flip .flag-num { display:none; }
 .flag-bg { position:absolute; left:0; top:0; width:${IN(FLAG.w)}; height:${IN(FLAG.strip + FLAG.h)}; }
 .flag-bg .strip { fill:#f6f6f6; }
 .strip-text { position:absolute; left:0; right:0; top:0; height:${IN(FLAG.strip)}; display:flex; align-items:center; justify-content:center; font-size:9pt; letter-spacing:.14em; text-transform:uppercase; color:#999; }

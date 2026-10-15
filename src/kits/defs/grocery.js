@@ -48,7 +48,7 @@ module.exports = {
   },
   passport: {
     pageTitle: 'Rewards Cards', word: 'Rewards Card', emblem: '⭐', drawLabel: 'Draw yourself',
-    fields: ['Name', 'Favorite food', 'Member since', 'Card no.'], stampsLabel: 'Shopping trips',
+    fields: ['Name', 'Who', 'Favorite food', 'Card no.'], stampsLabel: 'Shopping trips',
     howTo: 'Cut along the dashed line and fold in the middle. Stamp or tick a box every time you shop. A full card earns a treat!',
   },
   menu: {

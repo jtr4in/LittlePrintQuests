@@ -82,6 +82,9 @@ module.exports = {
     keys: [['🥄', 'Stir'], ['🫧', 'Bubble'], ['✨', 'Sparkle'], ['💨', 'Poof!']],
   },
   props: {
+    recipe: { title: 'How to Brew a Potion', steps: [['🧙', 'Put on your potion hat and apron.'], ['🫙', 'Pick three ingredients from the jars.'], ['🫗', 'Drop them in the cauldron one by one.'], ['🥄', 'Stir three times and say a silly spell.'], ['✨', 'Wave your wand. Abracadabra!'], ['🧪', 'Pour the potion and give it to a customer.']] },
+    labels: { title: 'Ingredient Jar Labels', howTo: 'Cut out, fold along the dotted line and stand a label by each jar or cup.',
+      items: [['🦇', 'Bat whispers'], ['🐸', 'Frog giggles'], ['⭐', 'Star dust'], ['🌙', 'Moonbeams'], ['🍬', 'Candy drops'], ['🌈', 'Rainbow juice']] },
     wanted: { title: 'Runaway Ingredients', word: 'WANTED', howTo: 'Tape them up around the shop. Catch these silly ingredients for a reward in pumpkin coins.',
       list: [['🐸', 'Hoppy the Frog', 'Hopping out of the cauldron'], ['🦇', 'Flappy the Bat', 'Hiding the stirring spoon'], ['🕷️', 'Tickles the Spider', 'Tickling the potion makers'], ['🐌', 'Slowpoke Snail', 'Taking the star dust for a ride']] },
     cards: { title: 'Ingredient Cards', howTo: 'Cut out the ingredients. Pick three, drop them in the cauldron and stir!',

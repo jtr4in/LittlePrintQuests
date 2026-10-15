@@ -48,7 +48,7 @@ module.exports = {
   },
   passport: {
     pageTitle: 'Burger Club Cards', word: 'Burger Club', emblem: '🍔', drawLabel: 'Draw yourself',
-    fields: ['Name', 'Favorite burger', 'Member since', 'Table'], stampsLabel: 'Burgers eaten',
+    fields: ['Name', 'Who', 'Favorite burger', 'Member since'], stampsLabel: 'Burgers eaten',
     howTo: 'Cut along the dashed line and fold in the middle. Stamp or tick a box for every burger. Fill them all for free fries!',
   },
   menu: {
