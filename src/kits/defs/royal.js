@@ -57,6 +57,15 @@ module.exports = {
     title: 'Royal Bakery', icon: '🍰', coinIcon: '💎', coinWord: 'jewel', coinsTitle: 'Crown jewels',
     items: [['🍰', 'Castle cake', 3], ['🧁', 'Cupcake', 1], ['🍪', 'Crown cookie', 1], ['🍓', 'Strawberries', 1], ['🍵', 'Pot of tea', 2], ['🥧', 'Royal tart', 2], ['👑', 'Crown polish', 2], ['🐉', 'Dragon ride', 5]],
   },
+  toys: [
+    { type: 'flaps', inside: 'A lift-the-flap castle with someone behind every window', title: 'Castle Windows', howTo: 'Knock knock! Lift each window to see who lives in the castle.',
+      vessel: 'castle', label: '{childs} Castle',
+      items: [['👸', 'Princess'], ['🤴', 'Prince'], ['🐉', 'Friendly dragon'], ['🦄', 'Royal unicorn'], ['🧙', 'Wizard'], ['🐸', 'Frog prince']] },
+    { type: 'spinner', inside: 'A Royal Wish Wheel to spin for a royal wish', title: 'Royal Wish Wheel', howTo: 'Spin the wheel and the royal court must make the wish come true!',
+      label: 'Royal {child}', sub: 'Make a wish!', decor: ['✨', '👑', '✨'],
+      items: [['🎉', 'A royal ball'], ['🍰', 'Royal cake'], ['🐎', 'Horse ride'], ['🎁', 'A gift'], ['🎶', 'A royal song'], ['🏰', 'Castle tour']],
+      game: ['Royal game:', 'The king or queen spins, and the court has to act it out: dance at the ball, bake a pretend cake, or gallop around the room!'] },
+  ],
   dashboard: {
     gadget: 'magic mirror', device: 'mirror', decor: '🏰',
     appName: 'Magic Mirror', appIcon: '🪞', scheduleTitle: 'Royal calendar', monitorTitle: 'Guest of honor', alertHeader: 'Royal message',
@@ -76,11 +85,11 @@ module.exports = {
   },
   certificate: { title: 'Royal Honor Award', icon: '🏅', seal: '👑', line: 'ruled the castle with kindness, welcomed every guest, and kept the crown jewels safe.' },
   guide: {
-    afterHunt: 'The Crown Jewels are safe again! Carry them to {place} and put them in the Treasure Vault. The Hero of the Realm opens the castle gates and asks the magic mirror who’s visiting today.',
+    afterHunt: 'The Crown Jewels are safe again! Carry them to {place} and put them in the Treasure Vault. The Hero of the Realm opens the castle gates and spins the Royal Wish Wheel.',
     intro: 'Everything {child} needs to run a pretend royal castle. Print on regular Letter paper, cut along the dashed lines, and invite some toys to court.',
     setup: [
       'Tape the castle sign and Gates Open sign by the door.', 'Make a throne from a chair and a blanket in the Throne Room.',
-      'Cut out the magic mirror, fold back its stand, and set it by the throne.', 'Set out the Royal Bakery with play food or real snacks.',
+      'Put the castle windows together and set them by the throne.', 'Set out the Royal Bakery with play food or real snacks.',
       'Pin on the badges, put on a crown, and open the gates!',
     ],
     play: [

@@ -128,7 +128,7 @@ function placeholders(c) {
   if (c.order.product === 'kit') {
     const k = KITS[c.perTheme];
     return {
-      kit: k.name, place: k.placeName('[Name]’s'), gadget: k.dashboard.gadget, subjects: k.subjectPlural,
+      kit: k.name, place: k.placeName('[Name]’s'), toys: k.toys.map((t) => t.inside).join('\n• '), subjects: k.subjectPlural,
       props: list(Object.values(k.props).map((p) => p.title)), hunt: THEMES[k.hunt].name,
     };
   }

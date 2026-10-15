@@ -1,5 +1,5 @@
 // Builds the website's per-theme pictures in docs/img/: the theme card pages (pages/<id>-hunt|kit|party.webp:
-// a clue card sheet, the invitation and the kit's gadget),
+// a clue card sheet, the invitation and the kit's first hands-on toy),
 // the four hunt pages for "What's in the box" (pages/<id>-guide|briefing|cards|cert.webp),
 // the play kit card (kit-<id>.webp) and the Host Mode phones (host/<id>-hide|play|sidekick.webp).
 // Usage: node scripts/site-images.js [theme ...]
@@ -35,7 +35,7 @@ const dataUrl = (f) => `data:image/png;base64,${fs.readFileSync(f).toString('bas
     if (kit) {
       const fan = await browser.newPage({ viewport: { width: 677, height: 497 }, deviceScaleFactor: 2 });
       const sheet = (n, x, y, r, w = 340) => `<img src="${dataUrl(pg('kit', n))}" style="position:absolute;left:${x}px;top:${y}px;width:${w}px;transform:rotate(${r}deg);box-shadow:0 10px 28px rgba(40,50,90,.25)">`;
-      await fan.setContent(`<body style="margin:0;background:transparent">${sheet(2, 0, 40, -8)}${sheet(9, 330, 30, 7)}${sheet(6, 150, 4, 0, 380)}</body>`);
+      await fan.setContent(`<body style="margin:0;background:transparent">${sheet(2, 0, 40, -8)}${sheet(8, 330, 30, 7)}${sheet(7, 150, 4, 0, 380)}</body>`);
       await fan.screenshot({ path: path.join(tmp, `kit-${id}.png`), omitBackground: true });
       if (process.env.FAN_DIR) fs.copyFileSync(path.join(tmp, `kit-${id}.png`), path.join(process.env.FAN_DIR, `kit-${id}.png`));
       await fan.close();
@@ -78,7 +78,7 @@ for f in os.listdir(tmp):
         Image.open(p).convert('RGB').resize((240, 480), Image.LANCZOS).save(os.path.join(img, 'host', f[5:-4] + '.webp'), 'WEBP', quality=85)
     elif os.path.isdir(p):
         theme, kind = f.rsplit('-', 1)
-        n = {'hunt': 3, 'party': 2, 'kit': 6}[kind]
+        n = {'hunt': 3, 'party': 2, 'kit': 7}[kind]
         Image.open(os.path.join(p, f'page-{n}.png')).convert('RGB').resize((400, 518), Image.LANCZOS).save(os.path.join(img, 'pages', f'{theme}-{kind}.webp'), 'WEBP', quality=80)
         if kind == 'hunt':
             pages = sorted(os.listdir(p), key=lambda x: int(x[5:-4]))

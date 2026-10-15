@@ -55,14 +55,14 @@ const pages = {
     <div class="cap" style="left:725px;top:725px">2 · Play along</div>
     <div class="cap" style="left:955px;top:725px">3 · Sidekick role</div>`,
   'kits-main': `<div class="top" style="text-align:center"><h1>Pretend Play Kits</h1>
-    <div class="sub">9 kits with signs, props and a pretend gadget, all with your child’s name</div></div>
+    <div class="sub">${Object.keys(KITS).length} kits with hands-on toys, a shop to set up and signs, all with your child’s name</div></div>
     <div class="grid">${['vet', 'unicorn', 'dino', 'mermaid', 'construction', 'pirate']
       .map((k) => `<div><img src="${img(`kit-${k}.png`)}"><div class="label">${KITS[k].name}</div></div>`)
       .join('')}</div>`,
 };
 for (const k of Object.keys(KITS)) {
   pages[`kit-${k}`] = `<div class="mint"></div><div class="top" style="text-align:center"><h1>${KITS[k].name} Play Kit</h1>
-    <div class="sub">With a ${KITS[k].dashboard.gadget}, plus props to cut out</div></div>
+    <div class="sub">${KITS[k].toys.map((t) => t.title).join(' + ')} + a whole shop to set up</div></div>
     <img src="${img(`kit-${k}.png`)}" style="position:absolute;left:170px;top:200px;width:860px">`;
 }
 

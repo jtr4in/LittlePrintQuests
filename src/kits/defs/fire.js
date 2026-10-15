@@ -63,6 +63,13 @@ module.exports = {
     title: 'Station Kitchen', icon: '🍲', coinIcon: '🔔', coinWord: 'bell', coinsTitle: 'Golden bells',
     items: [['🌶️', 'Chief’s chili', 2], ['🌭', 'Hot dog', 2], ['🍎', 'Apple', 1], ['🥛', 'Milk', 1], ['🍪', 'Cookie', 1], ['🧃', 'Juice box', 1], ['🦴', 'Dog treat', 1], ['🚒', 'Engine ride', 5]],
   },
+  toys: [
+    { type: 'headband', inside: 'A firefighter helmet shield with your child’s name', title: 'Fire Helmet Shield', howTo: 'Every firefighter needs a helmet. Wear it on every call!',
+      ornament: 'shield', piece: 'shield', shieldTop: 'FIRE DEPT', shieldIcon: '🚒', bandIcons: ['🚒', '🧯', '⭐'] },
+    { type: 'slider', inside: 'A rescue card: pull the tab to put out the fire', title: 'Put Out the Fire!', howTo: 'Grab the hose and pull the tab to put out the fire!',
+      cardTitle: 'Fire Call!', cardIcons: ['🚒', '🧯', '🧑‍🚒'], cardHint: 'Hurry, hurry!',
+      frames: [{ e: '🔥', text: 'Fire! Grab the hose!' }, { e: '💦', text: 'Spray, spray, spray!' }, { e: '🏆', text: 'Fire’s out! Hooray!' }] },
+  ],
   dashboard: {
     gadget: 'dispatch radio', device: 'communicator', decor: '📻',
     appName: 'Dispatch', appIcon: '🚒', scheduleTitle: 'Station calendar', monitorTitle: 'Engine check', alertHeader: 'Rescue call',
@@ -89,7 +96,7 @@ module.exports = {
     intro: 'Everything {child} needs to run a pretend fire station. Print on regular Letter paper, cut along the dashed lines, and gather some stuffed animals and toys to be neighbors who need help.',
     setup: [
       'Tape the Fire Station sign and Station Open sign by the door.', 'Park a toy truck, a wagon or a big box in the Engine Bay.',
-      'Cut out the dispatch radio and set it on the Dispatch Desk.', 'Put a stuffed kitten up on a shelf or chair for the first rescue.',
+      'Make the helmet shield and tape the headband to fit.', 'Put a stuffed kitten up on a shelf or chair for the first rescue.',
       'Pin on the badges and ring the bell!',
     ],
     play: [

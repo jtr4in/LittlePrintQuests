@@ -62,6 +62,16 @@ module.exports = {
     title: 'Potion Prices', icon: '🧪', coinIcon: '🎃', coinWord: 'coin', coinsTitle: 'Pumpkin coins',
     items: [['😂', 'Giggle potion', 2], ['✨', 'Sparkle potion', 2], ['🌈', 'Rainbow potion', 3], ['💤', 'Sleepy potion', 1], ['🦘', 'Bouncy potion', 2], ['🌟', 'Glow potion', 3], ['🍭', 'Lollipop', 1], ['🧹', 'Broom ride', 5]],
   },
+  toys: [
+    { type: 'flaps', inside: 'A lift-the-flap potion cauldron with six secret ingredients', title: 'Bubbling Potion Cauldron', howTo: 'Lift a door, find a secret ingredient, and add it to the potion. Can you find all six?',
+      vessel: 'cauldron', label: '{childs} Cauldron',
+      items: [['🐸', 'Frog giggle'], ['⭐', 'Star dust'], ['🍬', 'Candy drop'], ['🌈', 'Rainbow juice'], ['🦇', 'Bat whisper'], ['🌙', 'Moonbeam']] },
+    { type: 'gauges', inside: 'A Ghost-o-Meter and a Spell-o-Meter with needles that spin', title: 'Spooky Meters', howTo: 'Cut out the meters and needles. Point the Ghost-o-Meter around the room to find friendly ghosts!',
+      gauges: [
+        { name: 'Ghost-o-Meter', needle: '👻', zones: [['😴', 'No ghosts'], ['👀', 'Hmm…'], ['👻', 'Boo!'], ['🎉', 'Ghost party']] },
+        { name: '{childs} Spell-o-Meter', needle: '🪄', zones: [['🫧', 'Fizzle'], ['✨', 'Sparkle'], ['🌟', 'Glow'], ['🎃', 'Pumpkin power!']] },
+      ] },
+  ],
   dashboard: {
     gadget: 'cauldron control panel', device: 'console', decor: '🔮',
     appName: 'BubbleBrew', appIcon: '🧪', scheduleTitle: 'Potion calendar', monitorTitle: 'Cauldron check', alertHeader: 'Crystal ball message',
@@ -87,7 +97,7 @@ module.exports = {
     intro: 'Everything {child} needs to run a pretend potion shop. Print on regular Letter paper, cut along the dashed lines, and gather some stuffed animals to be customers.',
     setup: [
       'Tape the Potion Shop sign and Open sign by the door.', 'Use a big pot or bowl as the cauldron, with a wooden spoon.',
-      'Cut out the cauldron control panel and fold the screen up.', 'Fill a shelf with “ingredients”: the cards, cups, cotton balls and colored water.',
+      'Put the potion cauldron together: glue the back behind the doors.', 'Fill a shelf with “ingredients”: the cards, cups, cotton balls and colored water.',
       'Pin on the badges and open the shop!',
     ],
     play: [

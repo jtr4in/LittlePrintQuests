@@ -35,14 +35,15 @@ h1 { font: 700 62px/1.05 Fredoka; margin: 0; letter-spacing: -.01em; }
 const grid = (items) => `<div class="grid">${items.map(([src, label]) => `<figure><img src="${src}">${label ? `<figcaption>${label}</figcaption>` : ''}</figure>`).join('')}</div>`;
 
 function kitPhotos(k, p, n) {
-  // Page 1 is the grown-up guide, 2–5 the signs, 6–7 the gadget; the rest varies by kit.
-  const pick = [2, 3, 6, 7, 8, 9, n - 3, n - 1].filter((i, j, a) => i > 1 && i <= n && a.indexOf(i) === j);
+  // Page 1 is the grown-up guide, 2 the welcome poster, 3–6 the signs, 7–8 the hands-on toys;
+  // the shop set (menu, specials, money) sits just before the two certificates at the end.
+  const pick = [2, 7, 8, 3, 9, n - 4, n - 3, n - 2].filter((i, j, a) => i > 1 && i <= n && a.indexOf(i) === j);
   return {
     inside: `<div class="top"><h1>What’s Inside</h1><div class="sub">${n}-page printable ${k.name} play kit · US Letter</div></div>${grid(pick.map((i) => [p(i)]))}`,
-    feature: `<div class="top"><h1>Your Child’s Name on Every Sign</h1></div>
+    feature: `<div class="top"><h1>Your Child’s Name All Over the Shop</h1></div>
       <div class="page" style="left:150px;top:170px;width:440px;transform:rotate(-4deg)"><img src="${p(2)}"></div>
-      <div class="page" style="left:620px;top:180px;width:440px;transform:rotate(3deg)"><img src="${p(6)}"></div>
-      <div class="bar">SIGNS · A PRETEND ${k.dashboard.gadget.toUpperCase()} · BADGES · PROPS · CERTIFICATE</div>`,
+      <div class="page" style="left:620px;top:180px;width:440px;transform:rotate(3deg)"><img src="${p(7)}"></div>
+      <div class="bar">${k.toys.map((t) => t.title.toUpperCase()).join(' · ')} · MENU · PLAY MONEY</div>`,
   };
 }
 

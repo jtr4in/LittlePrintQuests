@@ -1,0 +1,435 @@
+{
+ "vet-1": [
+  "check-up",
+  "bandage",
+  "vet-clinic-logo",
+  "2705",
+  "1f319",
+  "1fa91"
+ ],
+ "vet-2": [
+  "x-ray",
+  "pills",
+  "surgery",
+  "temperature",
+  "toothbrush",
+  "flashlight",
+  "dog"
+ ],
+ "vet-3": [
+  "paws",
+  "vaccine",
+  "teeth",
+  "bubble-bath",
+  "claw-trim",
+  "1fa99"
+ ],
+ "space-1": [
+  "moon-juice",
+  "freeze-dried-pizza",
+  "3-2-1",
+  "23f1",
+  "1f634",
+  "1f52c",
+  "1f6cf",
+  "1f6aa"
+ ],
+ "space-2": [
+  "the-moon",
+  "back-to-earth",
+  "saturn",
+  "sun",
+  "a-comet",
+  "friendly-alien",
+  "the-stars",
+  "astronaut"
+ ],
+ "space-3": [
+  "liftoff",
+  "astronaut-ice-cream",
+  "comet-cookie",
+  "rocket-fuel-shake",
+  "space-apple",
+  "milky-way-bar",
+  "rocket-ride",
+  "1f37d"
+ ],
+ "dino-1": [
+  "bone-pit",
+  "dino-egg",
+  "t-rex",
+  "pickaxe",
+  "1f634",
+  "lab-tour",
+  "1f3db",
+  "volcano-show",
+  "2601"
+ ],
+ "dino-2": [
+  "fern-forest",
+  "1f33f",
+  "long-neck",
+  "eyes",
+  "dino-coloring",
+  "shiny-rock",
+  "ranger-hat",
+  "magnifier",
+  "dino-ride"
+ ],
+ "hero-1": [
+  "shield",
+  "superhero",
+  "super-speed",
+  "1f319",
+  "1f3cb",
+  "1f527",
+  "1f92b",
+  "heli-ride"
+ ],
+ "hero-2": [
+  "1f512",
+  "fly",
+  "super-strength",
+  "freeze-ray",
+  "x-ray-vision",
+  "resting",
+  "ready",
+  "all-clear"
+ ],
+ "hero-3": [
+  "hmm",
+  "trouble",
+  "alert",
+  "mask",
+  "super-torch",
+  "hero-radio",
+  "power-juice",
+  "speed-shoes"
+ ],
+ "pirate-1": [
+  "fish-stew",
+  "banana",
+  "pirate-ship-logo",
+  "drop-anchor",
+  "1f319",
+  "heading",
+  "gold"
+ ],
+ "pirate-2": [
+  "1f372",
+  "spyglass",
+  "friendly-shark",
+  "2b50",
+  "parrot",
+  "octopus",
+  "treasure-island"
+ ],
+ "pirate-3": [
+  "a-ship",
+  "shell-beach",
+  "map-reading",
+  "treasure-eyes",
+  "gold-coin",
+  "crown",
+  "pearls"
+ ],
+ "pirate-4": [
+  "old-key",
+  "ruby-ring",
+  "coconut",
+  "ship-biscuit",
+  "grog-juice",
+  "captains-cookie",
+  "rowboat-ride"
+ ],
+ "royal-1": [
+  "cake-feast",
+  "cupcake",
+  "castle-tour",
+  "ring-bells",
+  "1f319",
+  "crown",
+  "pet-dragon",
+  "dancing"
+ ],
+ "royal-2": [
+  "jewels",
+  "1f6a9",
+  "princess",
+  "prince",
+  "unicorn",
+  "wizard",
+  "frog-prince",
+  "royal-parade"
+ ],
+ "royal-3": [
+  "horse-ride",
+  "a-gift",
+  "singing",
+  "2728",
+  "crown-cookie",
+  "strawberries",
+  "tea-pouring",
+  "royal-tart"
+ ],
+ "unicorn-1": [
+  "rainbow-glow",
+  "cupcake",
+  "unicorn",
+  "moon-pond",
+  "mane-tail",
+  "1fa7a",
+  "appetite",
+  "star-falls",
+  "rainbow-butterfly"
+ ],
+ "unicorn-2": [
+  "blossom-trail",
+  "big-hug",
+  "horn-polish",
+  "cloud-meadow",
+  "1f337",
+  "rainbow-gem",
+  "apple",
+  "rainbow-oats",
+  "candy-hills"
+ ],
+ "mermaid-1": [
+  "shell-or-scales",
+  "pearl-bed",
+  "mermaid",
+  "swimming",
+  "1f319",
+  "sea-rescue",
+  "kelp-bubble-tea",
+  "tropical-fish"
+ ],
+ "mermaid-2": [
+  "starfish",
+  "puffer-fish",
+  "octopus",
+  "1f33f",
+  "fins-tail",
+  "sea-glass",
+  "watermelon",
+  "dolphin"
+ ],
+ "construction-1": [
+  "sandwich",
+  "hot-dog",
+  "crane",
+  "builder",
+  "1f319",
+  "safety-star",
+  "site-office"
+ ],
+ "construction-2": [
+  "digger",
+  "wrench",
+  "barrier",
+  "hammer",
+  "screwdriver",
+  "ruler"
+ ],
+ "construction-3": [
+  "saw",
+  "bolts",
+  "apple",
+  "milk",
+  "cookie",
+  "donut",
+  "stack-bricks"
+ ],
+ "easter-1": [
+  "plain-egg",
+  "painted-egg",
+  "bunny",
+  "chick",
+  "1f319",
+  "full-basket",
+  "carrot-patch"
+ ],
+ "easter-2": [
+  "1f69a",
+  "flowers",
+  "tulip-garden",
+  "1f33c",
+  "chocolate-egg",
+  "golden-egg",
+  "basket-ribbon"
+ ],
+ "halloween-1": [
+  "giggles",
+  "sparkles",
+  "potion-pro",
+  "moonbeam",
+  "2697",
+  "1fad9",
+  "stir",
+  "1f4da"
+ ],
+ "halloween-2": [
+  "broom-ride",
+  "fizzle",
+  "frog",
+  "star-dust",
+  "candy-drop",
+  "rainbow-hair",
+  "bat",
+  "no-ghosts",
+  "hmm"
+ ],
+ "halloween-3": [
+  "friendly-ghost",
+  "ghost-party",
+  "glowing",
+  "pumpkin",
+  "1fa84",
+  "sleepy-yawns",
+  "bounces",
+  "lollipop"
+ ],
+ "christmas-1": [
+  "hot-cocoa",
+  "cookie",
+  "merry-christmas",
+  "hammer",
+  "moon-fast",
+  "teddy-bear",
+  "presents",
+  "1f4dc"
+ ],
+ "christmas-2": [
+  "sleigh-ride",
+  "jingle",
+  "tree-star",
+  "nice",
+  "smile",
+  "super-nice",
+  "nicest",
+  "santa"
+ ],
+ "christmas-3": [
+  "reindeer",
+  "flying",
+  "rocket-fast",
+  "milk",
+  "peppermint",
+  "cupcake",
+  "donut",
+  "reindeer-carrot"
+ ],
+ "valentine-1": [
+  "sent-a-valentine",
+  "letter-paper",
+  "1f319",
+  "send",
+  "2702",
+  "sort",
+  "hearts",
+  "express-mail"
+ ],
+ "valentine-2": [
+  "shared-a-snack",
+  "teddy-bear",
+  "rose",
+  "chocolate",
+  "balloon",
+  "gave-a-hug",
+  "drew-a-picture",
+  "made-them-smile"
+ ],
+ "valentine-3": [
+  "high-five",
+  "a-song",
+  "1f495",
+  "crayons",
+  "glitter",
+  "candy-heart",
+  "cupcake",
+  "1f6cd"
+ ],
+ "fire-1": [
+  "chiefs-chili",
+  "hot-dog",
+  "fire-truck",
+  "1f319",
+  "call-base",
+  "boots",
+  "2b07"
+ ],
+ "fire-2": [
+  "1f372",
+  "extinguisher",
+  "rescue-star",
+  "1f9d1-200d-1f692",
+  "fire-grab-the-hose",
+  "spray-spray-spray"
+ ],
+ "fire-3": [
+  "fires-out-hooray",
+  "smoke-alarm",
+  "apple",
+  "milk",
+  "cookie",
+  "juice-box",
+  "dog-treat"
+ ],
+ "ice-1": [
+  "cocoa-sipping",
+  "snow-cookie",
+  "ice-palace",
+  "catching-flakes",
+  "1f319",
+  "tiara",
+  "skating"
+ ],
+ "ice-2": [
+  "ice-gem",
+  "penguin",
+  "snowman",
+  "freeze",
+  "big-wind",
+  "melt-it",
+  "crystal-ball"
+ ],
+ "ice-3": [
+  "frosty-forest",
+  "2b50",
+  "frosty-cupcake",
+  "ice-cream",
+  "peppermint",
+  "warm-soup",
+  "sleigh-ride"
+ ],
+ "racecar-1": [
+  "fuel-tank",
+  "tires",
+  "race-car",
+  "grand-prix",
+  "1f319",
+  "quick-fix",
+  "clean-and-shiny",
+  "starting-line"
+ ],
+ "racecar-2": [
+  "trophy-polish",
+  "honk-honk",
+  "turbo",
+  "headlights",
+  "turbo-turtle",
+  "car",
+  "fast",
+  "empty"
+ ],
+ "racecar-3": [
+  "low",
+  "half",
+  "full",
+  "token",
+  "oil-change",
+  "new-paint",
+  "drivers-pretzel",
+  "juice-box"
+ ]
+}

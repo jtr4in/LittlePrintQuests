@@ -57,6 +57,17 @@ module.exports = {
     title: 'Gadget Shop', icon: '🔧', coinIcon: '⚡', coinWord: 'hero coin', coinsTitle: 'Hero coins',
     items: [['🛡️', 'Power shield', 3], ['🦸', 'New cape', 2], ['🎭', 'Secret mask', 1], ['🔦', 'Super torch', 1], ['📡', 'Hero radio', 2], ['🧃', 'Power juice', 1], ['👟', 'Speed shoes', 3], ['🚁', 'Heli ride', 5]],
   },
+  toys: [
+    { type: 'spinner', inside: 'A Super Power Spinner to pick today’s power', title: 'Super Power Spinner', howTo: 'Spin to get your super power for the next mission!',
+      label: 'Hero {child}', sub: 'Spin for a power!', decor: ['⚡', '🦸', '⚡'],
+      items: [['🦅', 'Fly'], ['⚡', 'Super speed'], ['💪', 'Super strong'], ['🛡️', 'Force shield'], ['❄️', 'Freeze ray'], ['👀', 'X-ray eyes']],
+      game: ['Hero game:', 'Spin, then use that power to rescue a teddy: fly it to safety, carry it super strong, or freeze the bad guy!'] },
+    { type: 'gauges', inside: 'A Hero Power Meter and a Villain Alarm with needles that spin', title: 'Hero HQ Meters', howTo: 'Cut out the meters and needles. Check them before every mission!',
+      gauges: [
+        { name: '{childs} Power Meter', needle: '⚡', zones: [['😴', 'Resting'], ['🙂', 'Ready'], ['💪', 'Strong'], ['🦸', 'MAX POWER']] },
+        { name: 'Villain Alarm', needle: '🚨', zones: [['😊', 'All clear'], ['🤔', 'Hmm…'], ['😈', 'Trouble'], ['🚨', 'Alert!']] },
+      ] },
+  ],
   dashboard: {
     gadget: 'hero communicator', device: 'communicator', decor: '⚡',
     appName: 'HeroNet', appIcon: '🦸', scheduleTitle: 'Mission calendar', monitorTitle: 'Hero power scan', alertHeader: 'Villain alert',

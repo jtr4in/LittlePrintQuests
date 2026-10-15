@@ -64,6 +64,15 @@ module.exports = {
     title: 'Pit Stop Shop', icon: '⛽', coinIcon: '⚙️', coinWord: 'token', coinsTitle: 'Race tokens',
     items: [['⛽', 'Full tank', 2], ['🛞', 'New tire', 2], ['🛢️', 'Oil change', 1], ['🧽', 'Car wash', 2], ['🎨', 'New paint', 3], ['🥨', 'Driver’s pretzel', 1], ['🧃', 'Juice box', 1], ['🏆', 'Trophy polish', 5]],
   },
+  toys: [
+    { type: 'steering', inside: 'A full-size steering wheel with your child’s name on the horn', title: 'Racing Steering Wheel', howTo: 'Hold it with both hands, press HONK, and steer around the track!',
+      horn: ['📯', 'HONK! HONK!'], rimText: '★ GRAND PRIX ★', buttons: [['🚀', 'Turbo'], ['💡', 'Lights'], ['⛽', 'Pit stop'], ['🏁', 'Finish']] },
+    { type: 'gauges', inside: 'A speedometer and fuel gauge with needles that really spin', title: 'Race Car Dashboard', howTo: 'Cut out the meters and needles. Tape them by the steering wheel and turn the needles as you race.',
+      gauges: [
+        { name: '{childs} Speedometer', needle: '🏎️', zones: [['🐢', 'Slow'], ['🚗', 'Cruise'], ['💨', 'Fast'], ['🚀', 'Turbo!']] },
+        { name: 'Fuel Gauge', needle: '⛽', zones: [['😟', 'Empty'], ['🥤', 'Low'], ['🙂', 'Half'], ['😁', 'Full!']] },
+      ] },
+  ],
   dashboard: {
     gadget: 'race car dashboard', device: 'console', decor: '🏎️',
     appName: 'PitBoard', appIcon: '🏁', scheduleTitle: 'Race calendar', monitorTitle: 'Engine check', alertHeader: 'Track alert',
@@ -89,7 +98,7 @@ module.exports = {
     intro: 'Everything {child} needs to run a pretend race car garage. Print on regular Letter paper, cut along the dashed lines, and gather toy cars and some stuffed animal drivers.',
     setup: [
       'Tape the Pit Stop Garage sign and Garage Open sign by the door.', 'Make a race track on the floor with painter’s tape.',
-      'Cut out the race car dashboard and fold the screen up.', 'Fill a box with “tools”: spoons, blocks and a toy wrench.',
+      'Make the steering wheel and the dashboard meters (you’ll need 2 paper fasteners).', 'Fill a box with “tools”: spoons, blocks and a toy wrench.',
       'Pin on the pit crew passes and start your engines!',
     ],
     play: [

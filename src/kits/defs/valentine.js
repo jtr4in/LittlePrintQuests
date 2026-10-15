@@ -64,6 +64,14 @@ module.exports = {
     title: 'Post Office Shop', icon: '🛍️', coinIcon: '💗', coinWord: 'heart', coinsTitle: 'Heart coins',
     items: [['💌', 'Envelope', 1], ['📝', 'Letter paper', 1], ['🖍️', 'Crayons', 2], ['✨', 'Glitter', 2], ['🍬', 'Candy heart', 1], ['🧁', 'Cupcake', 2], ['🌹', 'Rose', 3], ['🚚', 'Express mail', 5]],
   },
+  toys: [
+    { type: 'flaps', inside: 'A lift-the-flap Love Mailbox with six sweet surprises', title: 'Love Mailbox', howTo: 'Open each little door to find a surprise from a friend!',
+      vessel: 'mailbox', label: '{childs} Mail',
+      items: [['💌', 'Love letter'], ['🍪', 'Cookie'], ['🧸', 'Teddy hug'], ['🌹', 'A rose'], ['🍫', 'Chocolate'], ['🎈', 'Balloon']] },
+    { type: 'spinner', inside: 'A Kindness Spinner full of kind things to do', title: 'Kindness Spinner', howTo: 'Spin it and do the kind thing it lands on!',
+      label: '{childs} Kindness', sub: 'Spin to be kind!', decor: ['💕', '💌', '💕'],
+      items: [['🤗', 'Give a hug'], ['🎨', 'Draw a card'], ['😊', 'Say a nice thing'], ['🧸', 'Share a toy'], ['👏', 'High five'], ['🎵', 'Sing a song']] },
+  ],
   dashboard: {
     gadget: 'mail scanner', device: 'scanner', decor: '💌',
     appName: 'HeartMail', appIcon: '💌', scheduleTitle: 'Delivery calendar', monitorTitle: 'Mail scan', alertHeader: 'New message',

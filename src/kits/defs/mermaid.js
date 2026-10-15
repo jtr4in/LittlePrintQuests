@@ -59,6 +59,13 @@ module.exports = {
     title: 'Shell Shop', icon: '🐚', coinIcon: '🐚', coinWord: 'shell', coinsTitle: 'Seashell money',
     items: [['🐚', 'Spiral shell', 1], ['🦪', 'Pearl', 3], ['⭐', 'Starfish', 2], ['💎', 'Sea glass', 2], ['🧋', 'Kelp bubble tea', 2], ['🍉', 'Watermelon', 1], ['🧜‍♀️', 'Mermaid tail', 5], ['🐬', 'Dolphin ride', 4]],
   },
+  toys: [
+    { type: 'headband', inside: 'A seashell tiara with your child’s name', title: 'Seashell Tiara', howTo: 'Wear it to rule the lagoon!',
+      ornament: 'shells', piece: 'shells', bandIcons: ['🐚', '⭐', '🐠'] },
+    { type: 'puzzle', inside: 'An under-the-sea puzzle with your child’s name', title: 'Lagoon Puzzle', howTo: 'Cut along the white lines to make 9 pieces, then put the lagoon back together!',
+      hero: '🧜‍♀️', banner: '{childs} Lagoon', scenery: [['🐠', 130, 150, 100], ['🐡', 600, 200, 90], ['🐙', 110, 470, 110], ['🐚', 630, 560, 80], ['🌿', 560, 470, 110], ['🐟', 520, 90, 70]],
+      tip: 'Hide the pieces in a bowl of water toys or under blue blankets, then go diving for them!' },
+  ],
   dashboard: {
     gadget: 'shell phone', device: 'communicator', decor: '🐚',
     appName: 'ShellPhone', appIcon: '🐚', scheduleTitle: 'Tide calendar', monitorTitle: 'Sea friend check', alertHeader: 'Message from the deep',
@@ -84,7 +91,7 @@ module.exports = {
     intro: 'Everything {child} needs to run a pretend mermaid lagoon. Print on regular Letter paper, cut along the dashed lines, and gather some toy sea creatures.',
     setup: [
       'Tape the Mermaid Lagoon sign and Lagoon Open sign by the door.', 'Spread a blue blanket or towel on the floor for the water.',
-      'Cut out the shell phone and glue it onto cardboard.', 'Set up the Shell Shop on a table with the treasures and seashell money.',
+      'Make the seashell tiara and tape the headband to fit.', 'Set up the Shell Shop on a table with the treasures and seashell money.',
       'Pin on the badges, put on a crown, and dive in!',
     ],
     play: [

@@ -63,6 +63,15 @@ module.exports = {
     title: 'Cocoa Corner', icon: '☕', coinIcon: '❄️', coinWord: 'snowflake', coinsTitle: 'Crystal snowflakes',
     items: [['☕', 'Hot cocoa', 2], ['🍪', 'Snow cookie', 1], ['🧁', 'Frosty cupcake', 2], ['🍦', 'Ice cream', 2], ['🍬', 'Peppermint', 1], ['🥣', 'Warm soup', 2], ['⛸️', 'Skate rental', 3], ['🛷', 'Sleigh ride', 5]],
   },
+  toys: [
+    { type: 'spinner', inside: 'A Snowflake Spell spinner with six frosty spells', title: 'Snowflake Spells', howTo: 'Spin the wheel to cast a frosty spell!',
+      label: '{childs} Spells', sub: 'Spin a spell!', decor: ['❄️', '🔮', '❄️'],
+      items: [['⛄', 'Make a snowman'], ['🧊', 'Freeze!'], ['❄️', 'Snowflakes'], ['⛸️', 'Ice skate'], ['🌬️', 'Big wind'], ['☀️', 'Melt it']],
+      game: ['Freeze game:', 'Spin and act it out. If it lands on Freeze, everyone stops like a statue until someone spins Melt it!'] },
+    { type: 'puzzle', inside: 'An ice palace puzzle with your child’s name', title: 'Ice Palace Puzzle', howTo: 'Cut along the white lines to make 9 pieces, then rebuild the ice palace!',
+      hero: '🏰', banner: '{childs} Ice Palace', scenery: [['❄️', 120, 120, 90], ['❄️', 600, 140, 70], ['⛄', 110, 480, 140], ['🌲', 630, 470, 140], ['⭐', 380, 70, 60], ['🐧', 520, 590, 80]],
+      tip: 'Hide the pieces under white pillows and blankets for a snowy treasure hunt.' },
+  ],
   dashboard: {
     gadget: 'crystal ball tablet', device: 'scanner', decor: '❄️',
     appName: 'CrystalBall', appIcon: '🔮', scheduleTitle: 'Palace calendar', monitorTitle: 'Snow guest', alertHeader: 'Royal message',
@@ -88,7 +97,7 @@ module.exports = {
     intro: 'Everything {child} needs to run a pretend ice palace. Print on regular Letter paper, cut along the dashed lines, and invite some toys to the winter ball.',
     setup: [
       'Tape the palace sign and Palace Open sign by the door.', 'Make a throne from a chair and a white or blue blanket.',
-      'Cut out the crystal ball tablet and glue it onto cardboard.', 'Set up Cocoa Corner with play food or real snacks.',
+      'Put the Snowflake Spells spinner together with a paper fastener.', 'Set up Cocoa Corner with play food or real snacks.',
       'Pin on the badges, put on a tiara, and open the gates!',
     ],
     play: [

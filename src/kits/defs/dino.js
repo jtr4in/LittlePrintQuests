@@ -57,6 +57,15 @@ module.exports = {
     title: 'Museum Gift Shop', icon: '🏛️', coinIcon: '🦴', coinWord: 'fossil coin', coinsTitle: 'Fossil coins',
     items: [['🦖', 'Toy T-Rex', 3], ['🥚', 'Chocolate egg', 1], ['🦴', 'Bone puzzle', 2], ['🖍️', 'Dino coloring', 1], ['🪨', 'Shiny rock', 1], ['🧢', 'Ranger hat', 3], ['🔍', 'Magnifier', 2], ['🎟️', 'Dino ride', 5]],
   },
+  toys: [
+    { type: 'puzzle', inside: 'A T-Rex puzzle with your child’s name to dig up and put back together', title: 'Rebuild the T-Rex', howTo: 'Cut along the white lines to make 9 puzzle pieces. Bury them in the dig site, dig them up, and put the T-Rex back together!',
+      hero: '🦖', banner: '{childs} T-Rex', scenery: [['☁️', 150, 110, 120], ['☁️', 420, 70, 90], ['🌋', 120, 400, 190], ['🌴', 610, 380, 170], ['🌿', 70, 540, 100], ['🥚', 640, 580, 80], ['🦴', 560, 600, 70]],
+      tip: 'Dig idea: hide the pieces in a bin of rice, sand or crumpled paper and hand out brushes.' },
+    { type: 'slider', inside: 'A dino egg that hatches when you pull the tab', title: 'Hatch a Dino Egg', howTo: 'Pull the tab slowly and watch the egg wobble, crack and hatch!',
+      cardTitle: 'Dino Hatchery', cardIcons: ['🌋', '🥚', '🦕'], cardHint: 'Keep the eggs warm!',
+      frames: [{ e: '🥚', text: 'Shh… it’s wobbling!' }, { shape: 'crack', e: '👀', text: 'Crack… crack… CRACK!' }, { shape: 'hatch', e: '🦕', text: 'Hello, baby dino!' }] },
+  ],
+  shop: { hero: ['🦴', '🦖', '🥚'] },
   dashboard: {
     gadget: 'dino scanner', device: 'scanner', decor: '🔍',
     appName: 'DinoTrack', appIcon: '🦖', scheduleTitle: 'Dig calendar', monitorTitle: 'Dino tracker', alertHeader: 'Ranger alert',

@@ -12,6 +12,9 @@
 // Pictures are Noto Color Emoji (SIL Open Font License), so they're free to use in a product.
 
 const path = require('path');
+const { toyPages, toyCss } = require('./toys');
+const { welcomePage, menuBoard, specialsPage, moneyPage, shopCss } = require('./shop');
+const art = require('./art');
 
 const FONT_DIR = path.join(__dirname, '..', '..', 'fonts');
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -44,9 +47,11 @@ const subjectsOrDefaults = (k) => (k.subjects.length ? k.subjects : k.def.defaul
 
 // ---------- pieces ----------
 
+let signSeed = 0;
 function sign(title, sub, icon, cls = '') {
   return `<div class="sign ${cls}"><div class="sign-in">
-    <div class="sign-icon">${icon}</div>
+    <svg class="sign-deco" viewBox="0 0 700 440" preserveAspectRatio="none">${art.confetti(++signSeed, 700, 440, 26, [110, 40, 480, 360])}</svg>
+    <div class="sign-icon">${art.pic(icon, '1.15in')}</div>
     <div class="sign-title">${esc(title)}</div>
     ${sub ? `<div class="sign-sub">${esc(sub)}</div>` : ''}
   </div></div>`;
@@ -182,17 +187,6 @@ function passportsPages(k) {
   return out.join('');
 }
 
-function menuPage(k) {
-  const M = k.def.menu;
-  const coins = Array.from({ length: 20 }, () => `<div class="coin"><span>${M.coinIcon}</span><b>1</b></div>`).join('');
-  return `<section class="page menu">
-    ${formHead(k, M.title, M.icon)}
-    <div class="price-list">${M.items.map(([e, n, c]) => `<div class="price"><span class="em">${e}</span><span class="pn">${esc(n)}</span><span class="dots"></span><span class="pc">${c} ${c === 1 ? M.coinWord : M.coinWord + 's'}</span></div>`).join('')}</div>
-    <h3 class="coins-title">${esc(M.coinsTitle)} <small>Cut out and use to pay</small></h3>
-    <div class="coins">${coins}</div>
-  </section>`;
-}
-
 // The child's own certificate, then a blank copy to print for guests and siblings.
 function certificatePage(k, blank = false) {
   const C = k.def.certificate;
@@ -215,13 +209,13 @@ function guidePage(k) {
   const signCount = d.signs.length + 1 - ((d.signs.length + 1) % 2);
   const inside = [
     `${signCount} signs for doors and walls`,
-    `${['laptop', 'console'].includes(d.dashboard.device) ? 'A fold-up' : 'A cut-out'} ${d.dashboard.gadget} with 3 screens`,
+    ...(d.toys ? d.toys.map((t) => t.inside) : [`${['laptop', 'console'].includes(d.dashboard.device) ? 'A fold-up' : 'A cut-out'} ${d.dashboard.gadget} with 3 screens`]),
     '8 ID badges',
     ...(d.props ? [`Props to cut out: ${Object.values(d.props).map((x) => x.title).join(', ')}`] : []),
     `${d.record.title} forms, two to a page, for ${k.subjects.length ? `each of your ${d.subjectPlural}` : `four ${d.subjectPlural}`} plus a blank one`,
     `${d.ticket.title} cards`,
     d.passport.pageTitle,
-    `${d.menu.title} and ${d.menu.coinsTitle.toLowerCase()}`,
+    `Shop set: welcome poster, ${d.menu.title} board, Today’s Specials, order slips and ${d.menu.coinsTitle.toLowerCase()}`,
     `${d.certificate.title} (named + blank)`,
   ];
   return `<section class="page guide${k.withHunt && G.afterHunt ? ' with-hunt' : ''}">
@@ -229,7 +223,7 @@ function guidePage(k) {
     <p class="lead">${esc(G.intro.replace('{child}', k.childName))}</p>
     <div class="guide-cols">
       <div><h3>What’s inside</h3><ul>${inside.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
-      <div><h3>Set up in 10 minutes</h3><ol>${G.setup.map((x) => `<li>${esc(x)}</li>`).join('')}</ol></div>
+      <div><h3>Set up in 10 minutes</h3><ol>${[G.setup[0], 'Hang the welcome poster; tape up the menu and specials.', ...G.setup.slice(1)].map((x) => `<li>${esc(x)}</li>`).join('')}</ol></div>
     </div>
     ${k.withHunt && G.afterHunt ? `<div class="after-hunt"><b>After the hunt</b>${esc(G.afterHunt.replace('{place}', k.placeName).replace('{child}', k.childName))}</div>` : ''}
     <div class="play"><h3>Play ideas</h3><div class="play-grid">
@@ -380,6 +374,7 @@ function mirrorPage(k) {
 }
 
 function gadgetPages(k) {
+  if (k.def.toys) return toyPages(k);
   const device = k.def.dashboard.device || 'laptop';
   const main = { laptop: foldPage, console: foldPage, scanner: handheldPage, communicator: handheldPage, helm: helmPage, mirror: mirrorPage }[device];
   if (!main) throw new Error(`Unknown gadget device "${device}"`);
@@ -536,8 +531,11 @@ function buildKitHtml(cfg) {
   const def = KITS[cfg.kit];
   if (!def) throw new Error(`Unknown kit "${cfg.kit}". Use one of: ${Object.keys(KITS).join(', ')}`);
   const k = normalize(def, cfg);
+  signSeed = 0;
+  art.setKit(def);
   const pages = [
     guidePage(k),
+    welcomePage(k),
     signsPages(k),
     gadgetPages(k),
     badgesPage(k),
@@ -545,7 +543,9 @@ function buildKitHtml(cfg) {
     recordsPages(k),
     ticketPage(k),
     passportsPages(k),
-    menuPage(k),
+    menuBoard(k),
+    specialsPage(k),
+    moneyPage(k),
     certificatePage(k),
     certificatePage(k, true),
   ].join('');
@@ -558,6 +558,8 @@ function css(c) {
 ${font('Fredoka', 'Fredoka.ttf', '300 700')}
 ${font('Nunito', 'Nunito.ttf', '200 1000')}
 @page { size: letter; margin: 0; }
+${toyCss}
+${shopCss(font)}
 :root { --teal:${c.main}; --teal-d:${c.dark}; --mint:${c.soft}; --mint-l:${c.light}; --orange:${c.accent}; --accent-ink:${c.accentInk || '#2b1d06'}; --navy:#3f4a73; --cream:#fbf8f1; --line:#c9d6d0; --gold:${c.gold || '#f1d48f'}; }
 * { box-sizing:border-box; }
 html, body { margin:0; padding:0; }
@@ -582,12 +584,12 @@ h1, h2, h3 { font-family:'Fredoka', sans-serif; margin:0; line-height:1.1; }
 .guide-head { display:flex; gap:.2in; align-items:center; }
 .guide-icon { font-size:46pt; background:var(--mint); border-radius:50%; width:1.1in; height:1.1in; display:grid; place-items:center; flex:none; }
 .guide h1 { font-size:30pt; }
-.lead { font-size:14.5pt; line-height:1.5; margin:.24in 0; }
+.lead { font-size:13.5pt; line-height:1.45; margin:.2in 0; }
 .guide-cols { display:grid; grid-template-columns:1fr 1fr; gap:.3in; }
 .guide h3 { font-size:18pt; color:var(--teal-d); margin-bottom:.08in; }
-.guide ul, .guide ol { margin:0; padding-left:.25in; font-size:13pt; line-height:1.55; }
-.play { margin-top:.3in; }
-.with-hunt .lead { margin:.16in 0; font-size:13.5pt; } .with-hunt ul, .with-hunt ol { font-size:12.5pt; line-height:1.45; }
+.guide ul, .guide ol { margin:0; padding-left:.25in; font-size:12.5pt; line-height:1.42; }
+.play { margin-top:.22in; }
+.with-hunt .lead { margin:.16in 0; font-size:13.5pt; } .with-hunt ul, .with-hunt ol { font-size:11.5pt; line-height:1.36; }
 .with-hunt .play { margin-top:.18in; } .with-hunt .play-grid div { padding:.12in .16in; font-size:12pt; }
 .play-grid { display:grid; grid-template-columns:1fr 1fr; gap:.15in; }
 .play-grid div { background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:.18in .2in; font-size:13pt; line-height:1.45; }
@@ -598,7 +600,9 @@ h1, h2, h3 { font-family:'Fredoka', sans-serif; margin:0; line-height:1.1; }
 .sign { flex:1; padding:.12in; }
 .cut-h { border-top:2px dashed #b7c0cc; margin:.06in -.3in; }
 .sign-in { height:100%; border-radius:22px; background:var(--mint-l); border:5px solid var(--teal); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; position:relative; padding:.2in; }
-.sign-icon { font-size:68pt; line-height:1; }
+.sign-icon { font-size:68pt; line-height:1; position:relative; } .sign-title, .sign-sub { position:relative; }
+.sign-deco { position:absolute; inset:0; width:100%; height:100%; border-radius:18px; }
+.sign.hero .sign-title { font-family:'Pacifico', 'Fredoka'; font-weight:400; }
 .sign-title { font:700 54pt/1.05 'Fredoka'; color:var(--teal-d); margin-top:.1in; }
 .sign-sub { font:500 16pt 'Fredoka'; margin-top:.1in; color:var(--navy); }
 .sign.hero .sign-in { background:var(--teal); border-color:var(--teal-d); }

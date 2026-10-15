@@ -150,15 +150,18 @@ THE HUNT
 • Mission Accomplished Certificate with your child's name
 • HOST MODE, your Host Guide on your phone: a private step-by-step link that shows where each card goes, then runs the hunt with you. Lines to say in character, quick challenges between clues, a "they're stuck" button with hints, and a secret sidekick role for a second grown-up. Works in any phone browser, nothing to download
 
-THE PLAY KIT (18–20 pages, matches your theme)
-• 8 door signs with your child's name ("Leo's Mission Control")
-• A pretend gadget to match: a dino scanner, hero communicator, ship's wheel,
-  mission control console, magic mirror, rainbow finder, shell phone or crane controls
+THE PLAY KIT (22–23 pages, matches your theme)
+• Two hands-on toys made for your theme: a steering wheel and spinning speedometer,
+  a T-Rex puzzle and hatching egg, a lift-the-flap potion cauldron, a pirate spyglass,
+  a Planet Picker spinner, bunny ears, a fire helmet, reindeer antlers and more
+• A whole shop to set up: a "Welcome to Leo's Mission Control" poster, a menu board,
+  Today's Specials, order slips and play money (bills and coins)
+• 8 door signs with your child's name
 • Flat props to cut out and hold: fossil scans, star maps, treasure maps,
   wanted posters, treasure and gear cards, and stickers
 • One cardstock wearable where it fits: hero masks, pirate eye patches or a crown
 • ID badges and check-up forms for each of your child's pets or toys
-• Tickets, passports, a menu with coins to cut out, and a certificate (plus a blank one for guests)
+• Tickets, passports and a certificate (plus a blank one for guests)
 
 THE PARTY PACK (matches your theme, with your child's name)
 • Invitations (5" x 7") with write-in or filled-in party details
@@ -180,7 +183,7 @@ Maya, turning 6, Space. Spots: front door, shoe rack, coat closet, washer, dryer
 • Cardstock (65–110 lb) for the clue cards, play kit props, invitations and toppers. Regular paper works for everything else.
 • Scissors or a paper cutter, plus painter's tape or sticky tack for hiding cards
 • Toothpicks and tape for the cupcake toppers, and a hole punch with ribbon or string for the banner and favor tags
-• Optional: laminating pouches for the pretend gadget, signs and badges (add a dry-erase marker for the forms), and small envelopes for the clues
+• Optional: laminating pouches for the menu board, signs and badges (add a dry-erase marker for the forms), and small envelopes for the clues
 • A phone for Host Mode
 
 ★ PLEASE NOTE
@@ -211,31 +214,34 @@ Personalized Pretend Play Kit, Printable Vet, Space, Dino, Pirate, Superhero, Ca
 ```
 Turn the living room into a vet clinic, a pirate ship or mission control, with your child's name on every sign.
 
-★ WHAT YOU GET (18–20 page PDF, US Letter)
-• 8 door signs, including "[Name]'s Pet Clinic" (or Pirate Ship, Mission Control…)
-• A pretend gadget to match: a clinic laptop, dino scanner, hero communicator,
-  ship's wheel, mission control console, magic mirror, rainbow finder, shell phone
-  or crane controls, with 3 screens to swap
+★ WHAT YOU GET (22–23 page PDF, US Letter)
+• Two hands-on toys made for your kit: a vet's lift-the-flap doctor bag and X-ray machine,
+  a Planet Picker spinner and blast-off rocket, a T-Rex puzzle and hatching egg,
+  a pirate spyglass and treasure chest, a Super Power Spinner, a seashell tiara and more
+• A whole shop to set up: a "Welcome to [Name]'s Pet Clinic" poster, a menu board,
+  Today's Specials, order slips and play money (bills and coins)
+• 8 door signs with your child's name
 • Flat props to cut out and hold: pet X-rays, star maps, fossil scans, treasure maps,
   wanted posters, supply and treasure cards, and stickers
 • One cardstock wearable where it fits: hero masks, pirate eye patches or a crown
 • 8 ID badges for your child, family and friends
 • A check-up form and passport for each of your child's pets or toys
-• Tickets, a price list with coins to cut out, and a certificate (plus a blank one for guests)
+• Tickets and a certificate (plus a blank one for guests)
 
 ★ BUILT FOR REAL PLAY
-Everything is flat and sturdy: cards, maps and posters kids can hold, trade and hide.
-Print the wearables on cardstock and they last all party.
+Things that spin, slide, lift and go on your head, plus cards, maps and posters kids can hold, trade and hide.
+Print the toys and wearables on cardstock and they last all party.
 
 ★ HOW TO ORDER
 Fill in the personalization box with your child's name and up to 6 pets or toys.
 We send your PDF through Etsy messages, usually within a few hours.
 
 ★ WHAT YOU'LL NEED
-• Cardstock (65–110 lb) for the gadget, badges, wearables and props. Regular paper is fine for the forms and tickets.
+• Cardstock (65–110 lb) for the toys, badges, wearables and props. Regular paper is fine for the forms and tickets.
 • Scissors, plus a hole punch and string or a lanyard for the ID badges
-• Elastic or ribbon for the masks, eye patches or crown, and tape or a stapler
-• Optional: laminating pouches so the gadget, signs and badges survive lots of play, and a dry-erase marker to fill in the check-up forms again and again
+• Paper fasteners (brads) for the spinners and meters, glue, and tape or a stapler
+• Elastic or ribbon for any masks, eye patches or crown
+• Optional: laminating pouches so the menu, signs and badges survive lots of play, and a dry-erase marker to fill in the check-up forms again and again
 
 ★ PLEASE NOTE
 This is a DIGITAL file. No physical item will be shipped. For personal use only.
@@ -356,19 +362,20 @@ vet party, pet vet party, scavenger hunt kids, treasure hunt clues, puppy birthd
 
 ## 13. Play kit, one listing per theme ($7.99)
 
-The same kits as listing 7, each on its own listing so it can have its own title, tags and search terms. The bot fills `{kit}`, `{place}`, `{gadget}`, `{props}`, `{subjects}` and `{hunt}` in the template below from each kit, and puts the theme's opening line at `{opening}`. Orders on these listings already know their kit, so there's no dropdown.
+The same kits as listing 7, each on its own listing so it can have its own title, tags and search terms. The bot fills `{kit}`, `{place}`, `{toys}`, `{props}`, `{subjects}` and `{hunt}` in the template below from each kit, and puts the theme's opening line at `{opening}`. Orders on these listings already know their kit, so there's no dropdown.
 
 **Description template**
 ```
 {opening}
 
-★ WHAT YOU GET (18–20 page PDF, US Letter)
-• Door signs, including "{place}" with your child's name
-• A pretend {gadget} with 3 screens to swap
+★ WHAT YOU GET (22–23 page PDF, US Letter)
+• {toys}
+• A whole shop to set up: a "Welcome to {place}" poster, a menu board, Today's Specials, order slips and play money
+• Door signs with your child's name
 • Flat props to cut out and play with: {props}
 • 8 ID badges for your child, family and friends
 • A check-up form and passport for each of your child's {subjects} (stuffed animals and toys count!)
-• Tickets, a price list with coins to cut out, and a certificate (plus a blank one for guests)
+• Tickets and a certificate (plus a blank one for guests)
 • A grown-up guide with setup steps and play ideas
 
 ★ PERFECT WITH
@@ -379,10 +386,10 @@ Fill in the personalization box with your child's name and up to 6 pets or toys.
 We send your PDF through Etsy messages, usually within a few hours.
 
 ★ WHAT YOU'LL NEED
-• Cardstock (65–110 lb) for the gadget, badges and props. Regular paper is fine for the forms and tickets.
+• Cardstock (65–110 lb) for the toys, badges and props. Regular paper is fine for the forms and tickets.
 • Scissors, plus a hole punch and string or a lanyard for the ID badges
-• Tape or a stapler, and elastic or ribbon for any masks, eye patches or crowns
-• Optional: laminating pouches so the gadget, signs and badges survive lots of play, and a dry-erase marker to fill in the forms again and again
+• Paper fasteners (brads) for any spinners or meters, glue, tape or a stapler, and elastic or ribbon for masks or crowns
+• Optional: laminating pouches so the menu, signs and badges survive lots of play, and a dry-erase marker to fill in the forms again and again
 
 ★ PLEASE NOTE
 This is a DIGITAL file. No physical item will be shipped. For personal use only.
