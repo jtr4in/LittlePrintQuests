@@ -6,6 +6,8 @@ To do it by hand instead, everything is copy-paste ready. Each standard listing 
 
 **Pricing:** Etsy shoppers in this category expect a sale price. Set the standard packs at $8.00 and run an ongoing 40% off sale (Shop Manager > Marketing > Sales and discounts), so buyers see $4.80 with the $8 crossed out.
 
+**Shop sections:** the bot puts each listing in a section, making the sections the first time: **Scavenger Hunt Packs** (the 9 theme packs), **Custom Party Bundles**, **Pretend Play Kits** and **Party Printables**. Rename or reorder them any time in Shop Manager > Listings > Sections.
+
 **Settings for every listing:** Type: Digital. Who made it: I did. What is it: A finished product. When was it made: 2020–2026. Category: Paper & Party Supplies > Party Supplies > Party Games.
 
 ---
@@ -135,6 +137,7 @@ THE HUNT
 • 6–10 custom rhyming clue cards (4" x 6", two per page)
 • Picture clues for ages 3–5: each card shows the next spot, so pre-readers can play
 • Mission Accomplished Certificate with your child's name
+• NEW: Host Mode, a private step-by-step guide for your phone. It shows where each card goes, lines to say in character, quick challenges between clues, hints if the kids get stuck, and a secret role for a second grown-up
 
 THE PLAY KIT (18–20 pages, matches your theme)
 • 8 door signs with your child's name ("Leo's Mission Control")
@@ -157,7 +160,7 @@ Choose "Hunt only" if you just want the scavenger hunt.
 ★ HOW TO ORDER
 1. Fill in the personalization box (see the example below)
 2. Check out
-3. We send your PDF through Etsy messages, usually within a few hours
+3. We send your PDF and your Host Mode link through Etsy messages, usually within a few hours
 
 Personalization example:
 Maya, turning 6, Space. Spots: front door, shoe rack, coat closet, washer, dryer, piano, dog bed, kitchen table (prize). Pets/toys: Rover (dog), Teddy (bear)

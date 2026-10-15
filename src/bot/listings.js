@@ -25,6 +25,7 @@ const CATALOG = [
   ...Object.keys(THEMES).map((theme) => ({
     key: `pack-${theme}`,
     section: PACK_SECTIONS[theme],
+    shopSection: 'Scavenger Hunt Packs',
     label: `${THEMES[theme].name} pack`,
     price: 8.0,
     photos: [`hunt-${theme}.jpg`],
@@ -33,6 +34,7 @@ const CATALOG = [
   {
     key: 'bundle',
     section: 6,
+    shopSection: 'Custom Party Bundles',
     label: 'Custom Party Bundle',
     price: 16.99,
     variation: { name: 'Package', options: [{ value: 'Hunt + Play Kit + Party Pack', price: 16.99 }, { value: 'Hunt only', price: 9.99 }] },
@@ -43,6 +45,7 @@ const CATALOG = [
   {
     key: 'kits',
     section: 7,
+    shopSection: 'Pretend Play Kits',
     label: 'Pretend Play Kit',
     price: 7.99,
     variation: { name: 'Kit', options: KIT_ORDER.map((k) => ({ value: KITS[k].name, price: 7.99 })) },
@@ -53,6 +56,7 @@ const CATALOG = [
   {
     key: 'party',
     section: 8,
+    shopSection: 'Party Printables',
     label: 'Party Pack',
     price: 6.99,
     variation: { name: 'Theme', options: Object.values(THEMES).map((t) => ({ value: t.label, price: 6.99 })) },
@@ -136,7 +140,9 @@ function setStatus(key, patch) {
 async function createOne(l, taxonomy) {
   const done = () => store.get().listings?.[l.key] || {};
   if (!done().id) {
-    const created = await etsy.createDraftListing(l, taxonomy);
+    // Each kind of listing goes in its own shop section, made on first use.
+    const sectionId = await etsy.shopSectionId(l.shopSection);
+    const created = await etsy.createDraftListing({ ...l, sectionId }, taxonomy);
     setStatus(l.key, { id: created.listing_id, steps: [] });
   }
   const id = done().id;
