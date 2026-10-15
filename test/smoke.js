@@ -47,6 +47,7 @@ const seen = [];
 const etsyCalls = [];
 let failImageOnce = true;
 const shopSections = [];
+const shopDrafts = [];
 const etsyListingApi = async (u, opts) => {
   const p = new URL(u).pathname.replace('/v3/application', '');
   const body = opts.body instanceof FormData ? Object.fromEntries(opts.body) : opts.body instanceof URLSearchParams ? Object.fromEntries(opts.body) : opts.body && JSON.parse(opts.body);
@@ -57,7 +58,9 @@ const etsyListingApi = async (u, opts) => {
     if (opts.method === 'POST') shopSections.push({ shop_section_id: 300 + shopSections.length, title: body.title });
     return json(opts.method === 'POST' ? shopSections.at(-1) : { results: shopSections });
   }
-  if (p === '/shops/42/listings') return json({ listing_id: 7000 + etsyCalls.filter((c) => c.p === p).length });
+  if (p === '/shops/42/listings' && opts.method === 'GET') return json({ results: new URL(u).searchParams.get('state') === 'draft' ? shopDrafts : [] });
+  if (p === '/shops/42/listings') return json({ listing_id: 7000 + etsyCalls.filter((c) => c.p === p && c.method === 'POST').length });
+  if (opts.method === 'GET' && /\/(images|files)$/.test(p)) return json({ count: 1, results: [{}] });
   if (/\/images$/.test(p) && body.image.name === 'kits-main.jpg' && failImageOnce) {
     failImageOnce = false;
     return json({ error: 'Temporary upload problem' }, 500);
@@ -303,7 +306,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   await createListings();
   listed = await listingsDone();
   assert.ok(Object.values(listed).every((x) => x.ready));
-  const creates = etsyCalls.filter((c) => c.p === '/shops/42/listings');
+  const creates = etsyCalls.filter((c) => c.p === '/shops/42/listings' && c.method === 'POST');
   assert.equal(creates.length, 12, 'resuming must not create a second kits listing');
   const pack = creates[0].body;
   // Four shop sections, each made once and reused.
@@ -329,7 +332,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   // Theme packs get 5 photos each.
   assert.equal(etsyCalls.filter((c) => c.p === `/shops/42/listings/${listed['pack-dino'].id}/images`).length, 5);
   // Clicking again once everything is ready updates the listings in place: no new drafts or photos.
-  const imagesBefore = etsyCalls.filter((c) => /\/images$/.test(c.p)).length;
+  const imagesBefore = etsyCalls.filter((c) => /\/images$/.test(c.p) && c.method === 'POST').length;
   const patchesBefore = etsyCalls.filter((c) => c.method === 'PATCH').length;
   const bundleInvBefore = etsyCalls.filter((c) => c.p === `/listings/${bundleId}/inventory`).length;
   assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Update listings on Etsy/);
@@ -338,10 +341,24 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const patches = etsyCalls.filter((c) => c.method === 'PATCH').slice(patchesBefore);
   assert.equal(patches.length, 12);
   assert.ok(patches.every((c) => c.body.shop_section_id && c.body.title && c.body.tags));
-  assert.equal(etsyCalls.filter((c) => c.p === '/shops/42/listings').length, 12);
-  assert.equal(etsyCalls.filter((c) => /\/images$/.test(c.p)).length, imagesBefore);
+  assert.equal(etsyCalls.filter((c) => c.p === '/shops/42/listings' && c.method === 'POST').length, 12);
+  assert.equal(etsyCalls.filter((c) => /\/images$/.test(c.p) && c.method === 'POST').length, imagesBefore);
   // The update also re-sends option prices, so the bundle's new Package choices reach old drafts.
   assert.equal(etsyCalls.filter((c) => c.p === `/listings/${bundleId}/inventory`).length, bundleInvBefore + 1);
+  // If the bot's records are lost (a redeploy without a volume), the next click finds the drafts it
+  // made by title instead of making them again, and only adds the photos they're missing.
+  shopDrafts.push(...etsyCalls.filter((c) => c.p === '/shops/42/listings' && c.method === 'POST').map((c, i) => ({ listing_id: 7001 + i, title: c.body.title })));
+  require('../src/bot/store').update((st) => delete st.listings);
+  assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Create drafts on Etsy/);
+  const postsBefore = etsyCalls.filter((c) => c.method === 'POST').length;
+  await createListings();
+  listed = await listingsDone();
+  assert.ok(Object.values(listed).every((x) => x.ready && x.adopted));
+  assert.equal(listed['pack-dino'].id, shopDrafts[0].listing_id);
+  assert.equal(etsyCalls.filter((c) => c.p === '/shops/42/listings' && c.method === 'POST').length, 12);
+  const adoptPosts = etsyCalls.filter((c) => c.method === 'POST').slice(postsBefore);
+  assert.equal(adoptPosts.filter((c) => c.p === `/shops/42/listings/${listed['pack-dino'].id}/images`).length, 4);
+  assert.ok(!adoptPosts.some((c) => /\/files$/.test(c.p)));
   assert.ok(files.every((f) => f.body.file.size > 10000 && f.body.file.type === 'application/pdf'));
   assert.ok(!etsyCalls.some((c) => c.p.includes(`/listings/${listed['pack-dino'].id}/personalization`)));
 

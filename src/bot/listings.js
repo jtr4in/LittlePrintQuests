@@ -142,9 +142,22 @@ function setStatus(key, patch) {
 
 // Each listing goes draft -> personalization -> variation prices -> photos -> file. Progress is
 // saved after every step, so clicking the button again after an error picks up where it stopped.
-async function createOne(l, taxonomy) {
+// If the bot's records were lost (say, a redeploy without a volume), a listing it made before is
+// found again by its title, so it isn't made twice. Photos and the file it already has count as done.
+async function adopt(l, existing) {
+  const title = (t) => String(t || '').trim().toLowerCase();
+  const found = (await existing()).find((x) => title(x.title) === title(l.title));
+  if (!found) return false;
+  const has = await etsy.listingContents(found.listing_id);
+  const steps = [...l.photos.slice(0, has.images).map((p) => `photo:${p}`), ...(has.files ? ['file'] : [])];
+  setStatus(l.key, { id: found.listing_id, steps, adopted: true });
+  await etsy.updateListing(found.listing_id, { ...l, sectionId: await etsy.shopSectionId(l.shopSection) });
+  return true;
+}
+
+async function createOne(l, taxonomy, existing) {
   const done = () => store.get().listings?.[l.key] || {};
-  if (!done().id) {
+  if (!done().id && !(await adopt(l, existing))) {
     // Each kind of listing goes in its own shop section, made on first use.
     const sectionId = await etsy.shopSectionId(l.shopSection);
     const created = await etsy.createDraftListing({ ...l, sectionId }, taxonomy);
@@ -192,10 +205,12 @@ async function createDrafts() {
     // New listings are created; finished ones are updated to match the latest copy and photos.
     const isReady = (l) => store.get().listings?.[l.key]?.ready;
     const taxonomy = listings.some((l) => !isReady(l)) ? await etsy.taxonomyId(/^party games$/i) : null;
+    let shop = null;
+    const existing = async () => (shop ||= await etsy.shopListings());
     for (const l of listings) {
       try {
         setStatus(l.key, { error: null, working: true });
-        await (isReady(l) ? updateOne(l) : createOne(l, taxonomy));
+        await (isReady(l) ? updateOne(l) : createOne(l, taxonomy, existing));
       } catch (err) {
         setStatus(l.key, { error: err.message });
       } finally {
