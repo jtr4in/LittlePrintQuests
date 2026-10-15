@@ -21,6 +21,10 @@ function checks() {
     ['STRIPE_SECRET_KEY', /^(sk|rk)_(test|live)_/.test(env('STRIPE_SECRET_KEY')), 'Use the Secret key (sk_test_… or sk_live_…), not the Publishable key (pk_…).'],
     ['STRIPE_WEBHOOK_SECRET', env('STRIPE_WEBHOOK_SECRET').startsWith('whsec_'), `Add a webhook in Stripe for ${env('PUBLIC_URL') || 'PUBLIC_URL'}/webhooks/stripe, then copy its Signing secret (whsec_…).`],
     ['SITE_URL', /^https?:\/\//.test(env('SITE_URL')), 'Your website, like https://jtr4in.github.io/LittlePrintQuests/'],
+    // Railway sets RAILWAY_VOLUME_MOUNT_PATH only when a volume is attached. Without one, every deploy
+    // starts from an empty disk: orders, the Etsy login and the list of drafts are gone.
+    ['Saved data survives deploys (volume at /data)', !env('RAILWAY_PROJECT_ID') || env('RAILWAY_VOLUME_MOUNT_PATH') === (env('DATA_DIR') || '/data'),
+      'In Railway, add a volume to this service with mount path /data. Without it, orders and your Etsy connection are erased on every deploy.'],
     ['ETSY_KEYSTRING and ETSY_SHARED_SECRET', Boolean(env('ETSY_KEYSTRING') && env('ETSY_SHARED_SECRET')), 'From etsy.com/developers > Your Apps.'],
   ];
 }

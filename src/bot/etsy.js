@@ -144,6 +144,26 @@ async function shopSectionId(title) {
   return (await api('POST', `/application/shops/${shopId()}/sections`, null, { title })).shop_section_id;
 }
 
+// Every listing in the shop that the bot could have made (drafts, live and paused ones).
+async function shopListings() {
+  const out = [];
+  for (const state of ['draft', 'active', 'inactive']) {
+    for (let offset = 0; ; offset += 100) {
+      const { results = [] } = await api('GET', `/application/shops/${shopId()}/listings`, { state, limit: '100', offset: String(offset) });
+      out.push(...results);
+      if (results.length < 100) break;
+    }
+  }
+  return out;
+}
+
+// How many photos and digital files a listing already has.
+async function listingContents(listingId) {
+  const images = await api('GET', `/application/listings/${listingId}/images`);
+  const files = await api('GET', `/application/shops/${shopId()}/listings/${listingId}/files`);
+  return { images: images.count ?? images.results?.length ?? 0, files: files.count ?? files.results?.length ?? 0 };
+}
+
 // One required text box for the buyer's details (Etsy's personalization questions API).
 async function setPersonalization(listingId, { question, instructions }) {
   return api('POST', `/application/shops/${shopId()}/listings/${listingId}/personalization`, null, {
@@ -191,6 +211,8 @@ module.exports = {
   createDraftListing,
   shopSectionId,
   updateListing,
+  shopListings,
+  listingContents,
   uploadListingImage,
   uploadListingFile,
   setVariationPrices,
