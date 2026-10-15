@@ -140,6 +140,9 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.match(o.message, /Mission Control play kit:\s+https:\/\/bot\.example\.com\/d\/[\w-]+-kit\.pdf/);
   assert.ok(o.partyReady);
   assert.match(o.message, /party printables[^\n]*:\s+https:\/\/bot\.example\.com\/d\/[\w-]+-party\.pdf/);
+  // Host Mode: hunts get a private host link in the Etsy message; kit-only orders don't.
+  assert.ok(o.message.includes(`https://bot.example.com/h/${o.hostToken}`) && o.sidekickToken);
+  assert.ok(!kitOrder.hostToken && !/\/h\//.test(kitOrder.message));
   assert.equal(seen[0].headers['x-api-key'], 'key:secret');
   assert.match(seen[0].u, /shops\/42\/receipts\?was_paid=true/);
 
@@ -231,6 +234,21 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     }
     if (product === 'bundle') assert.equal((await realFetch(`${base}/d/${w.downloadToken}-party.pdf`)).headers.get('content-disposition'), 'inline; filename="party-printables.pdf"');
     assert.match(await (await realFetch(`${base}/order/${orderId}`)).text(), { hunt: /hunt is ready/, kit: /play kit is ready/, party: /party pack is ready/ }[main]);
+    assert.equal(Boolean(w.hostToken), main === 'hunt');
+    assert.equal(mail.html.includes(`/h/${w.hostToken}`), main === 'hunt');
+    if (main === 'hunt') {
+      // Host Mode and the sidekick page share progress, and stay free of shop links and prices (Etsy buyers get them too).
+      const hostHtml = await (await realFetch(`${base}/h/${w.hostToken}`)).text();
+      assert.match(hostHtml, /Hide Card 2/);
+      assert.match(hostHtml, /Read Clue #1 aloud/);
+      assert.ok(!/etsy\.com|github\.io|\$\d/i.test(hostHtml), 'Host Mode must not link to the shop or show prices');
+      assert.equal((await realFetch(`${base}/h/${w.hostToken}/state`, { method: 'POST', body: JSON.stringify({ step: 5 }) })).status, 204);
+      assert.deepEqual(await (await realFetch(`${base}/s/${w.sidekickToken}/state`)).json(), { step: 5 });
+      assert.match(await (await realFetch(`${base}/s/${w.sidekickToken}`)).text(), /Your jobs today/);
+      assert.equal((await realFetch(`${base}/s/${w.sidekickToken}/state`, { method: 'POST', body: '{"step":1}' })).status, 200); // sidekick can't move the host
+      assert.equal((await realFetch(`${base}/h/${'x'.repeat(24)}`)).status, 404);
+      assert.match(await (await realFetch(`${base}/order/${orderId}`)).text(), /Open Host Mode/);
+    }
     // Stripe retries the same event: no second email.
     await realFetch(base + '/webhooks/stripe', { method: 'POST', body: payload, headers: { 'stripe-signature': sig } });
   }

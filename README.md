@@ -67,6 +67,10 @@ The website's hunt builder sends its form to the bot, which opens a Stripe Check
 4. **Website.** In `docs/index.html`, set `CHECKOUT_URL` to `<PUBLIC_URL>/api/checkout`. Set `SITE_URL` (and optionally `SITE_ORIGIN`) on the bot.
 5. **Test.** With test keys, order on your site using card `4242 4242 4242 4242`, any future date and any CVC. You should get the email within a minute. Then swap in the live keys and a live webhook.
 
+## Host Mode
+
+Every hunt order (Etsy or website) gets a private Host Mode link at `/h/<token>`: a phone page that walks the grown-up through hiding each card in order, then running the hunt with lines to say in character, quick challenges between clues, and step-by-step hints. A second link at `/s/<token>` gives a helper their own cues (radio calls, sound effects, checking the next card is still hidden), following along as the host taps Next. The link goes in the Etsy message, the website email and the order page. Because Etsy buyers see it, these pages have no shop links, prices or offers. Lines for each theme live in `src/host/scripts.js`.
+
 ### Development
 
 `npm test` runs a smoke test with a fake Etsy, Claude, Stripe and Resend, and renders real PDFs.

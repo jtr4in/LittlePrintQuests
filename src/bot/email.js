@@ -25,6 +25,7 @@ async function sendHuntEmail(order) {
     ${btn(pdf, `Download your ${products.NAMES[main]} (PDF)`)}
     ${order.kitReady ? btn(pdf.replace(/\.pdf$/, '-kit.pdf'), `Download the ${esc(kit.name)} play kit (PDF)`) : ''}
     ${order.partyReady ? btn(pdf.replace(/\.pdf$/, '-party.pdf'), 'Download the party printables (PDF)') : ''}
+    ${order.hostToken ? `<p><b>New: Host Mode.</b> Open this on your phone on party day. It walks you through hiding each card and running the hunt, with lines to say, hints, and a secret role for a second grown-up.</p>${btn(`${process.env.PUBLIC_URL}/h/${order.hostToken}`, 'Open Host Mode')}` : ''}
     <p><b>Quick setup:</b> ${tips}${order.kitReady ? ' The play kit has its own grown-up guide on page 1.' : ''}</p>
     <p>Something not right? Just reply to this email and we’ll fix it.</p>
     <p>Have an amazing party! 🎉<br>LittlePrintQuests</p></div>`;
