@@ -79,7 +79,7 @@ function awning(w, stripes = 12) {
 module.exports = { em, pic, confetti, awning, emojiSvg };
 
 // ---------- illustrations ----------
-// A kit can swap any emoji for a real illustration: drop a PNG named after the picture's slug
+// A kit can swap any emoji for a real illustration: drop a picture (WebP) named after the picture's slug
 // into src/kits/art/<kit id>/ (scripts/art-list.js lists every slug with a drawing prompt, and
 // scripts/art-import.py cleans up and names uploaded images). Missing files keep the emoji.
 
@@ -118,7 +118,7 @@ function setKit(def) {
   const files = {};
   if (fs.existsSync(dir)) {
     for (const p of kitPictures(def)) {
-      const f = path.join(dir, `${p.slug}.png`);
+      const f = path.join(dir, `${p.slug}.webp`);
       if (fs.existsSync(f)) files[p.e] = f;
     }
   }
@@ -129,7 +129,7 @@ const pngCache = {};
 function illustration(e) {
   const f = current && current.files[e];
   if (!f) return null;
-  return (pngCache[f] ||= `data:image/png;base64,${fs.readFileSync(f).toString('base64')}`);
+  return (pngCache[f] ||= `data:image/webp;base64,${fs.readFileSync(f).toString('base64')}`);
 }
 
 module.exports.kitPictures = kitPictures;
