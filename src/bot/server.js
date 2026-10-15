@@ -10,7 +10,8 @@ const orders = require('./orders');
 const payments = require('./payments');
 const listings = require('./listings');
 const sample = require('./sample');
-const { KITS } = require('../kits/engine');
+const products = require('./products');
+const { KITS, kitForHunt } = require('../kits/engine');
 const { sendHuntEmail } = require('./email');
 const THEMES = require('../generator/themes');
 
@@ -67,27 +68,36 @@ const kitLink = (o, label) =>
   (o.partyReady ? ` · <a href="/d/${esc(o.downloadToken)}-party.pdf" target="_blank">Party pack</a>` : '');
 const sendJson = (res, code, obj) => send(res, code, JSON.stringify(obj), { 'Content-Type': 'application/json', ...cors() });
 
+// "Dino Fossil Recovery", "Dino Dig Lab play kit" or "Dinosaur party pack".
+function orderTitle(o) {
+  const main = products.mainOf(o);
+  const theme = THEMES[o.config?.theme];
+  if (main === 'kit') return `${(KITS[o.config?.kit] || kitForHunt(o.config.theme)).name} play kit`;
+  return main === 'party' ? `${theme.label} party pack` : theme.name;
+}
+
 // Public page the buyer lands on after paying. Order ids are long and random.
 function orderPage(o) {
   const theme = THEMES[o.form.theme];
   const working = o.status === 'awaiting_payment' || o.status === 'processing';
-  const party = o.form.product === 'party';
-  const what = party ? 'party pack' : 'hunt';
+  const main = products.mainOf(o);
+  const party = main === 'party';
+  const what = products.NAMES[main];
   const body =
     o.status === 'ready'
       ? `<h1>${esc(o.config.childName)}’s ${what} is ready! 🎉</h1>
          <p><a class="btn" href="/d/${esc(o.downloadToken)}.pdf" target="_blank">Download your ${what} (PDF)</a></p>
          ${o.kitReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-kit.pdf" target="_blank">Download your play kit (PDF)</a></p>` : ''}
          ${o.partyReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-party.pdf" target="_blank">Download your party printables (PDF)</a></p>` : ''}
-         <p>${o.email ? `We also emailed the link to <b>${esc(o.email)}</b>.` : ''} Print at “Actual Size / 100%”${party ? ', on cardstock if you have it.' : ', cut out the clue cards, and follow the Host Guide on page 1.'}</p>`
+         <p>${o.email ? `We also emailed the link to <b>${esc(o.email)}</b>.` : ''} Print at “Actual Size / 100%”${{ hunt: ', cut out the clue cards, and follow the Host Guide on page 1.', kit: ', and start with the grown-up guide on page 1.', party: ', on cardstock if you have it.' }[main]}</p>`
       : working
-        ? `<h1>Building ${esc(o.form.childName)}’s ${esc(party ? `${theme.label} party pack` : theme.name)}…</h1>
+        ? `<h1>Building ${esc(o.form.childName)}’s ${esc(main === 'hunt' ? theme.name : `${theme.label} ${what}`)}…</h1>
            <p>${o.status === 'awaiting_payment' ? 'Confirming your payment.' : 'Writing clues and laying out the cards.'} This page updates by itself, and we’ll email you the link too.</p>
            <div class="spin"></div>`
         : `<h1>Thanks for your order!</h1>
            <p>Your payment went through. We’re giving ${esc(o.form.childName)}’s ${what} a quick hand check and will email it to ${esc(o.email || 'you')} shortly.</p>`;
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Your ${party ? 'party pack' : 'scavenger hunt'}</title>${working ? '<meta http-equiv="refresh" content="4">' : ''}<style>
+<title>Your ${what}</title>${working ? '<meta http-equiv="refresh" content="4">' : ''}<style>
 :root{--bg:#fbf8f1;--ink:#3f4a73;--muted:#646d8f;--sun:#ef9d31;--sun-ink:#2b1d06}
 @media (prefers-color-scheme:dark){:root{--bg:#151a2e;--ink:#f4f0e6;--muted:#b4bad4}}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 system-ui,sans-serif}
@@ -125,7 +135,7 @@ function orderCard(o) {
   const theme = o.config && (THEMES[o.config.theme] || KITS[o.config.kit]);
   return `<article id="${esc(o.id)}" class="order ${o.sent ? 'sent' : o.status}">
     <header><span class="badge">${o.sent ? 'Sent' : esc(badge)}</span>
-      <b>${esc(o.config?.childName || o.form?.childName || o.buyerName || 'Order')}</b>${theme ? ` · ${esc(o.product === 'party' ? `${theme.label} party pack` : theme.name)}` : ''}
+      <b>${esc(o.config?.childName || o.form?.childName || o.buyerName || 'Order')}</b>${theme ? ` · ${esc(orderTitle(o))}${products.itemsOf(o).length > 1 ? ` <span class="muted">(${esc(products.packageName(products.itemsOf(o)))})</span>` : ''}` : ''}
       <small>${o.source === 'web' ? 'Website · ' : ''}${esc(o.buyerName || '')}${o.email ? ` &lt;${esc(o.email)}&gt;` : ''} · ${esc(new Date(o.createdAt).toLocaleString('en-US'))}${o.receiptId ? ` · receipt ${esc(o.receiptId)}` : ''}</small></header>
     <details><summary>Buyer’s notes</summary><pre>${esc(o.personalization)}</pre>${
       Object.keys(o.options || {}).length ? `<pre>${esc(Object.entries(o.options).map(([k, v]) => `${k}: ${v}`).join('\n'))}</pre>` : ''
@@ -189,7 +199,7 @@ button.secondary{background:#fff;color:#2d6a4f;border:1px solid #2d6a4f;margin-t
 </div>
 <div class="panel">${
     payments.enabled()
-      ? `<b>Website checkout on.</b> <span class="muted">$${(payments.BUNDLE_PRICE_CENTS / 100).toFixed(2)} per party bundle, $${(payments.PRICE_CENTS / 100).toFixed(2)} per hunt only, $${(payments.PARTY_PRICE_CENTS / 100).toFixed(2)} per party pack, built and emailed automatically.${unpaid.length ? ` ${unpaid.length} checkout${unpaid.length === 1 ? '' : 's'} started but not paid.` : ''}</span>`
+      ? `<b>Website checkout on.</b> <span class="muted">Buyers pick any mix of hunt ($${(payments.PRICES.hunt / 100).toFixed(2)}), play kit ($${(payments.PRICES.kit / 100).toFixed(2)}) and party pack ($${(payments.PRICES.party / 100).toFixed(2)}), or all three for $${(payments.PRICES.bundle / 100).toFixed(2)}, built and emailed automatically.${unpaid.length ? ` ${unpaid.length} checkout${unpaid.length === 1 ? '' : 's'} started but not paid.` : ''}</span>`
       : `<b>Website checkout off.</b> <span class="muted">Add STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET to take orders on your site.</span>`
   }</div>
 ${listingsPanel(s)}

@@ -1,6 +1,6 @@
 // Order pipelines. Etsy: receipt -> parsed hunt config -> PDF -> ready-to-send message.
 // Website: form -> Stripe payment -> PDF -> emailed to the buyer.
-// A Party Bundle order also gets the theme's matching play kit as a second PDF.
+// An order can hold any mix of the hunt, its play kit and the party pack (see products.js).
 
 const crypto = require('crypto');
 const path = require('path');
@@ -14,6 +14,7 @@ const { renderParty } = require('../party/render-party');
 const { kitForHunt, KITS } = require('../kits/engine');
 const THEMES = require('../generator/themes');
 const SPOTS = require('../generator/spots');
+const products = require('./products');
 
 const CUSTOM_LISTING_IDS = (process.env.CUSTOM_LISTING_IDS || '')
   .split(',')
@@ -39,44 +40,48 @@ function customRequest(tx) {
   return { personalization, options, product: bundle ? 'bundle' : 'hunt' };
 }
 
+// The kit an order's play kit uses: named by an Etsy kit order, else the theme's match.
+const kitOf = (order) => KITS[order.config.kit] || kitForHunt(order.config.theme);
+
 function buyerMessage(order) {
   const first = (order.buyerName || '').split(' ')[0] || 'there';
-  if (order.product === 'kit') {
-    return `Hi ${first}! Your ${KITS[order.config.kit].name} play kit for ${order.config.childName} is ready. Download your printable PDF here:
-
-${process.env.PUBLIC_URL}/d/${order.downloadToken}.pdf
-
-Print at "Actual Size / 100%" and start with the grown-up guide on page 1. Have fun! 🎉`;
-  }
+  const main = products.mainOf(order);
+  const base = `${process.env.PUBLIC_URL}/d/${order.downloadToken}`;
   const theme = THEMES[order.config.theme];
-  if (order.product === 'party') {
-    return `Hi ${first}! Your ${theme.label} party pack for ${order.config.childName} is ready. Download your printable PDF here:
+  const title = {
+    hunt: () => `custom ${theme.name}`,
+    kit: () => `${kitOf(order).name} play kit`,
+    party: () => `${theme.label} party pack`,
+  }[main]();
+  const extras =
+    (order.kitReady ? `\nAnd here's the matching ${kitOf(order).name} play kit:\n\n${base}-kit.pdf\n` : '') +
+    (order.partyReady ? `\nAnd your party printables (invitations, toppers, tags, banner and more):\n\n${base}-party.pdf\n` : '');
+  const tips = {
+    hunt: 'Print at "Actual Size / 100%", cut out the clue cards, and use the Host Guide on page 1 to hide them. Have an amazing party! 🎉',
+    kit: 'Print at "Actual Size / 100%" and start with the grown-up guide on page 1. Have fun! 🎉',
+    party: 'Print at "Actual Size / 100%". Invitations, toppers and the banner look best on cardstock. Have an amazing party! 🎉',
+  }[main];
+  return `Hi ${first}! Your ${title} for ${order.config.childName} is ready. Download your printable PDF here:
 
-${process.env.PUBLIC_URL}/d/${order.downloadToken}.pdf
-
-Print at "Actual Size / 100%". Invitations, toppers and the banner look best on cardstock. Have an amazing party! 🎉`;
-  }
-  const kit = order.kitReady ? kitForHunt(order.config.theme) : null;
-  return `Hi ${first}! Your custom ${theme.name} for ${order.config.childName} is ready. Download your printable PDF here:
-
-${process.env.PUBLIC_URL}/d/${order.downloadToken}.pdf
-${kit ? `\nAnd here's the matching ${kit.name} play kit:\n\n${process.env.PUBLIC_URL}/d/${order.downloadToken}-kit.pdf\n` : ''}${order.partyReady ? `\nAnd your party printables (invitations, toppers, tags, banner and more):\n\n${process.env.PUBLIC_URL}/d/${order.downloadToken}-party.pdf\n` : ''}
-Print at "Actual Size / 100%", cut out the clue cards, and use the Host Guide on page 1 to hide them. Have an amazing party! 🎉`;
+${base}.pdf
+${extras}
+${tips}`;
 }
 
 async function generate(id) {
   const order = store.get().orders[id];
   const token = order.downloadToken || crypto.randomBytes(18).toString('base64url');
   const out = (suffix = '') => path.join(store.PDF_DIR, `${token}${suffix}.pdf`);
-  if (order.product === 'kit') await renderKit(order.config, out());
-  else if (order.product === 'party') await renderParty(order.config, out());
+  const main = products.mainOf(order);
+  if (main === 'kit') await renderKit(order.config, out());
+  else if (main === 'party') await renderParty(order.config, out());
   else await renderPdf(order.config, out());
-  const bundle = order.product === 'bundle';
-  const kit = bundle ? kitForHunt(order.config.theme) : null;
+  const kit = main !== 'kit' && products.has(order, 'kit') ? kitOf(order) : null;
+  const party = main !== 'party' && products.has(order, 'party');
   if (kit) await renderKit(kitConfig(order, kit), out('-kit'));
-  if (bundle) await renderParty(partyConfig(order), out('-party'));
+  if (party) await renderParty(partyConfig(order), out('-party'));
   store.update((s) => {
-    Object.assign(s.orders[id], { downloadToken: token, kitReady: Boolean(kit), partyReady: bundle, status: 'ready', problem: null, generatedAt: new Date().toISOString() });
+    Object.assign(s.orders[id], { downloadToken: token, kitReady: Boolean(kit), partyReady: party, status: 'ready', problem: null, generatedAt: new Date().toISOString() });
     s.orders[id].message = buyerMessage(s.orders[id]);
   });
 }
@@ -87,7 +92,7 @@ function partyConfig(order) {
 }
 
 function kitConfig(order, kit) {
-  return { kit: kit.id, childName: order.config.childName, subjects: order.pets || [], lenient: true, withHunt: true };
+  return { kit: kit.id, childName: order.config.childName, subjects: order.pets || [], lenient: true, withHunt: products.has(order, 'hunt') };
 }
 
 // Parses and builds one order. Never throws: failures become "needs attention".
@@ -154,7 +159,7 @@ async function notify(order) {
     await fetch(`https://ntfy.sh/${encodeURIComponent(topic)}`, {
       method: 'POST',
       headers: {
-        Title: ready ? `${{ kit: 'Play kit', party: 'Party pack' }[order.product] || 'Hunt'} ready for ${order.config.childName}` : 'Order needs a look',
+        Title: ready ? `${{ kit: 'Play kit', party: 'Party pack' }[products.mainOf(order)] || 'Hunt'} ready for ${order.config.childName}` : 'Order needs a look',
         Click: `${process.env.PUBLIC_URL}/admin#${order.id}`,
         Tags: ready ? 'tada' : 'warning',
       },
@@ -174,20 +179,23 @@ function validateWebForm(body) {
   const childName = String(body.childName || '').trim().slice(0, 24);
   if (!childName) throw new Error('Please add your child’s first name.');
   const age = Number.isInteger(body.age) && body.age > 0 && body.age < 16 ? body.age : null;
-  if (body.product === 'party') return { product: 'party', theme, childName, age, spots: [], pets: [], party: cleanParty(body.party) };
+  // Newer forms send items; older ones send a product name.
+  const items = products.normalize(Array.isArray(body.items) ? body.items : products.itemsOf({ product: body.product === 'bundle' || body.product === 'party' ? body.product : 'hunt' }));
+  if (!items.length) throw new Error('Please pick the hunt, the play kit or the party pack.');
+  const pets = (Array.isArray(body.pets) ? body.pets : []).slice(0, 6)
+    .map((p) => ({ name: String(p?.name || '').trim().slice(0, 20), kind: String(p?.kind || '').trim().slice(0, 20) }))
+    .filter((p) => p.name || p.kind);
+  const form = { items, product: products.productFor(items), theme, childName, age, spots: [], pets, party: items.includes('party') ? cleanParty(body.party) : null };
+  if (!items.includes('hunt')) return form;
   const spots = Array.isArray(body.spots) ? body.spots : [];
   if (spots.length < 3 || spots.length > 12) throw new Error('Please pick between 3 and 12 hiding spots.');
-  const clean = spots.map((s) => {
+  form.spots = spots.map((s) => {
     if (typeof s === 'string' && SPOTS[s]) return s;
     const label = String(s?.custom || '').trim().slice(0, 40);
     if (!label) throw new Error('One of the hiding spots is empty.');
     return { custom: label };
   });
-  const product = body.product === 'bundle' ? 'bundle' : 'hunt';
-  const pets = (Array.isArray(body.pets) ? body.pets : []).slice(0, 6)
-    .map((p) => ({ name: String(p?.name || '').trim().slice(0, 20), kind: String(p?.kind || '').trim().slice(0, 20) }))
-    .filter((p) => p.name || p.kind);
-  return { product, theme, childName, age, spots: clean, pets, party: product === 'bundle' ? cleanParty(body.party) : null };
+  return form;
 }
 
 // Optional party details for the invitations.
@@ -207,16 +215,17 @@ function addWebOrder(form) {
     source: 'web',
     status: 'awaiting_payment',
     product: form.product,
+    items: form.items,
     pets: form.pets,
     party: form.party,
     form,
     personalization: formAsText(form),
-    options: { Theme: THEMES[form.theme].name, Package: { bundle: 'Hunt + Play Kit + Party Pack', party: 'Party Pack' }[form.product] || 'Hunt only' },
+    options: { Theme: THEMES[form.theme].name, Package: products.packageName(form.items) },
   });
 }
 
 function formAsText(f) {
-  if (f.product === 'party') return `${f.childName}${f.age ? `, turning ${f.age}` : ''}. Party pack.`;
+  if (!products.has(f, 'hunt')) return `${f.childName}${f.age ? `, turning ${f.age}` : ''}. ${products.describe(products.itemsOf(f))}.`;
   const spots = f.spots.map((s) => (typeof s === 'string' ? SPOTS[s].label : s.custom));
   return `${f.childName}${f.age ? `, turning ${f.age}` : ''}. Spots in order: ${spots.join(', ')} (prize at the last one).`;
 }
@@ -228,7 +237,10 @@ async function fulfillWebOrder(id, { email, buyerName }) {
   store.update((s) => Object.assign(s.orders[id], { status: 'processing', email, buyerName, paidAt: new Date().toISOString() }));
   const f = order.form;
   try {
-    if (f.product === 'party') {
+    const main = products.mainOf(order);
+    if (main === 'kit') {
+      store.update((s) => (s.orders[id].config = { kit: kitForHunt(f.theme).id, theme: f.theme, childName: f.childName, ...(f.age ? { age: f.age } : {}), subjects: f.pets || [], lenient: true }));
+    } else if (main === 'party') {
       store.update((s) => (s.orders[id].config = { theme: f.theme, childName: f.childName, ...(f.age ? { age: f.age } : {}), ...(f.party ? { party: f.party } : {}) }));
     } else if (f.spots.every((s) => typeof s === 'string')) {
       // Every spot is in the library, so no need to ask Claude.
