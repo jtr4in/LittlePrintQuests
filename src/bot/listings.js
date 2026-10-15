@@ -1,5 +1,5 @@
 // Creates the shop's Etsy listings as drafts: one pack per theme, the custom Party Bundle,
-// the play kit and the party pack. Titles, descriptions and tags come from etsy-listings.md; prices,
+// the play kit and the party pack (each with a theme dropdown, and again as one listing per theme). Titles, descriptions and tags come from etsy-listings.md; prices,
 // photos, files and variations are set here.
 
 const fs = require('fs');
@@ -10,6 +10,7 @@ const etsy = require('./etsy');
 const { renderPdf, renderHtml } = require('../generator/render');
 const THEMES = require('../generator/themes');
 const { KITS } = require('../kits/engine');
+const { flavorFor } = require('../party/flavor');
 
 const ROOT = path.join(__dirname, '..', '..');
 const ASSETS = path.join(ROOT, 'listing-assets');
@@ -69,7 +70,38 @@ const CATALOG = [
     photos: ['party-main.jpg', ...Object.keys(THEMES).map((k) => `party-${k}.jpg`)],
     file: { name: 'your-party-printables.pdf', build: (out) => thankYouPdf(out, 'party printables') },
   },
+  // One play kit and one party pack listing per theme as well, so each shows up in its own searches.
+  ...KIT_ORDER.map((k) => ({
+    key: `kit-${k}`,
+    section: 13,
+    perTheme: k,
+    shopSection: 'Pretend Play Kits',
+    label: `${KITS[k].name} play kit`,
+    price: 7.99,
+    order: { product: 'kit', kit: k },
+    personalization: { question: 'Child’s name and pets or toys' },
+    photos: [`kit-${k}.jpg`, `kit-${k}-inside.jpg`, `kit-${k}-feature.jpg`],
+    file: { name: 'your-pretend-play-kit.pdf', build: (out) => thankYouPdf(out, 'play kit') },
+  })),
+  ...Object.keys(THEMES).map((theme) => ({
+    key: `party-${theme}`,
+    section: 14,
+    perTheme: theme,
+    shopSection: 'Party Printables',
+    label: `${THEMES[theme].label} party pack`,
+    price: 6.99,
+    order: { product: 'party', theme },
+    personalization: { question: 'Child’s name and age' },
+    photos: [`party-${theme}.jpg`, `party-${theme}-inside.jpg`, `party-${theme}-feature.jpg`],
+    file: { name: 'your-party-printables.pdf', build: (out) => thankYouPdf(out, 'party printables') },
+  })),
 ];
+
+// The catalog entry for an Etsy listing the bot made, if it made it.
+function forListingId(listingId) {
+  const made = store.get().listings || {};
+  return CATALOG.find((c) => made[c.key]?.id && String(made[c.key].id) === String(listingId)) || null;
+}
 
 // ---------- reading etsy-listings.md ----------
 
@@ -85,6 +117,23 @@ function sections(md) {
 const lineAfter = (text, label) => text.match(new RegExp(`\\*\\*${label}[^*]*\\*\\*\\s*\\n(.+)`))?.[1].trim();
 const blockAfter = (text, label) => text.match(new RegExp(`${label}[\\s\\S]*?\\n\`\`\`\\n([\\s\\S]*?)\\n\`\`\``))?.[1].trim();
 
+const fill = (text, values) => text && text.replace(/\{(\w+)\}/g, (m, k) => values[k] ?? m);
+const list = (items) => (items.length > 1 ? `${items.slice(0, -1).join(', ')} and ${items.at(-1)}` : items[0]);
+
+// What a per-theme description template can say about its kit or theme.
+function placeholders(c) {
+  if (c.order.product === 'kit') {
+    const k = KITS[c.perTheme];
+    return {
+      kit: k.name, place: k.placeName('[Name]’s'), gadget: k.dashboard.gadget, subjects: k.subjectPlural,
+      props: list(Object.values(k.props).map((p) => p.title)), hunt: THEMES[k.hunt].name,
+    };
+  }
+  const t = THEMES[c.perTheme];
+  const f = flavorFor(t);
+  return { theme: t.label, party: f.party, foods: list(f.foods), hunt: t.name };
+}
+
 // Title, description, tags and personalization instructions for every catalog listing.
 function readCopy(md = fs.readFileSync(DOC, 'utf8')) {
   const all = sections(md);
@@ -92,13 +141,19 @@ function readCopy(md = fs.readFileSync(DOC, 'utf8')) {
   return CATALOG.map((c) => {
     const s = all[c.section];
     if (!s) throw new Error(`etsy-listings.md has no section ${c.section} (${c.label})`);
-    const opening = lineAfter(s, 'Opening line');
-    const description = opening ? `${opening}\n\n${shared}` : blockAfter(s, '\\*\\*Description\\*\\*');
+    // Per-theme listings share a description template; each theme has a "### id" part with its
+    // own title, opening line and tags.
+    const own = c.perTheme ? s.split(/^### /m).find((part) => part.startsWith(`${c.perTheme}\n`)) : s;
+    if (!own) throw new Error(`etsy-listings.md section ${c.section} has no "### ${c.perTheme}" part (${c.label})`);
+    const opening = lineAfter(own, 'Opening line');
+    const description = c.perTheme
+      ? fill(blockAfter(s, '\\*\\*Description template\\*\\*'), { opening, ...placeholders(c) })
+      : opening ? `${opening}\n\n${shared}` : blockAfter(s, '\\*\\*Description\\*\\*');
     const listing = {
       ...c,
-      title: lineAfter(s, 'Title'),
+      title: lineAfter(own, 'Title'),
       description,
-      tags: (lineAfter(s, 'Tags') || '').split(',').map((t) => t.trim()).filter(Boolean),
+      tags: (lineAfter(own, 'Tags') || '').split(',').map((t) => t.trim()).filter(Boolean),
       instructions: c.personalization ? blockAfter(s, 'Instructions to buyer') : null,
     };
     const problems = [];
@@ -224,4 +279,4 @@ async function createDrafts() {
   }
 }
 
-module.exports = { CATALOG, readCopy, createDrafts, isRunning };
+module.exports = { CATALOG, readCopy, createDrafts, isRunning, forListingId };

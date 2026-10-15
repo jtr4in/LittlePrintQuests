@@ -15,6 +15,7 @@ const { kitForHunt, KITS } = require('../kits/engine');
 const THEMES = require('../generator/themes');
 const SPOTS = require('../generator/spots');
 const products = require('./products');
+const listings = require('./listings');
 
 const CUSTOM_LISTING_IDS = (process.env.CUSTOM_LISTING_IDS || '')
   .split(',')
@@ -26,10 +27,16 @@ const CUSTOM_LISTING_IDS = (process.env.CUSTOM_LISTING_IDS || '')
 function customRequest(tx) {
   const variations = tx.variations || [];
   const personal = variations.filter((v) => v.question_id || /personali[sz]/i.test(v.formatted_name || ''));
-  const isCustom = CUSTOM_LISTING_IDS.length ? CUSTOM_LISTING_IDS.includes(String(tx.listing_id)) : personal.length > 0;
+  // Listings the bot made itself are known by id, so their orders need no listing id settings.
+  const made = listings.forListingId(tx.listing_id);
+  const isCustom = made ? Boolean(made.personalization)
+    : CUSTOM_LISTING_IDS.length ? CUSTOM_LISTING_IDS.includes(String(tx.listing_id)) : personal.length > 0;
   if (!isCustom) return null;
   const options = Object.fromEntries(variations.filter((v) => !personal.includes(v)).map((v) => [v.formatted_name, v.formatted_value]));
   const personalization = personal.map((v) => v.formatted_value).join('\n');
+  // A single-theme play kit or party pack listing has no dropdown: its theme comes with the listing.
+  if (made?.order?.product === 'kit') return { personalization, options, product: 'kit', kit: made.order.kit };
+  if (made?.order?.product === 'party') return { personalization, options: { ...options, Theme: THEMES[made.order.theme].label }, product: 'party' };
   // The play kit listing has a "Kit" option naming the kit.
   const kit = Object.values(KITS).find((k) => Object.values(options).some((v) => v.toLowerCase() === k.name.toLowerCase()));
   if (kit) return { personalization, options, product: 'kit', kit: kit.id };

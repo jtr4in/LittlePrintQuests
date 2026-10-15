@@ -290,11 +290,13 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
   // Etsy listings: drafts with photos, files and variation prices; a failed step resumes on the next click.
   const createListings = () => realFetch(base + '/admin/etsy/listings', { method: 'POST', headers: auth, redirect: 'manual' });
+  const N = require('../src/bot/listings').CATALOG.length;
+  assert.equal(N, 30); // 9 packs, the bundle, both dropdown listings, and a kit and party pack per theme
   const listingsDone = async () => {
     for (let i = 0; i < 240; i++) {
       await wait(500);
       const l = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8')).listings || {};
-      if (Object.keys(l).length === 12 && Object.values(l).every((x) => x.ready || (x.error && !x.working))) return l;
+      if (Object.keys(l).length === N && Object.values(l).every((x) => x.ready || (x.error && !x.working))) return l;
     }
     throw new Error('listings never finished');
   };
@@ -302,12 +304,12 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   await createListings();
   let listed = await listingsDone();
   assert.match(listed.kits.error, /Temporary upload problem/);
-  assert.equal(Object.values(listed).filter((x) => x.ready).length, 11);
+  assert.equal(Object.values(listed).filter((x) => x.ready).length, N - 1);
   await createListings();
   listed = await listingsDone();
   assert.ok(Object.values(listed).every((x) => x.ready));
   const creates = etsyCalls.filter((c) => c.p === '/shops/42/listings' && c.method === 'POST');
-  assert.equal(creates.length, 12, 'resuming must not create a second kits listing');
+  assert.equal(creates.length, N, 'resuming must not create a second kits listing');
   const pack = creates[0].body;
   // Four shop sections, each made once and reused.
   assert.deepEqual(shopSections.map((s) => s.title), ['Scavenger Hunt Packs', 'Custom Party Bundles', 'Pretend Play Kits', 'Party Printables']);
@@ -328,7 +330,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.ok(q.required && q.question_text.length <= 45 && /pets or toys/.test(q.instructions));
   assert.equal(etsyCalls.filter((c) => c.p === `/shops/42/listings/${listed.kits.id}/images`).length, 11); // 10 photos + 1 failed try
   const files = etsyCalls.filter((c) => /\/files$/.test(c.p));
-  assert.equal(files.length, 12);
+  assert.equal(files.length, N);
   // Theme packs get 5 photos each.
   assert.equal(etsyCalls.filter((c) => c.p === `/shops/42/listings/${listed['pack-dino'].id}/images`).length, 5);
   // Clicking again once everything is ready updates the listings in place: no new drafts or photos.
@@ -337,14 +339,26 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const bundleInvBefore = etsyCalls.filter((c) => c.p === `/listings/${bundleId}/inventory`).length;
   assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Update listings on Etsy/);
   await createListings();
-  for (let i = 0; i < 120 && etsyCalls.filter((c) => c.method === 'PATCH').length < patchesBefore + 12; i++) await wait(250);
+  for (let i = 0; i < 120 && etsyCalls.filter((c) => c.method === 'PATCH').length < patchesBefore + N; i++) await wait(250);
   const patches = etsyCalls.filter((c) => c.method === 'PATCH').slice(patchesBefore);
-  assert.equal(patches.length, 12);
+  assert.equal(patches.length, N);
   assert.ok(patches.every((c) => c.body.shop_section_id && c.body.title && c.body.tags));
-  assert.equal(etsyCalls.filter((c) => c.p === '/shops/42/listings' && c.method === 'POST').length, 12);
+  assert.equal(etsyCalls.filter((c) => c.p === '/shops/42/listings' && c.method === 'POST').length, N);
   assert.equal(etsyCalls.filter((c) => /\/images$/.test(c.p) && c.method === 'POST').length, imagesBefore);
   // The update also re-sends option prices, so the bundle's new Package choices reach old drafts.
   assert.equal(etsyCalls.filter((c) => c.p === `/listings/${bundleId}/inventory`).length, bundleInvBefore + 1);
+  // Per-theme listings: their own copy, three photos, and orders that know their kit or theme.
+  const pirateKit = creates.find((c) => /Pirate Ship Pretend Play/.test(c.body.title)).body;
+  assert.match(pirateKit.description, /^Ahoy, Captain!.*Pirate Ship".*Treasure Map, Wanted Posters/s);
+  assert.doesNotMatch(pirateKit.description, /\{\w+\}/);
+  assert.equal(etsyCalls.filter((c) => c.method === 'POST' && c.p === `/shops/42/listings/${listed['kit-pirate'].id}/images`).length, 3);
+  const { customRequest } = require('../src/bot/orders');
+  const name = [{ formatted_name: 'Personalization', formatted_value: 'Maya, Teddy (bear)', question_id: 1 }];
+  assert.deepEqual(customRequest({ listing_id: listed['kit-pirate'].id, title: 'x', variations: name }), { personalization: 'Maya, Teddy (bear)', options: {}, product: 'kit', kit: 'pirate' });
+  const partyReq = customRequest({ listing_id: listed['party-vet'].id, title: 'x', variations: name });
+  assert.equal(partyReq.product, 'party');
+  assert.equal(partyReq.options.Theme, 'Pet Vet');
+  assert.equal(customRequest({ listing_id: listed['pack-dino'].id, title: 'x', variations: [] }), null);
   // If the bot's records are lost (a redeploy without a volume), the next click finds the drafts it
   // made by title instead of making them again, and only adds the photos they're missing.
   shopDrafts.push(...etsyCalls.filter((c) => c.p === '/shops/42/listings' && c.method === 'POST').map((c, i) => ({ listing_id: 7001 + i, title: c.body.title })));
@@ -355,7 +369,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   listed = await listingsDone();
   assert.ok(Object.values(listed).every((x) => x.ready && x.adopted));
   assert.equal(listed['pack-dino'].id, shopDrafts[0].listing_id);
-  assert.equal(etsyCalls.filter((c) => c.p === '/shops/42/listings' && c.method === 'POST').length, 12);
+  assert.equal(etsyCalls.filter((c) => c.p === '/shops/42/listings' && c.method === 'POST').length, N);
   const adoptPosts = etsyCalls.filter((c) => c.method === 'POST').slice(postsBefore);
   assert.equal(adoptPosts.filter((c) => c.p === `/shops/42/listings/${listed['pack-dino'].id}/images`).length, 4);
   assert.ok(!adoptPosts.some((c) => /\/files$/.test(c.p)));

@@ -347,3 +347,231 @@ Woof! Someone left the clinic gate open and the pets wandered off! Your Junior V
 
 **Tags (13)**
 vet party, pet vet party, scavenger hunt kids, treasure hunt clues, puppy birthday, kids party game, printable party game, indoor scavenger, kitten party, rhyming clues, toddler party game, birthday activity, animal party game
+
+---
+
+## 13. Play kit, one listing per theme ($7.99)
+
+The same kits as listing 7, each on its own listing so it can have its own title, tags and search terms. The bot fills `{kit}`, `{place}`, `{gadget}`, `{props}`, `{subjects}` and `{hunt}` in the template below from each kit, and puts the theme's opening line at `{opening}`. Orders on these listings already know their kit, so there's no dropdown.
+
+**Description template**
+```
+{opening}
+
+★ WHAT YOU GET (18–20 page PDF, US Letter)
+• Door signs, including "{place}" with your child's name
+• A pretend {gadget} with 3 screens to swap
+• Flat props to cut out and play with: {props}
+• 8 ID badges for your child, family and friends
+• A check-up form and passport for each of your child's {subjects} (stuffed animals and toys count!)
+• Tickets, a price list with coins to cut out, and a certificate (plus a blank one for guests)
+• A grown-up guide with setup steps and play ideas
+
+★ PERFECT WITH
+Our {hunt} scavenger hunt: the trail ends at the {kit}, so the party keeps going. Find it in our shop, or get the hunt, this kit and a matching party pack together in our Custom Party Bundle.
+
+★ HOW TO ORDER
+Fill in the personalization box with your child's name and up to 6 pets or toys.
+We send your PDF through Etsy messages, usually within a few hours.
+
+★ WHAT YOU'LL NEED
+• Cardstock (65–110 lb) for the gadget, badges and props. Regular paper is fine for the forms and tickets.
+• Scissors, plus a hole punch and string or a lanyard for the ID badges
+• Tape or a stapler, and elastic or ribbon for any masks, eye patches or crowns
+• Optional: laminating pouches so the gadget, signs and badges survive lots of play, and a dry-erase marker to fill in the forms again and again
+
+★ PLEASE NOTE
+This is a DIGITAL file. No physical item will be shipped. For personal use only.
+```
+
+**Personalization:** On, required. Instructions to buyer:
+```
+Child's first name, and up to 6 pets or toys with what they are, like "Rover (dog), Teddy (bear)".
+```
+
+### vet
+**Title**
+Personalized Vet Clinic Pretend Play Printable, Kids Pet Doctor Role Play Set, Animal Hospital Dramatic Play, Vet Party Activity
+**Opening line**
+Turn the living room into a real pet clinic, with your child as the head vet and their stuffed animals as patients.
+**Tags**
+vet pretend play, vet clinic printable, pet doctor play, animal hospital, dramatic play, kids role play, pretend play kit, printable play set, vet party, pet vet birthday, personalized kids, homeschool play, toddler activity
+
+### space
+**Title**
+Personalized Space Mission Control Pretend Play Printable, Kids Astronaut Role Play Set, Outer Space Dramatic Play, Space Party
+**Opening line**
+3, 2, 1, blast off! Turn any room into Mission Control, with your child in charge of the launch.
+**Tags**
+space pretend play, mission control, astronaut play, outer space party, dramatic play, kids role play, pretend play kit, printable play set, space birthday, rocket party, personalized kids, homeschool play, space activity
+
+### dino
+**Title**
+Personalized Dinosaur Dig Lab Pretend Play Printable, Kids Paleontologist Role Play Set, Fossil Dramatic Play, Dino Party Activity
+**Opening line**
+Dig in! Your little paleontologist runs their own Dino Dig Lab, scanning fossils and caring for dinosaurs.
+**Tags**
+dino pretend play, dinosaur printable, paleontologist, fossil dig kids, dramatic play, kids role play, pretend play kit, printable play set, dino party, dinosaur birthday, personalized kids, homeschool play, dinosaur activity
+
+### hero
+**Title**
+Personalized Superhero HQ Pretend Play Printable, Kids Hero Masks and Role Play Set, Superhero Dramatic Play, Hero Party Activity
+**Opening line**
+Calling all heroes! Your child runs Hero HQ, with masks, gear and a communicator to save the day.
+**Tags**
+superhero play, hero masks printable, superhero party, hero role play, dramatic play, kids role play, pretend play kit, printable play set, hero birthday, superhero mask, personalized kids, homeschool play, superhero activity
+
+### pirate
+**Title**
+Personalized Pirate Ship Pretend Play Printable, Kids Treasure Map and Eye Patch Role Play Set, Pirate Dramatic Play, Pirate Party
+**Opening line**
+Ahoy, Captain! Turn the couch into a pirate ship, with your child at the wheel and treasure to find.
+**Tags**
+pirate pretend play, pirate printable, treasure map kids, pirate eye patch, dramatic play, kids role play, pretend play kit, printable play set, pirate party, pirate birthday, personalized kids, homeschool play, pirate activity
+
+### royal
+**Title**
+Personalized Princess Castle Pretend Play Printable, Kids Royal Crown Role Play Set, Knight and Princess Dramatic Play, Royal Party
+**Opening line**
+Welcome to the castle! Your child rules the kingdom, with a royal crown, a magic mirror and a court to run.
+**Tags**
+princess play, castle printable, royal crown kids, knight party, dramatic play, kids role play, pretend play kit, printable play set, princess party, princess birthday, personalized kids, homeschool play, royal activity
+
+### unicorn
+**Title**
+Personalized Unicorn Stable Pretend Play Printable, Kids Unicorn Role Play Set, Rainbow Dramatic Play, Unicorn Party Activity
+**Opening line**
+Saddle up for sparkles! Your child runs a magical Unicorn Stable, caring for every unicorn friend.
+**Tags**
+unicorn pretend play, unicorn printable, unicorn stable, rainbow party, dramatic play, kids role play, pretend play kit, printable play set, unicorn party, unicorn birthday, personalized kids, homeschool play, unicorn activity
+
+### mermaid
+**Title**
+Personalized Mermaid Lagoon Pretend Play Printable, Kids Mermaid Crown Role Play Set, Under the Sea Dramatic Play, Mermaid Party
+**Opening line**
+Dive in! Your child runs the Mermaid Lagoon, looking after sea creatures with a shell phone and a crown.
+**Tags**
+mermaid pretend play, mermaid printable, under the sea party, mermaid crown, dramatic play, kids role play, pretend play kit, printable play set, mermaid party, mermaid birthday, personalized kids, homeschool play, ocean activity
+
+### construction
+**Title**
+Personalized Construction Site Pretend Play Printable, Kids Builder Role Play Set, Digger Dramatic Play, Construction Party Activity
+**Opening line**
+Hard hats on! Your child runs their own Construction Co., with a crane control panel and a crew to boss around.
+**Tags**
+builder pretend play, construction play, digger party, builder role play, dramatic play, kids role play, pretend play kit, printable play set, construction party, truck birthday, personalized kids, homeschool play, digger activity
+
+---
+
+## 14. Party pack, one listing per theme ($6.99)
+
+The same party packs as listing 8, each on its own listing. The bot fills `{theme}`, `{party}`, `{foods}` and `{hunt}` from each theme and puts its opening line at `{opening}`. Orders on these listings already know their theme.
+
+**Description template**
+```
+{opening}
+
+★ WHAT YOU GET (PDF, US Letter)
+• Invitations (5" x 7", two per page) with lines for when, where and RSVP
+• Thank-you cards to send after the party
+• Cupcake toppers with your child's name and age
+• Favor tags for goodie bags
+• A HAPPY BIRTHDAY banner that spells your child's name
+• Food tent cards with {theme} snack names ({foods}), plus blank ones to fill in
+• Water bottle labels
+
+★ PERFECT WITH
+Our {hunt} scavenger hunt, the main event of the party. Find it in our shop, or get the hunt, a matching play kit and this party pack together in our Custom Party Bundle.
+
+★ HOW TO ORDER
+Write your child's name and the age they're turning in the personalization box.
+Add your party date, time and place if you'd like them printed on the invitations.
+We send your PDF through Etsy messages, usually within a few hours.
+
+★ WHAT YOU'LL NEED
+• Cardstock (65–110 lb) for the invitations, thank-you cards, toppers, tags and banner
+• Scissors or a paper cutter
+• Toothpicks or lollipop sticks and tape for the cupcake toppers
+• A hole punch and ribbon or string for the banner and favor tags
+• Optional: a corner rounder for a polished look, and envelopes (A7 fits the 5" x 7" invitations)
+
+★ PLEASE NOTE
+This is a DIGITAL file. No physical item will be shipped. For personal use only.
+```
+
+**Personalization:** On, required. Instructions to buyer:
+```
+Child's first name and the age they're turning. Optional: party date, time, place and RSVP for the invitations.
+```
+
+### dino
+**Title**
+Personalized Dinosaur Birthday Party Printables, Dino Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Kids Party
+**Opening line**
+Roar! Everything for a dinosaur party table, made with your child's name and age.
+**Tags**
+dinosaur party, dino birthday, dino invitation, dinosaur banner, dino cupcake topper, dino party decor, dinosaur printable, personalized party, kids party pack, dino favor tags, birthday printables, party printable, dino thank you
+
+### hero
+**Title**
+Personalized Superhero Birthday Party Printables, Hero Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Kids Party
+**Opening line**
+Pow! Everything for a superhero party table, made with your child's name and age.
+**Tags**
+superhero party, hero birthday, hero invitation, superhero banner, hero cupcake topper, hero party decor, superhero printable, personalized party, kids party pack, hero favor tags, birthday printables, party printable, hero thank you
+
+### pirate
+**Title**
+Personalized Pirate Birthday Party Printables, Pirate Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Kids Party
+**Opening line**
+Ahoy! Everything for a pirate party table, made with your child's name and age.
+**Tags**
+pirate party, pirate birthday, pirate invitation, pirate banner, pirate cupcake top, pirate party decor, pirate printable, personalized party, kids party pack, pirate favor tags, birthday printables, party printable, pirate thank you
+
+### space
+**Title**
+Personalized Outer Space Birthday Party Printables, Space Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Rocket
+**Opening line**
+Blast off! Everything for an outer space party table, made with your child's name and age.
+**Tags**
+space party, space birthday, space invitation, outer space banner, rocket cupcake top, space party decor, astronaut party, personalized party, kids party pack, space favor tags, birthday printables, party printable, space thank you
+
+### royal
+**Title**
+Personalized Princess and Knight Birthday Party Printables, Castle Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards
+**Opening line**
+Hear ye! Everything for a royal castle party table, made with your child's name and age.
+**Tags**
+princess party, princess birthday, castle invitation, princess banner, crown cupcake top, royal party decor, knight party, personalized party, kids party pack, royal favor tags, birthday printables, party printable, royal thank you
+
+### unicorn
+**Title**
+Personalized Unicorn Birthday Party Printables, Unicorn Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Rainbow
+**Opening line**
+Sparkle time! Everything for a unicorn party table, made with your child's name and age.
+**Tags**
+unicorn party, unicorn birthday, unicorn invitation, unicorn banner, unicorn cupcake top, unicorn decor, rainbow party, personalized party, kids party pack, unicorn favor tags, birthday printables, party printable, unicorn thank you
+
+### mermaid
+**Title**
+Personalized Mermaid Birthday Party Printables, Under the Sea Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards
+**Opening line**
+Make a splash! Everything for a mermaid party table, made with your child's name and age.
+**Tags**
+mermaid party, mermaid birthday, mermaid invitation, mermaid banner, mermaid cupcake top, under the sea party, ocean party, personalized party, kids party pack, mermaid favor tags, birthday printables, party printable, mermaid thank you
+
+### construction
+**Title**
+Personalized Construction Birthday Party Printables, Digger Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Truck
+**Opening line**
+Hard hats on! Everything for a construction party table, made with your child's name and age.
+**Tags**
+construction party, digger birthday, truck invitation, construction banner, digger cupcake top, truck party decor, builder party, personalized party, kids party pack, truck favor tags, birthday printables, party printable, dump truck party
+
+### vet
+**Title**
+Personalized Pet Vet Birthday Party Printables, Puppy Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Animal Party
+**Opening line**
+Paws up! Everything for a pet vet party table, made with your child's name and age.
+**Tags**
+pet vet party, puppy birthday, puppy invitation, pet party banner, puppy cupcake top, vet party decor, animal party, personalized party, kids party pack, pet favor tags, birthday printables, party printable, puppy thank you
