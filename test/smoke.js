@@ -291,7 +291,11 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   // Etsy listings: drafts with photos, files and variation prices; a failed step resumes on the next click.
   const createListings = () => realFetch(base + '/admin/etsy/listings', { method: 'POST', headers: auth, redirect: 'manual' });
   const N = require('../src/bot/listings').CATALOG.length;
-  assert.equal(N, 30); // 9 packs, the bundle, both dropdown listings, and a kit and party pack per theme
+  for (const c of require('../src/bot/listings').CATALOG) {
+    assert.ok(c.photos.length <= 10, `${c.key} has more than 10 photos`);
+    for (const f of c.photos) assert.ok(fs.existsSync(path.join(__dirname, '..', 'listing-assets', f)), `missing listing-assets/${f}`);
+  }
+  assert.equal(N, 51); // 16 packs, the bundle, both dropdown listings, and a kit and party pack per theme
   const listingsDone = async () => {
     for (let i = 0; i < 240; i++) {
       await wait(500);
@@ -323,7 +327,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const inv = etsyCalls.find((c) => c.p === `/listings/${bundleId}/inventory`).body;
   assert.deepEqual(inv.products.map((x) => [x.property_values[0].values[0], x.offerings[0].price]), [['Hunt + Play Kit + Party Pack', 16.99], ['Hunt + Play Kit', 14.99], ['Hunt + Party Pack', 13.99], ['Hunt only', 9.99]]);
   const kitInv = etsyCalls.find((c) => c.p === `/listings/${listed.kits.id}/inventory`).body;
-  assert.equal(kitInv.products.length, 9);
+  assert.equal(kitInv.products.length, 16);
   const partyInv = etsyCalls.find((c) => c.p === `/listings/${listed.party.id}/inventory`).body;
   assert.deepEqual(partyInv.products.map((x) => x.property_values[0].values[0]).slice(0, 2), ['Dinosaur', 'Superhero']);
   const q = etsyCalls.find((c) => c.p === `/shops/42/listings/${bundleId}/personalization`).body.personalization_questions[0];

@@ -6,7 +6,7 @@ To do it by hand instead, everything is copy-paste ready. Each standard listing 
 
 **Pricing:** Etsy shoppers in this category expect a sale price. Set the standard packs at $8.00 and run an ongoing 40% off sale (Shop Manager > Marketing > Sales and discounts), so buyers see $4.80 with the $8 crossed out.
 
-**Shop sections:** the bot puts each listing in a section, making the sections the first time: **Scavenger Hunt Packs** (the 9 theme packs), **Custom Party Bundles**, **Pretend Play Kits** and **Party Printables**. Rename or reorder them any time in Shop Manager > Listings > Sections.
+**Shop sections:** the bot puts each listing in a section, making the sections the first time: **Scavenger Hunt Packs** (the 16 theme packs), **Custom Party Bundles**, **Pretend Play Kits** and **Party Printables**. Rename or reorder them any time in Shop Manager > Listings > Sections.
 
 **Settings for every listing:** Type: Digital. Who made it: I did. What is it: A finished product. When was it made: 2020–2026. Category: Paper & Party Supplies > Party Supplies > Party Games.
 
@@ -136,7 +136,8 @@ A scavenger hunt made for YOUR child and YOUR home.
 Tell us your child's name, age, theme and 6–10 hiding spots in your house or yard, and we'll create a personalized, print-ready hunt with custom rhyming clues that lead from spot to spot, ending at the cake or prize.
 
 ★ CHOOSE A THEME
-Dinosaurs · Superheroes · Pirates · Outer Space · Princess & Knights · Unicorns · Mermaids · Construction · Pet Vet
+Dinosaurs · Superheroes · Pirates · Outer Space · Princess & Knights · Unicorns · Mermaids · Construction · Pet Vet · Race Cars · Firefighters · Ice Kingdom
+Holidays: Halloween · Christmas · Easter · Valentine's
 
 ★ PARTY BUNDLE: THE HUNT + A MATCHING PLAY KIT + PARTY PACK ($24.97 value)
 THE HUNT
@@ -187,7 +188,7 @@ This is a DIGITAL file. No physical item will be shipped.
 **Personalization:** On, required. Max characters 500.
 Instructions to buyer:
 ```
-Child's name, age, theme (Dino, Superhero, Pirate, Space, Princess, Unicorn, Mermaid, Construction, Pet Vet), and 6–10 spots in order. The LAST spot is where the prize goes. Bundle: add up to 6 pets or toys for the play kit, like "Rover (dog)".
+Child's name, age, theme (any theme in the photos, like Dino, Space or Halloween), and 6–10 spots in order. The LAST spot is where the prize goes. Bundle: add up to 6 pets or toys for the play kit, like "Rover (dog)".
 ```
 
 **Digital file:** Etsy requires one. Upload a one-page "Thank you, your custom hunt is on its way" PDF, or reuse a standard pack as a bonus.
@@ -270,7 +271,8 @@ Everything for the party table, matched to your theme and made with your child's
 • Food tent cards with themed snack names, plus blank ones to fill in
 
 ★ THEMES
-Dinosaurs · Superheroes · Pirates · Outer Space · Princess & Knights · Unicorns · Mermaids · Construction · Pet Vet
+Dinosaurs · Superheroes · Pirates · Outer Space · Princess & Knights · Unicorns · Mermaids · Construction · Pet Vet · Race Cars · Firefighters · Ice Kingdom
+Holidays: Halloween · Christmas · Easter · Valentine's
 
 ★ HOW TO ORDER
 Pick your theme and write your child's name and age in the personalization box.
@@ -461,6 +463,62 @@ Hard hats on! Your child runs their own Construction Co., with a crane control p
 **Tags**
 builder pretend play, construction play, digger party, builder role play, dramatic play, kids role play, pretend play kit, printable play set, construction party, truck birthday, personalized kids, homeschool play, digger activity
 
+### easter
+**Title**
+Personalized Easter Egg Factory Pretend Play Printable, Kids Bunny Role Play Set, Egg Painting Dramatic Play, Easter Basket Stuffer
+**Opening line**
+Hop to it! Your child runs a Bunny Egg Factory, painting eggs and delivering baskets to every stuffed animal.
+**Tags**
+easter pretend play, easter printable, easter bunny play, egg painting kids, dramatic play, kids role play, pretend play kit, printable play set, easter basket, basket stuffer, personalized kids, homeschool play, easter activity
+
+### halloween
+**Title**
+Personalized Potion Shop Pretend Play Printable, Kids Witch and Wizard Role Play Set, Halloween Dramatic Play, Halloween Party Activity
+**Opening line**
+Bubble, bubble! Turn the kitchen into a silly potion shop, with your child as the head potion maker and their stuffed animals as customers.
+**Tags**
+potion pretend play, potion shop, halloween play, witch pretend play, wizard role play, dramatic play, kids role play, pretend play kit, printable play set, halloween activity, halloween kids, personalized kids, homeschool play
+
+### christmas
+**Title**
+Personalized Santa’s Workshop Pretend Play Printable, Kids Elf Toy Shop Role Play Set, Christmas Dramatic Play, Elf Activity
+**Opening line**
+Ho ho ho! Turn the playroom into Santa’s Workshop, with your child as Head Elf and their toys as busy helpers.
+**Tags**
+christmas play, santas workshop, elf pretend play, elf activity, dramatic play, kids role play, pretend play kit, printable play set, christmas party, nice list kids, personalized kids, homeschool play, christmas activity
+
+### valentine
+**Title**
+Personalized Valentine Post Office Pretend Play Printable, Kids Mail Carrier Role Play Set, Valentines Day Dramatic Play, Valentine Activity
+**Opening line**
+Turn the living room into a Valentine Post Office, with your child as postmaster writing, stamping and delivering cards to their stuffed animal friends.
+**Tags**
+valentine pretend, post office play, mail carrier play, valentines activity, dramatic play, kids role play, pretend play kit, printable play set, valentine printable, valentine kids, personalized kids, homeschool play, toddler valentine
+
+### fire
+**Title**
+Personalized Fire Station Pretend Play Printable, Kids Firefighter Role Play Set, Fire Truck Dramatic Play, Firefighter Party Activity
+**Opening line**
+Ding-a-ling! Your child runs their own fire station, with a dispatch radio, rescue calls and toys who need a helping hand.
+**Tags**
+firefighter play, fire station play, fire truck party, firefighter role, dramatic play, kids role play, pretend play kit, printable play set, firefighter party, fireman birthday, personalized kids, homeschool play, fire truck activity
+
+### ice
+**Title**
+Personalized Ice Palace Pretend Play Printable, Kids Snow Princess Role Play Set, Winter Wonderland Dramatic Play, Snowflake Party
+**Opening line**
+Welcome to the Ice Palace! Your child rules a winter wonderland, with a snowflake tiara, a crystal ball tablet and snowy guests to greet.
+**Tags**
+ice palace play, snow princess play, snowflake tiara, winter wonderland, dramatic play, kids role play, pretend play kit, printable play set, winter party, snowflake birthday, personalized kids, homeschool play, winter activity
+
+### racecar
+**Title**
+Personalized Race Car Garage Pretend Play Printable, Kids Pit Stop Mechanic Role Play Set, Car Dramatic Play, Race Car Party
+**Opening line**
+Start your engines! Your child runs their own Pit Stop Garage, fixing and fueling every toy car before the big race.
+**Tags**
+race car play, pit stop printable, car mechanic play, racing goggles, dramatic play, kids role play, pretend play kit, printable play set, race car party, car birthday, personalized kids, homeschool play, car activity
+
 ---
 
 ## 14. Party pack, one listing per theme ($6.99)
@@ -575,3 +633,150 @@ Personalized Pet Vet Birthday Party Printables, Puppy Invitation, Cupcake Topper
 Paws up! Everything for a pet vet party table, made with your child's name and age.
 **Tags**
 pet vet party, puppy birthday, puppy invitation, pet party banner, puppy cupcake top, vet party decor, animal party, personalized party, kids party pack, pet favor tags, birthday printables, party printable, puppy thank you
+
+### easter
+**Title**
+Personalized Easter Birthday Party Printables, Bunny Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Spring
+**Opening line**
+Hoppy birthday! Everything for a spring bunny party table, made with your child’s name and age.
+**Tags**
+easter party, bunny birthday, bunny invitation, easter banner, bunny cupcake top, easter party decor, spring party, personalized party, kids party pack, easter favor tags, birthday printables, party printable, bunny thank you
+
+### halloween
+**Title**
+Personalized Halloween Birthday Party Printables, Pumpkin Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Ghost Party
+**Opening line**
+Boo! Everything for a not-so-spooky Halloween party table, made with your child’s name and age.
+**Tags**
+halloween party, halloween birthday, pumpkin invitation, halloween banner, pumpkin cupcake top, ghost party, halloween decor, personalized party, kids party pack, halloween favor tag, birthday printables, party printable, boo birthday
+
+### christmas
+**Title**
+Personalized Christmas Party Printables, Santa Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, December Birthday
+**Opening line**
+Ho ho ho! Everything for a merry Christmas party or December birthday table, made with your child’s name and age.
+**Tags**
+christmas party, december birthday, christmas invite, christmas banner, christmas cupcake, santa party decor, holiday party kids, personalized party, kids party pack, xmas favor tags, birthday printables, party printable, christmas thank you
+
+### valentine
+**Title**
+Personalized Valentines Party Printables, February Birthday Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards
+**Opening line**
+Share the love! Everything for a Valentine’s party table or a February birthday, made with your child’s name and age.
+**Tags**
+valentines party, valentine birthday, valentine invite, heart party banner, heart cupcake top, valentine decor, february birthday, personalized party, kids party pack, valentine favor tag, birthday printables, party printable, valentine thank you
+
+### fire
+**Title**
+Personalized Firefighter Birthday Party Printables, Fire Truck Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Siren
+**Opening line**
+Sirens on! Everything for a firefighter party table, made with your child’s name and age.
+**Tags**
+firefighter party, fire truck birthday, fire truck invite, firefighter banner, fire truck cupcake, fire truck decor, fireman party, personalized party, kids party pack, firefighter favor, birthday printables, party printable, fire truck thanks
+
+### ice
+**Title**
+Personalized Snowflake Birthday Party Printables, Winter Wonderland Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards
+**Opening line**
+Brrr! Everything for a winter wonderland party table, made with your child’s name and age.
+**Tags**
+snowflake party, snowflake birthday, winter invitation, snowflake banner, snowflake cupcake, winter party decor, snow princess party, personalized party, kids party pack, winter favor tags, birthday printables, party printable, winter thank you
+
+### racecar
+**Title**
+Personalized Race Car Birthday Party Printables, Racing Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Kids Party
+**Opening line**
+Vroom! Everything for a race car party table, made with your child’s name and age.
+**Tags**
+race car party, car birthday, race car invitation, racing banner, race car cupcake, two fast party, checkered flag, personalized party, kids party pack, race car favor tag, birthday printables, party printable, race thank you
+
+---
+
+## 15. Golden Egg Easter Hunt (list $8.00, run a 40% sale → $4.80)
+
+**Title**
+Easter Scavenger Hunt Printable, Kids Easter Egg Hunt Clues, Golden Egg Treasure Hunt, Indoor Scavenger Hunt Ages 3-7, Download
+
+**Opening line**
+Boing! Clover the Bunny tripped and the Easter Bunny’s golden eggs rolled away! Your Bunny Helpers follow 8 rhyming clues around the house to find every egg.
+
+**Tags (13)**
+easter scavenger, easter egg hunt, egg hunt clues, scavenger hunt kids, treasure hunt clues, easter game kids, easter basket idea, printable party game, indoor scavenger, rhyming clues, toddler easter, easter activity, spring party game
+
+---
+
+## 16. Not-So-Spooky Halloween Hunt (list $8.00, run a 40% sale → $4.80)
+
+**Title**
+Halloween Scavenger Hunt Printable, Kids Halloween Party Game, Not So Spooky Treat Hunt Clues, Indoor Scavenger Hunt Ages 3-7, Download
+
+**Opening line**
+Boo! Wispy the little ghost sneezed and blew all the Halloween treats away! Your Pumpkin Patrol follows 8 rhyming clues around the house to find every treat before the costume parade.
+
+**Tags (13)**
+halloween scavenger, halloween party game, kids halloween, treasure hunt clues, scavenger hunt kids, halloween printable, not so spooky, indoor scavenger, rhyming clues, toddler halloween, halloween activity, classroom halloween, trick or treat game
+
+---
+
+## 17. Santa’s Jingle Bell Rescue (list $8.00, run a 40% sale → $4.80)
+
+**Title**
+Christmas Scavenger Hunt Printable, Christmas Eve Game for Kids, Santa Elf Treasure Hunt Clues, Indoor Scavenger Hunt Ages 3-7, Download
+
+**Opening line**
+Ho ho ho! Santa’s sleigh hit a bump and the magic jingle bells scattered all over the house! Your Elves-in-Training follow 8 rhyming clues to find every bell before Christmas Eve.
+
+**Tags (13)**
+christmas scavenger, christmas eve game, elf activity, scavenger hunt kids, treasure hunt clues, kids christmas game, christmas printable, indoor scavenger, rhyming clues, santa letter kids, christmas party game, stocking stuffer, toddler christmas
+
+---
+
+## 18. Valentine Friendship Delivery (list $8.00, run a 40% sale → $4.80)
+
+**Title**
+Valentines Scavenger Hunt Printable, Kids Valentines Day Activity, Family Valentine Game, Friendship Treasure Hunt Clues, Download
+
+**Opening line**
+Uh-oh! Pip the Love Bug’s mailbag went POP and the valentines flew away! Your Valentine Helpers follow 8 rhyming clues around the house to deliver the love.
+
+**Tags (13)**
+valentines hunt, valentine scavenger, scavenger hunt kids, treasure hunt clues, valentines day kids, family valentine, kids party game, printable party game, indoor scavenger, rhyming clues, toddler valentine, valentine activity, friendship game
+
+---
+
+## 19. Fire Station Rescue Run (list $8.00, run a 40% sale → $4.80)
+
+**Title**
+Firefighter Scavenger Hunt Printable, Kids Birthday Party Game, Fire Truck Treasure Hunt Clues, Indoor Scavenger Hunt Ages 3-7, Download
+
+**Opening line**
+Ding-a-ling! Pepper the station dalmatian ran off with the rescue gear! Your Junior Firefighters follow 8 rhyming clues around the house to get the fire station ready.
+
+**Tags (13)**
+firefighter party, fire truck party, scavenger hunt kids, treasure hunt clues, fireman birthday, kids party game, printable party game, indoor scavenger, fire truck birthday, rhyming clues, toddler party game, birthday activity, firefighter game
+
+---
+
+## 20. Ice Palace Snowflake Quest (list $8.00, run a 40% sale → $4.80)
+
+**Title**
+Snowflake Scavenger Hunt Printable, Kids Winter Birthday Party Game, Snow Princess Treasure Hunt Clues, Indoor Scavenger Hunt Ages 3-7
+
+**Opening line**
+Brrr! Pip the Snow Fox swished away Queen Glacia’s crystal snowflakes! Your Snowflake Seekers follow 8 rhyming clues around the house to bring winter magic back.
+
+**Tags (13)**
+winter party, snowflake birthday, scavenger hunt kids, treasure hunt clues, snow princess, winter wonderland, printable party game, indoor scavenger, ice palace party, rhyming clues, toddler party game, birthday activity, snow day activity
+
+---
+
+## 21. Race Car Grand Prix Chase (list $8.00, run a 40% sale → $4.80)
+
+**Title**
+Race Car Scavenger Hunt Printable, Kids Birthday Party Game, Racing Treasure Hunt Clues, Indoor Scavenger Hunt Ages 3-7, Download
+
+**Opening line**
+Vroom! A gust of wind blew Turbo Tess’s checkpoint flags off the racetrack! Your Rookie Racers follow 8 rhyming clues around the house to finish the Grand Prix.
+
+**Tags (13)**
+race car party, car birthday, scavenger hunt kids, treasure hunt clues, racing party, kids party game, printable party game, indoor scavenger, two fast party, rhyming clues, toddler party game, birthday activity, race car game

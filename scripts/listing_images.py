@@ -20,6 +20,13 @@ THEMES = {
     'mermaid': ('Mermaid Treasure Hunt', 'Ages 3–7', '#d9f1ee', '#11798a'),
     'construction': ('Construction Scavenger Hunt', 'Ages 3–7', '#fde9a8', '#33373d'),
     'vet': ('Pet Vet Scavenger Hunt', 'Ages 3–7', '#d8f1e6', '#1f6f66'),
+    'easter': ('Easter Egg Scavenger Hunt', 'Ages 3–7', '#ece5f7', '#6f58a8'),
+    'halloween': ('Halloween Scavenger Hunt', 'Ages 3–7', '#ffe2c4', '#4a2475'),
+    'christmas': ('Christmas Scavenger Hunt', 'Ages 3–7', '#f6e3c3', '#b3202a'),
+    'valentine': ('Valentine’s Scavenger Hunt', 'Ages 3–7', '#fde0e8', '#a61e4d'),
+    'fire': ('Firefighter Scavenger Hunt', 'Ages 3–7', '#ffe1d6', '#8e1b1b'),
+    'ice': ('Snowflake Scavenger Hunt', 'Ages 3–7', '#dbe8f7', '#24467e'),
+    'racecar': ('Race Car Scavenger Hunt', 'Ages 3–7', '#ffe8a3', '#b81d17'),
 }
 W, H = 2400, 1800
 
