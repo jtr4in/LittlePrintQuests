@@ -241,6 +241,13 @@ input[type="text"], input[type="number"], input[type="email"], select { width: 1
 .more-row { text-align: center; margin-top: 22px; }
 .theme { position: relative; }
 .theme .now { position: absolute; top: 24px; left: 24px; z-index: 1; font: 600 12px/1 var(--mono); letter-spacing: .05em; text-transform: uppercase; background: #ef9d31; color: #2b1d06; padding: 6px 10px; border-radius: 99px; }
+/* shop play kits */
+.shop-card img { width: 100%; height: auto; border-radius: 12px; background: var(--tint); }
+.shop-card h3 { font-size: 19px; }
+.shop-buy { margin-top: 26px; background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; display: grid; grid-template-columns: 1fr auto; gap: 16px 20px; align-items: end; }
+.shop-buy .row2 { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
+.shop-buy .status { grid-column: 1 / -1; }
+@media (max-width: 720px) { .shop-buy { grid-template-columns: 1fr; } }
 /* what's in the box */
 .box-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px; }
 .box-theme { display: flex; align-items: center; gap: 10px; margin-top: 22px; font: 600 15px/1 var(--display); }
@@ -296,6 +303,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <a href="#how">How it works</a>
       <a href="#themes">Themes</a>
       <a href="#inside">What’s included</a>
+      <a href="#shops">Shop kits</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
       <a class="btn btn-orange" href="#order">Make my hunt</a>
@@ -427,6 +435,26 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         </div>
       </div>
       <p style="margin-top:26px"><a class="btn btn-orange" href="#order">Make this party bundle</a></p>
+    </div>
+  </section>
+
+  <section class="stop" id="shops">
+    <div class="wrap">
+      <div class="pin"><b></b><span class="eyebrow">Shop play kits</span></div>
+      <h2>Ten pretend shops to set up at home</h2>
+      <p class="kits-lede">Print, cut and tape them up around a play kitchen, a shelf or a corner of the room. Every kit is made with your child’s name: a long shop sign, station and counter signs, shelf labels, a cash register, play money, order forms and a menu to run it all. $7.99 each, with play ideas in Host Mode.</p>
+      <div class="themes" id="shopList"></div>
+      <form class="shop-buy" id="shopForm" novalidate>
+        <div>
+          <p class="eyebrow" id="shopPicked">Pizza Shop play kit</p>
+          <div class="row2" style="margin-top:10px">
+            <div class="field"><label for="shopChild">Child’s first name</label><input type="text" id="shopChild" maxlength="24" autocomplete="off" placeholder="Maya"></div>
+            <div class="field"><label for="shopAge">Age (optional)</label><input type="number" id="shopAge" min="1" max="15" inputmode="numeric"></div>
+          </div>
+        </div>
+        <button class="btn btn-orange" type="submit" id="shopBtn">Get this kit · $7.99</button>
+        <p class="status" id="shopStatus" role="status"></p>
+      </form>
     </div>
   </section>
 
@@ -848,6 +876,51 @@ $('orderForm').addEventListener('submit', async (e) => {
     location.href = data.url;
   } catch (err) {
     status(err.message || 'Checkout didn’t open. Please try again in a moment, or order on Etsy.', true);
+  }
+});
+
+// Shop play kits: no hunt or party to match, so each one is bought on its own.
+const SHOP_KITS = [
+  ['pizza', 'Pizza Shop', 'A big pizza to top and slice with order cards, a cash register and a pizza menu.'],
+  ['burger', 'Burger Shop', 'Burger layers to stack to order, a drive-thru, a cash register and a burger menu.'],
+  ['grocery', 'Grocery Store', 'Play food with price tags, aisle signs, coupons, a basket game and a checkout register.'],
+  ['post', 'Post Office', 'Stamps, postcards and letters to mail, a parcel card with a pull tab and a post office till.'],
+  ['library', 'Library', 'Library cards, a checkout desk, a Story Spinner and Quiet Please and Story Time signs.'],
+  ['police', 'Police Station', 'A patrol car steering wheel with your child’s name, a lost teddy to find and report slips.'],
+  ['petshop', 'Pet Shop', 'Adoption papers for stuffed animals, a bubble-bath grooming card and a cash register.'],
+  ['coffee', 'Coffee Shop', 'A café menu, a Drink Spinner for the barista, a tip jar sign and a cash register.'],
+  ['italian', 'Italian Restaurant', 'A pasta pot with a pull tab, a waiter’s order pad, table labels and a trattoria menu.'],
+  ['auto', 'Auto Repair Shop', 'A lift-the-flap toolbox, work orders, car check-up forms, a car wash sign and a cash register.'],
+];
+let shopKit = 'pizza';
+function drawShops() {
+  $('shopList').innerHTML = SHOP_KITS.map(([id, name, blurb]) => `<button type="button" class="theme shop-card" data-kit="${id}" aria-pressed="${id === shopKit}">
+      <img src="img/kit-${id}.webp" alt="${name} play kit pages" width="677" height="497" loading="lazy"><h3>${name}</h3><p>${blurb}</p></button>`).join('');
+  $('shopList').querySelectorAll('[data-kit]').forEach((b) => b.addEventListener('click', () => {
+    shopKit = b.dataset.kit;
+    drawShops();
+    $('shopForm').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }));
+  const name = SHOP_KITS.find(([id]) => id === shopKit)[1];
+  $('shopPicked').textContent = `${name} play kit`;
+  $('shopBtn').textContent = `Get the ${name} kit · $7.99`;
+}
+drawShops();
+$('shopForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const say = (t, bad) => { $('shopStatus').textContent = t; $('shopStatus').classList.toggle('bad', Boolean(bad)); };
+  const childName = $('shopChild').value.trim();
+  if (!childName) return say('Add your child’s first name so we can put it on the signs.', true), $('shopChild').focus();
+  if (!CHECKOUT_URL) return say('Checkout opens here once payments are switched on. For now, order through our Etsy shop.');
+  say('Opening secure checkout…');
+  try {
+    const res = await fetch(CHECKOUT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: ['kit'], kit: shopKit, childName, age: parseInt($('shopAge').value, 10) || null }) });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.url) throw new Error(data.error || '');
+    location.href = data.url;
+  } catch (err) {
+    say(err.message || 'Checkout didn’t open. Please try again in a moment, or order on Etsy.', true);
   }
 });
 

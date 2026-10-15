@@ -12,7 +12,7 @@ async function sendHuntEmail(order) {
   const pdf = `${process.env.PUBLIC_URL}/d/${order.downloadToken}.pdf`;
   const main = products.mainOf(order);
   const kit = KITS[order.config.kit] || kitForHunt(order.config.theme);
-  const title = { hunt: theme.name, kit: `${kit.name} play kit`, party: `${theme.label} party pack` }[main];
+  const title = { hunt: theme?.name, kit: `${kit.name} play kit`, party: `${theme?.label} party pack` }[main];
   const btn = (href, label) => `<p><a href="${href}" style="display:inline-block;background:#ef9d31;color:#2b1d06;padding:12px 22px;border-radius:99px;text-decoration:none;font-weight:bold">${label}</a></p>`;
   const tips = {
     hunt: 'print at “Actual Size / 100%”, cut out the clue cards, and use the Host Guide on page 1 to hide them. Read the Mission Briefing aloud to start.',
