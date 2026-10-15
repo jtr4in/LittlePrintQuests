@@ -193,6 +193,26 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal(state.orders[manual.id].status, 'needs_attention');
   assert.match(state.orders[manual.id].problem, /Unknown spot "nope"/);
 
+  // Theme dropdown passes the theme on; clearing hides an order without deleting it.
+  const form = { ...auth, 'Content-Type': 'application/x-www-form-urlencoded' };
+  assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /<select name="theme">.*Race Car Grand Prix Chase/s);
+  await realFetch(base + '/admin/orders', { method: 'POST', headers: form, body: 'personalization=Leo+5&theme=racecar&product=hunt', redirect: 'manual' });
+  state = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
+  const themed = Object.values(state.orders).find((x) => x.personalization === 'Leo 5');
+  assert.equal(themed.options.Theme, 'Race Car Grand Prix Chase');
+  await realFetch(`${base}/admin/orders/${manual.id}/clear`, { method: 'POST', headers: form, redirect: 'manual' });
+  let page = await (await realFetch(base + '/admin', { headers: auth })).text();
+  assert.match(page, /Cleared \(1\)/);
+  assert.match(page, /Put back/);
+  await realFetch(`${base}/admin/orders/${manual.id}/restore`, { method: 'POST', headers: form, redirect: 'manual' });
+  state = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
+  assert.equal(state.orders[manual.id].cleared, false);
+  await realFetch(`${base}/admin/orders/${o.id}/sent`, { method: 'POST', headers: form, redirect: 'manual' });
+  await realFetch(base + '/admin/orders/clear-sent', { method: 'POST', headers: form, redirect: 'manual' });
+  state = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
+  assert.ok(state.orders[o.id].cleared && !state.orders[manual.id].cleared, 'clear all sent only clears sent orders');
+  assert.equal((await realFetch(`${base}/d/${o.downloadToken}.pdf`)).status, 200, 'cleared orders keep their links');
+
   // Website order: checkout -> signed Stripe webhook -> PDF -> email.
   const bad = await realFetch(base + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ theme: 'dino', childName: 'Ava', spots: ['front_door'] }) });

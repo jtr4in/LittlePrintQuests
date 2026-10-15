@@ -156,6 +156,7 @@ function orderCard(o) {
            ${o.sent ? '' : `<form method="post" action="/admin/orders/${esc(o.id)}/sent"><button>Mark as sent</button></form>`}</div>`
         : ''
     }
+    ${o.status === 'processing' ? '' : `<form method="post" action="/admin/orders/${esc(o.id)}/${o.cleared ? 'restore' : 'clear'}"><button class="secondary">${o.cleared ? 'Put back' : 'Clear from list'}</button></form>`}
     <details><summary>Edit details and rebuild</summary>
       <form method="post" action="/admin/orders/${esc(o.id)}/config">
         <textarea name="config" rows="12">${esc(JSON.stringify(o.config || o.draft || { theme: '', childName: '', age: null, spots: [] }, null, 2))}</textarea>
@@ -177,7 +178,9 @@ function setupPanel() {
 
 function dashboard(query = new URLSearchParams()) {
   const s = store.get();
-  const list = Object.values(s.orders).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+  const all = Object.values(s.orders).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+  const cleared = all.filter((o) => o.cleared);
+  const list = all.filter((o) => !o.cleared);
   const unpaid = list.filter((o) => o.status === 'awaiting_payment');
   const open = list.filter((o) => !o.sent && o.status !== 'awaiting_payment');
   const done = list.filter((o) => o.sent);
@@ -225,11 +228,12 @@ ${listingsPanel(s)}
     <p><input name="buyerName" placeholder="Buyer name (optional)"></p>
     <textarea name="personalization" rows="4" required placeholder="Maya, turning 6, space theme. Spots: front door, shoe rack, washer, dryer, grandma's piano, dog bed, kitchen table (prize). Pets: Rover (dog)"></textarea>
     <button type="button" class="secondary" onclick="const t=this.form.personalization;t.value=t.placeholder;t.focus()">Use the sample</button>
-    <div class="row"><select name="product"><option value="bundle">Party bundle (hunt, play kit and party pack)</option><option value="hunt">Hunt only</option><option value="party">Party pack only</option></select><button>Make it</button></div>
+    <div class="row"><select name="theme"><option value="">Theme: from the notes</option>${Object.entries(THEMES).map(([id, t]) => `<option value="${esc(id)}">${esc(t.name)}</option>`).join('')}</select><select name="product"><option value="bundle">Party bundle (hunt, play kit and party pack)</option><option value="hunt">Hunt only</option><option value="party">Party pack only</option></select><button>Make it</button></div>
   </form>
 </details>
 <h2>To send (${open.length})</h2>${open.map(orderCard).join('') || '<p class="muted">Nothing waiting.</p>'}
-<h2>Sent (${done.length})</h2>${done.slice(0, 30).map(orderCard).join('')}
+<h2>Sent (${done.length})</h2>${done.length ? '<form method="post" action="/admin/orders/clear-sent"><button class="secondary">Clear all sent</button></form>' : ''}${done.slice(0, 30).map(orderCard).join('')}
+${cleared.length ? `<details class="cleared"${query.get('cleared') ? ' open' : ''}><summary><h2 style="display:inline">Cleared (${cleared.length})</h2> <span class="muted">Hidden from the list. Buyers’ download and Host Mode links still work.</span></summary>${cleared.slice(0, 50).map(orderCard).join('')}</details>` : ''}
 <script>
 function copyMsg(btn){const t=btn.closest('.order').querySelector('textarea');navigator.clipboard.writeText(t.value).then(()=>{btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy message',1500)})}
 ${open.some((o) => o.status === 'processing') ? 'setTimeout(()=>location.reload(),5000)' : ''}
@@ -384,14 +388,23 @@ async function route(req, res) {
     const f = await readForm(req);
     if (!f.personalization?.trim()) return redirect(res, '/admin?empty=1');
     const product = ['bundle', 'hunt', 'party'].includes(f.product) ? f.product : f.bundle ? 'bundle' : 'hunt';
-    const id = orders.addOrder({ source: 'manual', buyerName: f.buyerName || '', personalization: f.personalization, options: {}, product });
+    const options = THEMES[f.theme] ? { Theme: THEMES[f.theme].name } : {};
+    const id = orders.addOrder({ source: 'manual', buyerName: f.buyerName || '', personalization: f.personalization, options, product });
     orders.processOrder(id);
     return redirect(res, `/admin?made=${encodeURIComponent(id)}#${id}`);
   }
-  const m = p.match(/^\/admin\/orders\/([\w-]+)\/(sent|retry|config|email)$/);
+  if (p === '/admin/orders/clear-sent') {
+    store.update((s) => Object.values(s.orders).forEach((o) => o.sent && (o.cleared = true)));
+    return redirect(res, '/admin');
+  }
+  const m = p.match(/^\/admin\/orders\/([\w-]+)\/(sent|retry|config|email|clear|restore)$/);
   if (m && store.get().orders[m[1]]) {
     const [, id, action] = m;
     if (action === 'sent') store.update((s) => (s.orders[id].sent = true));
+    if (action === 'clear' || action === 'restore') {
+      store.update((s) => (s.orders[id].cleared = action === 'clear'));
+      return redirect(res, action === 'clear' ? '/admin' : `/admin#${id}`);
+    }
     if (action === 'email') {
       try {
         await sendHuntEmail(store.get().orders[id]);
