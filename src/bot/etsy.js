@@ -158,6 +158,11 @@ async function shopListings() {
 }
 
 // How many photos and digital files a listing already has.
+// The listing's title as it is on Etsy now (it may have been edited there).
+async function listingTitle(listingId) {
+  return (await api('GET', `/application/listings/${listingId}`)).title || null;
+}
+
 async function listingContents(listingId) {
   const images = await api('GET', `/application/listings/${listingId}/images`);
   const files = await api('GET', `/application/shops/${shopId()}/listings/${listingId}/files`);
@@ -207,7 +212,7 @@ async function setVariationPrices(listingId, name, options) {
   });
 }
 
-module.exports = {
+module.exports = { listingTitle,
   startAuth,
   taxonomyId,
   createDraftListing,

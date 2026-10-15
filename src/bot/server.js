@@ -122,7 +122,7 @@ function listingsPanel(s) {
     const state = l.ready
       ? `<a href="https://www.etsy.com/your/shops/me/listing-editor/edit/${esc(l.id)}" target="_blank">Draft ready, review and publish</a>`
       : l.working ? 'Creating…' : l.error ? `<span class="problem">${esc(l.error)}</span>` : l.id ? 'Partly created' : '<span class="muted">Not created</span>';
-    return `<li><b>${esc(c.label)}</b> · ${state}</li>`;
+    return `<li><b>${esc(c.label)}</b> · ${state}${l.titleKept ? ' <span class="muted">· keeping the title from Etsy</span>' : ''}</li>`;
   }).join('');
   const allReady = listings.CATALOG.every((c) => st[c.key]?.ready);
   const action = !etsy.canWriteListings()
