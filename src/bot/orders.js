@@ -273,8 +273,13 @@ async function fulfillWebOrder(id, { email, buyerName }) {
       store.update((s) => (s.orders[id].config = { ...parsed.config, theme: f.theme }));
     }
     await generate(id);
-    await sendHuntEmail(store.get().orders[id]);
-    store.update((s) => Object.assign(s.orders[id], { sent: true, deliveredAt: new Date().toISOString() }));
+    try {
+      await sendHuntEmail(store.get().orders[id]);
+      store.update((s) => Object.assign(s.orders[id], { sent: true, deliveredAt: new Date().toISOString() }));
+    } catch (err) {
+      // The buyer can still download it from their order page, so the order stays ready.
+      store.update((s) => (s.orders[id].problem = `Not emailed (${err.message}). The buyer can download it from their order page.`));
+    }
   } catch (err) {
     store.update((s) => Object.assign(s.orders[id], { status: 'needs_attention', problem: err.message }));
   }
