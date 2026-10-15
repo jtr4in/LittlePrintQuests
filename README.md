@@ -80,4 +80,4 @@ Every hunt order (Etsy or website) gets a private Host Mode link at `/h/<token>`
 
 `docs/index.html` is the LittlePrintQuests storefront: themes, what's inside, pricing, FAQ, and a hunt builder that collects the child's name, age, theme and spots. To publish it free on GitHub Pages: repo Settings > Pages > Deploy from a branch > `main` / `docs`.
 
-Two settings at the top of its script need filling in once they exist: `ETSY_SHOP_URL` (your shop) and `CHECKOUT_URL` (the order bot's checkout endpoint, once Stripe is connected). Until `CHECKOUT_URL` is set, the builder tells visitors to order on Etsy.
+Two settings sit at the top of its script: `ETSY_SHOP_URL` (https://www.etsy.com/shop/LittlePrintQuests) and `CHECKOUT_URL` (the order bot's checkout endpoint). If `CHECKOUT_URL` is empty, the builder tells visitors to order on Etsy.
