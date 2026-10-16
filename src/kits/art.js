@@ -105,7 +105,15 @@ function kitPictures(def) {
   walk(def);
   if (seen.has(def.icon)) seen.get(def.icon).name ||= `${def.name} logo`;
   if (seen.has(def.menu.coinIcon)) seen.get(def.menu.coinIcon).name ||= def.menu.coinWord;
-  return [...seen.values()].map((p) => ({ e: p.e, name: p.name, slug: slug(p.name || codeOf(p.e)) }));
+  // A name that's only a number (a stamp's value) or that two pictures share can't name a file,
+  // so those pictures go by their emoji code instead.
+  const taken = new Set();
+  return [...seen.values()].map((p) => {
+    let s = /^\d*$/.test(p.name.trim()) ? '' : slug(p.name);
+    if (!s || taken.has(s)) s = slug(codeOf(p.e));
+    taken.add(s);
+    return { e: p.e, name: p.name, slug: s };
+  });
 }
 
 // Pictures drawn while building the current kit, in first-use order (for scripts/art-list.js).
