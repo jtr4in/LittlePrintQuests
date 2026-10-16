@@ -558,43 +558,6 @@
   "fix-the-road",
   "dig-a-hole"
  ],
- "mermaid-3": [
-  "sunken-ship"
- ],
- "easter-3": [
-  "paint-stripes-dots-or-zigzags"
- ],
- "halloween-4": [
-  "pour-the-potion-and-give-it-to-a-custome",
-  "friendly-spider",
-  "drop-them-in-the-cauldron-one-by-one"
- ],
- "christmas-4": [
-  "yo-yo",
-  "write-a-gift-tag-from-the-nice-list"
- ],
- "valentine-4": [
-  "1f49d"
- ],
- "fire-4": [
-  "1f691",
-  "ladder",
-  "phone-number",
-  "duck",
-  "school-visit"
- ],
- "ice-4": [
-  "ski-lesson",
-  "polar-bear"
- ],
- "racecar-4": [
-  "desert-dash",
-  "city-circuit",
-  "speedway"
- ],
- "burger-3": [
-  "1f373"
- ],
  "grocery-3": [
   "1f969",
   "1f37f"
@@ -677,5 +640,41 @@
   "fill-a-bucket-with-warm-soapy-water",
   "spray-the-car-all-over-with-water",
   "dry-it-with-a-soft-towel"
+ ],
+ "mermaid-3": [
+  "sunken-ship"
+ ],
+ "easter-3": [
+  "paint-stripes-dots-or-zigzags"
+ ],
+ "halloween-4": [
+  "pour-the-potion-and-give-it-to-a-custome",
+  "friendly-spider",
+  "drop-them-in-the-cauldron-one-by-one"
+ ],
+ "christmas-4": [
+  "yo-yo",
+  "write-a-gift-tag-from-the-nice-list"
+ ],
+ "valentine-4": [
+  "1f49d"
+ ],
+ "fire-4": [
+  "1f691",
+  "ladder",
+  "duck",
+  "school-visit"
+ ],
+ "ice-4": [
+  "ski-lesson",
+  "polar-bear"
+ ],
+ "racecar-4": [
+  "desert-dash",
+  "city-circuit",
+  "speedway"
+ ],
+ "burger-3": [
+  "1f373"
  ]
 }
