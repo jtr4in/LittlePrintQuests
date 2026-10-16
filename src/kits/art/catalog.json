@@ -1,5 +1,61 @@
 [
  {
+  "file": "auto/1f9f0.webp",
+  "kit": "auto",
+  "emoji": "🧰",
+  "label": "",
+  "shows": "toolbox"
+ },
+ {
+  "file": "auto/battery.webp",
+  "kit": "auto",
+  "emoji": "🔋",
+  "label": "Battery",
+  "shows": "battery"
+ },
+ {
+  "file": "auto/brakes.webp",
+  "kit": "auto",
+  "emoji": "🛑",
+  "label": "Brakes",
+  "shows": "octagonal sign"
+ },
+ {
+  "file": "auto/dry-it-with-a-soft-towel.webp",
+  "kit": "auto",
+  "emoji": "🧻",
+  "label": "Dry it with a soft towel.",
+  "shows": "roll of paper"
+ },
+ {
+  "file": "auto/fill-a-bucket-with-warm-soapy-water.webp",
+  "kit": "auto",
+  "emoji": "🪣",
+  "label": "Fill a bucket with warm, soapy water.",
+  "shows": "bucket"
+ },
+ {
+  "file": "auto/keys.webp",
+  "kit": "auto",
+  "emoji": "🔑",
+  "label": "Keys",
+  "shows": "key"
+ },
+ {
+  "file": "auto/spray-the-car-all-over-with-water.webp",
+  "kit": "auto",
+  "emoji": "🚿",
+  "label": "Spray the car all over with water.",
+  "shows": "shower"
+ },
+ {
+  "file": "auto/wipers.webp",
+  "kit": "auto",
+  "emoji": "🌧️",
+  "label": "Wipers",
+  "shows": "cloud with rain"
+ },
+ {
   "file": "burger/1f4e3.webp",
   "kit": "burger",
   "emoji": "📣",
@@ -273,6 +329,55 @@
   "shows": "white medium star"
  },
  {
+  "file": "coffee/1f4f6.webp",
+  "kit": "coffee",
+  "emoji": "📶",
+  "label": "",
+  "shows": "antenna with bars"
+ },
+ {
+  "file": "coffee/bagel.webp",
+  "kit": "coffee",
+  "emoji": "🥯",
+  "label": "Bagel",
+  "shows": "bagel"
+ },
+ {
+  "file": "coffee/honey.webp",
+  "kit": "coffee",
+  "emoji": "🍯",
+  "label": "Honey",
+  "shows": "honey pot"
+ },
+ {
+  "file": "coffee/lemonade.webp",
+  "kit": "coffee",
+  "emoji": "🍋",
+  "label": "Lemonade",
+  "shows": "lemon"
+ },
+ {
+  "file": "coffee/napkins.webp",
+  "kit": "coffee",
+  "emoji": "🧻",
+  "label": "Napkins",
+  "shows": "roll of paper"
+ },
+ {
+  "file": "coffee/pot-of-tea.webp",
+  "kit": "coffee",
+  "emoji": "🫖",
+  "label": "Pot of tea",
+  "shows": "teapot"
+ },
+ {
+  "file": "coffee/waffle.webp",
+  "kit": "coffee",
+  "emoji": "🧇",
+  "label": "Waffle",
+  "shows": "waffle"
+ },
+ {
   "file": "construction/1f319.webp",
   "kit": "construction",
   "emoji": "🌙",
@@ -460,6 +565,62 @@
   "emoji": "🔧",
   "label": "Wrench",
   "shows": "wrench"
+ },
+ {
+  "file": "dentist/brush-the-top-teeth-in-little-circles.webp",
+  "kit": "dentist",
+  "emoji": "⬆️",
+  "label": "Brush the top teeth in little circles.",
+  "shows": "upwards black arrow"
+ },
+ {
+  "file": "dentist/brush-your-tongue-tickly.webp",
+  "kit": "dentist",
+  "emoji": "👅",
+  "label": "Brush your tongue. Tickly!",
+  "shows": "tongue"
+ },
+ {
+  "file": "dentist/flossed.webp",
+  "kit": "dentist",
+  "emoji": "🧵",
+  "label": "Flossed",
+  "shows": "spool of thread"
+ },
+ {
+  "file": "dentist/gloves.webp",
+  "kit": "dentist",
+  "emoji": "🧤",
+  "label": "Gloves",
+  "shows": "gloves"
+ },
+ {
+  "file": "dentist/next-visit.webp",
+  "kit": "dentist",
+  "emoji": "📅",
+  "label": "Next visit",
+  "shows": "calendar"
+ },
+ {
+  "file": "dentist/rinsed.webp",
+  "kit": "dentist",
+  "emoji": "💧",
+  "label": "Rinsed",
+  "shows": "droplet"
+ },
+ {
+  "file": "dentist/tooth-mirror.webp",
+  "kit": "dentist",
+  "emoji": "🪞",
+  "label": "Tooth mirror",
+  "shows": "mirror"
+ },
+ {
+  "file": "dentist/x-ray.webp",
+  "kit": "dentist",
+  "emoji": "📸",
+  "label": "X-ray",
+  "shows": "camera with flash"
  },
  {
   "file": "dino/1f33f.webp",
@@ -838,6 +999,20 @@
   "emoji": "💦",
   "label": "Spray, spray, spray!",
   "shows": "splashing sweat symbol"
+ },
+ {
+  "file": "grocery/1f37f.webp",
+  "kit": "grocery",
+  "emoji": "🍿",
+  "label": "",
+  "shows": "popcorn"
+ },
+ {
+  "file": "grocery/1f969.webp",
+  "kit": "grocery",
+  "emoji": "🥩",
+  "label": "",
+  "shows": "cut of meat"
  },
  {
   "file": "grocery/1f9fe.webp",
@@ -1449,6 +1624,118 @@
   "shows": "bowl with spoon"
  },
  {
+  "file": "italian/1f34b.webp",
+  "kit": "italian",
+  "emoji": "🍋",
+  "label": "Lemonade",
+  "shows": "lemon"
+ },
+ {
+  "file": "italian/1f468-200d-1f373.webp",
+  "kit": "italian",
+  "emoji": "👨‍🍳",
+  "label": "",
+  "shows": "man cooking"
+ },
+ {
+  "file": "italian/1f4d6.webp",
+  "kit": "italian",
+  "emoji": "📖",
+  "label": "",
+  "shows": "open book"
+ },
+ {
+  "file": "italian/boil-the-water.webp",
+  "kit": "italian",
+  "emoji": "💧",
+  "label": "Boil the water!",
+  "shows": "droplet"
+ },
+ {
+  "file": "italian/meatballs.webp",
+  "kit": "italian",
+  "emoji": "🧆",
+  "label": "Meatballs",
+  "shows": "falafel"
+ },
+ {
+  "file": "italian/table-5.webp",
+  "kit": "italian",
+  "emoji": "🕯️",
+  "label": "Table 5",
+  "shows": "candle"
+ },
+ {
+  "file": "library/1f6cb.webp",
+  "kit": "library",
+  "emoji": "🛋️",
+  "label": "",
+  "shows": "couch and lamp"
+ },
+ {
+  "file": "library/bookmark.webp",
+  "kit": "library",
+  "emoji": "🔖",
+  "label": "Bookmark",
+  "shows": "bookmark"
+ },
+ {
+  "file": "library/bring-it-back-on-time.webp",
+  "kit": "library",
+  "emoji": "📥",
+  "label": "Bring it back on time.",
+  "shows": "inbox tray"
+ },
+ {
+  "file": "library/chapter-book.webp",
+  "kit": "library",
+  "emoji": "📕",
+  "label": "Chapter book",
+  "shows": "closed book"
+ },
+ {
+  "file": "library/due-in-1-week.webp",
+  "kit": "library",
+  "emoji": "📅",
+  "label": "Due in 1 week",
+  "shows": "calendar"
+ },
+ {
+  "file": "library/fairy-tale.webp",
+  "kit": "library",
+  "emoji": "🧚",
+  "label": "Fairy tale",
+  "shows": "fairy"
+ },
+ {
+  "file": "library/owl.webp",
+  "kit": "library",
+  "emoji": "🦉",
+  "label": "Owl",
+  "shows": "owl"
+ },
+ {
+  "file": "library/pencil.webp",
+  "kit": "library",
+  "emoji": "✏️",
+  "label": "Pencil",
+  "shows": "pencil"
+ },
+ {
+  "file": "library/story-book.webp",
+  "kit": "library",
+  "emoji": "📖",
+  "label": "Story book",
+  "shows": "open book"
+ },
+ {
+  "file": "library/take-it-and-your-library-card-to-the-des.webp",
+  "kit": "library",
+  "emoji": "🪪",
+  "label": "Take it and your library card to the desk.",
+  "shows": "identification card"
+ },
+ {
   "file": "mermaid/1f319.webp",
   "kit": "mermaid",
   "emoji": "🌙",
@@ -1559,6 +1846,62 @@
   "emoji": "🍉",
   "label": "Watermelon",
   "shows": "watermelon"
+ },
+ {
+  "file": "petshop/1f3be.webp",
+  "kit": "petshop",
+  "emoji": "🎾",
+  "label": "",
+  "shows": "tennis racquet and ball"
+ },
+ {
+  "file": "petshop/bird.webp",
+  "kit": "petshop",
+  "emoji": "🐦",
+  "label": "Bird",
+  "shows": "bird"
+ },
+ {
+  "file": "petshop/brushed.webp",
+  "kit": "petshop",
+  "emoji": "🪮",
+  "label": "Brushed",
+  "shows": "hair pick"
+ },
+ {
+  "file": "petshop/fresh-water.webp",
+  "kit": "petshop",
+  "emoji": "💧",
+  "label": "Fresh water",
+  "shows": "droplet"
+ },
+ {
+  "file": "petshop/hamster.webp",
+  "kit": "petshop",
+  "emoji": "🐹",
+  "label": "Hamster",
+  "shows": "hamster face"
+ },
+ {
+  "file": "petshop/playtime.webp",
+  "kit": "petshop",
+  "emoji": "⚽",
+  "label": "Playtime",
+  "shows": "soccer ball"
+ },
+ {
+  "file": "petshop/walk.webp",
+  "kit": "petshop",
+  "emoji": "🦮",
+  "label": "Walk",
+  "shows": "guide dog"
+ },
+ {
+  "file": "petshop/yarn-ball.webp",
+  "kit": "petshop",
+  "emoji": "🧶",
+  "label": "Yarn ball",
+  "shows": "ball of yarn"
  },
  {
   "file": "pirate/1f319.webp",
@@ -1909,6 +2252,104 @@
   "emoji": "🧼",
   "label": "Wash your hands and put on your apron.",
   "shows": "bar of soap"
+ },
+ {
+  "file": "police/1f415.webp",
+  "kit": "police",
+  "emoji": "🐕",
+  "label": "",
+  "shows": "dog"
+ },
+ {
+  "file": "police/1f4de.webp",
+  "kit": "police",
+  "emoji": "📞",
+  "label": "",
+  "shows": "telephone receiver"
+ },
+ {
+  "file": "police/1f6b8.webp",
+  "kit": "police",
+  "emoji": "🚸",
+  "label": "",
+  "shows": "children crossing"
+ },
+ {
+  "file": "police/bike-licence.webp",
+  "kit": "police",
+  "emoji": "🚲",
+  "label": "Bike licence",
+  "shows": "bicycle"
+ },
+ {
+  "file": "police/car-keys.webp",
+  "kit": "police",
+  "emoji": "🔑",
+  "label": "Car Keys",
+  "shows": "key"
+ },
+ {
+  "file": "police/front-desk.webp",
+  "kit": "police",
+  "emoji": "🛎️",
+  "label": "Front Desk",
+  "shows": "bellhop bell"
+ },
+ {
+  "file": "police/hold-a-grown-ups-hand.webp",
+  "kit": "police",
+  "emoji": "🤝",
+  "label": "Hold a grown-up’s hand.",
+  "shows": "handshake"
+ },
+ {
+  "file": "police/listen-for-cars.webp",
+  "kit": "police",
+  "emoji": "👂",
+  "label": "Listen for cars.",
+  "shows": "ear"
+ },
+ {
+  "file": "police/missed-stop.webp",
+  "kit": "police",
+  "emoji": "🛑",
+  "label": "Missed stop",
+  "shows": "octagonal sign"
+ },
+ {
+  "file": "police/oh-no-teddy-is-lost.webp",
+  "kit": "police",
+  "emoji": "😢",
+  "label": "Oh no! Teddy is lost!",
+  "shows": "crying face"
+ },
+ {
+  "file": "police/parking-ticket.webp",
+  "kit": "police",
+  "emoji": "🎫",
+  "label": "Parking ticket",
+  "shows": "ticket"
+ },
+ {
+  "file": "police/police-station.webp",
+  "kit": "police",
+  "emoji": "🚓",
+  "label": "Police Station",
+  "shows": "police car"
+ },
+ {
+  "file": "police/silly-spot.webp",
+  "kit": "police",
+  "emoji": "🅿️",
+  "label": "Silly spot",
+  "shows": "negative squared latin capital letter p"
+ },
+ {
+  "file": "police/walk-across-dont-run.webp",
+  "kit": "police",
+  "emoji": "🚶",
+  "label": "Walk across. Don’t run!",
+  "shows": "pedestrian"
  },
  {
   "file": "post/1f33b.webp",
