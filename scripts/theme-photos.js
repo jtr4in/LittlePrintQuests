@@ -137,7 +137,11 @@ function partyPhotos(t, p, n) {
     if (process.env.FAN_DIR) {
       const fan = await browser.newPage({ viewport: { width: 677, height: 497 }, deviceScaleFactor: 2 });
       const sheet = (n, x, y, r, w = 340) => `<img src="${dataUrl(path.join(dir, `page-${n}.png`))}" style="position:absolute;left:${x}px;top:${y}px;width:${w}px;transform:rotate(${r}deg);box-shadow:0 10px 28px rgba(40,50,90,.25)">`;
-      await fan.setContent(`<body style="margin:0;background:transparent">${sheet(2, 0, 40, -8)}${sheet(13, 330, 30, 7)}${sheet(8, 150, 4, 0, 380)}</body>`);
+      // The welcome poster, with the first toy in front and the second behind it, found by title so
+      // new pages elsewhere in the kit don't move them.
+      const names = pageNames(kit);
+      const [toy1, toy2] = kit.toys.map((t) => names.indexOf(t.title) + 1);
+      await fan.setContent(`<body style="margin:0;background:transparent">${sheet(2, 0, 40, -8)}${sheet(toy2, 330, 30, 7)}${sheet(toy1, 150, 4, 0, 380)}</body>`);
       await fan.screenshot({ path: path.join(process.env.FAN_DIR, `kit-${kit.id}.png`), omitBackground: true });
       await fan.close();
     }

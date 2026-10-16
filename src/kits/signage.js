@@ -23,7 +23,7 @@ const STATIONS = {
   hero: [['Mission Room', '🗺️'], ['Cape Closet', '🦸'], ['Hero Gym', '💪'], ['Signal Tower', '🔦']],
   ice: [['Snowman Garden', '⛄'], ['Sled Hill', '🛷'], ['Ice Cream Bar', '🍦'], ['Crystal Room', '💎']],
   italian: [['Pasta Station', '🍝'], ['Pizza Oven', '🍕'], ['Gelato Bar', '🍨'], ['Bread Basket', '🥖']],
-  library: [['Picture Books', '🖍️'], ['Chapter Books', '📖'], ['Library Cards', '🪪'], ['Book Drop', '📥']],
+  library: [['Picture Books', '🖍️'], ['Chapter Books', '📖'], ['Library Cards', '💳'], ['Book Drop', '📥']],
   mermaid: [['Treasure Cave', '💎'], ['Turtle Beach', '🐢'], ['Bubble Spa', '🫧'], ['Dolphin Show', '🐬']],
   dentist: [['Exam Room', '🦷'], ['X-Ray Room', '📸'], ['Prize Box', '🎁'], ['Brushing Station', '🪥']],
   petshop: [['Fish Tanks', '🐠'], ['Bird Cages', '🐦'], ['Pet Toys', '🎾'], ['Puppy Corner', '🐶']],
