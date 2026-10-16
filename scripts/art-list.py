@@ -1,8 +1,8 @@
 # Writes the illustration shopping list for the play kits: every picture each kit prints,
 # grouped into 3x3 sheets with a ready-to-paste prompt for an image generator.
 # Make each sheet, then run scripts/art-import.py on it to cut it into src/kits/art/<kit>/.
-# Pictures the kit already has, or can borrow from another kit (src/kits/art/catalog.json), are
-# left out unless you pass --all.
+# Pictures the kit already has, can borrow from another kit (src/kits/art/catalog.json), or that are
+# already on an earlier sheet are left out unless you pass --all.
 # Usage: python3 scripts/art-list.py [--all] [kit ...] > kit-art-prompts.md   (also adds to src/kits/art/sheets.json)
 import json, os, subprocess, sys, unicodedata
 
@@ -48,7 +48,9 @@ def main():
     for k in kits:
         pics = k['pictures']
         if not everything:
-            have = [p for p in pics if os.path.exists(os.path.join(art, k['id'], p['slug'] + '.webp')) or code(p['e']) in library]
+            # A picture already on an earlier sheet counts too, so a sheet not made yet isn't listed twice.
+            listed = {slug for s, slugs in sheets.items() if s.rsplit('-', 1)[0] == k['id'] for slug in slugs}
+            have = [p for p in pics if os.path.exists(os.path.join(art, k['id'], p['slug'] + '.webp')) or code(p['e']) in library or p['slug'] in listed]
             pics = [p for p in pics if p not in have]
             if not pics:
                 print(f"## {k['name']} ({k['id']}): all {len(have)} pictures done\n")
@@ -57,7 +59,7 @@ def main():
         count = -(-len(pics) // PER_SHEET)
         cuts = [round(i * len(pics) / count) for i in range(count + 1)]
         groups = [pics[a:b] for a, b in zip(cuts, cuts[1:])]
-        print(f"## {k['name']} ({k['id']}): {len(pics)} pictures, {len(groups)} sheets\n")
+        print(f"## {k['name']} ({k['id']}): {len(pics)} pictures, {len(groups)} sheet{'s' if len(groups) > 1 else ''}\n")
         for n, group in enumerate(groups, first):
             items = []
             for p in group:
