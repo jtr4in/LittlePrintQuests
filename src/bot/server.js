@@ -113,6 +113,17 @@ h1{font-size:28px;line-height:1.2}p{color:var(--muted)}p b{color:var(--ink)}
 }
 
 // Etsy listings the bot can create as drafts (see listings.js).
+// How far the Etsy run has got: whole listings, plus the photos of the one being sent.
+function progressBar(p) {
+  if (!p) return '';
+  const pct = Math.min(100, Math.round(((p.done + (p.photos ? p.photo / p.photos : 0)) / p.total) * 100));
+  return `<div class="bar"><div style="width:${pct}%"></div></div>
+  <p><b>${pct}%</b> · ${p.done} of ${p.total} listings done${p.label ? ` · now on <b>${esc(p.label)}</b>${p.photos ? ` (photo ${p.photo} of ${p.photos})` : ''}` : ''}</p>
+  ${p.stopping
+    ? '<p class="muted">Stopping after this step…</p>'
+    : '<form method="post" action="/admin/etsy/listings/stop"><button class="secondary">Stop</button> <span class="muted">Finishes the current step, then stops. Click the button again later to pick up where it left off.</span></form>'}`;
+}
+
 function listingsPanel(s) {
   if (!etsy.isConnected()) return '';
   const st = s.listings || {};
@@ -128,7 +139,9 @@ function listingsPanel(s) {
   const someReady = listings.CATALOG.some((c) => st[c.key]?.ready);
   const action = !etsy.canWriteListings()
     ? `<p class="muted">To let the bot create listings, reconnect your shop once and allow listing access.</p><a href="/auth/etsy/start"><button class="secondary">Reconnect Etsy shop</button></a>`
-    : `<form method="post" action="/admin/etsy/listings"><button${working ? ' disabled' : ''}>${working ? 'Working on Etsy…' : allReady ? 'Update listings on Etsy' : someReady ? 'Update listings and create new drafts' : 'Create drafts on Etsy'}</button></form>
+    : working
+    ? progressBar(listings.getProgress())
+    : `${s.listingsStopped ? '<p class="muted">Stopped. Click below to pick up where it left off.</p>' : ''}<form method="post" action="/admin/etsy/listings"><button>${allReady ? 'Update listings on Etsy' : someReady ? 'Update listings and create new drafts' : 'Create drafts on Etsy'}</button></form>
        ${someReady ? `<p class="muted">Sends the latest titles, descriptions, tags, option prices, shop sections and any new photos to these listings, including ones you’ve already published.${allReady ? '' : ' Listings marked Not created are made as new drafts.'}</p>` : ''}`;
   return `<div class="panel"><b>Etsy listings</b> <span class="muted">Created as drafts with photos, files, prices and options. Nothing goes live until you publish it in Shop Manager.</span>
   <ul>${rows}</ul>${s.listingsError ? `<p class="problem">${esc(s.listingsError)}</p>` : ''}${action}
@@ -200,9 +213,11 @@ button{background:#2d6a4f;color:#fff;border:0;border-radius:6px;padding:8px 14px
 button.secondary{background:#fff;color:#2d6a4f;border:1px solid #2d6a4f;margin-top:8px}
 .row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap} input{padding:7px;border:1px solid #ccc;border-radius:6px;width:100%;box-sizing:border-box}
 .muted{color:#777;font-size:13px}
+.bar{height:14px;background:#e6efe9;border-radius:99px;overflow:hidden;margin-top:10px}.bar div{height:100%;background:#2d6a4f;transition:width .4s}
 </style></head><body>
 <h1>Order Bot</h1>
 ${query.get('empty') ? '<div class="panel problem">Type or paste the order details first (the grey example text doesn’t count). Tap “Use the sample” to try it.</div>' : ''}
+${query.get('pickkit') ? '<div class="panel problem">For a play kit on its own, pick a theme or a shop kit from the list.</div>' : ''}
 ${query.get('made') && s.orders[query.get('made')] ? `<div class="panel"><b>Making it now.</b> <span class="muted">It’s under “To send” below and finishes in about a minute; this page refreshes by itself.</span> <a href="#${esc(query.get('made'))}">Jump to it</a></div>` : ''}
 ${setupPanel()}
 <div class="panel">
@@ -224,12 +239,12 @@ ${setupPanel()}
   }</div>
 ${listingsPanel(s)}
 <div class="panel"><b>Mailing list:</b> ${Object.values(s.subscribers || {}).filter((x) => !x.unsubscribedAt).length} people from the free sample. <a href="/admin/subscribers.csv">Download CSV</a></div>
-<details class="panel"><summary><b>Make a hunt by hand</b> <span class="muted">(paste order notes, or test the bot)</span></summary>
+<details class="panel"><summary><b>Make an order by hand</b> <span class="muted">(paste order notes, or test the bot)</span></summary>
   <form method="post" action="/admin/orders">
     <p><input name="buyerName" placeholder="Buyer name (optional)"></p>
     <textarea name="personalization" rows="4" required placeholder="Maya, turning 6, space theme. Spots: front door, shoe rack, washer, dryer, grandma's piano, dog bed, kitchen table (prize). Pets: Rover (dog)"></textarea>
     <button type="button" class="secondary" onclick="const t=this.form.personalization;t.value=t.placeholder;t.focus()">Use the sample</button>
-    <div class="row"><select name="theme"><option value="">Theme: from the notes</option>${Object.entries(THEMES).map(([id, t]) => `<option value="${esc(id)}">${esc(t.name)}</option>`).join('')}</select><select name="product"><option value="bundle">Party bundle (hunt, play kit and party pack)</option><option value="hunt">Hunt only</option><option value="party">Party pack only</option></select><button>Make it</button></div>
+    <div class="row"><select name="theme"><option value="">Theme: from the notes</option><optgroup label="Hunt themes">${Object.entries(THEMES).map(([id, t]) => `<option value="${esc(id)}">${esc(t.name)}</option>`).join('')}</optgroup><optgroup label="Shop kits (play kit only)">${Object.values(KITS).filter((k) => !k.hunt).map((k) => `<option value="kit:${esc(k.id)}">${esc(k.name)}</option>`).join('')}</optgroup></select><select name="product"><option value="bundle">Party bundle (hunt, play kit and party pack)</option><option value="hunt">Hunt only</option><option value="kit">Play kit only</option><option value="party">Party pack only</option></select><button>Make it</button></div>
   </form>
 </details>
 <h2>To send (${open.length})</h2>${open.map(orderCard).join('') || '<p class="muted">Nothing waiting.</p>'}
@@ -385,12 +400,20 @@ async function route(req, res) {
     listings.createDrafts();
     return redirect(res, '/admin');
   }
+  if (p === '/admin/etsy/listings/stop') {
+    listings.stop();
+    return redirect(res, '/admin');
+  }
   if (p === '/admin/orders') {
     const f = await readForm(req);
     if (!f.personalization?.trim()) return redirect(res, '/admin?empty=1');
-    const product = ['bundle', 'hunt', 'party'].includes(f.product) ? f.product : f.bundle ? 'bundle' : 'hunt';
-    const options = THEMES[f.theme] ? { Theme: THEMES[f.theme].name } : {};
-    const id = orders.addOrder({ source: 'manual', buyerName: f.buyerName || '', personalization: f.personalization, options, product });
+    // A shop kit is always a play kit on its own; "Play kit only" with a hunt theme makes that theme's kit.
+    const shopKit = KITS[String(f.theme || '').replace(/^kit:/, '')];
+    const kit = f.theme?.startsWith('kit:') && shopKit && !shopKit.hunt ? shopKit : f.product === 'kit' && THEMES[f.theme] ? kitForHunt(f.theme) : null;
+    if (f.product === 'kit' && !kit) return redirect(res, '/admin?pickkit=1');
+    const product = kit ? 'kit' : ['bundle', 'hunt', 'party'].includes(f.product) ? f.product : f.bundle ? 'bundle' : 'hunt';
+    const options = kit ? { Kit: kit.name } : THEMES[f.theme] ? { Theme: THEMES[f.theme].name } : {};
+    const id = orders.addOrder({ source: 'manual', buyerName: f.buyerName || '', personalization: f.personalization, options, product, ...(kit ? { kit: kit.id } : {}) });
     orders.processOrder(id);
     return redirect(res, `/admin?made=${encodeURIComponent(id)}#${id}`);
   }

@@ -203,6 +203,21 @@ function photoSent(key, name) {
 
 let running = false;
 const isRunning = () => running;
+// Live progress for the dashboard: listings finished out of the total, plus the photos of the one in hand.
+let progress = null;
+let stopAsked = false;
+const getProgress = () => (running ? { ...progress, stopping: stopAsked } : null);
+// Stops between steps, never mid-upload. Every step is saved, so the next run picks up from there.
+function stop() {
+  if (running) stopAsked = true;
+}
+function checkStop() {
+  if (stopAsked) throw Object.assign(new Error('Stopped'), { stopped: true });
+}
+function photoDone(i, count) {
+  progress.photo = i + 1;
+  progress.photos = count;
+}
 
 function setStatus(key, patch) {
   store.update((s) => {
@@ -247,8 +262,10 @@ async function createOne(l, taxonomy, existing) {
   if (l.variation) await step('variation', () => etsy.setVariationPrices(id, l.variation.name, l.variation.options));
   for (const [i, name] of l.photos.entries()) {
     if (done().steps?.includes(`photo:${name}`)) continue;
+    checkStop();
     await etsy.uploadListingImage(id, photo(name), i + 1);
     photoSent(l.key, name);
+    photoDone(i, l.photos.length);
   }
   await step('file', async () => {
     const tmp = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'listing-')), l.file.name);
@@ -283,8 +300,10 @@ async function updateOne(l) {
     setStatus(l.key, { steps: keep });
     for (const [i, name] of l.photos.entries()) {
       if (i < from) continue;
+      checkStop();
       await etsy.uploadListingImage(id, photo(name), i + 1);
       photoSent(l.key, name);
+      photoDone(i, l.photos.length);
     }
   }
   setStatus(l.key, { error: null, updatedAt: new Date().toISOString() });
@@ -293,28 +312,35 @@ async function updateOne(l) {
 async function createDrafts() {
   if (running) return;
   running = true;
+  stopAsked = false;
   try {
     const listings = readCopy();
+    progress = { done: 0, total: listings.length, label: '', photo: 0, photos: 0 };
     // New listings are created; finished ones are updated to match the latest copy and photos.
     const isReady = (l) => store.get().listings?.[l.key]?.ready;
     const taxonomy = listings.some((l) => !isReady(l)) ? await etsy.taxonomyId(/^party games$/i) : null;
     let shop = null;
     const existing = async () => (shop ||= await etsy.shopListings());
     for (const l of listings) {
+      if (stopAsked) break;
+      Object.assign(progress, { label: l.label, photo: 0, photos: 0 });
       try {
         setStatus(l.key, { error: null, working: true });
         await (isReady(l) ? updateOne(l) : createOne(l, taxonomy, existing));
       } catch (err) {
-        setStatus(l.key, { error: err.message });
+        if (!err.stopped) setStatus(l.key, { error: err.message });
       } finally {
         setStatus(l.key, { working: false });
       }
+      progress.done++;
     }
+    store.update((s) => (s.listingsStopped = stopAsked ? new Date().toISOString() : null));
   } catch (err) {
     store.update((s) => (s.listingsError = err.message));
   } finally {
     running = false;
+    stopAsked = false;
   }
 }
 
-module.exports = { CATALOG, readCopy, createDrafts, isRunning, forListingId };
+module.exports = { CATALOG, readCopy, createDrafts, isRunning, getProgress, stop, forListingId };
