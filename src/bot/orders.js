@@ -11,6 +11,8 @@ const { renderPdf } = require('../generator/render');
 const { sendHuntEmail } = require('./email');
 const { renderKit } = require('../kits/render-kit');
 const { renderParty } = require('../party/render-party');
+const { renderCraft } = require('../crafts/render-craft');
+const { HOLIDAYS } = require('../crafts/build');
 const { kitForHunt, KITS } = require('../kits/engine');
 const THEMES = require('../generator/themes');
 const SPOTS = require('../generator/spots');
@@ -36,6 +38,7 @@ function customRequest(tx) {
   const personalization = personal.map((v) => v.formatted_value).join('\n');
   // A single-theme play kit or party pack listing has no dropdown: its theme comes with the listing.
   if (made?.order?.product === 'kit') return { personalization, options, product: 'kit', kit: made.order.kit };
+  if (made?.order?.product === 'craft') return { personalization, options, product: 'craft', holiday: made.order.holiday };
   if (made?.order?.product === 'party') return { personalization, options: { ...options, Theme: THEMES[made.order.theme].label }, product: 'party' };
   // The play kit listing has a "Kit" option naming the kit.
   const kit = Object.values(KITS).find((k) => Object.values(options).some((v) => v.toLowerCase() === k.name.toLowerCase()));
@@ -47,6 +50,8 @@ function customRequest(tx) {
     const items = products.normalize(['hunt', /play kit|bundle/i.test(pkg) && 'kit', /party|bundle/i.test(pkg) && 'party']);
     return { personalization, options, product: products.productFor(items), items };
   }
+  const holiday = /handprint/i.test(tx.title || '') && Object.values(HOLIDAYS).find((h) => new RegExp(h.name, 'i').test(tx.title));
+  if (holiday) return { personalization, options, product: 'craft', holiday: holiday.id };
   if (/party (pack|printables)/i.test(tx.title || '') && !/bundle|play kit/i.test(tx.title || '')) return { personalization, options, product: 'party' };
   return { personalization, options, product: /bundle|play kit/i.test(tx.title || '') ? 'bundle' : 'hunt' };
 }
@@ -66,6 +71,7 @@ function buyerMessage(order) {
     hunt: () => `custom ${theme.name}`,
     kit: () => `${kitOf(order).name} play kit`,
     party: () => `${theme.label} party pack`,
+    craft: () => `${HOLIDAYS[order.config.holiday].name} handprint art pack`,
   }[main]();
   const host = order.hostToken
     ? `\n${products.has(order, 'hunt') ? 'On party day, open' : 'Open'} Host Mode on your phone. It ${products.hostHelps(order)}:\n\n${hostUrl(order)}\n`
@@ -77,6 +83,7 @@ function buyerMessage(order) {
     hunt: 'Print at "Actual Size / 100%", cut out the clue cards, and use the Host Guide on page 1 to hide them. Have an amazing party! 🎉',
     kit: 'Print at "Actual Size / 100%" and start with the grown-up guide on page 1. Have fun! 🎉',
     party: 'Print at "Actual Size / 100%". Invitations, toppers and the banner look best on cardstock. Have an amazing party! 🎉',
+    craft: 'Print the keepsake pages on white cardstock at "Actual Size / 100%" and start with the tips on page 1. Washable paint and a baby wipe nearby help a lot. Have fun! 🎨',
   }[main];
   return `Hi ${first}! Your ${title} for ${order.config.childName} is ready. Download your printable PDF here:
 
@@ -89,11 +96,12 @@ async function generate(id) {
   const order = store.get().orders[id];
   const token = order.downloadToken || crypto.randomBytes(18).toString('base64url');
   // Every order gets Host Mode, a private phone page with a tab for each thing in it.
-  // Hunts also get a second link for a helper (the sidekick).
-  const hostTokens = { hostToken: order.hostToken || newToken(), ...(products.has(order, 'hunt') ? { sidekickToken: order.sidekickToken || newToken() } : {}) };
-  const out = (suffix = '') => path.join(store.PDF_DIR, `${token}${suffix}.pdf`);
+  // Hunts also get a second link for a helper (the sidekick). Handprint art needs no Host Mode.
   const main = products.mainOf(order);
-  if (main === 'kit') await renderKit(order.config, out());
+  const hostTokens = main === 'craft' ? {} : { hostToken: order.hostToken || newToken(), ...(products.has(order, 'hunt') ? { sidekickToken: order.sidekickToken || newToken() } : {}) };
+  const out = (suffix = '') => path.join(store.PDF_DIR, `${token}${suffix}.pdf`);
+  if (main === 'craft') await renderCraft(order.config, out());
+  else if (main === 'kit') await renderKit(order.config, out());
   else if (main === 'party') await renderParty(order.config, out());
   else await renderPdf(order.config, out());
   const kit = main !== 'kit' && products.has(order, 'kit') ? kitOf(order) : null;
@@ -119,7 +127,9 @@ function kitConfig(order, kit) {
 async function processOrder(id) {
   const order = store.get().orders[id];
   try {
-    const parsed = order.product === 'kit'
+    const parsed = order.product === 'craft'
+      ? await parse.parseCraftOrder({ personalization: order.personalization, holiday: order.holiday })
+      : order.product === 'kit'
       ? await parse.parseKitOrder({ personalization: order.personalization, kit: order.kit })
       : order.product === 'party'
       ? await parse.parsePartyOrder({ personalization: order.personalization, options: order.options })
@@ -179,7 +189,7 @@ async function notify(order) {
     await fetch(`https://ntfy.sh/${encodeURIComponent(topic)}`, {
       method: 'POST',
       headers: {
-        Title: ready ? `${{ kit: 'Play kit', party: 'Party pack' }[products.mainOf(order)] || 'Hunt'} ready for ${order.config.childName}` : 'Order needs a look',
+        Title: ready ? `${{ kit: 'Play kit', party: 'Party pack', craft: 'Handprint art' }[products.mainOf(order)] || 'Hunt'} ready for ${order.config.childName}` : 'Order needs a look',
         Click: `${process.env.PUBLIC_URL}/admin#${order.id}`,
         Tags: ready ? 'tada' : 'warning',
       },
@@ -194,6 +204,15 @@ async function notify(order) {
 
 // Checks the website's order form. Returns a clean form or throws a message for the buyer.
 function validateWebForm(body) {
+  // A handprint art pack is its own thing: just a holiday and the child's name and age.
+  if (body.craft !== undefined) {
+    const holiday = HOLIDAYS[body.craft] ? body.craft : null;
+    if (!holiday) throw new Error('Please pick Halloween or Christmas.');
+    const childName = String(body.childName || '').trim().slice(0, 24);
+    if (!childName) throw new Error('Please add your child’s first name.');
+    const age = Number.isInteger(body.age) && body.age > 0 && body.age < 16 ? body.age : null;
+    return { items: ['craft'], product: 'craft', holiday, theme: null, childName, age, spots: [], pets: [], party: null };
+  }
   // A shop kit (pizza, library...) has no hunt or party theme, so it is ordered on its own.
   const shopKit = KITS[body.kit] && !KITS[body.kit].hunt ? KITS[body.kit].id : null;
   const theme = shopKit ? null : String(body.theme || '');
@@ -242,11 +261,12 @@ function addWebOrder(form) {
     party: form.party,
     form,
     personalization: formAsText(form),
-    options: { Theme: form.kit ? KITS[form.kit].name : THEMES[form.theme].name, Package: products.packageName(form.items) },
+    options: form.holiday ? { Holiday: HOLIDAYS[form.holiday].name } : { Theme: form.kit ? KITS[form.kit].name : THEMES[form.theme].name, Package: products.packageName(form.items) },
   });
 }
 
 function formAsText(f) {
+  if (f.holiday) return `${f.childName}${f.age ? `, age ${f.age}` : ''}. ${HOLIDAYS[f.holiday].name} handprint art pack.`;
   if (!products.has(f, 'hunt')) return `${f.childName}${f.age ? `, turning ${f.age}` : ''}. ${products.describe(products.itemsOf(f))}.`;
   const spots = f.spots.map((s) => (typeof s === 'string' ? SPOTS[s].label : s.custom));
   return `${f.childName}${f.age ? `, turning ${f.age}` : ''}. Spots in order: ${spots.join(', ')} (prize at the last one).`;
@@ -260,7 +280,9 @@ async function fulfillWebOrder(id, { email, buyerName }) {
   const f = order.form;
   try {
     const main = products.mainOf(order);
-    if (main === 'kit') {
+    if (main === 'craft') {
+      store.update((s) => (s.orders[id].config = { holiday: f.holiday, childName: f.childName, ...(f.age ? { age: f.age } : {}) }));
+    } else if (main === 'kit') {
       store.update((s) => (s.orders[id].config = { kit: f.kit || kitForHunt(f.theme).id, ...(f.theme ? { theme: f.theme } : {}), childName: f.childName, ...(f.age ? { age: f.age } : {}), subjects: f.pets || [], lenient: true }));
     } else if (main === 'party') {
       store.update((s) => (s.orders[id].config = { theme: f.theme, childName: f.childName, ...(f.age ? { age: f.age } : {}), ...(f.party ? { party: f.party } : {}) }));

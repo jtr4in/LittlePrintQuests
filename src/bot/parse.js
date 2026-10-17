@@ -169,4 +169,29 @@ Set ok to false only if the child's name or the theme is missing.`,
   return { ok: true, config: { theme: p.theme, childName: p.childName.trim(), ...(p.age ? { age: p.age } : {}), ...(party ? { party } : {}) } };
 }
 
-module.exports = { parseOrder, parseKitOrder, parsePartyOrder, toHuntConfig, OrderSchema };
+// ---------- handprint art orders ----------
+
+const CraftSchema = z.object({
+  ok: z.boolean().describe('false if the child’s first name is missing'),
+  problem: z.string().nullable().describe('When ok is false: a short note to the shop owner saying what is missing'),
+  childName: z.string().nullable(),
+  age: z.number().int().nullable().describe('the child’s age, if given'),
+});
+
+// Reads a handprint art order: just the child's name and age for the keepsake lines.
+async function parseCraftOrder({ personalization, holiday }) {
+  const response = await client.messages.parse({
+    model: MODEL,
+    max_tokens: 500,
+    output_config: { effort: 'low', format: zodOutputFormat(CraftSchema) },
+    system: `You set up personalized handprint art keepsake pages for young children from a buyer's Etsy order notes.
+Return the child's first name and their age if given. Set ok to false only if there's no child's name.`,
+    messages: [{ role: 'user', content: `Buyer's personalization text:\n"""\n${personalization}\n"""` }],
+  });
+  const p = response.parsed_output;
+  if (!p) return { ok: false, problem: `Claude could not read this order (stop reason: ${response.stop_reason}).` };
+  if (!p.ok || !p.childName) return { ok: false, problem: p.problem || 'missing child’s name', draft: p };
+  return { ok: true, config: { holiday, childName: p.childName.trim(), ...(p.age ? { age: p.age } : {}) } };
+}
+
+module.exports = { parseOrder, parseKitOrder, parsePartyOrder, parseCraftOrder, toHuntConfig, OrderSchema };

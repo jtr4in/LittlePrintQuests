@@ -15,6 +15,7 @@ const products = require('./products');
 const { KITS, kitForHunt } = require('../kits/engine');
 const { sendHuntEmail } = require('./email');
 const THEMES = require('../generator/themes');
+const { HOLIDAYS } = require('../crafts/build');
 const host = require('../host/host');
 
 const PORT = Number(process.env.PORT || 3000);
@@ -74,6 +75,7 @@ const sendJson = (res, code, obj) => send(res, code, JSON.stringify(obj), { 'Con
 function orderTitle(o) {
   const main = products.mainOf(o);
   const theme = THEMES[o.config?.theme];
+  if (main === 'craft') return `${HOLIDAYS[o.config?.holiday]?.name || ''} handprint art`;
   if (main === 'kit') return `${(KITS[o.config?.kit] || kitForHunt(o.config.theme)).name} play kit`;
   return main === 'party' ? `${theme.label} party pack` : theme.name;
 }
@@ -92,10 +94,10 @@ function orderPage(o) {
          ${o.kitReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-kit.pdf" target="_blank">Download your play kit (PDF)</a></p>` : ''}
          ${o.partyReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-party.pdf" target="_blank">Download your party printables (PDF)</a></p>` : ''}
          ${o.hostToken ? `<p><a class="btn alt" href="/h/${esc(o.hostToken)}">Open Host Mode</a><br><small>Help on your phone for ${esc(products.has(o, 'hunt') ? 'hiding the cards and running the hunt' : products.has(o, 'kit') ? 'playing with the kit' : 'planning the party')}.</small></p>` : ''}
-         <p>${o.email && o.deliveredAt ? `We also emailed the link to <b>${esc(o.email)}</b>.` : 'Save your PDF now, or bookmark this page to come back to it.'} Print at “Actual Size / 100%”${{ hunt: ', cut out the clue cards, and follow the Host Guide on page 1.', kit: ', and start with the grown-up guide on page 1.', party: ', on cardstock if you have it.' }[main]}</p>`
+         <p>${o.email && o.deliveredAt ? `We also emailed the link to <b>${esc(o.email)}</b>.` : 'Save your PDF now, or bookmark this page to come back to it.'} Print at “Actual Size / 100%”${{ hunt: ', cut out the clue cards, and follow the Host Guide on page 1.', kit: ', and start with the grown-up guide on page 1.', party: ', on cardstock if you have it.', craft: ', on white cardstock, and start with the tips on page 1.' }[main]}</p>`
       : working
-        ? `<h1>Building ${esc(o.form.childName)}’s ${esc(main === 'hunt' ? theme.name : theme ? `${theme.label} ${what}` : `${KITS[o.form.kit]?.name || ''} ${what}`)}…</h1>
-           <p>${o.status === 'awaiting_payment' ? 'Confirming your payment.' : 'Writing clues and laying out the cards.'} This page updates by itself.</p>
+        ? `<h1>Building ${esc(o.form.childName)}’s ${esc(main === 'craft' ? `${HOLIDAYS[o.form.holiday].name} ${what}` : main === 'hunt' ? theme.name : theme ? `${theme.label} ${what}` : `${KITS[o.form.kit]?.name || ''} ${what}`)}…</h1>
+           <p>${o.status === 'awaiting_payment' ? 'Confirming your payment.' : main === 'craft' ? 'Laying out the keepsake pages.' : 'Writing clues and laying out the cards.'} This page updates by itself.</p>
            <div class="spin"></div>`
         : `<h1>Thanks for your order!</h1>
            <p>Your payment went through. We’re giving ${esc(o.form.childName)}’s ${what} a quick hand check and will email it to ${esc(o.email || 'you')} shortly.</p>`;
@@ -150,7 +152,7 @@ function listingsPanel(s) {
 
 function orderCard(o) {
   const badge = { ready: 'Ready to send', needs_attention: 'Needs a look', processing: 'Working…', awaiting_payment: 'Not paid' }[o.status] || o.status;
-  const theme = o.config && (THEMES[o.config.theme] || KITS[o.config.kit]);
+  const theme = o.config && (THEMES[o.config.theme] || KITS[o.config.kit] || HOLIDAYS[o.config.holiday]);
   return `<article id="${esc(o.id)}" class="order ${o.sent ? 'sent' : o.status}">
     <header><span class="badge">${o.sent ? 'Sent' : esc(badge)}</span>
       <b>${esc(o.config?.childName || o.form?.childName || o.buyerName || 'Order')}</b>${theme ? ` · ${esc(orderTitle(o))}${products.itemsOf(o).length > 1 ? ` <span class="muted">(${esc(products.packageName(products.itemsOf(o)))})</span>` : ''}` : ''}
@@ -244,7 +246,7 @@ ${listingsPanel(s)}
     <p><input name="buyerName" placeholder="Buyer name (optional)"></p>
     <textarea name="personalization" rows="4" required placeholder="Maya, turning 6, space theme. Spots: front door, shoe rack, washer, dryer, grandma's piano, dog bed, kitchen table (prize). Pets: Rover (dog)"></textarea>
     <button type="button" class="secondary" onclick="const t=this.form.personalization;t.value=t.placeholder;t.focus()">Use the sample</button>
-    <div class="row"><select name="theme"><option value="">Theme: from the notes</option><optgroup label="Hunt themes">${Object.entries(THEMES).map(([id, t]) => `<option value="${esc(id)}">${esc(t.name)}</option>`).join('')}</optgroup><optgroup label="Shop kits (play kit only)">${Object.values(KITS).filter((k) => !k.hunt).map((k) => `<option value="kit:${esc(k.id)}">${esc(k.name)}</option>`).join('')}</optgroup></select><select name="product"><option value="bundle">Party bundle (hunt, play kit and party pack)</option><option value="hunt">Hunt only</option><option value="kit">Play kit only</option><option value="party">Party pack only</option></select><button>Make it</button></div>
+    <div class="row"><select name="theme"><option value="">Theme: from the notes</option><optgroup label="Hunt themes">${Object.entries(THEMES).map(([id, t]) => `<option value="${esc(id)}">${esc(t.name)}</option>`).join('')}</optgroup><optgroup label="Shop kits (play kit only)">${Object.values(KITS).filter((k) => !k.hunt).map((k) => `<option value="kit:${esc(k.id)}">${esc(k.name)}</option>`).join('')}</optgroup><optgroup label="Handprint art">${Object.values(HOLIDAYS).map((h) => `<option value="craft:${esc(h.id)}">${esc(h.kicker)}</option>`).join('')}</optgroup></select><select name="product"><option value="bundle">Party bundle (hunt, play kit and party pack)</option><option value="hunt">Hunt only</option><option value="kit">Play kit only</option><option value="party">Party pack only</option></select><button>Make it</button></div>
   </form>
 </details>
 <h2>To send (${open.length})</h2>${open.map(orderCard).join('') || '<p class="muted">Nothing waiting.</p>'}
@@ -407,6 +409,13 @@ async function route(req, res) {
   if (p === '/admin/orders') {
     const f = await readForm(req);
     if (!f.personalization?.trim()) return redirect(res, '/admin?empty=1');
+    // Handprint art is its own product: the holiday comes from the dropdown.
+    const holiday = HOLIDAYS[String(f.theme || '').replace(/^craft:/, '')];
+    if (f.theme?.startsWith('craft:') && holiday) {
+      const id = orders.addOrder({ source: 'manual', buyerName: f.buyerName || '', personalization: f.personalization, options: { Holiday: holiday.name }, product: 'craft', holiday: holiday.id });
+      orders.processOrder(id);
+      return redirect(res, `/admin?made=${encodeURIComponent(id)}#${id}`);
+    }
     // A shop kit is always a play kit on its own; "Play kit only" with a hunt theme makes that theme's kit.
     const shopKit = KITS[String(f.theme || '').replace(/^kit:/, '')];
     const kit = f.theme?.startsWith('kit:') && shopKit && !shopKit.hunt ? shopKit : f.product === 'kit' && THEMES[f.theme] ? kitForHunt(f.theme) : null;

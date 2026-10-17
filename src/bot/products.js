@@ -1,9 +1,10 @@
-// What a customer can buy: any mix of the hunt, its matching play kit and the party pack.
+// What a customer can buy: any mix of the hunt, its matching play kit and the party pack,
+// or a holiday handprint art pack (always on its own).
 // An order's items decide which PDFs get built; the first one is the main download
 // (/d/<token>.pdf) and the others get -kit / -party suffixes.
 
-const ITEMS = ['hunt', 'kit', 'party'];
-const LEGACY = { bundle: ['hunt', 'kit', 'party'], hunt: ['hunt'], party: ['party'], kit: ['kit'] };
+const ITEMS = ['hunt', 'kit', 'party', 'craft'];
+const LEGACY = { bundle: ['hunt', 'kit', 'party'], hunt: ['hunt'], party: ['party'], kit: ['kit'], craft: ['craft'] };
 
 const cents = (key, fallback) => Number(process.env[key] || fallback);
 // Each item alone, every pair, and all three (the Party Bundle).
@@ -15,6 +16,7 @@ const PRICES = {
   'hunt+party': cents('HUNT_PARTY_PRICE_CENTS', 1399),
   'kit+party': cents('KIT_PARTY_PRICE_CENTS', 1299),
   bundle: cents('BUNDLE_PRICE_CENTS', 1699),
+  craft: cents('CRAFT_PRICE_CENTS', 599),
 };
 
 // Cleans a list of items into the fixed order; unknown ones are dropped.
@@ -25,7 +27,7 @@ const has = (order, item) => itemsOf(order).includes(item);
 const mainOf = (order) => itemsOf(order)[0];
 const priceFor = (product) => PRICES[product] ?? PRICES.hunt;
 
-const NAMES = { hunt: 'scavenger hunt', kit: 'play kit', party: 'party pack' };
+const NAMES = { hunt: 'scavenger hunt', kit: 'play kit', party: 'party pack', craft: 'handprint art pack' };
 // "scavenger hunt, play kit and party pack"
 function describe(items) {
   const names = items.map((i) => NAMES[i]);
@@ -34,7 +36,7 @@ function describe(items) {
 
 // The Etsy-style Package option shown on the dashboard.
 const packageName = (items) =>
-  items.length === 3 ? 'Hunt + Play Kit + Party Pack' : items.map((i) => ({ hunt: 'Hunt', kit: 'Play Kit', party: 'Party Pack' })[i]).join(' + ') + (items.length === 1 && items[0] === 'hunt' ? ' only' : '');
+  items.length === 3 ? 'Hunt + Play Kit + Party Pack' : items.map((i) => ({ hunt: 'Hunt', kit: 'Play Kit', party: 'Party Pack', craft: 'Handprint Art' })[i]).join(' + ') + (items.length === 1 && items[0] === 'hunt' ? ' only' : '');
 
 // What Host Mode does for this order, as the end of "Host Mode ...", for emails and messages.
 function hostHelps(order) {

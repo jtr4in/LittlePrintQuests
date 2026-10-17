@@ -890,3 +890,60 @@ Vroom! A gust of wind blew Turbo Tess’s checkpoint flags off the racetrack! Yo
 
 **Tags (13)**
 race car party, car birthday, scavenger hunt kids, treasure hunt clues, racing party, kids party game, printable party game, indoor scavenger, two fast party, rhyming clues, toddler party game, birthday activity, race car game
+
+---
+
+## 22. Handprint art pack, one listing per holiday ($5.99)
+
+Personalized handprint and footprint keepsake pages, one listing per holiday. The bot fills `{holiday}`, `{crafts}`, `{count}` and `{month}` from each holiday and puts its opening line at `{opening}`. Orders on these listings already know their holiday.
+
+**Description template**
+```
+{opening}
+
+★ WHAT YOU GET (PDF, US Letter, {count} pages)
+• 8 handprint, footprint and fingerprint crafts: {crafts}
+• Every craft page has a sweet little poem, a dashed guide showing where to press, and a finished example to copy
+• Your child's name, age and the month printed on each page as a keepsake ("Maya · age 4 · {month} 2026")
+• 2 handprint greeting cards to give to grandparents
+• A cut-out add-on sheet: eyes, hats, noses and more to glue on once the paint dries
+• "These Little Hands" poem page with space for both hands
+• A grown-up guide with tips for mess-free printing, even with babies and toddlers
+
+★ HOW TO ORDER
+Write your child's first name and age in the personalization box.
+We send your PDF through Etsy messages, usually within a few hours.
+
+★ WHAT YOU'LL NEED
+• White cardstock (65–110 lb) so the paint doesn't soak through
+• Washable kids' paint and a foam brush
+• Baby wipes or a damp cloth for quick clean-up
+• A black marker for faces, plus glue for the add-ons
+
+★ GREAT FOR
+Daycare and preschool crafts, a baby's first {holiday}, gifts for grandparents, and a keepsake to save year after year.
+
+★ PLEASE NOTE
+This is a DIGITAL file. No physical item will be shipped. For personal use only.
+```
+
+**Personalization:** On, required. Instructions to buyer:
+```
+Child's first name and age (for example: Maya, age 4).
+```
+
+### halloween
+**Title**
+Personalized Halloween Handprint Art, Footprint Craft Keepsake, Toddler Baby Preschool Halloween Craft, Printable Kids Activity
+**Opening line**
+Not-so-spooky little hands! 8 Halloween handprint and footprint crafts, personalized with your child's name and age, to keep year after year.
+**Tags**
+halloween handprint, footprint art, halloween craft, toddler craft, baby keepsake, handprint keepsake, preschool craft, kids halloween, footprint keepsake, daycare craft, ghost handprint, pumpkin craft, halloween printable
+
+### christmas
+**Title**
+Personalized Christmas Handprint Art, Footprint Craft Keepsake, Toddler Baby Preschool Christmas Craft, Printable Kids Activity
+**Opening line**
+Little hands, big Christmas memories! 8 handprint and footprint crafts, personalized with your child's name and age, to keep year after year.
+**Tags**
+xmas handprint, footprint art, christmas craft, toddler craft, baby keepsake, handprint keepsake, preschool craft, baby first xmas, reindeer footprint, daycare craft, santa handprint, christmas gift, xmas printable

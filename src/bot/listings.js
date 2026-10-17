@@ -12,6 +12,7 @@ const { renderPdf, renderHtml } = require('../generator/render');
 const THEMES = require('../generator/themes');
 const { KITS } = require('../kits/engine');
 const { flavorFor } = require('../party/flavor');
+const { HOLIDAYS } = require('../crafts/build');
 
 const ROOT = path.join(__dirname, '..', '..');
 const ASSETS = path.join(ROOT, 'listing-assets');
@@ -101,6 +102,19 @@ const CATALOG = [
     photos: [`party-${theme}.jpg`, `party-${theme}-inside.jpg`, `party-${theme}-feature.jpg`, ...closeUps(`party-${theme}`)].slice(0, MAX_PHOTOS),
     file: { name: 'your-party-printables.pdf', build: (out) => thankYouPdf(out, 'party printables') },
   })),
+  // Handprint art packs, one per holiday.
+  ...Object.keys(HOLIDAYS).map((holiday) => ({
+    key: `craft-${holiday}`,
+    section: 22,
+    perTheme: holiday,
+    shopSection: 'Handprint Art',
+    label: `${HOLIDAYS[holiday].name} handprint art`,
+    price: 5.99,
+    order: { product: 'craft', holiday },
+    personalization: { question: 'Child’s name and age' },
+    photos: [`craft-${holiday}.jpg`, `craft-${holiday}-inside.jpg`, ...closeUps(`craft-${holiday}`)].slice(0, MAX_PHOTOS),
+    file: { name: 'your-handprint-art.pdf', build: (out) => thankYouPdf(out, 'handprint art pack') },
+  })),
 ];
 
 // The catalog entry for an Etsy listing the bot made, if it made it.
@@ -128,6 +142,10 @@ const list = (items) => (items.length > 1 ? `${items.slice(0, -1).join(', ')} an
 
 // What a per-theme description template can say about its kit or theme.
 function placeholders(c) {
+  if (c.order.product === 'craft') {
+    const h = HOLIDAYS[c.perTheme];
+    return { holiday: h.name, month: h.month, crafts: list(h.crafts.map((k) => k.title)), count: 12 };
+  }
   if (c.order.product === 'kit') {
     const k = KITS[c.perTheme];
     return {
