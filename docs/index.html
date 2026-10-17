@@ -150,7 +150,8 @@ main { position: relative; }
 .theme:hover .fan img:nth-child(2) { transform: rotate(12deg) translateX(4%); }
 @media (max-width: 1180px) { .themes { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 980px) { .themes { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 520px) { .themes { grid-template-columns: 1fr; } }
+.themes.two { grid-template-columns: repeat(2, 1fr); max-width: 820px; }
+@media (max-width: 520px) { .themes, .themes.two { grid-template-columns: 1fr; } }
 
 /* Host Mode: phone frames */
 .phone { display: block; background: #161b2e; padding: 7px; border-radius: 30px; box-shadow: 0 18px 40px -18px rgba(20, 28, 60, .55); }
@@ -304,6 +305,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <a href="#themes">Themes</a>
       <a href="#inside">What’s included</a>
       <a href="#shops">Shop kits</a>
+      <a href="#crafts">Handprint art</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
       <a class="btn btn-orange" href="#order">Make my hunt</a>
@@ -454,6 +456,26 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         </div>
         <button class="btn btn-orange" type="submit" id="shopBtn">Get this kit · $7.99</button>
         <p class="status" id="shopStatus" role="status"></p>
+      </form>
+    </div>
+  </section>
+
+  <section class="stop" id="crafts">
+    <div class="wrap">
+      <div class="pin"><b></b><span class="eyebrow">Handprint art</span></div>
+      <h2>Holiday handprint keepsakes</h2>
+      <p class="kits-lede">Eight handprint, footprint and fingerprint crafts per holiday, each with a little poem, a dashed guide showing where to press and a finished example to copy. Your child’s name, age and the month are printed on every page, so they’re ready to frame or send to Grandma. Includes 2 handprint cards, cut-out add-ons and a “These Little Hands” poem page. $5.99 each.</p>
+      <div class="themes two" id="craftList"></div>
+      <form class="shop-buy" id="craftForm" novalidate>
+        <div>
+          <p class="eyebrow" id="craftPicked">Halloween handprint art</p>
+          <div class="row2" style="margin-top:10px">
+            <div class="field"><label for="craftChild">Child’s first name</label><input type="text" id="craftChild" maxlength="24" autocomplete="off" placeholder="Maya"></div>
+            <div class="field"><label for="craftAge">Age (optional)</label><input type="number" id="craftAge" min="1" max="15" inputmode="numeric"></div>
+          </div>
+        </div>
+        <button class="btn btn-orange" type="submit" id="craftBtn">Get this pack · $5.99</button>
+        <p class="status" id="craftStatus" role="status"></p>
       </form>
     </div>
   </section>
@@ -917,6 +939,43 @@ $('shopForm').addEventListener('submit', async (e) => {
   try {
     const res = await fetch(CHECKOUT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items: ['kit'], kit: shopKit, childName, age: parseInt($('shopAge').value, 10) || null }) });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.url) throw new Error(data.error || '');
+    location.href = data.url;
+  } catch (err) {
+    say(err.message || 'Checkout didn’t open. Please try again in a moment, or order on Etsy.', true);
+  }
+});
+
+// Handprint art packs: one per holiday, ordered on their own.
+const CRAFTS = [
+  ['halloween', 'Halloween', 'Ghosts, a spider, a bat, candy corn feet and a fingerprint pumpkin patch.'],
+  ['christmas', 'Christmas', 'A handprint tree, a reindeer footprint, Santa, snowmen, a wreath and penguins.'],
+];
+let craft = new Date().getMonth() >= 10 ? 'christmas' : 'halloween';
+function drawCrafts() {
+  $('craftList').innerHTML = CRAFTS.map(([id, name, blurb]) => `<button type="button" class="theme shop-card" data-craft="${id}" aria-pressed="${id === craft}">
+      <img src="img/craft-${id}.webp" alt="${name} handprint art pages" width="1000" height="750" loading="lazy"><h3>${name} handprint art</h3><p>${blurb}</p></button>`).join('');
+  $('craftList').querySelectorAll('[data-craft]').forEach((b) => b.addEventListener('click', () => {
+    craft = b.dataset.craft;
+    drawCrafts();
+    $('craftForm').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }));
+  const name = CRAFTS.find(([id]) => id === craft)[1];
+  $('craftPicked').textContent = `${name} handprint art`;
+  $('craftBtn').textContent = `Get the ${name} pack · $5.99`;
+}
+drawCrafts();
+$('craftForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const say = (t, bad) => { $('craftStatus').textContent = t; $('craftStatus').classList.toggle('bad', Boolean(bad)); };
+  const childName = $('craftChild').value.trim();
+  if (!childName) return say('Add your child’s first name so we can put it on the keepsake pages.', true), $('craftChild').focus();
+  if (!CHECKOUT_URL) return say('Checkout opens here once payments are switched on. For now, order through our Etsy shop.');
+  say('Opening secure checkout…');
+  try {
+    const res = await fetch(CHECKOUT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ craft, childName, age: parseInt($('craftAge').value, 10) || null }) });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.url) throw new Error(data.error || '');
     location.href = data.url;

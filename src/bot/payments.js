@@ -3,6 +3,7 @@
 const Stripe = require('stripe');
 const THEMES = require('../generator/themes');
 const { kitForHunt, KITS } = require('../kits/engine');
+const { HOLIDAYS } = require('../crafts/build');
 
 const products = require('./products');
 const { PRICES, priceFor } = products;
@@ -17,12 +18,14 @@ const enabled = () => Boolean(process.env.STRIPE_SECRET_KEY && process.env.STRIP
 async function createCheckout(order) {
   const theme = THEMES[order.form.theme];
   const items = products.itemsOf(order.form);
-  const kit = KITS[order.form.kit] || kitForHunt(theme.id);
-  const parts = { hunt: `Custom ${theme?.name}`, kit: `${kit.name} play kit`, party: `${theme?.label} party pack` };
+  const kit = KITS[order.form.kit] || (theme && kitForHunt(theme.id));
+  const holiday = HOLIDAYS[order.form.holiday];
+  const parts = { hunt: `Custom ${theme?.name}`, kit: `${kit?.name} play kit`, party: `${theme?.label} party pack`, craft: `${holiday?.name} handprint art pack` };
   const details = {
     hunt: `scavenger hunt with ${order.form.spots.length} clues`,
     kit: 'pretend play kit',
     party: 'invitations, toppers, tags, banner and more',
+    craft: '8 handprint and footprint keepsake crafts, cards and a poem page',
   };
   const session = await stripe().checkout.sessions.create({
     mode: 'payment',

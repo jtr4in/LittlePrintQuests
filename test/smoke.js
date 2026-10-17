@@ -33,6 +33,10 @@ parse.parseKitOrder = async ({ personalization, kit }) => ({
   ok: true, config: { kit, childName: personalization.split(',')[0], subjects: [{ name: 'Biscuit', kind: 'dog' }], lenient: true },
 });
 
+parse.parseCraftOrder = async ({ personalization, holiday }) => ({
+  ok: true, config: { holiday, childName: personalization.split(',')[0], age: 2 },
+});
+
 // Fake Stripe Checkout session creation (webhooks are signed for real below).
 const payments = require('../src/bot/payments');
 const charged = [];
@@ -130,6 +134,19 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const partyPdf = path.join(dataDir, 'party.pdf');
   await renderParty({ theme: 'space', childName: 'Bo', age: 3 }, partyPdf);
   assert.ok(fs.statSync(partyPdf).size > 50000);
+
+  // Handprint art: 12 pages per holiday with the child's name, age and month on every craft page.
+  const { buildCraftHtml, HOLIDAYS } = require('../src/crafts/build');
+  for (const holiday of Object.keys(HOLIDAYS)) {
+    const craft = buildCraftHtml({ holiday, childName: 'Juniper', age: 3, year: 2026 });
+    assert.equal((craft.match(/<section class="page/g) || []).length, 12, holiday);
+    assert.equal((craft.match(new RegExp(`Juniper <i>·</i> age 3 <i>·</i> ${HOLIDAYS[holiday].month} 2026`, "g")) || []).length >= 8, true, holiday);
+    assert.doesNotMatch(craft, /\{name\}|\{year\}|undefined|NaN/);
+  }
+  assert.throws(() => buildCraftHtml({ holiday: 'easter', childName: 'Bo' }), /Unknown holiday/);
+  const craftPdf = path.join(dataDir, 'craft.pdf');
+  await require('../src/crafts/render-craft').renderCraft({ holiday: 'christmas', childName: 'Bo', age: 1 }, craftPdf);
+  assert.ok(fs.statSync(craftPdf).size > 50000);
 
   for (let i = 0; i < 60; i++) {
     const s = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
@@ -317,6 +334,36 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal((await realFetch(base + '/order/manual-1')).status, 401); // only web orders are public
   assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Emailed to ava\.parent@example\.com/);
 
+  // Website handprint art order: on its own, no Host Mode.
+  const readState = () => JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
+  const badCraft = await realFetch(base + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ craft: 'easter', childName: 'Ava' }) });
+  assert.equal(badCraft.status, 400);
+  assert.match((await badCraft.json()).error, /Halloween or Christmas/);
+  const craftCo = await realFetch(base + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ craft: 'halloween', childName: 'Ava', age: 2 }) });
+  const craftId = (await craftCo.json()).url.split('/').pop();
+  assert.match(await (await realFetch(`${base}/order/${craftId}`)).text(), /Confirming your payment/);
+  const craftPayload = JSON.stringify({ id: 'evt_2', type: 'checkout.session.completed', data: { object: {
+    id: 'cs_test_2', payment_status: 'paid', metadata: { order_id: craftId }, customer_details: { email: 'ava.parent@example.com', name: 'Pat Parent' } } } });
+  await realFetch(base + '/webhooks/stripe', { method: 'POST', body: craftPayload, headers: { 'stripe-signature': payments.stripe().webhooks.generateTestHeaderString({ payload: craftPayload, secret: 'whsec_test' }) } });
+  for (let i = 0; i < 60 && !readState().orders[craftId].sent; i++) await wait(500);
+  const craftOrder = readState().orders[craftId];
+  assert.equal(craftOrder.status, 'ready', JSON.stringify(craftOrder));
+  assert.deepEqual(craftOrder.config, { holiday: 'halloween', childName: 'Ava', age: 2 });
+  assert.ok(!craftOrder.hostToken);
+  assert.equal(charged.at(-1), 599);
+  assert.ok(craftOrder.sent, JSON.stringify(craftOrder));
+  assert.match(emails.at(-1).subject, /Halloween handprint art pack for Ava/);
+  assert.doesNotMatch(emails.at(-1).html, /Host Mode/);
+  assert.match(await (await realFetch(`${base}/order/${craftId}`)).text(), /handprint art pack is ready/);
+  assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Halloween handprint art/);
+  // By hand from the dashboard, picking the holiday.
+  const handCraft = await realFetch(base + '/admin/orders', { method: 'POST', headers: { ...auth, 'Content-Type': 'application/x-www-form-urlencoded' }, redirect: 'manual',
+    body: new URLSearchParams({ personalization: 'Theo, age 2', theme: 'craft:christmas' }).toString() });
+  const handId = decodeURIComponent(handCraft.headers.get('location').match(/made=([^#&]+)/)[1]);
+  for (let i = 0; i < 60 && readState().orders[handId].status !== 'ready'; i++) await wait(500);
+  assert.equal(readState().orders[handId].status, 'ready', readState().orders[handId].problem);
+  assert.match(readState().orders[handId].message, /Christmas handprint art pack for Theo/);
+
   // Free sample: email signup sends a mini picture-clue hunt and joins the list; unsubscribe works.
   const ask = (body) => realFetch(base + '/api/sample', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   assert.equal((await ask({ email: 'nope' })).status, 400);
@@ -341,7 +388,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.ok(c.photos.length <= 20, `${c.key} has more than 20 photos`);
     for (const f of c.photos) assert.ok(fs.existsSync(path.join(__dirname, '..', 'listing-assets', f)), `missing listing-assets/${f}`);
   }
-  assert.equal(N, 62); // 16 packs, the bundle, both dropdown listings, a party pack per theme and a listing per kit (16 theme kits + 11 shop kits)
+  assert.equal(N, 64); // 16 packs, the bundle, both dropdown listings, a party pack per theme, a listing per kit (16 theme kits + 11 shop kits) and 2 handprint art packs
   const listingsDone = async () => {
     for (let i = 0; i < 240; i++) {
       await wait(500);
@@ -355,7 +402,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   await createListings();
   const running = await (await realFetch(base + '/admin', { headers: auth })).text();
   assert.match(running, /class="bar"/);
-  assert.match(running, /of 62 listings done/);
+  assert.match(running, /of 64 listings done/);
   await realFetch(base + '/admin/etsy/listings/stop', { method: 'POST', headers: auth, redirect: 'manual' });
   for (let i = 0; i < 100 && require('../src/bot/listings').isRunning(); i++) await wait(100);
   assert.ok(!require('../src/bot/listings').isRunning(), 'stop ends the run');
@@ -372,9 +419,9 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const creates = etsyCalls.filter((c) => c.p === '/shops/42/listings' && c.method === 'POST');
   assert.equal(creates.length, N, 'resuming must not create a second kits listing');
   const pack = creates[0].body;
-  // Four shop sections, each made once and reused.
-  assert.deepEqual(shopSections.map((s) => s.title), ['Scavenger Hunt Packs', 'Custom Party Bundles', 'Pretend Play Kits', 'Party Printables']);
-  assert.deepEqual([...new Set(creates.map((c) => c.body.shop_section_id))], ['300', '301', '302', '303']);
+  // Five shop sections, each made once and reused.
+  assert.deepEqual(shopSections.map((s) => s.title), ['Scavenger Hunt Packs', 'Custom Party Bundles', 'Pretend Play Kits', 'Party Printables', 'Handprint Art']);
+  assert.deepEqual([...new Set(creates.map((c) => c.body.shop_section_id))], ['300', '301', '302', '303', '304']);
   assert.equal(pack.type, 'download');
   assert.equal(pack.price, '8.00');
   assert.equal(pack.taxonomy_id, '1250');
@@ -457,6 +504,10 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal(partyReq.product, 'party');
   assert.equal(partyReq.options.Theme, 'Pet Vet');
   assert.equal(customRequest({ listing_id: listed['pack-dino'].id, title: 'x', variations: [] }), null);
+  assert.deepEqual(customRequest({ listing_id: listed['craft-christmas'].id, title: 'x', variations: name }), { personalization: 'Maya, Teddy (bear)', options: {}, product: 'craft', holiday: 'christmas' });
+  const craftListing = creates.find((c) => /Halloween Handprint Art/.test(c.body.title)).body;
+  assert.match(craftListing.description, /Handprint Ghosts, Itsy Bitsy Spider/);
+  assert.doesNotMatch(craftListing.description, /\{\w+\}/);
   // If the bot's records are lost (a redeploy without a volume), the next click finds the drafts it
   // made by title instead of making them again, and only adds the photos they're missing.
   shopDrafts.push(...etsyCalls.filter((c) => c.p === '/shops/42/listings' && c.method === 'POST').map((c, i) => ({ listing_id: 7001 + i, title: c.body.title })));
