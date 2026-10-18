@@ -134,7 +134,7 @@ function mazePage(k) {
 function designPage(k) {
   const M = k.def.menu;
   return page('wp-design', `${head(`Invent Something New`, `Dream up a brand new treat for the ${M.title.toLowerCase()}. Draw it, name it and set the price.`)}
-    <div class="wp-d-frame"><span>Draw it here</span></div>
+    <div class="wp-d-frame"></div><p class="wp-d-cap">Draw it here</p>
     <div class="wp-d-lines"><div><b>It’s called</b><span></span></div><div><b>It costs</b><span></span><em>${M.coinIcon} ${esc(M.coinWord)}s</em></div><div><b>Made by</b><span>${esc(k.childName)}</span></div></div>`);
 }
 
@@ -170,7 +170,8 @@ const activityCss = `
 .wp-mz path { fill:none; stroke:var(--teal-d); stroke-width:7; stroke-linecap:round; }
 .wp-mz-start, .wp-mz-end { position:absolute; display:flex; flex-direction:column; align-items:center; font:700 11pt 'Fredoka'; color:var(--teal-d); }
 .wp-mz-start { left:-1.05in; top:-.1in; } .wp-mz-end { right:-1.05in; bottom:-.1in; }
-.wp-d-frame { margin-top:.3in; height:5.6in; border:4px dashed var(--teal); border-radius:26px; display:grid; place-items:center; font:500 16pt 'Fredoka'; color:#b4bccf; }
+.wp-d-cap { text-align:center; font:600 13pt 'Fredoka'; color:#8a93ab; margin:.06in 0 0; }
+.wp-d-frame { margin-top:.3in; height:5.3in; border:4px dashed var(--teal); border-radius:26px; display:grid; place-items:center; font:500 16pt 'Fredoka'; color:#b4bccf; }
 .wp-d-lines { margin-top:.3in; display:flex; flex-direction:column; gap:.22in; font-size:16pt; }
 .wp-d-lines div { display:flex; align-items:flex-end; gap:.15in; }
 .wp-d-lines b { font:600 16pt 'Fredoka'; width:1.4in; }

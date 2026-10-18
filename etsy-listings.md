@@ -155,9 +155,10 @@ THE PLAY KIT (34–38 pages, matches your theme)
   a T-Rex puzzle and hatching egg, a lift-the-flap potion cauldron, a pirate spyglass,
   a Planet Picker spinner, bunny ears, a fire helmet, reindeer antlers and more
 • A whole shop to set up: a "Welcome to Leo's Mission Control" poster, a menu board,
-  Today's Specials, order slips and play money (bills and coins)
-• A wall full of signs with your child's name: 8 door signs, 4 big station signs,
-  8 counter signs (open, closed, pay here, our hours and more) and 15 shelf and bin labels
+  Today's Specials, order slips, play money (bills and coins) and a pull-tab money machine
+• Morning paperwork for little bosses: a Good Morning checklist and a Supply Order form
+• A wall full of signs with your child's name: a big two-page shop sign, door signs, station signs,
+  counter signs (a fold-over open/closed sign, pay here, our hours and more) and 15 shelf and bin labels
 • 7 WIPE & PLAY activity pages to use again and again in a sheet protector or laminated:
   clean-up time (draw a mess, wipe it clean!), tracing, matching, counting, I spy, a maze and invent-a-treat
 • Flat props to cut out and hold: fossil scans, star maps, treasure maps,
@@ -219,14 +220,15 @@ Personalized Pretend Play Kit, Printable Vet, Space, Dino, Pirate, Superhero, Ca
 ```
 Turn the living room into a vet clinic, a pizzeria, a grocery store or mission control, with your child's name on every sign.
 
-★ WHAT YOU GET (34–38 page PDF, US Letter)
+★ WHAT YOU GET (37–47 page PDF, US Letter)
 • Two hands-on toys made for your kit: a vet's lift-the-flap doctor bag and X-ray machine,
   a Planet Picker spinner and blast-off rocket, a T-Rex puzzle and hatching egg,
   a pirate spyglass and treasure chest, a Super Power Spinner, a seashell tiara and more
 • A whole shop to set up: a "Welcome to [Name]'s Pet Clinic" poster, a menu board,
-  Today's Specials, order slips and play money (bills and coins)
-• A wall full of signs with your child's name: 8 door signs, 4 big station signs,
-  8 counter signs (open, closed, pay here, our hours and more) and 15 shelf and bin labels
+  Today's Specials, order slips, play money (bills and coins) and a pull-tab money machine
+• Morning paperwork for little bosses: a Good Morning checklist and a Supply Order form
+• A wall full of signs with your child's name: a big two-page shop sign, door signs, station signs,
+  counter signs (a fold-over open/closed sign, pay here, our hours and more) and 15 shelf and bin labels
 • 7 WIPE & PLAY activity pages to use again and again in a sheet protector or laminated:
   clean-up time (draw a mess, wipe it clean!), tracing, matching, counting, I spy, a maze and invent-a-treat
 • Flat props to cut out and hold: pet X-rays, star maps, fossil scans, treasure maps,
@@ -237,12 +239,15 @@ Turn the living room into a vet clinic, a pizzeria, a grocery store or mission c
 • Tickets and a certificate (plus a blank one for guests)
 • HOST MODE on your phone: 8 pretend-play scenarios for your kit with lines to say and silly twists, a "Surprise me" button, and quick games. Works in any phone browser, nothing to download
 
+★ MADE FOR THEIR AGE
+Tell us your child's age and we make the right version. Ages 2 to 4 get thicker cut lines, bigger pictures and order forms they can fill in by circling pictures. Ages 5 and up get the writing version.
+
 ★ BUILT FOR REAL PLAY
 Things that spin, slide, lift and go on your head, plus cards, maps and posters kids can hold, trade and hide.
 Print the toys and wearables on cardstock and they last all party.
 
 ★ HOW TO ORDER
-Fill in the personalization box with your child's name and up to 6 pets or toys.
+Fill in the personalization box with your child's name, their age and up to 6 pets or toys.
 We send your PDF and your Host Mode link through Etsy messages, usually within a few hours.
 
 ★ WHAT YOU'LL NEED
@@ -258,7 +263,7 @@ This is a DIGITAL file. No physical item will be shipped. For personal use only.
 
 **Personalization:** On, required. Instructions to buyer:
 ```
-Child's first name, and up to 6 pets or toys with what they are, like "Rover (dog), Teddy (bear)".
+Child's first name and age, and up to 6 pets or toys with what they are, like "Maya, 3. Rover (dog), Teddy (bear)".
 ```
 
 **Photos:** use `/mnt/project-files/pretend-play/kit-*-pages.png` and the site's kit images for now.
@@ -378,10 +383,11 @@ The same kits as listing 7, each on its own listing so it can have its own title
 ```
 {opening}
 
-★ WHAT YOU GET (34–38 page PDF, US Letter)
+★ WHAT YOU GET (37–47 page PDF, US Letter)
 • {toys}
-• A whole shop to set up: a "Welcome to {place}" poster, a menu board, Today's Specials, order slips and play money
-• A wall full of signs with your child's name: door signs, big station signs, counter signs (open, closed, pay here, our hours) and shelf and bin labels
+• A whole shop to set up: a "Welcome to {place}" poster, a menu, Today's Specials, order slips, play money and a pull-tab money machine
+• Morning paperwork for little bosses: a Good Morning checklist and a Supply Order form
+• A wall full of signs with your child's name: door signs, station signs, counter signs (a fold-over open/closed sign, pay here, our hours) and shelf and bin labels
 • 7 Wipe & Play activity pages to use again and again with a dry-erase marker: clean-up time, tracing, matching, counting, I spy, a maze and invent-a-treat
 • Flat props to cut out and play with: {props}
 • 8 ID badges for your child, family and friends
@@ -390,11 +396,14 @@ The same kits as listing 7, each on its own listing so it can have its own title
 • A grown-up guide with setup steps and play ideas
 • HOST MODE on your phone: 8 pretend-play scenarios with lines to say and silly twists, a "Surprise me" button, and quick games. Works in any phone browser, nothing to download
 
+★ MADE FOR THEIR AGE
+Tell us your child's age and we make the right version. Ages 2 to 4 get thicker cut lines, bigger pictures and order forms they can fill in by circling pictures. Ages 5 and up get the writing version.
+
 ★ PERFECT WITH
 {pairing}
 
 ★ HOW TO ORDER
-Fill in the personalization box with your child's name and up to 6 pets or toys.
+Fill in the personalization box with your child's name, their age and up to 6 pets or toys.
 We send your PDF and your Host Mode link through Etsy messages, usually within a few hours.
 
 ★ WHAT YOU'LL NEED
@@ -409,7 +418,7 @@ This is a DIGITAL file. No physical item will be shipped. For personal use only.
 
 **Personalization:** On, required. Instructions to buyer:
 ```
-Child's first name, and up to 6 pets or toys with what they are, like "Rover (dog), Teddy (bear)".
+Child's first name and age, and up to 6 pets or toys with what they are, like "Maya, 3. Rover (dog), Teddy (bear)".
 ```
 
 ### vet

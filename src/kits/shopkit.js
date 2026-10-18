@@ -227,29 +227,6 @@ function lettersPage(k) {
   return `<section class="page props">${propHead(P, k)}${sheet()}<div class="cut-h"></div>${sheet()}</section>`;
 }
 
-// ---------- play kitchen sign ----------
-// A long shop sign for the back of a play kitchen or a shelf: two halves on one page that
-// tape together into a 15 inch banner. Shop kits only (kits with no matching hunt).
-
-function kitchenSignPage(k) {
-  const d = k.def;
-  const trio = (d.shop && d.shop.hero) || [d.menu.items[0][0], d.icon, d.menu.items[1][0]];
-  const W = 1520; const H = 430;
-  const stripes = 24; const sw = W / stripes;
-  const awn = Array.from({ length: stripes }, (_, i) => `<path d="M${i * sw},0 L${(i + 1) * sw},0 L${(i + 1) * sw},56 A${sw / 2},${sw / 2.4} 0 0 1 ${i * sw},56 Z" fill="${i % 2 ? '#fff' : 'var(--teal-d)'}" stroke="var(--teal-d)" stroke-width="2"/>`).join('');
-  const art = `<rect x="0" y="0" width="${W}" height="${H}" rx="28" fill="var(--teal)"/>${awn}
-    <rect x="22" y="92" width="${W - 44}" height="${H - 114}" rx="22" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="2 14" stroke-linecap="round"/>
-    ${em(150, 255, 190, trio[0])}${em(W - 150, 255, 190, trio[2])}
-    <text x="${W / 2}" y="268" text-anchor="middle" class="ks-name" style="font-size:${Math.min(120, Math.round(1700 / k.placeName.length))}px">${esc(k.placeName)}</text>
-    <text x="${W / 2}" y="345" text-anchor="middle" class="ks-sub">${esc(d.tagline)}</text>`;
-  const half = (x) => `<svg class="ks-half" viewBox="${x} 0 ${W / 2} ${H}">${art}</svg>`;
-  return `<section class="page props kitchen-sign"><h2 class="pg-title">Play Kitchen Sign</h2>
-    <p class="pg-sub">Cut out both halves and tape them together into one long sign for the back of a play kitchen, a shelf or a doorway.</p>
-    <div class="ks-label">Left half</div>${half(0)}<div class="cut-h"></div><div class="ks-label">Right half: tape the left edge behind the left half</div>${half(W / 2)}
-  </section>`;
-}
-
-
 // ---------- wipe-clean teeth ----------
 
 // A big open smile with 16 teeth to brush, and a cut-out toothbrush. In a sheet protector,
@@ -300,8 +277,6 @@ const SHOP_TOYS = { register, burger, pizza, teeth };
 const SHOP_PROPS = [['food', foodPages], ['labels', labelsPages], ['recipe', recipePage], ['coupons', couponsPage], ['stamps', stampsPage], ['postcards', postcardsPage], ['letters', lettersPage]];
 
 const shopkitCss = `
-.kitchen-sign .ks-half { width:100%; display:block; }
-.ks-label { font:600 10pt 'Fredoka'; color:#66708f; margin:.06in 0; }
 .ks-name { font:400 120px 'Pacifico', 'Fredoka'; fill:#fff; } .ks-sub { font:700 38px 'Fredoka'; fill:var(--mint-l); letter-spacing:2px; }
 .register { width:7.2in; }
 .rg-body { fill:var(--teal); } .rg-drawer { fill:var(--teal-d); } .rg-handle { fill:var(--gold); } .rg-neck { fill:var(--teal-d); }
@@ -373,4 +348,4 @@ const shopkitCss = `
 .lt-line.sign { justify-content:flex-end; } .lt-line.sign i { flex:none; width:2.4in; }
 `;
 
-module.exports = { SHOP_TOYS, SHOP_PROPS, shopkitCss, kitchenSignPage };
+module.exports = { SHOP_TOYS, SHOP_PROPS, shopkitCss };
