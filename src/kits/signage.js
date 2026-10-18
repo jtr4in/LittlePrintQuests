@@ -101,10 +101,18 @@ function hoursCard(k) {
   </div></div>`;
 }
 
+// Open on one half and Closed upside down on the other: fold it in half (or hang it) and turn
+// it round to open or close the shop.
+function openClosedCard(k) {
+  return `<div class="ct-card flip-sign"><div class="fs-half">${counterCard(COUNTER[0], k)}</div>
+    <div class="fs-fold">fold here</div><div class="fs-half upside">${counterCard(COUNTER[1], k)}</div></div>`;
+}
+
 function counterPages(k) {
-  const cards = [...COUNTER.map((c) => counterCard(c, k)), hoursCard(k)];
+  const cards = [openClosedCard(k), ...COUNTER.slice(2).map((c) => counterCard(c, k)), hoursCard(k)];
   const out = [];
-  for (let i = 0; i < cards.length; i += 4) out.push(`<section class="page ct-page"><div class="ct-grid">${cards.slice(i, i + 4).join('')}</div></section>`);
+  // The fold-over sign takes the left column of the first page.
+  for (let i = 0; i < cards.length; i += i ? 4 : 3) out.push(`<section class="page ct-page"><div class="ct-grid">${cards.slice(i, i + (i ? 4 : 3)).join('')}</div></section>`);
   return out.join('');
 }
 
@@ -137,6 +145,9 @@ const signageCss = `
 .ct-page { padding:.35in; }
 .ct-grid { height:100%; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:0; }
 .ct-card { padding:.12in; border:1.5px dashed #b7c0cc; margin:-.75px; }
+.ct-card.flip-sign { grid-row:span 2; padding:0; display:flex; flex-direction:column; }
+.fs-half { flex:1; display:flex; } .fs-half > .ct-card { flex:1; border:0; margin:0; } .fs-half.upside { transform:rotate(180deg); }
+.fs-fold { border-top:2px dotted #9aa5b8; text-align:center; font:600 8pt 'Fredoka'; color:#9aa5b8; margin-top:-1px; height:0; overflow:visible; line-height:0; }
 .ct-in { height:100%; border:4px solid var(--teal); border-radius:16px; outline:2px solid var(--teal); outline-offset:-12px; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:.25in .2in; }
 .ct-lead { font:400 25pt/1.3 'Pacifico', 'Fredoka'; color:var(--navy); margin-top:.1in; }
 .ct-word { font:700 40pt/1.05 'Fredoka'; color:var(--teal-d); }

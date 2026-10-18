@@ -120,7 +120,8 @@ function partyConfig(order) {
 }
 
 function kitConfig(order, kit) {
-  return { kit: kit.id, childName: order.config.childName, subjects: order.pets || [], lenient: true, withHunt: products.has(order, 'hunt') };
+  // The kit's age version (little kids or 5 and up) follows the child's age.
+  return { kit: kit.id, childName: order.config.childName, ...(order.config.age ? { age: order.config.age } : {}), subjects: order.pets || [], lenient: true, withHunt: products.has(order, 'hunt') };
 }
 
 // Parses and builds one order. Never throws: failures become "needs attention".

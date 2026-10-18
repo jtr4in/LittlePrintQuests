@@ -6,7 +6,10 @@
 //     subjects?: [{ name: 'Biscuit', kind: 'dog' }, ...],  // pets, crew, guests... up to 6
 //     staff?: ['Leo', 'Grandpa'],                         // extra badge names, up to 7
 //     lenient?: true,   // unknown subject kinds fall back to the kit's defaults instead of throwing
-//     withHunt?: true }  // sold with the matching hunt: the guide explains how the two connect
+//     withHunt?: true,  // sold with the matching hunt: the guide explains how the two connect
+//     age?: 3, ages?: 'little' | 'big' }  // the little-kids version (ages 2 to 4) has thicker cut
+//                                         // lines, bigger pictures and picture-only order forms; it's
+//                                         // picked by age unless ages says which
 // Everything except kit and childName is optional; empty slots print as blanks to fill in.
 //
 // Pictures are Noto Color Emoji (SIL Open Font License), so they're free to use in a product.
@@ -15,9 +18,10 @@ const path = require('path');
 const { toyPages, toyCss } = require('./toys');
 const { welcomePage, menuBoard, specialsPage, moneyPage, shopCss } = require('./shop');
 const art = require('./art');
-const { SHOP_PROPS, shopkitCss, kitchenSignPage } = require('./shopkit');
+const { SHOP_PROPS, shopkitCss } = require('./shopkit');
 const { stationPages, counterPages, labelsPage, signageCss, signageCount } = require('./signage');
 const { activityPages, activityCss, ACTIVITY_COUNT } = require('./activities');
+const extras = require('./extras');
 
 const FONT_DIR = path.join(__dirname, '..', '..', 'fonts');
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -40,11 +44,14 @@ function normalize(def, cfg) {
     placeName: String(cfg.placeName || cfg.clinicName || def.placeName(possessive(childName))).trim(),
     subjects,
     withHunt: Boolean(cfg.withHunt),
+    little: cfg.ages ? cfg.ages === 'little' : Number(cfg.age) > 0 && Number(cfg.age) <= 4,
     staff: (cfg.staff || []).slice(0, 7).map((s) => String(s).trim()).filter(Boolean),
   };
 }
 
 const pic = (k, s) => k.def.kinds[s.kind][0];
+// An empty box to draw in, with its words underneath so they don't get drawn over.
+const drawBox = (cls, label) => `<div class="draw-wrap"><div class="${cls} empty"></div><span class="draw-cap">${esc(label)}</span></div>`;
 const kindName = (k, s) => k.def.kinds[s.kind][1];
 const subjectsOrDefaults = (k) => (k.subjects.length ? k.subjects : k.def.defaultKinds.map((kind) => ({ name: '', kind })));
 
@@ -73,7 +80,7 @@ function badge(k, name, role, lead) {
   return `<div class="badge ${lead ? 'lead' : ''}">
     <div class="badge-top"><span>${k.def.badgeIcon} ${esc(lead ? k.def.leadRole : 'Crew')}</span><span>ID</span></div>
     <div class="badge-body">
-      <div class="photo">Draw<br>yourself</div>
+      <div class="photo-col"><div class="photo"></div><span class="draw-cap">Draw yourself</span></div>
       <div class="badge-info">
         <div class="clinic">${esc(k.placeName)}</div>
         <div class="who">${name ? esc(name) : '<span class="blank"></span>'}</div>
@@ -128,7 +135,7 @@ function recordPage(k, p) {
   return `<section class="page form">
     ${formHead(k, R.title, R.icon)}
     <div class="patient">
-      <div class="pet-pic">${p ? pic(k, p) : `<span class="draw">${esc(R.drawLabel)}</span>`}</div>
+      ${p ? `<div class="pet-pic">${pic(k, p)}</div>` : drawBox('pet-pic', R.drawLabel)}
       <div class="fields">
         ${R.fields.map((f, i) => `<div class="field"><b>${esc(f)}</b><span class="fill">${p && i === 0 ? esc(p.name) : p && i === 1 ? esc(kindName(k, p)) : ''}</span></div>`).join('')}
       </div>
@@ -156,8 +163,18 @@ function ticketCard(k) {
   </div>`;
 }
 
+function ticketCardLittle(k) {
+  const T = k.def.ticket;
+  return `<div class="rx little-rx">
+    <div class="rx-top"><span class="rx-mark">${T.mark}</span><div><div class="clinic">${esc(k.placeName)}</div><b>${esc(T.title)}</b></div></div>
+    <div class="lx-grid">${T.options.slice(0, 8).map(([e, n]) => `<div class="lr-tile">${art.pic(e, '.5in')}<span>${esc(n)}</span></div>`).join('')}</div>
+    <div class="times"><b>${esc(T.countLabel)}</b> <span>1</span><span>2</span><span>3</span><span>4</span></div>
+    <div class="lx-coins"><b>Pay</b>${Array.from({ length: 5 }, () => art.pic(k.def.menu.coinIcon, '.36in')).join('')}</div>
+  </div>`;
+}
+
 function ticketPage(k) {
-  const c = ticketCard(k);
+  const c = k.little ? ticketCardLittle(k) : ticketCard(k);
   return `<section class="page rxs"><div class="rx-grid">${c}${c}${c}${c}</div></section>`;
 }
 
@@ -166,7 +183,7 @@ function passport(k, p) {
   return `<div class="passport">
     <div class="pp-cover"><div class="pp-emblem">${P.emblem}</div><div class="pp-word">${esc(P.word)}</div><div class="clinic">${esc(k.placeName)}</div></div>
     <div class="pp-inside">
-      <div class="pp-photo">${p ? pic(k, p) : `<span class="draw">${esc(P.drawLabel)}</span>`}</div>
+      ${p ? `<div class="pp-photo">${pic(k, p)}</div>` : drawBox('pp-photo', P.drawLabel)}
       <div class="pp-fields">
         ${P.fields.map((f, i) => `<div class="field"><b>${esc(f)}</b><span class="fill">${p && i === 0 ? esc(p.name) : p && i === 1 ? esc(kindName(k, p)) : ''}</span></div>`).join('')}
       </div>
@@ -211,19 +228,25 @@ function guidePage(k) {
   const d = k.def;
   const signCount = d.signs.length + 1 - ((d.signs.length + 1) % 2);
   const inside = [
-    `${signCount} signs for doors and walls, plus ${signageCount(d)} big station signs, 8 counter signs (open, closed, pay here, our hours and more) and 15 shelf and bin labels`,
+    ...(d.hunt ? [] : ['A big shop sign: two pages that glue into one 20 inch banner']),
+    `${signCount} signs for doors and walls, plus ${signageCount(d) ? `${signageCount(d)} big station signs, ` : ''}7 counter signs (a fold-over Open/Closed sign, pay here, our hours and more) and 15 shelf and bin labels`,
+    ...(d.appliances ? [`A ${d.appliances.map((a) => ({ oven: 'pizza oven', stove: 'stove' })[a]).join(' and a ')} to tape onto a box`] : []),
+    ...(d.jars ? [`${d.jars.length} wrap-around jar labels`] : []),
     ...(d.toys ? d.toys.map((t) => t.inside) : [`${['laptop', 'console'].includes(d.dashboard.device) ? 'A fold-up' : 'A cut-out'} ${d.dashboard.gadget} with 3 screens`]),
     '8 ID badges',
+    ...(d.chefHat ? [`A chef hat with ${k.lead} on the band`] : []),
+    ...(d.peel ? ['A pizza peel and two draw-your-own wipe-off pizzas'] : []),
     `${ACTIVITY_COUNT} Wipe & Play activity pages to use again and again in a sheet protector: clean-up time, tracing, matching, counting, I spy, a maze and invent-a-treat`,
     ...(d.props ? [`Props to cut out: ${Object.values(d.props).map((x) => x.title).join(', ')}`] : []),
     `${d.record.title} forms, two to a page, for ${k.subjects.length ? `each of your ${d.subjectPlural}` : `four ${d.subjectPlural}`} plus a blank one`,
     `${d.ticket.title} cards`,
     d.passport.pageTitle,
-    `Shop set: welcome poster, ${d.menu.title} board, Today’s Specials, order slips and ${d.menu.coinsTitle.toLowerCase()}`,
+    'Morning paperwork: a Good Morning checklist and a Supply Order form',
+    `Shop set: welcome poster, ${d.menu.fold ? `a ${d.menu.title} that folds like a book` : `${d.menu.title} board`}, Today’s Specials, order slips, ${d.menu.coinsTitle.toLowerCase()} and a pull-tab money machine`,
     `${d.certificate.title} (named + blank)`,
   ];
   return `<section class="page guide${k.withHunt && G.afterHunt ? ' with-hunt' : ''}">
-    <div class="guide-head"><div class="guide-icon">${d.icon}</div><div><div class="clinic">Grown-up guide</div><h1>Welcome to ${esc(k.placeName)}!</h1></div></div>
+    <div class="guide-head"><div class="guide-icon">${d.icon}</div><div><div class="clinic">Grown-up guide${k.little ? ' · little kids version, ages 2 to 4' : ''}</div><h1>Welcome to ${esc(k.placeName)}!</h1></div></div>
     <p class="lead">${esc(G.intro.replace('{child}', k.childName))}</p>
     <div class="guide-cols">
       <div><h3>What’s inside</h3><ul>${inside.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
@@ -494,10 +517,24 @@ function recordHalf(k, p) {
   return `<div class="rec">
     <header class="rec-head"><span class="em">${R.icon}</span><h2>${esc(R.title)}</h2><span class="clinic">${esc(k.placeName)}</span></header>
     <div class="rec-top">
-      <div class="pet-pic small">${p ? pic(k, p) : `<span class="draw">${esc(R.drawLabel)}</span>`}</div>
+      ${p ? `<div class="pet-pic small">${pic(k, p)}</div>` : drawBox('pet-pic small', R.drawLabel)}
       <div class="rec-fields">${R.fields.map((f, i) => `<div class="field"><b>${esc(f)}</b><span class="fill">${p && i === 0 ? esc(p.name) : p && i === 1 ? esc(kindName(k, p)) : ''}</span></div>`).join('')}</div>
     </div>
     <div class="rec-checks">${col(R.checks.slice(0, half))}${col(R.checks.slice(half))}</div>
+    <div class="rec-foot"><b>${esc(R.moodLabel)}</b><div class="faces">${R.moods.map((m) => `<span>${m}</span>`).join('')}</div></div>
+  </div>`;
+}
+
+// The little-kids version: no writing, just big pictures to circle.
+function recordHalfLittle(k, p) {
+  const R = k.def.record;
+  return `<div class="rec little-rec">
+    <header class="rec-head"><span class="em">${R.icon}</span><h2>${esc(R.title)}</h2><span class="clinic">${esc(k.placeName)}</span></header>
+    <div class="rec-top">
+      ${p ? `<div class="pet-pic small">${pic(k, p)}</div>` : drawBox('pet-pic small', R.drawLabel)}
+      <div class="lr-table"><b>${esc(R.fields[2] || 'Table')}</b><div class="lr-nums">${[1, 2, 3, 4, 5].map((n) => `<span>${n}</span>`).join('')}</div><small>Circle one</small></div>
+    </div>
+    <div class="lr-grid">${R.checks.slice(0, 8).map(([e, n]) => `<div class="lr-tile">${art.pic(e, '.62in')}<span>${esc(n)}</span></div>`).join('')}</div>
     <div class="rec-foot"><b>${esc(R.moodLabel)}</b><div class="faces">${R.moods.map((m) => `<span>${m}</span>`).join('')}</div></div>
   </div>`;
 }
@@ -506,7 +543,8 @@ function recordsPages(k) {
   const list = [...subjectsOrDefaults(k), null];
   if (list.length % 2) list.push(null);
   const out = [];
-  for (let i = 0; i < list.length; i += 2) out.push(`<section class="page recs">${recordHalf(k, list[i])}<div class="cut-h"></div>${recordHalf(k, list[i + 1])}</section>`);
+  const half = k.little ? recordHalfLittle : recordHalf;
+  for (let i = 0; i < list.length; i += 2) out.push(`<section class="page recs">${half(k, list[i])}<div class="cut-h"></div>${half(k, list[i + 1])}</section>`);
   return out.join('');
 }
 
@@ -548,29 +586,42 @@ function buildKitHtml(cfg) {
   const k = normalize(def, cfg);
   signSeed = 0;
   art.setKit(def);
+  art.setPicScale(k.little ? 1.3 : 1);
   const pages = [
     guidePage(k),
     welcomePage(k),
-    def.hunt ? '' : kitchenSignPage(k),
+    def.hunt ? '' : extras.bigSignPages(k),
     signsPages(k),
+    extras.appliancePages(k),
     stationPages(k),
     counterPages(k),
     labelsPage(k),
+    extras.jarPages(k),
     gadgetPages(k),
     badgesPage(k),
+    extras.chefHatPage(k),
     propsPages(k),
+    extras.peelPages(k),
     activityPages(k),
+    extras.morningPages(k),
     recordsPages(k),
     ticketPage(k),
     passportsPages(k),
-    menuBoard(k),
+    def.menu.fold ? extras.foldMenuPages(k) : menuBoard(k),
     k.def.props?.recipe ? SHOP_PROPS.find(([key]) => key === 'recipe')[1](k) : '',
     specialsPage(k),
     moneyPage(k),
+    extras.atmPage(k),
     certificatePage(k),
     certificatePage(k, true),
   ].join('');
-  return `<!doctype html><html><head><meta charset="utf-8"><style>${css(def.colors)}</style></head><body>${pages}</body></html>`;
+  art.setPicScale(1);
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${k.little ? thicker(css(def.colors)) : css(def.colors)}</style></head><body class="${k.little ? 'little' : 'big'}">${pages}</body></html>`;
+}
+
+// The little-kids version doubles every cut line and border, so they're easy to see and follow.
+function thicker(styles) {
+  return styles.replace(/(\d*\.?\d+)px (dashed|solid|dotted)/g, (m, n, kind) => `${Math.min(+n * 2, 8)}px ${kind}`);
 }
 
 function css(c) {
@@ -583,6 +634,7 @@ ${toyCss}
 ${shopkitCss}
 ${signageCss}
 ${activityCss}
+${extras.extrasCss}
 ${shopCss(font)}
 :root { --teal:${c.main}; --teal-d:${c.dark}; --mint:${c.soft}; --mint-l:${c.light}; --orange:${c.accent}; --accent-ink:${c.accentInk || '#2b1d06'}; --navy:#3f4a73; --cream:#fbf8f1; --line:#c9d6d0; --gold:${c.gold || '#f1d48f'}; }
 * { box-sizing:border-box; }
@@ -599,6 +651,10 @@ h1, h2, h3 { font-family:'Fredoka', sans-serif; margin:0; line-height:1.1; }
 .field b { white-space:nowrap; }
 .hint { font-size:9pt; color:#7a849f; margin:2px 0 0; text-align:center; }
 .draw { font:500 10pt 'Fredoka'; color:#9aa3b8; }
+.draw-wrap { display:flex; flex-direction:column; align-items:center; gap:3px; flex:none; }
+.draw-cap { font:600 9pt 'Fredoka'; color:#8a93ab; text-align:center; white-space:nowrap; }
+.draw-wrap .pp-photo { align-self:stretch; height:1.3in; }
+.photo-col { width:1.05in; flex:none; display:flex; flex-direction:column; gap:3px; } .photo-col .photo { flex:1; width:auto; }
 .pg-title { font-size:24pt; text-align:center; }
 .pg-sub { text-align:center; margin:.05in 0 .2in; font-size:11pt; color:#66708f; }
 .foot { position:absolute; bottom:.35in; left:0; right:0; text-align:center; font:500 9pt 'Fredoka'; color:#9aa3b8; }
@@ -921,6 +977,12 @@ p.lead { font-size:13.5pt; line-height:1.45; margin:.2in 0; }
 .check.mini .em { font-size:12pt; }
 .rec-foot { display:flex; align-items:center; gap:.2in; font-size:11pt; } .rec-foot .faces { flex:1; margin:0; font-size:22pt; }
 .recs .cut-h { margin:.12in -.45in; }
+.lr-table { flex:1; display:flex; flex-direction:column; align-items:center; gap:.05in; font-size:13pt; } .lr-table small { color:#8a93ab; font:600 9pt 'Fredoka'; }
+.lr-nums { display:flex; gap:.14in; } .lr-nums span { width:.55in; height:.55in; border:3px solid var(--teal); border-radius:50%; display:grid; place-items:center; font:700 19pt 'Fredoka'; color:var(--teal-d); }
+.lr-grid { flex:1; display:grid; grid-template-columns:repeat(4, 1fr); gap:.1in; }
+.lr-tile { border:3px solid var(--mint); border-radius:.16in; background:var(--mint-l); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; text-align:center; font:700 10.5pt/1.1 'Fredoka'; padding:.04in; }
+.lx-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:.08in; margin:.06in 0; } .lx-grid .lr-tile { font-size:8.5pt; }
+.lx-coins { display:flex; align-items:center; gap:.06in; margin-top:auto; font-size:11pt; }
 .after-hunt { background:var(--mint-l); border-left:5px solid var(--orange); border-radius:.08in; padding:.12in .16in; margin:.15in 0 0; font-size:11pt; }
 .after-hunt b { display:block; font:700 12pt 'Fredoka'; color:var(--teal-d); margin-bottom:2px; }
 .extra { justify-content:space-evenly; align-items:center; }

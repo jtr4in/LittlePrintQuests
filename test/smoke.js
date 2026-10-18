@@ -135,6 +135,27 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   await renderParty({ theme: 'space', childName: 'Bo', age: 3 }, partyPdf);
   assert.ok(fs.statSync(partyPdf).size > 50000);
 
+  // Play kits come in two versions: little kids (2 to 4) get picture-only order forms, bigger
+  // pictures and thicker cut lines; the version follows the child's age.
+  const { buildKitHtml, KITS } = require('../src/kits/engine');
+  const littleKit = buildKitHtml({ kit: 'italian', childName: 'Ava', age: 3, lenient: true });
+  const bigKit = buildKitHtml({ kit: 'italian', childName: 'Ava', age: 6, lenient: true });
+  assert.match(littleKit, /<body class="little">/);
+  assert.match(bigKit, /<body class="big">/);
+  assert.ok(littleKit.includes('little-rec') && !bigKit.includes('little-rec'));
+  assert.ok(littleKit.includes('Circle what they want!') && !bigKit.includes('Circle what they want!'));
+  assert.match(buildKitHtml({ kit: 'italian', childName: 'Ava', age: 3, ages: 'big', lenient: true }), /<body class="big">/);
+  // Every kit: draw labels sit under the boxes, a fold-over Open/Closed sign and the money machine.
+  for (const id of Object.keys(KITS)) {
+    const html = buildKitHtml({ kit: id, childName: 'Ava', lenient: true });
+    assert.ok(html.includes('class="draw-cap">Draw yourself') && !html.includes('Draw<br>yourself'), id);
+    assert.ok(html.includes('flip-sign') && html.includes('Money Machine') && html.includes('Good Morning,'), id);
+    assert.equal(html.includes('Big sign, page 2 of 2'), !KITS[id].hunt, id);
+  }
+  // The Italian kit: oven and stove that look like the real thing, jar labels, a peel, a chef hat and a folding menu.
+  for (const piece of ['ov-dome', 'sv-ring', 'Jar Labels', 'Pizza Peel', 'Draw Your Own Pizza', 'Chef Hat', 'Menu, page 2 of 2']) assert.ok(bigKit.includes(piece), piece);
+  assert.doesNotMatch(bigKit, /class="st-title"[^>]*>Pizza Oven/);
+
   // Handprint art: 12 pages per holiday with the child's name, age and month on every craft page.
   const { buildCraftHtml, HOLIDAYS } = require('../src/crafts/build');
   for (const holiday of Object.keys(HOLIDAYS)) {

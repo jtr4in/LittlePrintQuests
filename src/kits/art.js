@@ -39,9 +39,15 @@ function em(x, y, size, e, extra = '') {
   return `<g ${extra}><svg x="${(x - size / 2).toFixed(1)}" y="${(y - size / 2).toFixed(1)}" width="${size}" height="${size}" viewBox="${viewBox}">${body}</svg></g>`;
 }
 
+// Pictures come out bigger in the little-kids (ages 2 to 4) version of a kit.
+let picScale = 1;
+const setPicScale = (n) => { picScale = n; };
+const scaled = (size) => (picScale === 1 ? size : String(size).replace(/^([\d.]+)in$/, (m, n) => `${+(n * picScale).toFixed(3)}in`));
+
 // An emoji as an inline HTML element, `size` in any CSS unit.
 function pic(e, size, cls = '') {
   note(e);
+  size = scaled(size);
   const png = illustration(e);
   if (png) return `<img class="pic ${cls}" src="${png}" style="width:${size};height:${size};object-fit:contain;vertical-align:middle">`;
   const svg = emojiSvg(e);
@@ -76,7 +82,7 @@ function awning(w, stripes = 12) {
   }).join('');
 }
 
-module.exports = { em, pic, confetti, awning, emojiSvg };
+module.exports = { em, pic, confetti, awning, emojiSvg, setPicScale };
 
 // ---------- illustrations ----------
 // A kit can swap any emoji for a real illustration: drop a picture (WebP) named after the picture's slug

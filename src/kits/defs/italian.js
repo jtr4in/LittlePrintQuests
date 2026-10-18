@@ -2,7 +2,7 @@
 module.exports = {
   id: 'italian',
   name: 'Italian Restaurant',
-  colors: { main: '#2f8a4c', dark: '#1f6036', soft: '#f9d6c8', light: '#fff5ef', accent: '#d23a2f', accentInk: '#ffffff' },
+  colors: { main: '#c8372d', dark: '#8f231c', soft: '#f9d6c8', light: '#fff5ef', accent: '#2f8a4c', accentInk: '#ffffff' },
   icon: '🍝',
   placeName: (who) => `${who} Trattoria`,
   tagline: 'Pasta, meatballs and gelato. Buon appetito!',
@@ -24,6 +24,12 @@ module.exports = {
     ['Kitchen', 'Busy chefs! Chefs only, please', '👨‍🍳'],
     ['Buon Appetito!', 'That means “Enjoy your meal!”', '🍝'],
   ],
+  // The oven and stove are wall pieces that look like the real thing, so they're not station signs.
+  stations: [['Gelato Bar', '🍨'], ['Bread Basket', '🥖']],
+  appliances: ['oven', 'stove'],
+  jars: [['🫑', 'Peppers'], ['🍄', 'Mushrooms'], ['🫒', 'Olives'], ['🍅', 'Tomatoes'], ['🧀', 'Cheese'], ['🌿', 'Basil'], ['🧅', 'Onions'], ['🌶️', 'Hot peppers'], ['🍝', 'Pasta'], ['🥖', 'Breadsticks'], ['🧄', 'Garlic'], ['🍋', 'Lemons']],
+  peel: true,
+  chefHat: true,
   badgeIcon: '🍝',
   leadPrefix: 'Chef',
   leadRole: 'Head Chef',
@@ -52,7 +58,7 @@ module.exports = {
     howTo: 'Cut along the dashed line and fold in the middle. Stamp a circle for every dinner. Fill all four for a free gelato!',
   },
   menu: {
-    title: 'Dinner Menu', icon: '🍝', coinIcon: '🪙', coinWord: 'coin', coinsTitle: 'Trattoria coins',
+    fold: true, title: 'Dinner Menu', icon: '🍝', coinIcon: '🪙', coinWord: 'coin', coinsTitle: 'Trattoria coins',
     items: [['🍝', 'Spaghetti', 3], ['🧆', 'Meatballs', 2], ['🥖', 'Garlic bread', 2], ['🥗', 'Salad', 2], ['🍲', 'Minestrone soup', 2], ['🍨', 'Gelato', 2], ['🍰', 'Tiramisu', 3], ['🍋', 'Lemonade', 1]],
   },
   shop: {
@@ -80,7 +86,7 @@ module.exports = {
     intro: 'Everything {child} needs to run a pretend sit-down Italian restaurant. Print on regular Letter paper, cut along the dashed lines, and seat some stuffed animals at the tables as hungry guests.',
     setup: [
       'Tape the restaurant sign and Open sign by the “front door”, with Please Wait to Be Seated just inside.', 'Set a table or two with plates, napkins and a Table Card on each.',
-      'Put the register by the Pay Here sign and a notebook under the Reservations sign.', 'Use a pot and a wooden spoon for the kitchen, and tape up How to Make Spaghetti.',
+      'Put the register by the Pay Here sign and a notebook under the Reservations sign.', 'Tape the oven and stove onto boxes for the kitchen, wrap the jar labels round some cups, and tape up How to Make Spaghetti.',
       'Pin on the badges and seat the first guests!',
     ],
     play: [

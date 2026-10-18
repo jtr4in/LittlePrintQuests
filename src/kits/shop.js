@@ -57,7 +57,7 @@ function specialsPage(k) {
   const S = k.def.shop || {};
   const picks = S.specials || [M.items[1], M.items[0], M.items[M.items.length - 1]].map(([e, n]) => [e, n]);
   const tags = S.specialTags || ['Yum!', 'Tasty!', 'Wow!'];
-  const card = ([e, n], i) => `<div class="special">${pic(e, '1.45in')}<b>${esc(n)}</b><span class="pill">${tags[i]}</span></div>`;
+  const card = ([e, n], i) => `<div class="special">${pic(e, k.little ? '1in' : '1.45in')}<b>${esc(n)}</b><span class="pill">${tags[i]}</span></div>`;
   const slip = () => `<div class="slip">
     <div class="slip-head">${pic(M.icon, '.42in')}<div><small>${esc(k.placeName)}</small><b>${esc(S.slipTitle || 'Order slip')}</b></div><span class="no">No. ____</span></div>
     ${(S.slipFields || ['Customer', 'Order', 'Extras']).map((f) => `<div class="line"><span>${f}</span><i></i></div>`).join('')}
@@ -65,12 +65,19 @@ function specialsPage(k) {
     <div class="line"><span>Total</span><i class="short"></i>${pic(M.coinIcon, '.3in')}</div>
     <div class="slip-foot">Thank you! Come again!</div>
   </div>`;
+  // Little kids circle pictures instead of writing.
+  const littleSlip = () => `<div class="slip">
+    <div class="slip-head">${pic(M.icon, '.42in')}<div><small>${esc(k.placeName)}</small><b>${esc(S.slipTitle || 'Order slip')}</b></div></div>
+    <div class="ls-pics">${M.items.slice(0, 6).map(([e]) => `<span>${pic(e, '.3in')}</span>`).join('')}</div>
+    <div class="line"><span>How many</span><span class="ticks">${[1, 2, 3, 4].map((n) => `<em>${n}</em>`).join('')}</span></div>
+    <div class="slip-foot">Circle what they want!</div>
+  </div>`;
   return `<section class="page shop-page specials-page">
     ${bg(11, [60, 40, 696, 470], 34)}
     <h1 class="script center">Today’s Specials</h1>
     <div class="specials">${picks.map(card).join('')}</div>
     <div class="cut-h"></div>
-    <div class="slips">${slip()}${slip()}${slip()}${slip()}</div>
+    <div class="slips">${Array.from({ length: 4 }, k.little ? littleSlip : slip).join('')}</div>
   </section>`;
 }
 
@@ -107,6 +114,7 @@ svg.pic { display:inline-block; vertical-align:middle; flex:none; }
 .tag-line { font:600 15pt 'Fredoka'; color:var(--navy); margin-top:.08in; }
 .trio { width:6in; margin:auto 0; }
 .puddle { fill:var(--mint); opacity:.7; }
+.ls-pics { display:grid; grid-template-columns:repeat(3, 1fr); justify-items:center; gap:.05in; margin:.04in 0; } .ls-pics span { width:.6in; height:.6in; border:2px solid var(--mint); border-radius:50%; display:grid; place-items:center; }
 .open-pill { margin-top:.12in; background:var(--teal); color:#fff; font:700 20pt 'Fredoka'; padding:.08in .4in; border-radius:99px; letter-spacing:.04em; }
 .menu-board { padding:.45in .55in; }
 .board-head { display:flex; align-items:center; justify-content:center; gap:.2in; }
