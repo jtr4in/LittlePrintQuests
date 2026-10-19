@@ -9,7 +9,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { painted, outline, outlines } = require('./prints');
+const { painted, outlines } = require('./prints');
 const { draw, ...seasonal } = require('./holidays');
 const memory = require('./memory');
 
@@ -32,8 +32,15 @@ const fill = (s, ctx) => String(s).replace(/\{(\w+)\}/g, (_, k) => esc(ctx[k] ??
 
 // The art panel: the scene, then either the dashed outlines (the page to press on) or the painted
 // prints with their finishing touches (the example).
+// Guides are pale gray on light pages and soft blue on dark ones.
+const guideFor = (bg) => {
+  const [r, g, b] = (bg.replace('#', '').match(/../g) || ['ff', 'ff', 'ff']).map((x) => parseInt(x, 16));
+  return 0.299 * r + 0.587 * g + 0.114 * b < 110 ? '#b9c8e6' : '#8a90a6';
+};
+
 function panel(craft, mode) {
-  const prints = craft.prints.map((p) => (mode === 'example' ? painted(p) : outline(p, craft.bg))).join('');
+  const prints = mode === 'clean' ? '' : mode === 'example' ? craft.prints.map(painted).join('')
+    : craft.prints.map((p) => outlines([p], guideFor(craft.bg))).join('');
   return `<svg class="art" viewBox="0 0 ${PANEL.w} ${PANEL.h}">
     <rect width="${PANEL.w}" height="${PANEL.h}" rx="0.25" fill="${craft.bg}"/>
     ${craft.scene || ''}${prints}${craft.decor || ''}${mode === 'example' ? craft.finish || '' : ''}
@@ -44,13 +51,13 @@ function keepsakeLine(ctx) {
   return [esc(ctx.name), ctx.age ? `age ${esc(ctx.age)}` : '', esc(ctx.when)].filter(Boolean).join(' <i>·</i> ');
 }
 
-function craftPage(h, craft, ctx) {
+function craftPage(h, craft, ctx, clean = false) {
   const swatches = craft.paints.map(([c, label]) => `<span class="sw"><i style="background:${c}"></i>${esc(label)}</span>`).join('');
   return `<section class="page craft">
     <div class="kicker">${esc(h.kicker)}</div>
     <h1>${esc(craft.title)}</h1>
     <p class="poem">${craft.poem.map((l) => fill(l, ctx)).join('<br>')}</p>
-    <div class="panel">${panel(craft, 'page')}</div>
+    <div class="panel">${panel(craft, clean ? 'clean' : 'page')}</div>
     <div class="keep">${keepsakeLine(ctx)}</div>
     <div class="how">
       <div class="steps">
@@ -78,7 +85,7 @@ function guidePage(h, ctx) {
         <li>Optional: googly eyes, glitter and glue</li>
       </ul>
       <h2>What’s inside</h2><ul class="inside">${h.crafts.map((c) => `<li>${esc(c.title)}</li>`).join('')}
-        <li>Handprint cards to send to family</li><li>Cut-out add-ons: eyes, hats and more</li><li>“These Little Hands” poem keepsake</li></ul></div>
+        <li>Handprint cards to send to family</li><li>Cut-out add-ons: eyes, hats and more</li><li>“These Little Hands” poem keepsake</li><li>Every craft page again with no outlines</li></ul></div>
       <div class="col"><h2>How to get a great print</h2><ol class="tips">
         <li><b>Brush, don’t dip.</b> Paint a thin, even coat on the hand or foot with the brush.</li>
         <li><b>Press flat.</b> Lay the hand on the outline and press each finger down gently.</li>
@@ -87,7 +94,7 @@ function guidePage(h, ctx) {
         <li><b>Practice first</b> on scrap paper. Wiggly prints are part of the charm!</li>
         <li><b>Little ones:</b> print the foot while they’re sitting or sleepy, and have a wipe ready.</li>
       </ol>
-      <div class="note">The dashed outlines are just a guide. Every hand is different, so press where it fits best. Frame your favorites, or laminate them to keep year after year.</div></div>
+      <div class="note">The dotted outlines are light and a little smaller than a hand, so the paint covers them. Every hand is different, so press where it fits best. Prefer no outlines at all? Use the second set of craft pages at the back. Frame your favorites, or laminate them to keep year after year.</div></div>
     </div>
   </section>`;
 }
@@ -95,7 +102,7 @@ function guidePage(h, ctx) {
 // Two half-page cards to send to family: a greeting and a spot for a small handprint.
 function cardsPage(h, ctx) {
   const card = (greet, i) => `<div class="card">
-    <div class="c-art"><svg viewBox="0 0 3.2 3.6">${outline({ kind: 'hand', x: 1.6, y: 2, s: 0.68 }, '#fff')}</svg></div>
+    <div class="c-art"><svg viewBox="0 0 3.2 3.6">${outlines([{ kind: 'hand', x: 1.6, y: 2, s: 0.68 }])}</svg></div>
     <div class="c-text"><div class="c-greet">${fill(greet, ctx)}</div><div class="c-from">Love, <b>${esc(ctx.name)}</b></div><div class="c-small">${esc(ctx.when)}</div>
       <div class="c-to"><span>To:</span><i></i></div></div>
     <div class="c-icon">${h.cardIcons[i]}</div>
@@ -115,7 +122,7 @@ function poemPage(h, ctx) {
   const lines = ['Here are my little handprints,', 'so tiny and so new.', 'One day when I am big and tall,', 'I’ll still make art with you.'];
   return `<section class="page poem-page"><div class="frame">${h.frame}</div>
     <div class="pp-inner"><h1>These Little Hands</h1><p class="poem">${lines.join('<br>')}</p>
-    <div class="pp-hands"><svg viewBox="0 0 6.4 4.6">${outline({ kind: 'hand', x: 1.85, y: 2.4, s: 0.95 }, '#fff')}${outline({ kind: 'hand', x: 4.55, y: 2.4, s: 0.95, flip: true }, '#fff')}</svg></div>
+    <div class="pp-hands"><svg viewBox="0 0 6.4 4.6">${outlines([{ kind: 'hand', x: 1.85, y: 2.4, s: 0.95 }])}${outlines([{ kind: 'hand', x: 4.55, y: 2.4, s: 0.95, flip: true }])}</svg></div>
     <div class="pp-name">${esc(ctx.name)}</div><div class="keep">${[ctx.age ? `age ${esc(ctx.age)}` : '', esc(ctx.when)].filter(Boolean).join(' · ')}</div></div></section>`;
 }
 
@@ -296,7 +303,8 @@ function buildCraftHtml(cfg) {
   const pages = h.book
     ? [bookGuide(h, ctx), coverPage(h, ctx), ...howToPages(h, ctx), ...h.crafts.map((m) => monthPage(h, m, ctx)), grownPage(h, ctx),
       ...(ctx.preview ? [] : h.crafts.map((m) => monthPage(h, m, ctx, true)))]
-    : [guidePage(h, ctx), ...h.crafts.map((c) => craftPage(h, c, ctx)), cardsPage(h, ctx), addonsPage(h), poemPage(h, ctx)];
+    : [guidePage(h, ctx), ...h.crafts.map((c) => craftPage(h, c, ctx)), cardsPage(h, ctx), addonsPage(h), poemPage(h, ctx),
+      ...h.crafts.map((c) => craftPage(h, c, ctx, true))];
   return `<!doctype html><html><head><meta charset="utf-8"><style>${css(h)}${h.book ? bookCss() : ''}</style></head><body>${pages.join('')}</body></html>`;
 }
 

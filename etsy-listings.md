@@ -912,7 +912,8 @@ Personalized handprint and footprint keepsake pages, one listing per holiday. Th
 
 ★ WHAT YOU GET (PDF, US Letter, {count} pages)
 • 8 handprint, footprint and fingerprint crafts: {crafts}
-• Every craft page has a sweet little poem, a dashed guide showing where to press, and a finished example to copy
+• Every craft page has a sweet little poem, a light dotted guide showing where to press, and a finished example to copy
+• Every craft page again with no outlines, for older kids or a picture-perfect frame
 • Your child's name, age and the month printed on each page as a keepsake ("Maya · age 4 · {month} 2026")
 • 2 handprint greeting cards to give to grandparents
 • A cut-out add-on sheet: eyes, hats, noses and more to glue on once the paint dries
