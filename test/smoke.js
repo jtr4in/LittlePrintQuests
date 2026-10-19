@@ -168,9 +168,9 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   // The Memory Handprint Book: guide, cover, 2 how-to pages, 12 months and a growth page, with dashed
   // outlines to press on, or the finished prints in preview mode.
   const book = buildCraftHtml({ holiday: 'memory', childName: 'Juniper', year: 2027 });
-  assert.equal((book.match(/<section class="page/g) || []).length, 17);
+  assert.equal((book.match(/<section class="page/g) || []).length, 29); // plus the 12 months again without outlines
   for (const m of HOLIDAYS.memory.crafts) assert.ok(book.includes(`>${m.month[0]}</span>`) && book.includes(m.title), m.month);
-  assert.equal((book.match(/<div class="bkeep"><b>Juniper<\/b>/g) || []).length, 12);
+  assert.equal((book.match(/<div class="bkeep"><b>Juniper<\/b>/g) || []).length, 24);
   assert.match(book, /This book belongs to[\s\S]*Juniper[\s\S]*2027/);
   assert.doesNotMatch(book, /\{name\}|\{year\}|undefined|NaN/);
   const preview = buildCraftHtml({ holiday: 'memory', childName: 'Juniper', preview: true });

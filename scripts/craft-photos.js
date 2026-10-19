@@ -62,7 +62,7 @@ function bookShots(h, dir, plain) {
     <div style="position:absolute;left:70px;right:70px;top:108px;display:grid;grid-template-columns:repeat(5,156px);justify-content:space-between;gap:10px 0">
       ${order.map((n) => `<div class="page" style="position:static;border-radius:4px;overflow:hidden"><img src="${p(n)}"></div>`).join('')}</div>`;
   const inside = `<div class="top" style="top:34px;text-align:center"><h1 style="font-size:46px">Print it, press a hand, keep it forever</h1>
-      <div class="sub" style="font-size:21px">Each page prints with a dashed outline to press on. Add a face once it dries!</div></div>
+      <div class="sub" style="font-size:21px">A light dotted outline shows where to press, or use the set with no outlines.</div></div>
     <div class="page" style="left:120px;top:170px;width:330px;transform:rotate(-3deg)"><img src="${p(5, plain)}"></div>
     <div style="position:absolute;left:470px;top:370px;font:700 70px Fredoka;color:${h.colors.accent}">→</div>
     <div class="page" style="left:560px;top:160px;width:330px;transform:rotate(3deg)"><img src="${p(5)}"></div>

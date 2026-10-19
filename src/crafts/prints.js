@@ -80,15 +80,15 @@ function outline(p, bg) {
 }
 
 // Several prints' outlines over a picture, masked together so prints that overlap (a heart of two
-// hands) show one outer edge between them.
-function outlines(prints, guide = '#7d8499') {
+// hands) show one outer edge between them. A faint dotted line drawn a little smaller than the print,
+// so the paint covers it and nothing spoils the finished picture.
+function outlines(prints, guide = '#8a90a6') {
   const id = `om${++uid}`;
-  const place = (p, inner) => `<g transform="translate(${p.x} ${p.y}) rotate(${p.rot || 0}) scale(${(p.flip ? -1 : 1) * (p.s || 1)} ${p.s || 1})">${inner(p.s || 1)}</g>`;
+  const place = (p, inner) => { const s = (p.s || 1) * 0.9; return `<g transform="translate(${p.x} ${p.y}) rotate(${p.rot || 0}) scale(${(p.flip ? -1 : 1) * s} ${s})">${inner(s)}</g>`; };
   const shapesOf = (p) => (p.kind === 'hand' ? handShapes(p.thumb !== false, p.fingers) : p.kind === 'foot' ? footShapes() : '<ellipse cx="0" cy="0" rx="0.2" ry="0.26"/>');
   const all = prints.map((p) => place(p, () => shapesOf(p))).join('');
   return `<mask id="${id}" maskUnits="userSpaceOnUse" x="-2" y="-2" width="14" height="14"><rect x="-2" y="-2" width="14" height="14" fill="#fff"/><g fill="#000">${all}</g></mask>
-    <g fill="#fff" opacity=".35">${all}</g>
-    <g mask="url(#${id})" fill="none" stroke="${guide}">${prints.map((p) => place(p, (s) => `<g stroke-width="${0.09 / s}" stroke-dasharray="${0.08 / s} ${0.07 / s}">${shapesOf(p)}</g>`)).join('')}</g>`;
+    <g mask="url(#${id})" fill="none" stroke="${guide}" stroke-opacity=".45" stroke-linecap="round">${prints.map((p) => place(p, (s) => `<g stroke-width="${0.045 / s}" stroke-dasharray="${0.001 / s} ${0.075 / s}">${shapesOf(p)}</g>`)).join('')}</g>`;
 }
 
 module.exports = { painted, outline, outlines };
