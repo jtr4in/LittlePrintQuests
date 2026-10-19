@@ -2,7 +2,7 @@
 // the child's name, age and the year.
 //
 // cfg = { holiday: 'halloween' | 'christmas' | 'memory', childName: 'Maya', age?: 4, year?: 2026, preview?: true }
-// The Memory Handprint Book (memory.js) is a frameable page for each month instead. preview shows
+// Books (memory.js, zoo.js, fingerprint.js) are a frameable page per craft instead. preview shows
 // every page with the prints already painted, for listing photos.
 // Returns one Letter-size HTML document of `.page` sections (rendered by src/generator/render.js).
 // Each craft page has a faint dashed outline where to press, a poem, and a small finished example.
@@ -12,8 +12,10 @@ const path = require('path');
 const { painted, outlines } = require('./prints');
 const { draw, ...seasonal } = require('./holidays');
 const memory = require('./memory');
+const zoo = require('./zoo');
+const fingerprint = require('./fingerprint');
 
-const HOLIDAYS = { ...seasonal, memory };
+const HOLIDAYS = { ...seasonal, memory, zoo, fingerprint };
 
 const FONT_DIR = path.join(__dirname, '..', '..', 'fonts');
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -127,7 +129,7 @@ function poemPage(h, ctx) {
 }
 
 
-// ---------- the Memory Handprint Book ----------
+// ---------- books: the Memory Handprint Book, Handprint Zoo and Fingerprint Friends ----------
 const BOOK = { w: 7.5, h: 6.6 };
 const val = (x, ctx) => (typeof x === 'function' ? x(ctx) : x || '');
 
@@ -154,7 +156,7 @@ function bookFrame(m) {
 function monthPage(h, m, ctx, clean = false) {
   const mode = ctx.preview ? 'example' : clean ? 'clean' : 'page';
   return `<section class="page book">${bookFrame(m)}
-    <h1 class="mtitle">${bubbleTitle(m.month, m.titleColors)}</h1>
+    <h1 class="mtitle" style="font-size:${headSize(heading(m))}pt">${bubbleTitle(heading(m), m.titleColors)}</h1>
     <div class="msub" style="color:${m.titleColors[0]}">${esc(m.title)}</div>
     <div class="bpanel">${bookArt(m, ctx, mode)}</div>
     <p class="bpoem">${m.poem.map((l) => fill(l, ctx)).join('<br>')}</p>
@@ -162,13 +164,17 @@ function monthPage(h, m, ctx, clean = false) {
   </section>`;
 }
 
+// A page's big heading: the month in the Memory Handprint Book, the animal or picture in the others.
+const heading = (m) => m.heading || m.month;
+const headSize = (t) => (t.length > 11 ? 46 : t.length > 9 ? 54 : 62);
+
 function coverPage(h, ctx) {
   const rainbow = ['#e5383b', '#f28c28', '#e9b200', '#4caf50', '#3a86ff', '#8e5bd3'];
-  const m = { border: '#ffd23f', icon: (x, y, s) => draw.star(x, y, s * 0.15, ['#f7a8c0', '#9bd0f2', '#b7e4a8'][Math.round(x + y) % 3]) };
+  const m = { border: h.cover.border || '#ffd23f', icon: h.cover.icon || ((x, y, s) => draw.star(x, y, s * 0.15, ['#f7a8c0', '#9bd0f2', '#b7e4a8'][Math.round(x + y) % 3])) };
   return `<section class="page book cover">${bookFrame(m)}
-    <div class="ctop">My Memory</div>
-    <h1 class="mtitle ctitle">${bubbleTitle('Handprint Book', rainbow)}</h1>
-    <div class="msub" style="color:#8e5bd3">A year of little hands, from January to December</div>
+    <div class="ctop">${esc(h.cover.top)}</div>
+    <h1 class="mtitle ctitle">${bubbleTitle(h.cover.title, h.cover.colors || rainbow)}</h1>
+    <div class="msub" style="color:${h.cover.subColor || '#8e5bd3'}">${esc(h.cover.sub)}</div>
     <div class="carts">${h.coverArt(ctx)}</div>
   </section>`;
 }
@@ -180,7 +186,7 @@ function howToPages(h, ctx) {
     pages.push(`<section class="page howto"><div class="kicker">${esc(h.kicker)}</div><h1>How to Make Each Page</h1>
       <div class="ht-grid">${h.crafts.slice(i, i + 6).map((m) => `<div class="ht">
         <div class="ht-art">${bookArt(m, ctx, 'example')}</div>
-        <div class="ht-text"><div class="ht-m" style="color:${m.titleColors[0]}">${esc(m.month)}</div><div class="ht-t">${esc(m.title)}</div>
+        <div class="ht-text"><div class="ht-m" style="color:${m.titleColors[0]}">${esc(heading(m))}</div><div class="ht-t">${esc(m.title)}</div>
           <div class="paints">${m.paints.map(([c, label]) => `<span class="sw"><i style="background:${c}"></i>${esc(label)}</span>`).join('')}</div>
           <div class="uses">${esc(m.uses)}</div>
           <ol>${m.steps.map((st) => `<li>${fill(st, ctx)}</li>`).join('')}</ol></div></div>`).join('')}</div></section>`);
@@ -204,8 +210,8 @@ function grownPage(h, ctx) {
 function bookGuide(h, ctx) {
   return `<section class="page guide">
     <div class="g-head"><div class="kicker">Grown-up guide</div>
-      <h1>${esc(ctx.name)}’s Memory Handprint Book</h1>
-      <p class="lead">One handprint page for every month of the year. Make a page each month, and by December you’ll have a whole book of ${esc(ctx.name)}’s little hands.</p>
+      <h1>${esc(ctx.name)}’s ${esc(h.name)}</h1>
+      <p class="lead">${fill(h.guide.lead, ctx)}</p>
     </div>
     <div class="cols">
       <div class="col"><h2>You’ll need</h2><ul>
@@ -216,17 +222,18 @@ function bookGuide(h, ctx) {
         <li>White cardstock for printing (it won’t curl when wet)</li>
         <li>Optional: googly eyes, cotton balls and glue</li>
       </ul>
-      <h2>What’s inside</h2><ul class="inside"><li>A cover with ${esc(ctx.name)}’s name</li><li>12 month pages: ${h.crafts.map((m) => esc(m.title)).join(', ')}</li>
-        <li>“How to make each page” with the finished look of every month</li><li>“Look how I’ve grown” page for a January and a December handprint</li>
-        <li>A second set of the 12 month pages with no outlines, for older kids or a picture-perfect frame</li></ul></div>
-      <div class="col"><h2>How to get a great print</h2><ol class="tips">
-        <li><b>Brush, don’t dip.</b> Paint a thin, even coat on the hand with the brush.</li>
-        <li><b>Press flat.</b> Lay the hand on the dashed outline and press each finger down gently.</li>
-        <li><b>Lift straight up</b> so the print doesn’t smudge.</li>
-        <li><b>Let it dry</b> for about 20 minutes before adding faces and details.</li>
-        <li><b>Practice first</b> on scrap paper. Wiggly prints are part of the charm!</li>
+      <h2>What’s inside</h2><ul class="inside"><li>A cover with ${esc(ctx.name)}’s name</li><li>${h.crafts.length} ${esc(h.guide.pages)}: ${h.crafts.map((m) => esc(m.title)).join(', ')}</li>
+        <li>“How to make each page” with the finished look of every page</li>${h.grown ? '<li>“Look how I’ve grown” page for a January and a December handprint</li>' : ''}
+        <li>A second set of the ${h.crafts.length} ${esc(h.guide.pages)} with no outlines, for older kids or a picture-perfect frame</li></ul></div>
+      <div class="col"><h2>${esc(h.guide.tipsTitle || 'How to get a great print')}</h2><ol class="tips">${(h.guide.tips || [
+        '<b>Brush, don’t dip.</b> Paint a thin, even coat on the hand with the brush.',
+        '<b>Press flat.</b> Lay the hand on the dotted outline and press each finger down gently.',
+        '<b>Lift straight up</b> so the print doesn’t smudge.',
+        '<b>Let it dry</b> for about 20 minutes before adding faces and details.',
+        '<b>Practice first</b> on scrap paper. Wiggly prints are part of the charm!',
+      ]).map((t) => `<li>${t}</li>`).join('')}
       </ol>
-      <div class="note">The dotted outlines are light and a little smaller than a hand, so the paint covers them. Press so the line is hidden. Prefer none at all? Use the second set of month pages at the back. Write the age and date on each page as you go. Keep the pages in a binder or folder, or punch holes and tie them with ribbon to make a real book at the end of the year.</div></div>
+      <div class="note">The dotted outlines are light and a little smaller than the print, so the paint covers them. Prefer none at all? Use the second set of pages at the back. ${esc(h.guide.note)}</div></div>
     </div>
   </section>`;
 }
@@ -301,7 +308,7 @@ function buildCraftHtml(cfg) {
   const year = cfg.year || now.getFullYear() + (h.book && now.getMonth() >= 10 ? 1 : 0);
   const ctx = { name, nameSvg: esc(name), age: cfg.age || '', when: `${h.month} ${year}`, year, preview: Boolean(cfg.preview) };
   const pages = h.book
-    ? [bookGuide(h, ctx), coverPage(h, ctx), ...howToPages(h, ctx), ...h.crafts.map((m) => monthPage(h, m, ctx)), grownPage(h, ctx),
+    ? [bookGuide(h, ctx), coverPage(h, ctx), ...howToPages(h, ctx), ...h.crafts.map((m) => monthPage(h, m, ctx)), ...(h.grown ? [grownPage(h, ctx)] : []),
       ...(ctx.preview ? [] : h.crafts.map((m) => monthPage(h, m, ctx, true)))]
     : [guidePage(h, ctx), ...h.crafts.map((c) => craftPage(h, c, ctx)), cardsPage(h, ctx), addonsPage(h), poemPage(h, ctx),
       ...h.crafts.map((c) => craftPage(h, c, ctx, true))];

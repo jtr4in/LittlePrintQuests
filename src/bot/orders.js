@@ -208,7 +208,7 @@ function validateWebForm(body) {
   // A handprint art pack is its own thing: just a holiday and the child's name and age.
   if (body.craft !== undefined) {
     const holiday = HOLIDAYS[body.craft] ? body.craft : null;
-    if (!holiday) throw new Error('Please pick Halloween, Christmas or the Memory Handprint Book.');
+    if (!holiday) throw new Error('Please pick a handprint art pack or book.');
     const childName = String(body.childName || '').trim().slice(0, 24);
     if (!childName) throw new Error('Please add your child’s first name.');
     const age = Number.isInteger(body.age) && body.age > 0 && body.age < 16 ? body.age : null;

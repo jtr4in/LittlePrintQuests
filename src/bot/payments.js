@@ -25,7 +25,7 @@ async function createCheckout(order) {
     hunt: `scavenger hunt with ${order.form.spots.length} clues`,
     kit: 'pretend play kit',
     party: 'invitations, toppers, tags, banner and more',
-    craft: holiday?.book ? 'A handprint page for every month, a cover and a “look how I’ve grown” page' : '8 handprint and footprint keepsake crafts, cards and a poem page',
+    craft: holiday?.book ? holiday.checkoutLine : '8 handprint and footprint keepsake crafts, cards and a poem page',
   };
   const session = await stripe().checkout.sessions.create({
     mode: 'payment',

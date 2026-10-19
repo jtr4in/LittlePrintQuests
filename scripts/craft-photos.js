@@ -55,19 +55,21 @@ function shots(h, dir) {
 // The book: every page in a grid under a big title, then a printable page beside its finished look.
 function bookShots(h, dir, plain) {
   const p = (n, d = dir) => png(path.join(d, `page-${n}.png`));
-  const order = [2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 3]; // cover, Jan to Dec, grown, how-to
+  const first = 3 + Math.ceil(h.crafts.length / 6); // pages: guide, cover, how-to sheets, then the crafts
+  const crafts = h.crafts.map((_, i) => first + i);
+  const order = [2, ...crafts, h.grown ? first + h.crafts.length : 3, h.grown ? 3 : 4]; // cover, crafts, grown page, how-to
   const main = `<div style="position:absolute;left:0;right:0;top:20px;text-align:center">
-      <h1 style="font:700 58px/1 Fredoka;letter-spacing:.01em;color:#231a33">MEMORY HANDPRINT BOOK</h1>
+      <h1 style="font:700 58px/1 Fredoka;letter-spacing:.01em;color:#231a33">${(h.gridTitle || h.name).toUpperCase()}</h1>
       <div style="margin:10px auto 0;width:860px;height:5px;border-radius:3px;background:linear-gradient(90deg,#e5383b,#f28c28,#e9b200,#4caf50,#3a86ff,#8e5bd3)"></div></div>
     <div style="position:absolute;left:70px;right:70px;top:108px;display:grid;grid-template-columns:repeat(5,156px);justify-content:space-between;gap:10px 0">
       ${order.map((n) => `<div class="page" style="position:static;border-radius:4px;overflow:hidden"><img src="${p(n)}"></div>`).join('')}</div>`;
-  const inside = `<div class="top" style="top:34px;text-align:center"><h1 style="font-size:46px">Print it, press a hand, keep it forever</h1>
-      <div class="sub" style="font-size:21px">A light dotted outline shows where to press, or use the set with no outlines.</div></div>
-    <div class="page" style="left:120px;top:170px;width:330px;transform:rotate(-3deg)"><img src="${p(5, plain)}"></div>
+  const inside = `<div class="top" style="top:34px;text-align:center"><h1 style="font-size:46px">${h.inside?.title || 'Print it, press a hand, keep it forever'}</h1>
+      <div class="sub" style="font-size:21px">${h.inside?.sub || 'A light dotted outline shows where to press, or use the set with no outlines.'}</div></div>
+    <div class="page" style="left:120px;top:170px;width:330px;transform:rotate(-3deg)"><img src="${p(first, plain)}"></div>
     <div style="position:absolute;left:470px;top:370px;font:700 70px Fredoka;color:${h.colors.accent}">→</div>
-    <div class="page" style="left:560px;top:160px;width:330px;transform:rotate(3deg)"><img src="${p(5)}"></div>
+    <div class="page" style="left:560px;top:160px;width:330px;transform:rotate(3deg)"><img src="${p(first)}"></div>
     <div style="position:absolute;left:120px;width:330px;top:620px;text-align:center" class="cap">The printed page</div>
-    <div style="position:absolute;left:560px;width:330px;top:620px;text-align:center" class="cap">Finished with a handprint</div>`;
+    <div style="position:absolute;left:560px;width:330px;top:620px;text-align:center" class="cap">${h.inside?.cap || 'Finished with a handprint'}</div>`;
   const pages = [3, ...order.slice(0, 14)].map((n, i) => [`craft-${h.id}-p${String(i + 1).padStart(2, '0')}`,
     `<div class="page" style="left:280px;top:20px;width:440px;transform:rotate(${i % 2 ? 1.5 : -1.5}deg)"><img src="${p(n)}"></div>`]);
   return { [`craft-${h.id}`]: main, [`craft-${h.id}-inside`]: inside, ...Object.fromEntries(pages) };
