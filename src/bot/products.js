@@ -17,7 +17,7 @@ const PRICES = {
   'kit+party': cents('KIT_PARTY_PRICE_CENTS', 1299),
   bundle: cents('BUNDLE_PRICE_CENTS', 1699),
   craft: cents('CRAFT_PRICE_CENTS', 599),
-  book: cents('BOOK_PRICE_CENTS', 799), // the Memory Handprint Book, a craft order
+  book: cents('BOOK_PRICE_CENTS', 799), // a handprint book (memory, zoo, fingerprint), a craft order
 };
 
 // Cleans a list of items into the fixed order; unknown ones are dropped.

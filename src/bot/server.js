@@ -86,8 +86,8 @@ function orderPage(o) {
   const working = o.status === 'awaiting_payment' || o.status === 'processing';
   const main = products.mainOf(o);
   const party = main === 'party';
-  const book = main === 'craft' && HOLIDAYS[(o.config || o.form)?.holiday]?.book;
-  const what = book ? 'Memory Handprint Book' : products.NAMES[main];
+  const book = main === 'craft' && HOLIDAYS[(o.config || o.form)?.holiday];
+  const what = book?.book ? book.name : products.NAMES[main];
   const body =
     o.status === 'ready'
       ? `<h1>${esc(o.config.childName)}’s ${what} is ready! 🎉</h1>
@@ -97,7 +97,7 @@ function orderPage(o) {
          ${o.hostToken ? `<p><a class="btn alt" href="/h/${esc(o.hostToken)}">Open Host Mode</a><br><small>Help on your phone for ${esc(products.has(o, 'hunt') ? 'hiding the cards and running the hunt' : products.has(o, 'kit') ? 'playing with the kit' : 'planning the party')}.</small></p>` : ''}
          <p>${o.email && o.deliveredAt ? `We also emailed the link to <b>${esc(o.email)}</b>.` : 'Save your PDF now, or bookmark this page to come back to it.'} Print at “Actual Size / 100%”${{ hunt: ', cut out the clue cards, and follow the Host Guide on page 1.', kit: ', and start with the grown-up guide on page 1.', party: ', on cardstock if you have it.', craft: ', on white cardstock, and start with the tips on page 1.' }[main]}</p>`
       : working
-        ? `<h1>Building ${esc(o.form.childName)}’s ${esc(main === 'craft' ? (book ? what : `${HOLIDAYS[o.form.holiday].name} ${what}`) : main === 'hunt' ? theme.name : theme ? `${theme.label} ${what}` : `${KITS[o.form.kit]?.name || ''} ${what}`)}…</h1>
+        ? `<h1>Building ${esc(o.form.childName)}’s ${esc(main === 'craft' ? (book?.book ? what : `${HOLIDAYS[o.form.holiday].name} ${what}`) : main === 'hunt' ? theme.name : theme ? `${theme.label} ${what}` : `${KITS[o.form.kit]?.name || ''} ${what}`)}…</h1>
            <p>${o.status === 'awaiting_payment' ? 'Confirming your payment.' : main === 'craft' ? 'Laying out the keepsake pages.' : 'Writing clues and laying out the cards.'} This page updates by itself.</p>
            <div class="spin"></div>`
         : `<h1>Thanks for your order!</h1>

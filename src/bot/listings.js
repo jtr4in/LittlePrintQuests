@@ -115,18 +115,18 @@ const CATALOG = [
     photos: [`craft-${holiday}.jpg`, `craft-${holiday}-inside.jpg`, ...closeUps(`craft-${holiday}`)].slice(0, MAX_PHOTOS),
     file: { name: 'your-handprint-art.pdf', build: (out) => thankYouPdf(out, 'handprint art pack') },
   })),
-  // The Memory Handprint Book: a handprint page for every month.
-  {
-    key: 'craft-memory',
-    section: 23,
+  // Handprint books, one listing each: the Memory Handprint Book, the Handprint Zoo and more.
+  ...Object.keys(HOLIDAYS).filter((h) => HOLIDAYS[h].book).map((holiday) => ({
+    key: `craft-${holiday}`,
+    section: HOLIDAYS[holiday].etsySection,
     shopSection: 'Handprint Art',
-    label: 'Memory Handprint Book',
+    label: HOLIDAYS[holiday].name,
     price: 7.99,
-    order: { product: 'craft', holiday: 'memory' },
+    order: { product: 'craft', holiday },
     personalization: { question: 'Child’s name' },
-    photos: ['craft-memory.jpg', 'craft-memory-inside.jpg', ...closeUps('craft-memory')].slice(0, MAX_PHOTOS),
-    file: { name: 'your-memory-book.pdf', build: (out) => thankYouPdf(out, 'Memory Handprint Book') },
-  },
+    photos: [`craft-${holiday}.jpg`, `craft-${holiday}-inside.jpg`, ...closeUps(`craft-${holiday}`)].slice(0, MAX_PHOTOS),
+    file: { name: `your-${holiday}-book.pdf`, build: (out) => thankYouPdf(out, HOLIDAYS[holiday].name) },
+  })),
 ];
 
 // The catalog entry for an Etsy listing the bot made, if it made it.

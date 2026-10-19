@@ -1007,3 +1007,99 @@ handprint book, handprint art, monthly craft, toddler craft, baby keepsake, hand
 ```
 Child's first name (for example: Maya).
 ```
+
+## 24. Handprint Zoo Book ($7.99)
+
+One listing: 12 handprint animal pages, personalized with the child's name. Orders on this listing already know it's the zoo book. Photo 1 is the grid of every page (shown finished); photo 2 is a printed page beside its finished look.
+
+**Title**
+Personalized Handprint Zoo Book, Handprint Animal Art, Toddler Preschool Craft, Printable Kids Activity, Handprint Keepsake
+
+**Description**
+```
+Turn little hands into a whole zoo! Twelve handprint animal pages, each personalized with your child's name. Make one page at a time and keep them together as a book.
+
+★ WHAT YOU GET (PDF, US Letter, 28 pages)
+• A cover: "My Handprint Zoo Book, this book belongs to [Name]"
+• 12 animal pages, each with big colorful letters, a full illustrated scene and a sweet little poem:
+  a lion, an elephant, a peacock, a rainbow fish, a crab, a dinosaur, a unicorn, a bunny,
+  a sea turtle, a hedgehog, a bumblebee and a jellyfish
+• A light dotted outline on every page showing where to press, so even toddlers get a great print
+• A second set of all 12 animal pages with no outlines, for older kids or a picture-perfect frame
+• Space on every page for your child's age and the date
+• "How to make each page" sheets with the paint colors, easy steps and the finished look of every animal
+• A grown-up guide with tips for mess-free printing
+
+★ HOW TO ORDER
+Write your child's first name in the personalization box.
+We send your PDF through Etsy messages, usually within a few hours.
+
+★ WHAT YOU'LL NEED
+• White cardstock (65–110 lb) so the paint doesn't soak through
+• Washable kids' paint and a foam brush
+• Baby wipes or a damp cloth for quick clean-up
+• A black marker for faces, plus googly eyes if you like
+
+★ GREAT FOR
+Rainy days, daycare and preschool crafts, homeschool art, animal-loving kids, gifts for grandparents, and a keepsake to save forever.
+
+★ PLEASE NOTE
+The listing photos show the pages with the handprints already added, so you can see the finished look. Your pages print with light dotted outlines for your child's own prints, plus a set with no outlines at all.
+This is a DIGITAL file. No physical item will be shipped. For personal use only.
+```
+
+**Tags**
+handprint art, handprint animals, zoo craft, toddler craft, preschool craft, handprint keepsake, kids art book, animal craft, daycare craft, homeschool art, handprint book, kids activity, printable craft
+
+**Personalization:** On, required. Instructions to buyer:
+```
+Child's first name (for example: Maya).
+```
+
+## 25. Fingerprint Friends Book ($7.99)
+
+One listing: 12 fingerprint art pages, personalized with the child's name. Orders on this listing already know it's the fingerprint book. Photo 1 is the grid of every page (shown finished); photo 2 is a printed page beside its finished look.
+
+**Title**
+Personalized Fingerprint Art Book, Thumbprint Craft Pages, Toddler Preschool Activity, Printable Kids Craft, Fingerprint Keepsake
+
+**Description**
+```
+Tiny fingers, big pictures! Twelve fingerprint and thumbprint art pages, each personalized with your child's name. Just a dab of paint on a fingertip turns into ladybugs, balloons, sheep and more.
+
+★ WHAT YOU GET (PDF, US Letter, 28 pages)
+• A cover: "My Fingerprint Friends, this book belongs to [Name]"
+• 12 fingerprint pages, each with big colorful letters, a full illustrated scene and a sweet little poem:
+  ladybugs, a caterpillar, balloons, sheep, a fishbowl, a flower garden, penguins, snowmen,
+  a love tree, owls, fireflies in a jar and ice cream cones
+• A light dotted spot on every page showing where to press each fingerprint
+• A second set of all 12 pages with no dots, for older kids or a picture-perfect frame
+• Space on every page for your child's age and the date
+• "How to make each page" sheets with the paint colors, easy steps and the finished look of every page
+• A grown-up guide with tips for getting a great fingerprint
+
+★ HOW TO ORDER
+Write your child's first name in the personalization box.
+We send your PDF through Etsy messages, usually within a few hours.
+
+★ WHAT YOU'LL NEED
+• White cardstock (65–110 lb)
+• Washable kids' paint or a washable ink pad
+• Baby wipes or a damp cloth for quick clean-up
+• A fine black marker to add faces, legs and little details
+
+★ GREAT FOR
+Quiet afternoons, daycare and preschool crafts, homeschool art, fine motor practice, gifts for grandparents, and a keepsake to save forever.
+
+★ PLEASE NOTE
+The listing photos show the pages with the fingerprints already added, so you can see the finished look. Your pages print with light dotted spots for your child's own prints, plus a set with none at all.
+This is a DIGITAL file. No physical item will be shipped. For personal use only.
+```
+
+**Tags**
+fingerprint art, thumbprint art, toddler craft, preschool craft, fingerprint craft, kids art book, daycare craft, homeschool art, fine motor skills, kids activity, printable craft, keepsake craft, handprint art
+
+**Personalization:** On, required. Instructions to buyer:
+```
+Child's first name (for example: Maya).
+```
