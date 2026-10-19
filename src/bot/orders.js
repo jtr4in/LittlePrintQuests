@@ -12,7 +12,7 @@ const { sendHuntEmail } = require('./email');
 const { renderKit } = require('../kits/render-kit');
 const { renderParty } = require('../party/render-party');
 const { renderCraft } = require('../crafts/render-craft');
-const { HOLIDAYS } = require('../crafts/build');
+const { HOLIDAYS, craftLabel } = require('../crafts/build');
 const { kitForHunt, KITS } = require('../kits/engine');
 const THEMES = require('../generator/themes');
 const SPOTS = require('../generator/spots');
@@ -71,7 +71,7 @@ function buyerMessage(order) {
     hunt: () => `custom ${theme.name}`,
     kit: () => `${kitOf(order).name} play kit`,
     party: () => `${theme.label} party pack`,
-    craft: () => `${HOLIDAYS[order.config.holiday].name} handprint art pack`,
+    craft: () => craftLabel(HOLIDAYS[order.config.holiday]),
   }[main]();
   const host = order.hostToken
     ? `\n${products.has(order, 'hunt') ? 'On party day, open' : 'Open'} Host Mode on your phone. It ${products.hostHelps(order)}:\n\n${hostUrl(order)}\n`
@@ -208,7 +208,7 @@ function validateWebForm(body) {
   // A handprint art pack is its own thing: just a holiday and the child's name and age.
   if (body.craft !== undefined) {
     const holiday = HOLIDAYS[body.craft] ? body.craft : null;
-    if (!holiday) throw new Error('Please pick Halloween or Christmas.');
+    if (!holiday) throw new Error('Please pick Halloween, Christmas or the Memory Handprint Book.');
     const childName = String(body.childName || '').trim().slice(0, 24);
     if (!childName) throw new Error('Please add your child’s first name.');
     const age = Number.isInteger(body.age) && body.age > 0 && body.age < 16 ? body.age : null;

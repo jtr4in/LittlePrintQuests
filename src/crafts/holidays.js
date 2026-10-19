@@ -315,3 +315,5 @@ function addonSheet(id) {
 }
 
 module.exports = { halloween, christmas };
+// The drawing helpers, for the Memory Handprint Book (memory.js).
+module.exports.draw = { eye, dotEyes, smile, star, twinkles, snow, leaf, stem, ground, bow };

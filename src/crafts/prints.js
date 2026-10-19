@@ -19,8 +19,10 @@ function capsule([x, y, len, w, deg]) {
   return `<rect x="${(x - w / 2).toFixed(3)}" y="${(y - len).toFixed(3)}" width="${w}" height="${len + w / 2}" rx="${w / 2}" transform="rotate(${deg} ${x} ${y})"/>`;
 }
 const PALM = '<path d="M-1.02,-0.55 C-1.1,0.2 -1.0,0.95 -0.55,1.25 C-0.15,1.5 0.45,1.5 0.8,1.2 C1.12,0.9 1.12,0.1 1.0,-0.45 C0.8,-0.85 -0.8,-0.9 -1.02,-0.55 Z"/>';
-const handShapes = (thumb = true, fingers = [0, 1, 2, 3]) =>
-  PALM + fingers.map((i) => capsule(FINGERS[i])).join('') + (thumb ? capsule(THUMB) : '');
+const handShapes = (thumb = true, fingers = [0, 1, 2, 3], colors = null) => {
+  const part = (i, shape) => (colors?.[i] ? `<g fill="${colors[i]}">${shape}</g>` : shape);
+  return PALM + fingers.map((i) => part(i, capsule(FINGERS[i]))).join('') + (thumb ? part(4, capsule(THUMB)) : '');
+};
 
 // A foot (about 5 in long), heel at the bottom, toes up, centered on (0, 0); a left foot,
 // big toe on the right (mirror for the other foot).
@@ -40,12 +42,13 @@ function paintFilter(id, seed) {
   </filter>`;
 }
 
-// p = { kind: 'hand' | 'foot' | 'finger', x, y, rot = 0, s = 1, flip = false, color, thumb, fingers, bands }
+// p = { kind: 'hand' | 'foot' | 'finger', x, y, rot = 0, s = 1, flip = false, color, thumb, fingers, bands, fingerColors }
 // bands: [[color, fromY, toY], ...] paints parts of the print in other colors (candy corn, Santa).
+// fingerColors: [index, middle, ring, pinky, thumb] paints each finger its own color (rainbow, turkey).
 function painted(p) {
   const id = `pf${++uid}`;
   const clip = `pc${uid}`;
-  const shapes = p.kind === 'hand' ? handShapes(p.thumb !== false, p.fingers) : p.kind === 'foot' ? footShapes() : '<ellipse cx="0" cy="0" rx="0.2" ry="0.26"/>';
+  const shapes = p.kind === 'hand' ? handShapes(p.thumb !== false, p.fingers, p.fingerColors) : p.kind === 'foot' ? footShapes() : '<ellipse cx="0" cy="0" rx="0.2" ry="0.26"/>';
   const bands = (p.bands || []).map(([c, y0, y1]) => `<rect x="-3" y="${y0}" width="6" height="${y1 - y0}" fill="${c}"/>`).join('');
   const ridges = p.kind === 'finger'
     ? `<g fill="none" stroke="#000" stroke-opacity=".13" stroke-width=".018">${[0.05, 0.1, 0.15].map((r) => `<ellipse cx="0" cy="0.02" rx="${r}" ry="${r * 1.3}"/>`).join('')}</g>`
@@ -57,14 +60,35 @@ function painted(p) {
 }
 
 // The same print as a dashed outline: the shapes stroked, then filled over with the page color
-// so only the outer edge of the union shows.
+// so only the outer edge of the union shows. With no page color (a picture behind the print), the
+// inside of the print is masked off instead, which leaves the outer half of a thicker stroke.
 function outline(p, bg) {
   const shapes = p.kind === 'hand' ? handShapes(p.thumb !== false, p.fingers) : p.kind === 'foot' ? footShapes() : '<ellipse cx="0" cy="0" rx="0.2" ry="0.26"/>';
   const s = p.s || 1;
+  if (!bg) {
+    const id = `om${++uid}`;
+    return `<g transform="translate(${p.x} ${p.y}) rotate(${p.rot || 0}) scale(${(p.flip ? -1 : 1) * s} ${s})">
+    <mask id="${id}" maskUnits="userSpaceOnUse" x="-6" y="-6" width="12" height="12"><rect x="-6" y="-6" width="12" height="12" fill="#fff"/><g fill="#000">${shapes}</g></mask>
+    <g fill="#fff" opacity=".35">${shapes}</g>
+    <g mask="url(#${id})" fill="none" stroke="${p.guide || '#7d8499'}" stroke-width="${0.09 / s}" stroke-dasharray="${0.08 / s} ${0.07 / s}">${shapes}</g>
+  </g>`;
+  }
   return `<g transform="translate(${p.x} ${p.y}) rotate(${p.rot || 0}) scale(${(p.flip ? -1 : 1) * s} ${s})">
     <g fill="none" stroke="#9aa0b4" stroke-width="${0.05 / s}" stroke-dasharray="${0.07 / s} ${0.07 / s}">${shapes}</g>
     <g fill="${bg}">${shapes}</g>
   </g>`;
 }
 
-module.exports = { painted, outline };
+// Several prints' outlines over a picture, masked together so prints that overlap (a heart of two
+// hands) show one outer edge between them.
+function outlines(prints, guide = '#7d8499') {
+  const id = `om${++uid}`;
+  const place = (p, inner) => `<g transform="translate(${p.x} ${p.y}) rotate(${p.rot || 0}) scale(${(p.flip ? -1 : 1) * (p.s || 1)} ${p.s || 1})">${inner(p.s || 1)}</g>`;
+  const shapesOf = (p) => (p.kind === 'hand' ? handShapes(p.thumb !== false, p.fingers) : p.kind === 'foot' ? footShapes() : '<ellipse cx="0" cy="0" rx="0.2" ry="0.26"/>');
+  const all = prints.map((p) => place(p, () => shapesOf(p))).join('');
+  return `<mask id="${id}" maskUnits="userSpaceOnUse" x="-2" y="-2" width="14" height="14"><rect x="-2" y="-2" width="14" height="14" fill="#fff"/><g fill="#000">${all}</g></mask>
+    <g fill="#fff" opacity=".35">${all}</g>
+    <g mask="url(#${id})" fill="none" stroke="${guide}">${prints.map((p) => place(p, (s) => `<g stroke-width="${0.09 / s}" stroke-dasharray="${0.08 / s} ${0.07 / s}">${shapesOf(p)}</g>`)).join('')}</g>`;
+}
+
+module.exports = { painted, outline, outlines };

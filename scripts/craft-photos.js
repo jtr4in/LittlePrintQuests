@@ -3,6 +3,7 @@
 // Renders each pack for a sample child, then writes listing-assets/craft-<id>.jpg (main),
 // craft-<id>-inside.jpg (all 8 crafts), craft-<id>-p01.jpg... (one per page) and docs/img/craft-<id>.png
 // (save that as a 1000x750 WebP, q82, for the website).
+// The Memory Handprint Book gets a grid of all its pages instead, shown with the prints painted in.
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -51,6 +52,27 @@ function shots(h, dir) {
   return { [`craft-${h.id}`]: main, [`craft-${h.id}-inside`]: inside, ...Object.fromEntries(pages.map((html, i) => [`craft-${h.id}-p${String(i + 1).padStart(2, '0')}`, html])) };
 }
 
+// The book: every page in a grid under a big title, then a printable page beside its finished look.
+function bookShots(h, dir, plain) {
+  const p = (n, d = dir) => png(path.join(d, `page-${n}.png`));
+  const order = [2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 3]; // cover, Jan to Dec, grown, how-to
+  const main = `<div style="position:absolute;left:0;right:0;top:20px;text-align:center">
+      <h1 style="font:700 58px/1 Fredoka;letter-spacing:.01em;color:#231a33">MEMORY HANDPRINT BOOK</h1>
+      <div style="margin:10px auto 0;width:860px;height:5px;border-radius:3px;background:linear-gradient(90deg,#e5383b,#f28c28,#e9b200,#4caf50,#3a86ff,#8e5bd3)"></div></div>
+    <div style="position:absolute;left:70px;right:70px;top:108px;display:grid;grid-template-columns:repeat(5,156px);justify-content:space-between;gap:10px 0">
+      ${order.map((n) => `<div class="page" style="position:static;border-radius:4px;overflow:hidden"><img src="${p(n)}"></div>`).join('')}</div>`;
+  const inside = `<div class="top" style="top:34px;text-align:center"><h1 style="font-size:46px">Print it, press a hand, keep it forever</h1>
+      <div class="sub" style="font-size:21px">Each page prints with a dashed outline to press on. Add a face once it dries!</div></div>
+    <div class="page" style="left:120px;top:170px;width:330px;transform:rotate(-3deg)"><img src="${p(5, plain)}"></div>
+    <div style="position:absolute;left:470px;top:370px;font:700 70px Fredoka;color:${h.colors.accent}">→</div>
+    <div class="page" style="left:560px;top:160px;width:330px;transform:rotate(3deg)"><img src="${p(5)}"></div>
+    <div style="position:absolute;left:120px;width:330px;top:620px;text-align:center" class="cap">The printed page</div>
+    <div style="position:absolute;left:560px;width:330px;top:620px;text-align:center" class="cap">Finished with a handprint</div>`;
+  const pages = [3, ...order.slice(0, 14)].map((n, i) => [`craft-${h.id}-p${String(i + 1).padStart(2, '0')}`,
+    `<div class="page" style="left:280px;top:20px;width:440px;transform:rotate(${i % 2 ? 1.5 : -1.5}deg)"><img src="${p(n)}"></div>`]);
+  return { [`craft-${h.id}`]: main, [`craft-${h.id}-inside`]: inside, ...Object.fromEntries(pages) };
+}
+
 (async () => {
   const ids = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(HOLIDAYS);
   const browser = await chromium.launch();
@@ -58,8 +80,13 @@ function shots(h, dir) {
   for (const id of ids) {
     const h = HOLIDAYS[id];
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), `craft-${id}-`));
-    await renderHtml(buildCraftHtml({ holiday: id, childName: 'Maya', age: 4, year: 2026 }), path.join(dir, 'pack.pdf'), { pngDir: dir });
-    for (const [name, html] of Object.entries(shots(h, dir))) {
+    await renderHtml(buildCraftHtml({ holiday: id, childName: 'Maya', age: 4, year: 2026, preview: h.book }), path.join(dir, 'pack.pdf'), { pngDir: dir });
+    let plain = null;
+    if (h.book) {
+      plain = fs.mkdtempSync(path.join(os.tmpdir(), `craft-${id}-plain-`));
+      await renderHtml(buildCraftHtml({ holiday: id, childName: 'Maya', age: 4, year: 2026 }), path.join(plain, 'pack.pdf'), { pngDir: plain });
+    }
+    for (const [name, html] of Object.entries(h.book ? bookShots(h, dir, plain) : shots(h, dir))) {
       await page.setContent(`<!doctype html><meta charset="utf-8"><style>${css(h)}</style>${html}`);
       await page.waitForTimeout(150);
       await page.screenshot({ path: path.join(OUT, `${name}.jpg`), type: 'jpeg', quality: 80 });
@@ -72,6 +99,7 @@ function shots(h, dir) {
     }
     fs.copyFileSync(path.join(dir, 'site.png'), path.join(ROOT, 'docs', 'img', `craft-${id}.png`));
     fs.rmSync(dir, { recursive: true, force: true });
+    if (plain) fs.rmSync(plain, { recursive: true, force: true });
   }
   await browser.close();
 })();
