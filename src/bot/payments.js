@@ -3,7 +3,7 @@
 const Stripe = require('stripe');
 const THEMES = require('../generator/themes');
 const { kitForHunt, KITS } = require('../kits/engine');
-const { HOLIDAYS } = require('../crafts/build');
+const { HOLIDAYS, craftLabel } = require('../crafts/build');
 
 const products = require('./products');
 const { PRICES, priceFor } = products;
@@ -20,12 +20,12 @@ async function createCheckout(order) {
   const items = products.itemsOf(order.form);
   const kit = KITS[order.form.kit] || (theme && kitForHunt(theme.id));
   const holiday = HOLIDAYS[order.form.holiday];
-  const parts = { hunt: `Custom ${theme?.name}`, kit: `${kit?.name} play kit`, party: `${theme?.label} party pack`, craft: `${holiday?.name} handprint art pack` };
+  const parts = { hunt: `Custom ${theme?.name}`, kit: `${kit?.name} play kit`, party: `${theme?.label} party pack`, craft: craftLabel(holiday) };
   const details = {
     hunt: `scavenger hunt with ${order.form.spots.length} clues`,
     kit: 'pretend play kit',
     party: 'invitations, toppers, tags, banner and more',
-    craft: '8 handprint and footprint keepsake crafts, cards and a poem page',
+    craft: holiday?.book ? 'A handprint page for every month, a cover and a “look how I’ve grown” page' : '8 handprint and footprint keepsake crafts, cards and a poem page',
   };
   const session = await stripe().checkout.sessions.create({
     mode: 'payment',
@@ -34,7 +34,7 @@ async function createCheckout(order) {
         quantity: 1,
         price_data: {
           currency: 'usd',
-          unit_amount: priceFor(order.form.product),
+          unit_amount: priceFor(HOLIDAYS[order.form.holiday]?.book ? 'book' : order.form.product),
           product_data: {
             name: items.length === 3 ? `Party Bundle: ${items.map((i) => parts[i]).join(' + ')}` : items.map((i) => parts[i]).join(' + '),
             description: `Printable ${items.map((i) => details[i]).join(' · ')} for ${order.form.childName} · PDF`,

@@ -103,7 +103,7 @@ const CATALOG = [
     file: { name: 'your-party-printables.pdf', build: (out) => thankYouPdf(out, 'party printables') },
   })),
   // Handprint art packs, one per holiday.
-  ...Object.keys(HOLIDAYS).map((holiday) => ({
+  ...Object.keys(HOLIDAYS).filter((h) => !HOLIDAYS[h].book).map((holiday) => ({
     key: `craft-${holiday}`,
     section: 22,
     perTheme: holiday,
@@ -115,6 +115,18 @@ const CATALOG = [
     photos: [`craft-${holiday}.jpg`, `craft-${holiday}-inside.jpg`, ...closeUps(`craft-${holiday}`)].slice(0, MAX_PHOTOS),
     file: { name: 'your-handprint-art.pdf', build: (out) => thankYouPdf(out, 'handprint art pack') },
   })),
+  // The Memory Handprint Book: a handprint page for every month.
+  {
+    key: 'craft-memory',
+    section: 23,
+    shopSection: 'Handprint Art',
+    label: 'Memory Handprint Book',
+    price: 7.99,
+    order: { product: 'craft', holiday: 'memory' },
+    personalization: { question: 'Child’s name' },
+    photos: ['craft-memory.jpg', 'craft-memory-inside.jpg', ...closeUps('craft-memory')].slice(0, MAX_PHOTOS),
+    file: { name: 'your-memory-book.pdf', build: (out) => thankYouPdf(out, 'Memory Handprint Book') },
+  },
 ];
 
 // The catalog entry for an Etsy listing the bot made, if it made it.

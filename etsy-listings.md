@@ -956,3 +956,52 @@ Personalized Christmas Handprint Art, Footprint Craft Keepsake, Toddler Baby Pre
 Little hands, big Christmas memories! 8 handprint and footprint crafts, personalized with your child's name and age, to keep year after year.
 **Tags**
 xmas handprint, footprint art, christmas craft, toddler craft, baby keepsake, handprint keepsake, preschool craft, baby first xmas, reindeer footprint, daycare craft, santa handprint, christmas gift, xmas printable
+
+## 23. Memory Handprint Book ($7.99)
+
+One listing: a handprint page for every month of the year, personalized with the child's name. Orders on this listing already know it's the book. Photo 1 is the grid of every page (shown finished); photo 2 is a printed page beside its finished look.
+
+**Title**
+Personalized Memory Handprint Book, Monthly Handprint Art Keepsake, Toddler Baby Preschool Craft, 12 Month Printable Kids Activity
+
+**Description**
+```
+A whole year of little hands! One handprint page for every month, January to December, personalized with your child's name. Make a page each month and by the end of the year you'll have a book to keep forever.
+
+★ WHAT YOU GET (PDF, US Letter, 17 pages)
+• A cover: "My Memory Handprint Book, this book belongs to [Name]"
+• 12 month pages, each with big colorful letters, a full illustrated scene and a sweet little poem:
+  a polar bear (January), a handprint heart (February), a rainbow cloud (March), a butterfly (April),
+  a flower pot with your child's name (May), a sunshine (June), fireworks (July), an octopus (August),
+  an apple tree (September), an owl (October), a turkey (November) and a Christmas tree (December)
+• A dashed outline on every page showing exactly where to press, so even toddlers get a great print
+• Space on every page for your child's age and the date
+• "How to make each page" sheets with the paint colors, easy steps and the finished look of every month
+• A "Look how I've grown" page for a January and a December handprint side by side
+• A grown-up guide with tips for mess-free printing
+
+★ HOW TO ORDER
+Write your child's first name in the personalization box.
+We send your PDF through Etsy messages, usually within a few hours.
+
+★ WHAT YOU'LL NEED
+• White cardstock (65–110 lb) so the paint doesn't soak through
+• Washable kids' paint and a foam brush
+• Baby wipes or a damp cloth for quick clean-up
+• A black marker for faces, plus googly eyes and cotton balls if you like
+
+★ GREAT FOR
+Daycare and preschool monthly crafts, a baby's first year, homeschool art, gifts for grandparents, and a keepsake to save forever. Punch holes and tie the pages with ribbon to make a real book.
+
+★ PLEASE NOTE
+The listing photos show the pages with the handprints already added, so you can see the finished look. Your pages print with dashed outlines for your child's own prints.
+This is a DIGITAL file. No physical item will be shipped. For personal use only.
+```
+
+**Tags**
+handprint book, handprint art, monthly craft, toddler craft, baby keepsake, handprint keepsake, preschool craft, footprint art, daycare craft, baby first year, memory book, kids art book, handprint calendar
+
+**Personalization:** On, required. Instructions to buyer:
+```
+Child's first name (for example: Maya).
+```

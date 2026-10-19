@@ -158,13 +158,23 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
   // Handprint art: 12 pages per holiday with the child's name, age and month on every craft page.
   const { buildCraftHtml, HOLIDAYS } = require('../src/crafts/build');
-  for (const holiday of Object.keys(HOLIDAYS)) {
+  for (const holiday of Object.keys(HOLIDAYS).filter((h) => !HOLIDAYS[h].book)) {
     const craft = buildCraftHtml({ holiday, childName: 'Juniper', age: 3, year: 2026 });
     assert.equal((craft.match(/<section class="page/g) || []).length, 12, holiday);
     assert.equal((craft.match(new RegExp(`Juniper <i>·</i> age 3 <i>·</i> ${HOLIDAYS[holiday].month} 2026`, "g")) || []).length >= 8, true, holiday);
     assert.doesNotMatch(craft, /\{name\}|\{year\}|undefined|NaN/);
   }
   assert.throws(() => buildCraftHtml({ holiday: 'easter', childName: 'Bo' }), /Unknown holiday/);
+  // The Memory Handprint Book: guide, cover, 2 how-to pages, 12 months and a growth page, with dashed
+  // outlines to press on, or the finished prints in preview mode.
+  const book = buildCraftHtml({ holiday: 'memory', childName: 'Juniper', year: 2027 });
+  assert.equal((book.match(/<section class="page/g) || []).length, 17);
+  for (const m of HOLIDAYS.memory.crafts) assert.ok(book.includes(`>${m.month[0]}</span>`) && book.includes(m.title), m.month);
+  assert.equal((book.match(/<div class="bkeep"><b>Juniper<\/b>/g) || []).length, 12);
+  assert.match(book, /This book belongs to[\s\S]*Juniper[\s\S]*2027/);
+  assert.doesNotMatch(book, /\{name\}|\{year\}|undefined|NaN/);
+  const preview = buildCraftHtml({ holiday: 'memory', childName: 'Juniper', preview: true });
+  assert.ok((preview.match(/stroke-dasharray/g) || []).length < (book.match(/stroke-dasharray/g) || []).length);
   const craftPdf = path.join(dataDir, 'craft.pdf');
   await require('../src/crafts/render-craft').renderCraft({ holiday: 'christmas', childName: 'Bo', age: 1 }, craftPdf);
   assert.ok(fs.statSync(craftPdf).size > 50000);
@@ -359,7 +369,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const readState = () => JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
   const badCraft = await realFetch(base + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ craft: 'easter', childName: 'Ava' }) });
   assert.equal(badCraft.status, 400);
-  assert.match((await badCraft.json()).error, /Halloween or Christmas/);
+  assert.match((await badCraft.json()).error, /Halloween, Christmas or the Memory Handprint Book/);
   const craftCo = await realFetch(base + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ craft: 'halloween', childName: 'Ava', age: 2 }) });
   const craftId = (await craftCo.json()).url.split('/').pop();
   assert.match(await (await realFetch(`${base}/order/${craftId}`)).text(), /Confirming your payment/);
@@ -409,7 +419,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.ok(c.photos.length <= 20, `${c.key} has more than 20 photos`);
     for (const f of c.photos) assert.ok(fs.existsSync(path.join(__dirname, '..', 'listing-assets', f)), `missing listing-assets/${f}`);
   }
-  assert.equal(N, 64); // 16 packs, the bundle, both dropdown listings, a party pack per theme, a listing per kit (16 theme kits + 11 shop kits) and 2 handprint art packs
+  assert.equal(N, 65); // 16 packs, the bundle, both dropdown listings, a party pack per theme, a listing per kit (16 theme kits + 11 shop kits) 2 handprint art packs and the Memory Handprint Book
   const listingsDone = async () => {
     for (let i = 0; i < 240; i++) {
       await wait(500);
@@ -423,7 +433,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   await createListings();
   const running = await (await realFetch(base + '/admin', { headers: auth })).text();
   assert.match(running, /class="bar"/);
-  assert.match(running, /of 64 listings done/);
+  assert.match(running, /of 65 listings done/);
   await realFetch(base + '/admin/etsy/listings/stop', { method: 'POST', headers: auth, redirect: 'manual' });
   for (let i = 0; i < 100 && require('../src/bot/listings').isRunning(); i++) await wait(100);
   assert.ok(!require('../src/bot/listings').isRunning(), 'stop ends the run');
@@ -526,6 +536,8 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal(partyReq.options.Theme, 'Pet Vet');
   assert.equal(customRequest({ listing_id: listed['pack-dino'].id, title: 'x', variations: [] }), null);
   assert.deepEqual(customRequest({ listing_id: listed['craft-christmas'].id, title: 'x', variations: name }), { personalization: 'Maya, Teddy (bear)', options: {}, product: 'craft', holiday: 'christmas' });
+  assert.deepEqual(customRequest({ listing_id: listed['craft-memory'].id, title: 'x', variations: name }), { personalization: 'Maya, Teddy (bear)', options: {}, product: 'craft', holiday: 'memory' });
+  assert.match(creates.find((c) => /Memory Handprint Book/.test(c.body.title)).body.description, /12 month pages/);
   const craftListing = creates.find((c) => /Halloween Handprint Art/.test(c.body.title)).body;
   assert.match(craftListing.description, /Handprint Ghosts, Itsy Bitsy Spider/);
   assert.doesNotMatch(craftListing.description, /\{\w+\}/);
