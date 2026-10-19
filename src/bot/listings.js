@@ -156,7 +156,7 @@ const list = (items) => (items.length > 1 ? `${items.slice(0, -1).join(', ')} an
 function placeholders(c) {
   if (c.order.product === 'craft') {
     const h = HOLIDAYS[c.perTheme];
-    return { holiday: h.name, month: h.month, crafts: list(h.crafts.map((k) => k.title)), count: 12 };
+    return { holiday: h.name, month: h.month, crafts: list(h.crafts.map((k) => k.title)), count: 12 + h.crafts.length };
   }
   if (c.order.product === 'kit') {
     const k = KITS[c.perTheme];

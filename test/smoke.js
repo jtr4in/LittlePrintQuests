@@ -160,8 +160,8 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const { buildCraftHtml, HOLIDAYS } = require('../src/crafts/build');
   for (const holiday of Object.keys(HOLIDAYS).filter((h) => !HOLIDAYS[h].book)) {
     const craft = buildCraftHtml({ holiday, childName: 'Juniper', age: 3, year: 2026 });
-    assert.equal((craft.match(/<section class="page/g) || []).length, 12, holiday);
-    assert.equal((craft.match(new RegExp(`Juniper <i>·</i> age 3 <i>·</i> ${HOLIDAYS[holiday].month} 2026`, "g")) || []).length >= 8, true, holiday);
+    assert.equal((craft.match(/<section class="page/g) || []).length, 20, holiday); // 12, plus the 8 crafts again without outlines
+    assert.equal((craft.match(new RegExp(`Juniper <i>·</i> age 3 <i>·</i> ${HOLIDAYS[holiday].month} 2026`, "g")) || []).length >= 16, true, holiday);
     assert.doesNotMatch(craft, /\{name\}|\{year\}|undefined|NaN/);
   }
   assert.throws(() => buildCraftHtml({ holiday: 'easter', childName: 'Bo' }), /Unknown holiday/);
