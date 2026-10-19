@@ -968,13 +968,14 @@ Personalized Memory Handprint Book, Monthly Handprint Art Keepsake, Toddler Baby
 ```
 A whole year of little hands! One handprint page for every month, January to December, personalized with your child's name. Make a page each month and by the end of the year you'll have a book to keep forever.
 
-★ WHAT YOU GET (PDF, US Letter, 17 pages)
+★ WHAT YOU GET (PDF, US Letter, 29 pages)
 • A cover: "My Memory Handprint Book, this book belongs to [Name]"
 • 12 month pages, each with big colorful letters, a full illustrated scene and a sweet little poem:
   a polar bear (January), a handprint heart (February), a rainbow cloud (March), a butterfly (April),
   a flower pot with your child's name (May), a sunshine (June), fireworks (July), an octopus (August),
   an apple tree (September), an owl (October), a turkey (November) and a Christmas tree (December)
-• A dashed outline on every page showing exactly where to press, so even toddlers get a great print
+• A light dotted outline on every page showing where to press, so even toddlers get a great print
+• A second set of all 12 month pages with no outlines, for older kids or a picture-perfect frame
 • Space on every page for your child's age and the date
 • "How to make each page" sheets with the paint colors, easy steps and the finished look of every month
 • A "Look how I've grown" page for a January and a December handprint side by side
@@ -994,7 +995,7 @@ We send your PDF through Etsy messages, usually within a few hours.
 Daycare and preschool monthly crafts, a baby's first year, homeschool art, gifts for grandparents, and a keepsake to save forever. Punch holes and tie the pages with ribbon to make a real book.
 
 ★ PLEASE NOTE
-The listing photos show the pages with the handprints already added, so you can see the finished look. Your pages print with dashed outlines for your child's own prints.
+The listing photos show the pages with the handprints already added, so you can see the finished look. Your pages print with light dotted outlines for your child's own prints, plus a set with no outlines at all.
 This is a DIGITAL file. No physical item will be shipped. For personal use only.
 ```
 

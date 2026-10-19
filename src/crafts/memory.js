@@ -46,6 +46,7 @@ const burst = (x, y, s, color, turn = 0) => [0, 120, 240].map((a) => {
 const months = [
   {
     month: 'January',
+    guide: '#b9c8e6',
     title: 'Polar Bear Hug',
     titleColors: ['#2f6fb5', '#5aa9e6', '#2f6fb5', '#5aa9e6'],
     border: '#5aa9e6',
@@ -170,6 +171,7 @@ const months = [
   },
   {
     month: 'July',
+    guide: '#b9c8e6',
     title: 'Sparkle and Shine',
     titleColors: ['#e63946', '#2b59c3', '#e63946', '#2b59c3'],
     border: '#e63946',
