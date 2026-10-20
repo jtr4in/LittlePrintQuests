@@ -9,7 +9,7 @@ const THEMES = require('../src/generator/themes');
 const SPOTS = require('../src/generator/spots');
 const SPACES = require('../src/generator/spaces');
 
-const SITE = 'https://jtr4in.github.io/LittlePrintQuests/';
+const SITE = 'https://littleprintquests.com/';
 const DOCS = path.join(__dirname, '..', 'docs');
 const OUT = path.join(DOCS, 'ideas');
 
