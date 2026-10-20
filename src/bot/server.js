@@ -60,8 +60,16 @@ async function readRaw(req, limit = 100_000) {
   return Buffer.concat(chunks);
 }
 
-const cors = () => ({
-  'Access-Control-Allow-Origin': process.env.SITE_ORIGIN || '*',
+// Sites allowed to call the API: the shop's own domain and its old GitHub Pages address, plus any
+// in SITE_ORIGIN (comma-separated). The browser's Origin is echoed back when it is one of them.
+const ORIGINS = ['https://littleprintquests.com', 'https://www.littleprintquests.com', 'https://jtr4in.github.io'];
+const allowedOrigin = (origin) => {
+  const extra = (process.env.SITE_ORIGIN || '').split(',').map((o) => o.trim().replace(/\/$/, '')).filter(Boolean);
+  if (!extra.length) return '*';
+  return [...ORIGINS, ...extra].includes(origin) ? origin : extra[0];
+};
+const cors = (req) => ({
+  'Access-Control-Allow-Origin': allowedOrigin(req?.headers.origin),
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
   Vary: 'Origin',
@@ -69,7 +77,7 @@ const cors = () => ({
 const kitLink = (o, label) =>
   (o.kitReady ? ` · <a href="/d/${esc(o.downloadToken)}-kit.pdf" target="_blank">${label}</a>` : '') +
   (o.partyReady ? ` · <a href="/d/${esc(o.downloadToken)}-party.pdf" target="_blank">Party pack</a>` : '');
-const sendJson = (res, code, obj) => send(res, code, JSON.stringify(obj), { 'Content-Type': 'application/json', ...cors() });
+const sendJson = (res, code, obj) => send(res, code, JSON.stringify(obj), { 'Content-Type': 'application/json', ...cors(res.req) });
 
 // "Dino Fossil Recovery", "Dino Dig Lab play kit" or "Dinosaur party pack".
 function orderTitle(o) {
@@ -274,7 +282,7 @@ async function route(req, res) {
   }
 
   if (p === '/api/sample') {
-    if (req.method === 'OPTIONS') return send(res, 204, '', cors());
+    if (req.method === 'OPTIONS') return send(res, 204, '', cors(req));
     if (req.method !== 'POST') return sendJson(res, 405, { error: 'Use POST' });
     try {
       const body = JSON.parse((await readRaw(req, 5_000)).toString() || '{}');
@@ -303,7 +311,7 @@ async function route(req, res) {
   }
 
   if (p === '/api/checkout') {
-    if (req.method === 'OPTIONS') return send(res, 204, '', cors());
+    if (req.method === 'OPTIONS') return send(res, 204, '', cors(req));
     if (req.method !== 'POST') return sendJson(res, 405, { error: 'Use POST' });
     if (!payments.enabled()) return sendJson(res, 503, { error: 'Online ordering is not open yet.' });
     let form;
