@@ -203,6 +203,9 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 .row2 { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
 input[type="text"], input[type="number"], input[type="email"], select { width: 100%; font: 17px/1.3 var(--body); color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); border-radius: 10px; padding: 11px 12px; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.presets { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; font-size: 15px; color: var(--ink-soft); }
+.presets button { font: 600 14px/1 var(--body); color: var(--ink); background: var(--tint); border: 1.5px dashed var(--line); border-radius: 999px; padding: 8px 12px; cursor: pointer; }
+.presets button[aria-pressed="true"] { border-style: solid; border-color: var(--mint-deep); }
 .chip { display: inline-flex; align-items: center; gap: 6px; font: 15px/1 var(--body); color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); border-radius: 999px; padding: 8px 12px; cursor: pointer; }
 .chip b { display: none; width: 20px; height: 20px; border-radius: 50%; background: var(--ink); color: var(--paper); font: 700 11px/20px var(--mono); text-align: center; }
 .chip[aria-pressed="true"] { border-color: var(--ink); background: var(--tint); }
@@ -505,6 +508,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
           <fieldset class="field" id="spotsField">
             <legend>Hiding spots, in order</legend>
             <p class="hint">Tap 6 to 10 spots in the order the kids should find them. The last one is where the prize goes.</p>
+            <div class="presets" id="presets" role="group" aria-label="Start from a ready-made trail"><span>Start from:</span></div>
             <div class="chips" id="spotChips"></div>
             <div class="addspot"><input type="text" id="customSpot" maxlength="30" placeholder="Add your own, like “Grandma’s piano”" aria-label="Add your own spot"><button type="button" class="btn btn-ghost" id="addSpot">Add</button></div>
           </fieldset>
@@ -577,7 +581,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 <footer>
   <div class="wrap">
     <div class="brand"><img src="img/mark.png" alt="" width="64" height="49"><span><b class="wordmark"><span class="l">Little</span><span class="p">Print</span><span class="q">Quests</span></b>Printable Party Games &amp; Quests · © 2026</span></div>
-    <a id="etsyLink3" href="#" target="_blank" rel="noopener">Find us on Etsy</a>
+    <span><a href="ideas/">Party and hunt ideas</a> · <a id="etsyLink3" href="#" target="_blank" rel="noopener">Find us on Etsy</a></span>
   </div>
 </footer>
 
@@ -662,6 +666,12 @@ const SPOTS = [
   ['desk', 'Desk'], ['mirror', 'Mirror'], ['doormat', 'Doormat'], ['stuffed_animals', 'Stuffed Animals'], ['backpack', 'Backpack'],
   ['swing', 'Swing'], ['slide', 'Slide'], ['sandbox', 'Sandbox'], ['tree', 'Big Tree'],
 ];
+// Ready-made trails, the same as src/generator/spaces.js.
+const SPACES = {
+  apartment: ['Apartment', ['front_door', 'shoe_rack', 'couch', 'bookshelf', 'kitchen_table', 'fridge', 'bathtub', 'bed']],
+  house: ['House', ['front_door', 'coat_closet', 'couch', 'stairs', 'pantry', 'dryer', 'bathtub', 'bed']],
+  backyard: ['Backyard', ['front_door', 'doormat', 'mailbox', 'plant', 'swing', 'slide', 'sandbox', 'tree']],
+};
 const DRYER = ['Head to the spot where wet clothes become dry,', 'It spins and it tumbles, so give it a try!'];
 
 const $ = (id) => document.getElementById(id);
@@ -770,6 +780,15 @@ function toggle(key) {
   status('');
   render();
 }
+function useSpace(id) {
+  if (!SPACES[id]) return;
+  state.picks = [...SPACES[id][1]];
+  status('');
+  render();
+  document.querySelectorAll('#presets button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.space === id)));
+}
+$('presets').insertAdjacentHTML('beforeend', Object.entries(SPACES).map(([id, [label]]) => `<button type="button" data-space="${id}" aria-pressed="false">${label}</button>`).join(''));
+$('presets').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => useSpace(b.dataset.space)));
 $('addSpot').addEventListener('click', addCustom);
 $('customSpot').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addCustom(); } });
 function addCustom() {
@@ -1009,8 +1028,13 @@ $('sampleForm').addEventListener('submit', async (e) => {
   }
 });
 
+// Links from the idea pages can pick the theme, the trail and the age: /?theme=dino&space=apartment&age=5#order
+const params = new URLSearchParams(location.search);
+const askedAge = Number(params.get('age'));
+if (askedAge >= 2 && askedAge <= 12) $('childAge').value = askedAge;
 drawThemes();
-setTheme(seasonal || state.theme);
+setTheme(THEMES.some((t) => t.id === params.get('theme')) ? params.get('theme') : seasonal || state.theme);
+useSpace(params.get('space'));
 </script>
 </body>
 </html>
