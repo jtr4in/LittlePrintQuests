@@ -68,7 +68,13 @@ function page({ file, title, description, body, jsonLd }) {
 <link rel="canonical" href="${url}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
-<meta property="og:image" content="${SITE}img/social.jpg">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="LittlePrintQuests">
+<meta property="og:url" content="${url}">
+<meta property="og:image" content="${SITE}img/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="${SITE}img/favicon.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>${CSS}</style>
