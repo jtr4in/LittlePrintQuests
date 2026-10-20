@@ -14,13 +14,13 @@ const env = (k) => (process.env[k] || '').trim();
 function checks() {
   const from = env('EMAIL_FROM');
   return [
-    ['PUBLIC_URL is your Railway address', /^https:\/\/[^/]+$/.test(env('PUBLIC_URL')), 'Set it to https://your-app.up.railway.app with https:// and no slash at the end.'],
+    ['PUBLIC_URL is the order bot’s address', /^https:\/\/[^/]+$/.test(env('PUBLIC_URL')), 'Set it to https://orders.littleprintquests.com (or your Railway address) with https:// and no slash at the end.'],
     ['ANTHROPIC_API_KEY', env('ANTHROPIC_API_KEY').startsWith('sk-ant-'), 'It should start with sk-ant-.'],
     ['RESEND_API_KEY', env('RESEND_API_KEY').startsWith('re_'), 'From resend.com > API Keys. It starts with re_.'],
     ['EMAIL_FROM', /@[^\s>]+\.[a-z]{2,}>?$/i.test(from), 'An address on the domain you verified in Resend, like LittlePrintQuests <hunts@yourdomain.com>.'],
     ['STRIPE_SECRET_KEY', /^(sk|rk)_(test|live)_/.test(env('STRIPE_SECRET_KEY')), 'Use the Secret key (sk_test_… or sk_live_…), not the Publishable key (pk_…).'],
     ['STRIPE_WEBHOOK_SECRET', env('STRIPE_WEBHOOK_SECRET').startsWith('whsec_'), `Add a webhook in Stripe for ${env('PUBLIC_URL') || 'PUBLIC_URL'}/webhooks/stripe, then copy its Signing secret (whsec_…).`],
-    ['SITE_URL', /^https?:\/\//.test(env('SITE_URL')), 'Your website, like https://jtr4in.github.io/LittlePrintQuests/'],
+    ['SITE_URL', /^https?:\/\//.test(env('SITE_URL')), 'Your website, like https://littleprintquests.com/'],
     // Railway sets RAILWAY_VOLUME_MOUNT_PATH only when a volume is attached. Without one, every deploy
     // starts from an empty disk: orders, the Etsy login and the list of drafts are gone.
     ['Saved data survives deploys (volume at /data)', !env('RAILWAY_PROJECT_ID') || env('RAILWAY_VOLUME_MOUNT_PATH') === (env('DATA_DIR') || '/data'),
