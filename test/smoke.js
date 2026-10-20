@@ -305,6 +305,15 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.match((await bad.json()).error, /between 3 and 12/);
   const pre = await realFetch(base + '/api/checkout', { method: 'OPTIONS' });
   assert.equal(pre.headers.get('access-control-allow-origin'), '*');
+  // With SITE_ORIGIN set to the old GitHub Pages site, the new domain is still allowed.
+  process.env.SITE_ORIGIN = 'https://jtr4in.github.io';
+  for (const origin of ['https://littleprintquests.com', 'https://jtr4in.github.io']) {
+    const ok = await realFetch(base + '/api/checkout', { method: 'OPTIONS', headers: { Origin: origin } });
+    assert.equal(ok.headers.get('access-control-allow-origin'), origin);
+  }
+  const other = await realFetch(base + '/api/checkout', { method: 'OPTIONS', headers: { Origin: 'https://evil.example' } });
+  assert.equal(other.headers.get('access-control-allow-origin'), 'https://jtr4in.github.io');
+  delete process.env.SITE_ORIGIN;
   // Older forms send a product name; newer ones send any mix of items.
   const webOrders = [
     { product: 'bundle', spots: ['front_door', 'pet_bed', 'kitchen_table'], has: ['hunt', 'kit', 'party'] },
