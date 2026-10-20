@@ -36,6 +36,9 @@ async function createCheckout(order) {
           currency: 'usd',
           unit_amount: priceFor(HOLIDAYS[order.form.holiday]?.book ? 'book' : order.form.product),
           product_data: {
+            // Stripe Managed Payments needs a tax category on every product. The default is
+            // "General - Electronically Supplied Services"; set STRIPE_TAX_CODE to use another.
+            tax_code: process.env.STRIPE_TAX_CODE || 'txcd_10000000',
             name: items.length === 3 ? `Party Bundle: ${items.map((i) => parts[i]).join(' + ')}` : items.map((i) => parts[i]).join(' + '),
             description: `Printable ${items.map((i) => details[i]).join(' · ')} for ${order.form.childName} · PDF`,
           },
