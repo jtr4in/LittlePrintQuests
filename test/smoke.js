@@ -184,6 +184,26 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   }
   const preview = buildCraftHtml({ holiday: 'memory', childName: 'Juniper', preview: true });
   assert.ok((preview.match(/stroke-dasharray/g) || []).length < (book.match(/stroke-dasharray/g) || []).length);
+  // Ready-made trails: only library spots, and the website's copy matches.
+  const SPACE_TRAILS = require('../src/generator/spaces');
+  const site = fs.readFileSync(path.join(__dirname, '..', 'docs', 'index.html'), 'utf8');
+  for (const sp of Object.values(SPACE_TRAILS)) {
+    assert.ok(sp.spots.every((id) => require('../src/generator/spots')[id]), sp.id);
+    assert.ok(site.includes(`${sp.id}: ['${sp.label}', ${JSON.stringify(sp.spots).replace(/"/g, "'").replace(/,/g, ', ')}]`), `site trail ${sp.id}`);
+  }
+  // The idea pages: a hub, one per home and one per theme, all in the sitemap, with no blanks.
+  const ideaUrls = require('../scripts/idea-pages').build();
+  assert.equal(ideaUrls.length, 2 + Object.keys(SPACE_TRAILS).length + Object.keys(require('../src/generator/themes')).length);
+  const sitemap = fs.readFileSync(path.join(__dirname, '..', 'docs', 'sitemap.xml'), 'utf8');
+  for (const u of ideaUrls) assert.ok(sitemap.includes(`<loc>${u}</loc>`), u);
+  const dinoIdeas = fs.readFileSync(path.join(__dirname, '..', 'docs', 'ideas', 'dinosaur-scavenger-hunt', 'index.html'), 'utf8');
+  assert.match(dinoIdeas, /Junior Rangers/);
+  assert.match(dinoIdeas, /\?theme=dino#order/);
+  for (const f of fs.readdirSync(path.join(__dirname, '..', 'docs', 'ideas'))) {
+    if (!f.endsWith('.html') && fs.statSync(path.join(__dirname, '..', 'docs', 'ideas', f)).isDirectory()) {
+      assert.doesNotMatch(fs.readFileSync(path.join(__dirname, '..', 'docs', 'ideas', f, 'index.html'), 'utf8'), /undefined|\{kids\}|\{count\}|NaN/, f);
+    }
+  }
   const craftPdf = path.join(dataDir, 'craft.pdf');
   await require('../src/crafts/render-craft').renderCraft({ holiday: 'christmas', childName: 'Bo', age: 1 }, craftPdf);
   assert.ok(fs.statSync(craftPdf).size > 50000);
