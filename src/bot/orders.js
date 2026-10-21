@@ -221,7 +221,7 @@ function validateWebForm(body) {
     const age = Number.isInteger(body.age) && body.age > 0 && body.age < 16 ? body.age : null;
     return { items: ['craft'], product: 'craft', holiday, theme: null, childName, age, spots: [], pets: [], party: null };
   }
-  // A shop kit (pizza, library...) has no hunt or party theme, so it is ordered on its own.
+  // A shop kit (pizza, library...) has no hunt or party theme, so it comes as the kit, with or without its activity pack.
   const shopKit = KITS[body.kit] && !KITS[body.kit].hunt ? KITS[body.kit].id : null;
   const theme = shopKit ? null : String(body.theme || '');
   if (!shopKit && !THEMES[theme]) throw new Error('Please pick a theme.');
@@ -229,7 +229,10 @@ function validateWebForm(body) {
   if (!childName) throw new Error('Please add your child’s first name.');
   const age = Number.isInteger(body.age) && body.age > 0 && body.age < 16 ? body.age : null;
   // Newer forms send items; older ones send a product name.
-  const items = shopKit ? ['kit'] : products.normalize(Array.isArray(body.items) ? body.items : products.itemsOf({ product: body.product === 'bundle' || body.product === 'party' ? body.product : 'hunt' }));
+  const asked = Array.isArray(body.items) ? body.items : null;
+  const items = shopKit
+    ? products.normalize(['kit', ...(asked || []).filter((i) => i === 'activity')])
+    : products.normalize(asked || products.itemsOf({ product: body.product === 'bundle' || body.product === 'party' ? body.product : 'hunt' }));
   if (!items.length) throw new Error('Please pick the hunt, the play kit, the activity pack or the party pack.');
   const pets = (Array.isArray(body.pets) ? body.pets : []).slice(0, 6)
     .map((p) => ({ name: String(p?.name || '').trim().slice(0, 20), kind: String(p?.kind || '').trim().slice(0, 20) }))

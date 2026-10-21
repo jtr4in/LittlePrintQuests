@@ -12,7 +12,7 @@ const { execFileSync } = require('child_process');
 const { renderPdf } = require('../src/generator/render');
 const { renderKit, renderActivities } = require('../src/kits/render-kit');
 const { renderParty } = require('../src/party/render-party');
-const { kitForHunt } = require('../src/kits/engine');
+const { kitForHunt, KITS } = require('../src/kits/engine');
 const THEMES = require('../src/generator/themes');
 
 const OUT = path.join(__dirname, '..', 'docs', 'img', 'gallery');
@@ -24,8 +24,28 @@ const count = (dir) => fs.readdirSync(dir).filter((f) => /^page-\d+\.png$/.test(
   const only = process.argv.slice(2);
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'gallery-'));
   const jobs = [];
-  for (const id of Object.keys(THEMES).filter((k) => !only.length || only.includes(k))) {
+  // Shop kits (pizza, library...) have no hunt or party, just the play kit and its activity pack.
+  const shops = Object.values(KITS).filter((k) => !k.hunt).map((k) => k.id);
+  for (const id of [...Object.keys(THEMES), ...shops].filter((k) => !only.length || only.includes(k))) {
     const dir = (k) => path.join(tmp, `${id}-${k}`);
+    const shop = shops.includes(id);
+    if (shop) {
+      await renderKit({ kit: id, childName: 'Maya', subjects: [], lenient: true }, `${dir('kit')}.pdf`, { pngDir: dir('kit') });
+      await renderActivities({ kit: id, childName: 'Maya', lenient: true }, `${dir('activity')}.pdf`, { pngDir: dir('activity') });
+      const kit = count(dir('kit'));
+      const picks = {
+        kit: [2, 4, ...[0.35, 0.55, 0.75].map((f) => Math.round(5 + f * (kit - 5)))], // welcome poster, shop sign, three toys
+        activity: [1, 6, 7, 9, 10],
+      };
+      fs.mkdirSync(path.join(OUT, id), { recursive: true });
+      for (const [k, pages] of Object.entries(picks)) {
+        pages.forEach((n, i) => jobs.push([path.join(dir(k), `page-${n}.png`), path.join(OUT, id, `${k}-${i + 1}.webp`)]));
+      }
+      jobs.push([path.join(dir('kit'), `page-${picks.kit[2]}.png`), path.join(OUT, '..', 'pages', `${id}-kit.webp`), 400]);
+      jobs.push([path.join(dir('activity'), 'page-6.png'), path.join(OUT, '..', 'pages', `${id}-activity.webp`), 400]);
+      console.log('Rendered', id);
+      continue;
+    }
     await renderPdf({ theme: id, childName: 'Maya', age: 6, spots: SPOTS, pictures: true }, `${dir('hunt')}.pdf`, { pngDir: dir('hunt') });
     await renderParty({ theme: id, childName: 'Maya', age: 6, party: PARTY }, `${dir('party')}.pdf`, { pngDir: dir('party') });
     await renderKit({ kit: kitForHunt(id).id, childName: 'Maya', subjects: [], lenient: true }, `${dir('kit')}.pdf`, { pngDir: dir('kit') });
@@ -66,7 +86,7 @@ for t in sys.argv[2:]:
     # the middle sheet of the fan (a hands-on toy), a little below its title
     k = bg.width / 677; left, top, side = int(165 * k), int(40 * k), int(350 * k)
     bg.crop((left, top, left + side, top + side)).convert('RGB').resize((220, 220), Image.LANCZOS).save(os.path.join(img, 'themes', f'{t}.webp'), 'WEBP', quality=80)
-`, path.join(OUT, '..'), ...Object.keys(THEMES).filter((k) => !only.length || only.includes(k))]);
+`, path.join(OUT, '..'), ...[...Object.keys(THEMES), ...shops].filter((k) => !only.length || only.includes(k))]);
   fs.rmSync(tmp, { recursive: true, force: true });
   console.log('Wrote docs/img/gallery for', only.length ? only.join(', ') : 'every theme');
 })();

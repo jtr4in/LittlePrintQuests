@@ -270,6 +270,8 @@ input[type="text"], input[type="number"], input[type="email"], select { width: 1
 /* shop play kits */
 .shop-card img { width: 100%; height: auto; border-radius: 12px; background: var(--tint); }
 .shop-card h3 { font-size: 19px; }
+.shop-pill { margin: 0 0 14px; padding: 10px 14px; border: 1.5px solid var(--ink); border-radius: 12px; background: var(--tint); display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; justify-content: space-between; }
+.shop-pill button { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
 .shop-buy { margin-top: 26px; background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; display: grid; grid-template-columns: 1fr auto; gap: 16px 20px; align-items: end; }
 .shop-buy .row2 { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
 .shop-buy .status { grid-column: 1 / -1; }
@@ -380,11 +382,12 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
     <div class="wrap">
       <form class="builder" id="orderForm" novalidate>
         <div class="panel">
+          <p class="shop-pill" id="shopPill" hidden></p>
           <div class="row2">
             <div class="field"><label for="childName">Child’s first name</label><input type="text" id="childName" maxlength="24" autocomplete="off" value="Maya"></div>
-            <div class="field"><label for="childAge">Turning</label><input type="number" id="childAge" min="2" max="12" placeholder="Optional"></div>
+            <div class="field"><label for="childAge" id="ageLabel">Turning</label><input type="number" id="childAge" min="2" max="12" placeholder="Optional"></div>
           </div>
-          <div class="field"><label for="themeSelect">Theme</label><select id="themeSelect"></select><div class="themes mini" id="themeList" aria-label="Themes"></div></div>
+          <div class="field" id="themeField"><label for="themeSelect">Theme</label><select id="themeSelect"></select><div class="themes mini" id="themeList" aria-label="Themes"></div></div>
           <details class="field party-details">
             <summary>Party details for the invitations <span class="hint">(optional)</span></summary>
             <div class="row2">
@@ -404,7 +407,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
           </fieldset>
         </div>
         <aside class="panel summary" aria-live="polite">
-          <div class="field"><span class="eyebrow">Your trail</span><p id="trailTitle" style="font:600 20px/1.2 var(--display)"></p></div>
+          <div class="field"><span class="eyebrow" id="trailEyebrow">Your trail</span><p id="trailTitle" style="font:600 20px/1.2 var(--display)"></p></div>
           <ol class="route" id="route"></ol>
           <div class="field"><span class="eyebrow">What’s in your order</span>
             <div class="stack" id="stack" role="button" tabindex="0" aria-label="See every page in your order"></div>
@@ -613,7 +616,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <div class="pin"><b></b><span class="eyebrow">Questions</span></div>
       <h2>Before you print</h2>
       <div class="faq">
-        <details><summary>How does the Family Pass work?</summary><p>One payment of $39.99 gets you 6 orders to use within 12 months. Each order can be the whole bundle: the custom hunt, its play kit, the activity pack and the party pack, in any theme and for any of your kids. Your code arrives by email. Build an order as usual and type the code under “Have a Family Pass code?” next to the total. It covers anything in the order builder; shop play kits and handprint art are sold separately. It doesn’t renew by itself.</p></details>
+        <details><summary>How does the Family Pass work?</summary><p>One payment of $39.99 gets you 6 orders to use within 12 months. Each order can be the whole bundle: the custom hunt, its play kit, the activity pack and the party pack, in any theme and for any of your kids. Your code arrives by email. Build an order as usual and type the code under “Have a Family Pass code?” next to the total. It covers anything in the order builder, shop play kits included; handprint art is sold separately. It doesn’t renew by itself.</p></details>
         <details><summary>Is anything shipped to me?</summary><p>No. You get a PDF to print at home on regular Letter paper, in color or black and white.</p></details>
         <details><summary>How fast will I get it?</summary><p>Usually within a few minutes of checkout. It shows on screen and arrives by email, so it works even the morning of the party.</p></details>
         <details><summary>What if my house doesn’t have a spot on the list?</summary><p>Type any spot you like, such as “the hammock” or “Dad’s guitar”, and we’ll write a rhyme for it. We skip anything unsafe for little kids, like the oven.</p></details>
@@ -715,7 +718,8 @@ const SPACES = {
 };
 
 const $ = (id) => document.getElementById(id);
-const state = { theme: 'dino', picks: ['front_door', 'shoe_rack', 'couch', 'dryer', 'bathtub', 'bookshelf', 'pet_bed', 'kitchen_table'], custom: {} };
+// shop is set when a shop play kit (pizza, library...) is being ordered instead of a themed set.
+const state = { shop: null, theme: 'dino', picks: ['front_door', 'shoe_rack', 'couch', 'dryer', 'bathtub', 'bookshelf', 'pet_bed', 'kitchen_table'], custom: {} };
 
 // Theme cards: everyday themes and holidays. The holiday coming up goes first with a "Now" badge.
 const KITS = {"dino":{"name":"Dino Dig Lab","blurb":"A T-Rex puzzle with your child’s name to dig up and put back together, a dino egg that hatches when you pull the tab, plus a whole shop to set up.","alt":"Dino Dig Lab kit pages: a welcome poster and two hands-on toys"},"hero":{"name":"Hero HQ","blurb":"A Super Power Spinner to pick today’s power, a Hero Power Meter and a Villain Alarm with needles that spin, plus a whole shop to set up.","alt":"Hero HQ kit pages: a welcome poster and two hands-on toys"},"pirate":{"name":"Pirate Ship","blurb":"A pirate spyglass to roll up, with a Spot It! list, a lift-the-flap treasure chest with six treasures, plus a whole shop to set up.","alt":"Pirate Ship kit pages: a welcome poster and two hands-on toys"},"space":{"name":"Mission Control","blurb":"A Planet Picker spinner to choose where to fly next, a launch pad card: pull the tab and the rocket blasts off, plus a whole shop to set up.","alt":"Mission Control kit pages: a welcome poster and two hands-on toys"},"royal":{"name":"Royal Castle","blurb":"A lift-the-flap castle with someone behind every window, a Royal Wish Wheel to spin for a royal wish, plus a whole shop to set up.","alt":"Royal Castle kit pages: a welcome poster and two hands-on toys"},"unicorn":{"name":"Unicorn Stable","blurb":"A Rainbow Maker spinner with six magic surprises, a unicorn puzzle with your child’s name, plus a whole shop to set up.","alt":"Unicorn Stable kit pages: a welcome poster and two hands-on toys"},"mermaid":{"name":"Mermaid Lagoon","blurb":"A seashell tiara with your child’s name, an under-the-sea puzzle with your child’s name, plus a whole shop to set up.","alt":"Mermaid Lagoon kit pages: a welcome poster and two hands-on toys"},"construction":{"name":"Construction Site","blurb":"A hard hat to wear, with your child’s name, a lift-the-flap toolbox with six tools, plus a whole shop to set up.","alt":"Construction Site kit pages: a welcome poster and two hands-on toys"},"vet":{"name":"Vet Clinic","blurb":"A lift-the-flap doctor’s bag with six tools to find, an X-ray machine: pull the tab to see inside a patient, plus a whole shop to set up.","alt":"Vet Clinic kit pages: a welcome poster and two hands-on toys"},"racecar":{"name":"Pit Stop Garage","blurb":"A full-size steering wheel with your child’s name on the horn, a speedometer and fuel gauge with needles that really spin, plus a whole shop to set up.","alt":"Pit Stop Garage kit pages: a welcome poster and two hands-on toys"},"fire":{"name":"Fire Station","blurb":"A firefighter helmet shield with your child’s name, a rescue card: pull the tab to put out the fire, plus a whole shop to set up.","alt":"Fire Station kit pages: a welcome poster and two hands-on toys"},"ice":{"name":"Ice Palace","blurb":"A Snowflake Spell spinner with six frosty spells, an ice palace puzzle with your child’s name, plus a whole shop to set up.","alt":"Ice Palace kit pages: a welcome poster and two hands-on toys"},"halloween":{"name":"Potion Shop","blurb":"A lift-the-flap potion cauldron with six secret ingredients, a Ghost-o-Meter and a Spell-o-Meter with needles that spin, plus a whole shop to set up.","alt":"Potion Shop kit pages: a welcome poster and two hands-on toys"},"christmas":{"name":"Santa’s Workshop","blurb":"Reindeer antlers to wear, with your child’s name, a Nice-o-Meter and a Sleigh Speed meter with needles that spin, plus a whole shop to set up.","alt":"Santa’s Workshop kit pages: a welcome poster and two hands-on toys"},"valentine":{"name":"Valentine Post Office","blurb":"A lift-the-flap Love Mailbox with six sweet surprises, a Kindness Spinner full of kind things to do, plus a whole shop to set up.","alt":"Valentine Post Office kit pages: a welcome poster and two hands-on toys"},"easter":{"name":"Bunny Egg Factory","blurb":"Bunny ears to wear, with your child’s name, a lift-the-flap egg basket with six surprises, plus a whole shop to set up.","alt":"Bunny Egg Factory kit pages: a welcome poster and two hands-on toys"}};
@@ -780,6 +784,10 @@ if (seasonal) {
 
 // Someone chose a theme: the banner shows that set and stops rotating.
 function pickTheme(id) {
+  if (state.shop) {
+    state.shop = null;
+    setPicks(['hunt', 'kit', 'activity']);
+  }
   setTheme(id);
   heroLocked = true;
   clearInterval(heroTimer);
@@ -795,7 +803,7 @@ const heroSrc = (id) => ({ src: `img/hero/${id}.webp`, srcset: `img/hero/${id}-s
 function showHero(id) {
   if (id === heroAt) return;
   heroAt = id;
-  const t = THEMES.find((x) => x.id === id);
+  const name = shopName(id) ? `${shopName(id)} play kit` : THEMES.find((x) => x.id === id).name;
   const imgs = [...document.querySelectorAll('#heroBanner .hb')];
   const front = imgs.find((i) => i.classList.contains('on'));
   const back = imgs.find((i) => i !== front);
@@ -806,8 +814,9 @@ function showHero(id) {
   };
   back.srcset = srcset;
   back.src = src;
-  back.alt = `The ${t.name} set printed out: host guide, story briefing, clue cards, play kit, activity page, party invitation and Host Mode on a phone`;
-  $('heroCap').innerHTML = `<b>${esc(t.name)}</b><span>${heroLocked ? 'Your theme' : 'Make this set'}</span>`;
+  back.alt = shopName(id) ? `The ${name} printed out: shop signs, order cards, play pages and activity pages`
+    : `The ${name} set printed out: host guide, story briefing, clue cards, play kit, activity page, party invitation and Host Mode on a phone`;
+  $('heroCap').innerHTML = `<b>${esc(name)}</b><span>${heroLocked ? (shopName(id) ? 'Your kit' : 'Your theme') : 'Make this set'}</span>`;
   $('heroCap').dataset.id = id;
   // warm up the next one so the fade is instant
   if (!heroLocked) new Image().src = heroSrc(ordered[(ordered.findIndex((x) => x.id === id) + 1) % ordered.length].id).src;
@@ -820,7 +829,7 @@ function startHero() {
     showHero(ordered[(ordered.findIndex((x) => x.id === heroAt) + 1) % ordered.length].id);
   }, 5000);
 }
-$('heroCap').addEventListener('click', () => pickTheme($('heroCap').dataset.id));
+$('heroCap').addEventListener('click', () => (shopName($('heroCap').dataset.id) ? chooseShop($('heroCap').dataset.id) : pickTheme($('heroCap').dataset.id)));
 
 function setTheme(id) {
   state.theme = id;
@@ -878,7 +887,15 @@ function render() {
   const name = $('childName').value.trim() || 'your child';
   // trail summary
   const age = parseInt($('childAge').value, 10);
-  $('trailTitle').textContent = `${t.name} for ${name}${age ? `, turning ${age}` : ''}`;
+  $('trailTitle').textContent = state.shop ? `${shopName(state.shop)} play kit for ${name}${age ? `, age ${age}` : ''}` : `${t.name} for ${name}${age ? `, turning ${age}` : ''}`;
+  $('trailEyebrow').textContent = state.shop ? 'Your kit' : 'Your trail';
+  $('ageLabel').textContent = state.shop ? 'Age' : 'Turning';
+  $('themeField').hidden = Boolean(state.shop);
+  $('shopPill').hidden = !state.shop;
+  if (state.shop) {
+    $('shopPill').innerHTML = `<span>Making the <b>${esc(shopName(state.shop))}</b> play kit</span><button type="button" id="leaveShop">Get a themed hunt and party pack instead</button>`;
+    $('leaveShop').addEventListener('click', leaveShop);
+  }
   $('route').innerHTML = state.picks.length
     ? state.picks.map((k, i) => {
         const last = i === state.picks.length - 1;
@@ -915,7 +932,11 @@ function productOf(gets) {
 const priceOf = (p) => (p && p !== 'activity' && p.endsWith('+activity') ? priceOf(p.slice(0, -9)) + PRICES.activityAdd : PRICES[p] || 0);
 const money = (n) => '$' + n.toFixed(2);
 
+// A shop kit order is always its play kit, with the activity pack as the add-on.
+const shown = () => (state.shop ? LAYERS.filter((l) => l.id === 'kit' || l.id === 'activity') : LAYERS);
+const setId = () => state.shop || state.theme;
 function pick(id) {
+  if (state.shop && id === 'kit') return;
   // Ticking items shows or hides whole sections (the spots list goes with the hunt), so keep the
   // tapped row where it was on screen instead of letting the page jump.
   const at = () => document.querySelector(`button.layer[data-id="${id}"]`)?.getBoundingClientRect().top;
@@ -931,7 +952,7 @@ function setPicks(ids) {
   drawCart();
 }
 function drawCart() {
-  const gets = LAYERS.map((l) => l.id).filter((k) => picked.has(k));
+  const gets = shown().map((l) => l.id).filter((k) => picked.has(k));
   product = productOf(gets);
   // papers fan out wider as the stack grows
   const pos = { 1: [[0, 0]], 2: [[-38, -6], [38, 5]], 3: [[-62, -9], [62, 9], [0, -1]], 4: [[-74, -10], [74, 10], [-24, -4], [26, 3]] }[gets.length] || [];
@@ -939,7 +960,7 @@ function drawCart() {
   $('stack').querySelectorAll(':scope > img').forEach((img) => img.classList.toggle('out', !gets.includes(img.dataset.k)));
   order.forEach((k, i) => {
     const img = $('stack').querySelector(`[data-k="${k}"]`);
-    img.src = `img/pages/${state.theme}-${k}.webp`;
+    img.src = `img/pages/${setId()}-${k}.webp`;
     img.style.zIndex = i + 1;
     img.style.transform = `translate(calc(-50% + ${pos[i][0]}px), ${Math.abs(pos[i][0]) / 5}px) rotate(${pos[i][1]}deg)`;
   });
@@ -950,18 +971,20 @@ function drawCart() {
   const huntX = gets.includes('hunt') ? pos[order.indexOf('hunt')][0] : 0;
   phone.style.left = `max(4px, calc(50% + ${huntX - 104}px))`;
   phone.querySelector('img').src = `img/host/${state.theme}-play.webp`;
-  $('layers').innerHTML = LAYERS.map((l) => `<li><button type="button" class="layer" data-id="${l.id}" aria-pressed="${gets.includes(l.id)}">
+  $('layers').innerHTML = shown().map((l) => `<li><button type="button" class="layer" data-id="${l.id}" aria-pressed="${gets.includes(l.id)}">
       <span class="box">✓</span><span><b>${l.name}</b><small>${l.note}<span class="plus">${{ hunt: '+ Host Mode phone guide included', kit: '+ Play ideas in Host Mode', activity: '+ Reusable with a dry-erase marker', party: '+ Party checklist in Host Mode' }[l.id] || ''}</span></small></span><span class="amt">${l.id === 'activity' && gets.some((k) => k !== 'activity') ? `+${money(PRICES.activityAdd)}` : money(l.price)}</span></button></li>`).join('');
   $('layers').querySelectorAll('button.layer').forEach((b) => b.addEventListener('click', () => pick(b.dataset.id)));
   const value = gets.reduce((sum, k) => sum + LAYERS.find((l) => l.id === k).price, 0);
   const price = priceOf(product);
   // suggest the party pack first: it's the add-on
-  const next = ['party', 'activity', 'kit', 'hunt'].find((k) => !gets.includes(k));
+  const next = ['party', 'activity', 'kit', 'hunt'].find((k) => !gets.includes(k) && shown().some((l) => l.id === k));
   const nextName = next && LAYERS.find((l) => l.id === next).name.toLowerCase();
+  const addNext = next && ` Add the ${nextName} for ${money(priceOf(productOf([...gets, next].sort((a, b) => LAYERS.findIndex((l) => l.id === a) - LAYERS.findIndex((l) => l.id === b)))) - price)} more.`;
   $('saveNote').innerHTML = !product ? 'Pick at least one thing to print.'
-    : gets.length > 1 ? `<s>${money(value)}</s> together for ${money(price)}, so you save ${money(value - price)}.${next ? ` Add the ${nextName} for ${money(priceOf(productOf([...gets, next].sort((a, b) => LAYERS.findIndex((l) => l.id === a) - LAYERS.findIndex((l) => l.id === b)))) - price)} more.` : ''}`
+    : gets.length > 1 ? `<s>${money(value)}</s> together for ${money(price)}, so you save ${money(value - price)}.${addNext || ''}`
+    : state.shop ? (addNext || '').trim()
     : `Add another one and save. All four are ${money(priceOf('bundle+activity'))}.`;
-  $('totalLabel').textContent = !product ? 'Nothing picked yet' : gets.length === 4 ? 'Everything bundle, PDF' : product === 'hunt+kit+activity' ? 'Play bundle, PDF' : product === 'bundle' ? 'Party bundle, PDF' : `${gets.map((k) => LABELS[k]).join(' + ')}, PDF`;
+  $('totalLabel').textContent = !product ? 'Nothing picked yet' : state.shop ? `${shopName(state.shop)} kit${gets.includes('activity') ? ' + activity pack' : ''}, PDF` : gets.length === 4 ? 'Everything bundle, PDF' : product === 'hunt+kit+activity' ? 'Play bundle, PDF' : product === 'bundle' ? 'Party bundle, PDF' : `${gets.map((k) => LABELS[k]).join(' + ')}, PDF`;
   if (passInfo && product) {
     $('totalPrice').innerHTML = `<s>${money(price)}</s>$0.00`;
     $('totalLabel').textContent += ' · Family Pass';
@@ -998,9 +1021,9 @@ function gShow(i) {
   $('gTabs').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.k === p.k));
 }
 function openGallery(k) {
-  const gets = ['hunt', 'kit', 'activity', 'party'].filter((x) => picked.has(x));
+  const gets = ['hunt', 'kit', 'activity', 'party'].filter((x) => picked.has(x) && shown().some((l) => l.id === x));
   if (!gets.length) return;
-  gPages = gets.flatMap((x) => GALLERY[x].map((cap, i) => ({ k: x, cap, src: `img/gallery/${state.theme}/${x}-${i + 1}.webp` })));
+  gPages = gets.flatMap((x) => GALLERY[x].map((cap, i) => ({ k: x, cap, src: `img/gallery/${setId()}/${x}-${i + 1}.webp` })));
   $('gTabs').innerHTML = gets.map((x) => `<button type="button" data-k="${x}">${LABELS[x]}</button>`).join('');
   $('gTabs').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => gShow(gPages.findIndex((p) => p.k === b.dataset.k))));
   $('gThumbs').innerHTML = gPages.map((p, i) => `<button type="button" aria-label="${p.cap}"><img src="${p.src}" alt="" loading="lazy" width="46" height="60"></button>`).join('');
@@ -1026,21 +1049,23 @@ $('gView').addEventListener('touchend', (e) => {
   if (gTouch !== null && Math.abs(dx) > 40) gShow(gAt + (dx < 0 ? 1 : -1));
   gTouch = null;
 });
-document.querySelectorAll('[data-pick]').forEach((a) => a.addEventListener('click', () => setPicks(a.dataset.pick.split(' '))));
+document.querySelectorAll('[data-pick]').forEach((a) => a.addEventListener('click', () => { leaveShop(); setPicks(a.dataset.pick.split(' ')); }));
 
 $('orderForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const childName = $('childName').value.trim();
   if (!childName) return status('Add your child’s first name so we can put it on the cards.', true), $('childName').focus();
   if (!product) return status('Pick at least one: the hunt, the play kit, the activity pack or the party pack.', true);
+  const items = [...picked].filter((k) => shown().some((l) => l.id === k));
   if (picked.has('hunt') && state.picks.length < 6) return status(`Pick at least 6 spots. You have ${state.picks.length}.`, true);
   const order = {
     product,
-    items: [...picked],
+    items,
     theme: state.theme,
+    ...(state.shop ? { kit: state.shop } : {}),
     childName,
     age: parseInt($('childAge').value, 10) || null,
-    spots: picked.has('hunt') ? state.picks.map((k) => (state.custom[k] ? { custom: state.custom[k] } : k)) : [],
+    spots: items.includes('hunt') ? state.picks.map((k) => (state.custom[k] ? { custom: state.custom[k] } : k)) : [],
     party: { date: $('partyDate').value, time: $('partyTime').value, place: $('partyPlace').value, rsvp: $('partyRsvp').value },
   };
   if (passInfo) order.passCode = passInfo.code;
@@ -1089,7 +1114,8 @@ $('buyPass').addEventListener('click', async () => {
   }
 });
 
-// Shop play kits: no hunt or party to match, so each one is bought on its own.
+// Shop play kits: no hunt or party to match. "Get the kit" loads it into the order builder
+// with just the play kit ticked, so the activity pack (and the Family Pass) can be offered there.
 const SHOP_KITS = [
   ['pizza', 'Pizza Shop', 'A big pizza to top and slice with order cards, a cash register and a pizza menu.'],
   ['burger', 'Burger Shop', 'Burger layers to stack to order, a drive-thru, a cash register and a burger menu.'],
@@ -1116,23 +1142,34 @@ function drawShops() {
   $('shopPicked').textContent = `${name} play kit`;
   $('shopBtn').textContent = `Get the ${name} kit · $7.99`;
 }
+function shopName(id) { return (SHOP_KITS.find(([k]) => k === id) || [])[1]; }
 drawShops();
-$('shopForm').addEventListener('submit', async (e) => {
+function chooseShop(id, { scroll = true } = {}) {
+  state.shop = id;
+  shopKit = id;
+  drawShops();
+  // carry over what they typed down here
+  if ($('shopChild').value.trim()) $('childName').value = $('shopChild').value.trim();
+  if ($('shopAge').value) $('childAge').value = $('shopAge').value;
+  document.querySelectorAll('#themeList .theme').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+  heroLocked = true;
+  clearInterval(heroTimer);
+  showHero(id);
+  setPicks(['kit']);
+  render();
+  if (scroll) $('order').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+// Back to a themed set (hunt, kit, activities and party pack all available again).
+function leaveShop() {
+  if (!state.shop) return;
+  state.shop = null;
+  setPicks(['hunt', 'kit', 'activity']);
+  setTheme(state.theme);
+  showHero(state.theme);
+}
+$('shopForm').addEventListener('submit', (e) => {
   e.preventDefault();
-  const say = (t, bad) => { $('shopStatus').textContent = t; $('shopStatus').classList.toggle('bad', Boolean(bad)); };
-  const childName = $('shopChild').value.trim();
-  if (!childName) return say('Add your child’s first name so we can put it on the signs.', true), $('shopChild').focus();
-  if (!CHECKOUT_URL) return say('Checkout opens here soon. Please check back in a little while.');
-  say('Opening secure checkout…');
-  try {
-    const res = await fetch(CHECKOUT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items: ['kit'], kit: shopKit, childName, age: parseInt($('shopAge').value, 10) || null }) });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok || !data.url) throw new Error(data.error || '');
-    location.href = data.url;
-  } catch (err) {
-    say(err.message || 'Checkout didn’t open. Please try again in a moment.', true);
-  }
+  chooseShop(shopKit);
 });
 
 // Handprint art packs: one per holiday, ordered on their own.
@@ -1197,6 +1234,7 @@ $('sampleForm').addEventListener('submit', async (e) => {
 });
 
 // Links from the idea pages can pick the theme, the trail and the age: /?theme=dino&space=apartment&age=5#order
+// or a shop kit: /?kit=burger#order
 const params = new URLSearchParams(location.search);
 const askedAge = Number(params.get('age'));
 if (askedAge >= 2 && askedAge <= 12) $('childAge').value = askedAge;
@@ -1205,6 +1243,7 @@ setTheme(THEMES.some((t) => t.id === params.get('theme')) ? params.get('theme') 
 if (params.get('theme')) heroLocked = true; // they came for this theme
 startHero();
 useSpace(params.get('space'));
+if (shopName(params.get('kit'))) chooseShop(params.get('kit'), { scroll: false });
 </script>
 </body>
 </html>
