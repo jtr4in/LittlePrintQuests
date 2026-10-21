@@ -298,6 +298,20 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const byHand = (n) => Object.values(state.orders).find((x) => x.personalization === n);
   assert.deepEqual([byHand('Ivy 4').product, byHand('Ivy 4').kit, byHand('Ivy 4').options.Kit], ['kit', 'dentist', 'Dentist Office']);
   assert.deepEqual([byHand('Max 7').product, byHand('Max 7').kit], ['kit', 'pirate']);
+  // Boxes pick what's in it, and the version can be picked by hand.
+  const page0 = await (await realFetch(base + '/admin', { headers: auth })).text();
+  assert.match(page0, /name="item" value="activity"/);
+  assert.match(page0, /<option value="little">Little kids, ages 2 to 4<\/option>/);
+  await realFetch(base + '/admin/orders', { method: 'POST', headers: form, body: 'personalization=Zoe+6&theme=kit%3Apizza&item=kit&item=activity&ages=little', redirect: 'manual' });
+  await realFetch(base + '/admin/orders', { method: 'POST', headers: form, body: 'personalization=Eli+3&theme=dino&item=activity', redirect: 'manual' });
+  for (let i = 0; i < 60; i++) {
+    state = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
+    if (['Zoe 6', 'Eli 3', 'Ivy 4'].every((n) => byHand(n)?.status === 'ready')) break;
+    await wait(500);
+  }
+  assert.deepEqual([byHand('Zoe 6').items, byHand('Zoe 6').config.ages, byHand('Zoe 6').options.Version, byHand('Zoe 6').activityReady], [['kit', 'activity'], 'little', 'Little kids, ages 2 to 4', true]);
+  assert.deepEqual([byHand('Eli 3').product, byHand('Eli 3').kit, byHand('Eli 3').kitReady], ['activity', 'dino', false]);
+  assert.ok(!byHand('Ivy 4').activityReady, 'a hand-made play kit leaves out the activity pack unless ticked');
   await realFetch(`${base}/admin/orders/${manual.id}/clear`, { method: 'POST', headers: form, redirect: 'manual' });
   let page = await (await realFetch(base + '/admin', { headers: auth })).text();
   assert.match(page, /Cleared \(1\)/);

@@ -51,6 +51,9 @@ function describe(items) {
 const packageName = (items) =>
   items.map((i) => ({ hunt: 'Hunt', kit: 'Play Kit', activity: 'Activity Pack', party: 'Party Pack', craft: 'Handprint Art' })[i]).join(' + ') + (items.length === 1 && items[0] === 'hunt' ? ' only' : '');
 
+// The age version picked for a play kit, activity pack or hunt.
+const VERSIONS = { little: 'Little kids, ages 2 to 4', big: 'Big kids, ages 5 to 8' };
+
 // What Host Mode does for this order, as the end of "Host Mode ...", for emails and messages.
 function hostHelps(order) {
   const helps = [
@@ -61,4 +64,4 @@ function hostHelps(order) {
   return helps.length > 1 ? `${helps.slice(0, -1).join(', ')}, and ${helps[helps.length - 1]}` : helps[0];
 }
 
-module.exports = { hostHelps, ITEMS, PRICES, normalize, productFor, itemsOf, has, mainOf, priceFor, describe, packageName, NAMES };
+module.exports = { VERSIONS, hostHelps, ITEMS, PRICES, normalize, productFor, itemsOf, has, mainOf, priceFor, describe, packageName, NAMES };

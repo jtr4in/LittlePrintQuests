@@ -110,7 +110,7 @@ async function generate(id) {
   else await renderPdf(order.config, out());
   const kit = main !== 'kit' && products.has(order, 'kit') ? kitOf(order) : null;
   // Etsy kit listings still promise the Wipe & Play pages, so Etsy kit orders get the activity pack too.
-  const activity = main !== 'activity' && (products.has(order, 'activity') || (!order.form && products.has(order, 'kit'))) ? kitOf(order) : null;
+  const activity = main !== 'activity' && (products.has(order, 'activity') || (order.source === 'etsy' && products.has(order, 'kit'))) ? kitOf(order) : null;
   const party = main !== 'party' && products.has(order, 'party');
   if (kit) await renderKit(kitConfig(order, kit), out('-kit'));
   if (activity) await renderActivities(kitConfig(order, activity), out('-activities'));
@@ -137,7 +137,7 @@ async function processOrder(id) {
   try {
     const parsed = order.product === 'craft'
       ? await parse.parseCraftOrder({ personalization: order.personalization, holiday: order.holiday })
-      : order.product === 'kit'
+      : order.kit && !products.has(order, 'hunt')
       ? await parse.parseKitOrder({ personalization: order.personalization, kit: order.kit })
       : order.product === 'party'
       ? await parse.parsePartyOrder({ personalization: order.personalization, options: order.options })
@@ -145,7 +145,10 @@ async function processOrder(id) {
     if (!parsed.ok) {
       store.update((s) => Object.assign(s.orders[id], { status: 'needs_attention', problem: parsed.problem, draft: parsed.draft || null }));
     } else {
-      store.update((s) => Object.assign(s.orders[id], { config: parsed.config, pets: parsed.pets || [], party: parsed.party || null }));
+      // A version picked by hand (or an Etsy "Version" option) wins over the child's age.
+      const ages = order.ages || Object.entries(products.VERSIONS).find(([, v]) => v === order.options?.Version)?.[0];
+      const config = ages ? { ...parsed.config, ages, ...(ages === 'little' && products.mainOf(order) === 'hunt' ? { pictures: true } : {}) } : parsed.config;
+      store.update((s) => Object.assign(s.orders[id], { config, pets: parsed.pets || [], party: parsed.party || null }));
       await generate(id);
     }
   } catch (err) {

@@ -41,7 +41,9 @@ function authorized(req) {
 async function readForm(req) {
   let body = '';
   for await (const chunk of req) body += chunk;
-  return Object.fromEntries(new URLSearchParams(body));
+  const params = new URLSearchParams(body);
+  // Ticked boxes repeat their name, so "item" comes back as a list.
+  return { ...Object.fromEntries(params), ...(params.has('item') ? { item: params.getAll('item') } : {}) };
 }
 
 const send = (res, code, body, headers = {}) => {
@@ -251,13 +253,15 @@ textarea{width:100%;box-sizing:border-box;font:13px ui-monospace,monospace;paddi
 pre{white-space:pre-wrap;background:#f3f3f3;padding:8px;border-radius:6px}
 button{background:#2d6a4f;color:#fff;border:0;border-radius:6px;padding:8px 14px;font-size:14px;cursor:pointer}
 button.secondary{background:#fff;color:#2d6a4f;border:1px solid #2d6a4f;margin-top:8px}
-.row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap} input{padding:7px;border:1px solid #ccc;border-radius:6px;width:100%;box-sizing:border-box}
+.row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap} .picks label{display:flex;gap:6px;align-items:center;margin-right:10px} .picks input{width:auto} input{padding:7px;border:1px solid #ccc;border-radius:6px;width:100%;box-sizing:border-box}
 .muted{color:#777;font-size:13px}
 .bar{height:14px;background:#e6efe9;border-radius:99px;overflow:hidden;margin-top:10px}.bar div{height:100%;background:#2d6a4f;transition:width .4s}
 </style></head><body>
 <h1>Order Bot</h1>
 ${query.get('empty') ? '<div class="panel problem">Type or paste the order details first (the grey example text doesn’t count). Tap “Use the sample” to try it.</div>' : ''}
-${query.get('pickkit') ? '<div class="panel problem">For a play kit on its own, pick a theme or a shop kit from the list.</div>' : ''}
+${query.get('pickkit') ? '<div class="panel problem">For a play kit or activity pack without the hunt, pick a theme or a shop kit from the list.</div>' : ''}
+${query.get('pickitem') ? '<div class="panel problem">Tick at least one thing to make: the hunt, the play kit, the activity pack or the party pack.</div>' : ''}
+${query.get('partyalone') ? '<div class="panel problem">Without the hunt, the party pack is made on its own. Make the play kit or activity pack as a second order.</div>' : ''}
 ${query.get('made') && s.orders[query.get('made')] ? `<div class="panel"><b>Making it now.</b> <span class="muted">It’s under “To send” below and finishes in about a minute; this page refreshes by itself.</span> <a href="#${esc(query.get('made'))}">Jump to it</a></div>` : ''}
 ${setupPanel()}
 <div class="panel">
@@ -274,7 +278,7 @@ ${setupPanel()}
 </div>
 <div class="panel">${
     payments.enabled()
-      ? `<b>Website checkout on.</b> <span class="muted">Buyers pick any mix of hunt ($${(payments.PRICES.hunt / 100).toFixed(2)}), play kit ($${(payments.PRICES.kit / 100).toFixed(2)}), activity pack ($${(payments.PRICES.activity / 100).toFixed(2)}) and party pack ($${(payments.PRICES.party / 100).toFixed(2)}), or all three for $${(payments.PRICES.bundle / 100).toFixed(2)}, built and emailed automatically.${unpaid.length ? ` ${unpaid.length} checkout${unpaid.length === 1 ? '' : 's'} started but not paid.` : ''}</span>`
+      ? `<b>Website checkout on.</b> <span class="muted">Buyers pick any mix of hunt ($${(payments.PRICES.hunt / 100).toFixed(2)}), play kit ($${(payments.PRICES.kit / 100).toFixed(2)}), activity pack ($${(payments.PRICES.activity / 100).toFixed(2)}, or $${(payments.PRICES.activityAdd / 100).toFixed(2)} added to anything) and party pack ($${(payments.PRICES.party / 100).toFixed(2)}), or the hunt, play kit and party pack for $${(payments.PRICES.bundle / 100).toFixed(2)}, in the little kids (ages 2 to 4) or big kids (5 to 8) version, built and emailed automatically.${unpaid.length ? ` ${unpaid.length} checkout${unpaid.length === 1 ? '' : 's'} started but not paid.` : ''}</span>`
       : `<b>Website checkout off.</b> <span class="muted">Add STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET to take orders on your site.</span>`
   }</div>
 ${passPanel(s)}
@@ -285,7 +289,9 @@ ${listingsPanel(s)}
     <p><input name="buyerName" placeholder="Buyer name (optional)"></p>
     <textarea name="personalization" rows="4" required placeholder="Maya, turning 6, space theme. Spots: front door, shoe rack, washer, dryer, grandma's piano, dog bed, kitchen table (prize). Pets: Rover (dog)"></textarea>
     <button type="button" class="secondary" onclick="const t=this.form.personalization;t.value=t.placeholder;t.focus()">Use the sample</button>
-    <div class="row"><select name="theme"><option value="">Theme: from the notes</option><optgroup label="Hunt themes">${Object.entries(THEMES).map(([id, t]) => `<option value="${esc(id)}">${esc(t.name)}</option>`).join('')}</optgroup><optgroup label="Shop kits (play kit only)">${Object.values(KITS).filter((k) => !k.hunt).map((k) => `<option value="kit:${esc(k.id)}">${esc(k.name)}</option>`).join('')}</optgroup><optgroup label="Handprint art">${Object.values(HOLIDAYS).map((h) => `<option value="craft:${esc(h.id)}">${esc(h.kicker)}</option>`).join('')}</optgroup></select><select name="product"><option value="bundle">Party bundle (hunt, play kit and party pack)</option><option value="hunt">Hunt only</option><option value="kit">Play kit only</option><option value="party">Party pack only</option></select><button>Make it</button></div>
+    <div class="row"><select name="theme"><option value="">Theme: from the notes</option><optgroup label="Hunt themes">${Object.entries(THEMES).map(([id, t]) => `<option value="${esc(id)}">${esc(t.name)}</option>`).join('')}</optgroup><optgroup label="Shop kits (play kit and activity pack)">${Object.values(KITS).filter((k) => !k.hunt).map((k) => `<option value="kit:${esc(k.id)}">${esc(k.name)}</option>`).join('')}</optgroup><optgroup label="Handprint art">${Object.values(HOLIDAYS).map((h) => `<option value="craft:${esc(h.id)}">${esc(h.kicker)}</option>`).join('')}</optgroup></select></div>
+    <div class="row picks">${[['hunt', 'Scavenger hunt'], ['kit', 'Play kit'], ['activity', 'Activity pack'], ['party', 'Party pack']].map(([v, l]) => `<label><input type="checkbox" name="item" value="${v}"${v === 'activity' ? '' : ' checked'}> ${l}</label>`).join('')}</div>
+    <div class="row"><select name="ages"><option value="">Version: from the child’s age</option><option value="little">Little kids, ages 2 to 4</option><option value="big">Big kids, ages 5 to 8</option></select><button>Make it</button></div>
   </form>
 </details>
 <h2>To send (${open.length})</h2>${open.map(orderCard).join('') || '<p class="muted">Nothing waiting.</p>'}
@@ -513,13 +519,24 @@ async function route(req, res) {
       orders.processOrder(id);
       return redirect(res, `/admin?made=${encodeURIComponent(id)}#${id}`);
     }
-    // A shop kit is always a play kit on its own; "Play kit only" with a hunt theme makes that theme's kit.
+    // The boxes pick what's in it; older forms send one product name. A shop kit has no hunt or party pack.
     const shopKit = KITS[String(f.theme || '').replace(/^kit:/, '')];
-    const kit = f.theme?.startsWith('kit:') && shopKit && !shopKit.hunt ? shopKit : f.product === 'kit' && THEMES[f.theme] ? kitForHunt(f.theme) : null;
-    if (f.product === 'kit' && !kit) return redirect(res, '/admin?pickkit=1');
-    const product = kit ? 'kit' : ['bundle', 'hunt', 'party'].includes(f.product) ? f.product : f.bundle ? 'bundle' : 'hunt';
-    const options = kit ? { Kit: kit.name } : THEMES[f.theme] ? { Theme: THEMES[f.theme].name } : {};
-    const id = orders.addOrder({ source: 'manual', buyerName: f.buyerName || '', personalization: f.personalization, options, product, ...(kit ? { kit: kit.id } : {}) });
+    const shop = f.theme?.startsWith('kit:') && shopKit && !shopKit.hunt ? shopKit : null;
+    const picked = f.item ? products.normalize(f.item) : f.product === 'kit' ? ['kit'] : products.itemsOf({ product: ['bundle', 'hunt', 'party'].includes(f.product) ? f.product : 'hunt' });
+    const items = shop ? products.normalize(picked.filter((i) => i === 'activity').concat('kit')) : picked;
+    if (!items.length) return redirect(res, '/admin?pickitem=1');
+    const hunt = items.includes('hunt');
+    if (!hunt && items.includes('party') && items.length > 1) return redirect(res, '/admin?partyalone=1');
+    const kit = shop || (!hunt && !items.includes('party') ? (THEMES[f.theme] ? kitForHunt(f.theme) : null) : null);
+    if (!hunt && !items.includes('party') && !kit) return redirect(res, '/admin?pickkit=1');
+    const ages = f.ages === 'little' || f.ages === 'big' ? f.ages : null;
+    const options = {
+      ...(kit ? { Kit: kit.name } : THEMES[f.theme] ? { Theme: THEMES[f.theme].name } : {}),
+      ...(items.length > 1 ? { Package: products.packageName(items) } : {}),
+      ...(ages ? { Version: products.VERSIONS[ages] } : {}),
+    };
+    const product = products.productFor(items);
+    const id = orders.addOrder({ source: 'manual', buyerName: f.buyerName || '', personalization: f.personalization, options, product, items, ...(kit ? { kit: kit.id } : {}), ...(ages ? { ages } : {}) });
     orders.processOrder(id);
     return redirect(res, `/admin?made=${encodeURIComponent(id)}#${id}`);
   }
