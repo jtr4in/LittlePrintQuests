@@ -9,7 +9,7 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 const { chromium } = require('playwright');
 const THEMES = require('../src/generator/themes');
-const { kitForHunt } = require('../src/kits/engine');
+const { kitForHunt, KITS } = require('../src/kits/engine');
 const art = require('../src/kits/art');
 
 const IMG = path.join(__dirname, '..', 'docs', 'img');
@@ -24,6 +24,11 @@ const TABLES = {
   easter: ['#cfe6b0', 'felt', '#e36fa5'], halloween: ['#4a3426', 'wood', '#f07f1d'], christmas: ['#8a5a3a', 'wood', '#c8323a'],
   valentine: ['#f4c4c9', 'felt', '#d8324f'], fire: ['#a46a40', 'wood', '#d8372e'], ice: ['#dcecf7', 'felt', '#3d7fc1'],
   racecar: ['#3b3f46', 'felt', '#e23b2e'],
+  // shop play kits (no hunt or party, so their scene is all kit and activity pages)
+  pizza: ['#b07a4a', 'wood', '#d8372e'], burger: ['#c9a06a', 'wood', '#e0892b'], grocery: ['#cfe1b8', 'felt', '#3f9a4a'],
+  post: ['#a9c4e0', 'felt', '#2f5fa8'], library: ['#8a5a3a', 'wood', '#7a4fb0'], police: ['#2f3f63', 'felt', '#3d7fc1'],
+  petshop: ['#f1d6a8', 'wood', '#e0698c'], dentist: ['#d6eef2', 'felt', '#2f9e8f'], coffee: ['#7a5236', 'wood', '#c88a4a'],
+  italian: ['#c8a37a', 'wood', '#2f8a4a'], auto: ['#4a4f58', 'felt', '#f2a71b'],
 };
 
 function table([base, grain]) {
@@ -46,7 +51,11 @@ const DECOR = {
   unicorn: '🌈✨⭐🦄🧁', mermaid: '🐚🐠🐬⭐🐚', construction: '🔩🧱🚧🔨🦺', vet: '🐾🦴🩹🐶🐱',
   easter: '🥚🌷🐣🐰🥚', halloween: '🎃🍂🍬🕸️🦇', christmas: '🎄❄️🍪🎁⭐', valentine: '❤️💌🌹💖🍫',
   fire: '🚒🧯⛑️🔥🚨', ice: '❄️⛄🧊💎✨', racecar: '🏁🏎️🏆🔧⭐',
+  pizza: '🍕🧀🍅🫑🍄', burger: '🍔🍟🥤🧀🍅', grocery: '🍎🛒🥕🍌🥛', post: '✉️📦📮🏷️💌',
+  library: '📚🔖✏️📖⭐', police: '🚓⭐🚨🔦🚔', petshop: '🐾🐶🐱🦴🐟', dentist: '🪥🦷✨🪞⭐',
+  coffee: '☕🥐🍪🧁🍩', italian: '🍝🥖🍅🧀🍕', auto: '🔧🚗🛞🔩🚙',
 };
+const SHOPS = Object.values(KITS).filter((k) => !k.hunt).map((k) => k.id);
 const pics = (s) => [...new Intl.Segmenter().segment(s)].map((x) => x.segment);
 
 const url = (f) => 'file://' + path.join(IMG, f);
@@ -55,7 +64,8 @@ const sheet = (f, x, y, w, r, extra = '') => `<div class="p" style="left:${x}px;
 const card = (f, second, x, y, w, r) => `<div class="p card" style="left:${x}px;top:${y}px;width:${w}px;height:${Math.round(w * 0.6)}px;transform:rotate(${r}deg)"><img src="${url(f)}" style="width:${Math.round(w * 1.12)}px;margin-left:${-Math.round(w * 0.06)}px;margin-top:${-Math.round(w * (second ? 0.8 : 0.075))}px"></div>`;
 
 function scene(id) {
-  const kit = kitForHunt(id);
+  const shop = SHOPS.includes(id);
+  const kit = shop ? KITS[id] : kitForHunt(id);
   art.setKit(kit);
   const [, , ink] = TABLES[id];
   const props = [...kit.menu.items.map(([e]) => e), ...kit.defaultKinds.map((k) => kit.kinds[k][0])];
@@ -85,7 +95,14 @@ body{margin:0;width:${W}px;height:${H}px;overflow:hidden;position:relative}
 .light{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(255,240,215,.2),rgba(0,0,0,0) 55%),radial-gradient(ellipse at center,rgba(0,0,0,0) 55%,rgba(20,10,4,.35))}
 </style></head><body>${table(TABLES[id])}
 ${scatter}
-${sheet(`gallery/${id}/hunt-1.webp`, 30, 40, 340, -8)}
+${shop ? `${sheet(`gallery/${id}/kit-2.webp`, 30, 40, 340, -8)}
+${sheet(`gallery/${id}/kit-3.webp`, 300, 80, 340, 5)}
+${sheet(`gallery/${id}/kit-4.webp`, 120, 400, 330, -4)}
+${sheet(`gallery/${id}/kit-1.webp`, 700, 70, 320, -4)}
+${sheet(`gallery/${id}/activity-3.webp`, 900, 300, 290, 9)}
+${sheet(`gallery/${id}/activity-2.webp`, 1150, 40, 330, 4, circles)}
+${sheet(`gallery/${id}/kit-5.webp`, 1270, 390, 260, -10)}
+` : `${sheet(`gallery/${id}/hunt-1.webp`, 30, 40, 340, -8)}
 ${sheet(`gallery/${id}/hunt-2.webp`, 300, 80, 340, 5)}
 ${card(`gallery/${id}/hunt-3.webp`, false, 110, 470, 330, -12)}
 ${card(`gallery/${id}/hunt-3.webp`, true, 390, 500, 330, 8)}
@@ -93,7 +110,7 @@ ${sheet(`gallery/${id}/kit-1.webp`, 700, 70, 320, -4)}
 ${sheet(`gallery/${id}/party-1.webp`, 900, 300, 290, 9)}
 ${sheet(`gallery/${id}/activity-2.webp`, 1150, 40, 330, 4, circles)}
 <div class="phone" style="left:1290px;top:400px;transform:rotate(-10deg)"><img src="${url(`host/${id}-play.webp`)}"></div>
-<div class="marker" style="left:820px;top:620px;transform:rotate(-18deg)"></div>
+`}<div class="marker" style="left:820px;top:620px;transform:rotate(-18deg)"></div>
 ${decor}
 <div class="light"></div></body></html>`;
 }
@@ -104,7 +121,7 @@ ${decor}
   fs.mkdirSync(path.join(IMG, 'hero'), { recursive: true });
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: W, height: H } });
-  const ids = Object.keys(THEMES).filter((k) => !only.length || only.includes(k));
+  const ids = [...Object.keys(THEMES), ...SHOPS].filter((k) => !only.length || only.includes(k));
   for (const id of ids) {
     const file = path.join(tmp, `${id}.html`);
     fs.writeFileSync(file, scene(id));
@@ -124,5 +141,5 @@ for t in sys.argv[3:]:
     im.resize((800, 350), Image.LANCZOS).save(os.path.join(out, t + '-sm.webp'), 'WEBP', quality=76)
 `, tmp, path.join(IMG, 'hero'), ...ids]);
   fs.rmSync(tmp, { recursive: true, force: true });
-  console.log('Wrote docs/img/hero for', only.length ? only.join(', ') : 'every theme');
+  console.log('Wrote docs/img/hero for', only.length ? only.join(', ') : 'every theme and shop kit');
 })();

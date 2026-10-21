@@ -323,8 +323,9 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     { items: ['party', 'kit'], spots: [], has: ['kit', 'party'] },
     { items: ['activity', 'kit', 'hunt'], spots: ['front_door', 'pet_bed', 'kitchen_table'], has: ['hunt', 'kit', 'activity'] },
     { items: ['activity'], spots: [], has: ['activity'] },
-    // A shop kit has no theme of its own, so it always comes on its own.
+    // A shop kit has no theme of its own, so it comes as the kit, with or without its activity pack.
     { kit: 'pizza', items: ['hunt', 'kit'], spots: [], has: ['kit'] },
+    { kit: 'burger', items: ['activity', 'party'], spots: [], has: ['kit', 'activity'] },
   ];
   for (const { product, items, spots, has, kit } of webOrders) {
     const co = await realFetch(base + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -368,7 +369,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.equal(Boolean(w.activityReady), extraActivity);
     if (extraActivity) assert.equal((await realFetch(`${base}/d/${w.downloadToken}-activities.pdf`)).headers.get('content-disposition'), 'inline; filename="activity-pack.pdf"');
     if (has.includes('party')) assert.deepEqual(w.party || w.config.party, { date: 'Saturday, June 3' });
-    if (main === 'kit') assert.match(mail.subject, kit ? /Pizza Shop play kit for Ava/ : /Dino Dig Lab play kit for Ava/);
+    if (main === 'kit') assert.match(mail.subject, kit ? new RegExp(`${KITS[kit].name} play kit for Ava`) : /Dino Dig Lab play kit for Ava/);
     if (product === 'party') {
       assert.match(mail.subject, /Dinosaur party pack for Ava/);
       assert.equal((await realFetch(`${base}/d/${w.downloadToken}.pdf`)).headers.get('content-disposition'), 'inline; filename="scavenger-hunt.pdf"');
@@ -409,8 +410,8 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     await realFetch(base + '/webhooks/stripe', { method: 'POST', body: payload, headers: { 'stripe-signature': sig } });
   }
   await wait(500);
-  assert.equal(emails.length, 8);
-  assert.deepEqual(charged, [1699, 999, 699, 1499, 1299, 1799, 499, 799]);
+  assert.equal(emails.length, 9);
+  assert.deepEqual(charged, [1699, 999, 699, 1499, 1299, 1799, 499, 799, 1099]);
   assert.equal((await realFetch(base + '/order/manual-1')).status, 401); // only web orders are public
   assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Emailed to ava\.parent@example\.com/);
 
@@ -695,8 +696,14 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.match(homePage, /const picked = new Set\(\['hunt', 'kit', 'activity'\]\)/);
   assert.match(homePage, /id="childAge" min="2" max="12" placeholder="Optional">/);
 
-  // The homepage banner has a scene (big and small) for every theme.
-  for (const id of Object.keys(require('../src/generator/themes'))) for (const f of [id, `${id}-sm`]) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'hero', `${f}.webp`)), `hero ${f}`);
+  // The homepage banner has a scene (big and small) for every theme and shop kit.
+  const shopIds = Object.values(KITS).filter((k) => !k.hunt).map((k) => k.id);
+  for (const id of [...Object.keys(require('../src/generator/themes')), ...shopIds]) for (const f of [id, `${id}-sm`]) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'hero', `${f}.webp`)), `hero ${f}`);
+  // Shop kits open in the order builder, so they need its pictures too.
+  for (const id of shopIds) {
+    for (const f of [`themes/${id}`, `pages/${id}-kit`, `pages/${id}-activity`]) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', `${f}.webp`)), f);
+    for (const k of ['kit', 'activity']) for (let i = 1; i <= 5; i++) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'gallery', id, `${k}-${i}.webp`)), `gallery ${id} ${k}-${i}`);
+  }
   // The order preview gallery has five pages per item for every theme.
   for (const id of Object.keys(require('../src/generator/themes'))) {
     for (const k of ['hunt', 'party', 'kit', 'activity']) for (let i = 1; i <= 5; i++) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'gallery', id, `${k}-${i}.webp`)), `gallery ${id} ${k}-${i}`);
