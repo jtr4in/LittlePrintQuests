@@ -99,6 +99,12 @@ main { position: relative; }
 .hero { padding-block: 48px; }
 .hero { padding-block: 28px 56px; }
 .hero-head { margin-bottom: 22px; }
+.hero-banner { position: relative; aspect-ratio: 16 / 7; max-height: 380px; width: 100%; border-radius: 18px; overflow: hidden; background: var(--tint); box-shadow: 0 18px 40px -24px rgba(40, 30, 20, .55); margin-bottom: 26px; }
+.hero-banner .hb { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .8s ease; }
+.hero-banner .hb.on { opacity: 1; }
+.hb-cap { position: absolute; left: 14px; bottom: 14px; display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 14px; border: 0; border-radius: 99px; background: rgba(255, 255, 255, .94); color: #3f4a73; font: 600 15px/1.2 var(--display); box-shadow: 0 6px 18px rgba(20, 20, 40, .25); cursor: pointer; }
+.hb-cap span { background: var(--orange); color: #2b1d06; border-radius: 99px; padding: 6px 12px; font-size: 13px; }
+@media (max-width: 640px) { .hero-banner { aspect-ratio: 16 / 9; border-radius: 14px; margin-bottom: 18px; } .hb-cap { left: 10px; bottom: 10px; font-size: 13px; padding: 6px 6px 6px 10px; } .hb-cap span { padding: 5px 10px; font-size: 12px; } }
 .hero h1 { font-size: clamp(32px, 4.6vw, 50px); margin-top: 10px; }
 .hero h1 em { font-style: normal; background: linear-gradient(transparent 60%, var(--hl) 60%); padding: 0 4px; }
 .hero .lede { font-size: 18px; color: var(--ink-soft); margin-top: 10px; max-width: 40em; }
@@ -359,6 +365,13 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 <main id="top">
   <section class="hero" id="order">
     <div class="wrap season-wrap"><button type="button" class="season" id="season" hidden></button></div>
+    <div class="wrap">
+      <div class="hero-banner" id="heroBanner">
+        <img class="hb on" alt="" width="1600" height="700" sizes="(max-width: 1240px) 100vw, 1200px" fetchpriority="high">
+        <img class="hb" alt="" width="1600" height="700" sizes="(max-width: 1240px) 100vw, 1200px">
+        <button type="button" class="hb-cap" id="heroCap"></button>
+      </div>
+    </div>
     <div class="wrap hero-head">
       <p class="eyebrow">Personalized hunts, play kits and activities · ages 3 to 8</p>
       <h1>A treasure hunt written for <em>your</em> house.</h1>
@@ -726,14 +739,14 @@ function drawThemes() {
     ${t.id === seasonal ? '<span class="now">Now</span>' : ''}
     <img src="img/themes/${t.id}.webp" alt="" width="220" height="220" loading="lazy"><span>${THEME_LABELS[t.id]}</span>
   </button>`).join('');
-  $('themeList').querySelectorAll('.theme').forEach((b) => b.addEventListener('click', () => setTheme(b.dataset.id)));
+  $('themeList').querySelectorAll('.theme').forEach((b) => b.addEventListener('click', () => pickTheme(b.dataset.id)));
 }
 
 const options = ordered.map((t) => `<option value="${t.id}">${t.name} (ages ${t.ages})</option>`).join('');
 $('themeSelect').innerHTML = options;
 $('boxSelect').innerHTML = options;
-$('themeSelect').addEventListener('change', (e) => setTheme(e.target.value));
-$('boxSelect').addEventListener('change', (e) => setTheme(e.target.value));
+$('themeSelect').addEventListener('change', (e) => pickTheme(e.target.value));
+$('boxSelect').addEventListener('change', (e) => pickTheme(e.target.value));
 
 // What's in the box: one set of tabs that follows the chosen theme.
 document.querySelectorAll('#inside [role="tab"]').forEach((b) => b.addEventListener('click', () => {
@@ -760,10 +773,54 @@ function drawBox() {
 if (seasonal) {
   const h = HOLIDAYS[seasonal];
   const t = THEMES.find((x) => x.id === seasonal);
-  $('season').innerHTML = `<span aria-hidden="true">${h.icon}</span><span>${h.line}: <b>${t.name}</b>, with its own play kit and party pack →</span>`;
+  $('season').innerHTML = `<span aria-hidden="true">${h.icon}</span><span>${h.line}: <b>${t.name}</b>, with its own play kit, activities and party pack →</span>`;
   $('season').hidden = false;
-  $('season').addEventListener('click', () => setTheme(seasonal));
+  $('season').addEventListener('click', () => pickTheme(seasonal));
 }
+
+// Someone chose a theme: the banner shows that set and stops rotating.
+function pickTheme(id) {
+  setTheme(id);
+  heroLocked = true;
+  clearInterval(heroTimer);
+  showHero(id);
+}
+
+// Hero banner: each set laid out on a table that matches the theme (scripts/hero-scenes.js).
+// It rotates through the themes until someone picks one.
+let heroAt = null;
+let heroLocked = false;
+let heroTimer = null;
+const heroSrc = (id) => ({ src: `img/hero/${id}.webp`, srcset: `img/hero/${id}-sm.webp 800w, img/hero/${id}.webp 1600w` });
+function showHero(id) {
+  if (id === heroAt) return;
+  heroAt = id;
+  const t = THEMES.find((x) => x.id === id);
+  const imgs = [...document.querySelectorAll('#heroBanner .hb')];
+  const front = imgs.find((i) => i.classList.contains('on'));
+  const back = imgs.find((i) => i !== front);
+  const { src, srcset } = heroSrc(id);
+  back.onload = () => {
+    back.classList.add('on');
+    front.classList.remove('on');
+  };
+  back.srcset = srcset;
+  back.src = src;
+  back.alt = `The ${t.name} set printed out: host guide, story briefing, clue cards, play kit, activity page, party invitation and Host Mode on a phone`;
+  $('heroCap').innerHTML = `<b>${esc(t.name)}</b><span>${heroLocked ? 'Your theme' : 'Make this set'}</span>`;
+  $('heroCap').dataset.id = id;
+  // warm up the next one so the fade is instant
+  if (!heroLocked) new Image().src = heroSrc(ordered[(ordered.findIndex((x) => x.id === id) + 1) % ordered.length].id).src;
+}
+function startHero() {
+  showHero(state.theme);
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  heroTimer = setInterval(() => {
+    if (heroLocked || document.hidden) return;
+    showHero(ordered[(ordered.findIndex((x) => x.id === heroAt) + 1) % ordered.length].id);
+  }, 5000);
+}
+$('heroCap').addEventListener('click', () => pickTheme($('heroCap').dataset.id));
 
 function setTheme(id) {
   state.theme = id;
@@ -1139,6 +1196,8 @@ const askedAge = Number(params.get('age'));
 if (askedAge >= 2 && askedAge <= 12) $('childAge').value = askedAge;
 drawThemes();
 setTheme(THEMES.some((t) => t.id === params.get('theme')) ? params.get('theme') : seasonal || state.theme);
+if (params.get('theme')) heroLocked = true; // they came for this theme
+startHero();
 useSpace(params.get('space'));
 </script>
 </body>
