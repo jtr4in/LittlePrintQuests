@@ -172,6 +172,29 @@ main { position: relative; }
 .stack .phone img { border-radius: 10px; }
 .stack .phone.out { opacity: 0; transform: translateY(40px) rotate(-8deg); }
 .stack > img.out { opacity: 0; transform: translate(-50%, 40px) scale(.85) !important; }
+.stack { cursor: zoom-in; }
+.stack:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+.peek { margin: 2px 0 8px; text-align: center; font-size: 14px; color: var(--ink-soft); }
+.peek button { font: inherit; color: inherit; background: none; border: 0; padding: 4px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+/* order preview gallery */
+.gallery { width: min(760px, 100vw - 24px); max-height: calc(100dvh - 24px); padding: 0; border: 0; border-radius: 16px; background: var(--sheet, #fff); color: var(--ink); box-shadow: 0 30px 80px -20px rgba(20, 25, 50, .6); overflow: hidden; }
+.gallery::backdrop { background: rgba(20, 25, 45, .72); }
+.gallery .g-in { display: flex; flex-direction: column; gap: 10px; padding: 14px; max-height: calc(100dvh - 24px); box-sizing: border-box; }
+.gallery header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.gallery header b { font: 600 18px/1.2 var(--display); }
+.gallery .tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.gallery .tabs button { font: 600 14px/1 var(--body); padding: 8px 12px; border-radius: 99px; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; }
+.gallery .tabs button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.gallery .x { font-size: 26px; line-height: 1; width: 40px; height: 40px; border-radius: 50%; border: 0; background: transparent; color: var(--ink); cursor: pointer; flex: none; }
+.gallery .view { position: relative; flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; background: var(--paper); border-radius: 10px; touch-action: pan-y; }
+.gallery .view img { display: block; max-width: 100%; max-height: calc(100dvh - 230px); width: auto; height: auto; box-shadow: 0 6px 20px -8px rgba(40, 50, 90, .45); background: #fff; }
+.gallery .nav { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(255, 255, 255, .92); color: #3f4a73; font-size: 24px; line-height: 1; cursor: pointer; box-shadow: 0 4px 12px rgba(20, 25, 50, .25); }
+.gallery .prev { left: 8px; } .gallery .next { right: 8px; }
+.gallery .cap { margin: 0; text-align: center; font-size: 15px; color: var(--ink-soft); }
+.gallery .thumbs { display: flex; gap: 6px; overflow-x: auto; padding: 2px 2px 4px; scrollbar-width: thin; }
+.gallery .thumbs button { flex: none; padding: 0; border: 2px solid transparent; border-radius: 4px; background: #fff; cursor: pointer; opacity: .6; }
+.gallery .thumbs button[aria-current="true"] { border-color: var(--ink); opacity: 1; }
+.gallery .thumbs img { display: block; width: 46px; height: 60px; object-fit: cover; object-position: top; border-radius: 2px; }
 .layers { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .layer { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--paper); cursor: pointer; font: inherit; color: inherit; text-align: left; width: 100%; }
 .layer[aria-pressed="true"] { border-color: var(--ink); background: var(--tint); }
@@ -346,7 +369,8 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
           <div class="field"><span class="eyebrow">Your trail</span><p id="trailTitle" style="font:600 20px/1.2 var(--display)"></p></div>
           <ol class="route" id="route"></ol>
           <div class="field"><span class="eyebrow">What’s in your order</span>
-            <div class="stack" id="stack" aria-hidden="true"></div>
+            <div class="stack" id="stack" role="button" tabindex="0" aria-label="See every page in your order"></div>
+            <p class="peek"><button type="button" id="peek">Tap to see every page</button></p>
             <ul class="layers" id="layers" role="group" aria-label="What to include"></ul>
             <p class="save" id="saveNote"></p>
           </div>
@@ -535,6 +559,18 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
   </div>
 </footer>
 
+<dialog class="gallery" id="gallery" aria-label="Pages in your order">
+  <div class="g-in">
+    <header><div class="tabs" id="gTabs"></div><button type="button" class="x" id="gClose" aria-label="Close">×</button></header>
+    <div class="view" id="gView">
+      <img id="gImg" alt="" width="640" height="828">
+      <button type="button" class="nav prev" id="gPrev" aria-label="Previous page">‹</button>
+      <button type="button" class="nav next" id="gNext" aria-label="Next page">›</button>
+    </div>
+    <p class="cap" id="gCap"></p>
+    <div class="thumbs" id="gThumbs"></div>
+  </div>
+</dialog>
 <script>
 // The order bot's checkout.
 const CHECKOUT_URL = 'https://littleprintquests-production.up.railway.app/api/checkout'; // the order bot's /api/checkout endpoint
@@ -791,6 +827,7 @@ function drawCart() {
     : `Add another one and save. All three are ${money(PRICES.bundle)}.`;
   $('totalLabel').textContent = !product ? 'Nothing picked yet' : gets.length === 3 ? 'Party bundle, PDF' : `${gets.map((k) => LABELS[k]).join(' + ')}, PDF`;
   $('totalPrice').textContent = money(price);
+  $('peek').parentElement.hidden = !product;
   // Hiding spots are only for the hunt, and invitations only come in the party pack.
   $('spotsField').hidden = !picked.has('hunt');
   $('route').hidden = !picked.has('hunt');
@@ -798,6 +835,54 @@ function drawCart() {
 }
 $('stack').innerHTML = ['hunt', 'kit', 'party'].map((k) => `<img data-k="${k}" class="out" alt="" width="400" height="518">`).join('')
   + '<span class="phone out"><img alt="" width="240" height="480"></span>';
+
+// Tapping the stack opens a gallery of real pages for the picked items, made by scripts/gallery-images.js.
+const GALLERY = {
+  hunt: ['Host guide and hiding checklist', 'Mission briefing to read aloud', 'Clue cards', 'More clue cards', 'Certificate'],
+  party: ['Invitations', 'Thank-you cards', 'Cupcake toppers', 'Favor tags', 'Birthday banner'],
+  kit: ['Welcome poster', 'Shop signs', 'Hands-on play page', 'Hands-on play page', 'Hands-on play page'],
+};
+let gPages = [];
+let gAt = 0;
+function gShow(i) {
+  gAt = (i + gPages.length) % gPages.length;
+  const p = gPages[gAt];
+  $('gImg').src = p.src;
+  $('gImg').alt = `${p.cap}, page ${gAt + 1} of ${gPages.length}`;
+  $('gCap').textContent = `${LABELS[p.k]} · ${p.cap} (${gAt + 1} of ${gPages.length})`;
+  $('gThumbs').querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-current', j === gAt));
+  $('gThumbs').children[gAt]?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  $('gTabs').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.k === p.k));
+}
+function openGallery(k) {
+  const gets = ['hunt', 'party', 'kit'].filter((x) => picked.has(x));
+  if (!gets.length) return;
+  gPages = gets.flatMap((x) => GALLERY[x].map((cap, i) => ({ k: x, cap, src: `img/gallery/${state.theme}/${x}-${i + 1}.webp` })));
+  $('gTabs').innerHTML = gets.map((x) => `<button type="button" data-k="${x}">${LABELS[x]}</button>`).join('');
+  $('gTabs').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => gShow(gPages.findIndex((p) => p.k === b.dataset.k))));
+  $('gThumbs').innerHTML = gPages.map((p, i) => `<button type="button" aria-label="${p.cap}"><img src="${p.src}" alt="" loading="lazy" width="46" height="60"></button>`).join('');
+  $('gThumbs').querySelectorAll('button').forEach((b, i) => b.addEventListener('click', () => gShow(i)));
+  $('gallery').showModal();
+  gShow(Math.max(0, gPages.findIndex((p) => p.k === k)));
+}
+$('stack').addEventListener('click', (e) => openGallery(e.target.closest('[data-k]')?.dataset.k));
+$('stack').addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openGallery(); } });
+$('peek').addEventListener('click', () => openGallery());
+$('gPrev').addEventListener('click', () => gShow(gAt - 1));
+$('gNext').addEventListener('click', () => gShow(gAt + 1));
+$('gClose').addEventListener('click', () => $('gallery').close());
+$('gallery').addEventListener('click', (e) => { if (e.target === $('gallery')) $('gallery').close(); });
+$('gallery').addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') gShow(gAt - 1);
+  if (e.key === 'ArrowRight') gShow(gAt + 1);
+});
+let gTouch = null;
+$('gView').addEventListener('touchstart', (e) => { gTouch = e.touches[0].clientX; }, { passive: true });
+$('gView').addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].clientX - gTouch;
+  if (gTouch !== null && Math.abs(dx) > 40) gShow(gAt + (dx < 0 ? 1 : -1));
+  gTouch = null;
+});
 document.querySelectorAll('[data-pick]').forEach((a) => a.addEventListener('click', () => setPicks(a.dataset.pick.split(' '))));
 
 $('orderForm').addEventListener('submit', async (e) => {

@@ -613,6 +613,11 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.doesNotMatch(html.replace(/<script>[\s\S]*?<\/script>/g, ''), /\{name\}|undefined/);
   }
 
+  // The order preview gallery has five pages per item for every theme.
+  for (const id of Object.keys(require('../src/generator/themes'))) {
+    for (const k of ['hunt', 'party', 'kit']) for (let i = 1; i <= 5; i++) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'gallery', id, `${k}-${i}.webp`)), `gallery ${id} ${k}-${i}`);
+  }
+
   console.log('All smoke checks passed');
   process.exit(0);
 })().catch((e) => { console.error(e); process.exit(1); });
