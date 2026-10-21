@@ -532,7 +532,6 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
           <div class="total"><span id="totalLabel">Party bundle, PDF</span><strong id="totalPrice">$16.99</strong></div>
           <button class="btn btn-orange" type="submit" style="justify-content:center">Continue to checkout</button>
           <p class="status" id="formStatus"></p>
-          <p class="alt">Prefer Etsy? <a id="etsyLink" href="#" target="_blank" rel="noopener">Order the same hunt in our Etsy shop</a>.</p>
         </aside>
       </form>
     </div>
@@ -549,7 +548,6 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         <div class="plan"><span class="eyebrow">Party pack only</span><div class="price">$6.99</div><ul><li>Invitations and thank-you cards</li><li>Cupcake toppers, favor tags and food cards</li><li>A HAPPY BIRTHDAY banner with your child’s name</li><li>Host Mode party checklist on your phone</li></ul><a class="btn btn-ghost" href="#order" data-pick="party">Make a party pack</a></div>
         <div class="plan"><span class="eyebrow">Play kit only</span><div class="price">$7.99</div><ul><li>The kit that matches your theme</li><li>Hands-on toys, a shop to set up and signs with your child’s name</li><li>Host Mode play ideas: scenarios, lines to say and games</li></ul><a class="btn btn-ghost" href="#order" data-pick="kit">Make a play kit</a></div>
       </div>
-      <p class="hint" style="margin-top:16px">Prefer Etsy? Ready-made theme packs are in <a id="etsyLink2" href="#" target="_blank" rel="noopener">our Etsy shop</a>.</p>
     </div>
   </section>
 
@@ -589,13 +587,12 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 <footer>
   <div class="wrap">
     <div class="brand"><img src="img/mark.png" alt="" width="64" height="49"><span><b class="wordmark"><span class="l">Little</span><span class="p">Print</span><span class="q">Quests</span></b>Printable Party Games &amp; Quests · © 2026</span></div>
-    <span><a href="ideas/">Party and hunt ideas</a> · <a id="etsyLink3" href="#" target="_blank" rel="noopener">Find us on Etsy</a></span>
+    <a href="ideas/">Party and hunt ideas</a>
   </div>
 </footer>
 
 <script>
-// The Etsy shop and the order bot's checkout.
-const ETSY_SHOP_URL = 'https://www.etsy.com/shop/LittlePrintQuests';
+// The order bot's checkout.
 const CHECKOUT_URL = 'https://littleprintquests-production.up.railway.app/api/checkout'; // the order bot's /api/checkout endpoint
 
 const ICONS = {
@@ -684,9 +681,6 @@ const DRYER = ['Head to the spot where wet clothes become dry,', 'It spins and i
 
 const $ = (id) => document.getElementById(id);
 const state = { theme: 'dino', picks: ['front_door', 'shoe_rack', 'couch', 'dryer', 'bathtub', 'bookshelf', 'pet_bed', 'kitchen_table'], custom: {} };
-
-// Shop links
-['etsyLink', 'etsyLink2', 'etsyLink3'].forEach((id) => ($(id).href = ETSY_SHOP_URL));
 
 // Theme cards: everyday themes and holidays. The holiday coming up goes first with a "Now" badge.
 const KITS = {"dino":{"name":"Dino Dig Lab","blurb":"A T-Rex puzzle with your child’s name to dig up and put back together, a dino egg that hatches when you pull the tab, plus a whole shop to set up.","alt":"Dino Dig Lab kit pages: a welcome poster and two hands-on toys"},"hero":{"name":"Hero HQ","blurb":"A Super Power Spinner to pick today’s power, a Hero Power Meter and a Villain Alarm with needles that spin, plus a whole shop to set up.","alt":"Hero HQ kit pages: a welcome poster and two hands-on toys"},"pirate":{"name":"Pirate Ship","blurb":"A pirate spyglass to roll up, with a Spot It! list, a lift-the-flap treasure chest with six treasures, plus a whole shop to set up.","alt":"Pirate Ship kit pages: a welcome poster and two hands-on toys"},"space":{"name":"Mission Control","blurb":"A Planet Picker spinner to choose where to fly next, a launch pad card: pull the tab and the rocket blasts off, plus a whole shop to set up.","alt":"Mission Control kit pages: a welcome poster and two hands-on toys"},"royal":{"name":"Royal Castle","blurb":"A lift-the-flap castle with someone behind every window, a Royal Wish Wheel to spin for a royal wish, plus a whole shop to set up.","alt":"Royal Castle kit pages: a welcome poster and two hands-on toys"},"unicorn":{"name":"Unicorn Stable","blurb":"A Rainbow Maker spinner with six magic surprises, a unicorn puzzle with your child’s name, plus a whole shop to set up.","alt":"Unicorn Stable kit pages: a welcome poster and two hands-on toys"},"mermaid":{"name":"Mermaid Lagoon","blurb":"A seashell tiara with your child’s name, an under-the-sea puzzle with your child’s name, plus a whole shop to set up.","alt":"Mermaid Lagoon kit pages: a welcome poster and two hands-on toys"},"construction":{"name":"Construction Site","blurb":"A hard hat to wear, with your child’s name, a lift-the-flap toolbox with six tools, plus a whole shop to set up.","alt":"Construction Site kit pages: a welcome poster and two hands-on toys"},"vet":{"name":"Vet Clinic","blurb":"A lift-the-flap doctor’s bag with six tools to find, an X-ray machine: pull the tab to see inside a patient, plus a whole shop to set up.","alt":"Vet Clinic kit pages: a welcome poster and two hands-on toys"},"racecar":{"name":"Pit Stop Garage","blurb":"A full-size steering wheel with your child’s name on the horn, a speedometer and fuel gauge with needles that really spin, plus a whole shop to set up.","alt":"Pit Stop Garage kit pages: a welcome poster and two hands-on toys"},"fire":{"name":"Fire Station","blurb":"A firefighter helmet shield with your child’s name, a rescue card: pull the tab to put out the fire, plus a whole shop to set up.","alt":"Fire Station kit pages: a welcome poster and two hands-on toys"},"ice":{"name":"Ice Palace","blurb":"A Snowflake Spell spinner with six frosty spells, an ice palace puzzle with your child’s name, plus a whole shop to set up.","alt":"Ice Palace kit pages: a welcome poster and two hands-on toys"},"halloween":{"name":"Potion Shop","blurb":"A lift-the-flap potion cauldron with six secret ingredients, a Ghost-o-Meter and a Spell-o-Meter with needles that spin, plus a whole shop to set up.","alt":"Potion Shop kit pages: a welcome poster and two hands-on toys"},"christmas":{"name":"Santa’s Workshop","blurb":"Reindeer antlers to wear, with your child’s name, a Nice-o-Meter and a Sleigh Speed meter with needles that spin, plus a whole shop to set up.","alt":"Santa’s Workshop kit pages: a welcome poster and two hands-on toys"},"valentine":{"name":"Valentine Post Office","blurb":"A lift-the-flap Love Mailbox with six sweet surprises, a Kindness Spinner full of kind things to do, plus a whole shop to set up.","alt":"Valentine Post Office kit pages: a welcome poster and two hands-on toys"},"easter":{"name":"Bunny Egg Factory","blurb":"Bunny ears to wear, with your child’s name, a lift-the-flap egg basket with six surprises, plus a whole shop to set up.","alt":"Bunny Egg Factory kit pages: a welcome poster and two hands-on toys"}};
@@ -917,7 +911,7 @@ $('orderForm').addEventListener('submit', async (e) => {
     spots: picked.has('hunt') ? state.picks.map((k) => (state.custom[k] ? { custom: state.custom[k] } : k)) : [],
     party: { date: $('partyDate').value, time: $('partyTime').value, place: $('partyPlace').value, rsvp: $('partyRsvp').value },
   };
-  if (!CHECKOUT_URL) return status('Checkout opens here once payments are switched on. For now, order through our Etsy shop.');
+  if (!CHECKOUT_URL) return status('Checkout opens here soon. Please check back in a little while.');
   status('Opening secure checkout…');
   try {
     const res = await fetch(CHECKOUT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(order) });
@@ -925,7 +919,7 @@ $('orderForm').addEventListener('submit', async (e) => {
     if (!res.ok || !data.url) throw new Error(data.error || '');
     location.href = data.url;
   } catch (err) {
-    status(err.message || 'Checkout didn’t open. Please try again in a moment, or order on Etsy.', true);
+    status(err.message || 'Checkout didn’t open. Please try again in a moment.', true);
   }
 });
 
@@ -962,7 +956,7 @@ $('shopForm').addEventListener('submit', async (e) => {
   const say = (t, bad) => { $('shopStatus').textContent = t; $('shopStatus').classList.toggle('bad', Boolean(bad)); };
   const childName = $('shopChild').value.trim();
   if (!childName) return say('Add your child’s first name so we can put it on the signs.', true), $('shopChild').focus();
-  if (!CHECKOUT_URL) return say('Checkout opens here once payments are switched on. For now, order through our Etsy shop.');
+  if (!CHECKOUT_URL) return say('Checkout opens here soon. Please check back in a little while.');
   say('Opening secure checkout…');
   try {
     const res = await fetch(CHECKOUT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -971,7 +965,7 @@ $('shopForm').addEventListener('submit', async (e) => {
     if (!res.ok || !data.url) throw new Error(data.error || '');
     location.href = data.url;
   } catch (err) {
-    say(err.message || 'Checkout didn’t open. Please try again in a moment, or order on Etsy.', true);
+    say(err.message || 'Checkout didn’t open. Please try again in a moment.', true);
   }
 });
 
@@ -1002,7 +996,7 @@ $('craftForm').addEventListener('submit', async (e) => {
   const say = (t, bad) => { $('craftStatus').textContent = t; $('craftStatus').classList.toggle('bad', Boolean(bad)); };
   const childName = $('craftChild').value.trim();
   if (!childName) return say('Add your child’s first name so we can put it on the keepsake pages.', true), $('craftChild').focus();
-  if (!CHECKOUT_URL) return say('Checkout opens here once payments are switched on. For now, order through our Etsy shop.');
+  if (!CHECKOUT_URL) return say('Checkout opens here soon. Please check back in a little while.');
   say('Opening secure checkout…');
   try {
     const res = await fetch(CHECKOUT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -1011,7 +1005,7 @@ $('craftForm').addEventListener('submit', async (e) => {
     if (!res.ok || !data.url) throw new Error(data.error || '');
     location.href = data.url;
   } catch (err) {
-    say(err.message || 'Checkout didn’t open. Please try again in a moment, or order on Etsy.', true);
+    say(err.message || 'Checkout didn’t open. Please try again in a moment.', true);
   }
 });
 
