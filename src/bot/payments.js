@@ -20,10 +20,11 @@ async function createCheckout(order) {
   const items = products.itemsOf(order.form);
   const kit = KITS[order.form.kit] || (theme && kitForHunt(theme.id));
   const holiday = HOLIDAYS[order.form.holiday];
-  const parts = { hunt: `Custom ${theme?.name}`, kit: `${kit?.name} play kit`, party: `${theme?.label} party pack`, craft: craftLabel(holiday) };
+  const parts = { hunt: `Custom ${theme?.name}`, kit: `${kit?.name} play kit`, activity: `${kit?.name} activity pack`, party: `${theme?.label} party pack`, craft: craftLabel(holiday) };
   const details = {
     hunt: `scavenger hunt with ${order.form.spots.length} clues`,
     kit: 'pretend play kit',
+    activity: 'Wipe & Play activity pages',
     party: 'invitations, toppers, tags, banner and more',
     craft: holiday?.book ? holiday.checkoutLine : '8 handprint and footprint keepsake crafts, cards and a poem page',
   };
@@ -39,7 +40,7 @@ async function createCheckout(order) {
             // Stripe Managed Payments needs a tax category on every product. The default is
             // "General - Electronically Supplied Services"; set STRIPE_TAX_CODE to use another.
             tax_code: process.env.STRIPE_TAX_CODE || 'txcd_10000000',
-            name: items.length === 3 ? `Party Bundle: ${items.map((i) => parts[i]).join(' + ')}` : items.map((i) => parts[i]).join(' + '),
+            name: items.length >= 3 ? `${items.length === 4 ? 'Everything Bundle' : 'Bundle'}: ${items.map((i) => parts[i]).join(' + ')}` : items.map((i) => parts[i]).join(' + '),
             description: `Printable ${items.map((i) => details[i]).join(' · ')} for ${order.form.childName} · PDF`,
           },
         },

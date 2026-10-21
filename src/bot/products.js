@@ -1,9 +1,9 @@
-// What a customer can buy: any mix of the hunt, its matching play kit and the party pack,
-// or a holiday handprint art pack (always on its own).
+// What a customer can buy: any mix of the hunt, its matching pretend play kit, the activity pack
+// and the party pack, or a holiday handprint art pack (always on its own).
 // An order's items decide which PDFs get built; the first one is the main download
-// (/d/<token>.pdf) and the others get -kit / -party suffixes.
+// (/d/<token>.pdf) and the others get -kit / -activities / -party suffixes.
 
-const ITEMS = ['hunt', 'kit', 'party', 'craft'];
+const ITEMS = ['hunt', 'kit', 'activity', 'party', 'craft'];
 const LEGACY = { bundle: ['hunt', 'kit', 'party'], hunt: ['hunt'], party: ['party'], kit: ['kit'], craft: ['craft'] };
 
 const cents = (key, fallback) => Number(process.env[key] || fallback);
@@ -16,19 +16,30 @@ const PRICES = {
   'hunt+party': cents('HUNT_PARTY_PRICE_CENTS', 1399),
   'kit+party': cents('KIT_PARTY_PRICE_CENTS', 1299),
   bundle: cents('BUNDLE_PRICE_CENTS', 1699),
+  activity: cents('ACTIVITY_PRICE_CENTS', 499), // the activity pack on its own
+  activityAdd: cents('ACTIVITY_ADD_CENTS', 300), // added to anything else
   craft: cents('CRAFT_PRICE_CENTS', 599),
   book: cents('BOOK_PRICE_CENTS', 799), // a handprint book (memory, zoo, fingerprint), a craft order
 };
 
 // Cleans a list of items into the fixed order; unknown ones are dropped.
 const normalize = (items) => ITEMS.filter((i) => (items || []).includes(i));
-const productFor = (items) => (items.length === 3 ? 'bundle' : items.join('+'));
+// The hunt, kit and party mixes keep their names ("bundle" is all three); the activity pack adds
+// "+activity", so the hunt, kit and activity pack together is "hunt+kit+activity".
+function productFor(items) {
+  const rest = items.filter((i) => i !== 'activity');
+  const base = rest.length === 3 ? 'bundle' : rest.join('+');
+  return items.includes('activity') ? (base ? `${base}+activity` : 'activity') : base;
+}
 const itemsOf = (order) => normalize(order.items || LEGACY[order.product] || ['hunt']);
 const has = (order, item) => itemsOf(order).includes(item);
 const mainOf = (order) => itemsOf(order)[0];
-const priceFor = (product) => PRICES[product] ?? PRICES.hunt;
+function priceFor(product) {
+  if (product !== 'activity' && String(product).endsWith('+activity')) return priceFor(product.slice(0, -9)) + PRICES.activityAdd;
+  return PRICES[product] ?? PRICES.hunt;
+}
 
-const NAMES = { hunt: 'scavenger hunt', kit: 'play kit', party: 'party pack', craft: 'handprint art pack' };
+const NAMES = { hunt: 'scavenger hunt', kit: 'pretend play kit', activity: 'activity pack', party: 'party pack', craft: 'handprint art pack' };
 // "scavenger hunt, play kit and party pack"
 function describe(items) {
   const names = items.map((i) => NAMES[i]);
@@ -37,7 +48,7 @@ function describe(items) {
 
 // The Etsy-style Package option shown on the dashboard.
 const packageName = (items) =>
-  items.length === 3 ? 'Hunt + Play Kit + Party Pack' : items.map((i) => ({ hunt: 'Hunt', kit: 'Play Kit', party: 'Party Pack', craft: 'Handprint Art' })[i]).join(' + ') + (items.length === 1 && items[0] === 'hunt' ? ' only' : '');
+  items.map((i) => ({ hunt: 'Hunt', kit: 'Play Kit', activity: 'Activity Pack', party: 'Party Pack', craft: 'Handprint Art' })[i]).join(' + ') + (items.length === 1 && items[0] === 'hunt' ? ' only' : '');
 
 // What Host Mode does for this order, as the end of "Host Mode ...", for emails and messages.
 function hostHelps(order) {

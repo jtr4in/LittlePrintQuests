@@ -76,6 +76,7 @@ const cors = (req) => ({
 });
 const kitLink = (o, label) =>
   (o.kitReady ? ` · <a href="/d/${esc(o.downloadToken)}-kit.pdf" target="_blank">${label}</a>` : '') +
+  (o.activityReady ? ` · <a href="/d/${esc(o.downloadToken)}-activities.pdf" target="_blank">Activities</a>` : '') +
   (o.partyReady ? ` · <a href="/d/${esc(o.downloadToken)}-party.pdf" target="_blank">Party pack</a>` : '');
 const sendJson = (res, code, obj) => send(res, code, JSON.stringify(obj), { 'Content-Type': 'application/json', ...cors(res.req) });
 
@@ -84,7 +85,7 @@ function orderTitle(o) {
   const main = products.mainOf(o);
   const theme = THEMES[o.config?.theme];
   if (main === 'craft') return HOLIDAYS[o.config?.holiday]?.book ? HOLIDAYS[o.config.holiday].name : `${HOLIDAYS[o.config?.holiday]?.name || ''} handprint art`;
-  if (main === 'kit') return `${(KITS[o.config?.kit] || kitForHunt(o.config.theme)).name} play kit`;
+  if (main === 'kit' || main === 'activity') return `${(KITS[o.config?.kit] || kitForHunt(o.config.theme)).name} ${main === 'kit' ? 'play kit' : 'activity pack'}`;
   return main === 'party' ? `${theme.label} party pack` : theme.name;
 }
 
@@ -101,9 +102,10 @@ function orderPage(o) {
       ? `<h1>${esc(o.config.childName)}’s ${what} is ready! 🎉</h1>
          <p><a class="btn" href="/d/${esc(o.downloadToken)}.pdf" target="_blank">Download your ${what} (PDF)</a></p>
          ${o.kitReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-kit.pdf" target="_blank">Download your play kit (PDF)</a></p>` : ''}
+         ${o.activityReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-activities.pdf" target="_blank">Download your activity pack (PDF)</a></p>` : ''}
          ${o.partyReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-party.pdf" target="_blank">Download your party printables (PDF)</a></p>` : ''}
          ${o.hostToken ? `<p><a class="btn alt" href="/h/${esc(o.hostToken)}">Open Host Mode</a><br><small>Help on your phone for ${esc(products.has(o, 'hunt') ? 'hiding the cards and running the hunt' : products.has(o, 'kit') ? 'playing with the kit' : 'planning the party')}.</small></p>` : ''}
-         <p>${o.email && o.deliveredAt ? `We also emailed the link to <b>${esc(o.email)}</b>.` : 'Save your PDF now, or bookmark this page to come back to it.'} Print at “Actual Size / 100%”${{ hunt: ', cut out the clue cards, and follow the Host Guide on page 1.', kit: ', and start with the grown-up guide on page 1.', party: ', on cardstock if you have it.', craft: ', on white cardstock, and start with the tips on page 1.' }[main]}</p>`
+         <p>${o.email && o.deliveredAt ? `We also emailed the link to <b>${esc(o.email)}</b>.` : 'Save your PDF now, or bookmark this page to come back to it.'} Print at “Actual Size / 100%”${{ hunt: ', cut out the clue cards, and follow the Host Guide on page 1.', kit: ', and start with the grown-up guide on page 1.', activity: ', then slip the pages into sheet protectors for a dry-erase marker.', party: ', on cardstock if you have it.', craft: ', on white cardstock, and start with the tips on page 1.' }[main]}</p>`
       : working
         ? `<h1>Building ${esc(o.form.childName)}’s ${esc(main === 'craft' ? (book?.book ? what : `${HOLIDAYS[o.form.holiday].name} ${what}`) : main === 'hunt' ? theme.name : theme ? `${theme.label} ${what}` : `${KITS[o.form.kit]?.name || ''} ${what}`)}…</h1>
            <p>${o.status === 'awaiting_payment' ? 'Confirming your payment.' : main === 'craft' ? 'Laying out the keepsake pages.' : 'Writing clues and laying out the cards.'} This page updates by itself.</p>
@@ -245,7 +247,7 @@ ${setupPanel()}
 </div>
 <div class="panel">${
     payments.enabled()
-      ? `<b>Website checkout on.</b> <span class="muted">Buyers pick any mix of hunt ($${(payments.PRICES.hunt / 100).toFixed(2)}), play kit ($${(payments.PRICES.kit / 100).toFixed(2)}) and party pack ($${(payments.PRICES.party / 100).toFixed(2)}), or all three for $${(payments.PRICES.bundle / 100).toFixed(2)}, built and emailed automatically.${unpaid.length ? ` ${unpaid.length} checkout${unpaid.length === 1 ? '' : 's'} started but not paid.` : ''}</span>`
+      ? `<b>Website checkout on.</b> <span class="muted">Buyers pick any mix of hunt ($${(payments.PRICES.hunt / 100).toFixed(2)}), play kit ($${(payments.PRICES.kit / 100).toFixed(2)}), activity pack ($${(payments.PRICES.activity / 100).toFixed(2)}) and party pack ($${(payments.PRICES.party / 100).toFixed(2)}), or all three for $${(payments.PRICES.bundle / 100).toFixed(2)}, built and emailed automatically.${unpaid.length ? ` ${unpaid.length} checkout${unpaid.length === 1 ? '' : 's'} started but not paid.` : ''}</span>`
       : `<b>Website checkout off.</b> <span class="muted">Add STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET to take orders on your site.</span>`
   }</div>
 ${listingsPanel(s)}
@@ -277,7 +279,7 @@ async function route(req, res) {
   if (dl) {
     const file = path.join(store.PDF_DIR, `${dl[1]}.pdf`);
     if (!fs.existsSync(file)) return send(res, 404, 'Not found');
-    res.writeHead(200, { 'Content-Type': 'application/pdf', 'Content-Disposition': `inline; filename="${dl[1].endsWith('-kit') ? 'play-kit' : dl[1].endsWith('-party') ? 'party-printables' : 'scavenger-hunt'}.pdf"` });
+    res.writeHead(200, { 'Content-Type': 'application/pdf', 'Content-Disposition': `inline; filename="${dl[1].endsWith('-kit') ? 'play-kit' : dl[1].endsWith('-activities') ? 'activity-pack' : dl[1].endsWith('-party') ? 'party-printables' : 'scavenger-hunt'}.pdf"` });
     return fs.createReadStream(file).pipe(res);
   }
 

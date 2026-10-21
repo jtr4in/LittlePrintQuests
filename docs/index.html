@@ -285,7 +285,7 @@ input[type="text"], input[type="number"], input[type="email"], select { width: 1
 .season b { color: #c46a00; }
 
 /* pricing */
-.plans { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 20px; margin-top: 32px; }
+.plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 32px; }
 @media (max-width: 1100px) { .plans { grid-template-columns: 1fr 1fr; } }
 .plan { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 26px; display: grid; gap: 14px; align-content: start; }
 .plan.main { border: 2px solid var(--ink); }
@@ -344,7 +344,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         <div class="panel">
           <div class="row2">
             <div class="field"><label for="childName">Child’s first name</label><input type="text" id="childName" maxlength="24" autocomplete="off" value="Maya"></div>
-            <div class="field"><label for="childAge">Turning</label><input type="number" id="childAge" min="2" max="12" value="6"></div>
+            <div class="field"><label for="childAge">Turning</label><input type="number" id="childAge" min="2" max="12" placeholder="Optional"></div>
           </div>
           <div class="field"><label for="themeSelect">Theme</label><select id="themeSelect"></select><div class="themes mini" id="themeList" aria-label="Themes"></div></div>
           <details class="field party-details">
@@ -374,7 +374,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
             <ul class="layers" id="layers" role="group" aria-label="What to include"></ul>
             <p class="save" id="saveNote"></p>
           </div>
-          <div class="total"><span id="totalLabel">Party bundle, PDF</span><strong id="totalPrice">$16.99</strong></div>
+          <div class="total"><span id="totalLabel">Play bundle, PDF</span><strong id="totalPrice">$17.99</strong></div>
           <button class="btn btn-orange" type="submit" style="justify-content:center">Continue to checkout</button>
           <p class="status" id="formStatus"></p>
         </aside>
@@ -406,6 +406,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
           <button type="button" role="tab" data-tab="hunt" aria-selected="true">The hunt</button>
           <button type="button" role="tab" data-tab="host" aria-selected="false">Host Mode</button>
           <button type="button" role="tab" data-tab="kit" aria-selected="false">Play kit</button>
+          <button type="button" role="tab" data-tab="activity" aria-selected="false">Activity pack</button>
           <button type="button" role="tab" data-tab="party" aria-selected="false">Party pack</button>
         </div>
         <label class="box-theme">Theme <select id="boxSelect"></select></label>
@@ -444,9 +445,18 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
             <span class="tag">Matching play kit</span>
             <h3 id="kitName">Dino Dig Lab</h3>
             <p id="kitBlurb" class="kits-lede"></p>
-            <ul class="kit-points"><li>A wall full of signs with your child’s name: door signs, big station signs, open/closed and pay-here counter signs, store hours and shelf labels</li><li>7 Wipe &amp; Play activity pages to reuse with a dry-erase marker: clean-up time, tracing, matching, counting, I spy, a maze and invent-a-treat</li><li>Two hands-on toys made for the theme: things that spin, slide, lift or go on your head</li><li>A whole shop to set up: welcome poster, menu board, specials, order slips and play money</li><li>Flat props kids can hold: maps, X-rays, wanted posters, treasure cards and stickers</li><li>ID badges, check-up forms, tickets, passports and a certificate</li></ul>
+            <ul class="kit-points"><li>A wall full of signs with your child’s name: door signs, big station signs, open/closed and pay-here counter signs, store hours and shelf labels</li><li>Two hands-on toys made for the theme: things that spin, slide, lift or go on your head</li><li>A whole shop to set up: welcome poster, menu board, specials, order slips and play money</li><li>Flat props kids can hold: maps, X-rays, wanted posters, treasure cards and stickers</li><li>ID badges, check-up forms, tickets, passports and a certificate</li></ul>
             <p class="hint" style="margin-top:14px">Every theme has its own kit. Switch the theme above to see the others.</p>
           </div>
+        </div>
+      </div>
+      <div class="box-panel" data-panel="activity" hidden>
+        <p class="kits-lede">Ten Wipe &amp; Play pages made from the same pictures as the play kit. Slip them into sheet protectors and use a dry-erase marker, then wipe clean and play again. Great for car rides, waiting rooms and quiet time.</p>
+        <div class="kit">
+        <div class="page-thumb"><img class="mini-img" id="actSpy" src="img/gallery/dino/activity-2.webp" alt="I spy page with pictures to find and count" width="480" height="621" loading="lazy"><h3>I spy and counting</h3><p>Find every picture, count them and write the number.</p></div>
+        <div class="page-thumb"><img class="mini-img" id="actSpot" src="img/gallery/dino/activity-3.webp" alt="Spot the difference page with two pictures" width="480" height="621" loading="lazy"><h3>Spot the difference</h3><p>Two pictures with five changes to circle, plus which one is different.</p></div>
+        <div class="page-thumb"><img class="mini-img" id="actMaze" src="img/gallery/dino/activity-4.webp" alt="Maze page from start to finish" width="480" height="621" loading="lazy"><h3>Mazes and tracing</h3><p>A maze to the finish, dotted words to trace and pictures to match.</p></div>
+        <div class="page-thumb"><img class="mini-img" id="actWords" src="img/gallery/dino/activity-5.webp" alt="Word search with picture clues" width="480" height="621" loading="lazy"><h3>Word search</h3><p>Picture clues that read across or down, plus a page to invent their own treat.</p></div>
         </div>
       </div>
       <div class="box-panel" data-panel="party" hidden>
@@ -460,7 +470,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
           </div>
         </div>
       </div>
-      <p style="margin-top:26px"><a class="btn btn-orange" href="#order">Make this party bundle</a></p>
+      <p style="margin-top:26px"><a class="btn btn-orange" href="#order">Make this bundle</a></p>
     </div>
   </section>
 
@@ -471,12 +481,14 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
   <section class="stop" id="pricing">
     <div class="wrap">
       <div class="pin"><b></b><span class="eyebrow">Pricing</span></div>
-      <h2>Everything for the party, one price</h2>
+      <h2>Pick what you need, save when you bundle</h2>
       <div class="plans">
-        <div class="plan main"><span class="eyebrow">Party bundle · most popular</span><div class="price">$16.99 <small>per party</small></div><p class="was"><s>$24.97</s> value: the hunt, its play kit and party printables</p><ul><li>Custom hunt with your child’s name and your home’s own spots</li><li>Matching play kit with hands-on toys and a shop to set up</li><li>Matching invitations, cupcake toppers, favor tags, a name banner and more</li><li>Delivered to your inbox in minutes</li></ul><div class="plan-host"><span class="phone"><img src="img/host/space-play.webp" alt="" width="360" height="720" loading="lazy"></span><span><b>+ Host Mode included</b>Hunt, play kit and party tabs on your phone</span></div><a class="btn btn-orange" href="#order" data-pick="hunt kit party">Make my party bundle</a></div>
-        <div class="plan"><span class="eyebrow">Hunt only</span><div class="price">$9.99</div><ul><li>Your child’s name on every page</li><li>6 to 10 of your home’s own spots</li><li>Host guide, briefing, cards and certificate</li></ul><div class="plan-host"><span class="phone"><img src="img/host/space-play.webp" alt="" width="360" height="720" loading="lazy"></span><span><b>+ Host Mode included</b>Step-by-step phone guide for party day</span></div><a class="btn btn-ghost" href="#order" data-pick="hunt">Make just the hunt</a></div>
+        <div class="plan main"><span class="eyebrow">Play bundle · most popular</span><div class="price">$17.99</div><p class="was"><s>$22.97</s> value: the hunt, its play kit and activity pack</p><ul><li>Custom hunt with your child’s name and your home’s own spots</li><li>Matching pretend play kit with hands-on toys and a shop to set up</li><li>10 Wipe &amp; Play activity pages: mazes, spot the difference, I spy and more</li><li>Delivered to your inbox in minutes</li></ul><div class="plan-host"><span class="phone"><img src="img/host/space-play.webp" alt="" width="360" height="720" loading="lazy"></span><span><b>+ Host Mode included</b>Hunt and play kit tabs on your phone</span></div><a class="btn btn-orange" href="#order" data-pick="hunt kit activity">Make my play bundle</a></div>
+        <div class="plan"><span class="eyebrow">Having a party?</span><div class="price">$19.99</div><p class="was"><s>$29.96</s> value: everything, plus the party pack</p><ul><li>The whole play bundle</li><li>Matching invitations, cupcake toppers, favor tags, a name banner and more</li><li>Host Mode party checklist</li></ul><a class="btn btn-ghost" href="#order" data-pick="hunt kit activity party">Make the everything bundle</a></div>
+        <div class="plan"><span class="eyebrow">Hunt only</span><div class="price">$9.99</div><ul><li>Your child’s name on every page</li><li>6 to 10 of your home’s own spots</li><li>Host guide, briefing, cards and certificate</li><li>Step-by-step Host Mode guide on your phone</li></ul><a class="btn btn-ghost" href="#order" data-pick="hunt">Make just the hunt</a></div>
+        <div class="plan"><span class="eyebrow">Pretend play kit only</span><div class="price">$7.99</div><ul><li>The kit that matches your theme</li><li>Hands-on toys, a shop to set up and signs with your child’s name</li><li>Host Mode play ideas: scenarios, lines to say and games</li></ul><a class="btn btn-ghost" href="#order" data-pick="kit">Make a play kit</a></div>
+        <div class="plan"><span class="eyebrow">Activity pack only</span><div class="price">$4.99</div><ul><li>10 Wipe &amp; Play pages in your theme</li><li>Mazes, spot the difference, I spy, word search, tracing and more</li><li>$3 more when added to anything else</li></ul><a class="btn btn-ghost" href="#order" data-pick="activity">Make an activity pack</a></div>
         <div class="plan"><span class="eyebrow">Party pack only</span><div class="price">$6.99</div><ul><li>Invitations and thank-you cards</li><li>Cupcake toppers, favor tags and food cards</li><li>A HAPPY BIRTHDAY banner with your child’s name</li><li>Host Mode party checklist on your phone</li></ul><a class="btn btn-ghost" href="#order" data-pick="party">Make a party pack</a></div>
-        <div class="plan"><span class="eyebrow">Play kit only</span><div class="price">$7.99</div><ul><li>The kit that matches your theme</li><li>Hands-on toys, a shop to set up and signs with your child’s name</li><li>Host Mode play ideas: scenarios, lines to say and games</li></ul><a class="btn btn-ghost" href="#order" data-pick="kit">Make a play kit</a></div>
       </div>
     </div>
   </section>
@@ -486,7 +498,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
     <div class="wrap">
       <div class="pin"><b></b><span class="eyebrow">Shop play kits</span></div>
       <h2>Eleven pretend places to set up at home</h2>
-      <p class="kits-lede">Print, cut and tape them up around a play kitchen, a shelf or a corner of the room. Every kit is made with your child’s name: a long shop sign, station and counter signs, shelf labels, 7 wipe-clean activity pages, a cash register, play money, order forms and a menu to run it all. $7.99 each, with play ideas in Host Mode. Add your child’s age: 2 to 4 year olds get a little-kids version with thicker cut lines, bigger pictures and order forms they fill in by circling pictures.</p>
+      <p class="kits-lede">Print, cut and tape them up around a play kitchen, a shelf or a corner of the room. Every kit is made with your child’s name: a long shop sign, station and counter signs, shelf labels, a cash register, play money, order forms and a menu to run it all. $7.99 each, with play ideas in Host Mode. Add your child’s age: 2 to 4 year olds get a little-kids version with thicker cut lines, bigger pictures and order forms they fill in by circling pictures.</p>
       <div class="themes" id="shopList"></div>
       <form class="shop-buy" id="shopForm" novalidate>
         <div>
@@ -690,6 +702,7 @@ function drawBox() {
   $('huntName').textContent = t.name;
   for (const [el, part] of [['huntGuide', 'guide'], ['huntBriefing', 'briefing'], ['huntCards', 'cards'], ['huntCert', 'cert']]) $(el).src = `img/pages/${t.id}-${part}.webp`;
   for (const [el, part] of [['hostHide', 'hide'], ['hostPlay', 'play'], ['hostSidekick', 'sidekick']]) $(el).src = `img/host/${t.id}-${part}.webp`;
+  for (const [el, n] of [['actSpy', 2], ['actSpot', 3], ['actMaze', 4], ['actWords', 5]]) $(el).src = `img/gallery/${t.id}/activity-${n}.webp`;
   $('partyImg').src = `img/pages/${t.id}-party.webp`;
   $('partyImg').alt = `${t.name} party invitation with your child’s name`;
 }
@@ -773,18 +786,26 @@ function render() {
 $('childName').addEventListener('input', render);
 $('childAge').addEventListener('input', render);
 
-// The cart is a stack of papers: the hunt, its play kit and the party pack.
-// Pick any mix; two together cost less, and all three is the Party Bundle.
+// The cart is a stack of papers: the hunt, its play kit, the activity pack and the party pack.
+// Pick any mix; two together cost less. The first three are ticked to start; the party pack is the add-on.
 const LAYERS = [
   { id: 'hunt', name: 'Custom scavenger hunt', note: 'Clue cards, host guide, briefing and certificate', price: 9.99 },
   { id: 'kit', name: 'Pretend play kit', note: 'Hands-on toys, a shop set and signs with their name', price: 7.99 },
+  { id: 'activity', name: 'Activity pack', note: 'Mazes, spot the difference, I spy, word search and more to wipe and play', price: 4.99 },
   { id: 'party', name: 'Party pack', note: 'Invitations, toppers, banner, favor tags and more', price: 6.99 },
 ];
 // Must match PRICES in the order bot (src/bot/products.js).
-const PRICES = { hunt: 9.99, kit: 7.99, party: 6.99, 'hunt+kit': 14.99, 'hunt+party': 13.99, 'kit+party': 12.99, bundle: 16.99 };
-const LABELS = { hunt: 'Custom hunt', kit: 'Play kit', party: 'Party pack' };
-const picked = new Set(['hunt', 'kit', 'party']);
-let product = 'bundle';
+const PRICES = { hunt: 9.99, kit: 7.99, party: 6.99, 'hunt+kit': 14.99, 'hunt+party': 13.99, 'kit+party': 12.99, bundle: 16.99, activity: 4.99, activityAdd: 3 };
+const LABELS = { hunt: 'Custom hunt', kit: 'Play kit', activity: 'Activity pack', party: 'Party pack' };
+const picked = new Set(['hunt', 'kit', 'activity']);
+let product = 'hunt+kit+activity';
+// Same names as productFor in the order bot: "bundle" is hunt + kit + party, the activity pack adds "+activity".
+function productOf(gets) {
+  const rest = gets.filter((k) => k !== 'activity');
+  const base = rest.length === 3 ? 'bundle' : rest.join('+');
+  return gets.includes('activity') ? (base ? `${base}+activity` : 'activity') : base || null;
+}
+const priceOf = (p) => (p && p !== 'activity' && p.endsWith('+activity') ? priceOf(p.slice(0, -9)) + PRICES.activityAdd : PRICES[p] || 0);
 const money = (n) => '$' + n.toFixed(2);
 
 function pick(id) {
@@ -798,10 +819,10 @@ function setPicks(ids) {
 }
 function drawCart() {
   const gets = LAYERS.map((l) => l.id).filter((k) => picked.has(k));
-  product = gets.length === 3 ? 'bundle' : gets.length ? gets.join('+') : null;
+  product = productOf(gets);
   // papers fan out wider as the stack grows
-  const pos = { 1: [[0, 0]], 2: [[-38, -6], [38, 5]], 3: [[-62, -9], [62, 9], [0, -1]] }[gets.length] || [];
-  const order = ['hunt', 'party', 'kit'].filter((k) => gets.includes(k));
+  const pos = { 1: [[0, 0]], 2: [[-38, -6], [38, 5]], 3: [[-62, -9], [62, 9], [0, -1]], 4: [[-74, -10], [74, 10], [-24, -4], [26, 3]] }[gets.length] || [];
+  const order = ['hunt', 'party', 'activity', 'kit'].filter((k) => gets.includes(k));
   $('stack').querySelectorAll(':scope > img').forEach((img) => img.classList.toggle('out', !gets.includes(img.dataset.k)));
   order.forEach((k, i) => {
     const img = $('stack').querySelector(`[data-k="${k}"]`);
@@ -817,15 +838,17 @@ function drawCart() {
   phone.style.left = `max(4px, calc(50% + ${huntX - 104}px))`;
   phone.querySelector('img').src = `img/host/${state.theme}-play.webp`;
   $('layers').innerHTML = LAYERS.map((l) => `<li><button type="button" class="layer" data-id="${l.id}" aria-pressed="${gets.includes(l.id)}">
-      <span class="box">✓</span><span><b>${l.name}</b><small>${l.note}<span class="plus">${{ hunt: '+ Host Mode phone guide included', kit: '+ Play ideas in Host Mode', party: '+ Party checklist in Host Mode' }[l.id] || ''}</span></small></span><span class="amt">${money(l.price)}</span></button></li>`).join('');
+      <span class="box">✓</span><span><b>${l.name}</b><small>${l.note}<span class="plus">${{ hunt: '+ Host Mode phone guide included', kit: '+ Play ideas in Host Mode', activity: '+ Reusable with a dry-erase marker', party: '+ Party checklist in Host Mode' }[l.id] || ''}</span></small></span><span class="amt">${l.id === 'activity' && gets.some((k) => k !== 'activity') ? `+${money(PRICES.activityAdd)}` : money(l.price)}</span></button></li>`).join('');
   $('layers').querySelectorAll('button.layer').forEach((b) => b.addEventListener('click', () => pick(b.dataset.id)));
   const value = gets.reduce((sum, k) => sum + LAYERS.find((l) => l.id === k).price, 0);
-  const price = product ? PRICES[product] : 0;
-  const missing = LAYERS.filter((l) => !gets.includes(l.id));
+  const price = priceOf(product);
+  // suggest the party pack first: it's the add-on
+  const next = ['party', 'activity', 'kit', 'hunt'].find((k) => !gets.includes(k));
+  const nextName = next && LAYERS.find((l) => l.id === next).name.toLowerCase();
   $('saveNote').innerHTML = !product ? 'Pick at least one thing to print.'
-    : gets.length > 1 ? `<s>${money(value)}</s> together for ${money(price)}, so you save ${money(value - price)}.${missing.length ? ` Add the ${missing[0].name.toLowerCase()} for ${money(PRICES.bundle - price)} more.` : ''}`
-    : `Add another one and save. All three are ${money(PRICES.bundle)}.`;
-  $('totalLabel').textContent = !product ? 'Nothing picked yet' : gets.length === 3 ? 'Party bundle, PDF' : `${gets.map((k) => LABELS[k]).join(' + ')}, PDF`;
+    : gets.length > 1 ? `<s>${money(value)}</s> together for ${money(price)}, so you save ${money(value - price)}.${next ? ` Add the ${nextName} for ${money(priceOf(productOf([...gets, next].sort((a, b) => LAYERS.findIndex((l) => l.id === a) - LAYERS.findIndex((l) => l.id === b)))) - price)} more.` : ''}`
+    : `Add another one and save. All four are ${money(priceOf('bundle+activity'))}.`;
+  $('totalLabel').textContent = !product ? 'Nothing picked yet' : gets.length === 4 ? 'Everything bundle, PDF' : product === 'hunt+kit+activity' ? 'Play bundle, PDF' : product === 'bundle' ? 'Party bundle, PDF' : `${gets.map((k) => LABELS[k]).join(' + ')}, PDF`;
   $('totalPrice').textContent = money(price);
   $('peek').parentElement.hidden = !product;
   // Hiding spots are only for the hunt, and invitations only come in the party pack.
@@ -833,7 +856,7 @@ function drawCart() {
   $('route').hidden = !picked.has('hunt');
   document.querySelector('.party-details').hidden = !picked.has('party');
 }
-$('stack').innerHTML = ['hunt', 'kit', 'party'].map((k) => `<img data-k="${k}" class="out" alt="" width="400" height="518">`).join('')
+$('stack').innerHTML = ['hunt', 'kit', 'activity', 'party'].map((k) => `<img data-k="${k}" class="out" alt="" width="400" height="518">`).join('')
   + '<span class="phone out"><img alt="" width="240" height="480"></span>';
 
 // Tapping the stack opens a gallery of real pages for the picked items, made by scripts/gallery-images.js.
@@ -841,6 +864,7 @@ const GALLERY = {
   hunt: ['Host guide and hiding checklist', 'Mission briefing to read aloud', 'Clue cards', 'More clue cards', 'Certificate'],
   party: ['Invitations', 'Thank-you cards', 'Cupcake toppers', 'Favor tags', 'Birthday banner'],
   kit: ['Welcome poster', 'Shop signs', 'Hands-on play page', 'Hands-on play page', 'Hands-on play page'],
+  activity: ['Activity pack checklist', 'I spy', 'Spot the difference', 'Find the way maze', 'Word search'],
 };
 let gPages = [];
 let gAt = 0;
@@ -855,7 +879,7 @@ function gShow(i) {
   $('gTabs').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.k === p.k));
 }
 function openGallery(k) {
-  const gets = ['hunt', 'party', 'kit'].filter((x) => picked.has(x));
+  const gets = ['hunt', 'kit', 'activity', 'party'].filter((x) => picked.has(x));
   if (!gets.length) return;
   gPages = gets.flatMap((x) => GALLERY[x].map((cap, i) => ({ k: x, cap, src: `img/gallery/${state.theme}/${x}-${i + 1}.webp` })));
   $('gTabs').innerHTML = gets.map((x) => `<button type="button" data-k="${x}">${LABELS[x]}</button>`).join('');
@@ -889,7 +913,7 @@ $('orderForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const childName = $('childName').value.trim();
   if (!childName) return status('Add your child’s first name so we can put it on the cards.', true), $('childName').focus();
-  if (!product) return status('Pick the hunt, the play kit or the party pack.', true);
+  if (!product) return status('Pick at least one: the hunt, the play kit, the activity pack or the party pack.', true);
   if (picked.has('hunt') && state.picks.length < 6) return status(`Pick at least 6 spots. You have ${state.picks.length}.`, true);
   const order = {
     product,

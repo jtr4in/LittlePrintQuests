@@ -13,11 +13,12 @@ async function sendHuntEmail(order) {
   const pdf = `${process.env.PUBLIC_URL}/d/${order.downloadToken}.pdf`;
   const main = products.mainOf(order);
   const kit = KITS[order.config.kit] || (order.config.theme && kitForHunt(order.config.theme));
-  const title = { hunt: theme?.name, kit: `${kit?.name} play kit`, party: `${theme?.label} party pack`, craft: craftLabel(HOLIDAYS[order.config.holiday]) }[main];
+  const title = { hunt: theme?.name, kit: `${kit?.name} play kit`, activity: `${kit?.name} activity pack`, party: `${theme?.label} party pack`, craft: craftLabel(HOLIDAYS[order.config.holiday]) }[main];
   const btn = (href, label) => `<p><a href="${href}" style="display:inline-block;background:#ef9d31;color:#2b1d06;padding:12px 22px;border-radius:99px;text-decoration:none;font-weight:bold">${label}</a></p>`;
   const tips = {
     hunt: 'print at “Actual Size / 100%”, cut out the clue cards, and use the Host Guide on page 1 to hide them. Read the Mission Briefing aloud to start.',
     kit: 'print at “Actual Size / 100%” and start with the grown-up guide on page 1.',
+    activity: 'print at “Actual Size / 100%” and slip the pages into sheet protectors to use with a dry-erase marker.',
     party: 'print at “Actual Size / 100%”. Invitations, cupcake toppers and the banner look best on cardstock.',
     craft: 'print the keepsake pages on white cardstock at “Actual Size / 100%” and start with the tips on page 1.',
   }[main];
@@ -26,6 +27,7 @@ async function sendHuntEmail(order) {
     <p>Thanks for your order! Your printable ${esc(products.describe(products.itemsOf(order)))} ${products.itemsOf(order).length > 1 ? 'are' : 'is'} ready to download.</p>
     ${btn(pdf, `Download your ${products.NAMES[main]} (PDF)`)}
     ${order.kitReady ? btn(pdf.replace(/\.pdf$/, '-kit.pdf'), `Download the ${esc(kit.name)} play kit (PDF)`) : ''}
+    ${order.activityReady ? btn(pdf.replace(/\.pdf$/, '-activities.pdf'), 'Download the activity pack (PDF)') : ''}
     ${order.partyReady ? btn(pdf.replace(/\.pdf$/, '-party.pdf'), 'Download the party printables (PDF)') : ''}
     ${order.hostToken ? `<p><b>New: Host Mode.</b> Open this on your phone${products.has(order, 'hunt') ? ' on party day' : ''}. It ${esc(products.hostHelps(order))}.</p>${btn(`${process.env.PUBLIC_URL}/h/${order.hostToken}`, 'Open Host Mode')}` : ''}
     <p><b>Quick setup:</b> ${tips}${order.kitReady ? ' The play kit has its own grown-up guide on page 1.' : ''}</p>
