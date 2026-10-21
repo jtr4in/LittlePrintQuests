@@ -67,10 +67,22 @@ function sign(title, sub, icon, cls = '') {
   </div></div>`;
 }
 
+// Hand washing in pictures, for kids who can't read yet: wet, soap, scrub, rinse, dry.
+const WASH = [['💧', 'Wet'], ['🧼', 'Soap'], ['👏', 'Scrub'], ['🚿', 'Rinse'], ['🧻', 'Dry']];
+function washSign(title) {
+  return `<div class="sign wash"><div class="sign-in">
+    <div class="sign-title">${esc(title)}</div>
+    <div class="wash-steps">${WASH.map(([e, w], i) => `<div class="wash-step"><b>${i + 1}</b>${art.pic(e, '1in')}<span>${w}</span></div>`).join('<i>›</i>')}</div>
+  </div></div>`;
+}
+
+// A blank sign to write and draw on, so a page is never left half empty.
+const ownSign = () => `<div class="sign own"><div class="sign-in"><div class="own-draw">Draw a picture</div><div class="own-line"></div><div class="sign-sub">Make your own sign</div></div></div>`;
+
 function signsPages(k) {
   const d = k.def;
-  const s = [sign(k.placeName, d.tagline, d.icon, 'hero'), ...d.signs.map(([t, sub, icon, cls]) => sign(t, sub, icon, cls))];
-  if (s.length % 2) s.pop();
+  const s = [sign(k.placeName, d.tagline, d.icon, 'hero'), ...d.signs.map(([t, sub, icon, cls]) => (cls === 'wash' ? washSign(t) : sign(t, sub, icon, cls)))];
+  if (s.length % 2) s.push(ownSign());
   const out = [];
   for (let i = 0; i < s.length; i += 2) out.push(`<section class="page signs">${s[i]}<div class="cut-h"></div>${s[i + 1]}</section>`);
   return out.join('');
@@ -226,11 +238,11 @@ function certificatePage(k, blank = false) {
 function guidePage(k) {
   const G = k.def.guide;
   const d = k.def;
-  const signCount = d.signs.length + 1 - ((d.signs.length + 1) % 2);
+  const signCount = d.signs.length + 1;
   const inside = [
     ...(d.hunt ? [] : ['A big shop sign: two pages that glue into one 20 inch banner']),
-    `${signCount} signs for doors and walls, plus ${signageCount(d) ? `${signageCount(d)} big station signs, ` : ''}7 counter signs (a fold-over Open/Closed sign, pay here, our hours and more) and 15 shelf and bin labels`,
-    ...(d.appliances ? [`A ${d.appliances.map((a) => ({ oven: 'pizza oven', stove: 'stove' })[a]).join(' and a ')} to tape onto a box`] : []),
+    `${signCount} signs for doors and walls${signCount % 2 ? ' (and a blank one)' : ''}, plus ${signageCount(d) ? `${signageCount(d)} big station ${signageCount(d) === 1 ? 'sign' : 'signs'}, ` : ''}7 counter signs (a fold-over Open/Closed sign, pay here, our hours and more) and 15 shelf and bin labels`,
+    ...(d.appliances ? [`A ${d.appliances.map((a) => ({ oven: 'pizza oven', stove: 'stovetop' })[a]).join(' and a ')} to tape onto a box`] : []),
     ...(d.jars ? [`${d.jars.length} wrap-around jar labels`] : []),
     ...(d.toys ? d.toys.map((t) => t.inside) : [`${['laptop', 'console'].includes(d.dashboard.device) ? 'A fold-up' : 'A cut-out'} ${d.dashboard.gadget} with 3 screens`]),
     '8 ID badges',
@@ -538,7 +550,36 @@ function recordHalfLittle(k, p) {
   </div>`;
 }
 
+// A waiter's guest check, tall and narrow like a real order pad, two to a page: the menu's food
+// down the side to fill in how many (little kids circle 1, 2 or 3), the prices, a total and a
+// tear-off stub for the guest.
+function guestCheck(k, p, n) {
+  const R = k.def.record;
+  const M = k.def.menu;
+  const price = (name) => (M.items.find(([, x]) => x === name) || (k.def.props?.food?.items || []).find(([, x]) => x === name) || [])[2];
+  const no = String(4101 + n).padStart(4, '0');
+  const rows = R.checks.map(([e, name]) => `<div class="gc-row">${art.pic(e, k.little ? '.5in' : '.38in')}<span class="gc-item">${esc(name)}</span>
+    ${k.little ? `<span class="gc-circ">${[1, 2, 3].map((x) => `<i>${x}</i>`).join('')}</span>` : '<span class="gc-qty"></span>'}
+    <span class="gc-price">${price(name) ?? ''}</span></div>`).join('');
+  return `<div class="gc">
+    <div class="gc-head"><b>Guest Check</b><span>${esc(k.placeName)}</span><em>No. ${no}</em></div>
+    <div class="gc-boxes"><div><small>Table</small><i></i></div><div><small>Guests</small><i></i></div><div><small>Server</small><i></i></div></div>
+    <div class="gc-guest"><small>Guest</small><span>${p ? esc(p.name || kindName(k, p)) : ''}</span></div>
+    <div class="gc-cols"><span>Food</span><span>${k.little ? 'How many' : 'Qty'}</span><span>${esc(M.coinWord)}s</span></div>
+    <div class="gc-rows">${rows}</div>
+    <div class="gc-total"><b>Total</b><span></span>${art.pic(M.coinIcon, '.3in')}</div>
+    <div class="gc-stub"><b>Thank you! Grazie!</b><span>Table <i></i></span><em>No. ${no}</em></div>
+  </div>`;
+}
+
 function recordsPages(k) {
+  if (k.def.record.style === 'check') {
+    const list = [...subjectsOrDefaults(k), null];
+    if (list.length % 2) list.push(null);
+    const out = [];
+    for (let i = 0; i < list.length; i += 2) out.push(`<section class="page gcs">${guestCheck(k, list[i], i)}<div class="cut-v"></div>${guestCheck(k, list[i + 1], i + 1)}</section>`);
+    return out.join('');
+  }
   const list = [...subjectsOrDefaults(k), null];
   if (list.length % 2) list.push(null);
   const out = [];
@@ -713,6 +754,14 @@ p.lead { font-size:13.5pt; line-height:1.45; margin:.2in 0; }
 .sign-title { font:700 54pt/1.05 'Fredoka'; color:var(--teal-d); margin-top:.1in; }
 .sign-sub { font:500 16pt 'Fredoka'; margin-top:.1in; color:var(--navy); }
 .sign.hero .sign-in { background:var(--teal); border-color:var(--teal-d); }
+.sign.wash .sign-title { font-size:44pt; margin:0 0 .2in; }
+.wash-steps { display:flex; align-items:center; gap:.06in; } .wash-steps > i { font:700 30pt 'Fredoka'; color:var(--teal); font-style:normal; }
+.wash-step { display:flex; flex-direction:column; align-items:center; gap:.05in; width:1.15in; }
+.wash-step b { width:.36in; height:.36in; border-radius:50%; background:var(--teal); color:#fff; display:grid; place-items:center; font:700 13pt 'Fredoka'; }
+.wash-step span { font:700 17pt 'Fredoka'; color:var(--teal-d); }
+.sign.own .sign-in { background:#fff; border-style:dashed; justify-content:space-between; padding:.35in .6in; }
+.own-draw { width:2.6in; height:1.5in; border:2px dashed #b7c0cc; border-radius:14px; display:grid; place-items:center; font:600 11pt 'Fredoka'; color:#9aa5b8; }
+.own-line { align-self:stretch; border-bottom:3px solid var(--navy); height:.6in; }
 .sign.hero .sign-title { color:#fff; font-size:46pt; line-height:1.3; }
 .sign.hero .sign-sub { color:var(--mint); margin-top:.12in; }
 /* status signs */
@@ -993,6 +1042,27 @@ p.lead { font-size:13.5pt; line-height:1.45; margin:.2in 0; }
 
 /* check-up forms, two per page */
 .recs { padding:.35in .45in; display:flex; flex-direction:column; }
+.gcs { padding:.35in .4in; display:flex; gap:.25in; }
+.cut-v { border-left:2px dashed #b7c0cc; }
+.gc { flex:1; display:flex; flex-direction:column; background:#fbfdf6; border:2px solid #7f9a7a; border-radius:6px; padding:.14in .16in; font-family:'Fredoka'; }
+.gc-head { text-align:center; border-bottom:2px solid #7f9a7a; padding-bottom:.08in; position:relative; }
+.gc-head b { display:block; font:700 21pt 'Fredoka'; color:#3f5f3b; letter-spacing:.06em; text-transform:uppercase; }
+.gc-head span { font:600 10pt 'Fredoka'; color:#66708f; } .gc-head em, .gc-stub em { font:700 10pt 'Courier New', monospace; color:#c0392b; font-style:normal; }
+.gc-head em { position:absolute; top:-.02in; right:0; }
+.gc-boxes { display:grid; grid-template-columns:1fr 1fr 1.4fr; border-bottom:1.5px solid #7f9a7a; }
+.gc-boxes div { padding:.05in .06in .1in; border-right:1.5px solid #7f9a7a; } .gc-boxes div:last-child { border-right:0; }
+.gc-boxes small, .gc-guest small, .gc-cols { font:700 8pt 'Fredoka'; text-transform:uppercase; letter-spacing:.06em; color:#3f5f3b; }
+.gc-boxes i { display:block; height:.3in; }
+.gc-guest { display:flex; align-items:flex-end; gap:.08in; padding:.08in 0; border-bottom:1.5px solid #7f9a7a; } .gc-guest span { flex:1; font:600 13pt 'Fredoka'; border-bottom:1px dotted #9aa5b8; min-height:.26in; }
+.gc-cols { display:grid; grid-template-columns:1fr .9in .55in; padding:.05in 0; border-bottom:1.5px solid #7f9a7a; } .gc-cols span:not(:first-child) { text-align:center; }
+.gc-rows { flex:1; display:flex; flex-direction:column; }
+.gc-row { flex:1; display:grid; grid-template-columns:auto 1fr .9in .55in; align-items:center; gap:.06in; border-bottom:1px solid #b9cbb5; }
+.gc-item { font:600 12pt 'Fredoka'; } .gc-qty { height:.3in; border-left:1px solid #b9cbb5; border-right:1px solid #b9cbb5; align-self:stretch; }
+.gc-price { text-align:center; font:700 12pt 'Fredoka'; color:#3f5f3b; }
+.gc-circ { display:flex; justify-content:center; gap:.04in; } .gc-circ i { width:.26in; height:.26in; border:2px solid #7f9a7a; border-radius:50%; display:grid; place-items:center; font:700 10pt 'Fredoka'; font-style:normal; }
+.gc-total { display:flex; align-items:center; gap:.08in; padding:.1in 0; border-bottom:2px solid #7f9a7a; } .gc-total b { font:700 14pt 'Fredoka'; color:#3f5f3b; } .gc-total span { flex:1; height:.32in; border:1.5px solid #7f9a7a; border-radius:4px; background:#fff; }
+.gc-stub { margin-top:.12in; padding-top:.1in; border-top:2px dashed #9aa5b8; display:flex; align-items:center; justify-content:space-between; gap:.08in; font:600 10pt 'Fredoka'; }
+.gc-stub b { font:700 11pt 'Fredoka'; color:var(--teal-d); } .gc-stub span { display:flex; align-items:flex-end; gap:4px; } .gc-stub span i { width:.4in; border-bottom:1px solid var(--navy); height:1px; }
 .rec { flex:1; display:flex; flex-direction:column; gap:.1in; }
 .rec-head { display:flex; align-items:center; gap:.1in; border-bottom:3px solid var(--teal); padding-bottom:.06in; }
 .rec-head .em { font-size:22pt; } .rec-head h2 { font-size:20pt; flex:1; }

@@ -12,7 +12,7 @@ STYLE = ('Children\'s storybook illustration in soft watercolor and colored penc
          'gentle dark outlines, bright cheerful colors, cute rounded shapes, high quality, consistent style. '
          'A 3 by 3 grid of nine separate objects on a plain pure white background: each object is centered '
          'in its own cell with plenty of white space around it, and nothing touches or overlaps. '
-         'No text, no letters, no numbers, no borders, no grid lines, no frames, no shadows on the background.')
+         'Food and drinks have no faces. No text, no letters, no numbers, no borders, no grid lines, no frames, no shadows on the background.')
 
 JS = r'''
 const {KITS,buildKitHtml}=require('./src/kits/engine');const art=require('./src/kits/art');

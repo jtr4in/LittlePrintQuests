@@ -22,10 +22,11 @@ module.exports = {
     ['Reservations', 'Book your table here', '📖'],
     ['Pay Here', 'Coins and cards welcome. Grazie!', '🪙'],
     ['Kitchen', 'Busy chefs! Chefs only, please', '👨‍🍳'],
+    ['Wash Your Hands', '', '🧼', 'wash'],
     ['Buon Appetito!', 'That means “Enjoy your meal!”', '🍝'],
   ],
   // The oven and stove are wall pieces that look like the real thing, so they're not station signs.
-  stations: [['Gelato Bar', '🍨'], ['Bread Basket', '🥖']],
+  stations: [['Gelato Bar', '🍨']],
   appliances: ['oven', 'stove'],
   jars: [['🫑', 'Peppers'], ['🍄', 'Mushrooms'], ['🫒', 'Olives'], ['🍅', 'Tomatoes'], ['🧀', 'Cheese'], ['🌿', 'Basil'], ['🧅', 'Onions'], ['🌶️', 'Hot peppers'], ['🍝', 'Pasta'], ['🥖', 'Breadsticks'], ['🧄', 'Garlic'], ['🍋', 'Lemons']],
   peel: true,
@@ -41,10 +42,11 @@ module.exports = {
     note: 'Host: write each guest who calls in an empty row, then tick Seated when they sit down at their table.',
   },
   record: {
-    title: 'Waiter’s Order Pad', icon: '📝', drawLabel: 'Draw the guest',
+    // a guest check like a real waiter's order pad (see guestCheck in engine.js)
+    title: 'Waiter’s Order Pad', icon: '📝', drawLabel: 'Draw the guest', style: 'check',
     fields: ['Guest', 'Who', 'Table', 'Party of'],
     cols: ['Yes please', 'No thanks'],
-    checks: [['🍝', 'Spaghetti'], ['🧆', 'Meatballs'], ['🥖', 'Garlic bread'], ['🥗', 'Salad'], ['🧀', 'Extra cheese'], ['🍲', 'Soup'], ['🍨', 'Gelato'], ['🥤', 'Lemonade']],
+    checks: [['🍝', 'Spaghetti'], ['🍕', 'Pizza'], ['🧆', 'Meatballs'], ['🥖', 'Garlic bread'], ['🥗', 'Salad'], ['🍲', 'Soup'], ['🍨', 'Gelato'], ['🥤', 'Lemonade']],
     moodLabel: 'How was dinner?', moods: ['😋', '😀', '🙂', '😐', '🥵'],
     notesLabel: 'Waiter’s notes', signer: 'Chef',
   },
@@ -59,7 +61,7 @@ module.exports = {
   },
   menu: {
     fold: true, title: 'Dinner Menu', icon: '🍝', coinIcon: '🪙', coinWord: 'coin', coinsTitle: 'Trattoria coins',
-    items: [['🍝', 'Spaghetti', 3], ['🧆', 'Meatballs', 2], ['🥖', 'Garlic bread', 2], ['🥗', 'Salad', 2], ['🍲', 'Minestrone soup', 2], ['🍨', 'Gelato', 2], ['🍰', 'Tiramisu', 3], ['🍋', 'Lemonade', 1]],
+    items: [['🍝', 'Spaghetti', 3], ['🍕', 'Pizza', 3], ['🧆', 'Meatballs', 2], ['🥖', 'Garlic bread', 2], ['🥗', 'Salad', 2], ['🍲', 'Minestrone soup', 2], ['🍨', 'Gelato', 2], ['🍰', 'Tiramisu', 3], ['🍋', 'Lemonade', 1]],
   },
   shop: {
     open: 'Buon appetito!', hero: ['🥖', '🍝', '🍨'],

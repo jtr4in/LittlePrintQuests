@@ -142,7 +142,20 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const bigKit = buildKitHtml({ kit: 'italian', childName: 'Ava', age: 6, lenient: true });
   assert.match(littleKit, /<body class="little">/);
   assert.match(bigKit, /<body class="big">/);
-  assert.ok(littleKit.includes('little-rec') && !bigKit.includes('little-rec'));
+  // the Italian waiter's pad is a guest check: little kids circle how many, big kids write it
+  assert.ok(littleKit.includes('class="gc-circ"') && !bigKit.includes('class="gc-circ"') && bigKit.includes('class="gc-qty"'));
+  const littlePizza = buildKitHtml({ kit: 'pizza', childName: 'Ava', age: 3, lenient: true });
+  const bigPizza = buildKitHtml({ kit: 'pizza', childName: 'Ava', age: 6, lenient: true });
+  assert.ok(littlePizza.includes('little-rec') && !bigPizza.includes('little-rec'));
+  // Hand washing is a sign in pictures; the stove is just a cooktop; no bread basket sign; pizza is on the trattoria menu.
+  assert.ok(bigPizza.includes('class="sign wash"') && bigKit.includes('class="sign wash"'));
+  assert.ok(!bigKit.includes('class="sv-door"') && bigKit.includes('class="sv-ring"'));
+  assert.ok(!/Bread Basket/i.test(bigKit));
+  assert.match(bigKit, /class="fm-n">Pizza</);
+  // Play money looks like real bills, sized for a toy cash register drawer, with metal-look coins.
+  assert.match(bigKit, /class="bill2"[^>]*style="width:4.75in;height:2in"/);
+  assert.equal((bigKit.match(/class="bill2"/g) || []).length, 8);
+  assert.ok(bigKit.includes('BANK OF AVA’S TRATTORIA') && bigKit.includes('class="coin3"'));
   assert.ok(littleKit.includes('Circle what they want!') && !bigKit.includes('Circle what they want!'));
   assert.match(buildKitHtml({ kit: 'italian', childName: 'Ava', age: 3, ages: 'big', lenient: true }), /<body class="big">/);
   // Every kit: draw labels sit under the boxes, a fold-over Open/Closed sign and the money machine.
