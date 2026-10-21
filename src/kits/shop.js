@@ -81,20 +81,67 @@ function specialsPage(k) {
   </section>`;
 }
 
+// Play money that looks like the real thing: engraved-looking bills with corner numbers, a seal,
+// serial numbers and a signature, sized like the bills in a toy cash register drawer, plus
+// metal-look coins. Two pages of four bills and ten coins.
+const BILL = { w: 4.75, h: 2 }; // inches
+const WORDS = { 1: 'ONE', 2: 'TWO', 5: 'FIVE', 10: 'TEN' };
+const TINTS = { 1: ['#e4efdc', '#3d6b3a'], 2: ['#dde8f3', '#2f5683'], 5: ['#ebe0f0', '#5d3f78'], 10: ['#f6e6d4', '#8a4b1c'] };
+
+function bill(k, v, n) {
+  const M = k.def.menu;
+  const [paper, ink] = TINTS[v];
+  const w = BILL.w * 100; const h = BILL.h * 100;
+  // fine wavy lines like the engraving on real money
+  const waves = Array.from({ length: 16 }, (_, i) => {
+    const y = 18 + i * 10.5;
+    let d = `M14,${y}`;
+    for (let x = 14; x <= w - 14; x += 12) d += ` Q${x + 6},${y + (i % 2 ? 4 : -4)} ${x + 12},${y}`;
+    return `<path d="${d}" fill="none" stroke="${ink}" stroke-width=".5" opacity=".22"/>`;
+  }).join('');
+  const rosette = (cx, cy) => `<g transform="translate(${cx} ${cy})">${Array.from({ length: 12 }, (_, i) => `<ellipse rx="20" ry="7" transform="rotate(${i * 15})" fill="none" stroke="${ink}" stroke-width=".7" opacity=".55"/>`).join('')}
+    <circle r="15" fill="${paper}" stroke="${ink}" stroke-width="1.4"/><text y="6" text-anchor="middle" class="bn-num" fill="${ink}">${v}</text></g>`;
+  const serial = `${k.placeName.replace(/[^A-Za-z]/g, '').slice(0, 2).toUpperCase() || 'LP'} ${String(1000000 + ((v * 7919 + n * 104729) % 9000000)).padStart(8, '0')} ${'ABCDEFGH'[n % 8]}`;
+  const seal = `<g transform="translate(92 102)">${Array.from({ length: 24 }, (_, i) => `<path d="M0,-33 L3,-27 L-3,-27 Z" transform="rotate(${i * 15})" fill="${ink}" opacity=".7"/>`).join('')}
+    <circle r="27" fill="none" stroke="${ink}" stroke-width="1.6"/><circle r="21" fill="none" stroke="${ink}" stroke-width=".8"/>
+    <text y="-6" text-anchor="middle" class="bn-tiny" fill="${ink}">BANK OF</text><text y="4" text-anchor="middle" class="bn-tiny" fill="${ink}">${esc(k.childName.toUpperCase().slice(0, 10))}</text>
+    <text y="14" text-anchor="middle" class="bn-tiny" fill="${ink}">★ ★ ★</text></g>`;
+  return `<svg class="bill2" viewBox="0 0 ${w} ${h}" style="width:${BILL.w}in;height:${BILL.h}in">
+    <rect x="1" y="1" width="${w - 2}" height="${h - 2}" fill="${paper}"/>${waves}
+    <rect x="8" y="8" width="${w - 16}" height="${h - 16}" fill="none" stroke="${ink}" stroke-width="2.2"/>
+    <rect x="13" y="13" width="${w - 26}" height="${h - 26}" fill="none" stroke="${ink}" stroke-width=".8" stroke-dasharray="1.5 2"/>
+    ${rosette(36, 36)}${rosette(w - 36, 36)}${rosette(36, h - 36)}${rosette(w - 36, h - 36)}
+    <text x="${w / 2}" y="34" text-anchor="middle" class="bn-bank" fill="${ink}">${esc(`BANK OF ${k.placeName}`.toUpperCase())}</text>
+    <text x="70" y="62" class="bn-serial" fill="${ink}">${serial}</text>
+    <text x="${w - 70}" y="${h - 50}" text-anchor="end" class="bn-serial" fill="${ink}">${serial}</text>
+    ${seal}
+    <ellipse cx="${w / 2}" cy="${h / 2 + 4}" rx="58" ry="66" fill="#fffdf6" stroke="${ink}" stroke-width="2"/>
+    <ellipse cx="${w / 2}" cy="${h / 2 + 4}" rx="52" ry="60" fill="none" stroke="${ink}" stroke-width=".7" stroke-dasharray="2 2"/>
+    ${em(w / 2, h / 2 + 4, 74, k.def.icon)}
+    <text x="${w - 92}" y="${h / 2 + 4}" text-anchor="middle" class="bn-big" fill="${ink}">${v}</text>
+    <path d="M${w / 2 - 90},${h - 30} L${w / 2 + 90},${h - 30} L${w / 2 + 80},${h - 14} L${w / 2 - 80},${h - 14} Z" fill="${ink}"/>
+    <text x="${w / 2}" y="${h - 18}" text-anchor="middle" class="bn-word">${WORDS[v]} ${esc((v === 1 ? M.coinWord : `${M.coinWord}s`).toUpperCase())}</text>
+    <text x="${w - 92}" y="${h / 2 + 34}" text-anchor="middle" class="bn-sign" fill="${ink}">${esc(k.lead)}</text>
+    <line x1="${w - 140}" y1="${h / 2 + 38}" x2="${w - 44}" y2="${h / 2 + 38}" stroke="${ink}" stroke-width=".8"/>
+  </svg>`;
+}
+
+function coin(v) {
+  const ticks = Array.from({ length: 60 }, (_, i) => `<line x1="0" y1="-46" x2="0" y2="-41" transform="rotate(${i * 6})"/>`).join('');
+  return `<svg class="coin3" viewBox="-50 -50 100 100"><defs><radialGradient id="cg" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff4cf"/><stop offset=".55" stop-color="#e7bd52"/><stop offset="1" stop-color="#b8862a"/></radialGradient></defs>
+    <circle r="48" fill="url(#cg)" stroke="#8a6215" stroke-width="2"/><g stroke="#9a7020" stroke-width="1.2">${ticks}</g>
+    <circle r="36" fill="none" stroke="#9a7020" stroke-width="1.2"/><text y="13" text-anchor="middle" class="cn-num">${v}</text></svg>`;
+}
+
 function moneyPage(k) {
   const M = k.def.menu;
-  const bill = (v) => `<div class="bill">
-    <span class="corner tl">${v}</span><span class="corner tr">${v}</span><span class="corner bl">${v}</span><span class="corner br">${v}</span>
-    <div class="bill-mid">${pic(M.coinIcon, '.7in')}</div>
-    <div class="bill-txt"><small>Bank of ${esc(k.placeName)}</small><b>${esc(coins(M, v))}</b></div>
-  </div>`;
-  const coin = () => `<div class="coin2">${pic(M.coinIcon, '.46in')}<b>1</b></div>`;
-  return `<section class="page shop-page money-page">
-    <h1 class="script center">${esc(M.coinsTitle)}</h1>
-    <p class="pg-sub">Cut out the money and share it out before the shop opens.</p>
-    <div class="bills">${[1, 1, 2, 2, 5, 5, 10, 10].map(bill).join('')}</div>
-    <div class="coins2">${Array.from({ length: 12 }, coin).join('')}</div>
+  const page = (values, n) => `<section class="page shop-page money-page">
+    <h1 class="script center">${esc(M.coinsTitle)}${n ? ' <small>(more)</small>' : ''}</h1>
+    <p class="pg-sub">Cut out the money along the dashed lines and share it out before the shop opens.</p>
+    <div class="money-cols"><div class="bills2">${values.map((v, i) => `<div class="cut">${bill(k, v, n * 4 + i)}</div>`).join('')}</div>
+    <div class="coins3">${Array.from({ length: 10 }, () => `<div class="cut round">${coin(1)}</div>`).join('')}</div></div>
   </section>`;
+  return page([1, 1, 2, 5], 0) + page([2, 5, 10, 10], 1);
 }
 
 const shopCss = (font) => `
@@ -145,18 +192,17 @@ svg.pic { display:inline-block; vertical-align:middle; flex:none; }
 .slip .ticks { display:flex; gap:.1in; } .slip .ticks em { font-style:normal; width:.3in; height:.3in; border:2px solid var(--teal); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10pt; }
 .slip-foot { text-align:center; margin-top:.12in; font:600 11pt 'Fredoka'; color:var(--orange); }
 .money-page { padding:.4in .45in; }
-.money-page h1 { font-size:36pt; line-height:1.35; }
+.money-page h1 { font-size:36pt; line-height:1.35; } .money-page h1 small { font-size:18pt; }
 .money-page .pg-sub { margin:.02in 0 .18in; }
-.bills { display:grid; grid-template-columns:1fr 1fr; gap:.16in .22in; }
-.bill { position:relative; height:1.55in; border-radius:12px; background:var(--mint-l); border:3px solid var(--teal); outline:2px dashed #b7c0cc; outline-offset:5px; display:flex; align-items:center; gap:.15in; padding:0 .45in; overflow:hidden; }
-.bill::before { content:''; position:absolute; inset:6px; border:2px solid var(--mint); border-radius:8px; }
-.corner { position:absolute; font:700 17pt 'Fredoka'; color:var(--teal-d); } .tl { top:.05in; left:.14in; } .tr { top:.05in; right:.14in; } .bl { bottom:.05in; left:.14in; } .br { bottom:.05in; right:.14in; }
-.bill-mid { width:1in; height:1in; border-radius:50%; background:#fff; border:3px solid var(--gold); display:flex; align-items:center; justify-content:center; flex:none; }
-.bill-txt small { display:block; font:600 8pt 'Fredoka'; text-transform:uppercase; letter-spacing:.04em; line-height:1.15; color:#66708f; }
-.bill-txt b { font:700 19pt/1.1 'Fredoka'; color:var(--teal-d); }
-.coins2 { display:grid; grid-template-columns:repeat(6, 1fr); gap:.12in; margin-top:.3in; justify-items:center; }
-.coin2 { width:1.05in; height:1.05in; border-radius:50%; background:radial-gradient(circle at 35% 30%, #fff3cf, var(--gold) 65%); border:2px dashed #b77818; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-.coin2 b { font:700 15pt/1 'Fredoka'; color:#5a3a06; }
+.money-cols { display:flex; justify-content:space-between; gap:.2in; }
+.bills2 { display:flex; flex-direction:column; gap:.22in; }
+.cut { outline:2px dashed #b7c0cc; outline-offset:3px; line-height:0; } .cut.round { border-radius:50%; }
+.bill2 { display:block; }
+.bn-bank { font:700 11px 'Fredoka'; letter-spacing:1.5px; } .bn-serial { font:600 9px 'Courier New', monospace; letter-spacing:1px; }
+.bn-num { font:700 17px 'Fredoka'; } .bn-big { font:700 52px 'Fredoka'; } .bn-tiny { font:700 5.5px 'Fredoka'; letter-spacing:.5px; }
+.bn-word { font:700 11px 'Fredoka'; fill:#fff; letter-spacing:2px; } .bn-sign { font:400 13px 'Pacifico', 'Fredoka'; }
+.coins3 { display:grid; grid-template-columns:repeat(2, 1in); gap:.25in .3in; align-content:start; }
+.coin3 { width:1in; height:1in; display:block; } .cn-num { font:700 36px 'Fredoka'; fill:#6b4a0c; }
 `;
 
 module.exports = { welcomePage, menuBoard, specialsPage, moneyPage, shopCss };

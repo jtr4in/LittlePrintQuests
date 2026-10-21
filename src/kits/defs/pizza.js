@@ -22,7 +22,7 @@ module.exports = {
     ['Pay Here', 'Coins and cards welcome', '🪙'],
     ['Pick Up Here', 'Your pizza will be ready soon!', '📣'],
     ['Kitchen', 'Hot oven! Chefs only', '👨‍🍳'],
-    ['Wash Your Hands', 'Clean hands make the best pizza', '🧼'],
+    ['Wash Your Hands', '', '🧼', 'wash'],
   ],
   badgeIcon: '🍕',
   leadPrefix: 'Chef',

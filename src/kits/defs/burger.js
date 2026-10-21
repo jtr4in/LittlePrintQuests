@@ -22,7 +22,7 @@ module.exports = {
     ['Collect Your Order', 'Your burger will be ready soon!', '📣'],
     ['Drive-Thru', 'Honk, then order at the window', '🚗'],
     ['Hot Grill', 'Careful! Cooks only', '🔥'],
-    ['Wash Your Hands', 'Clean hands make the best burgers', '🧼'],
+    ['Wash Your Hands', '', '🧼', 'wash'],
   ],
   badgeIcon: '🍔',
   leadPrefix: 'Chef',

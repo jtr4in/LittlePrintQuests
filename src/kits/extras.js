@@ -2,7 +2,7 @@
 //   bigSignPages    the shop sign as two whole pages that glue into one 20 inch banner
 //   atmPage         a pull-tab ATM: pull the strip to put in the card, type the number and get cash
 //   morningPages    pretend paperwork to start the day: a morning checklist and a supply order
-//   appliancePages  wall pieces that look like the thing itself, no words: a pizza oven, a stove
+//   appliancePages  wall pieces that look like the thing itself, no words: a pizza oven, a stovetop
 //   jarPages        wrap-around labels for jars, cups and tubs (def.jars)
 //   peelPages       a pizza peel and two plain pizzas to glue onto cardboard and draw toppings on
 //   chefHatPage     a tall chef hat with the child's name on the band
@@ -127,22 +127,19 @@ function ovenPage() {
   </section>`;
 }
 
+// Just the cooktop: four burners and a row of knobs, no oven door, so it sits on a box or a table.
 function stovePage() {
-  const burner = (cx, cy, r) => `<circle cx="${cx}" cy="${cy}" r="${r}" class="sv-ring"/>${[0.8, 0.58, 0.36].map((f) => `<circle cx="${cx}" cy="${cy}" r="${(r * f).toFixed(1)}" class="sv-coil"/>`).join('')}`;
-  const knob = (cx) => `<circle cx="${cx}" cy="415" r="38" class="sv-knob"/><rect x="${cx - 6}" y="382" width="12" height="34" rx="6" class="sv-mark"/>`;
+  const burner = (cx, cy, r) => `<circle cx="${cx}" cy="${cy}" r="${r}" class="sv-ring"/>${[0.8, 0.58, 0.36].map((f) => `<circle cx="${cx}" cy="${cy}" r="${(r * f).toFixed(1)}" class="sv-coil"/>`).join('')}<circle cx="${cx}" cy="${cy}" r="${(r * 0.14).toFixed(1)}" class="sv-hub"/>`;
+  const knob = (cx) => `<circle cx="${cx}" cy="880" r="44" class="sv-knob"/><rect x="${cx - 7}" y="842" width="14" height="40" rx="7" class="sv-mark"/>`;
   return `<section class="page appliance">
     <svg viewBox="0 0 760 980" class="ap-art">
-      <rect x="20" y="20" width="720" height="940" rx="36" class="sv-body"/>
-      <rect x="50" y="50" width="660" height="310" rx="22" class="sv-top"/>
-      ${burner(210, 135, 70)}${burner(550, 135, 70)}${burner(210, 285, 55)}${burner(550, 285, 55)}
-      <rect x="50" y="370" width="660" height="90" rx="18" class="sv-panel"/>
-      ${[140, 280, 480, 620].map(knob).join('')}<rect x="345" y="395" width="70" height="40" rx="8" class="sv-clock"/>
-      <rect x="120" y="500" width="520" height="40" rx="20" class="sv-handle"/>
-      <rect x="70" y="565" width="620" height="360" rx="24" class="sv-door"/>
-      <rect x="130" y="620" width="500" height="250" rx="18" class="sv-glass"/>
-      <path d="M170,650 L260,650 L170,740 Z" class="sv-shine"/>
+      <rect x="20" y="40" width="720" height="920" rx="36" class="sv-body"/>
+      <rect x="50" y="70" width="660" height="720" rx="24" class="sv-top"/>
+      ${burner(215, 245, 130)}${burner(545, 245, 130)}${burner(215, 600, 105)}${burner(545, 600, 105)}
+      <path d="M90,100 L250,100 L90,260 Z" class="sv-shine"/>
+      ${[130, 290, 470, 630].map(knob).join('')}
     </svg>
-    <p class="ap-tip">Tape onto a box or the front of a play kitchen. Put a pot on a burner and turn the knobs!</p>
+    <p class="ap-tip">Tape onto a box, a table or the top of a play kitchen. Put a pot on a burner and turn the knobs!</p>
   </section>`;
 }
 
@@ -254,8 +251,7 @@ const extrasCss = `
 .sv-body { fill:#f1f3f6; stroke:#9aa3b8; stroke-width:6; } .sv-top { fill:#2f3440; }
 .sv-ring { fill:#1d2029; stroke:#596072; stroke-width:6; } .sv-coil { fill:none; stroke:#e4572e; stroke-width:9; }
 .sv-panel { fill:#d9dde6; } .sv-knob { fill:#fff; stroke:#7d86a3; stroke-width:6; } .sv-mark { fill:var(--orange); } .sv-clock { fill:#2f3440; }
-.sv-handle { fill:#b7bfcc; stroke:#7d86a3; stroke-width:4; } .sv-door { fill:#e3e7ee; stroke:#9aa3b8; stroke-width:5; }
-.sv-glass { fill:#3b4252; } .sv-shine { fill:#fff; opacity:.18; }
+.sv-hub { fill:#596072; } .sv-shine { fill:#fff; opacity:.1; }
 .jars { flex:1; display:flex; flex-direction:column; justify-content:space-between; }
 .jar { height:1.45in; border:2px dashed #b7c0cc; border-radius:.08in; display:flex; align-items:center; justify-content:space-around; background:var(--mint-l); border-top:.16in solid var(--teal); border-bottom:.16in solid var(--teal); }
 .jar.s1 { border-top-color:var(--orange); border-bottom-color:var(--orange); } .jar.s2 { background:#fff; }
