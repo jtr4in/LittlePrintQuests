@@ -2,7 +2,8 @@
 // the pretend play kit, the activity pack and the party pack (hunt-1..5, kit-1..5, activity-1..5,
 // party-1..5.webp), shown when someone taps "What's in your order" on the website. Kits differ in
 // length, so their toy pages are picked by position. Also writes the activity pack's card for the
-// order stack (docs/img/pages/<theme>-activity.webp).
+// order stack (docs/img/pages/<theme>-activity.webp) and the theme picker's square thumbnail
+// (docs/img/themes/<theme>.webp, cut from the play kit card made by site-images.js).
 // Usage: node scripts/gallery-images.js [theme ...]
 const fs = require('fs');
 const os = require('os');
@@ -54,6 +55,18 @@ for job in json.load(open(sys.argv[1])):
     im = Image.open(src).convert('RGB')
     im.resize((w, round(w * im.height / im.width)), Image.LANCZOS).save(out, 'WEBP', quality=72 if w == 640 else 80)
 `, list]);
+  fs.mkdirSync(path.join(OUT, '..', 'themes'), { recursive: true });
+  execFileSync('python3', ['-c', `
+import sys, os
+from PIL import Image
+img = sys.argv[1]
+for t in sys.argv[2:]:
+    im = Image.open(os.path.join(img, f'kit-{t}.webp')).convert('RGBA')
+    bg = Image.new('RGBA', im.size, (255, 255, 255, 255)); bg.alpha_composite(im)
+    # the middle sheet of the fan (a hands-on toy), a little below its title
+    k = bg.width / 677; left, top, side = int(165 * k), int(40 * k), int(350 * k)
+    bg.crop((left, top, left + side, top + side)).convert('RGB').resize((220, 220), Image.LANCZOS).save(os.path.join(img, 'themes', f'{t}.webp'), 'WEBP', quality=80)
+`, path.join(OUT, '..'), ...Object.keys(THEMES).filter((k) => !only.length || only.includes(k))]);
   fs.rmSync(tmp, { recursive: true, force: true });
   console.log('Wrote docs/img/gallery for', only.length ? only.join(', ') : 'every theme');
 })();

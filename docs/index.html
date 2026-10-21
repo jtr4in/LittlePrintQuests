@@ -106,7 +106,7 @@ main { position: relative; }
 .themes.mini { display: flex; gap: 10px; overflow-x: auto; margin-top: 10px; padding-bottom: 6px; scroll-snap-type: x proximity; }
 .themes.mini .theme { flex: 0 0 92px; padding: 6px; gap: 4px; scroll-snap-align: start; border-width: 1.5px; }
 .themes.mini .theme[aria-pressed="true"] { border-color: var(--orange); box-shadow: 0 0 0 2px var(--orange); }
-.themes.mini .theme img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; object-position: top; border-radius: 4px; background: #fff; display: block; }
+.themes.mini .theme img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 4px; background: #fff; display: block; }
 .themes.mini .theme span { font: 600 12.5px/1.2 var(--display); }
 .themes.mini .theme .now { position: absolute; top: 4px; left: 4px; padding: 3px 6px; font-size: 10px; }
 
@@ -686,7 +686,7 @@ function drawThemes() {
   $('themeList').innerHTML = ordered.map((t) => `
   <button type="button" class="theme" data-id="${t.id}" aria-pressed="${t.id === state.theme}" title="${t.name}, ages ${t.ages}">
     ${t.id === seasonal ? '<span class="now">Now</span>' : ''}
-    <img src="img/pages/${t.id}-party.webp" alt="" width="400" height="518" loading="lazy"><span>${THEME_LABELS[t.id]}</span>
+    <img src="img/themes/${t.id}.webp" alt="" width="220" height="220" loading="lazy"><span>${THEME_LABELS[t.id]}</span>
   </button>`).join('');
   $('themeList').querySelectorAll('.theme').forEach((b) => b.addEventListener('click', () => setTheme(b.dataset.id)));
 }
