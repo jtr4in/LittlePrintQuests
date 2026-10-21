@@ -321,6 +321,8 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     { product: 'party', spots: [], has: ['party'] },
     { items: ['hunt', 'kit'], spots: ['front_door', 'pet_bed', 'kitchen_table'], has: ['hunt', 'kit'] },
     { items: ['party', 'kit'], spots: [], has: ['kit', 'party'] },
+    { items: ['activity', 'kit', 'hunt'], spots: ['front_door', 'pet_bed', 'kitchen_table'], has: ['hunt', 'kit', 'activity'] },
+    { items: ['activity'], spots: [], has: ['activity'] },
     // A shop kit has no theme of its own, so it always comes on its own.
     { kit: 'pizza', items: ['hunt', 'kit'], spots: [], has: ['kit'] },
   ];
@@ -361,6 +363,10 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.equal(Boolean(w.kitReady), extraKit);
     assert.equal(mail.html.includes(`/d/${w.downloadToken}-party.pdf`), extraParty);
     assert.equal(Boolean(w.partyReady), extraParty);
+    const extraActivity = main !== 'activity' && has.includes('activity');
+    assert.equal(mail.html.includes(`/d/${w.downloadToken}-activities.pdf`), extraActivity);
+    assert.equal(Boolean(w.activityReady), extraActivity);
+    if (extraActivity) assert.equal((await realFetch(`${base}/d/${w.downloadToken}-activities.pdf`)).headers.get('content-disposition'), 'inline; filename="activity-pack.pdf"');
     if (has.includes('party')) assert.deepEqual(w.party || w.config.party, { date: 'Saturday, June 3' });
     if (main === 'kit') assert.match(mail.subject, kit ? /Pizza Shop play kit for Ava/ : /Dino Dig Lab play kit for Ava/);
     if (product === 'party') {
@@ -368,7 +374,12 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
       assert.equal((await realFetch(`${base}/d/${w.downloadToken}.pdf`)).headers.get('content-disposition'), 'inline; filename="scavenger-hunt.pdf"');
     }
     if (product === 'bundle') assert.equal((await realFetch(`${base}/d/${w.downloadToken}-party.pdf`)).headers.get('content-disposition'), 'inline; filename="party-printables.pdf"');
-    assert.match(await (await realFetch(`${base}/order/${orderId}`)).text(), { hunt: /hunt is ready/, kit: /play kit is ready/, party: /party pack is ready/ }[main]);
+    assert.match(await (await realFetch(`${base}/order/${orderId}`)).text(), { hunt: /hunt is ready/, kit: /play kit is ready/, activity: /activity pack is ready/, party: /party pack is ready/ }[main]);
+    // The activity pack on its own has nothing for Host Mode to do.
+    if (main === 'activity' && has.length === 1) {
+      assert.ok(!w.hostToken && !mail.html.includes('/h/'));
+      continue;
+    }
     assert.ok(w.hostToken && mail.html.includes(`/h/${w.hostToken}`));
     assert.equal(Boolean(w.sidekickToken), has.includes('hunt'));
     // Host Mode has a tab for each thing bought; the others are greyed out.
@@ -398,8 +409,8 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     await realFetch(base + '/webhooks/stripe', { method: 'POST', body: payload, headers: { 'stripe-signature': sig } });
   }
   await wait(500);
-  assert.equal(emails.length, 6);
-  assert.deepEqual(charged, [1699, 999, 699, 1499, 1299, 799]);
+  assert.equal(emails.length, 8);
+  assert.deepEqual(charged, [1699, 999, 699, 1499, 1299, 1799, 499, 799]);
   assert.equal((await realFetch(base + '/order/manual-1')).status, 401); // only web orders are public
   assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Emailed to ava\.parent@example\.com/);
 
@@ -613,9 +624,29 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.doesNotMatch(html.replace(/<script>[\s\S]*?<\/script>/g, ''), /\{name\}|undefined/);
   }
 
+  // The activity pack: every kit, both age versions, no gaps; the play kit no longer has those pages.
+  const { activityPackHtml, buildKitHtml: kitHtml, KITS: allKits } = require('../src/kits/engine');
+  for (const id of Object.keys(allKits)) {
+    for (const age of [3, 6]) {
+      const html = activityPackHtml({ kit: id, childName: 'Ava', age, lenient: true });
+      assert.equal((html.match(/<section class="page/g) || []).length, age === 3 ? 10 : 11, `${id} activity pages`);
+      assert.doesNotMatch(html.replace(/<style>[\s\S]*?<\/style>|data:[^"')]+/g, ''), /undefined|NaN|\{\w+\}/, id);
+      if (age === 6) assert.ok((html.match(/class="wp-w-list"><div>|<\/b><\/div><div>/g) || []).length >= 4, `${id} word search has words`);
+    }
+    assert.doesNotMatch(kitHtml({ kit: id, childName: "Ava", lenient: true }), /class="page wp |class="wp-badge"/, `${id} kit has no activity pages`);
+  }
+  const prices = require('../src/bot/products');
+  assert.deepEqual(['activity', 'hunt+kit+activity', 'bundle+activity', 'kit+party+activity'].map(prices.priceFor), [499, 1799, 1999, 1599]);
+  assert.equal(prices.productFor(['hunt', 'kit', 'activity', 'party']), 'bundle+activity');
+  // The site's cart prices must match the bot's.
+  const homePage = fs.readFileSync(path.join(__dirname, '..', 'docs', 'index.html'), 'utf8');
+  assert.match(homePage, /activity: 4\.99, activityAdd: 3 \}/);
+  assert.match(homePage, /const picked = new Set\(\['hunt', 'kit', 'activity'\]\)/);
+  assert.match(homePage, /id="childAge" min="2" max="12" placeholder="Optional">/);
+
   // The order preview gallery has five pages per item for every theme.
   for (const id of Object.keys(require('../src/generator/themes'))) {
-    for (const k of ['hunt', 'party', 'kit']) for (let i = 1; i <= 5; i++) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'gallery', id, `${k}-${i}.webp`)), `gallery ${id} ${k}-${i}`);
+    for (const k of ['hunt', 'party', 'kit', 'activity']) for (let i = 1; i <= 5; i++) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'gallery', id, `${k}-${i}.webp`)), `gallery ${id} ${k}-${i}`);
   }
 
   console.log('All smoke checks passed');

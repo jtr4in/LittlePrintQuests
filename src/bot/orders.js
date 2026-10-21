@@ -9,7 +9,7 @@ const etsy = require('./etsy');
 const parse = require('./parse');
 const { renderPdf } = require('../generator/render');
 const { sendHuntEmail } = require('./email');
-const { renderKit } = require('../kits/render-kit');
+const { renderKit, renderActivities } = require('../kits/render-kit');
 const { renderParty } = require('../party/render-party');
 const { renderCraft } = require('../crafts/render-craft');
 const { HOLIDAYS, craftLabel } = require('../crafts/build');
@@ -70,6 +70,7 @@ function buyerMessage(order) {
   const title = {
     hunt: () => `custom ${theme.name}`,
     kit: () => `${kitOf(order).name} play kit`,
+    activity: () => `${kitOf(order).name} activity pack`,
     party: () => `${theme.label} party pack`,
     craft: () => craftLabel(HOLIDAYS[order.config.holiday]),
   }[main]();
@@ -78,10 +79,12 @@ function buyerMessage(order) {
     : '';
   const extras =
     (order.kitReady ? `\nAnd here's the matching ${kitOf(order).name} play kit:\n\n${base}-kit.pdf\n` : '') +
+    (order.activityReady ? `\nAnd your Wipe & Play activity pack:\n\n${base}-activities.pdf\n` : '') +
     (order.partyReady ? `\nAnd your party printables (invitations, toppers, tags, banner and more):\n\n${base}-party.pdf\n` : '');
   const tips = {
     hunt: 'Print at "Actual Size / 100%", cut out the clue cards, and use the Host Guide on page 1 to hide them. Have an amazing party! 🎉',
     kit: 'Print at "Actual Size / 100%" and start with the grown-up guide on page 1. Have fun! 🎉',
+    activity: 'Print at "Actual Size / 100%" and slip the pages into sheet protectors to use with a dry-erase marker. Have fun! 🎉',
     party: 'Print at "Actual Size / 100%". Invitations, toppers and the banner look best on cardstock. Have an amazing party! 🎉',
     craft: 'Print the keepsake pages on white cardstock at "Actual Size / 100%" and start with the tips on page 1. Washable paint and a baby wipe nearby help a lot. Have fun! 🎨',
   }[main];
@@ -98,18 +101,22 @@ async function generate(id) {
   // Every order gets Host Mode, a private phone page with a tab for each thing in it.
   // Hunts also get a second link for a helper (the sidekick). Handprint art needs no Host Mode.
   const main = products.mainOf(order);
-  const hostTokens = main === 'craft' ? {} : { hostToken: order.hostToken || newToken(), ...(products.has(order, 'hunt') ? { sidekickToken: order.sidekickToken || newToken() } : {}) };
+  const hostTokens = !['hunt', 'kit', 'party'].some((i) => products.has(order, i)) ? {} : { hostToken: order.hostToken || newToken(), ...(products.has(order, 'hunt') ? { sidekickToken: order.sidekickToken || newToken() } : {}) };
   const out = (suffix = '') => path.join(store.PDF_DIR, `${token}${suffix}.pdf`);
   if (main === 'craft') await renderCraft(order.config, out());
   else if (main === 'kit') await renderKit(order.config, out());
+  else if (main === 'activity') await renderActivities(order.config, out());
   else if (main === 'party') await renderParty(order.config, out());
   else await renderPdf(order.config, out());
   const kit = main !== 'kit' && products.has(order, 'kit') ? kitOf(order) : null;
+  // Etsy kit listings still promise the Wipe & Play pages, so Etsy kit orders get the activity pack too.
+  const activity = main !== 'activity' && (products.has(order, 'activity') || (!order.form && products.has(order, 'kit'))) ? kitOf(order) : null;
   const party = main !== 'party' && products.has(order, 'party');
   if (kit) await renderKit(kitConfig(order, kit), out('-kit'));
+  if (activity) await renderActivities(kitConfig(order, activity), out('-activities'));
   if (party) await renderParty(partyConfig(order), out('-party'));
   store.update((s) => {
-    Object.assign(s.orders[id], hostTokens, { downloadToken: token, kitReady: Boolean(kit), partyReady: party, status: 'ready', problem: null, generatedAt: new Date().toISOString() });
+    Object.assign(s.orders[id], hostTokens, { downloadToken: token, kitReady: Boolean(kit), activityReady: Boolean(activity), partyReady: party, status: 'ready', problem: null, generatedAt: new Date().toISOString() });
     s.orders[id].message = buyerMessage(s.orders[id]);
   });
 }
@@ -223,7 +230,7 @@ function validateWebForm(body) {
   const age = Number.isInteger(body.age) && body.age > 0 && body.age < 16 ? body.age : null;
   // Newer forms send items; older ones send a product name.
   const items = shopKit ? ['kit'] : products.normalize(Array.isArray(body.items) ? body.items : products.itemsOf({ product: body.product === 'bundle' || body.product === 'party' ? body.product : 'hunt' }));
-  if (!items.length) throw new Error('Please pick the hunt, the play kit or the party pack.');
+  if (!items.length) throw new Error('Please pick the hunt, the play kit, the activity pack or the party pack.');
   const pets = (Array.isArray(body.pets) ? body.pets : []).slice(0, 6)
     .map((p) => ({ name: String(p?.name || '').trim().slice(0, 20), kind: String(p?.kind || '').trim().slice(0, 20) }))
     .filter((p) => p.name || p.kind);
@@ -283,7 +290,7 @@ async function fulfillWebOrder(id, { email, buyerName }) {
     const main = products.mainOf(order);
     if (main === 'craft') {
       store.update((s) => (s.orders[id].config = { holiday: f.holiday, childName: f.childName, ...(f.age ? { age: f.age } : {}) }));
-    } else if (main === 'kit') {
+    } else if (main === 'kit' || main === 'activity') {
       store.update((s) => (s.orders[id].config = { kit: f.kit || kitForHunt(f.theme).id, ...(f.theme ? { theme: f.theme } : {}), childName: f.childName, ...(f.age ? { age: f.age } : {}), subjects: f.pets || [], lenient: true }));
     } else if (main === 'party') {
       store.update((s) => (s.orders[id].config = { theme: f.theme, childName: f.childName, ...(f.age ? { age: f.age } : {}), ...(f.party ? { party: f.party } : {}) }));

@@ -1,10 +1,11 @@
 // Usage: node src/kits/render-kit.js <config.json> <out.pdf> [--png <dir>]
 const fs = require('fs');
-const { buildKitHtml } = require('./engine');
+const { buildKitHtml, activityPackHtml } = require('./engine');
 const { renderHtml } = require('../generator/render');
 
 const renderKit = (cfg, out, opts) => renderHtml(buildKitHtml(cfg), out, opts);
-module.exports = { renderKit };
+const renderActivities = (cfg, out, opts) => renderHtml(activityPackHtml(cfg), out, opts);
+module.exports = { renderKit, renderActivities };
 
 if (require.main === module) {
   const [cfgPath, out, flag, pngDir] = process.argv.slice(2);

@@ -8,6 +8,10 @@
 //   i spy     find and count each thing in a busy page
 //   maze      help the helper reach the customer
 //   design    invent something new for the menu, with a name and a price
+//   spot      spot the 5 differences between two pictures
+//   odd       circle the one that's different in each row
+//   words     a word search (5 and up only)
+// They're sold on their own as the Activity Pack (see activityPackHtml in engine.js).
 const art = require('./art');
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -138,10 +142,72 @@ function designPage(k) {
     <div class="wp-d-lines"><div><b>It’s called</b><span></span></div><div><b>It costs</b><span></span><em>${M.coinIcon} ${esc(M.coinWord)}s</em></div><div><b>Made by</b><span>${esc(k.childName)}</span></div></div>`);
 }
 
-function activityPages(k) {
-  return [cleanPage, tracePage, matchPage, countPage, spyPage, mazePage, designPage].map((f) => f(k)).join('');
+// Two copies of the same scene; the second has 5 changes (2 missing, 3 swapped).
+function spotPage(k) {
+  const rand = rng(seedOf(k.def.id + 'spot'));
+  const pool = shuffle(items(k), rand);
+  const cols = 5; const rows = 3; const cells = shuffle(Array.from({ length: cols * rows }, (_, i) => i), rand).slice(0, 12);
+  const scene = cells.map((cell, i) => ({ e: pool[i % pool.length][0], cell, r: Math.round(rand() * 30 - 15), dx: rand() * 0.3, dy: rand() * 0.25 }));
+  const changed = shuffle(scene.map((_, i) => i), rand).slice(0, 5);
+  const other = scene.map((p, i) => {
+    const at = changed.indexOf(i);
+    if (at === -1) return p;
+    if (at < 2) return null;
+    const swap = pool.find(([e]) => !scene.some((q) => q.e === e)) || pool.find(([e]) => e !== p.e);
+    return { ...p, e: swap ? swap[0] : p.e, r: -p.r + 25 };
+  });
+  const field = (list) => `<div class="wp-sd-field">${list.filter(Boolean).map((p) => `<div class="wp-sd-pic" style="left:${(((p.cell % cols) + p.dx) * 100 / cols).toFixed(1)}%;top:${((Math.floor(p.cell / cols) + p.dy) * 100 / rows).toFixed(1)}%;transform:rotate(${p.r}deg)">${art.pic(p.e, '.8in')}</div>`).join('')}</div>`;
+  return page('wp-spotdiff', `${head('Spot the Difference', 'The bottom picture has 5 changes. Circle each one you find!')}
+    ${field(scene)}<div class="wp-sd-stars">${'<span>☆</span>'.repeat(5)}</div>${field(other)}`);
 }
-const ACTIVITY_COUNT = 7;
+
+function oddPage(k) {
+  const rand = rng(seedOf(k.def.id + 'odd'));
+  const pool = shuffle(items(k), rand);
+  const rows = Array.from({ length: 5 }, (_, i) => {
+    const same = pool[i % pool.length][0]; const odd = pool[(i + 3) % pool.length][0];
+    const at = Math.floor(rand() * 4);
+    return Array.from({ length: 4 }, (_, j) => (j === at ? odd : same));
+  });
+  return page('wp-odd', `${head('Which One Is Different?', 'Look along each row and circle the picture that doesn’t belong.')}
+    ${rows.map((r) => `<div class="wp-o-row">${r.map((e) => `<div class="wp-o-cell">${art.pic(e, '1.05in')}</div>`).join('')}</div>`).join('')}`);
+}
+
+// Words read across or down only, so it stays friendly for early readers.
+function wordsPage(k) {
+  const rand = rng(seedOf(k.def.id + 'words'));
+  const N = 9;
+  const words = [];
+  for (const [e, n] of [...items(k), ...Object.values(k.def.kinds)]) {
+    // the last word is the thing itself: "Ranger hat" is HAT, "Toy T-Rex" is TREX
+    const w = n.split(/\s+/).at(-1).toUpperCase().replace(/[^A-Z]/g, '');
+    if (w.length >= 3 && w.length <= N && !words.some((x) => x[1] === w || x[0] === e)) words.push([e, w]);
+  }
+  const grid = Array.from({ length: N }, () => Array(N).fill(''));
+  const placed = [];
+  for (const [e, w] of [...shuffle(words.slice(0, 8), rand), ...words.slice(8)]) {
+    if (placed.length === 6) break;
+    for (let tries = 0; tries < 60; tries++) {
+      const down = rand() < 0.5; const x = Math.floor(rand() * (N - (down ? 0 : w.length - 1))); const y = Math.floor(rand() * (N - (down ? w.length - 1 : 0)));
+      const at = (i) => (down ? [x, y + i] : [x + i, y]);
+      if ([...w].every((c, i) => { const [cx, cy] = at(i); return !grid[cy][cx] || grid[cy][cx] === c; })) {
+        [...w].forEach((c, i) => { const [cx, cy] = at(i); grid[cy][cx] = c; });
+        placed.push([e, w]);
+        break;
+      }
+    }
+  }
+  const ABC = 'ABCDEFGHIJKLMNOPRSTUVWY';
+  const cells = grid.map((row) => row.map((c) => c || ABC[Math.floor(rand() * ABC.length)]));
+  return page('wp-words', `${head('Word Search', 'Find each word. They go across or down. Circle them with your marker!')}
+    <div class="wp-w-grid">${cells.flat().map((c) => `<span>${c}</span>`).join('')}</div>
+    <div class="wp-w-list">${placed.map(([e, w]) => `<div>${art.pic(e, '.55in')}<b>${w}</b></div>`).join('')}</div>`);
+}
+
+function activityPages(k) {
+  return [cleanPage, tracePage, matchPage, countPage, spyPage, spotPage, oddPage, mazePage, ...(k.little ? [] : [wordsPage]), designPage].map((f) => f(k)).join('');
+}
+const activityCount = (k) => (k.little ? 9 : 10);
 
 const activityCss = `
 .wp .wp-badge { position:absolute; top:.32in; right:.4in; font:700 10pt 'Fredoka'; letter-spacing:.08em; text-transform:uppercase; background:var(--orange); color:var(--accent-ink); padding:.05in .14in; border-radius:99px; }
@@ -170,6 +236,15 @@ const activityCss = `
 .wp-mz path { fill:none; stroke:var(--teal-d); stroke-width:7; stroke-linecap:round; }
 .wp-mz-start, .wp-mz-end { position:absolute; display:flex; flex-direction:column; align-items:center; font:700 11pt 'Fredoka'; color:var(--teal-d); }
 .wp-mz-start { left:-1.05in; top:-.1in; } .wp-mz-end { right:-1.05in; bottom:-.1in; }
+.wp-sd-field { position:relative; height:3.75in; border:3px solid var(--mint); border-radius:22px; background:var(--mint-l); margin-top:.12in; }
+.wp-sd-pic { position:absolute; width:20%; display:grid; place-items:center; padding-top:.12in; }
+.wp-sd-stars { text-align:center; font:600 26pt 'Fredoka'; color:var(--teal); letter-spacing:.12in; margin:.06in 0 -.04in; }
+.wp-o-row { display:flex; justify-content:space-around; align-items:center; border-bottom:2px dashed var(--line); padding:.16in 0; }
+.wp-o-cell { width:1.45in; height:1.4in; display:grid; place-items:center; }
+.wp-w-grid { display:grid; grid-template-columns:repeat(9, .68in); justify-content:center; gap:.04in; margin-top:.2in; }
+.wp-w-grid span { height:.68in; display:grid; place-items:center; font:600 26pt 'Fredoka'; color:var(--navy); border:1.5px solid var(--line); border-radius:8px; }
+.wp-w-list { display:grid; grid-template-columns:repeat(3, 1fr); gap:.14in .3in; margin:.35in .2in 0; }
+.wp-w-list div { display:flex; align-items:center; gap:.12in; font:700 17pt 'Fredoka'; letter-spacing:.06em; }
 .wp-d-cap { text-align:center; font:600 13pt 'Fredoka'; color:#8a93ab; margin:.06in 0 0; }
 .wp-d-frame { margin-top:.3in; height:5.3in; border:4px dashed var(--teal); border-radius:26px; display:grid; place-items:center; font:500 16pt 'Fredoka'; color:#b4bccf; }
 .wp-d-lines { margin-top:.3in; display:flex; flex-direction:column; gap:.22in; font-size:16pt; }
@@ -179,4 +254,4 @@ const activityCss = `
 .wp-d-lines em { font-style:normal; font:600 14pt 'Fredoka'; }
 `;
 
-module.exports = { activityPages, activityCss, ACTIVITY_COUNT, CLEAN };
+module.exports = { activityPages, activityCss, activityCount, CLEAN };

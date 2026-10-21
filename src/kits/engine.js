@@ -20,7 +20,7 @@ const { welcomePage, menuBoard, specialsPage, moneyPage, shopCss } = require('./
 const art = require('./art');
 const { SHOP_PROPS, shopkitCss } = require('./shopkit');
 const { stationPages, counterPages, labelsPage, signageCss, signageCount } = require('./signage');
-const { activityPages, activityCss, ACTIVITY_COUNT } = require('./activities');
+const { activityPages, activityCss, activityCount } = require('./activities');
 const extras = require('./extras');
 
 const FONT_DIR = path.join(__dirname, '..', '..', 'fonts');
@@ -236,7 +236,6 @@ function guidePage(k) {
     '8 ID badges',
     ...(d.chefHat ? [`A chef hat with ${k.lead} on the band`] : []),
     ...(d.peel ? ['A pizza peel and two draw-your-own wipe-off pizzas'] : []),
-    `${ACTIVITY_COUNT} Wipe & Play activity pages to use again and again in a sheet protector: clean-up time, tracing, matching, counting, I spy, a maze and invent-a-treat`,
     ...(d.props ? [`Props to cut out: ${Object.values(d.props).map((x) => x.title).join(', ')}`] : []),
     `${d.record.title} forms, two to a page, for ${k.subjects.length ? `each of your ${d.subjectPlural}` : `four ${d.subjectPlural}`} plus a blank one`,
     `${d.ticket.title} cards`,
@@ -602,7 +601,6 @@ function buildKitHtml(cfg) {
     extras.chefHatPage(k),
     propsPages(k),
     extras.peelPages(k),
-    activityPages(k),
     extras.morningPages(k),
     recordsPages(k),
     ticketPage(k),
@@ -617,6 +615,35 @@ function buildKitHtml(cfg) {
   ].join('');
   art.setPicScale(1);
   return `<!doctype html><html><head><meta charset="utf-8"><style>${k.little ? thicker(css(def.colors)) : css(def.colors)}</style></head><body class="${k.little ? 'little' : 'big'}">${pages}</body></html>`;
+}
+
+// The Activity Pack: Wipe & Play pages made from a kit's own pictures, sold on its own
+// or next to the pretend play kit. Same config as buildKitHtml.
+function activityPackHtml(cfg) {
+  const def = KITS[cfg.kit];
+  if (!def) throw new Error(`Unknown kit "${cfg.kit}". Use one of: ${Object.keys(KITS).join(', ')}`);
+  const k = normalize(def, cfg);
+  art.setKit(def);
+  art.setPicScale(k.little ? 1.3 : 1);
+  const list = ['Clean-up time', 'Trace the words', 'Match it up', 'How many?', 'I spy', 'Spot the difference', 'Which one is different?', 'Find the way', ...(k.little ? [] : ['Word search']), 'Invent something new'];
+  const cover = `<section class="page guide act-cover">
+    <div class="guide-head"><div class="guide-icon">${def.icon}</div><div><div class="clinic">${esc(def.name)} · Wipe &amp; Play${k.little ? ' · little kids version, ages 2 to 4' : ''}</div><h1>${esc(possessive(k.childName))} Activity Pack</h1></div></div>
+    <p class="lead">${activityCount(k)} Wipe &amp; Play pages, made from the same pictures as ${esc(k.placeName)}. Use them again and again: slip each page into a sheet protector (or laminate it) and use a dry-erase marker, then wipe clean with a tissue.</p>
+    <div class="act-list">${list.map((x, i) => `<div><span>${i + 1}</span>${esc(x)}<i class="box"></i></div>`).join('')}</div>
+    <div class="act-pics">${def.menu.items.slice(0, 5).map(([e]) => art.pic(e, '1.15in')).join('')}</div>
+    <p class="act-tip"><b>Grown-up tip:</b> keep the pages in a binder with a marker clipped on for car rides, waiting rooms and quiet time.</p>
+    <footer class="foot">Printable Party Games &amp; Quests · LittlePrintQuests</footer>
+  </section>`;
+  const html = cover + activityPages(k);
+  art.setPicScale(1);
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${k.little ? thicker(css(def.colors)) : css(def.colors)}
+.act-list { display:grid; grid-template-columns:1fr 1fr; gap:.14in .3in; margin:.3in 0; }
+.act-list div { display:flex; align-items:center; gap:.14in; border:2px solid var(--line); border-radius:14px; padding:.14in .18in; font:600 14pt 'Fredoka'; }
+.act-list span { width:.42in; height:.42in; border-radius:50%; background:var(--teal); color:#fff; display:grid; place-items:center; flex:none; }
+.act-list .box { margin-left:auto; }
+.act-pics { display:flex; justify-content:space-around; margin:.5in 0 .45in; }
+.act-tip { background:var(--mint-l); border-radius:14px; padding:.16in .22in; font-size:12pt; }
+</style></head><body class="${k.little ? 'little' : 'big'}">${html}</body></html>`;
 }
 
 // The little-kids version doubles every cut line and border, so they're easy to see and follow.
@@ -994,4 +1021,4 @@ p.lead { font-size:13.5pt; line-height:1.45; margin:.2in 0; }
 // The kit that goes with a hunt theme (dino -> Dino Dig Lab, ...).
 const kitForHunt = (theme) => Object.values(KITS).find((k) => k.hunt === theme) || null;
 
-module.exports = { buildKitHtml, KITS, kitForHunt };
+module.exports = { buildKitHtml, activityPackHtml, KITS, kitForHunt };
