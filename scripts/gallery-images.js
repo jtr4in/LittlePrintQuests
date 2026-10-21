@@ -4,6 +4,8 @@
 // length, so their toy pages are picked by position. Also writes the activity pack's card for the
 // order stack (docs/img/pages/<theme>-activity.webp) and the theme picker's square thumbnail
 // (docs/img/themes/<theme>.webp, cut from the play kit card made by site-images.js).
+// The little-kids version (ages 2 to 4) of the kit and activity pack goes in gallery/<theme>/little/,
+// with its order stack cards in docs/img/pages/<theme>-little-kit.webp and -little-activity.webp.
 // Usage: node scripts/gallery-images.js [theme ...]
 const fs = require('fs');
 const os = require('os');
@@ -19,6 +21,25 @@ const OUT = path.join(__dirname, '..', 'docs', 'img', 'gallery');
 const SPOTS = ['front_door', 'shoe_rack', 'couch', 'dryer', 'bathtub', 'bookshelf', 'pet_bed', 'kitchen_table'];
 const PARTY = { date: 'Saturday, June 3', time: '2 to 4 pm', place: 'Our house', rsvp: 'Text Sam' };
 const count = (dir) => fs.readdirSync(dir).filter((f) => /^page-\d+\.png$/.test(f)).length;
+
+// The little-kids kit and activity pack: thicker cut lines, bigger pictures, no word search.
+async function little(id, kitId, tmp, jobs) {
+  const dir = (k) => path.join(tmp, `${id}-little-${k}`);
+  await renderKit({ kit: kitId, childName: 'Maya', ages: 'little', subjects: [], lenient: true }, `${dir('kit')}.pdf`, { pngDir: dir('kit') });
+  await renderActivities({ kit: kitId, childName: 'Maya', ages: 'little', lenient: true }, `${dir('activity')}.pdf`, { pngDir: dir('activity') });
+  const kit = count(dir('kit'));
+  const start = KITS[kitId].hunt ? 4 : 5;
+  const picks = {
+    kit: [2, start - 1, ...[0.35, 0.55, 0.75].map((f) => Math.round(start + f * (kit - start)))],
+    activity: [1, 6, 7, 9, 5], // cover, I spy, spot the difference, maze, counting
+  };
+  fs.mkdirSync(path.join(OUT, id, 'little'), { recursive: true });
+  for (const [k, pages] of Object.entries(picks)) {
+    pages.forEach((n, i) => jobs.push([path.join(dir(k), `page-${n}.png`), path.join(OUT, id, 'little', `${k}-${i + 1}.webp`)]));
+  }
+  jobs.push([path.join(dir('kit'), `page-${picks.kit[2]}.png`), path.join(OUT, '..', 'pages', `${id}-little-kit.webp`), 400]);
+  jobs.push([path.join(dir('activity'), 'page-6.png'), path.join(OUT, '..', 'pages', `${id}-little-activity.webp`), 400]);
+}
 
 (async () => {
   const only = process.argv.slice(2);
@@ -43,6 +64,7 @@ const count = (dir) => fs.readdirSync(dir).filter((f) => /^page-\d+\.png$/.test(
       }
       jobs.push([path.join(dir('kit'), `page-${picks.kit[2]}.png`), path.join(OUT, '..', 'pages', `${id}-kit.webp`), 400]);
       jobs.push([path.join(dir('activity'), 'page-6.png'), path.join(OUT, '..', 'pages', `${id}-activity.webp`), 400]);
+      await little(id, id, tmp, jobs);
       console.log('Rendered', id);
       continue;
     }
@@ -63,6 +85,7 @@ const count = (dir) => fs.readdirSync(dir).filter((f) => /^page-\d+\.png$/.test(
       pages.forEach((n, i) => jobs.push([path.join(dir(k), `page-${n}.png`), path.join(OUT, id, `${k}-${i + 1}.webp`)]));
     }
     jobs.push([path.join(dir('activity'), 'page-6.png'), path.join(OUT, '..', 'pages', `${id}-activity.webp`), 400]);
+    await little(id, kitForHunt(id).id, tmp, jobs);
     console.log('Rendered', id);
   }
   const list = path.join(tmp, 'jobs.json');

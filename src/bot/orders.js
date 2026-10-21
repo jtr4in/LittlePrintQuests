@@ -127,8 +127,8 @@ function partyConfig(order) {
 }
 
 function kitConfig(order, kit) {
-  // The kit's age version (little kids or 5 and up) follows the child's age.
-  return { kit: kit.id, childName: order.config.childName, ...(order.config.age ? { age: order.config.age } : {}), subjects: order.pets || [], lenient: true, withHunt: products.has(order, 'hunt') };
+  // The kit's age version (little kids or 5 and up) is the one picked on the website, or follows the child's age.
+  return { kit: kit.id, childName: order.config.childName, ...(order.config.age ? { age: order.config.age } : {}), ...(order.config.ages ? { ages: order.config.ages } : {}), subjects: order.pets || [], lenient: true, withHunt: products.has(order, 'hunt') };
 }
 
 // Parses and builds one order. Never throws: failures become "needs attention".
@@ -228,6 +228,8 @@ function validateWebForm(body) {
   const childName = String(body.childName || '').trim().slice(0, 24);
   if (!childName) throw new Error('Please add your child’s first name.');
   const age = Number.isInteger(body.age) && body.age > 0 && body.age < 16 ? body.age : null;
+  // The website's "Little kids / Big kids" choice; without one the kit follows the age.
+  const ages = body.ages === 'little' || body.ages === 'big' ? body.ages : null;
   // Newer forms send items; older ones send a product name.
   const asked = Array.isArray(body.items) ? body.items : null;
   const items = shopKit
@@ -237,7 +239,7 @@ function validateWebForm(body) {
   const pets = (Array.isArray(body.pets) ? body.pets : []).slice(0, 6)
     .map((p) => ({ name: String(p?.name || '').trim().slice(0, 20), kind: String(p?.kind || '').trim().slice(0, 20) }))
     .filter((p) => p.name || p.kind);
-  const form = { items, product: products.productFor(items), theme, ...(shopKit ? { kit: shopKit } : {}), childName, age, spots: [], pets, party: items.includes('party') ? cleanParty(body.party) : null };
+  const form = { items, product: products.productFor(items), theme, ...(shopKit ? { kit: shopKit } : {}), childName, age, ...(ages ? { ages } : {}), spots: [], pets, party: items.includes('party') ? cleanParty(body.party) : null };
   if (!items.includes('hunt')) return form;
   const spots = Array.isArray(body.spots) ? body.spots : [];
   if (spots.length < 3 || spots.length > 12) throw new Error('Please pick between 3 and 12 hiding spots.');
@@ -272,7 +274,7 @@ function addWebOrder(form) {
     party: form.party,
     form,
     personalization: formAsText(form),
-    options: form.holiday ? { Holiday: HOLIDAYS[form.holiday].name } : { Theme: form.kit ? KITS[form.kit].name : THEMES[form.theme].name, Package: products.packageName(form.items) },
+    options: form.holiday ? { Holiday: HOLIDAYS[form.holiday].name } : { Theme: form.kit ? KITS[form.kit].name : THEMES[form.theme].name, Package: products.packageName(form.items), ...(form.ages ? { Version: form.ages === 'little' ? 'Little kids, ages 2 to 4' : 'Big kids, ages 5 to 8' } : {}) },
   });
 }
 
@@ -305,6 +307,8 @@ async function fulfillWebOrder(id, { email, buyerName }) {
       if (!parsed.ok) throw new Error(parsed.problem);
       store.update((s) => (s.orders[id].config = { ...parsed.config, theme: f.theme }));
     }
+    // Little kids get the little kit and activity pack, and picture clues in the hunt.
+    if (f.ages) store.update((s) => Object.assign(s.orders[id].config, { ages: f.ages }, f.ages === 'little' && main === 'hunt' ? { pictures: true } : {}));
     await generate(id);
     try {
       await sendHuntEmail(store.get().orders[id]);

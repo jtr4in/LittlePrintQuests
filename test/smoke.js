@@ -325,11 +325,11 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     { items: ['activity'], spots: [], has: ['activity'] },
     // A shop kit has no theme of its own, so it comes as the kit, with or without its activity pack.
     { kit: 'pizza', items: ['hunt', 'kit'], spots: [], has: ['kit'] },
-    { kit: 'burger', items: ['activity', 'party'], spots: [], has: ['kit', 'activity'] },
+    { kit: 'burger', items: ['activity', 'party'], spots: [], has: ['kit', 'activity'], ages: 'little' },
   ];
-  for (const { product, items, spots, has, kit } of webOrders) {
+  for (const { product, items, spots, has, kit, ages } of webOrders) {
     const co = await realFetch(base + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ product, items, kit, theme: 'dino', childName: 'Ava', age: 5, spots, pets: [{ name: 'Rex', kind: 'trex' }], party: { date: 'Saturday, June 3', place: '' } }) });
+      body: JSON.stringify({ product, items, kit, ages, theme: 'dino', childName: 'Ava', age: 5, spots, pets: [{ name: 'Rex', kind: 'trex' }], party: { date: 'Saturday, June 3', place: '' } }) });
     assert.equal(co.status, 200);
     const orderId = (await co.json()).url.split('/').pop();
     assert.match(orderId, /^web-/);
@@ -353,6 +353,9 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.equal(w.status, 'ready', JSON.stringify(w));
     assert.equal(w.config.theme, kit ? undefined : 'dino');
     if (kit) assert.equal(w.config.kit, kit);
+    // the website's Little kids / Big kids choice reaches the kit
+    assert.equal(w.config.ages, ages);
+    if (ages) assert.equal(w.options.Version, 'Little kids, ages 2 to 4');
     assert.ok(w.sent && w.deliveredAt);
     const mail = emails.at(-1);
     assert.deepEqual(mail.to, ['ava.parent@example.com']);
@@ -703,6 +706,11 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   for (const id of shopIds) {
     for (const f of [`themes/${id}`, `pages/${id}-kit`, `pages/${id}-activity`]) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', `${f}.webp`)), f);
     for (const k of ['kit', 'activity']) for (let i = 1; i <= 5; i++) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'gallery', id, `${k}-${i}.webp`)), `gallery ${id} ${k}-${i}`);
+  }
+  // ...and the little kids version of every kit and activity pack.
+  for (const id of [...Object.keys(require('../src/generator/themes')), ...shopIds]) {
+    for (const f of [`pages/${id}-little-kit`, `pages/${id}-little-activity`]) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', `${f}.webp`)), f);
+    for (const k of ['kit', 'activity']) for (let i = 1; i <= 5; i++) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'gallery', id, 'little', `${k}-${i}.webp`)), `little ${id} ${k}-${i}`);
   }
   // The order preview gallery has five pages per item for every theme.
   for (const id of Object.keys(require('../src/generator/themes'))) {
