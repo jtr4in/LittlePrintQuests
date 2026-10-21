@@ -916,8 +916,14 @@ const priceOf = (p) => (p && p !== 'activity' && p.endsWith('+activity') ? price
 const money = (n) => '$' + n.toFixed(2);
 
 function pick(id) {
+  // Ticking items shows or hides whole sections (the spots list goes with the hunt), so keep the
+  // tapped row where it was on screen instead of letting the page jump.
+  const at = () => document.querySelector(`button.layer[data-id="${id}"]`)?.getBoundingClientRect().top;
+  const before = at();
   picked.has(id) ? picked.delete(id) : picked.add(id);
   drawCart();
+  const after = at();
+  if (before != null && after != null && Math.abs(after - before) > 1) window.scrollBy({ top: after - before, behavior: 'instant' });
 }
 function setPicks(ids) {
   picked.clear();
