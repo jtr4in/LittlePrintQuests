@@ -294,6 +294,23 @@ input[type="text"], input[type="number"], input[type="email"], select { width: 1
 .single span { grid-row: 2; font-size: 14px; line-height: 1.35; color: var(--ink-soft); }
 .single strong { grid-row: 1 / 3; grid-column: 2; font: 700 22px/1 var(--display); font-variant-numeric: tabular-nums; }
 @media (max-width: 640px) { .singles { grid-template-columns: 1fr; } }
+.pass-card { max-width: 900px; margin-top: 20px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; align-items: center; padding: 26px; border-radius: var(--r); background: var(--tint); border: 2px dashed var(--orange); }
+.pass-card h3 { font: 700 26px/1.15 var(--display); margin: 6px 0 8px; }
+.pass-card p { margin: 0 0 10px; color: var(--ink-soft); }
+.pass-card ul { margin: 0; padding-left: 20px; color: var(--ink-soft); display: grid; gap: 6px; }
+.pass-buy { display: grid; gap: 10px; justify-items: start; }
+.pass-buy .price { font: 700 40px/1 var(--display); font-variant-numeric: tabular-nums; }
+.pass-buy .price small { font: 400 15px/1 var(--body); color: var(--ink-soft); }
+.pass-buy .was { margin: -4px 0 0; font-size: 14px; color: var(--mint-deep); }
+.pass-buy .hint { margin: 0; font-size: 14px; }
+@media (max-width: 700px) { .pass-card { grid-template-columns: 1fr; padding: 20px; } }
+.pass-up { display: block; margin: 10px 0 4px; padding: 10px 12px; border-radius: 10px; background: var(--tint); border: 1.5px dashed var(--orange); color: var(--ink); font-size: 14px; line-height: 1.4; text-decoration: none; }
+.pass-up b { white-space: nowrap; }
+.passbox { margin: 8px 0 12px; font-size: 14px; }
+.passbox summary { cursor: pointer; color: var(--ink-soft); text-decoration: underline; text-underline-offset: 3px; }
+.passrow { display: flex; gap: 8px; margin-top: 8px; }
+.passrow input { flex: 1; min-width: 0; font: 600 15px/1 ui-monospace, Menlo, monospace; letter-spacing: 1px; text-transform: uppercase; }
+.total strong s { font-size: 18px; color: var(--ink-soft); margin-right: 6px; }
 @media (max-width: 700px) { .plans { grid-template-columns: 1fr; } }
 .plan { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 26px; display: grid; gap: 14px; align-content: start; }
 .plan.main { border: 2px solid var(--ink); }
@@ -383,7 +400,12 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
             <p class="save" id="saveNote"></p>
           </div>
           <div class="total"><span id="totalLabel">Play bundle, PDF</span><strong id="totalPrice">$17.99</strong></div>
-          <button class="btn btn-orange" type="submit" style="justify-content:center">Continue to checkout</button>
+          <a class="pass-up" id="passUp" href="#pass" hidden>Planning more than one party this year? <b>Get 6 everything bundles for $39.99</b> with the Family Pass →</a>
+          <details class="passbox" id="passBox"><summary>Have a Family Pass code?</summary>
+            <div class="passrow"><input type="text" id="passCode" maxlength="20" placeholder="LPQ-XXXX-XXXX" autocomplete="off" spellcheck="false" aria-label="Family Pass code"><button type="button" class="btn btn-ghost" id="passApply">Apply</button></div>
+            <p class="save" id="passNote"></p>
+          </details>
+          <button class="btn btn-orange" type="submit" id="checkoutBtn" style="justify-content:center">Continue to checkout</button>
           <p class="status" id="formStatus"></p>
         </aside>
       </form>
@@ -395,7 +417,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <div class="pin"><b></b><span class="eyebrow">How it works</span></div>
       <h2>From form to first clue in about ten minutes</h2>
       <div class="steps">
-        <div class="step"><span class="n">Step 1 · 60 seconds</span><h3>Tell us about the party</h3><p>Your child’s name and age, a theme, and 6 to 10 spots around your home. The last spot is where the cake or prizes wait.</p></div>
+        <div class="step"><span class="n">Step 1 · 60 seconds</span><h3>Tell us about the party</h3><p>Your child’s name, a theme, and 6 to 10 spots around your home. Add their age if it’s for a birthday. The last spot is where the cake or prizes wait.</p></div>
         <div class="step"><span class="n">Step 2 · instant</span><h3>We write the hunt</h3><p>Every clue is a rhyme that leads to your next spot. Got a spot we haven’t seen before, like Grandma’s piano? We write a new rhyme for it.</p></div>
         <div class="step"><span class="n">Step 3 · 10 minutes</span><h3>Print, cut and hide</h3><p>The host guide tells you exactly where each card goes. A tiny “parent check” on every card means you never mix them up, and Host Mode on your phone walks you through it.</p></div>
       </div>
@@ -494,6 +516,21 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         <div class="plan main"><span class="eyebrow">Play bundle · most popular</span><div class="price">$17.99</div><p class="was"><s>$22.97</s> value: the hunt, its play kit and activity pack</p><ul><li>Custom hunt with your child’s name and your home’s own spots</li><li>Matching pretend play kit with hands-on toys and a shop to set up</li><li>10 Wipe &amp; Play activity pages: mazes, spot the difference, I spy and more</li><li>Delivered to your inbox in minutes</li></ul><div class="plan-host"><span class="phone"><img src="img/host/space-play.webp" alt="" width="360" height="720" loading="lazy"></span><span><b>+ Host Mode included</b>Hunt and play kit tabs on your phone</span></div><a class="btn btn-orange" href="#order" data-pick="hunt kit activity">Make my play bundle</a></div>
         <div class="plan"><span class="eyebrow">Having a party?</span><div class="price">$19.99</div><p class="was"><s>$29.96</s> value: everything, plus the party pack</p><ul><li>The whole play bundle</li><li>Matching invitations, cupcake toppers, favor tags, a name banner and more</li><li>Host Mode party checklist</li></ul><a class="btn btn-ghost" href="#order" data-pick="hunt kit activity party">Make the everything bundle</a></div>
       </div>
+      <div class="pass-card" id="pass">
+        <div>
+          <span class="eyebrow">Family Pass · for the whole year</span>
+          <h3>Six everything bundles to use all year</h3>
+          <p>One payment covers six orders in the next 12 months, each with the custom hunt, its play kit, the activity pack and the party pack. That’s $6.66 an event instead of $19.99.</p>
+          <ul><li>Birthdays, Halloween, Christmas or a rainy weekend: any theme, for any of your kids</li><li>Use them all at once or spread them out. Every order shows how many you have left</li><li>One payment. No subscription, and nothing renews by itself</li></ul>
+        </div>
+        <div class="pass-buy">
+          <div class="price">$39.99 <small>for a year</small></div>
+          <p class="was"><s>$119.94</s> value: 6 everything bundles</p>
+          <button type="button" class="btn btn-orange" id="buyPass">Get the Family Pass</button>
+          <p class="hint">Your pass code arrives by email in a minute.</p>
+          <p class="status" id="passStatus"></p>
+        </div>
+      </div>
       <div class="singles">
         <p class="eyebrow">Or get just one</p>
         <a class="single" href="#order" data-pick="hunt"><b>Custom hunt</b><span>Clue cards, briefing and certificate, with Host Mode</span><strong>$9.99</strong></a>
@@ -563,6 +600,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <div class="pin"><b></b><span class="eyebrow">Questions</span></div>
       <h2>Before you print</h2>
       <div class="faq">
+        <details><summary>How does the Family Pass work?</summary><p>One payment of $39.99 gets you 6 orders to use within 12 months. Each order can be the whole bundle: the custom hunt, its play kit, the activity pack and the party pack, in any theme and for any of your kids. Your code arrives by email. Build an order as usual and type the code under “Have a Family Pass code?” next to the total. It covers anything in the order builder; shop play kits and handprint art are sold separately. It doesn’t renew by itself.</p></details>
         <details><summary>Is anything shipped to me?</summary><p>No. You get a PDF to print at home on regular Letter paper, in color or black and white.</p></details>
         <details><summary>How fast will I get it?</summary><p>Usually within a few minutes of checkout. It shows on screen and arrives by email, so it works even the morning of the party.</p></details>
         <details><summary>What if my house doesn’t have a spot on the list?</summary><p>Type any spot you like, such as “the hammock” or “Dad’s guitar”, and we’ll write a rhyme for it. We skip anything unsafe for little kids, like the oven.</p></details>
@@ -809,6 +847,7 @@ const LAYERS = [
 const PRICES = { hunt: 9.99, kit: 7.99, party: 6.99, 'hunt+kit': 14.99, 'hunt+party': 13.99, 'kit+party': 12.99, bundle: 16.99, activity: 4.99, activityAdd: 3 };
 const LABELS = { hunt: 'Custom hunt', kit: 'Play kit', activity: 'Activity pack', party: 'Party pack' };
 const picked = new Set(['hunt', 'kit', 'activity']);
+let passInfo = null; // { code, left, total } once a Family Pass code checks out
 let product = 'hunt+kit+activity';
 // Same names as productFor in the order bot: "bundle" is hunt + kit + party, the activity pack adds "+activity".
 function productOf(gets) {
@@ -860,7 +899,13 @@ function drawCart() {
     : gets.length > 1 ? `<s>${money(value)}</s> together for ${money(price)}, so you save ${money(value - price)}.${next ? ` Add the ${nextName} for ${money(priceOf(productOf([...gets, next].sort((a, b) => LAYERS.findIndex((l) => l.id === a) - LAYERS.findIndex((l) => l.id === b)))) - price)} more.` : ''}`
     : `Add another one and save. All four are ${money(priceOf('bundle+activity'))}.`;
   $('totalLabel').textContent = !product ? 'Nothing picked yet' : gets.length === 4 ? 'Everything bundle, PDF' : product === 'hunt+kit+activity' ? 'Play bundle, PDF' : product === 'bundle' ? 'Party bundle, PDF' : `${gets.map((k) => LABELS[k]).join(' + ')}, PDF`;
-  $('totalPrice').textContent = money(price);
+  if (passInfo && product) {
+    $('totalPrice').innerHTML = `<s>${money(price)}</s>$0.00`;
+    $('totalLabel').textContent += ' · Family Pass';
+  } else $('totalPrice').textContent = money(price);
+  $('checkoutBtn').textContent = passInfo && product ? 'Make my order with my pass' : 'Continue to checkout';
+  // the pass pays off for anyone spending this much more than once a year
+  $('passUp').hidden = Boolean(passInfo) || price < 13;
   $('peek').parentElement.hidden = !product;
   // Hiding spots are only for the hunt, and invitations only come in the party pack.
   $('spotsField').hidden = !picked.has('hunt');
@@ -935,8 +980,9 @@ $('orderForm').addEventListener('submit', async (e) => {
     spots: picked.has('hunt') ? state.picks.map((k) => (state.custom[k] ? { custom: state.custom[k] } : k)) : [],
     party: { date: $('partyDate').value, time: $('partyTime').value, place: $('partyPlace').value, rsvp: $('partyRsvp').value },
   };
+  if (passInfo) order.passCode = passInfo.code;
   if (!CHECKOUT_URL) return status('Checkout opens here soon. Please check back in a little while.');
-  status('Opening secure checkout…');
+  status(passInfo ? 'Making your order…' : 'Opening secure checkout…');
   try {
     const res = await fetch(CHECKOUT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(order) });
     const data = await res.json().catch(() => ({}));
@@ -944,6 +990,39 @@ $('orderForm').addEventListener('submit', async (e) => {
     location.href = data.url;
   } catch (err) {
     status(err.message || 'Checkout didn’t open. Please try again in a moment.', true);
+  }
+});
+
+// Family Pass: buy one (Stripe), or apply a code so this order is free.
+const PASS_URL = CHECKOUT_URL.replace(/\/api\/checkout$/, '/api/pass');
+async function applyPass() {
+  const code = $('passCode').value.trim();
+  if (!code) return;
+  $('passNote').textContent = 'Checking your code…';
+  try {
+    const res = await fetch(`${PASS_URL}/check`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code }) });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || 'That code didn’t work. Please try again.');
+    passInfo = { code, left: data.left, total: data.total };
+    $('passNote').textContent = `Pass applied. This order uses 1 of your ${data.left} left.`;
+  } catch (err) {
+    passInfo = null;
+    $('passNote').textContent = err.message === 'Failed to fetch' ? 'We couldn’t check that code just now. Please try again.' : err.message;
+  }
+  drawCart();
+}
+$('passApply').addEventListener('click', applyPass);
+$('passCode').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); applyPass(); } });
+$('passCode').addEventListener('input', () => { if (passInfo) { passInfo = null; $('passNote').textContent = ''; drawCart(); } });
+$('buyPass').addEventListener('click', async () => {
+  $('passStatus').textContent = 'Opening secure checkout…';
+  try {
+    const res = await fetch(PASS_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.url) throw new Error(data.error || '');
+    location.href = data.url;
+  } catch (err) {
+    $('passStatus').textContent = err.message || 'Checkout didn’t open. Please try again in a moment.';
   }
 });
 

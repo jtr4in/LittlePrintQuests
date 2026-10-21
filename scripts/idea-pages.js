@@ -140,7 +140,7 @@ function themePage(t, i, all) {
 </ul>
 
 <h2>Want it printed and personalized?</h2>
-<p>The printable ${esc(t.name)} has your child’s name on every page and a rhyming clue for each spot in your home, including ones you type in, like “Grandma’s piano”. You get a host guide, the story briefing, clue cards with pictures for little ones and a finisher certificate, plus Host Mode on your phone for party day. It’s $9.99 and arrives by email in minutes.</p>
+<p>The printable ${esc(t.name)} has your child’s name on every page and a rhyming clue for each spot in your home, including ones you type in, like “Grandma’s piano”. You get a host guide, the story briefing, clue cards with pictures for little ones and a finisher certificate, plus Host Mode on your phone for party day. It’s $9.99, or $17.99 with its matching pretend play kit and activity pack, and arrives by email in minutes.</p>
 <div class="pages">${['hunt', 'briefing', 'cards', 'cert'].map((k) => `<img src="../../img/pages/${t.id}-${k}.webp" alt="${esc(t.name)} printable ${k} page" width="400" height="518" loading="lazy">`).join('')}</div>
 <p>
 <a class="btn" href="${builder({ theme: t.id })}">Build my ${esc(t.label)} hunt</a>

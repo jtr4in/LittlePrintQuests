@@ -19,6 +19,7 @@ const PRICES = {
   activity: cents('ACTIVITY_PRICE_CENTS', 499), // the activity pack on its own
   activityAdd: cents('ACTIVITY_ADD_CENTS', 300), // added to anything else
   craft: cents('CRAFT_PRICE_CENTS', 599),
+  pass: cents('PASS_PRICE_CENTS', 3999), // the Family Pass: 6 orders within a year
   book: cents('BOOK_PRICE_CENTS', 799), // a handprint book (memory, zoo, fingerprint), a craft order
 };
 

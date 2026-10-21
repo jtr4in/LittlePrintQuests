@@ -13,7 +13,8 @@ const sample = require('./sample');
 const health = require('./health');
 const products = require('./products');
 const { KITS, kitForHunt } = require('../kits/engine');
-const { sendHuntEmail } = require('./email');
+const { sendHuntEmail, sendPassEmail } = require('./email');
+const pass = require('./pass');
 const THEMES = require('../generator/themes');
 const { HOLIDAYS, craftLabel } = require('../crafts/build');
 const host = require('../host/host');
@@ -112,17 +113,43 @@ function orderPage(o) {
            <div class="spin"></div>`
         : `<h1>Thanks for your order!</h1>
            <p>Your payment went through. We’re giving ${esc(o.form.childName)}’s ${what} a quick hand check and will email it to ${esc(o.email || 'you')} shortly.</p>`;
+  return buyerPage(`Your ${what}`, body, working);
+}
+
+// The plain page buyers land on after paying (an order or a Family Pass).
+function buyerPage(title, body, refresh) {
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Your ${what}</title>${working ? '<meta http-equiv="refresh" content="4">' : ''}<style>
+<title>${esc(title)}</title>${refresh ? '<meta http-equiv="refresh" content="4">' : ''}<style>
 :root{--bg:#fbf8f1;--ink:#3f4a73;--muted:#646d8f;--sun:#ef9d31;--sun-ink:#2b1d06}
 @media (prefers-color-scheme:dark){:root{--bg:#151a2e;--ink:#f4f0e6;--muted:#b4bad4}}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 system-ui,sans-serif}
 main{max-width:560px;margin:12vh auto;padding:0 16px;text-align:center}
 h1{font-size:28px;line-height:1.2}p{color:var(--muted)}p b{color:var(--ink)}
 .btn{display:inline-block;background:var(--sun);color:var(--sun-ink);padding:14px 26px;border-radius:99px;text-decoration:none;font-weight:700}.btn.alt{background:transparent;color:var(--ink);border:2px solid var(--sun)}small{color:var(--muted)}
+.code{font:700 26px/1.2 ui-monospace,Menlo,monospace;letter-spacing:2px;color:var(--ink);background:rgba(239,157,49,.16);border-radius:12px;padding:14px 18px;display:inline-block}
 .spin{width:36px;height:36px;margin:24px auto;border:4px solid var(--muted);border-top-color:var(--sun);border-radius:50%;animation:s 1s linear infinite}
 @keyframes s{to{transform:rotate(1turn)}}
 </style></head><body><main>${body}</main></body></html>`;
+}
+
+// Family Passes sold, newest first, for the admin page.
+function passPanel(s) {
+  const sold = Object.values(s.passes || {}).filter((p) => p.status === 'active').sort((a, b) => b.paidAt.localeCompare(a.paidAt));
+  if (!sold.length) return `<div class="panel"><b>Family Passes:</b> <span class="muted">none sold yet ($${(payments.PRICES.pass / 100).toFixed(2)} for ${pass.USES} orders within a year).</span></div>`;
+  return `<details class="panel"><summary><b>Family Passes:</b> ${sold.length} sold · ${sold.reduce((n, p) => n + p.uses.length, 0)} orders made with them</summary>
+    <table>${sold.map((p) => `<tr><td><code>${esc(p.code)}</code></td><td>${esc(p.email || '')}</td><td>${pass.left(p)} of ${p.total} left</td><td>ends ${esc(p.expiresAt.slice(0, 10))}</td><td class="problem">${esc(p.problem || '')}</td></tr>`).join('')}</table></details>`;
+}
+
+function passPage(p) {
+  const ends = p.expiresAt && new Date(p.expiresAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  const body = p.status === 'active'
+    ? `<h1>Your Family Pass is ready! 🎉</h1>
+       <p>Your code:</p><p class="code">${esc(p.code)}</p>
+       <p><b>${pass.left(p)} of ${p.total}</b> orders left, to use by <b>${esc(ends)}</b>. Build an order on our site and type this code under “Have a Family Pass code?” next to the total.</p>
+       <p><a class="btn" href="${esc(process.env.SITE_URL || process.env.PUBLIC_URL)}#order">Make my first order</a></p>
+       <p><small>${p.email ? `We also emailed the code to ${esc(p.email)}.` : 'Save this page or write the code down.'}</small></p>`
+    : `<h1>Setting up your Family Pass…</h1><p>Confirming your payment. This page updates by itself.</p><div class="spin"></div>`;
+  return buyerPage('Your Family Pass', body, p.status !== 'active');
 }
 
 // Etsy listings the bot can create as drafts (see listings.js).
@@ -250,6 +277,7 @@ ${setupPanel()}
       ? `<b>Website checkout on.</b> <span class="muted">Buyers pick any mix of hunt ($${(payments.PRICES.hunt / 100).toFixed(2)}), play kit ($${(payments.PRICES.kit / 100).toFixed(2)}), activity pack ($${(payments.PRICES.activity / 100).toFixed(2)}) and party pack ($${(payments.PRICES.party / 100).toFixed(2)}), or all three for $${(payments.PRICES.bundle / 100).toFixed(2)}, built and emailed automatically.${unpaid.length ? ` ${unpaid.length} checkout${unpaid.length === 1 ? '' : 's'} started but not paid.` : ''}</span>`
       : `<b>Website checkout off.</b> <span class="muted">Add STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET to take orders on your site.</span>`
   }</div>
+${passPanel(s)}
 ${listingsPanel(s)}
 <div class="panel"><b>Mailing list:</b> ${Object.values(s.subscribers || {}).filter((x) => !x.unsubscribedAt).length} people from the free sample. <a href="/admin/subscribers.csv">Download CSV</a></div>
 <details class="panel"><summary><b>Make an order by hand</b> <span class="muted">(paste order notes, or test the bot)</span></summary>
@@ -317,12 +345,31 @@ async function route(req, res) {
     if (req.method !== 'POST') return sendJson(res, 405, { error: 'Use POST' });
     if (!payments.enabled()) return sendJson(res, 503, { error: 'Online ordering is not open yet.' });
     let form;
+    let passCode;
     try {
-      form = orders.validateWebForm(JSON.parse((await readRaw(req, 20_000)).toString() || '{}'));
+      const body = JSON.parse((await readRaw(req, 20_000)).toString() || '{}');
+      form = orders.validateWebForm(body);
+      passCode = typeof body.passCode === 'string' && body.passCode.trim() ? body.passCode.slice(0, 40) : null;
     } catch (err) {
       return sendJson(res, 400, { error: err instanceof SyntaxError ? 'Bad request' : err.message });
     }
     const id = orders.addWebOrder(form);
+    if (passCode) {
+      // A Family Pass pays for it: count it, then build it straight away.
+      let p;
+      try {
+        p = pass.use(passCode, id);
+      } catch (err) {
+        store.update((s) => delete s.orders[id]);
+        return sendJson(res, err.status || 500, { error: err.message });
+      }
+      store.update((s) => Object.assign(s.orders[id], { passId: p.id, paidWith: 'pass' }));
+      orders.fulfillWebOrder(id, { email: p.email, buyerName: p.buyerName || '' }).catch((err) => {
+        console.error('Fulfillment failed:', err);
+        health.recordError('Building a Family Pass order', err.message);
+      });
+      return sendJson(res, 200, { url: `${process.env.PUBLIC_URL}/order/${id}`, pass: pass.summary(p) });
+    }
     try {
       const session = await payments.createCheckout(store.get().orders[id]);
       store.update((s) => (s.orders[id].checkoutId = session.id));
@@ -334,6 +381,35 @@ async function route(req, res) {
     }
   }
 
+  // The Family Pass: buy one (Stripe), or check a code before using it at checkout.
+  if (p === '/api/pass' || p === '/api/pass/check') {
+    if (req.method === 'OPTIONS') return send(res, 204, '', cors(req));
+    if (req.method !== 'POST') return sendJson(res, 405, { error: 'Use POST' });
+    if (!payments.enabled()) return sendJson(res, 503, { error: 'Online ordering is not open yet.' });
+    if (p === '/api/pass/check') {
+      let body;
+      try {
+        body = JSON.parse((await readRaw(req, 2_000)).toString() || '{}');
+      } catch {
+        return sendJson(res, 400, { error: 'Bad request' });
+      }
+      const found = pass.check(body.code);
+      return found.error ? sendJson(res, 404, { error: found.error }) : sendJson(res, 200, pass.summary(found.pass));
+    }
+    const id = pass.addPass();
+    try {
+      const session = await payments.createPassCheckout(store.get().passes[id]);
+      store.update((s) => (s.passes[id].checkoutId = session.id));
+      return sendJson(res, 200, { url: session.url });
+    } catch (err) {
+      console.error('Stripe pass checkout failed:', err.message);
+      health.recordError('Family Pass checkout', err.message);
+      return sendJson(res, 502, { error: 'Checkout is having trouble right now. Please try again in a minute.' });
+    }
+  }
+  const pp = p.match(/^\/pass\/(pass-[A-Za-z0-9_-]{16,})$/);
+  if (pp && store.get().passes?.[pp[1]]) return send(res, 200, passPage(store.get().passes[pp[1]]), { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' });
+
   if (p === '/webhooks/stripe' && req.method === 'POST') {
     let event;
     try {
@@ -342,6 +418,16 @@ async function route(req, res) {
       return send(res, 400, `Webhook error: ${esc(err.message)}`, { 'Content-Type': 'text/plain' });
     }
     const session = event.data?.object;
+    if (event.type === 'checkout.session.completed' && session.payment_status === 'paid' && session.metadata?.pass_id) {
+      const p = pass.activate(session.metadata.pass_id, { email: session.customer_details?.email, buyerName: session.customer_details?.name || '' });
+      if (p) {
+        sendPassEmail(p).catch((err) => {
+          // They still see the code on the page Stripe sends them back to.
+          store.update((s) => (s.passes[p.id].problem = `Code not emailed (${err.message}).`));
+          health.recordError('Family Pass email', err.message);
+        });
+      }
+    }
     if (event.type === 'checkout.session.completed' && session.payment_status === 'paid' && session.metadata?.order_id) {
       // Answer Stripe right away; building the PDF takes a few seconds.
       orders
