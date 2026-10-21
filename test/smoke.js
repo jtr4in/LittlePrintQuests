@@ -414,6 +414,57 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal((await realFetch(base + '/order/manual-1')).status, 401); // only web orders are public
   assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Emailed to ava\.parent@example\.com/);
 
+  const readStateNow = () => JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
+  // Family Pass: bought once through Stripe, the code comes by email, then 6 free orders and no more.
+  payments.createPassCheckout = async (p) => {
+    charged.push(payments.PRICES.pass);
+    return { id: 'cs_pass', url: `https://checkout.stripe.com/c/pay/${p.id}` };
+  };
+  const passId = (await (await realFetch(base + '/api/pass', { method: 'POST', body: '{}' })).json()).url.split('/').pop();
+  assert.match(passId, /^pass-/);
+  assert.match(await (await realFetch(`${base}/pass/${passId}`)).text(), /Setting up your Family Pass/);
+  const passPayload = JSON.stringify({ id: 'evt_p', type: 'checkout.session.completed', data: { object: {
+    id: 'cs_pass', payment_status: 'paid', metadata: { pass_id: passId }, customer_details: { email: 'pat@example.com', name: 'Pat Parent' } } } });
+  const passSig = payments.stripe().webhooks.generateTestHeaderString({ payload: passPayload, secret: 'whsec_test' });
+  for (let i = 0; i < 2; i++) assert.equal((await realFetch(base + '/webhooks/stripe', { method: 'POST', body: passPayload, headers: { 'stripe-signature': passSig } })).status, 200);
+  await wait(300);
+  const passMails = emails.filter((e) => /Family Pass code/.test(e.subject));
+  assert.equal(passMails.length, 1, 'Stripe resending the event sends no second code');
+  assert.deepEqual(passMails[0].to, ['pat@example.com']);
+  const code = passMails[0].subject.split(': ')[1];
+  assert.match(code, /^LPQ-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/);
+  assert.ok(passMails[0].html.includes(code) && /6 orders/.test(passMails[0].html));
+  const passHtml = await (await realFetch(`${base}/pass/${passId}`)).text();
+  assert.ok(passHtml.includes(code) && /6 of 6<\/b> orders left/.test(passHtml));
+  const checkCode = (c) => realFetch(base + '/api/pass/check', { method: 'POST', body: JSON.stringify({ code: c }) });
+  assert.equal((await (await checkCode(code.toLowerCase().replace(/-/g, ' '))).json()).left, 6); // forgiving about case and dashes
+  assert.equal((await checkCode('LPQ-AAAA-AAAA')).status, 404);
+  const passOrder = (passCode) => realFetch(base + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ items: ['activity'], theme: 'dino', childName: 'Ava', spots: [], passCode }) });
+  const before = charged.length;
+  const passOrderIds = [];
+  for (let i = 0; i < 6; i++) {
+    const r = await passOrder(code);
+    assert.equal(r.status, 200);
+    const data = await r.json();
+    assert.equal(data.pass.left, 5 - i);
+    passOrderIds.push(data.url.split('/').pop());
+  }
+  const seventh = await passOrder(code);
+  assert.equal(seventh.status, 400);
+  assert.match((await seventh.json()).error, /used all 6/);
+  assert.equal(charged.length, before, 'pass orders never go to Stripe');
+  for (let i = 0; i < 120 && !passOrderIds.every((id) => readStateNow().orders[id]?.sent); i++) await wait(500);
+  const firstPassOrder = readStateNow().orders[passOrderIds[0]];
+  assert.equal(firstPassOrder.status, 'ready');
+  assert.equal(firstPassOrder.paidWith, 'pass');
+  assert.deepEqual(emails.find((e) => e.html.includes(`/d/${firstPassOrder.downloadToken}.pdf`)).to, ['pat@example.com']);
+  assert.ok(emails.some((e) => /Made with your Family Pass: <b>0 of 6<\/b>/.test(e.html)));
+  const ordersNow = Object.values(readStateNow().orders);
+  assert.equal(readStateNow().passes[passId].uses.length, 6);
+  assert.ok(!ordersNow.some((o) => o.status === 'awaiting_payment' && o.form?.items?.[0] === 'activity' && !o.passId), 'the refused 7th order is not kept');
+  assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Family Passes:<\/b> 1 sold · 6 orders made with them/);
+
   // Website handprint art order: on its own, no Host Mode.
   const readState = () => JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
   const badCraft = await realFetch(base + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ craft: 'easter', childName: 'Ava' }) });

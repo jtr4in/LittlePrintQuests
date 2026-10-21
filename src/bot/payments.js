@@ -59,4 +59,27 @@ function readWebhook(rawBody, signature) {
   return stripe().webhooks.constructEvent(rawBody, signature, process.env.STRIPE_WEBHOOK_SECRET);
 }
 
-module.exports = { enabled, createCheckout, readWebhook, stripe, PRICES, PRICE_CENTS, BUNDLE_PRICE_CENTS, PARTY_PRICE_CENTS, priceFor };
+// The Family Pass is one payment, no subscription.
+async function createPassCheckout(pass) {
+  return stripe().checkout.sessions.create({
+    mode: 'payment',
+    line_items: [{
+      quantity: 1,
+      price_data: {
+        currency: 'usd',
+        unit_amount: PRICES.pass,
+        product_data: {
+          tax_code: process.env.STRIPE_TAX_CODE || 'txcd_10000000',
+          name: 'Family Pass: 6 everything bundles',
+          description: `${pass.total} printable orders (hunt, play kit, activity pack and party pack) to use within a year · PDF · no subscription`,
+        },
+      },
+    }],
+    client_reference_id: pass.id,
+    metadata: { pass_id: pass.id },
+    success_url: `${process.env.PUBLIC_URL}/pass/${pass.id}`,
+    cancel_url: `${process.env.SITE_URL || process.env.PUBLIC_URL}#pass`,
+  });
+}
+
+module.exports = { enabled, createCheckout, createPassCheckout, readWebhook, stripe, PRICES, PRICE_CENTS, BUNDLE_PRICE_CENTS, PARTY_PRICE_CENTS, priceFor };
