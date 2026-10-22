@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+<channel>
+<title>LittlePrintQuests: Kids Birthday Party Printables</title>
+<link>https://littleprintquests.com/</link>
+<description>Kids Birthday Party Printables from LittlePrintQuests, printable and personalized for kids.</description>
+<language>en-us</language>
+<item>
+<title>Halloween Birthday Party Printables: Invitations, Cupcake Toppers, Banner</title>
+<link>https://littleprintquests.com/?theme=halloween&amp;utm_source=pinterest&amp;utm_medium=pin#order</link>
+<guid isPermaLink="false">party-halloween</guid>
+<pubDate>Thu, 22 Oct 2026 13:59:06 GMT</pubDate>
+<description>Everything for a Halloween birthday party with your child’s name on it: invitations, thank-you cards, cupcake toppers, favor tags and a party banner. Print at home and cut out.</description>
+<enclosure url="https://littleprintquests.com/pins/img/party-halloween.jpg" type="image/jpeg" length="0"/>
+<media:content url="https://littleprintquests.com/pins/img/party-halloween.jpg" medium="image" type="image/jpeg" width="1000" height="1500"/>
+</item>
+<item>
+<title>Dinosaur Birthday Party Printables: Invitations, Cupcake Toppers, Banner</title>
+<link>https://littleprintquests.com/?theme=dino&amp;utm_source=pinterest&amp;utm_medium=pin#order</link>
+<guid isPermaLink="false">party-dino</guid>
+<pubDate>Thu, 22 Oct 2026 13:59:06 GMT</pubDate>
+<description>Everything for a dinosaur birthday party with your child’s name on it: invitations, thank-you cards, cupcake toppers, favor tags and a party banner. Print at home and cut out.</description>
+<enclosure url="https://littleprintquests.com/pins/img/party-dino.jpg" type="image/jpeg" length="0"/>
+<media:content url="https://littleprintquests.com/pins/img/party-dino.jpg" medium="image" type="image/jpeg" width="1000" height="1500"/>
+</item>
+</channel>
+</rss>
