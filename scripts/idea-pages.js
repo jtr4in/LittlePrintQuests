@@ -21,6 +21,10 @@ const spaceSlug = (s) => slug(s.title);
 const kitSlug = (k) => `${slug(k.name)}-pretend-play`;
 const builder = (q) => `../../?${new URLSearchParams(q)}#order`;
 const lines = (couplet) => couplet.map(esc).join('<br>');
+// Kits with photos of the printed kit at home (docs/img/life/): the play stand leads the page, the flat lay of
+// everything in the kit sits with the printable, and a play shot sits with the games.
+const LIFE = { pizza: 'b', vet: 'b', dino: 'a', unicorn: 'a', halloween: 'b' };
+const lifePhoto = (k, v, alt, lazy = true) => (LIFE[k.id] ? `<img class="photo" src="../../img/life/${k.id}-${v}.webp" srcset="../../img/life/${k.id}-${v}-sm.webp 640w, ../../img/life/${k.id}-${v}.webp 1200w" sizes="(max-width: 760px) 100vw, 720px" width="1200" height="896" alt="${esc(alt)}"${lazy ? ' loading="lazy"' : ''}>` : '');
 
 const CSS = `
 :root { --paper:#fbf8f1; --sheet:#fff; --ink:#3f4a73; --soft:#646d8f; --line:#e4dfd2; --orange:#ef9d31; --orange-ink:#2b1d06; --mint:#2f9a6b; --tint:#f2f8f2;
@@ -50,6 +54,7 @@ h3 { font-size:19px; margin:0 0 6px; }
 .story p { margin:0 0 10px; }
 .pages { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
 .pages img { width:100%; height:auto; border-radius:6px; box-shadow:0 2px 10px rgba(0,0,0,.12); background:#fff; }
+.photo { display:block; width:100%; height:auto; border-radius:14px; margin:22px 0 4px; }
 .links { display:flex; flex-wrap:wrap; gap:8px; padding:0; list-style:none; }
 .links a { display:inline-block; padding:8px 14px; border:1.5px solid var(--line); border-radius:999px; text-decoration:none; font-size:15px; background:var(--sheet); }
 ul.tips li { margin-bottom:6px; }
@@ -216,12 +221,13 @@ function kitPage(k, kits) {
 <h1>${esc(k.name)} pretend play for kids</h1>
 <p class="lede">${esc(fill(g.intro))} Here’s how to set it up, games to play and a printable kit with your child’s name on every page.</p>
 <a class="btn" href="${builder(q)}">Make a personalized ${esc(k.name)} kit</a>
-
+${lifePhoto(k, 'stand', `The printed ${k.name} kit set up on a play stand: shop sign, open sign, price list, poster and labels`, false)}
 <h2>How to set it up</h2>
 <ol class="tips">${g.setup.map((x) => `<li>${esc(fill(x))}</li>`).join('')}</ol>
 
 <h2>Games to play</h2>
 <ul class="clues">${g.play.map(([t, d]) => `<li class="clue"><h3>${esc(t)}</h3><p>${esc(fill(d))}</p></li>`).join('')}</ul>
+${lifePhoto(k, LIFE[k.id], `Playing ${name} at home with the printed kit`)}
 
 <h2>Who’s who</h2>
 <p>Hand out the jobs so everyone gets a turn, grown-ups and stuffed animals included:</p>
@@ -232,6 +238,7 @@ function kitPage(k, kits) {
 
 <h2>Want it printed and personalized?</h2>
 <p>The printable ${esc(k.name)} kit has your child’s name on the signs, badges and certificate, plus play money, order forms, props and a grown-up guide full of ideas. Pick the little kids version (ages 2 to 4) or the big kids version (5 to 8), and add the activity pack of wipe-and-play pages if you like. It arrives by email in minutes.</p>
+${lifePhoto(k, 'flat', `Everything in the ${k.name} kit printed out: poster, price list, shop sign, cards, play money and badges`)}
 <div class="pages">${[`${k.hunt || k.id}-kit`, `${k.hunt || k.id}-little-kit`, `${k.hunt || k.id}-activity`, `${k.hunt || k.id}-little-activity`].filter((f) => fs.existsSync(path.join(DOCS, 'img', 'pages', `${f}.webp`))).map((f) => `<img src="../../img/pages/${f}.webp" alt="${esc(k.name)} printable page" width="400" height="518" loading="lazy">`).join('')}</div>
 <p><a class="btn" href="${builder(q)}">Build my ${esc(k.name)} kit</a></p>
 

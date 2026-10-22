@@ -22,6 +22,8 @@ const lower = (s) => (/^(Halloween|Christmas|Easter|Valentine)/.test(s) ? s : s.
 
 // Three pages fanned out, the middle one on top.
 const fan = (files) => `<div class="fan">${files.map((f, i) => `<img class="pg p${i}" src="${data(f)}">`).join('')}</div>`;
+// Kits with a photo of the printed kit set up at home (docs/img/life/) show that on their pin instead of the page fan.
+const LIFE = { pizza: 'stand', vet: 'stand', dino: 'stand', unicorn: 'stand', halloween: 'stand' };
 const scene = (f) => `<div class="scene" style="background-image:url(${data(f)})"></div>`;
 
 const PINS = [];
@@ -76,7 +78,7 @@ function kitPins(k, q) {
   PINS.push({
     id: `kit-${k.id}`, feed: 'pretend-play', color,
     kicker: 'Pretend play printable', head: `${k.name} Pretend Play Kit`, sub: 'Signs, menus, money and props with your child’s name on them',
-    tags: ['Ages 2 to 8', 'Print at home'], art: `<div class="wide"><img src="${data(`kit-${k.id}.webp`)}"></div>`,
+    tags: ['Ages 2 to 8', 'Print at home'], art: LIFE[k.id] ? scene(`life/${k.id}-${LIFE[k.id]}.webp`) : `<div class="wide"><img src="${data(`kit-${k.id}.webp`)}"></div>`,
     title: `${k.name} Pretend Play Printable Kit for Kids, Personalized`,
     description: `Turn the living room into your child’s own ${lower(k.name)}: shop signs, order forms, play money, props and a grown-up guide full of play ideas, all with their name on it. A screen-free dramatic play set to print at home.`,
     link: link(q),
