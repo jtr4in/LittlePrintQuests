@@ -16,6 +16,8 @@ async function sendHuntEmail(order) {
   const main = products.mainOf(order);
   const kit = KITS[order.config.kit] || (order.config.theme && kitForHunt(order.config.theme));
   const title = { hunt: theme?.name, kit: `${kit?.name} play kit`, activity: `${kit?.name} activity pack`, party: `${theme?.label} party pack`, craft: craftLabel(HOLIDAYS[order.config.holiday]) }[main];
+  // The add-on offer, same as the order page's (website checkout must be on).
+  const upgrade = process.env.STRIPE_SECRET_KEY && products.upgradeFor(order);
   const btn = (href, label) => `<p><a href="${href}" style="display:inline-block;background:#ef9d31;color:#2b1d06;padding:12px 22px;border-radius:99px;text-decoration:none;font-weight:bold">${label}</a></p>`;
   const tips = {
     hunt: 'print at “Actual Size / 100%”, cut out the clue cards, and use the Host Guide on page 1 to hide them. Read the Mission Briefing aloud to start.',
@@ -34,7 +36,8 @@ async function sendHuntEmail(order) {
     ${order.hostToken ? `<p><b>New: Host Mode.</b> Open this on your phone${products.has(order, 'hunt') ? ' on party day' : ''}. It ${esc(products.hostHelps(order))}.</p>${btn(`${process.env.PUBLIC_URL}/h/${order.hostToken}`, 'Open Host Mode')}` : ''}
     <p><b>Quick setup:</b> ${tips}${order.kitReady ? ' The play kit has its own grown-up guide on page 1.' : ''}</p>
     ${order.passId && store.get().passes?.[order.passId] ? `<p>Made with your Family Pass: <b>${pass.left(store.get().passes[order.passId])} of ${store.get().passes[order.passId].total}</b> orders left.</p>` : ''}
-    <p>Something not right? Just reply to this email and we’ll fix it.</p>
+    ${upgrade ? `<div style="border:2px dashed #ef9d31;border-radius:14px;padding:4px 16px 12px;margin:20px 0"><p><b>Make it the whole set for $${(upgrade.cents / 100).toFixed(2)}</b><br>Add the ${esc(products.describe(upgrade.add))}, already made with ${esc(order.config.childName)}’s name. Worth $${(upgrade.worth / 100).toFixed(2)} on their own.</p>${btn(`${process.env.PUBLIC_URL}/order/${order.id}/add`, `Add to my order · $${(upgrade.cents / 100).toFixed(2)}`)}</div>` : ''}
+    <p>Something not right? Just reply to this email and we’ll fix it, or refund you if we can’t.</p>
     <p>${main === 'craft' ? 'Have fun! 🎨' : 'Have an amazing party! 🎉'}<br>LittlePrintQuests</p></div>`;
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',

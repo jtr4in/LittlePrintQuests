@@ -326,4 +326,28 @@ async function fulfillWebOrder(id, { email, buyerName }) {
   await notify(store.get().orders[id]);
 }
 
-module.exports = { customRequest, hostUrl, addOrder, processOrder, generate, pollEtsy, validateWebForm, addWebOrder, fulfillWebOrder };
+// Called once Stripe confirms an add-on payment: adds the items and rebuilds the order with the
+// same download links, then emails it again with the new PDFs.
+async function upgradeWebOrder(id, { add, cents, sessionId }) {
+  const order = store.get().orders[id];
+  if (!order || order.status !== 'ready' || (order.upgrades || []).some((u) => u.sessionId === sessionId)) return; // Stripe can resend
+  const items = products.normalize([...products.itemsOf(order), ...add]);
+  store.update((s) => {
+    const o = s.orders[id];
+    o.paidCents = (o.paidCents ?? products.priceFor(o.product)) + cents;
+    Object.assign(o, { items, product: products.productFor(items), status: 'processing', upgrades: [...(o.upgrades || []), { sessionId, add, cents, at: new Date().toISOString() }] });
+  });
+  try {
+    await generate(id);
+    try {
+      await sendHuntEmail(store.get().orders[id]);
+    } catch (err) {
+      store.update((s) => (s.orders[id].problem = `Add-on not emailed (${err.message}). The buyer can download it from their order page.`));
+    }
+  } catch (err) {
+    store.update((s) => Object.assign(s.orders[id], { status: 'needs_attention', problem: `Adding ${products.describe(add)}: ${err.message}` }));
+  }
+  await notify(store.get().orders[id]);
+}
+
+module.exports = { upgradeWebOrder, customRequest, hostUrl, addOrder, processOrder, generate, pollEtsy, validateWebForm, addWebOrder, fulfillWebOrder };

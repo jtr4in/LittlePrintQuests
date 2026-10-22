@@ -54,6 +54,33 @@ async function createCheckout(order) {
   return session;
 }
 
+// The add-ons offered after checkout (products.upgradeFor), for an order that's already paid.
+async function createUpgradeCheckout(order, upgrade) {
+  const theme = THEMES[order.config.theme];
+  const kit = KITS[order.config.kit] || (theme && kitForHunt(theme.id));
+  const parts = { kit: `${kit?.name} play kit`, activity: `${kit?.name} activity pack`, party: `${theme?.label} party pack` };
+  return stripe().checkout.sessions.create({
+    mode: 'payment',
+    customer_email: order.email || undefined,
+    line_items: [{
+      quantity: 1,
+      price_data: {
+        currency: 'usd',
+        unit_amount: upgrade.cents,
+        product_data: {
+          tax_code: process.env.STRIPE_TAX_CODE || 'txcd_10000000',
+          name: `Add to your order: ${upgrade.add.map((i) => parts[i]).join(' + ')}`,
+          description: `Printable PDF for ${order.config.childName}, added to the order you already have`,
+        },
+      },
+    }],
+    client_reference_id: order.id,
+    metadata: { upgrade_of: order.id, add: upgrade.add.join(','), cents: String(upgrade.cents) },
+    success_url: `${process.env.PUBLIC_URL}/order/${order.id}`,
+    cancel_url: `${process.env.PUBLIC_URL}/order/${order.id}`,
+  });
+}
+
 // Verifies Stripe's signature; throws if the request didn't come from Stripe.
 function readWebhook(rawBody, signature) {
   return stripe().webhooks.constructEvent(rawBody, signature, process.env.STRIPE_WEBHOOK_SECRET);
@@ -82,4 +109,4 @@ async function createPassCheckout(pass) {
   });
 }
 
-module.exports = { enabled, createCheckout, createPassCheckout, readWebhook, stripe, PRICES, PRICE_CENTS, BUNDLE_PRICE_CENTS, PARTY_PRICE_CENTS, priceFor };
+module.exports = { enabled, createCheckout, createPassCheckout, createUpgradeCheckout, readWebhook, stripe, PRICES, PRICE_CENTS, BUNDLE_PRICE_CENTS, PARTY_PRICE_CENTS, priceFor };

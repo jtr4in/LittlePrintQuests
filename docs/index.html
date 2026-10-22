@@ -257,6 +257,8 @@ input[type="text"], input[type="number"], input[type="email"], select { width: 1
 .total strong { font: 700 30px/1 var(--display); }
 .status { font-size: 14.5px; color: var(--ink-soft); min-height: 1.4em; }
 .status.bad { color: #c2410c; }
+.trust { display: grid; gap: 4px; margin: 4px 0 0; font-size: 13.5px; color: var(--ink-soft); text-align: center; }
+.trust span::before { content: "✓ "; color: var(--mint-deep); font-weight: 700; }
 [hidden] { display: none !important; }
 .party-details summary { cursor: pointer; font: 600 16px/1.3 var(--display); }
 .party-details[open] summary { margin-bottom: 10px; }
@@ -349,6 +351,7 @@ input[type="text"], input[type="number"], input[type="email"], select { width: 1
 
 footer { border-top: 1px solid var(--line); padding-block: 36px 48px; color: var(--ink-soft); font-size: 15px; }
 footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; }
+footer .foot-links { display: flex; flex-wrap: wrap; gap: 8px 18px; }
 footer .brand { display: flex; align-items: center; gap: 14px; }
 footer .brand img { width: 64px; height: auto; }
 footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
@@ -441,6 +444,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
           </details>
           <button class="btn btn-orange" type="submit" id="checkoutBtn" style="justify-content:center">Continue to checkout</button>
           <p class="status" id="formStatus"></p>
+          <p class="trust"><span>Apple Pay, Google Pay or card, secure checkout by Stripe</span><span>Not right? We fix it free, or <a href="refunds/">refund you</a></span></p>
         </aside>
       </form>
     </div>
@@ -661,7 +665,8 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         <details><summary>How many kids can play?</summary><p>One trail works well for 2 to 10 kids. For bigger groups, read each clue aloud and let a different child find each card.</p></details>
         <details><summary>Can my 3-year-old do it?</summary><p>Yes. For ages 3 to 5, every clue card also shows a picture of the next spot, so kids who can’t read yet can solve it themselves while a grown-up reads the rhyme.</p></details>
         <details><summary>What is Host Mode? Do I need an app?</summary><p>Host Mode is a private page for your phone that comes with every order, with a tab for each thing you get. For a hunt it shows where each card goes, what to say in character, quick challenges and hints if the kids get stuck. For a play kit it has pretend-play scenarios, lines to say and games, and for a party pack a planning checklist. It opens in your phone’s browser from the link in your email, so there’s nothing to install.</p></details>
-        <details><summary>What if something looks wrong?</summary><p>Reply to your order email and we’ll fix it and send a new PDF free.</p></details>
+        <details><summary>What if something looks wrong?</summary><p>Reply to your order email and we’ll fix it and send a new PDF free. If we can’t make it right, we’ll refund you in full. See our <a href="refunds/">happy party promise</a>.</p></details>
+        <details><summary>How do I pay?</summary><p>Apple Pay, Google Pay or any major card, through Stripe’s secure checkout. We never see your card number.</p></details>
       </div>
     </div>
   </section>
@@ -670,7 +675,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 <footer>
   <div class="wrap">
     <div class="brand"><img src="img/mark.png" alt="" width="64" height="49"><span><b class="wordmark"><span class="l">Little</span><span class="p">Print</span><span class="q">Quests</span></b>Printable Party Games &amp; Quests · © 2026</span></div>
-    <a href="ideas/">Party and hunt ideas</a>
+    <nav class="foot-links"><a href="ideas/">Party and hunt ideas</a><a href="contact/">Contact</a><a href="refunds/">Refunds</a><a href="privacy/">Privacy</a><a href="terms/">Terms</a></nav>
   </div>
 </footer>
 

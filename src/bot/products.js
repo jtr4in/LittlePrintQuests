@@ -51,6 +51,26 @@ function describe(items) {
 const packageName = (items) =>
   items.map((i) => ({ hunt: 'Hunt', kit: 'Play Kit', activity: 'Activity Pack', party: 'Party Pack', craft: 'Handprint Art' })[i]).join(' + ') + (items.length === 1 && items[0] === 'hunt' ? ' only' : '');
 
+// What a paid website order can still add after checkout, and for how much: the rest of the
+// everything bundle at the bundle price, minus what they already paid. Only items that come after
+// the main one, so the main download stays the same file. Shop kits have no party pack, handprint
+// art has no add-ons, and Family Pass orders can already make the whole bundle.
+const ALONE = { kit: 'kit', activity: 'activity', party: 'party' };
+function upgradeFor(order) {
+  if (order.source !== 'web' || order.status !== 'ready' || order.paidWith === 'pass') return null;
+  const items = itemsOf(order);
+  const main = items[0];
+  if (main === 'craft') return null;
+  const themed = Boolean(order.config?.theme || order.form?.theme);
+  const add = ITEMS.slice(ITEMS.indexOf(main) + 1).filter((i) => ALONE[i] && !items.includes(i) && (themed || i === 'activity'));
+  if (!add.length) return null;
+  const paid = order.paidCents ?? priceFor(order.product || productFor(items));
+  const cents = priceFor(productFor(normalize([...items, ...add]))) - paid;
+  if (cents <= 0) return null;
+  const worth = add.reduce((n, i) => n + PRICES[ALONE[i]], 0);
+  return { add, cents, worth };
+}
+
 // The age version picked for a play kit, activity pack or hunt.
 const VERSIONS = { little: 'Little kids, ages 2 to 4', big: 'Big kids, ages 5 to 8' };
 
@@ -64,4 +84,4 @@ function hostHelps(order) {
   return helps.length > 1 ? `${helps.slice(0, -1).join(', ')}, and ${helps[helps.length - 1]}` : helps[0];
 }
 
-module.exports = { VERSIONS, hostHelps, ITEMS, PRICES, normalize, productFor, itemsOf, has, mainOf, priceFor, describe, packageName, NAMES };
+module.exports = { upgradeFor, VERSIONS, hostHelps, ITEMS, PRICES, normalize, productFor, itemsOf, has, mainOf, priceFor, describe, packageName, NAMES };
