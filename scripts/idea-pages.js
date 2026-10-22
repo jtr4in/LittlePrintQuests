@@ -21,6 +21,12 @@ const spaceSlug = (s) => slug(s.title);
 const kitSlug = (k) => `${slug(k.name)}-pretend-play`;
 const builder = (q) => `../../?${new URLSearchParams(q)}#order`;
 const lines = (couplet) => couplet.map(esc).join('<br>');
+// Kits with photos of the printed kit in a room (docs/img/life/<kit>-<a|b>.webp): the first shot leads the page, the second sits with the setup steps.
+const LIFE = { pizza: ['b', 'a'], vet: ['b', 'a'], dino: ['a', 'b'], unicorn: ['a', 'b'], halloween: ['b', 'a'] };
+const lifePhoto = (k, i) => {
+  const v = LIFE[k.id]?.[i];
+  return v ? `<img class="photo" src="../../img/life/${k.id}-${v}.webp" srcset="../../img/life/${k.id}-${v}-sm.webp 640w, ../../img/life/${k.id}-${v}.webp 1200w" sizes="(max-width: 760px) 100vw, 720px" width="1200" height="896" alt="The printed ${esc(k.name)} kit set up for play at home"${i ? ' loading="lazy"' : ''}>` : '';
+};
 
 const CSS = `
 :root { --paper:#fbf8f1; --sheet:#fff; --ink:#3f4a73; --soft:#646d8f; --line:#e4dfd2; --orange:#ef9d31; --orange-ink:#2b1d06; --mint:#2f9a6b; --tint:#f2f8f2;
@@ -50,6 +56,7 @@ h3 { font-size:19px; margin:0 0 6px; }
 .story p { margin:0 0 10px; }
 .pages { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
 .pages img { width:100%; height:auto; border-radius:6px; box-shadow:0 2px 10px rgba(0,0,0,.12); background:#fff; }
+.photo { display:block; width:100%; height:auto; border-radius:14px; margin:22px 0 4px; }
 .links { display:flex; flex-wrap:wrap; gap:8px; padding:0; list-style:none; }
 .links a { display:inline-block; padding:8px 14px; border:1.5px solid var(--line); border-radius:999px; text-decoration:none; font-size:15px; background:var(--sheet); }
 ul.tips li { margin-bottom:6px; }
@@ -216,9 +223,10 @@ function kitPage(k, kits) {
 <h1>${esc(k.name)} pretend play for kids</h1>
 <p class="lede">${esc(fill(g.intro))} Here’s how to set it up, games to play and a printable kit with your child’s name on every page.</p>
 <a class="btn" href="${builder(q)}">Make a personalized ${esc(k.name)} kit</a>
-
+${lifePhoto(k, 0)}
 <h2>How to set it up</h2>
 <ol class="tips">${g.setup.map((x) => `<li>${esc(fill(x))}</li>`).join('')}</ol>
+${lifePhoto(k, 1)}
 
 <h2>Games to play</h2>
 <ul class="clues">${g.play.map(([t, d]) => `<li class="clue"><h3>${esc(t)}</h3><p>${esc(fill(d))}</p></li>`).join('')}</ul>
