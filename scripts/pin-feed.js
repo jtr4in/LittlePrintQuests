@@ -1,8 +1,7 @@
-// (Unused while Pinterest offers no RSS import on this account; pin-csv.js makes the bulk upload instead.)
 // Adds the next pins from docs/pins/pool.json to the Pinterest RSS feeds, one per board feed per run
 // (or the number given), and rewrites docs/pins/<feed>.xml. Pinterest's "Auto-publish" reads each
 // feed and posts new items to the board it was linked to. The holiday that's coming up goes first.
-// docs/pins/published.json remembers what went out when. Run it daily to drip pins into the feeds.
+// docs/pins/published.json remembers what went out when. Run daily by .github/workflows/pins.yml.
 //   node scripts/pin-feed.js [per-feed]
 const fs = require('fs');
 const path = require('path');
