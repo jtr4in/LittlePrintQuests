@@ -8,6 +8,7 @@ const path = require('path');
 const THEMES = require('../src/generator/themes');
 const SPOTS = require('../src/generator/spots');
 const SPACES = require('../src/generator/spaces');
+const { KITS } = require('../src/kits/engine');
 
 const SITE = 'https://littleprintquests.com/';
 const DOCS = path.join(__dirname, '..', 'docs');
@@ -17,6 +18,7 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&l
 const slug = (s) => s.toLowerCase().replace(/’s\b/g, 's').replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const themeSlug = (t) => `${slug(t.label)}-scavenger-hunt`;
 const spaceSlug = (s) => slug(s.title);
+const kitSlug = (k) => `${slug(k.name)}-pretend-play`;
 const builder = (q) => `../../?${new URLSearchParams(q)}#order`;
 const lines = (couplet) => couplet.map(esc).join('<br>');
 
@@ -198,14 +200,65 @@ ${themes.map((t) => `<li><a href="../${themeSlug(t)}/">${esc(t.label)} hunt</a><
   });
 }
 
-function hub(themes) {
+
+// One page per pretend play kit: how to set it up, games to play, who's who, and the little-kids version.
+function kitPage(k, kits) {
+  const fill = (str) => str.replace(/\{child\}/g, 'your child').replace(/\{place\}/g, `the ${k.name.toLowerCase()}`);
+  const g = k.guide;
+  const q = k.hunt ? { theme: k.hunt } : { kit: k.id };
+  const name = k.name.toLowerCase();
+  const questions = [
+    [`What age is ${name} pretend play for?`, 'Ages 2 to 8. The little kids version (ages 2 to 4) has big pictures, thick cut lines and order forms they fill in by circling, so no reading or writing is needed. Ages 5 and up get the writing version.'],
+    ['Do I need anything special to print it?', 'Regular Letter paper works for everything. Cardstock makes the money, menus and props last longer, and sheet protectors turn the activity pages into wipe-clean pages.'],
+    [`How do I set up a pretend ${name} at home?`, `${g.setup.map(fill).join(' ')}`],
+  ];
   const body = `
-<h1>Scavenger hunt and party ideas for kids</h1>
-<p class="lede">Free rhyming clues, read-aloud stories and hiding tips for kids ages 3 to 8, sorted by theme and by the kind of home you have.</p>
+<h1>${esc(k.name)} pretend play for kids</h1>
+<p class="lede">${esc(fill(g.intro))} Here’s how to set it up, games to play and a printable kit with your child’s name on every page.</p>
+<a class="btn" href="${builder(q)}">Make a personalized ${esc(k.name)} kit</a>
+
+<h2>How to set it up</h2>
+<ol class="tips">${g.setup.map((x) => `<li>${esc(fill(x))}</li>`).join('')}</ol>
+
+<h2>Games to play</h2>
+<ul class="clues">${g.play.map(([t, d]) => `<li class="clue"><h3>${esc(t)}</h3><p>${esc(fill(d))}</p></li>`).join('')}</ul>
+
+<h2>Who’s who</h2>
+<p>Hand out the jobs so everyone gets a turn, grown-ups and stuffed animals included:</p>
+<ul class="links">${k.roles.map((r) => `<li><span>${esc(r[0])}</span></li>`).join('')}</ul>
+
+<h2>For toddlers and preschoolers</h2>
+<p>Little ones love pretend play before they can read. Give them the job with the most doing, like ${esc(k.roles[0][0].toLowerCase())}, keep the money to a few big coins and let them circle pictures on the order forms. Five to ten minutes of play is a win at this age.</p>
+
+<h2>Want it printed and personalized?</h2>
+<p>The printable ${esc(k.name)} kit has your child’s name on the signs, badges and certificate, plus play money, order forms, props and a grown-up guide full of ideas. Pick the little kids version (ages 2 to 4) or the big kids version (5 to 8), and add the activity pack of wipe-and-play pages if you like. It arrives by email in minutes.</p>
+<div class="pages">${[`${k.hunt || k.id}-kit`, `${k.hunt || k.id}-little-kit`, `${k.hunt || k.id}-activity`, `${k.hunt || k.id}-little-activity`].filter((f) => fs.existsSync(path.join(DOCS, 'img', 'pages', `${f}.webp`))).map((f) => `<img src="../../img/pages/${f}.webp" alt="${esc(k.name)} printable page" width="400" height="518" loading="lazy">`).join('')}</div>
+<p><a class="btn" href="${builder(q)}">Build my ${esc(k.name)} kit</a></p>
+
+<h2>Questions</h2>
+${faqHtml(questions)}
+
+<h2>More pretend play ideas</h2>
+<ul class="links">${kits.filter((o) => o.id !== k.id).map((o) => `<li><a href="../${kitSlug(o)}/">${esc(o.name)}</a></li>`).join('')}</ul>`;
+  return page({
+    file: path.join(OUT, kitSlug(k), 'index.html'),
+    title: `${k.name} Pretend Play for Kids: Setup Ideas, Games and Printable`,
+    description: `How to set up a pretend ${name} at home for ages 2 to 8: setup steps, games to play, roles, tips for toddlers and a printable kit personalized with your child’s name.`,
+    body,
+    jsonLd: faq(questions),
+  });
+}
+
+function hub(themes, kits) {
+  const body = `
+<h1>Scavenger hunt, party and pretend play ideas for kids</h1>
+<p class="lede">Free rhyming clues, read-aloud stories, hiding tips and pretend play setups for kids ages 2 to 8, sorted by theme, by the kind of home you have and by play kit.</p>
 <h2>By home</h2>
 <ul class="links">${Object.values(SPACES).map((s) => `<li><a href="../ideas/${spaceSlug(s)}/">${esc(s.title)}</a></li>`).join('')}</ul>
 <h2>By theme</h2>
 <ul class="links">${themes.map((t) => `<li><a href="../ideas/${themeSlug(t)}/">${esc(t.label)} scavenger hunt</a></li>`).join('')}</ul>
+<h2>Pretend play</h2>
+<ul class="links">${kits.map((k) => `<li><a href="../ideas/${kitSlug(k)}/">${esc(k.name)}</a></li>`).join('')}</ul>
 <p><a class="btn" href="../#order">Make a personalized hunt</a></p>`;
   // The hub sits one level up from the other pages, so its links are written from docs/ideas/.
   return page({
@@ -219,7 +272,8 @@ function hub(themes) {
 function build() {
   fs.rmSync(OUT, { recursive: true, force: true });
   const themes = Object.values(THEMES);
-  const urls = [SITE, hub(themes), ...Object.values(SPACES).map((s) => spacePage(s, themes)), ...themes.map((t, i) => themePage(t, i, themes))];
+  const kits = Object.values(KITS);
+  const urls = [SITE, hub(themes, kits), ...Object.values(SPACES).map((s) => spacePage(s, themes)), ...themes.map((t, i) => themePage(t, i, themes)), ...kits.map((k) => kitPage(k, kits))];
   // The hub lives one folder higher than the other pages, so its links back to the shop go up one level.
   const hubFile = path.join(OUT, 'index.html');
   fs.writeFileSync(hubFile, fs.readFileSync(hubFile, 'utf8').replaceAll('href="../../"', 'href="../"').replace('<a href="../">More party and hunt ideas</a> · ', ''));
@@ -232,4 +286,4 @@ ${urls.map((u) => `  <url><loc>${u}</loc></url>`).join('\n')}
 }
 
 if (require.main === module) console.log(`Wrote ${build().length - 1} idea pages and the sitemap.`);
-module.exports = { build, themeSlug, spaceSlug };
+module.exports = { build, themeSlug, spaceSlug, kitSlug };
