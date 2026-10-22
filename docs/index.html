@@ -124,7 +124,10 @@ main { position: relative; }
 .life span { display: flex; justify-content: space-between; gap: 10px; padding: 12px 16px; font: 600 17px/1.2 var(--display); }
 .life small { font: 400 14px/1.2 var(--body); color: var(--ink-soft); align-self: center; }
 .life a:hover small, .life a:focus-visible small { color: var(--orange-edge); }
-@media (max-width: 760px) { .life { grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: 78%; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; } .life a { scroll-snap-align: start; } }
+.life-2 { grid-template-columns: repeat(2, 1fr); margin-bottom: 26px; }
+.life figure { margin: 0; background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.life figcaption { padding: 12px 16px; font: 600 17px/1.2 var(--display); }
+@media (max-width: 760px) { .life { grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: 78%; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; } .life a, .life figure { scroll-snap-align: start; } }
 .step { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 24px; display: grid; gap: 10px; align-content: start; }
 .step .n { font: 700 15px/1 var(--mono); color: var(--ink-soft); }
 .step p { color: var(--ink-soft); }
@@ -464,12 +467,12 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <h2>Print it, tape it up, start playing</h2>
       <p class="kits-lede">Every kit prints on plain Letter paper with your child’s name on the signs, menus and forms. Tape the poster to a door, set the menu on the table and the living room is open for business.</p>
       <div class="life">
+        <a href="?theme=vet#order"><img src="img/life/vet-stand-sm.webp" srcset="img/life/vet-stand-sm.webp 640w, img/life/vet-stand.webp 1200w" sizes="(max-width: 760px) 78vw, 400px" width="640" height="478" alt="The printed Vet Clinic kit on a play stand: clinic sign, Open sign, treatment prices, welcome poster and basket labels" loading="lazy"><span>Vet Clinic<small>Make this kit</small></span></a>
+        <a href="?theme=dino#order"><img src="img/life/dino-flat-sm.webp" srcset="img/life/dino-flat-sm.webp 640w, img/life/dino-flat.webp 1200w" sizes="(max-width: 760px) 78vw, 400px" width="640" height="478" alt="Everything in the Dino Dig Lab kit printed out: poster, gift shop menu, shop sign, fossil scans, play money and badges" loading="lazy"><span>Dino Dig Lab<small>Make this kit</small></span></a>
+        <a href="?theme=halloween#order"><img src="img/life/halloween-stand-sm.webp" srcset="img/life/halloween-stand-sm.webp 640w, img/life/halloween-stand.webp 1200w" sizes="(max-width: 760px) 78vw, 400px" width="640" height="478" alt="The printed Potion Shop kit on a play stand with a cauldron, potion jars and basket labels" loading="lazy"><span>Potion Shop<small>Make this kit</small></span></a>
         <a href="?kit=pizza#order"><img src="img/life/pizza-b-sm.webp" srcset="img/life/pizza-b-sm.webp 640w, img/life/pizza-b.webp 1200w" sizes="(max-width: 760px) 78vw, 400px" width="640" height="478" alt="The Pizza Shop menu on a kitchen table next to a felt pizza" loading="lazy"><span>Pizza Shop<small>Make this kit</small></span></a>
+        <a href="?theme=unicorn#order"><img src="img/life/unicorn-stand-sm.webp" srcset="img/life/unicorn-stand-sm.webp 640w, img/life/unicorn-stand.webp 1200w" sizes="(max-width: 760px) 78vw, 400px" width="640" height="478" alt="The printed Unicorn Stable kit on a play stand with a plush unicorn, treat baskets and signs" loading="lazy"><span>Unicorn Stable<small>Make this kit</small></span></a>
         <a href="?theme=vet#order"><img src="img/life/vet-b-sm.webp" srcset="img/life/vet-b-sm.webp 640w, img/life/vet-b.webp 1200w" sizes="(max-width: 760px) 78vw, 400px" width="640" height="478" alt="A Pet Check-Up form beside a teddy bear getting a check-up" loading="lazy"><span>Vet Clinic<small>Make this kit</small></span></a>
-        <a href="?theme=dino#order"><img src="img/life/dino-a-sm.webp" srcset="img/life/dino-a-sm.webp 640w, img/life/dino-a.webp 1200w" sizes="(max-width: 760px) 78vw, 400px" width="640" height="478" alt="The Dig Site Map on a rug with toy dinosaurs and a magnifying glass" loading="lazy"><span>Dino Dig Lab<small>Make this kit</small></span></a>
-        <a href="?theme=unicorn#order"><img src="img/life/unicorn-a-sm.webp" srcset="img/life/unicorn-a-sm.webp 640w, img/life/unicorn-a.webp 1200w" sizes="(max-width: 760px) 78vw, 400px" width="640" height="478" alt="The Treat Barn menu on a play table while a child brushes a plush unicorn" loading="lazy"><span>Unicorn Stable<small>Make this kit</small></span></a>
-        <a href="?theme=halloween#order"><img src="img/life/halloween-a-sm.webp" srcset="img/life/halloween-a-sm.webp 640w, img/life/halloween-a.webp 1200w" sizes="(max-width: 760px) 78vw, 400px" width="640" height="478" alt="The Potion Shop welcome poster taped above a table of pumpkins and potion jars" loading="lazy"><span>Potion Shop<small>Make this kit</small></span></a>
-        <a href="?theme=vet#order"><img src="img/life/vet-a-sm.webp" srcset="img/life/vet-a-sm.webp 640w, img/life/vet-a.webp 1200w" sizes="(max-width: 760px) 78vw, 400px" width="640" height="478" alt="The Pet Clinic welcome poster taped to a bedroom door above plush pets" loading="lazy"><span>Vet Clinic<small>Make this kit</small></span></a>
       </div>
     </div>
   </section>
@@ -593,6 +596,10 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <div class="pin"><b></b><span class="eyebrow">Shop play kits</span></div>
       <h2>Eleven pretend places to set up at home</h2>
       <p class="kits-lede">Print, cut and tape them up around a play kitchen, a shelf or a corner of the room. Every kit is made with your child’s name: a long shop sign, station and counter signs, shelf labels, a cash register, play money, order forms and a menu to run it all. $7.99 each, with play ideas in Host Mode. Every kit comes in two versions: big kids (5 to 8), and little kids (2 to 4) with thicker cut lines, bigger pictures and order forms they fill in by circling pictures.</p>
+      <div class="life life-2">
+        <figure><img src="img/life/pizza-stand-sm.webp" srcset="img/life/pizza-stand-sm.webp 640w, img/life/pizza-stand.webp 1200w" sizes="(max-width: 760px) 78vw, 600px" width="640" height="478" alt="The printed Pizza Shop kit on a play stand: long shop sign, Open sign, menu, oven poster, Pay Here sign and topping labels" loading="lazy"><figcaption>Set up on a play stand</figcaption></figure>
+        <figure><img src="img/life/pizza-flat-sm.webp" srcset="img/life/pizza-flat-sm.webp 640w, img/life/pizza-flat.webp 1200w" sizes="(max-width: 760px) 78vw, 600px" width="640" height="478" alt="Everything in the Pizza Shop kit printed out: welcome poster, menu, shop sign, order cards, play money and staff badges" loading="lazy"><figcaption>Everything that prints</figcaption></figure>
+      </div>
       <div class="themes" id="shopList"></div>
       <form class="shop-buy" id="shopForm" novalidate>
         <div>

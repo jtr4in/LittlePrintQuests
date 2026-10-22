@@ -23,7 +23,7 @@ const lower = (s) => (/^(Halloween|Christmas|Easter|Valentine)/.test(s) ? s : s.
 // Three pages fanned out, the middle one on top.
 const fan = (files) => `<div class="fan">${files.map((f, i) => `<img class="pg p${i}" src="${data(f)}">`).join('')}</div>`;
 // Kits with a photo of the printed kit set up at home (docs/img/life/) show that on their pin instead of the page fan.
-const LIFE = { pizza: 'b', vet: 'b', dino: 'a', unicorn: 'a', halloween: 'a' };
+const LIFE = { pizza: 'stand', vet: 'stand', dino: 'stand', unicorn: 'stand', halloween: 'stand' };
 const scene = (f) => `<div class="scene" style="background-image:url(${data(f)})"></div>`;
 
 const PINS = [];
