@@ -204,9 +204,12 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.ok(sp.spots.every((id) => require('../src/generator/spots')[id]), sp.id);
     assert.ok(site.includes(`${sp.id}: ['${sp.label}', ${JSON.stringify(sp.spots).replace(/"/g, "'").replace(/,/g, ', ')}]`), `site trail ${sp.id}`);
   }
-  // The idea pages: a hub, one per home and one per theme, all in the sitemap, with no blanks.
+  // The idea pages: a hub, one per home, one per theme and one per play kit, all in the sitemap, with no blanks.
   const ideaUrls = require('../scripts/idea-pages').build();
-  assert.equal(ideaUrls.length, 2 + Object.keys(SPACE_TRAILS).length + Object.keys(require('../src/generator/themes')).length);
+  assert.equal(ideaUrls.length, 2 + Object.keys(SPACE_TRAILS).length + Object.keys(require('../src/generator/themes')).length + Object.keys(require('../src/kits/engine').KITS).length);
+  const pizzaIdeas = fs.readFileSync(path.join(__dirname, '..', 'docs', 'ideas', 'pizza-shop-pretend-play', 'index.html'), 'utf8');
+  assert.match(pizzaIdeas, /\?kit=pizza#order/);
+  assert.match(pizzaIdeas, /Delivery Driver/);
   const sitemap = fs.readFileSync(path.join(__dirname, '..', 'docs', 'sitemap.xml'), 'utf8');
   for (const u of ideaUrls) assert.ok(sitemap.includes(`<loc>${u}</loc>`), u);
   const dinoIdeas = fs.readFileSync(path.join(__dirname, '..', 'docs', 'ideas', 'dinosaur-scavenger-hunt', 'index.html'), 'utf8');
