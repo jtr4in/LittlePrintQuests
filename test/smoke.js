@@ -744,6 +744,17 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     for (const k of ['hunt', 'party', 'kit', 'activity']) for (let i = 1; i <= 5; i++) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'gallery', id, `${k}-${i}.webp`)), `gallery ${id} ${k}-${i}`);
   }
 
+  // Every Pinterest pin has its picture and a link into the site; holiday pins wait for their season.
+  const pins = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'docs', 'pins', 'pool.json'), 'utf8'));
+  for (const p of pins) {
+    assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'pins', 'img', `${p.id}.jpg`)), `pin image ${p.id}`);
+    assert.match(p.link, /^https:\/\/littleprintquests\.com\/.*utm_source=pinterest/);
+  }
+  const ideas = pins.filter((p) => p.id.startsWith('ideas-')).map((p) => new URL(p.link).pathname);
+  for (const u of ideas) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', u, 'index.html')), `idea page ${u}`);
+  const { inSeason } = require('../scripts/pin-feed');
+  assert.deepEqual([inSeason(new Date('2026-10-22')), inSeason(new Date('2026-12-01')), inSeason(new Date('2026-07-01'))], [['halloween'], ['christmas'], []]);
+
   console.log('All smoke checks passed');
   process.exit(0);
 })().catch((e) => { console.error(e); process.exit(1); });
