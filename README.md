@@ -67,6 +67,8 @@ The website's hunt builder sends its form to the bot, which opens a Stripe Check
 4. **Website.** In `docs/index.html`, set `CHECKOUT_URL` to `<PUBLIC_URL>/api/checkout`. Set `SITE_URL` (and optionally `SITE_ORIGIN`) on the bot.
 5. **Test.** With test keys, order on your site using card `4242 4242 4242 4242`, any future date and any CVC. You should get the email within a minute. Then swap in the live keys and a live webhook.
 
+**Add-ons after checkout.** Once a website order is ready, its order page and email offer the rest of the everything bundle (play kit, activity pack and party pack) for the bundle price minus what the buyer already paid, already made with the child's name. The button opens a Stripe page for the difference; when it's paid, the order is rebuilt with the same download links and emailed again. Shop kits only offer the activity pack, and handprint art and Family Pass orders get no offer.
+
 ## Host Mode
 
 Every hunt order (Etsy or website) gets a private Host Mode link at `/h/<token>`: a phone page that walks the grown-up through hiding each card in order, then running the hunt with lines to say in character, quick challenges between clues, and step-by-step hints. A second link at `/s/<token>` gives a helper their own cues (radio calls, sound effects, checking the next card is still hidden), following along as the host taps Next. The link goes in the Etsy message, the website email and the order page. Because Etsy buyers see it, these pages have no shop links, prices or offers. Lines for each theme live in `src/host/scripts.js`.
@@ -79,5 +81,7 @@ Every hunt order (Etsy or website) gets a private Host Mode link at `/h/<token>`
 ## Website
 
 `docs/index.html` is the LittlePrintQuests storefront: themes, what's inside, pricing, FAQ, and a hunt builder that collects the child's name, age, theme and spots. To publish it free on GitHub Pages: repo Settings > Pages > Deploy from a branch > `main` / `docs`.
+
+The Contact, Refunds, Privacy and Terms pages (`docs/contact/` and so on) come from `scripts/help-pages.js`: change the words there, including the contact email, and run `node scripts/help-pages.js`.
 
 One setting sits at the top of its script: `CHECKOUT_URL` (the order bot's checkout endpoint). If it is empty, the builder says checkout opens soon.

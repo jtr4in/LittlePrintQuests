@@ -108,6 +108,7 @@ function orderPage(o) {
          ${o.activityReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-activities.pdf" target="_blank">Download your activity pack (PDF)</a></p>` : ''}
          ${o.partyReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-party.pdf" target="_blank">Download your party printables (PDF)</a></p>` : ''}
          ${o.hostToken ? `<p><a class="btn alt" href="/h/${esc(o.hostToken)}">Open Host Mode</a><br><small>Help on your phone for ${esc(products.has(o, 'hunt') ? 'hiding the cards and running the hunt' : products.has(o, 'kit') ? 'playing with the kit' : 'planning the party')}.</small></p>` : ''}
+         ${upgradeOffer(o)}
          <p>${o.email && o.deliveredAt ? `We also emailed the link to <b>${esc(o.email)}</b>.` : 'Save your PDF now, or bookmark this page to come back to it.'} Print at “Actual Size / 100%”${{ hunt: ', cut out the clue cards, and follow the Host Guide on page 1.', kit: ', and start with the grown-up guide on page 1.', activity: ', then slip the pages into sheet protectors for a dry-erase marker.', party: ', on cardstock if you have it.', craft: ', on white cardstock, and start with the tips on page 1.' }[main]}</p>`
       : working
         ? `<h1>Building ${esc(o.form.childName)}’s ${esc(main === 'craft' ? (book?.book ? what : `${HOLIDAYS[o.form.holiday].name} ${what}`) : main === 'hunt' ? theme.name : theme ? `${theme.label} ${what}` : `${KITS[o.form.kit]?.name || ''} ${what}`)}…</h1>
@@ -116,6 +117,14 @@ function orderPage(o) {
         : `<h1>Thanks for your order!</h1>
            <p>Your payment went through. We’re giving ${esc(o.form.childName)}’s ${what} a quick hand check and will email it to ${esc(o.email || 'you')} shortly.</p>`;
   return buyerPage(`Your ${what}`, body, working);
+}
+
+// "Add the play kit, activity pack and party pack for $10": shown once an order is ready.
+function upgradeOffer(o) {
+  const up = payments.enabled() && products.upgradeFor(o);
+  if (!up) return '';
+  return `<div class="offer"><p><b>Make it the whole set for $${(up.cents / 100).toFixed(2)}</b><br>Add the ${esc(products.describe(up.add))}, already made with ${esc(o.config.childName)}’s name. Worth $${(up.worth / 100).toFixed(2)} on their own.</p>
+    <p><a class="btn" href="/order/${esc(o.id)}/add">Add to my order · $${(up.cents / 100).toFixed(2)}</a><br><small>The new PDFs show up right here and in your email.</small></p></div>`;
 }
 
 // The plain page buyers land on after paying (an order or a Family Pass).
@@ -127,7 +136,7 @@ function buyerPage(title, body, refresh) {
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 system-ui,sans-serif}
 main{max-width:560px;margin:12vh auto;padding:0 16px;text-align:center}
 h1{font-size:28px;line-height:1.2}p{color:var(--muted)}p b{color:var(--ink)}
-.btn{display:inline-block;background:var(--sun);color:var(--sun-ink);padding:14px 26px;border-radius:99px;text-decoration:none;font-weight:700}.btn.alt{background:transparent;color:var(--ink);border:2px solid var(--sun)}small{color:var(--muted)}
+.btn{display:inline-block;background:var(--sun);color:var(--sun-ink);padding:14px 26px;border-radius:99px;text-decoration:none;font-weight:700}.btn.alt{background:transparent;color:var(--ink);border:2px solid var(--sun)}.offer{border:2px dashed var(--sun);border-radius:18px;padding:4px 18px 10px;margin:28px 0}small{color:var(--muted)}
 .code{font:700 26px/1.2 ui-monospace,Menlo,monospace;letter-spacing:2px;color:var(--ink);background:rgba(239,157,49,.16);border-radius:12px;padding:14px 18px;display:inline-block}
 .spin{width:36px;height:36px;margin:24px auto;border:4px solid var(--muted);border-top-color:var(--sun);border-radius:50%;animation:s 1s linear infinite}
 @keyframes s{to{transform:rotate(1turn)}}
@@ -378,7 +387,7 @@ async function route(req, res) {
     }
     try {
       const session = await payments.createCheckout(store.get().orders[id]);
-      store.update((s) => (s.orders[id].checkoutId = session.id));
+      store.update((s) => Object.assign(s.orders[id], { checkoutId: session.id, paidCents: payments.priceFor(HOLIDAYS[form.holiday]?.book ? 'book' : form.product) }));
       return sendJson(res, 200, { url: session.url });
     } catch (err) {
       console.error('Stripe checkout failed:', err.message);
@@ -434,6 +443,15 @@ async function route(req, res) {
         });
       }
     }
+    if (event.type === 'checkout.session.completed' && session.payment_status === 'paid' && session.metadata?.upgrade_of) {
+      const add = products.normalize(String(session.metadata.add || '').split(','));
+      orders
+        .upgradeWebOrder(session.metadata.upgrade_of, { add, cents: Number(session.metadata.cents) || session.amount_total || 0, sessionId: session.id })
+        .catch((err) => {
+          console.error('Add-on failed:', err);
+          health.recordError('Adding to a website order', err.message);
+        });
+    }
     if (event.type === 'checkout.session.completed' && session.payment_status === 'paid' && session.metadata?.order_id) {
       // Answer Stripe right away; building the PDF takes a few seconds.
       orders
@@ -467,6 +485,23 @@ async function route(req, res) {
       ? host.hostPage(o, { stateUrl, items: products.itemsOf(o), sidekickUrl: o.sidekickToken && `${process.env.PUBLIC_URL}/s/${o.sidekickToken}`, downloads: `/d/${o.downloadToken}.pdf` })
       : host.sidekickPage(o, { stateUrl: `/s/${o.sidekickToken}/state` });
     return send(res, 200, page, noStore);
+  }
+
+  // The add-on offer on the order page and in the email: a Stripe page for the difference.
+  const ad = p.match(/^\/order\/(web-[A-Za-z0-9_-]{16,})\/add$/);
+  if (ad) {
+    const o = store.get().orders[ad[1]];
+    if (!o) return send(res, 404, 'Order not found');
+    const up = products.upgradeFor(o);
+    if (!up || !payments.enabled()) return redirect(res, `/order/${o.id}`);
+    try {
+      const session = await payments.createUpgradeCheckout(o, up);
+      return redirect(res, session.url);
+    } catch (err) {
+      console.error('Stripe add-on checkout failed:', err.message);
+      health.recordError('Add-on checkout', err.message);
+      return send(res, 502, buyerPage('Try again in a minute', '<h1>Checkout is having trouble</h1><p>Please try again in a minute. Your order is safe.</p>'));
+    }
   }
 
   const op = p.match(/^\/order\/(web-[A-Za-z0-9_-]{16,})$/);

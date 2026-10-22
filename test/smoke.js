@@ -445,6 +445,50 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   await wait(500);
   assert.equal(emails.length, 9);
   assert.deepEqual(charged, [1699, 999, 699, 1499, 1299, 1799, 499, 799, 1099]);
+
+  // After checkout: the order page and email offer the rest of the bundle for the difference.
+  state = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
+  const huntOnly = Object.values(state.orders).find((o) => o.source === 'web' && o.product === 'hunt' && o.status === 'ready');
+  assert.equal(huntOnly.paidCents, 999);
+  assert.ok(emails.some((m) => m.html.includes(`/order/${huntOnly.id}/add`) && m.html.includes('$10.00')));
+  assert.match(await (await realFetch(`${base}/order/${huntOnly.id}`)).text(), /Add the pretend play kit, activity pack and party pack[\s\S]*Add to my order · \$10\.00/);
+  // The party bundle (hunt, kit and party pack) only lacks the activity pack: $3 more.
+  const bundleOrder = Object.values(state.orders).find((o) => o.source === 'web' && o.product === 'bundle' && o.status === 'ready');
+  assert.match(await (await realFetch(`${base}/order/${bundleOrder.id}`)).text(), /Add the activity pack[\s\S]*Add to my order · \$3\.00/);
+  const upCharged = [];
+  payments.createUpgradeCheckout = async (order, up) => {
+    upCharged.push(up.cents);
+    return { id: 'cs_up', url: `https://checkout.stripe.com/c/pay/up-${order.id}` };
+  };
+  const addRes = await realFetch(`${base}/order/${huntOnly.id}/add`, { redirect: 'manual' });
+  assert.equal(addRes.status, 303);
+  assert.equal(addRes.headers.get('location'), `https://checkout.stripe.com/c/pay/up-${huntOnly.id}`);
+  assert.deepEqual(upCharged, [1000]);
+  const upPayload = JSON.stringify({ id: 'evt_up', type: 'checkout.session.completed', data: { object: {
+    id: 'cs_up', payment_status: 'paid', amount_total: 1000, metadata: { upgrade_of: huntOnly.id, add: 'kit,activity,party', cents: '1000' } } } });
+  const upSig = payments.stripe().webhooks.generateTestHeaderString({ payload: upPayload, secret: 'whsec_test' });
+  const mailsBefore = emails.length;
+  for (let i = 0; i < 2; i++) assert.equal((await realFetch(base + '/webhooks/stripe', { method: 'POST', body: upPayload, headers: { 'stripe-signature': upSig } })).status, 200);
+  let up;
+  for (let i = 0; i < 60; i++) {
+    up = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8')).orders[huntOnly.id];
+    if (up.status !== 'processing' && up.upgrades) break;
+    await wait(500);
+  }
+  assert.equal(up.status, 'ready', JSON.stringify(up));
+  assert.deepEqual(up.items, ['hunt', 'kit', 'activity', 'party']);
+  assert.equal(up.downloadToken, huntOnly.downloadToken); // same links as before
+  assert.equal(up.hostToken, huntOnly.hostToken);
+  assert.ok(up.kitReady && up.activityReady && up.partyReady);
+  assert.equal(up.paidCents, 1999);
+  assert.equal(up.upgrades.length, 1); // Stripe resending the event adds nothing twice
+  await wait(300);
+  assert.equal(emails.length, mailsBefore + 1);
+  assert.ok(emails.at(-1).html.includes(`/d/${up.downloadToken}-party.pdf`) && !emails.at(-1).html.includes('/add'));
+  const upPage = await (await realFetch(`${base}/order/${huntOnly.id}`)).text();
+  assert.match(upPage, /Download your party printables/);
+  assert.ok(!/Add to my order/.test(upPage));
+  assert.equal((await realFetch(`${base}/order/${huntOnly.id}/add`, { redirect: 'manual' })).headers.get('location'), `/order/${huntOnly.id}`);
   assert.equal((await realFetch(base + '/order/manual-1')).status, 401); // only web orders are public
   assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Emailed to ava\.parent@example\.com/);
 
