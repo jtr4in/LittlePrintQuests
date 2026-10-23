@@ -15,7 +15,7 @@ const { execFileSync } = require('child_process');
 const { renderPdf } = require('../src/generator/render');
 const { renderKit, renderActivities } = require('../src/kits/render-kit');
 const { renderParty } = require('../src/party/render-party');
-const { kitForHunt, KITS } = require('../src/kits/engine');
+const { kitForHunt, KITS, buildKitHtml } = require('../src/kits/engine');
 const THEMES = require('../src/generator/themes');
 const { blankJob, saveIndex } = require('../src/generator/name-slots');
 
@@ -24,6 +24,13 @@ const SPOTS = ['front_door', 'shoe_rack', 'couch', 'dryer', 'bathtub', 'bookshel
 const PARTY = { date: 'Saturday, June 3', time: '2 to 4 pm', place: 'Our house', rsvp: 'Text Sam' };
 // The page the hands-on toys start after: shop-style kits have a big shop sign first.
 const firstToy = (kitId) => (KITS[kitId].hunt && !KITS[kitId].bigSign ? 4 : 5);
+// The kit's wow prop page (def.wow), shown as the third kit sample.
+const wowPage = (kitId, ages) => {
+  const html = buildKitHtml({ kit: kitId, childName: 'Maya', ages, subjects: [], lenient: true });
+  const at = html.indexOf('<section class="page props wow"');
+  if (at < 0) throw new Error(`${kitId} has no wow page`);
+  return html.slice(0, at).split('<section class="page').length;
+};
 const count = (dir) => fs.readdirSync(dir).filter((f) => /^page-\d+\.png$/.test(f)).length;
 
 // The little-kids kit and activity pack: thicker cut lines, bigger pictures, no word search.
@@ -33,15 +40,16 @@ async function little(id, kitId, tmp, jobs) {
   await renderActivities({ kit: kitId, childName: 'Maya', ages: 'little', lenient: true }, `${dir('activity')}.pdf`, { pngDir: dir('activity'), nameSlots: 'Maya' });
   const kit = count(dir('kit'));
   const start = firstToy(kitId);
+  const toys = [0.35, 0.55, 0.75].map((f) => Math.round(start + f * (kit - start)));
   const picks = {
-    kit: [2, start - 1, ...[0.35, 0.55, 0.75].map((f) => Math.round(start + f * (kit - start)))],
+    kit: [2, start - 1, wowPage(kitId, 'little'), toys[1], toys[2]],
     activity: [1, 6, 7, 9, 5], // cover, I spy, spot the difference, maze, counting
   };
   fs.mkdirSync(path.join(OUT, id, 'little'), { recursive: true });
   for (const [k, pages] of Object.entries(picks)) {
     pages.forEach((n, i) => jobs.push([path.join(dir(k), `page-${n}.png`), path.join(OUT, id, 'little', `${k}-${i + 1}.webp`)]));
   }
-  jobs.push([path.join(dir('kit'), `page-${picks.kit[2]}.png`), path.join(OUT, '..', 'pages', `${id}-little-kit.webp`), 400]);
+  jobs.push([path.join(dir('kit'), `page-${toys[0]}.png`), path.join(OUT, '..', 'pages', `${id}-little-kit.webp`), 400]);
   jobs.push([path.join(dir('activity'), 'page-6.png'), path.join(OUT, '..', 'pages', `${id}-little-activity.webp`), 400]);
 }
 
@@ -59,14 +67,14 @@ async function little(id, kitId, tmp, jobs) {
       await renderActivities({ kit: id, childName: 'Maya', lenient: true }, `${dir('activity')}.pdf`, { pngDir: dir('activity'), nameSlots: 'Maya' });
       const kit = count(dir('kit'));
       const picks = {
-        kit: [2, 4, ...[0.35, 0.55, 0.75].map((f) => Math.round(5 + f * (kit - 5)))], // welcome poster, shop sign, three toys
+        kit: [2, 4, wowPage(id), ...[0.55, 0.75].map((f) => Math.round(5 + f * (kit - 5)))], // welcome poster, shop sign, wow prop, two toys
         activity: [1, 6, 7, 9, 10],
       };
       fs.mkdirSync(path.join(OUT, id), { recursive: true });
       for (const [k, pages] of Object.entries(picks)) {
         pages.forEach((n, i) => jobs.push([path.join(dir(k), `page-${n}.png`), path.join(OUT, id, `${k}-${i + 1}.webp`)]));
       }
-      jobs.push([path.join(dir('kit'), `page-${picks.kit[2]}.png`), path.join(OUT, '..', 'pages', `${id}-kit.webp`), 400]);
+      jobs.push([path.join(dir('kit'), `page-${Math.round(5 + 0.35 * (kit - 5))}.png`), path.join(OUT, '..', 'pages', `${id}-kit.webp`), 400]);
       jobs.push([path.join(dir('activity'), 'page-6.png'), path.join(OUT, '..', 'pages', `${id}-activity.webp`), 400]);
       await little(id, id, tmp, jobs);
       console.log('Rendered', id);
@@ -83,7 +91,7 @@ async function little(id, kitId, tmp, jobs) {
       hunt: [1, 2, 3, 4, hunt], // host guide, briefing, two clue card sheets, certificate
       activity: [1, 6, 7, 9, 10], // cover, I spy, spot the difference, maze, word search
       party: [2, 3, 4, 5, 6], // invitations, thank-you cards, toppers, favor tags, banner
-      kit: [2, start - 1, ...[0.35, 0.55, 0.75].map((f) => Math.round(start + f * (kit - start)))], // welcome poster, sign, three toys
+      kit: [2, start - 1, wowPage(kitForHunt(id).id), ...[0.55, 0.75].map((f) => Math.round(start + f * (kit - start)))], // welcome poster, sign, wow prop, two toys
     };
     fs.mkdirSync(path.join(OUT, id), { recursive: true });
     for (const [k, pages] of Object.entries(picks)) {
