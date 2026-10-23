@@ -108,8 +108,10 @@ function ovenPage() {
     const y = 200 + row * 52; const off = row % 2 ? 0 : 45;
     for (let x = -off; x < 760; x += 90) bricks.push(`<rect x="${x + 4}" y="${y + 4}" width="82" height="44" rx="6" class="ov-brick${(row + x) % 3 ? '' : ' d'}"/>`);
   }
-  return `<section class="page appliance">
-    <svg viewBox="0 0 760 980" class="ap-art">
+  // Two pieces: the oven itself is a 7.6 inch square, just under the 8 inch oven window of
+  // an IKEA Duktig or KidKraft play kitchen, and the woodpile base is a strip to add on a box.
+  return `<section class="page appliance oven">
+    <svg viewBox="0 0 760 760" class="ov-art">
       <defs><clipPath id="dome"><path d="M40,700 L40,420 Q40,140 380,130 Q720,140 720,420 L720,700 Z"/></clipPath></defs>
       <rect x="320" y="0" width="120" height="170" class="ov-chimney"/><rect x="300" y="0" width="160" height="30" rx="8" class="ov-cap"/>
       <path d="M40,700 L40,420 Q40,140 380,130 Q720,140 720,420 L720,700 Z" class="ov-dome"/>
@@ -120,10 +122,14 @@ function ovenPage() {
       ${em(300, 600, 150, '🔥')}${em(400, 580, 180, '🔥')}${em(480, 615, 120, '🔥')}
       <rect x="240" y="650" width="280" height="34" rx="17" class="ov-log"/><rect x="270" y="620" width="230" height="34" rx="17" class="ov-log d"/>
       <rect x="10" y="700" width="740" height="60" rx="10" class="ov-ledge"/>
+    </svg>
+    <p class="ap-tip">Play kitchen? Tape the oven inside the oven door so it shows through the window, or onto the door itself.</p>
+    <div class="cut-h"></div>
+    <svg viewBox="0 760 760 210" class="ov-base-art">
       <rect x="40" y="760" width="680" height="210" class="ov-base"/>
       ${[110, 280, 450, 620].map((x) => `<rect x="${x - 60}" y="800" width="120" height="130" rx="10" class="ov-wood"/>`).join('')}
     </svg>
-    <p class="ap-tip">Tape onto a box or the front of a play kitchen. Slide the pizzas in on the peel!</p>
+    <p class="ap-tip">Using a box instead? Tape the woodpile under the oven to make it tall. Slide the pizzas in on the peel!</p>
   </section>`;
 }
 
@@ -242,6 +248,8 @@ const extrasCss = `
 .appliance { padding:.35in; display:flex; flex-direction:column; align-items:center; }
 .ap-art { width:100%; flex:1; min-height:0; }
 .ap-tip { font-size:10pt; color:#66708f; margin:.08in 0 0; text-align:center; }
+.appliance.oven { padding:.3in; justify-content:space-between; } .appliance.oven .cut-h { align-self:stretch; margin:.04in -.3in; }
+.ov-art { width:7.6in; height:7.6in; flex:none; } .ov-base-art { width:7.6in; height:2.1in; flex:none; }
 .ov-chimney { fill:#8a8f98; } .ov-cap { fill:#5d626b; }
 .ov-dome { fill:#c8643c; } .ov-brick { fill:#d9784d; stroke:#a9502c; stroke-width:3; } .ov-brick.d { fill:#c66a43; }
 .ov-edge { fill:none; stroke:#8e3f22; stroke-width:10; }

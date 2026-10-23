@@ -91,7 +91,7 @@ module.exports = {
     intro: 'Everything {child} needs to run a pretend sit-down Italian restaurant. Print on regular Letter paper, cut along the dashed lines, and seat some stuffed animals at the tables as hungry guests.',
     setup: [
       'Tape the restaurant sign and Open sign by the “front door”, with Please Wait to Be Seated just inside.', 'Set a table or two with plates, napkins and a Table Card on each.',
-      'Put the register by the Pay Here sign and a notebook under the Reservations sign.', 'Tape the oven and stove onto boxes for the kitchen, wrap the jar labels round some cups, and tape up How to Make Spaghetti.',
+      'Put the register by the Pay Here sign and a notebook under the Reservations sign.', 'Tape the oven and stove onto a play kitchen or some boxes, wrap the jar labels round some cups, and tape up How to Make Spaghetti.',
       'Pin on the badges and seat the first guests!',
     ],
     play: [

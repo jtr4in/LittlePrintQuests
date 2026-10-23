@@ -242,7 +242,7 @@ function guidePage(k) {
   const inside = [
     ...(d.hunt && !d.bigSign ? [] : ['A big shop sign: two pages that glue into one 20 inch banner']),
     `${signCount} signs for doors and walls${signCount % 2 ? ' (and a blank one)' : ''}, plus ${signageCount(d) ? `${signageCount(d)} big station ${signageCount(d) === 1 ? 'sign' : 'signs'}, ` : ''}7 counter signs (a fold-over Open/Closed sign, pay here, our hours and more) and 15 shelf and bin labels`,
-    ...(d.appliances ? [`A ${d.appliances.map((a) => ({ oven: 'pizza oven', stove: 'stovetop' })[a]).join(' and a ')} to tape onto a box`] : []),
+    ...(d.appliances ? [`A ${d.appliances.map((a) => ({ oven: 'pizza oven', stove: 'stovetop' })[a]).join(' and a ')} to tape onto a box or a play kitchen`] : []),
     ...(d.jars ? [`${d.jars.length} wrap-around jar labels`] : []),
     ...(d.toys ? d.toys.map((t) => t.inside) : [`${['laptop', 'console'].includes(d.dashboard.device) ? 'A fold-up' : 'A cut-out'} ${d.dashboard.gadget} with 3 screens`]),
     '8 ID badges',
