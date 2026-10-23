@@ -35,9 +35,9 @@ for (const [id, t] of Object.entries(THEMES)) {
   PINS.push({
     id: `hunt-${id}`, feed: 'scavenger-hunts', color: c.primary,
     kicker: 'Printable birthday game', head: `${t.label} Scavenger Hunt`, sub: 'Rhyming clue cards with your child’s name and your own hiding spots',
-    tags: ['Ages 3 to 8', 'Print at home'], art: scene(`hero/${id}.webp`),
+    tags: ['Ages 2 to 8', 'Print at home'], art: scene(`hero/${id}.webp`),
     title: `${t.label} Birthday Scavenger Hunt for Kids, Printable and Personalized`,
-    description: `A ${lower(t.label)} treasure hunt made for your child: rhyming clue cards for the hiding spots in your own home, a mission briefing to read aloud and a finisher certificate. Print at home in minutes, great for birthday parties and rainy days. Ages 3 to 8.`,
+    description: `A ${lower(t.label)} treasure hunt made for your child: rhyming clue cards for the hiding spots in your own home, a mission briefing to read aloud and a finisher certificate. Print at home in minutes, great for birthday parties and rainy days. Ages 2 to 8.`,
     link: link({ theme: id }),
   });
   PINS.push({
@@ -64,7 +64,7 @@ for (const s of Object.values(SPACES)) {
   PINS.push({
     id: `ideas-${slug(s.title)}`, feed: 'scavenger-hunts', color: '#2f9a6b',
     kicker: 'Free ideas', head: s.title, sub: 'Free rhyming clues for the spots you really have',
-    tags: ['Use them today', 'Ages 3 to 8'], art: fan(['gallery/dino/hunt-3.webp', 'gallery/unicorn/hunt-3.webp', 'gallery/pirate/hunt-3.webp']),
+    tags: ['Use them today', 'Ages 2 to 8'], art: fan(['gallery/dino/hunt-3.webp', 'gallery/unicorn/hunt-3.webp', 'gallery/pirate/hunt-3.webp']),
     title: `${s.title} for Kids: Free Clues and Ideas`,
     description: `Free rhyming scavenger hunt clues for kids, picked for the spots you really have, plus easy tips for setting up a hunt at home.`,
     link: `${SITE}ideas/${slug(s.title)}/?utm_source=pinterest&utm_medium=pin`,

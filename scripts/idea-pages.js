@@ -102,7 +102,7 @@ ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script
 <main class="wrap">
 ${body}
 </main>
-<footer><div class="wrap">Printable party games and quests for kids ages 3 to 8 · <a href="../">More party and hunt ideas</a> · <a href="../../">LittlePrintQuests</a></div></footer>
+<footer><div class="wrap">Printable party games and quests for kids ages 2 to 8 · <a href="../">More party and hunt ideas</a> · <a href="../../">LittlePrintQuests</a></div></footer>
 </body>
 </html>
 `;
@@ -131,7 +131,7 @@ function themePage(t, i, all) {
   const young = t.ages.split('–')[0];
   const questions = [
     [`What age is a ${t.label.toLowerCase()} scavenger hunt for?`, `This hunt is written for ages ${t.ages}. Younger kids follow the picture on each card while a grown-up reads the rhyme; older kids can read the clues on their own.`],
-    ['How many clues should a scavenger hunt have?', 'Six to ten clues is the sweet spot for ages 3 to 8. It takes about 15 to 25 minutes, long enough to feel like a quest and short enough that nobody loses interest.'],
+    ['How many clues should a scavenger hunt have?', 'Six to ten clues is the sweet spot for ages 2 to 8. It takes about 15 to 25 minutes, long enough to feel like a quest and short enough that nobody loses interest.'],
     ['Can I do this hunt in a small apartment?', 'Yes. Pick spots in every room and zig-zag between them. The apartment trail below uses eight spots every apartment has.'],
   ];
   const body = `
@@ -181,7 +181,7 @@ ${Object.values(SPACES).map((s) => `<li><a href="../${spaceSlug(s)}/">${esc(s.ti
 
 function spacePage(s, themes) {
   const questions = [
-    [`How long does a ${s.label.toLowerCase()} scavenger hunt take?`, 'With eight clues, about 15 to 25 minutes for kids ages 3 to 8, plus a few minutes beforehand to hide the cards.'],
+    [`How long does a ${s.label.toLowerCase()} scavenger hunt take?`, 'With eight clues, about 15 to 25 minutes for kids ages 2 to 8, plus a few minutes beforehand to hide the cards.'],
     ['Where should the prize go?', `At the last spot on the trail. On this trail that’s the ${SPOTS[s.spots[s.spots.length - 1]].label.toLowerCase()}.`],
   ];
   const body = `
@@ -209,7 +209,7 @@ ${themes.map((t) => `<li><a href="../${themeSlug(t)}/">${esc(t.label)} hunt</a><
   return page({
     file: path.join(OUT, spaceSlug(s), 'index.html'),
     title: `${s.title} for Kids: 8 Free Rhyming Clues`,
-    description: `A ready-to-use ${s.label.toLowerCase()} scavenger hunt for ages 3 to 8: eight rhyming clues with answers, where to hide each one, and tips.`,
+    description: `A ready-to-use ${s.label.toLowerCase()} scavenger hunt for ages 2 to 8: eight rhyming clues with answers, where to hide each one, and tips.`,
     body,
     jsonLd: faq(questions),
   });
@@ -282,7 +282,7 @@ function hub(themes, kits) {
   return page({
     file: path.join(OUT, 'index.html'),
     title: 'Scavenger Hunt and Party Ideas for Kids',
-    description: 'Free rhyming scavenger hunt clues, stories and tips for kids ages 3 to 8, by theme and by home: apartment, house or backyard.',
+    description: 'Free rhyming scavenger hunt clues, stories and tips for kids ages 2 to 8, by theme and by home: apartment, house or backyard.',
     body,
   });
 }
