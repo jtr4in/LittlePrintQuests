@@ -30,7 +30,7 @@ function hints(spot) {
 // Every screen of Host Mode, plus the sidekick's cue for each one.
 function plan(order, sidekickUrl) {
   const cfg = order.config;
-  const { theme, cards, prize } = planHunt(cfg);
+  const { theme, cards, prize, puzzle } = planHunt(cfg);
   const s = SCRIPTS[cfg.theme];
   const name = cfg.childName || 'our birthday star';
   const kids = cfg.childName ? `${cfg.childName} and the ${theme.hunters}` : theme.hunters;
@@ -39,8 +39,9 @@ function plan(order, sidekickUrl) {
   const steps = [];
 
   steps.push({ phase: 'setup', title: 'Let’s hide the cards', body: [`You have ${n} clue cards. Keep Card 1 with you, and hide the other ${n - 1} in the order on the next screens.`, 'Do this while the kids are busy, or the night before.'] });
+  if (puzzle) steps.push({ phase: 'setup', title: 'Cut out the puzzle', body: [`The puzzle page has ${n} numbered pieces, one for each card. Tuck piece 1 behind Card 1, piece 2 behind Card 2, and so on.`, 'The kids collect a piece at every stop. At the last clue, they put the puzzle together to see where the prize is.'] });
   for (const c of cards.slice(1)) {
-    steps.push({ phase: 'setup', check: true, title: `Hide Card ${c.n}`, spot: c.hiddenAt.label, body: [c.hiddenAt.tip], small: `Its riddle sends the kids to the ${c.leadsTo.label}.` });
+    steps.push({ phase: 'setup', check: true, title: `Hide Card ${c.n}`, spot: c.hiddenAt.label, body: [c.hiddenAt.tip], small: `Its riddle sends the kids to the ${c.leadsTo.label}.${puzzle ? ` Puzzle piece ${c.n} goes with it.` : ''}` });
   }
   steps.push({ phase: 'setup', check: true, title: 'Hide the prize', spot: prize.label, body: [`Cake, favor bags or treasure: it all goes at the ${prize.label}. The last clue leads here.`] });
   if (sidekickUrl) steps.push({ phase: 'setup', title: 'Want a sidekick?', share: sidekickUrl, body: ['Send this link to another grown-up. They get a secret role: radio calls in character, sound effects, and sneaking ahead to check the next card is still hidden.', 'Their screen follows along as you tap Next.'] });
@@ -50,10 +51,11 @@ function plan(order, sidekickUrl) {
   steps.push({ phase: 'play', title: 'Read the mission briefing', read: theme.briefing.paragraphs.map((p) => fill(p, ctx)), small: `${theme.briefing.signoff} ${theme.briefing.from}` });
   cards.forEach((c, i) => {
     const step = { phase: 'play', heading: c.n === n ? `the prize at the ${prize.label}` : `the ${c.leadsTo.label}`, read: c.lines, hints: hints(c.leadsTo) };
-    if (c.n === 1) Object.assign(step, { title: 'Read Clue #1 aloud', body: ['Hand Card 1 to the kids and read it together.'] });
-    else Object.assign(step, { title: `They found Card ${c.n}!`, small: `At the ${c.hiddenAt.label}`, challenge: s.challenges[(i - 1) % s.challenges.length], say: fill(s.calls[(i - 1) % s.calls.length], ctx) });
+    if (c.n === 1) Object.assign(step, { title: 'Read Clue #1 aloud', body: [puzzle ? 'Hand Card 1 and puzzle piece 1 to the kids and read the card together. Pick one kid to hold the pieces, or take turns.' : 'Hand Card 1 to the kids and read it together.'] });
+    else Object.assign(step, { title: `They found Card ${c.n}!`, small: `At the ${c.hiddenAt.label}${puzzle ? ` · with puzzle piece ${c.n}` : ''}`, challenge: s.challenges[(i - 1) % s.challenges.length], say: fill(s.calls[(i - 1) % s.calls.length], ctx) });
     steps.push(step);
   });
+  if (puzzle) steps.push({ phase: 'play', title: 'Puzzle time! 🧩', body: [`Lay all ${n} pieces on the floor and let the kids put them together. The numbers go in order, left to right, if little ones need a hand.`, `The picture shows where the prize is: the ${prize.label}. Let them run!`] });
   steps.push({ phase: 'play', title: 'Treasure found! 🎉', say: fill(s.finale, ctx), body: [`Hand ${name} the certificate from the last page of the PDF.`] });
 
   // The sidekick's cue for each host screen.
@@ -74,6 +76,7 @@ function plan(order, sidekickUrl) {
         ? { title: 'Sound effect', body: s.sounds[(k >> 1) % s.sounds.length] }
         : { title: 'Sneak ahead', body: `Check that Card ${next.n} is still at the ${next.hiddenAt.label}. Put it back if it moved.` };
     }
+    if (step.title.startsWith('Puzzle time')) return { title: 'Puzzle time', body: 'Snap a photo of the kids building the puzzle, then get to the prize spot before they do.' };
     return { title: 'Big finish', body: `Lead the cheer and take a photo when ${name} gets the certificate!` };
   };
   steps.forEach((st, i) => (st.cue = cue(st, i)));

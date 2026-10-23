@@ -1,6 +1,6 @@
 // Builds the website's per-theme pictures in docs/img/: the theme card pages (pages/<id>-hunt|kit|party.webp:
 // a clue card sheet, the invitation and the kit's first hands-on toy),
-// the four hunt pages for "What's in the box" (pages/<id>-guide|briefing|cards|cert.webp),
+// the hunt pages for "What's in the box" (pages/<id>-guide|briefing|cards|puzzle|cert.webp),
 // the play kit card (kit-<id>.webp) and the Host Mode phones (host/<id>-hide|play|sidekick.webp).
 // Usage: node scripts/site-images.js [theme ...]
 const fs = require('fs');
@@ -83,7 +83,7 @@ for f in os.listdir(tmp):
         Image.open(os.path.join(p, f'page-{n}.png')).convert('RGB').resize((400, 518), Image.LANCZOS).save(os.path.join(img, 'pages', f'{theme}-{kind}.webp'), 'WEBP', quality=80)
         if kind == 'hunt':
             pages = sorted(os.listdir(p), key=lambda x: int(x[5:-4]))
-            for part, page in (('guide', pages[0]), ('briefing', pages[1]), ('cards', pages[2]), ('cert', pages[-1])):
+            for part, page in (('guide', pages[0]), ('briefing', pages[1]), ('cards', pages[2]), ('puzzle', pages[-2]), ('cert', pages[-1])):
                 Image.open(os.path.join(p, page)).convert('RGB').resize((480, 621), Image.LANCZOS).save(os.path.join(img, 'pages', f'{theme}-{part}.webp'), 'WEBP', quality=80)
 `, tmp, IMG]);
   console.log('Wrote docs/img for', only.length ? only.join(', ') : 'every theme');

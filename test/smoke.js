@@ -119,6 +119,21 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.ok(!hunt({ age: 7 }).includes('class="pic-hint"'));
   assert.ok(hunt({ age: 7, pictures: true }).includes('class="pic-hint"'));
 
+  // Puzzle finale: one numbered piece per clue card for every theme and spot count, a note on the
+  // last card, the prize spot on the picture, and real illustrations; `puzzle: false` leaves it out.
+  const { PUZZLES, ROWS } = require('../src/generator/puzzle');
+  const spotIds = Object.keys(require('../src/generator/spots'));
+  for (let n = 3; n <= 12; n++) assert.equal(ROWS[n].reduce((a, b) => a + b), n);
+  for (const theme of Object.keys(require('../src/generator/themes'))) {
+    assert.equal(PUZZLES[theme].art.filter((a) => fs.existsSync(path.join(__dirname, '..', 'src', 'kits', 'art', theme, `${a}.webp`))).length, 5, theme);
+    const n = 3 + (theme.length % 10);
+    const html = buildHtml({ theme, spots: spotIds.slice(0, n) });
+    assert.equal((html.match(/<g class="num">/g) || []).length, n, theme);
+    assert.equal((html.match(/class="puzzle-note"/g) || []).length, 1);
+    assert.ok(html.includes(`class="spot-label"`) && html.includes('.webp"'));
+  }
+  assert.ok(!hunt({ puzzle: false }).includes('class="page puzzle"') && !hunt({ puzzle: false }).includes('class="puzzle-note"'));
+
   // Party Pack: builds for every theme, fills party details or leaves write-in lines, renders a real PDF.
   const { buildPartyHtml } = require('../src/party/build');
   const { renderParty } = require('../src/party/render-party');

@@ -2,7 +2,7 @@
 
 Personalized, print-ready birthday scavenger hunts for kids ages 3 to 8.
 
-Each hunt is a PDF with a host guide (where to hide every card), a read-aloud mission briefing, 4x6 rhyming clue cards (two per page with cut lines), and a certificate. Twenty-seven themes, each with a matching play kit and party pack: Dino, Superhero, Pirate, Space, Royal Castle, Unicorn, Mermaid, Construction, Pet Vet, Race Car, Fire & Rescue and Ice Kingdom; the shop kits Pizza Shop, Burger Shop, Grocery Store, Post Office, Library, Police Station, Dentist Office, Pet Shop, Coffee Shop, Italian Restaurant and Auto Repair Shop; plus Halloween, Christmas, Easter and Valentine’s. The shop kits’ hunts and party packs are sold on the website only, not on Etsy. `scripts/site-images.js` builds a theme’s website pictures.
+Each hunt is a PDF with a host guide (where to hide every card), a read-aloud mission briefing, 4x6 rhyming clue cards (two per page with cut lines), a puzzle finale, and a certificate. The puzzle is a themed picture cut into one numbered jigsaw piece per clue card: piece k is tucked behind card k, and at the last clue the kids put it together to see where the prize is. Each theme's title, line and illustrations are in `src/generator/puzzle.js`; add `"puzzle": false` to a config to leave it out. Twenty-seven themes, each with a matching play kit and party pack: Dino, Superhero, Pirate, Space, Royal Castle, Unicorn, Mermaid, Construction, Pet Vet, Race Car, Fire & Rescue and Ice Kingdom; the shop kits Pizza Shop, Burger Shop, Grocery Store, Post Office, Library, Police Station, Dentist Office, Pet Shop, Coffee Shop, Italian Restaurant and Auto Repair Shop; plus Halloween, Christmas, Easter and Valentine’s. The shop kits’ hunts and party packs are sold on the website only, not on Etsy. `scripts/site-images.js` builds a theme’s website pictures.
 
 ## Make a hunt
 
@@ -71,7 +71,7 @@ The website's hunt builder sends its form to the bot, which opens a Stripe Check
 
 ## Host Mode
 
-Every hunt order (Etsy or website) gets a private Host Mode link at `/h/<token>`: a phone page that walks the grown-up through hiding each card in order, then running the hunt with lines to say in character, quick challenges between clues, and step-by-step hints. A second link at `/s/<token>` gives a helper their own cues (radio calls, sound effects, checking the next card is still hidden), following along as the host taps Next. The link goes in the Etsy message, the website email and the order page. Because Etsy buyers see it, these pages have no shop links, prices or offers. Lines for each theme live in `src/host/scripts.js`.
+Every hunt order (Etsy or website) gets a private Host Mode link at `/h/<token>`: a phone page that walks the grown-up through hiding each card (and its puzzle piece) in order, then running the hunt with lines to say in character, quick challenges between clues, and step-by-step hints. A second link at `/s/<token>` gives a helper their own cues (radio calls, sound effects, checking the next card is still hidden), following along as the host taps Next. The link goes in the Etsy message, the website email and the order page. Because Etsy buyers see it, these pages have no shop links, prices or offers. Lines for each theme live in `src/host/scripts.js`.
 
 ### Development
 
