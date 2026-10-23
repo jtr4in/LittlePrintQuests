@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Every link, picture and script on this page is relative to the site root, like the home page. -->
+<base href="../">
+<title>Make your kit · LittlePrintQuests</title>
+<meta name="description" content="Make a personalized printable scavenger hunt, pretend play kit, activity pack and party pack with your kid’s name and your home’s own hiding spots. Ready to print in minutes.">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<meta name="theme-color" content="#fbf8f1">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LittlePrintQuests">
+<meta property="og:url" content="https://littleprintquests.com/make/">
+<meta property="og:title" content="Make your kid’s kit · LittlePrintQuests">
+<meta property="og:description" content="Printable scavenger hunts, play kits and party packs with your kid’s name and your home’s own hiding spots. Ready to print in minutes.">
+<meta property="og:image" content="https://littleprintquests.com/img/share.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://littleprintquests.com/make/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&display=swap">
+<!-- the printed pages' own fonts, for writing the kid's name over the previews (js/names.js); files load only when used -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:wght@200..1000&family=Bangers&family=Pirata+One&family=Orbitron:wght@400..900&family=Cinzel+Decorative:wght@700&family=Pacifico&family=Comic+Neue:wght@700&display=swap">
+<link rel="stylesheet" href="css/site.css">
+<script src="js/names.js"></script>
+</head>
+<body class="make">
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="./" aria-label="LittlePrintQuests home">
+      <img src="img/mark.png" alt="" width="52" height="40">
+      <span class="wordmark"><span class="l">Little</span><span class="p">Print</span><span class="q">Quests</span></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <div class="links" id="navLinks">
+        <a href="./#themes">Themes</a>
+        <a href="./#pricing">Pricing</a>
+        <a href="play-kits/">Play kits</a>
+        <a href="handprint-art/">Handprint art</a>
+        <a href="./#faq">FAQ</a>
+      </div>
+      <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks" aria-label="Menu"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h16M3 11h16M3 16h16"/></svg></button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="make-wrap">
+    <div class="wrap" id="wizTop">
+      <h1 class="make-title">Make <b id="makeName">your kid’s</b> kit</h1>
+      <ol class="wiz-steps" id="wizSteps" aria-label="Steps"></ol>
+
+      <form class="builder" id="orderForm" novalidate>
+        <div class="panel wiz">
+          <p class="eyebrow" id="wizCount">Step 1 of 5</p>
+
+          <section class="wiz-step" data-step="who">
+            <h2>Who’s it for?</h2>
+            <div class="row2">
+              <div class="field"><label for="childName">Kid’s first name</label><input type="text" id="childName" maxlength="24" autocomplete="off" autocapitalize="words" placeholder="First name"></div>
+              <div class="field"><label for="childAge" id="ageLabel">Turning</label><input type="number" id="childAge" min="2" max="12" placeholder="Optional"></div>
+            </div>
+            <fieldset class="field" id="agesField">
+              <legend>Made for</legend>
+              <div class="ages-pick" id="agesPick">
+                <button type="button" data-ages="little" aria-pressed="false"><b>Little kids · 2 to 4</b><small>Thicker cut lines, bigger pictures, picture clues and order forms they circle</small></button>
+                <button type="button" data-ages="big" aria-pressed="true"><b>Big kids · 5 to 8</b><small>More to read and write, plus a word search in the activity pack</small></button>
+              </div>
+            </fieldset>
+          </section>
+
+          <section class="wiz-step" data-step="theme" hidden>
+            <h2>Pick a theme</h2>
+            <p class="hint">The hunt, play kit, activity pack and party pack all come in this theme. Now: <b id="themeName">Dino Fossil Recovery</b></p>
+            <div class="themes mini grid" id="themeList" aria-label="Themes"></div>
+            <div class="hero-banner small" id="heroBanner">
+              <img class="hb on" alt="" width="1600" height="700" sizes="(max-width: 860px) 100vw, 640px">
+              <img class="hb" alt="" width="1600" height="700" sizes="(max-width: 860px) 100vw, 640px">
+              <button type="button" class="hb-cap" id="heroCap"></button>
+            </div>
+          </section>
+
+          <section class="wiz-step" data-step="box" hidden>
+            <h2>What’s in the box</h2>
+            <p class="hint">Everything is ticked. Untick anything you don’t need, and the price drops to match.</p>
+            <ul class="layers" id="layers" role="group" aria-label="What to include"></ul>
+          </section>
+
+          <section class="wiz-step" data-step="details" hidden>
+            <fieldset class="field" id="spotsField">
+              <legend><h2>Where should the clues hide?</h2></legend>
+              <p class="hint">Tap 6 to 10 spots in the order the kids should find them. The last one is where the prize goes. <span id="spotCount"></span></p>
+              <div class="presets" id="presets" role="group" aria-label="Start from a ready-made trail"><span>Start from:</span></div>
+              <ol class="route" id="route" aria-label="Your trail, in order"></ol>
+              <p class="route-tip" id="routeTip" hidden>Tap a stop to take it off, or drag it to change the order.</p>
+              <div class="chips" id="spotChips"></div>
+              <div class="addspot"><input type="text" id="customSpot" maxlength="30" placeholder="Add your own, like “Grandma’s piano”" aria-label="Add your own spot"><button type="button" class="btn btn-ghost" id="addSpot">Add</button></div>
+            </fieldset>
+            <details class="field party-details" id="partyDetails">
+              <summary>Party details for the invitations <span class="hint">(optional)</span></summary>
+              <div class="row2">
+                <div class="field"><label for="partyDate">Date</label><input type="text" id="partyDate" maxlength="60" placeholder="Saturday, June 3"></div>
+                <div class="field"><label for="partyTime">Time</label><input type="text" id="partyTime" maxlength="60" placeholder="2 to 4 pm"></div>
+              </div>
+              <div class="field"><label for="partyPlace">Where</label><input type="text" id="partyPlace" maxlength="60" placeholder="Our house, 12 Elm Street"></div>
+              <div class="field"><label for="partyRsvp">RSVP</label><input type="text" id="partyRsvp" maxlength="60" placeholder="Text Sam 555-0102"></div>
+              <p class="hint">Leave these blank to get invitations with write-in lines.</p>
+            </details>
+          </section>
+
+          <section class="wiz-step" data-step="pay" hidden>
+            <h2>Check it over</h2>
+            <dl class="review" id="review"></dl>
+            <a class="pass-up" id="passUp" href="./#pass" hidden>Planning more than one party this year? <b>Get 6 everything bundles for $39.99</b> with the Family Pass →</a>
+            <details class="passbox" id="passBox"><summary>Have a Family Pass code?</summary>
+              <div class="passrow"><input type="text" id="passCode" maxlength="20" placeholder="LPQ-XXXX-XXXX" autocomplete="off" spellcheck="false" aria-label="Family Pass code"><button type="button" class="btn btn-ghost" id="passApply">Apply</button></div>
+              <p class="save" id="passNote"></p>
+            </details>
+            <button class="btn btn-orange pay-btn" type="submit" id="checkoutBtn">Continue to checkout</button>
+            <p class="trust"><span>Apple Pay, Google Pay or card, secure checkout by Stripe</span><span>Have a promo code? Add it on the payment page</span><span>Not right? We fix it free, or <a href="refunds/">refund you</a></span></p>
+          </section>
+
+          <p class="status" id="formStatus" role="status"></p>
+          <div class="wiz-nav">
+            <button type="button" class="btn btn-ghost" id="wizBack" hidden>Back</button>
+            <span class="wiz-total" id="navTotal"></span>
+            <button type="button" class="btn btn-orange" id="wizNext">Continue</button>
+          </div>
+        </div>
+
+        <aside class="panel summary" id="summary" aria-live="polite">
+          <div class="field"><span class="eyebrow">What’s in your order</span>
+            <div class="stack" id="stack" role="button" tabindex="0" aria-label="See sample pages from your order"></div>
+            <p class="peek"><button type="button" id="peek">Tap to see sample pages</button></p>
+          </div>
+          <div class="total"><span id="totalLabel">Everything bundle, PDF</span><strong id="totalPrice">$19.99</strong></div>
+          <p class="save" id="saveNote"></p>
+          <p class="trust"><span>PDF by email in minutes</span><span>Host Mode on your phone included</span></p>
+        </aside>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="brand"><img src="img/mark.png" alt="" width="64" height="49"><span><b class="wordmark"><span class="l">Little</span><span class="p">Print</span><span class="q">Quests</span></b>Printable Party Games &amp; Quests · © 2026</span></div>
+    <nav class="foot-links"><a href="ideas/">Party and hunt ideas</a><a href="contact/">Contact</a><a href="refunds/">Refunds</a><a href="privacy/">Privacy</a><a href="terms/">Terms</a></nav>
+  </div>
+</footer>
+<script src="js/data.js"></script>
+<script src="js/site.js"></script>
+<script src="js/make.js"></script>
+</body>
+</html>

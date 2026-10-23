@@ -1,6 +1,6 @@
 // Builds the preview gallery for the handprint art packs in docs/img/gallery/crafts/: six or seven real
 // pages of each pack (<id>-1.webp...), shown when someone taps a pack under "Handprint art" on the website.
-// The page numbers here line up with CRAFT_PAGES in docs/index.html, which holds the captions.
+// The page numbers here line up with CRAFT_PAGES in docs/js/data.js, which holds the captions.
 // Pages with the child's name also get a twin without it in docs/img/n/ (see src/generator/name-slots.js).
 // Usage: node scripts/craft-gallery.js [halloween christmas memory zoo fingerprint]
 const fs = require('fs');

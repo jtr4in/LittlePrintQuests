@@ -14,6 +14,7 @@ Paths like `project-files/...` are in this repo. Paths like `/mnt/project-files/
 - Threads merge their own PRs once tests pass (said 2026-10-23), squash into main. Reason: PRs were piling up and landing out of order (the #88/#91/#93/#94 stack left a duplicate lede in `docs/index.html`, fixed in #95).
 - Site copy says "kid", not "child" (keep "child" only for formal spots like policies).
 - Don't pigeonhole the site as birthday-only; rotate occasions (rainy day, sleepover, snow day, Halloween, playdate, Christmas, Valentine's, Easter, weekend).
+- Keep the site calm (2026-10-23, from Jason's wife: the old one-page site felt like "a lot coming at her"). One idea per section, short copy, ordering on its own page. Never drop a feature to get there (name previews, hero banners, order stack, galleries): move it instead.
 - Photos: pieces must be cut to shape and used as the real thing, staged "like an Instagram mom, just perfect". DIY cardboard builds sell best. Never glue cut-and-assemble activity pages (lift-flap vet bag, cauldron) flat onto boxes; use signs, labels and cards on boxes instead.
 - Jason runs paste-into-Gemini-app prompts himself for some image work (no API).
 - Jason raises the Gemini spend cap himself at ai.studio/spend when it hits the monthly cap (HTTP 429 "exceeded its monthly spending cap").
@@ -53,20 +54,27 @@ Paths like `project-files/...` are in this repo. Paths like `/mnt/project-files/
 ### Cardboard how-to guides (PR #82, 2026-10-23)
 - Flat-vector "Build it from a box" step guides for all 27 kits, 6 steps each, 1600x2400. Rules: builds must make sense, pieces are cut to shape, activity pages never glued flat on boxes.
 - Tools: `project-files/pretend-play/how-to/tools/` (`cut.py` cuts real pieces from rendered pages, `draw.py` SVG primitives plus post and pizza builds, `kits.py` the `BUILDS` dict for the other 25, run `python3 kits.py [kit...]`, `shot.js` screenshots; scratch path set by env var `HS` in `draw.py`).
-- Site: `docs/img/howto/<kitid>.webp` plus `-sm.webp`; HOWTO map in `scripts/idea-pages.js` and `docs/index.html`. Shown on kit idea pages, as the last Play kit page in the order preview gallery, and as a card on the What's in the box Play kit tab.
+- Site: `docs/img/howto/<kitid>.webp` plus `-sm.webp`; HOWTO map in `scripts/idea-pages.js` and `docs/js/data.js`. Shown on kit idea pages, as the last Play kit page in the order preview gallery, and as a card on the What's in the box Play kit tab.
 
 ## Site mechanics
+
+### Site pages (PR for the calmer home page, 2026-10-23)
+- The one-page site was split. `docs/index.html` is the home page (name hook, rotating hero banner, how it works, photos, themes, what's in the box, pricing, Family Pass, links to the other pages, free sample, FAQ). `docs/make/` is the step-by-step order page: who, theme, what's inside (everything ticked, $19.99), hiding spots and/or party details (skipped if neither), checkout. `docs/play-kits/` and `docs/handprint-art/` hold the shop kits and handprint packs with their preview galleries and buy forms.
+- Shared code: `docs/css/site.css`, `docs/js/data.js` (THEMES, KITS, SPACES, LAYERS, PRICES, PAGES, GALLERY, HOWTO, SHOP_KITS, CRAFTS, CHECKOUT_URL), `docs/js/site.js` (menu, `Gallery.open`, `setPages`, `goCheckout`), `docs/js/names.js`. Page code: `docs/js/home.js`, `docs/js/make.js`, inline scripts on the play-kits and handprint pages.
+- Subfolder pages use `<base href="../">` so every path stays root-relative like the home page. On those pages don't use `href="#x"` or a hash in `pushState` (they'd resolve to the home page); use `./#x` for home sections.
+- make/ takes `?theme=`, `?space=`, `?age=`, `?kit=` (just the play kit) and `?pick=hunt+kit`. Old links (`/?theme=dino#order`, already-posted Pinterest pins, the bot's `#order` email links and Stripe cancel URL) are forwarded to make/ by a script at the top of `docs/index.html`, so the bot wasn't changed. `#pass` still lands on the home page's Family Pass card.
+- Photos and theme tiles open the preview gallery with a "Make this" button instead of jumping to the order form.
 
 ### Name swap previews (2026-10-23)
 - The homepage "type your kid's name" hook live-updates all previews. `renderHtml(..., { nameSlots: 'Maya' })` also writes `pngDir/blank/` pages with the name hidden plus `slots.json`. `gallery-images.js`, `site-images.js`, `craft-gallery.js` and `hero-scenes.js` write twins to `docs/img/n/<same path>` and per-set JSON `docs/img/n/<set>.json`. `docs/js/names.js` swaps each matching `<img>` and draws the typed name (scenes use layers plus SVG masks). Name saved in localStorage `lpq.kidName`.
 - Regenerate in order: `gallery-images.js` -> `craft-gallery.js` -> `site-images.js` -> `hero-scenes.js`. If you only meant to refresh twins, `git checkout` the non-`n` images afterwards (they re-encode slightly differently). If a print layout changes, re-run the scripts or the overlay text sits in the old spot.
 
 ### Page counts (PR #104, 2026-10-23)
-- The "45 pages" bubbles come from a hardcoded `PAGES` line in `docs/index.html`. When pages are added to a kit, activity pack, party pack or craft, run `node scripts/page-counts.js` and paste the printed line over `PAGES`. Hunts follow 7 + ceil(spots/2) pages; the script throws if that changes.
+- The "45 pages" bubbles come from a hardcoded `PAGES` line in `docs/js/data.js`. When pages are added to a kit, activity pack, party pack or craft, run `node scripts/page-counts.js` and paste the printed line over `PAGES`. Hunts follow 7 + ceil(spots/2) pages; the script throws if that changes.
 - The order-stack hint says "Tap to see sample pages" (the gallery is only samples).
 
 ### Shop kit card photos (2026-10-23)
-- The 11 shop kit card thumbnails (`docs/img/kit-<id>.webp`, 1354x994, used by `SHOP_KITS` in `docs/index.html`) are styled Gemini photos, each starring the kit's signature piece, prompts say "no cash register". Prompts and scripts: `project-files/scavenger-hunt/previews/shop-kit-cards/`. Gemini redraws kit art loosely; use the round 4 lifestyle tools to restore exact art.
+- The 11 shop kit card thumbnails (`docs/img/kit-<id>.webp`, 1354x994, used by `SHOP_KITS` in `docs/js/data.js`) are styled Gemini photos, each starring the kit's signature piece, prompts say "no cash register". Prompts and scripts: `project-files/scavenger-hunt/previews/shop-kit-cards/`. Gemini redraws kit art loosely; use the round 4 lifestyle tools to restore exact art.
 
 ## Lifestyle photo pipeline (2026-10-22)
 
@@ -81,4 +89,5 @@ Tools: `project-files/scavenger-hunt/previews/lifestyle/tools/`. Outputs are lar
 ## Environment gotchas
 
 - The repo pins playwright 1.56.1, which doesn't match the container's browser. Easiest fix: a preload that wraps `chromium.launch` to pass `executablePath: '/opt/pw-browsers/chromium'`, run as `node -r pre.js scripts/<script>.js`.
+- To click through the site locally: `python3 -m http.server` in `docs/`, then Playwright with the preload above. `npm test` also needs the preload (`node -r pre.js test/smoke.js`).
 - Some tools in `project-files/` still hard-code `/mnt/project-files/...` paths; adjust them if that folder doesn't exist in your account.

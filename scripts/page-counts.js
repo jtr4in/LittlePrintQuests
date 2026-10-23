@@ -1,5 +1,5 @@
 // Usage: node scripts/page-counts.js
-// Renders every product the way an order does and prints the PAGES line for docs/index.html, which
+// Renders every product the way an order does and prints the PAGES line for docs/js/data.js, which
 // shows the page count bubbles on the order stack and the kit cards. Re-run it after adding pages.
 // Hunts don't need a row per theme: they're the same for all of them, 7 pages plus a sheet per two clue cards.
 const { chromium } = require('playwright');
@@ -23,7 +23,7 @@ const SPOTS = Object.keys(require('../src/generator/spots'));
   // Check the hunt rule on one theme before relying on it.
   for (const n of [6, 7, 10]) {
     const got = await count(buildHtml({ theme: 'dino', ...kid, spots: SPOTS.slice(0, n) }));
-    if (got !== 7 + Math.ceil(n / 2)) throw new Error(`A ${n}-spot hunt has ${got} pages; update the hunt rule here and in docs/index.html`);
+    if (got !== 7 + Math.ceil(n / 2)) throw new Error(`A ${n}-spot hunt has ${got} pages; update the hunt rule here and in docs/js/data.js`);
   }
   const pages = { kit: {}, activity: {}, party: await count(buildPartyHtml({ theme: 'dino', ...kid })), craft: {} };
   for (const ages of ['big', 'little']) pages.activity[ages] = await count(activityPackHtml({ kit: 'dino', ...kid, ages, lenient: true, subjects: [] }));

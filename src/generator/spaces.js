@@ -1,5 +1,5 @@
 // Ready-made hiding-spot trails for common kinds of homes. The website builder offers these as
-// one-tap presets (docs/index.html keeps a copy of the spot lists), and the idea pages use them.
+// one-tap presets (docs/js/data.js keeps a copy of the spot lists), and the idea pages use them.
 // Every spot is in the library, so these orders never need Claude. The last spot holds the prize.
 
 module.exports = {
