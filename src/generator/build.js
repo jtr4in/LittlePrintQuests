@@ -6,10 +6,15 @@
 //     promo?: 'footer line for the host guide' }
 // The last spot is where the prize/cake goes. One clue card per spot:
 // card 1 is handed to the kids after the briefing, card k is hidden at spot k-1.
+// Each card also has a matching puzzle piece (see puzzle.js) unless the config says `puzzle: false`.
+// Two bonus games for another day (a picture hunt and a look-around hunt, see bonus.js) go after the
+// certificate unless the config says `bonus: false`.
 
 const path = require('path');
 const THEMES = require('./themes');
 const SPOTS = require('./spots');
+const { puzzlePage, puzzleCss } = require('./puzzle');
+const { bonusPages, bonusCss } = require('./bonus');
 
 const FONT_DIR = path.join(__dirname, '..', '..', 'fonts');
 
@@ -77,7 +82,9 @@ function planHunt(cfg) {
   });
   // Picture clues: on for ages 3 to 5 unless the order says otherwise.
   const pictures = cfg.pictures !== undefined ? Boolean(cfg.pictures) : Boolean(cfg.age && cfg.age <= 5);
-  return { theme, spots, cards, prize: spots[spots.length - 1], pictures };
+  const puzzle = cfg.puzzle !== false;
+  const bonus = cfg.bonus !== false;
+  return { theme, spots, cards, prize: spots[spots.length - 1], pictures, puzzle, bonus };
 }
 
 function fill(text, ctx) {
@@ -101,7 +108,7 @@ function hostGuide(plan, cfg) {
       </tr>`
     )
     .join('');
-  return `<section class="page host">
+  return `<section class="page host${plan.puzzle && cards.length > 9 ? ' many' : ''}">
     <header class="page-head">
       <div class="icon">${theme.icon}</div>
       <div>
@@ -112,9 +119,10 @@ function hostGuide(plan, cfg) {
     </header>
     <ol class="steps">
       <li><b>Print</b> every page at <b>Actual Size / 100%</b>, then cut the clue cards along the dashed lines.</li>
+      ${plan.puzzle ? `<li><b>Cut out the puzzle</b> and tuck <b>piece 1 behind Card 1</b>, piece 2 behind Card 2, and so on.</li>` : ''}
       <li><b>Hide</b> cards 2 to ${cards.length} using the checklist below. Tick each box as you go.</li>
       <li><b>Put the prize</b> (cake, favor bags or treasure) at the <b>${esc(prize.label)}</b>.</li>
-      <li><b>Start the hunt:</b> read the Mission Briefing out loud, then read Clue #1.</li>
+      <li><b>Start the hunt:</b> read the Mission Briefing out loud, then read Clue #1.${plan.puzzle ? ' At the last clue, the kids build the puzzle.' : ''}</li>
     </ol>
     <table class="checklist">
       <thead><tr><th>Clue</th><th>Hide it at</th><th>Its riddle leads to</th><th>Done</th></tr></thead>
@@ -128,6 +136,7 @@ function hostGuide(plan, cfg) {
         : '<div><b>Ages 3–4:</b> read each riddle aloud and give little hints. <b>Ages 6–8:</b> let the kids take turns reading.</div>'}
       <div><b>Bonus fun:</b> tuck a sticker or small treat (like a toy ${esc(theme.treasureWord)}) with each card.</div>
       <div><b>Safety:</b> only hide cards in spots that are safe for little hands to open.</div>
+      ${plan.bonus ? '<div><b>Play again another day:</b> the last three pages are bonus games, a Picture Hunt to cut out and hide and a look-around hunt to take outside.</div>' : ''}
     </div>
     ${cfg.promo ? `<div class="promo">${esc(cfg.promo)}</div>` : ''}
   </section>`;
@@ -155,7 +164,7 @@ function briefing(plan, cfg) {
   </section>`;
 }
 
-function card(c, theme, pictures) {
+function card(c, theme, pictures, puzzle) {
   const footerLeft = c.hiddenAt
     ? `Parent check: hidden at <b>${esc(c.hiddenAt.label)}</b> · leads to <b>${esc(c.leadsTo.label)}</b>`
     : `Parent check: read after the briefing · leads to <b>${esc(c.leadsTo.label)}</b>`;
@@ -174,6 +183,7 @@ function card(c, theme, pictures) {
         </div>
         ${pictures ? `<div class="pic-hint"><div class="pic">${picHtml(c.leadsTo)}</div><span>Look here!</span></div>` : ''}
       </div>
+      ${puzzle && c.n === c.total ? `<div class="puzzle-note"><span class="emoji">🧩</span> Last step: put your puzzle together to find the prize!</div>` : ''}
       <div class="card-foot">
         <span>${footerLeft}</span>
         <span class="progress">${theme.grid ? `<span class="gauge">${'<i class="on"></i>'.repeat(c.n)}${'<i></i>'.repeat(c.total - c.n)}</span>` : ''}Mission ${c.n} of ${c.total}</span>
@@ -192,7 +202,7 @@ function cardSheets(plan) {
   const out = [];
   for (let i = 0; i < plan.cards.length; i += 2) {
     const pair = plan.cards.slice(i, i + 2);
-    out.push(`<section class="page sheet">${pair.map((c) => card(c, plan.theme, plan.pictures)).join('<div class="gap"></div>')}</section>`);
+    out.push(`<section class="page sheet">${pair.map((c) => card(c, plan.theme, plan.pictures, plan.puzzle)).join('<div class="gap"></div>')}</section>`);
   }
   return out.join('');
 }
@@ -265,6 +275,9 @@ h1, .card-title, .badge, .cert-title, .award, .signer, .kicker {
 .box { display:inline-block; width:.2in; height:.2in; border:2px solid var(--primary); border-radius:3px; }
 .prize-row td { background: var(--soft) !important; }
 .tips { margin-top:.18in; font-size:10.5pt; line-height:1.45; display:grid; gap:.05in; }
+.host.many .steps { margin:.14in 0 .1in; line-height:1.4; }
+.host.many .checklist td { padding:.04in .1in; }
+.host.many .tips { margin-top:.12in; }
 .promo { position:absolute; left:.7in; right:.7in; bottom:.45in; text-align:center; font-size:10pt; color:#666; border-top:1px dashed #bbb; padding-top:.1in; }
 
 /* briefing + certificate frame */
@@ -303,6 +316,11 @@ h1, .card-title, .badge, .cert-title, .award, .signer, .kicker {
 .gauge { display:inline-flex; gap:2px; }
 .gauge i { width:6px; height:9px; border:1px solid var(--primary); border-radius:1px; }
 .gauge i.on { background:var(--soft); }
+.puzzle-note { text-align:center; font-family:'Fredoka', sans-serif; font-weight:600; font-size:11pt; color:var(--primary); background:var(--soft);
+  border-radius:99px; padding:.03in .15in; margin:.02in auto .05in; position:relative; z-index:1; }
+.puzzle-note .emoji { font-family:'Noto Color Emoji', sans-serif; }
+${puzzleCss(theme)}
+${bonusCss(theme)}
 
 /* certificate */
 .cert .frame { text-align:center; align-items:center; justify-content:center; border-width:5px; }
@@ -471,7 +489,7 @@ function themeCss(theme) {
 
 function buildHtml(cfg) {
   const plan = planHunt(cfg);
-  const body = [hostGuide(plan, cfg), briefing(plan, cfg), cardSheets(plan), certificate(plan, cfg)].join('\n');
+  const body = [hostGuide(plan, cfg), briefing(plan, cfg), cardSheets(plan), plan.puzzle ? puzzlePage(plan, cfg, picHtml) : '', certificate(plan, cfg), plan.bonus ? bonusPages(plan) : ''].join('\n');
   return `<!doctype html><html><head><meta charset="utf-8"><title>${esc(plan.theme.name)}</title><style>${css(plan.theme)}</style></head><body>${body}</body></html>`;
 }
 

@@ -9,7 +9,7 @@ const THEMES = require('../generator/themes');
 const { renderPdf } = require('../generator/render');
 
 const SPOTS = ['toy_box', 'couch', 'fridge', 'kitchen_table'];
-const PROMO = 'Want one with your child’s name, your own hiding spots and a matching play kit? Order a custom hunt at LittlePrintQuests.';
+const PROMO = 'Want one with your child’s name, your own hiding spots and a matching play kit? Get our Scavenger Hunts at LittlePrintQuests.';
 const EMAIL_RE = /^[^\s@<>"]{1,64}@[^\s@<>"]{1,190}\.[a-z]{2,}$/i;
 
 const recent = new Map(); // ip -> request times, for a simple rate limit
@@ -56,7 +56,7 @@ async function sendSampleEmail({ email, theme }) {
     <h2 style="margin-bottom:4px">Your free ${t.name} mini hunt</h2>
     <p>Here's a 4-clue hunt you can print and play today. Each card has a picture of the next spot, so even kids who can't read yet can join in.</p>
     <p><a href="${link}" style="display:inline-block;background:#ef9d31;color:#2b1d06;padding:12px 22px;border-radius:99px;text-decoration:none;font-weight:bold">Download the mini hunt (PDF)</a></p>
-    <p>Planning a birthday? Our custom hunts use your child's name and your own hiding spots, and come with a matching pretend play kit and party printables.</p>
+    <p>Planning a birthday? Our scavenger hunts use your child's name and your own hiding spots, and come with a matching pretend play kit and party printables.</p>
     <p>Happy hunting! 🎉<br>LittlePrintQuests</p>
     <p style="font-size:12px;color:#8a90a8">You're getting this because you asked for a free sample. We'll send the occasional party idea. <a href="${unsubLink(email)}" style="color:#8a90a8">Unsubscribe</a></p></div>`;
   const res = await fetch('https://api.resend.com/emails', {

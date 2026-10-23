@@ -8,7 +8,7 @@ const { HOLIDAYS, craftLabel } = require('../crafts/build');
 
 const products = require('./products');
 const { PRICES, priceFor } = products;
-const PRICE_CENTS = PRICES.hunt; // custom hunt only
+const PRICE_CENTS = PRICES.hunt; // scavenger hunts only
 const BUNDLE_PRICE_CENTS = PRICES.bundle; // hunt + matching play kit + party pack
 const PARTY_PRICE_CENTS = PRICES.party; // party pack only
 let client = null;
@@ -41,7 +41,7 @@ async function createCheckout(order) {
   const items = products.itemsOf(order.form);
   const kit = KITS[order.form.kit] || (theme && kitForHunt(theme.id));
   const holiday = HOLIDAYS[order.form.holiday];
-  const parts = { hunt: `Custom ${theme?.name}`, kit: `${kit?.name} play kit`, activity: `${kit?.name} activity pack`, party: `${theme?.label} party pack`, craft: craftLabel(holiday) };
+  const parts = { hunt: `${theme?.label} Scavenger Hunts`, kit: `${kit?.name} play kit`, activity: `${kit?.name} activity pack`, party: `${theme?.label} party pack`, craft: craftLabel(holiday) };
   const details = {
     hunt: `scavenger hunt with ${order.form.spots.length} clues`,
     kit: 'pretend play kit',

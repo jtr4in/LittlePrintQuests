@@ -23,6 +23,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&display=swap">
+<!-- the printed pages' own fonts, for writing the kid's name over the previews (js/names.js); files load only when used -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:wght@200..1000&family=Bangers&family=Pirata+One&family=Orbitron:wght@400..900&family=Cinzel+Decorative:wght@700&family=Pacifico&family=Comic+Neue:wght@700&display=swap">
+<script src="js/names.js"></script>
 <style>
 /* Layout: the printed clue card is the hero object; sections stack on a wide
    single column, and the order builder pairs the form with a live trail. */
@@ -122,6 +125,43 @@ main { position: relative; }
 .hero h1 { font-size: clamp(32px, 4.6vw, 50px); margin-top: 10px; }
 .hero h1 em { font-style: normal; background: linear-gradient(transparent 60%, var(--hl) 60%); padding: 0 4px; }
 .hero .lede { font-size: 18px; color: var(--ink-soft); margin-top: 10px; max-width: 40em; }
+/* the name hook: type your kid's name and every preview on the page becomes theirs (js/names.js) */
+.hook { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 28px; align-items: center; margin-bottom: 22px; }
+.hook-title { font: 700 clamp(30px, 4.4vw, 48px)/1.08 var(--display); text-wrap: balance; margin-top: 10px; }
+.hook-title b { color: var(--orange-edge); background: linear-gradient(transparent 62%, var(--hl) 62%); padding: 0 4px; font-weight: 700; overflow-wrap: anywhere; }
+.hook-sub { color: var(--ink-soft); font-size: 18px; margin-top: 10px; max-width: 34em; }
+.hook-form { display: flex; gap: 10px; margin-top: 18px; max-width: 560px; }
+.hook-form input[type="text"] { flex: 1; min-width: 0; font: 600 22px/1.2 var(--display); color: var(--ink); background: var(--sheet); border: 2.5px solid var(--orange); border-radius: 999px; padding: 13px 22px; box-shadow: 0 8px 22px -14px rgba(239, 157, 49, .9); }
+.hook-form input::placeholder { color: var(--ink-soft); font-weight: 500; opacity: .75; }
+.hook-form .btn { white-space: nowrap; }
+.hook-note { font-size: 14px; color: var(--ink-soft); margin-top: 10px; }
+.hook-pages { position: relative; height: 330px; }
+.hook-pages img { position: absolute; width: 210px; height: auto; aspect-ratio: 480 / 621; background: #fff; border-radius: 4px; box-shadow: 0 16px 30px -14px rgba(40, 50, 90, .55); }
+.hook-pages .back { left: 0; top: 18px; transform: rotate(-7deg); }
+.hook-pages .front { right: 0; top: 40px; transform: rotate(5deg); }
+@media (max-width: 860px) {
+  .hook { grid-template-columns: minmax(0, 1fr) 112px; column-gap: 12px; row-gap: 0; align-items: start; }
+  .hook-copy { display: contents; }
+  .hook-copy > * { grid-column: 1; }
+  .hook-pages { grid-column: 2; grid-row: 1 / span 3; height: 160px; align-self: center; }
+  .hook-pages .back { display: none; }
+  .hook-pages .front { width: 108px; top: 8px; right: 2px; }
+  .hook-copy > .hook-form, .hook-copy > .hook-note { grid-column: 1 / -1; }
+}
+@media (max-width: 520px) {
+  .hook-title { font-size: 29px; }
+  .hook-sub { font-size: 16px; }
+  .hook-form { flex-direction: column; }
+  .hook-form input[type="text"] { font-size: 20px; padding: 12px 18px; }
+  .hook-form .btn { justify-content: center; }
+}
+/* the words laid over a nameless preview */
+.nm { all: initial; position: absolute; display: block; pointer-events: none; overflow: hidden; }
+.nm-scene { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.nm-layer { position: absolute; inset: 0; }
+.nm-sheet { position: absolute; overflow: hidden; }
+.nm-page { position: relative; }
+.nm-slot { position: absolute; }
 /* theme strip inside the builder */
 .themes.mini { display: flex; gap: 10px; overflow-x: auto; margin-top: 10px; padding-bottom: 6px; scroll-snap-type: x proximity; }
 .themes.mini .theme { flex: 0 0 92px; padding: 6px; gap: 4px; scroll-snap-align: start; border-width: 1.5px; }
@@ -152,6 +192,7 @@ main { position: relative; }
 .page-thumb { background: var(--sheet); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 12px; align-content: start; }
 .page-thumb p { font-size: 15px; color: var(--ink-soft); }
 .mini-img { width: 100%; height: auto; aspect-ratio: 8.5 / 11; border-radius: 4px; border: 1px solid var(--line); box-shadow: 0 6px 16px -10px rgba(40, 50, 90, .35); }
+@media (min-width: 861px) { .kit.five { grid-template-columns: repeat(5, 1fr); gap: 14px; } }
 @media (max-width: 860px) { .kit { grid-template-columns: repeat(2, 1fr); } }
 
 /* themes */
@@ -416,6 +457,22 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 
 <main id="top">
   <section class="hero" id="order">
+    <div class="wrap hook">
+      <div class="hook-copy">
+        <p class="eyebrow">Personalized printables · ages 3 to 8</p>
+        <p class="hook-title" id="hookTitle">A birthday adventure starring <b>your kid</b>.</p>
+        <p class="hook-sub">Type their first name and watch every page on this site become theirs.</p>
+        <form class="hook-form" id="hookForm">
+          <input type="text" id="hookName" maxlength="24" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="Your kid’s first name" aria-label="Your kid’s first name">
+          <button class="btn btn-orange" type="submit" id="hookGo">Make my hunt</button>
+        </form>
+        <p class="hook-note">Hunts, play kits and party packs, ready to print in minutes.</p>
+      </div>
+      <div class="hook-pages" aria-hidden="true">
+        <img class="back" id="hookBack" alt="" width="480" height="621">
+        <img class="front" id="hookFront" alt="" width="480" height="621">
+      </div>
+    </div>
     <div class="wrap">
       <div class="hero-banner" id="heroBanner">
         <img class="hb on" alt="" width="1600" height="700" sizes="(max-width: 1240px) 100vw, 1200px" fetchpriority="high">
@@ -424,7 +481,6 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       </div>
     </div>
     <div class="wrap hero-head">
-      <p class="eyebrow">Personalized hunts, play kits and activities · ages 3 to 8</p>
       <h1>A treasure hunt written for <em>your</em> house.</h1>
       <p class="lede">Pick a theme and the spots in your home. We write rhyming clues for each one, and you get your PDF in minutes.</p>
     </div>
@@ -529,12 +585,15 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         <label class="box-theme">Theme <select id="boxSelect"></select></label>
       </div>
       <div class="box-panel" data-panel="hunt">
-        <p class="kits-lede">A host guide, a read-aloud briefing, rhyming clue cards and a certificate, all with your child’s name. Real <span id="huntName">Deep Space Expedition</span> pages, made for Maya’s 6th birthday:</p>
+        <p class="kits-lede">A host guide, a read-aloud briefing, rhyming clue cards and a certificate, all with your child’s name. Real <span id="huntName">Deep Space Expedition</span> pages, made for <span data-kid-name>Maya</span>’s 6th birthday:</p>
         <div class="kit">
+        <p class="kits-lede">A host guide, a read-aloud briefing, rhyming clue cards, a puzzle to collect piece by piece and a certificate, all with your child’s name, plus two bonus games to play again another day. Real <span id="huntName">Deep Space Expedition</span> pages, made for Maya’s 6th birthday:</p>
+        <div class="kit five">
         <div class="page-thumb"><img class="mini-img" id="huntGuide" src="img/pages/space-guide.webp" alt="Host guide page listing where each clue card hides" width="480" height="621" loading="lazy"><h3>Host guide</h3><p>Your secret checklist: which card hides where, and where the prize goes.</p></div>
-        <div class="page-thumb"><img class="mini-img" id="huntBriefing" src="img/pages/space-briefing.webp" alt="Read-aloud story briefing addressed to Maya" width="480" height="621" loading="lazy"><h3>Story briefing</h3><p>A story letter to read aloud that kicks off the adventure, addressed to your child.</p></div>
         <div class="page-thumb"><img class="mini-img" id="huntCards" src="img/pages/space-cards.webp" alt="Two rhyming clue cards with dashed cut lines" width="480" height="621" loading="lazy"><h3>Clue cards</h3><p>4 × 6 inch rhyming cards, two per page, with dashed cut lines and big read-aloud type.</p></div>
+        <div class="page-thumb"><img class="mini-img" id="huntPuzzle" src="img/pages/space-puzzle.webp" alt="Jigsaw puzzle page that shows where the prize is hidden" width="480" height="621" loading="lazy"><h3>Puzzle finale</h3><p>Kids find a puzzle piece with every clue, then put them together to see where the prize is.</p></div>
         <div class="page-thumb"><img class="mini-img" id="huntCert" src="img/pages/space-cert.webp" alt="Certificate with Maya’s name" width="480" height="621" loading="lazy"><h3>Certificate</h3><p>A themed certificate with your child’s name and a special title for the big finish.</p></div>
+        <div class="page-thumb"><img class="mini-img" id="huntBonus" src="img/pages/space-bonus.webp" alt="Picture hunt checklist with twelve pictures to find and tick off" width="480" height="621" loading="lazy"><h3>Bonus games</h3><p>A picture hunt to cut out and hide, plus a look-around hunt to take outside. Great for round two.</p></div>
       </div>
       </div>
       <div class="box-panel" data-panel="host" hidden>
@@ -601,14 +660,14 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <div class="pin"><b></b><span class="eyebrow">Pricing</span></div>
       <h2>Pick what you need, save when you bundle</h2>
       <div class="plans">
-        <div class="plan main"><span class="eyebrow">Play bundle · most popular</span><div class="price">$17.99</div><p class="was"><s>$22.97</s> value: the hunt, its play kit and activity pack</p><ul><li>Custom hunt with your child’s name and your home’s own spots</li><li>Matching pretend play kit with hands-on toys and a shop to set up</li><li>10 Wipe &amp; Play activity pages: mazes, spot the difference, I spy and more</li><li>Delivered to your inbox in minutes</li></ul><div class="plan-host"><span class="phone"><img src="img/host/space-play.webp" alt="" width="360" height="720" loading="lazy"></span><span><b>+ Host Mode included</b>Hunt and play kit tabs on your phone</span></div><a class="btn btn-orange" href="#order" data-pick="hunt kit activity">Make my play bundle</a></div>
+        <div class="plan main"><span class="eyebrow">Play bundle · most popular</span><div class="price">$17.99</div><p class="was"><s>$22.97</s> value: the hunt, its play kit and activity pack</p><ul><li>Scavenger hunts with your child’s name and your home’s own spots</li><li>Matching pretend play kit with hands-on toys and a shop to set up</li><li>10 Wipe &amp; Play activity pages: mazes, spot the difference, I spy and more</li><li>Delivered to your inbox in minutes</li></ul><div class="plan-host"><span class="phone"><img src="img/host/space-play.webp" alt="" width="360" height="720" loading="lazy"></span><span><b>+ Host Mode included</b>Hunt and play kit tabs on your phone</span></div><a class="btn btn-orange" href="#order" data-pick="hunt kit activity">Make my play bundle</a></div>
         <div class="plan"><span class="eyebrow">Having a party?</span><div class="price">$19.99</div><p class="was"><s>$29.96</s> value: everything, plus the party pack</p><ul><li>The whole play bundle</li><li>Matching invitations, cupcake toppers, favor tags, a name banner and more</li><li>Host Mode party checklist</li></ul><a class="btn btn-ghost" href="#order" data-pick="hunt kit activity party">Make the everything bundle</a></div>
       </div>
       <div class="pass-card" id="pass">
         <div>
           <span class="eyebrow">Family Pass · for the whole year</span>
           <h3>Six everything bundles to use all year</h3>
-          <p>One payment covers six orders in the next 12 months, each with the custom hunt, its play kit, the activity pack and the party pack. That’s $6.66 an event instead of $19.99.</p>
+          <p>One payment covers six orders in the next 12 months, each with the scavenger hunts, their play kit, the activity pack and the party pack. That’s $6.66 an event instead of $19.99.</p>
           <ul><li>Birthdays, Halloween, Christmas or a rainy weekend: any theme, for any of your kids</li><li>Use them all at once or spread them out. Every order shows how many you have left</li><li>One payment. No subscription, and nothing renews by itself</li></ul>
         </div>
         <div class="pass-buy">
@@ -621,7 +680,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       </div>
       <div class="singles">
         <p class="eyebrow">Or get just one</p>
-        <a class="single" href="#order" data-pick="hunt"><b>Custom hunt</b><span>Clue cards, briefing and certificate, with Host Mode</span><strong>$9.99</strong></a>
+        <a class="single" href="#order" data-pick="hunt"><b>Scavenger Hunts</b><span>Clue cards, puzzle finale, certificate and bonus games, with Host Mode</span><strong>$9.99</strong></a>
         <a class="single" href="#order" data-pick="kit"><b>Pretend play kit</b><span>Hands-on toys, a shop set and signs</span><strong>$7.99</strong></a>
         <a class="single" href="#order" data-pick="activity"><b>Activity pack</b><span>10 Wipe &amp; Play pages</span><strong>$4.99</strong></a>
         <a class="single" href="#order" data-pick="party"><b>Party pack</b><span>Invitations, toppers, banner and tags</span><strong>$6.99</strong></a>
@@ -670,7 +729,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <div class="pin"><b></b><span class="eyebrow">Questions</span></div>
       <h2>Before you print</h2>
       <div class="faq">
-        <details><summary>How does the Family Pass work?</summary><p>One payment of $39.99 gets you 6 orders to use within 12 months. Each order can be the whole bundle: the custom hunt, its play kit, the activity pack and the party pack, in any theme and for any of your kids. Your code arrives by email. Build an order as usual and type the code under “Have a Family Pass code?” next to the total. It covers anything in the order builder, shop play kits included; handprint art is sold separately. It doesn’t renew by itself.</p></details>
+        <details><summary>How does the Family Pass work?</summary><p>One payment of $39.99 gets you 6 orders to use within 12 months. Each order can be the whole bundle: the scavenger hunts, their play kit, the activity pack and the party pack, in any theme and for any of your kids. Your code arrives by email. Build an order as usual and type the code under “Have a Family Pass code?” next to the total. It covers anything in the order builder, shop play kits included; handprint art is sold separately. It doesn’t renew by itself.</p></details>
         <details><summary>Is there a version for younger kids?</summary><p>Yes. Pick Little kids (2 to 4) or Big kids (5 to 8) in the order builder. The little kids version has thicker cut lines, bigger pictures, picture clues in the hunt and order forms they fill in by circling pictures. The big kids version has more to read and write, plus a word search in the activity pack. Same price either way.</p></details>
         <details><summary>Is anything shipped to me?</summary><p>No. You get a PDF to print at home on regular Letter paper, in color or black and white.</p></details>
         <details><summary>How fast will I get it?</summary><p>Usually within a few minutes of checkout. It shows on screen and arrives by email, so it works even the morning of the party.</p></details>
@@ -878,7 +937,7 @@ function drawBox() {
     $('howtoName').textContent = HOWTO[t.id];
   }
   $('huntName').textContent = t.name;
-  for (const [el, part] of [['huntGuide', 'guide'], ['huntBriefing', 'briefing'], ['huntCards', 'cards'], ['huntCert', 'cert']]) $(el).src = `img/pages/${t.id}-${part}.webp`;
+  for (const [el, part] of [['huntGuide', 'guide'], ['huntPuzzle', 'puzzle'], ['huntCards', 'cards'], ['huntCert', 'cert'], ['huntBonus', 'bonus']]) $(el).src = `img/pages/${t.id}-${part}.webp`;
   for (const [el, part] of [['hostHide', 'hide'], ['hostPlay', 'play'], ['hostSidekick', 'sidekick']]) $(el).src = `img/host/${t.id}-${part}.webp`;
   for (const [el, n] of [['actSpy', 2], ['actSpot', 3], ['actMaze', 4], ['actWords', 5]]) $(el).src = `img/gallery/${t.id}/activity-${n}.webp`;
   $('partyImg').src = `img/pages/${t.id}-party.webp`;
@@ -935,6 +994,7 @@ function setTheme(id) {
   $('boxSelect').value = id;
   document.querySelectorAll('.theme').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.id === id)));
   drawBox();
+  if (typeof drawHookPages === 'function') drawHookPages();
   render();
 }
 
@@ -1096,14 +1156,14 @@ $('childAge').addEventListener('input', render);
 // The cart is a stack of papers: the hunt, its play kit, the activity pack and the party pack.
 // Pick any mix; two together cost less. The first three are ticked to start; the party pack is the add-on.
 const LAYERS = [
-  { id: 'hunt', name: 'Custom scavenger hunt', note: 'Clue cards, host guide, briefing and certificate', price: 9.99 },
+  { id: 'hunt', name: 'Scavenger Hunts', note: 'Clue cards, host guide, puzzle finale, certificate and two bonus games', price: 9.99 },
   { id: 'kit', name: 'Pretend play kit', note: 'Hands-on toys, a shop set and signs with their name', price: 7.99 },
   { id: 'activity', name: 'Activity pack', note: 'Mazes, spot the difference, I spy, word search and more to wipe and play', price: 4.99 },
   { id: 'party', name: 'Party pack', note: 'Invitations, toppers, banner, favor tags and more', price: 6.99 },
 ];
 // Must match PRICES in the order bot (src/bot/products.js).
 const PRICES = { hunt: 9.99, kit: 7.99, party: 6.99, 'hunt+kit': 14.99, 'hunt+party': 13.99, 'kit+party': 12.99, bundle: 16.99, activity: 4.99, activityAdd: 3 };
-const LABELS = { hunt: 'Custom hunt', kit: 'Play kit', activity: 'Activity pack', party: 'Party pack' };
+const LABELS = { hunt: 'Scavenger Hunts', kit: 'Play kit', activity: 'Activity pack', party: 'Party pack' };
 const picked = new Set(['hunt', 'kit', 'activity']);
 let passInfo = null; // { code, left, total } once a Family Pass code checks out
 let product = 'hunt+kit+activity';
@@ -1451,6 +1511,31 @@ $('sampleForm').addEventListener('submit', async (e) => {
   }
 });
 
+// The name hook at the top: what a parent types there (or in any name box) goes onto every preview
+// (js/names.js), into the headline and button, and into the builder, and is kept for next visit.
+const kidFields = ['hookName', 'childName', 'shopChild', 'craftChild'];
+function showKid(from) {
+  const typed = LPQName.typed();
+  const b = document.querySelector('#hookTitle b');
+  b.textContent = typed || 'your kid';
+  $('hookGo').textContent = typed ? `Make ${typed}’s hunt` : 'Make my hunt';
+  for (const id of kidFields) if (id !== from) $(id).value = typed || (id === 'childName' ? LPQName.sample : '');
+  document.querySelectorAll('[data-kid-name]').forEach((el) => { el.textContent = LPQName.get(); });
+  if (from !== 'childName') render();
+}
+for (const id of kidFields) $(id).addEventListener('input', () => { LPQName.set($(id).value); showKid(id); });
+$('hookForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (!LPQName.typed()) return $('hookName').focus();
+  $('orderForm').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+});
+// The two pages beside the box follow the builder's theme: the story letter and the certificate.
+function drawHookPages() {
+  $('hookBack').src = `img/pages/${state.theme}-briefing.webp`;
+  $('hookFront').src = `img/pages/${state.theme}-cert.webp`;
+  LPQName.preload(state.theme);
+}
+
 // Links from the idea pages can pick the theme, the trail and the age: /?theme=dino&space=apartment&age=5#order
 // or a shop kit: /?kit=burger#order
 const params = new URLSearchParams(location.search);
@@ -1460,6 +1545,7 @@ drawThemes();
 setTheme(THEMES.some((t) => t.id === params.get('theme')) ? params.get('theme') : seasonal || state.theme);
 if (params.get('theme')) heroLocked = true; // they came for this theme
 startHero();
+showKid();
 useSpace(params.get('space'));
 if (shopName(params.get('kit'))) chooseShop(params.get('kit'), { scroll: false });
 </script>
