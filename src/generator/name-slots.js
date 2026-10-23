@@ -100,7 +100,7 @@ function nameSlots(name, sel = '.page') {
       const keep = node.matches('[data-emo],img,svg,canvas,picture,video');
       if (keep) {
         const s = getComputedStyle(node);
-        return `<span style="display:inline-block;width:${box.width / scale}px;height:${box.height / scale}px;vertical-align:${s.verticalAlign};margin:0 ${s.marginRight} 0 ${s.marginLeft}"></span>`;
+        return `<span style="display:inline-block;width:${box.width / scale}px;height:0;margin:0 ${s.marginRight} 0 ${s.marginLeft}"></span>`; // keeps the width only, so it never makes a line taller
       }
       const inline = getComputedStyle(node).display === 'inline';
       let style = [css(node, TEXT, top ? null : node.parentElement), inline && !top ? '' : css(node, BOX)].filter(Boolean).join(';');
