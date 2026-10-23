@@ -7,13 +7,16 @@ const os = require('os');
 const path = require('path');
 const { chromium } = require('playwright');
 const { buildHtml } = require('./build');
+const { nameSlots } = require('./name-slots');
 
 async function renderPdf(cfg, outPdf, opts) {
   return renderHtml(buildHtml(cfg), outPdf, opts);
 }
 
 // Renders any print HTML whose pages are `.page` elements (hunts and kits alike).
-async function renderHtml(html, outPdf, { pngDir } = {}) {
+// With nameSlots (the child's name in the config), it also writes pngDir/blank/page-N.png with that
+// name's text left out, and pngDir/blank/slots.json saying where to draw it back (see name-slots.js).
+async function renderHtml(html, outPdf, { pngDir, nameSlots: name } = {}) {
   const tmp = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'hunt-')), 'hunt.html');
   fs.writeFileSync(tmp, html);
   const browser = await chromium.launch();
@@ -25,9 +28,17 @@ async function renderHtml(html, outPdf, { pngDir } = {}) {
     if (pngDir) {
       fs.mkdirSync(pngDir, { recursive: true });
       await page.setViewportSize({ width: 816, height: 1056 });
-      const pages = await page.$$('.page');
-      for (let i = 0; i < pages.length; i++) {
-        await pages[i].screenshot({ path: path.join(pngDir, `page-${i + 1}.png`) });
+      const shoot = async (dir) => {
+        const pages = await page.$$('.page');
+        for (let i = 0; i < pages.length; i++) await pages[i].screenshot({ path: path.join(dir, `page-${i + 1}.png`) });
+      };
+      await shoot(pngDir);
+      if (name) {
+        const blank = path.join(pngDir, 'blank');
+        fs.mkdirSync(blank, { recursive: true });
+        const slots = await page.evaluate(`(${nameSlots})(${JSON.stringify(name)})`);
+        fs.writeFileSync(path.join(blank, 'slots.json'), JSON.stringify(slots));
+        await shoot(blank);
       }
     }
   } finally {
