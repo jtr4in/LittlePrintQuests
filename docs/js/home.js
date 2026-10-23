@@ -77,16 +77,14 @@ $('lifePhotos').querySelectorAll('button').forEach((b) => b.addEventListener('cl
 }));
 
 // ---- Themes: tap one to see its pages ------------------------------------------------------------
-const FIRST = 12;
-function drawThemeGrid(all) {
-  $('themeGrid').innerHTML = (all ? ordered : ordered.slice(0, FIRST)).map((t) => `
+// Two rows of tiles that swipe sideways, so 27 themes don't make a long page.
+function drawThemeGrid() {
+  $('themeGrid').innerHTML = ordered.map((t) => `
   <button type="button" class="theme" data-id="${t.id}" aria-haspopup="dialog" title="${esc(t.name)}, ages ${t.ages}">
     ${t.id === seasonal ? '<span class="now">Now</span>' : ''}
     <img src="img/themes/${t.id}.webp" alt="" width="220" height="220" loading="lazy"><span>${THEME_LABELS[t.id]}</span>
   </button>`).join('');
   $('themeGrid').querySelectorAll('.theme').forEach((b) => b.addEventListener('click', () => previewTheme(b.dataset.id)));
-  $('moreThemes').textContent = all ? 'Show fewer themes' : `Show all ${ordered.length} themes`;
-  $('moreThemes').setAttribute('aria-expanded', all);
 }
 function previewTheme(id) {
   const t = THEMES.find((x) => x.id === id);
@@ -96,8 +94,7 @@ function previewTheme(id) {
     foot: Gallery.cta(`make/?theme=${id}`, `Make the ${THEME_LABELS[id]} set`),
   });
 }
-$('moreThemes').addEventListener('click', () => drawThemeGrid($('moreThemes').getAttribute('aria-expanded') !== 'true'));
-drawThemeGrid(false);
+drawThemeGrid();
 
 // ---- What's in the box: one set of tabs that follows the chosen theme -----------------------------
 document.querySelectorAll('#inside [role="tab"]').forEach((b) => b.addEventListener('click', () => {
