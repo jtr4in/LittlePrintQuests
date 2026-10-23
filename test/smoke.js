@@ -119,6 +119,36 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.ok(!hunt({ age: 7 }).includes('class="pic-hint"'));
   assert.ok(hunt({ age: 7, pictures: true }).includes('class="pic-hint"'));
 
+  // Puzzle finale: one numbered piece per clue card for every theme and spot count, a note on the
+  // last card, the prize spot on the picture, and real illustrations; `puzzle: false` leaves it out.
+  const { PUZZLES, ROWS } = require('../src/generator/puzzle');
+  const spotIds = Object.keys(require('../src/generator/spots'));
+  for (let n = 3; n <= 12; n++) assert.equal(ROWS[n].reduce((a, b) => a + b), n);
+  for (const theme of Object.keys(require('../src/generator/themes'))) {
+    assert.equal(PUZZLES[theme].art.filter((a) => fs.existsSync(path.join(__dirname, '..', 'src', 'kits', 'art', theme, `${a}.webp`))).length, 5, theme);
+    const n = 3 + (theme.length % 10);
+    const html = buildHtml({ theme, spots: spotIds.slice(0, n) });
+    assert.equal((html.match(/<g class="num">/g) || []).length, n, theme);
+    assert.equal((html.match(/class="puzzle-note"/g) || []).length, 1);
+    assert.ok(html.includes(`class="spot-label"`) && html.includes('.webp"'));
+  }
+  assert.ok(!hunt({ puzzle: false }).includes('class="page puzzle"') && !hunt({ puzzle: false }).includes('class="puzzle-note"'));
+
+  // Bonus games: a picture hunt (12 cards + two matching checklists) and a look-around hunt with 12 finds,
+  // after the certificate, for every theme; every picture resolves; `bonus: false` leaves them out.
+  const { PICTURES, LOOK, entry } = require('../src/generator/bonus');
+  for (const theme of Object.keys(require('../src/generator/themes'))) {
+    assert.equal(PICTURES[theme].length, 12, theme);
+    assert.equal(LOOK[theme].items.length, 12, theme);
+    for (const s of [...PICTURES[theme], ...LOOK[theme].items]) entry(theme, s);
+    const html = buildHtml({ theme, spots: spotIds.slice(0, 5) });
+    assert.equal((html.match(/class="pc"/g) || []).length, 12, theme);
+    assert.equal((html.match(/class="pl-item"/g) || []).length, 24, theme);
+    assert.equal((html.match(/class="lk-item"/g) || []).length, 12, theme);
+    assert.ok(html.indexOf('class="page cert"') < html.indexOf('class="page bonus'), theme);
+  }
+  assert.ok(!hunt({ bonus: false }).includes('class="page bonus') && !hunt({ bonus: false }).includes('Play again another day'));
+
   // Party Pack: builds for every theme, fills party details or leaves write-in lines, renders a real PDF.
   const { buildPartyHtml } = require('../src/party/build');
   const { renderParty } = require('../src/party/render-party');
@@ -446,6 +476,31 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   await wait(500);
   assert.equal(emails.length, 9);
   assert.deepEqual(charged, [1699, 999, 699, 1499, 1299, 1799, 499, 1699, 1099]);
+
+  // A 100%-off promotion code: Stripe says 'no_payment_required', and the order is still built and emailed.
+  {
+    const co = await realFetch(base + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ theme: 'space', childName: 'Free', age: 5, spots: ['front_door', 'pet_bed', 'kitchen_table'] }) });
+    const orderId = (await co.json()).url.split('/').pop();
+    const payload = JSON.stringify({ id: 'evt_free', type: 'checkout.session.completed', data: { object: {
+      id: 'cs_test_free', payment_status: 'no_payment_required', amount_subtotal: 999, amount_total: 0, total_details: { amount_discount: 999 },
+      metadata: { order_id: orderId }, customer_details: { email: 'friend@example.com', name: 'A Friend' } } } });
+    const sig = payments.stripe().webhooks.generateTestHeaderString({ payload, secret: 'whsec_test' });
+    assert.equal((await realFetch(base + '/webhooks/stripe', { method: 'POST', body: payload, headers: { 'stripe-signature': sig } })).status, 200);
+    for (let i = 0; i < 60; i++) {
+      state = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
+      if (state.orders[orderId].sent || state.orders[orderId].status === 'needs_attention') break;
+      await wait(500);
+    }
+    const free = state.orders[orderId];
+    assert.equal(free.status, 'ready', JSON.stringify(free));
+    assert.ok(free.sent);
+    assert.equal(free.paidCents, 0);
+    assert.deepEqual(emails.at(-1).to, ['friend@example.com']);
+    assert.ok(emails.at(-1).html.includes(`/d/${free.downloadToken}.pdf`));
+    assert.equal((await realFetch(`${base}/d/${free.downloadToken}.pdf`)).status, 200);
+    charged.pop();
+  }
 
   // After checkout: the order page and email offer the rest of the bundle for the difference.
   state = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));

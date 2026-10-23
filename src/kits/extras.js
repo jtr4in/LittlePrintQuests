@@ -32,11 +32,20 @@ function bigSignPages(k) {
     <text x="${W / 2}" y="268" text-anchor="middle" class="ks-name" style="font-size:${Math.min(120, Math.round(1700 / k.placeName.length))}px">${esc(k.placeName)}</text>
     <text x="${W / 2}" y="345" text-anchor="middle" class="ks-sub">${esc(d.tagline)}</text>`;
   // The right half starts a little early: that strip goes under the left page when gluing.
-  const half = (x, w, glue) => `<div class="bs-turn" style="--ratio:${(H / w).toFixed(4)}"><svg viewBox="${x} 0 ${w} ${H}">${art}${glue
-    ? `<rect x="${x}" y="0" width="${lap}" height="${H}" fill="#fff" opacity=".55"/><text x="${x + lap / 2}" y="${H / 2}" class="bs-glue" text-anchor="middle" transform="rotate(-90 ${x + lap / 2} ${H / 2})">GLUE UNDER</text>` : ''}</svg></div>`;
+  // Both halves print at the same inches per unit (sized off the wider right half), so the
+  // awning, border and words line up at the seam. Sizing each half to fill its own page
+  // printed page 2 about 5% smaller and nothing matched.
+  const inch = 9.9 / (W / 2 + lap);
+  const seam = W / 2;
+  // On page 2: a dark line where page 1's edge goes, with arrows at the top and bottom.
+  const marks = `<rect x="${seam - lap}" y="0" width="${lap}" height="${H}" fill="#fff" opacity=".55"/>
+    <line x1="${seam}" y1="0" x2="${seam}" y2="${H}" stroke="var(--navy)" stroke-width="3" stroke-dasharray="10 6"/>
+    <path d="M${seam - 14},0 L${seam},16 L${seam - 14},32 Z M${seam - 14},${H} L${seam},${H - 16} L${seam - 14},${H - 32} Z" fill="var(--navy)"/>
+    <text x="${seam - lap / 2}" y="${H / 2}" class="bs-glue" text-anchor="middle" transform="rotate(-90 ${seam - lap / 2} ${H / 2})">GLUE UNDER</text>`;
+  const half = (x, w, glue) => `<div class="bs-turn" style="width:${(w * inch).toFixed(3)}in;height:${(H * inch).toFixed(3)}in"><svg viewBox="${x} 0 ${w} ${H}">${art}${glue ? marks : ''}</svg></div>`;
   const page = (n, body, tip) => `<section class="page big-sign"><div class="bs-tip">${esc(`Big sign, page ${n} of 2 · ${tip}`)}</div>${body}</section>`;
-  return page(1, half(0, W / 2, false), 'Cut along the edge of the sign, then glue page 2 underneath.')
-    + page(2, half(W / 2 - lap, W / 2 + lap, true), 'Slide the GLUE UNDER strip beneath page 1 and glue. Tape it above a play kitchen or doorway.');
+  return page(1, half(0, seam, false), 'Print both pages at Actual size (100%). Cut right on the edge of the sign.')
+    + page(2, half(seam - lap, seam + lap, true), 'Glue this strip under page 1, its edge on the dashed line.');
 }
 
 // ---------- ATM ----------
@@ -220,8 +229,8 @@ function foldMenuPages(k) {
 const extrasCss = `
 .big-sign { padding:.3in; display:flex; flex-direction:column; align-items:center; justify-content:center; }
 .bs-tip { position:absolute; top:.22in; left:0; right:0; text-align:center; font:600 10pt 'Fredoka'; color:#66708f; }
-.bs-turn { width:9.9in; height:calc(9.9in * var(--ratio)); transform:rotate(90deg); flex:none; }
-.bs-turn svg { width:100%; height:100%; display:block; outline:2px dashed #b7c0cc; outline-offset:4px; }
+.bs-turn { transform:rotate(90deg); flex:none; }
+.bs-turn svg { width:100%; height:100%; display:block; outline:2px dashed #b7c0cc; outline-offset:0; }
 .bs-glue { font:700 22px 'Fredoka'; fill:var(--navy); letter-spacing:4px; }
 .atm-t { font-size:38px; letter-spacing:6px; } .atm-bank { font:600 17px 'Fredoka'; fill:#fff; opacity:.9; }
 .atm-key { fill:#fff; } .atm-key.go { fill:var(--orange); } .atm-slot { fill:var(--teal-d); }

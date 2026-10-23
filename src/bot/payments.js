@@ -1,4 +1,5 @@
-// Stripe Checkout for orders placed on the website.
+// Stripe Checkout for orders placed on the website. Order and add-on pages take promotion codes
+// (made in the Stripe dashboard); the Family Pass page does not.
 
 const Stripe = require('stripe');
 const THEMES = require('../generator/themes');
@@ -7,7 +8,7 @@ const { HOLIDAYS, craftLabel } = require('../crafts/build');
 
 const products = require('./products');
 const { PRICES, priceFor } = products;
-const PRICE_CENTS = PRICES.hunt; // custom hunt only
+const PRICE_CENTS = PRICES.hunt; // scavenger hunts only
 const BUNDLE_PRICE_CENTS = PRICES.bundle; // hunt + matching play kit + party pack
 const PARTY_PRICE_CENTS = PRICES.party; // party pack only
 let client = null;
@@ -15,12 +16,34 @@ const stripe = () => (client ||= new Stripe(process.env.STRIPE_SECRET_KEY));
 
 const enabled = () => Boolean(process.env.STRIPE_SECRET_KEY && process.env.STRIPE_WEBHOOK_SECRET);
 
+// A finished checkout we should deliver. A 100%-off promotion code makes the total $0, and then
+// Stripe reports 'no_payment_required' instead of 'paid'.
+const isPaid = (session) => ['paid', 'no_payment_required'].includes(session?.payment_status);
+
+// What the buyer paid before tax, after any promotion code, or undefined when no code was used.
+function discountedCents(session) {
+  const off = session?.total_details?.amount_discount;
+  return off > 0 && Number.isFinite(session.amount_subtotal) ? Math.max(0, session.amount_subtotal - off) : undefined;
+}
+
+// Opens a Checkout page with the promotion code box. If this Stripe account won't take the box,
+// open it without one rather than losing the sale.
+async function createWithPromo(params) {
+  try {
+    return await stripe().checkout.sessions.create({ ...params, allow_promotion_codes: true });
+  } catch (err) {
+    if (!/promotion/i.test(err.message || '')) throw err;
+    console.error('Stripe refused promotion codes, opening checkout without them:', err.message);
+    return stripe().checkout.sessions.create(params);
+  }
+}
+
 async function createCheckout(order) {
   const theme = THEMES[order.form.theme];
   const items = products.itemsOf(order.form);
   const kit = KITS[order.form.kit] || (theme && kitForHunt(theme.id));
   const holiday = HOLIDAYS[order.form.holiday];
-  const parts = { hunt: `Custom ${theme?.name}`, kit: `${kit?.name} play kit`, activity: `${kit?.name} activity pack`, party: `${theme?.label} party pack`, craft: craftLabel(holiday) };
+  const parts = { hunt: `${theme?.label} Scavenger Hunts`, kit: `${kit?.name} play kit`, activity: `${kit?.name} activity pack`, party: `${theme?.label} party pack`, craft: craftLabel(holiday) };
   const details = {
     hunt: `scavenger hunt with ${order.form.spots.length} clues`,
     kit: 'pretend play kit',
@@ -28,7 +51,7 @@ async function createCheckout(order) {
     party: 'invitations, toppers, tags, banner and more',
     craft: holiday?.book ? holiday.checkoutLine : '8 handprint and footprint keepsake crafts, cards and a poem page',
   };
-  const session = await stripe().checkout.sessions.create({
+  const session = await createWithPromo({
     mode: 'payment',
     line_items: [
       {
@@ -59,7 +82,7 @@ async function createUpgradeCheckout(order, upgrade) {
   const theme = THEMES[order.config.theme];
   const kit = KITS[order.config.kit] || (theme && kitForHunt(theme.id));
   const parts = { kit: `${kit?.name} play kit`, activity: `${kit?.name} activity pack`, party: `${theme?.label} party pack` };
-  return stripe().checkout.sessions.create({
+  return createWithPromo({
     mode: 'payment',
     customer_email: order.email || undefined,
     line_items: [{
@@ -109,4 +132,4 @@ async function createPassCheckout(pass) {
   });
 }
 
-module.exports = { enabled, createCheckout, createPassCheckout, createUpgradeCheckout, readWebhook, stripe, PRICES, PRICE_CENTS, BUNDLE_PRICE_CENTS, PARTY_PRICE_CENTS, priceFor };
+module.exports = { enabled, isPaid, discountedCents, createCheckout, createPassCheckout, createUpgradeCheckout, readWebhook, stripe, PRICES, PRICE_CENTS, BUNDLE_PRICE_CENTS, PARTY_PRICE_CENTS, priceFor };

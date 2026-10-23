@@ -1,6 +1,6 @@
 // Builds the website's per-theme pictures in docs/img/: the theme card pages (pages/<id>-hunt|kit|party.webp:
 // a clue card sheet, the invitation and the kit's first hands-on toy),
-// the four hunt pages for "What's in the box" (pages/<id>-guide|briefing|cards|cert.webp),
+// the hunt pages for "What's in the box" (pages/<id>-guide|briefing|cards|puzzle|cert|bonus.webp; bonus is the picture hunt checklist),
 // the play kit card (kit-<id>.webp) and the Host Mode phones (host/<id>-hide|play|sidekick.webp).
 // Each picture with the child's name also gets a twin without it in docs/img/n/ (see name-slots.js).
 // Usage: node scripts/site-images.js [theme ...]
@@ -114,6 +114,8 @@ for f in os.listdir(tmp):
         if kind == 'hunt':
             pages = sorted((x for x in os.listdir(p) if x.endswith('.png')), key=lambda x: int(x[5:-4]))
             for part, page in (('guide', pages[0]), ('briefing', pages[1]), ('cards', pages[2]), ('cert', pages[-1])):
+            pages = sorted(os.listdir(p), key=lambda x: int(x[5:-4]))
+            for part, page in (('guide', pages[0]), ('briefing', pages[1]), ('cards', pages[2]), ('puzzle', pages[-5]), ('cert', pages[-4]), ('bonus', pages[-2])):
                 Image.open(os.path.join(p, page)).convert('RGB').resize((480, 621), Image.LANCZOS).save(os.path.join(img, 'pages', f'{theme}-{part}.webp'), 'WEBP', quality=80)
 `, tmp, IMG]);
   fs.writeFileSync(path.join(tmp, 'blanks.json'), JSON.stringify(blanks));
