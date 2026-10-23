@@ -65,7 +65,7 @@ function drawThemes() {
   $('themeList').innerHTML = ordered.map((t) => `
   <button type="button" class="theme" data-id="${t.id}" aria-pressed="${t.id === state.theme}" title="${esc(t.name)}, ages ${t.ages}">
     ${t.id === seasonal ? '<span class="now">Now</span>' : ''}
-    <img src="img/themes/${t.id}.webp" alt="" width="220" height="220" loading="lazy"><span>${THEME_LABELS[t.id]}</span>
+    <img src="img/icons/${t.id}.webp" alt="" width="240" height="240" loading="lazy"><span>${THEME_LABELS[t.id]}</span>
   </button>`).join('');
   $('themeList').querySelectorAll('.theme').forEach((b) => b.addEventListener('click', () => setTheme(b.dataset.id)));
   $('themeSelect').innerHTML = ordered.map((t) => `<option value="${t.id}">${esc(THEME_LABELS[t.id])} · ages ${t.ages}</option>`).join('');
