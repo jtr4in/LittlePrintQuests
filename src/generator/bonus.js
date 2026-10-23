@@ -140,11 +140,10 @@ function pictureCards(theme) {
 function pictureChecklists(theme) {
   const items = PICTURES[theme.id].map((s) => entry(theme.id, s));
   const list = `<div class="pl">
-      <div class="pl-head"><div class="icon">${theme.icon}</div><div><div class="bx-kicker">Bonus game</div><h2>${esc(theme.label)} Picture Hunt</h2></div>
-        <div class="pl-name">Hunter: <span></span></div></div>
-      <div class="pl-sub">12 pictures are hiding nearby. When you find one, check it off!</div>
+      <div class="pl-head"><div class="icon">${theme.icon}</div><div><div class="bx-kicker">Bonus game</div><h2>${esc(theme.label)} Picture Hunt</h2></div></div>
+      <div class="pl-sub"><span>12 pictures are hiding nearby. When you find one, check it off!</span><div class="pl-name">Hunter: <span></span></div></div>
       <div class="pl-grid">${items.map((it) => `<div class="pl-item"><div class="pl-pic">${it.html}</div><div class="pl-label">${esc(it.label)}</div><span class="bx-box"></span></div>`).join('')}</div>
-      <div class="pl-foot">Found all 12? You’re a ${esc(theme.label)} Picture Pro! ★</div>
+      <div class="pl-foot">Found all 12? You’re ${/^[AEIOU]/.test(theme.label) ? 'an' : 'a'} ${esc(theme.label)} Picture Pro! ★</div>
     </div>`;
   return `<section class="page bonus pic-lists">${list}<div class="pl-cut"><span>✂</span></div>${list}</section>`;
 }
@@ -200,9 +199,9 @@ const bonusCss = (theme) => `
 .pl-head .icon { width:.5in; height:.5in; flex:none; }
 .pl-head h2 { margin:0; font-family:'${theme.fonts.display}', 'Fredoka', sans-serif; font-weight:${theme.fonts.displayWeight}; text-transform:${theme.fonts.displayTransform};
   color:var(--primary); font-size:20pt; line-height:1.05; }
-.pl-name { margin-left:auto; font-size:11pt; color:#555; display:flex; align-items:flex-end; gap:.06in; }
+.pl-name { margin-left:auto; flex:none; font-size:11pt; color:#555; display:flex; align-items:flex-end; gap:.06in; }
 .pl-name span { display:inline-block; width:1.6in; border-bottom:1.5px solid var(--ink); height:.25in; }
-.pl-sub { font-size:11pt; color:#555; margin:.06in 0 .08in; }
+.pl-sub { font-size:11pt; color:#555; margin:.06in 0 .08in; display:flex; align-items:flex-end; gap:.2in; }
 .pl-grid { flex:1; display:grid; grid-template-columns:repeat(6, 1fr); grid-template-rows:1fr 1fr; gap:.07in; }
 .pl-item { display:flex; flex-direction:column; align-items:center; justify-content:space-between; border-radius:.1in; background:#fff; border:1.5px solid var(--soft); padding:.06in .03in .07in; }
 .pl-pic { width:.82in; height:.82in; display:grid; place-items:center; }
