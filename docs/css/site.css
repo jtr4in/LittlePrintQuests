@@ -425,8 +425,6 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 /* theme tiles that wrap into a grid (home and the order page) */
 .themes.mini.rows { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); grid-auto-columns: clamp(88px, calc((100% - 20px) / 3.3), 120px); gap: 10px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; margin-top: 14px; padding: 2px 2px 10px; }
 .themes.mini.rows .theme { flex: none; }
-/* the tiles show each kit's realistic wow prop (scripts/wow-tiles.py), whole and centered */
-.themes.mini .theme img[src*="img/wow/"] { object-fit: contain; background: transparent; }
 .home .themes.mini.rows { grid-auto-columns: clamp(96px, calc((100% - 20px) / 3.3), 140px); gap: 12px; }
 .home .themes.mini.rows .theme { padding: 8px; }
 .home .themes.mini.rows .theme span { font-size: 14px; text-align: center; }
