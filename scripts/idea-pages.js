@@ -28,6 +28,11 @@ const LIFE = { pizza: 'b', vet: 'b', dino: 'a', unicorn: 'a', halloween: 'b' };
 const STYLED = { dino: 'The printed Dino Dig Lab kit set up for play: shop sign, open sign, fossil puzzle, dig map and badges' };
 // Hunt themes with a photo of the printed hunt being played, shown with the printable.
 const HUNT_LIFE = { dino: 'A child by the bookshelf holding up a Dino Ranger Field Note clue card, with another clue taped to the shelf and the Urgent Field Report letter on the rug' };
+// Step-by-step cardboard box builds that use the kit's own signs and props (docs/img/howto/, 1200x1800).
+const HOWTO = {"auto": "Make a Car Wash", "burger": "Make a Drive-Thru", "christmas": "Make a Sleigh", "coffee": "Make a Coffee Machine", "construction": "Make Cardboard Bricks", "dentist": "Make a Prize Box", "dino": "Make a Dino Dig Pit", "easter": "Make an Egg Drying Rack", "fire": "Make a Fire Truck", "grocery": "Make a Store Shelf", "halloween": "Make a Potion Counter", "hero": "Make a Cape Closet", "ice": "Make an Igloo Den", "italian": "Make a Play Stove", "library": "Make a Book Drop", "mermaid": "Make a Treasure Chest", "petshop": "Make a Puppy House", "pirate": "Make a Pirate Ship", "pizza": "Make a Pizza Oven", "police": "Make a Police Car", "post": "Make a Mailbox", "racecar": "Make a Race Car", "royal": "Make a Castle", "space": "Make a Rocket", "unicorn": "Make a Unicorn Stable", "valentine": "Make a Valentine Mailbox", "vet": "Make an X-Ray Machine"};
+const howto = (k) => (HOWTO[k.id] ? `<h2>Build it from a box</h2>
+<p>${esc(HOWTO[k.id])} from a cardboard box and the pieces in your kit. Grown-ups do the cutting, kids paint, glue and play.</p>
+<a href="../../img/howto/${k.id}.webp"><img class="photo howto" src="../../img/howto/${k.id}-sm.webp" srcset="../../img/howto/${k.id}-sm.webp 640w, ../../img/howto/${k.id}.webp 1200w" sizes="(max-width: 760px) 100vw, 560px" width="1200" height="1800" alt="${esc(HOWTO[k.id])}: six illustrated steps to build it from a cardboard box with the printed ${esc(k.name)} kit" loading="lazy"></a>` : '');
 const lifePhoto = (k, v, alt, lazy = true) => (LIFE[k.id] ? `<img class="photo" src="../../img/life/${k.id}-${v}.webp" srcset="../../img/life/${k.id}-${v}-sm.webp 640w, ../../img/life/${k.id}-${v}.webp 1200w" sizes="(max-width: 760px) 100vw, 720px" width="1200" height="896" alt="${esc(alt)}"${lazy ? ' loading="lazy"' : ''}>` : '');
 
 const CSS = `
@@ -56,6 +61,7 @@ h3 { font-size:19px; margin:0 0 6px; }
 .clue small b { color:var(--mint); }
 .story { background:var(--tint); border-radius:14px; padding:20px 22px; }
 .story p { margin:0 0 10px; }
+.photo.howto { max-width:560px; display:block; margin-left:auto; margin-right:auto; }
 .pages { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
 .pages img { width:100%; height:auto; border-radius:6px; box-shadow:0 2px 10px rgba(0,0,0,.12); background:#fff; }
 .photo { display:block; width:100%; height:auto; border-radius:14px; margin:22px 0 4px; }
@@ -228,6 +234,7 @@ function kitPage(k, kits) {
 ${STYLED[k.id] ? lifePhoto(k, 'styled', STYLED[k.id], false) : lifePhoto(k, 'stand', `The printed ${k.name} kit set up on a play stand: shop sign, open sign, price list, poster and labels`, false)}
 <h2>How to set it up</h2>
 <ol class="tips">${g.setup.map((x) => `<li>${esc(fill(x))}</li>`).join('')}</ol>
+${howto(k)}
 
 <h2>Games to play</h2>
 <ul class="clues">${g.play.map(([t, d]) => `<li class="clue"><h3>${esc(t)}</h3><p>${esc(fill(d))}</p></li>`).join('')}</ul>

@@ -270,6 +270,11 @@ input[type="text"], input[type="number"], input[type="email"], select { width: 1
 
 /* pretend play kits */
 .kits-lede { color: var(--ink-soft); font-size: 18px; max-width: 40em; margin-top: 12px; }
+.howto-link { display: flex; gap: 14px; align-items: center; margin-top: 18px; padding: 10px; max-width: 420px; background: var(--sheet); border: 1px solid var(--line); border-radius: 10px; text-decoration: none; color: var(--ink-soft); font-size: 15px; }
+.howto-link[hidden] { display: none; }
+.howto-link img { width: 72px; height: auto; border-radius: 4px; flex: none; }
+.howto-link b, .howto-link span span { display: block; color: var(--ink); }
+.howto-link span span { font-weight: 600; }
 .kit-points { margin: 18px 0 0; padding-left: 20px; color: var(--ink-soft); display: grid; gap: 4px; max-width: 720px; }
 
 /* theme groups and tabs */
@@ -529,6 +534,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
             <h3 id="kitName">Dino Dig Lab</h3>
             <p id="kitBlurb" class="kits-lede"></p>
             <ul class="kit-points"><li>A wall full of signs with your child’s name: door signs, big station signs, open/closed and pay-here counter signs, store hours and shelf labels</li><li>Two hands-on toys made for the theme: things that spin, slide, lift or go on your head</li><li>A whole shop to set up: welcome poster, menu board, specials, order slips and play money</li><li>Flat props kids can hold: maps, X-rays, wanted posters, treasure cards and stickers</li><li>ID badges, check-up forms, tickets, passports and a certificate</li></ul>
+            <a class="howto-link" id="howtoLink" href="img/howto/dino.webp"><img id="howtoImg" src="img/howto/dino-sm.webp" alt="" width="640" height="960" loading="lazy"><span><b>Build it from a box</b><span id="howtoName">Make a Dino Dig Pit</span>Six simple steps with a cardboard box and the kit’s own signs.</span></a>
             <p class="hint" style="margin-top:14px">Every theme has its own kit. Switch the theme above to see the others.</p>
           </div>
         </div>
@@ -809,6 +815,13 @@ function drawBox() {
   $('kitImg').alt = k.alt;
   $('kitName').textContent = k.name;
   $('kitBlurb').textContent = k.blurb;
+  $('howtoLink').hidden = !HOWTO[t.id];
+  if (HOWTO[t.id]) {
+    $('howtoLink').href = `img/howto/${t.id}.webp`;
+    $('howtoImg').src = `img/howto/${t.id}-sm.webp`;
+    $('howtoImg').alt = `${HOWTO[t.id]}: six illustrated cardboard box steps`;
+    $('howtoName').textContent = HOWTO[t.id];
+  }
   $('huntName').textContent = t.name;
   for (const [el, part] of [['huntGuide', 'guide'], ['huntBriefing', 'briefing'], ['huntCards', 'cards'], ['huntCert', 'cert']]) $(el).src = `img/pages/${t.id}-${part}.webp`;
   for (const [el, part] of [['hostHide', 'hide'], ['hostPlay', 'play'], ['hostSidekick', 'sidekick']]) $(el).src = `img/host/${t.id}-${part}.webp`;
@@ -1055,6 +1068,8 @@ const GALLERY = {
   activity: ['Activity pack checklist', 'I spy', 'Spot the difference', 'Find the way maze', 'Word search'],
   activityLittle: ['Activity pack checklist', 'I spy', 'Spot the difference', 'Find the way maze', 'How many?'],
 };
+// Cardboard box builds that use the kit's signs and props (docs/img/howto/), shown after the kit pages.
+const HOWTO = {"auto": "Make a Car Wash", "burger": "Make a Drive-Thru", "christmas": "Make a Sleigh", "coffee": "Make a Coffee Machine", "construction": "Make Cardboard Bricks", "dentist": "Make a Prize Box", "dino": "Make a Dino Dig Pit", "easter": "Make an Egg Drying Rack", "fire": "Make a Fire Truck", "grocery": "Make a Store Shelf", "halloween": "Make a Potion Counter", "hero": "Make a Cape Closet", "ice": "Make an Igloo Den", "italian": "Make a Play Stove", "library": "Make a Book Drop", "mermaid": "Make a Treasure Chest", "petshop": "Make a Puppy House", "pirate": "Make a Pirate Ship", "pizza": "Make a Pizza Oven", "police": "Make a Police Car", "post": "Make a Mailbox", "racecar": "Make a Race Car", "royal": "Make a Castle", "space": "Make a Rocket", "unicorn": "Make a Unicorn Stable", "valentine": "Make a Valentine Mailbox", "vet": "Make an X-Ray Machine"};
 let gPages = [];
 let gAt = 0;
 function gShow(i) {
@@ -1070,7 +1085,8 @@ function gShow(i) {
 function openGallery(k) {
   const gets = ['hunt', 'kit', 'activity', 'party'].filter((x) => picked.has(x) && shown().some((l) => l.id === x));
   if (!gets.length) return;
-  gPages = gets.flatMap((x) => (little(x) && GALLERY[`${x}Little`] || GALLERY[x]).map((cap, i) => ({ k: x, cap, src: `img/gallery/${setId()}/${little(x) ? 'little/' : ''}${x}-${i + 1}.webp` })));
+  gPages = gets.flatMap((x) => [...(little(x) && GALLERY[`${x}Little`] || GALLERY[x]).map((cap, i) => ({ k: x, cap, src: `img/gallery/${setId()}/${little(x) ? 'little/' : ''}${x}-${i + 1}.webp` })),
+    ...(x === 'kit' && HOWTO[setId()] ? [{ k: x, cap: `Build it from a box: ${HOWTO[setId()]}`, src: `img/howto/${setId()}-sm.webp` }] : [])]);
   $('gTabs').innerHTML = gets.map((x) => `<button type="button" data-k="${x}">${LABELS[x]}</button>`).join('');
   $('gTabs').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => gShow(gPages.findIndex((p) => p.k === b.dataset.k))));
   $('gThumbs').innerHTML = gPages.map((p, i) => `<button type="button" aria-label="${p.cap}"><img src="${p.src}" alt="" loading="lazy" width="46" height="60"></button>`).join('');
