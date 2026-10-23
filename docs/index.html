@@ -464,7 +464,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
     <div class="wrap hook">
       <div class="hook-copy">
         <p class="eyebrow">Personalized printables · ages 3 to 8</p>
-        <p class="hook-title" id="hookTitle"><span class="occasion" id="occasion">A birthday</span> adventure starring <b>your kid</b>.</p>
+        <p class="hook-title" id="hookTitle">A <span class="occasion" id="occasion">birthday</span> adventure starring <b>your kid</b>.</p>
         <p class="hook-sub">Type their first name and watch every page on this site become theirs.</p>
         <form class="hook-form" id="hookForm">
           <input type="text" id="hookName" maxlength="24" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="Your kid’s first name" aria-label="Your kid’s first name">
@@ -1540,9 +1540,10 @@ function drawHookPages(id = state.theme) {
 }
 // The headline's occasion rotates so it reads as more than a birthday thing, each a nod to a theme.
 const OCCASIONS = [
-  ['A birthday', null], ['A rainy day', 'pirate'], ['A sleepover', 'space'], ['A snow day', 'ice'],
-  ['A Halloween', 'halloween'], ['A playdate', 'dino'], ['A Christmas morning', 'christmas'],
-  ['A Valentine’s Day', 'valentine'], ['An Easter morning', 'easter'], ['A weekend', 'royal'],
+  // (all take "A", which stays put while the occasion fades)
+  ['birthday', null], ['rainy day', 'pirate'], ['sleepover', 'space'], ['snow day', 'ice'],
+  ['Halloween', 'halloween'], ['playdate', 'dino'], ['Christmas morning', 'christmas'],
+  ['Valentine’s Day', 'valentine'], ['spring break', 'easter'], ['weekend', 'royal'],
 ];
 let occasionAt = 0;
 function nextOccasion() {
