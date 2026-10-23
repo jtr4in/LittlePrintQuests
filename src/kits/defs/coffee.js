@@ -81,6 +81,7 @@ module.exports = {
       items: [['☕', 'Cups'], ['🥄', 'Spoons'], ['🥤', 'Straws'], ['🧻', 'Napkins'], ['🥛', 'Milk'], ['🍯', 'Honey'],
         ['🍫', 'Cocoa'], ['🌈', 'Sprinkles'], ['🧁', 'Treats'], ['💖', 'Tip Jar'], ['🛍️', 'To Go'], ['📣', 'Pick Up']] },
   },
+  wow: { title: 'Espresso Machine', howTo: 'Tape it to the back of the play kitchen above the counter. Put a cup under the spout and press the buttons: whoosh!', inside: 'A real-looking espresso machine for the back of a play kitchen' },
   certificate: { title: 'Best Barista', icon: '🏅', seal: '☕', line: 'stirred the coziest cocoa, served every customer with a smile and never spilled a drop.' },
   guide: {
     afterHunt: 'Every Magic Cocoa Bean is found! Open {place} right where the last bean was hiding, and make the first cup of Magic Hot Cocoa. Barista of the Day {child} takes the first order.',

@@ -90,6 +90,7 @@ module.exports = {
     patches: { title: 'Rescue Stickers', howTo: 'Cut out the stickers. Give one to each firefighter after a rescue.',
       items: [['⭐', 'Rescue star'], ['🚒', 'Engine driver'], ['🪜', 'Ladder pro'], ['🔔', 'Bell ringer'], ['🐱', 'Kitten saver'], ['🦺', 'Safety star'], ['🤝', 'Team player'], ['💧', 'Hose hero'], ['🏅', 'Brave helper']] },
   },
+  wow: { title: 'Fire Truck Pump Panel', howTo: 'Tape it to the side of the play kitchen or a big box and turn the valves to pump the water!', inside: 'A real-looking fire truck pump panel' },
   certificate: { title: 'Junior Firefighter Award', icon: '🏅', seal: '🚒', line: 'answered every rescue call, helped every neighbor, and kept the fire station ready to roll.' },
   guide: {
     afterHunt: 'Pepper’s hidden gear is all found! Set up {place} right where the last piece turned up, and hang the gear in the Gear Room. Fire Chief {child} answers the first call on the dispatch radio.',

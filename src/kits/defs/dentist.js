@@ -81,6 +81,7 @@ module.exports = {
     labels: { title: 'Supply Labels', howTo: 'Cut out, fold along the dotted line and stand each label by a cup or box of supplies.',
       items: [['🪥', 'Toothbrushes'], ['🧴', 'Toothpaste'], ['🧵', 'Floss'], ['🧤', 'Gloves'], ['😷', 'Masks'], ['🎁', 'Prizes']] },
   },
+  wow: { title: 'Real Tooth X-Ray', howTo: 'Cut out the film and tape it to a window or the back of a play kitchen. Count the baby teeth, then find the grown-up teeth waiting underneath!', inside: 'A real-looking tooth X-ray film to hold up to the light' },
   certificate: { title: 'Super Smile Dentist', icon: '🏅', seal: '🦷', line: 'counted, brushed and polished every tooth, and sent each patient home with a sparkly smile.' },
   guide: {
     afterHunt: 'The Sparkle Toothbrushes are back and the Sugar Bugs ran away! Open {place} right where the last card was found, and give every stuffed patient a sparkly check-up. Super Smile Hero {child} is the first dentist.',

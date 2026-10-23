@@ -85,6 +85,7 @@ module.exports = {
     labels: { title: 'Table Cards', howTo: 'Cut out, fold along the dotted line and stand a card on each table so the waiter knows where to go.',
       items: [['🌹', 'Table 1'], ['🌻', 'Table 2'], ['🌷', 'Table 3'], ['🌼', 'Table 4'], ['🕯️', 'Table 5'], ['⭐', 'Reserved']] },
   },
+  wow: { title: 'Gelato Case', howTo: 'Tape it to the play kitchen fridge or oven door. Customers point at a flavor and the waiter scoops it!', inside: 'A real-looking gelato case for the play kitchen fridge door' },
   certificate: { title: 'Master Italian Chef', icon: '🏅', seal: '🍝', line: 'cooked the tastiest spaghetti in town and served every table with a smile. Grazie!' },
   guide: {
     afterHunt: 'Every runaway meatball is back in the pot! Open {place} right where the last card was found, and serve the first plate of spaghetti and meatballs. Master Chef {child} takes the first order.',

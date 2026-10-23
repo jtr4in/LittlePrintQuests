@@ -7,8 +7,11 @@
 //   peelPages       a pizza peel and two plain pizzas to glue onto cardboard and draw toppings on
 //   chefHatPage     a tall chef hat with the child's name on the band
 //   foldMenuPages   a menu that folds like a book: covers on one page, the food inside on the next
-// Kits pick the optional ones in their def: jars, appliances, peel, chefHat, menu.fold.
+//   wowPage         one real-looking prop (an X-ray film, a fish tank) sized for a play kitchen spot
+// Kits pick the optional ones in their def: jars, appliances, peel, chefHat, menu.fold, wow.
 
+const fs = require('fs');
+const path = require('path');
 const { em, pic } = require('./art');
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -158,6 +161,21 @@ function stovePage() {
   </section>`;
 }
 
+// ---------- wow prop ----------
+
+// The picture is src/kits/art/<kit>/wow.webp, cut out on a clear background with a grey cut line
+// (scripts/wow-cutout.py). It prints at most 7.6 x 9.4 inches: a square one fits behind a play
+// kitchen oven window. A kit without the picture yet simply skips the page.
+function wowPage(k) {
+  const W = k.def.wow;
+  const f = W && path.join(__dirname, 'art', k.def.id, 'wow.webp');
+  if (!f || !fs.existsSync(f)) return '';
+  return `<section class="page props wow">${head(W.title, W.howTo)}
+    <img class="wow-art" src="data:image/webp;base64,${fs.readFileSync(f).toString('base64')}" alt="">
+  </section>`;
+}
+const hasWow = (k) => Boolean(k.def.wow && fs.existsSync(path.join(__dirname, 'art', k.def.id, 'wow.webp')));
+
 const APPLIANCES = { oven: ovenPage, stove: stovePage };
 const appliancePages = (k) => (k.def.appliances || []).map((a) => APPLIANCES[a](k)).join('');
 
@@ -254,6 +272,7 @@ const extrasCss = `
 .so-item { border:2px solid var(--mint); border-radius:.18in; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.05in; text-align:center; }
 .so-item b { font:700 12.5pt/1.1 'Fredoka'; }
 .so-nums { display:flex; gap:.05in; } .so-nums span { width:.34in; height:.34in; border:2px solid var(--teal); border-radius:50%; display:grid; place-items:center; font:700 11pt 'Fredoka'; }
+.wow-art { width:100%; flex:1; min-height:0; max-height:9.4in; object-fit:contain; margin-top:.1in; }
 .appliance { padding:.35in; display:flex; flex-direction:column; align-items:center; }
 .ap-art { width:100%; flex:1; min-height:0; }
 .ap-tip { font-size:10pt; color:#66708f; margin:.08in 0 0; text-align:center; }
@@ -300,4 +319,4 @@ const extrasCss = `
 .fm-foot { margin-top:auto; text-align:center; font:600 10.5pt 'Fredoka'; color:#66708f; }
 `;
 
-module.exports = { bigSignPages, atmPage, morningPages, appliancePages, jarPages, peelPages, chefHatPage, foldMenuPages, extrasCss };
+module.exports = { bigSignPages, atmPage, morningPages, appliancePages, wowPage, hasWow, jarPages, peelPages, chefHatPage, foldMenuPages, extrasCss };

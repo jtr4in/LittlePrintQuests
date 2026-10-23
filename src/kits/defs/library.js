@@ -79,6 +79,7 @@ module.exports = {
     wanted: { title: 'Missing Book Posters', word: 'MISSING!', howTo: 'Tape them up by the desk. Can you find these silly books and bring them back?',
       list: [['🐉', 'The Dragon Book', 'Hiding under the bed for 3 weeks'], ['🦆', 'Duck Stories', 'Going for a swim in the bath'], ['🍪', 'The Cookie Book', 'Getting crumbs on every page'], ['🧦', 'The Sock Book', 'Napping in the laundry basket']] },
   },
+  wow: { title: 'Library Computer', howTo: 'Tape it to the back of the play kitchen or a desk. Write the book’s name on the screen with a dry-erase marker over a sheet protector, then scan the book!', inside: 'A real-looking library computer and book scanner' },
   certificate: { title: 'Star Librarian', icon: '🏅', seal: '📚', line: 'helped every reader find a great book, kept the shelves tidy and read the best stories in town.' },
   guide: {
     afterHunt: 'The Big Storybook is whole again! Open {place} right where the last page was found, and read the story together. Master Book Detective {child} stamps the first library card.',

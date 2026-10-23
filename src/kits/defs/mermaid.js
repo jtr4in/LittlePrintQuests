@@ -85,6 +85,7 @@ module.exports = {
         ['👑', 'Mermaid crown', 5], ['💍', 'Pearl ring', 3], ['📿', 'Necklace', 2], ['🔱', 'Trident', 4], ['🗝️', 'Chest key', 2], ['🍉', 'Watermelon', 1]] },
     wearable: { type: 'crown', title: 'Mermaid Crown', howTo: 'Print on cardstock. Cut out both pieces and tape them into a ring that fits.' },
   },
+  wow: { title: 'Sunken Treasure Chest', howTo: 'Tape it to the play kitchen oven door or a box, and fill it with the treasure you find!', inside: 'A real-looking treasure chest full of pearls and shells' },
   certificate: { title: 'Lagoon Hero Award', icon: '🏅', seal: '🐚', line: 'rescued every sea creature, ran the shell shop, and kept the lagoon sparkling clean.' },
   guide: {
     afterHunt: 'The Lagoon Explorers rescued every pearl! Carry them to {place} and lock them in the Pearl Vault. The Pearl Keeper, {child}, answers the shell phone first.',

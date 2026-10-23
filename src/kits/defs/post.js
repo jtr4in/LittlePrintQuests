@@ -78,6 +78,7 @@ module.exports = {
     patches: { title: 'Parcel Stickers', howTo: 'Cut out the stickers and tape one on each parcel so the mail carrier knows what to do.',
       items: [['🥚', 'Fragile'], ['✈️', 'Air Mail'], ['⚡', 'Express'], ['⬆️', 'This Side Up'], ['🏋️', 'Heavy'], ['🎁', 'Gift Inside'], ['✍️', 'Sign for It'], ['🎂', 'Birthday Mail'], ['❄️', 'Keep Cool']] },
   },
+  wow: { title: 'Big Blue Mailbox', howTo: 'Tape it onto the play kitchen oven door or a box, cut a slot where the handle is, and post the letters inside!', inside: 'A real-looking mailbox front for a play kitchen oven door or a box' },
   certificate: { title: 'Star Postmaster', icon: '🏅', seal: '📮', line: 'stamped, sorted and delivered every letter and parcel safely to the right door.' },
   guide: {
     afterHunt: 'Every special letter is found! Open {place} right where the last letter was hiding, and stamp and sort the mail. Star Mail Carrier {child} runs the counter first.',

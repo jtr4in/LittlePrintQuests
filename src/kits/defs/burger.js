@@ -80,6 +80,7 @@ module.exports = {
     labels: { title: 'Sauce Labels', howTo: 'Cut out, fold along the dotted line and stand each label by a sauce bottle or bowl.',
       items: [['🍅', 'Ketchup'], ['🌭', 'Mustard'], ['🥚', 'Mayo'], ['🔥', 'BBQ Sauce'], ['🥒', 'Pickles'], ['🧀', 'Cheese']] },
   },
+  wow: { title: 'Sizzling Grill', howTo: 'Tape it over the play kitchen burners (or onto a box) and cook the burger patty from Build a Burger on it. Turn the knobs to make it hot!', inside: 'A real-looking flat-top grill that sits over a play kitchen stovetop' },
   certificate: { title: 'Master Burger Chef', icon: '🏅', seal: '🍔', line: 'flipped the juiciest, tastiest burgers in town and served every customer with a smile.' },
   guide: {
     afterHunt: 'The Secret Sauce recipe is back together! Open {place} right where the last card was found, and grill the first burgers with Secret Sauce on top. Burger Boss {child} works the grill first.',

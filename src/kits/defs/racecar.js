@@ -92,6 +92,7 @@ module.exports = {
       items: [['🏆', 'Champion'], ['🥇', 'First place'], ['⭐', 'Super racer'], ['🏁', 'Finished!'], ['🔧', 'Fix-it whiz'], ['⛽', 'Fast fueler'], ['🤝', 'Team player'], ['💨', 'Speedy'], ['🛡️', 'Safe driver']] },
     wearable: { type: 'mask', title: 'Racing Goggles', howTo: 'Print on cardstock. Cut out, cut the eye holes, then tie on with string or elastic.' },
   },
+  wow: { title: 'Race Car Steering Wheel', howTo: 'Glue onto cardboard and cut it out. Hold it at the play kitchen (now the pit garage) and race!', inside: 'A real-looking race car steering wheel' },
   certificate: { title: 'Pit Crew Champion', icon: '🏆', seal: '🏁', line: 'fixed every car, filled every tank, drove safely, and crossed the finish line with a smile.' },
   guide: {
     afterHunt: 'The checkpoint flags are back and the race is won! Set up {place} right at the finish line, and give every car a tune-up after the big race. Grand Prix Champion {child} is the crew chief today.',

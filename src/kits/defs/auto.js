@@ -84,6 +84,7 @@ module.exports = {
     patches: { title: 'Car Stickers', howTo: 'Cut out the stickers and tape one on each car when the job is done.',
       items: [['🛢️', 'Oil changed!'], ['✅', 'Passed check-up'], ['✨', 'Super shiny'], ['🚗', 'New tires'], ['🔋', 'Fully charged'], ['🛑', 'Brakes fixed'], ['⭐', 'Safe car'], ['🔧', 'All fixed!'], ['💧', 'Squeaky clean']] },
   },
+  wow: { title: 'Under the Hood', howTo: 'Tape it flat on the play kitchen counter or a box with a lid for the hood. Check the oil, the battery and the water!', inside: 'A real-looking engine to check under the hood' },
   certificate: { title: 'Master Mechanic', icon: '🏅', seal: '🔧', line: 'fixed every car, washed every truck and sent everyone home safe and shiny.' },
   guide: {
     afterHunt: 'Every tool is back in the toolbox! Open {place} right where the Golden Wrench was found, and fix up the first car. Master Mechanic {child} runs the shop today.',

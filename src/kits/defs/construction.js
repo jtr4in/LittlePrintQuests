@@ -90,6 +90,7 @@ module.exports = {
     patches: { title: 'Safety Stickers', howTo: 'Cut out the stickers. Give one to each builder for a job well done.',
       items: [['⭐', 'Super builder'], ['🦺', 'Safety star'], ['🧱', 'Brick stacker'], ['🚜', 'Digger pro'], ['🏗️', 'Crane champ'], ['🔧', 'Fix-it whiz'], ['🤝', 'Team player'], ['📐', 'Plan reader'], ['🏆', 'Master builder']] },
   },
+  wow: { title: 'House Blueprint', howTo: 'Tape it to the wall by the building site and build the house from the plan with blocks!', inside: 'A real-looking house blueprint' },
   certificate: { title: 'Master Builder Award', icon: '🏅', seal: '👷', line: 'dug the holes, lifted the beams, followed every safety rule, and finished the Big Build.' },
   guide: {
     afterHunt: 'The crew put the blueprint back together! Lay it out at {place} and start the Big Build right where the last piece was found. Master Builder {child} works the crane controls first.',
