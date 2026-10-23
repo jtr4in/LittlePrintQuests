@@ -2,6 +2,8 @@
 // like a photo on a table that matches the theme (wood for dinos, sand for pirates, a starry desk
 // for space...), with the kit's own pictures scattered around as props.
 // Needs docs/img/gallery (scripts/gallery-images.js) and docs/img/host (scripts/site-images.js).
+// Each scene also gets a twin in docs/img/n/hero/ made from the pages' nameless twins, so the website
+// can write a parent's typed name over it (see src/generator/name-slots.js); run gallery-images.js first.
 // Usage: node scripts/hero-scenes.js [theme ...]
 const fs = require('fs');
 const os = require('os');
@@ -11,6 +13,7 @@ const { chromium } = require('playwright');
 const THEMES = require('../src/generator/themes');
 const { kitForHunt, KITS } = require('../src/kits/engine');
 const art = require('../src/kits/art');
+const { sheetLayers, blankLayers, saveIndex } = require('../src/generator/name-slots');
 
 const IMG = path.join(__dirname, '..', 'docs', 'img');
 const W = 1600;
@@ -59,9 +62,9 @@ const SHOPS = Object.values(KITS).filter((k) => !k.hunt).map((k) => k.id);
 const pics = (s) => [...new Intl.Segmenter().segment(s)].map((x) => x.segment);
 
 const url = (f) => 'file://' + path.join(IMG, f);
-const sheet = (f, x, y, w, r, extra = '') => `<div class="p" style="left:${x}px;top:${y}px;width:${w}px;transform:rotate(${r}deg)"><div class="inner"><img src="${url(f)}">${extra}</div></div>`;
+const sheet = (f, x, y, w, r, extra = '') => `<div class="p" data-key="img/${f}" style="left:${x}px;top:${y}px;width:${w}px;transform:rotate(${r}deg)"><div class="inner"><img src="${url(f)}">${extra}</div></div>`;
 // One clue card, cut out along its dashed line (two cards to a page).
-const card = (f, second, x, y, w, r) => `<div class="p card" style="left:${x}px;top:${y}px;width:${w}px;height:${Math.round(w * 0.6)}px;transform:rotate(${r}deg)"><img src="${url(f)}" style="width:${Math.round(w * 1.12)}px;margin-left:${-Math.round(w * 0.06)}px;margin-top:${-Math.round(w * (second ? 0.8 : 0.075))}px"></div>`;
+const card = (f, second, x, y, w, r) => `<div class="p card" data-occ style="left:${x}px;top:${y}px;width:${w}px;height:${Math.round(w * 0.6)}px;transform:rotate(${r}deg)"><img src="${url(f)}" style="width:${Math.round(w * 1.12)}px;margin-left:${-Math.round(w * 0.06)}px;margin-top:${-Math.round(w * (second ? 0.8 : 0.075))}px"></div>`;
 
 function scene(id) {
   const shop = SHOPS.includes(id);
@@ -70,11 +73,11 @@ function scene(id) {
   const [, , ink] = TABLES[id];
   const props = [...kit.menu.items.map(([e]) => e), ...kit.defaultKinds.map((k) => kit.kinds[k][0])];
   const spots = [[1490, 600, 120, 14], [700, 615, 110, -10], [1015, 40, 95, 18], [40, 610, 105, -16], [640, 25, 90, 10], [1560, 330, 95, -12], [880, 330, 80, 8]];
-  const scatter = spots.map(([x, y, s, r], i) => `<div class="prop" style="left:${x - s / 2}px;top:${y - s / 2}px;width:${s}px;transform:rotate(${r}deg)">${art.pic(props[i % props.length], `${s}px`)}</div>`).join('');
+  const scatter = spots.map(([x, y, s, r], i) => `<div class="prop" data-occ style="left:${x - s / 2}px;top:${y - s / 2}px;width:${s}px;transform:rotate(${r}deg)">${art.pic(props[i % props.length], `${s}px`)}</div>`).join('');
   // along the edges and in the gaps, on top of the paper like things set down on it
   const edge = [[30, 380, 92, -14], [655, 40, 84, 12], [660, 640, 96, -8], [1100, 660, 88, 16], [1560, 70, 90, 10], [1110, 250, 70, -12], [255, 30, 70, 20], [1560, 650, 84, -10], [1020, 520, 66, 6]];
   const d = pics(DECOR[id]);
-  const decor = edge.map(([x, y, s, r], i) => `<div class="prop" style="left:${x - s / 2}px;top:${y - s / 2}px;width:${s}px;transform:rotate(${r}deg)">${art.pic(d[i % d.length], `${s}px`)}</div>`).join('');
+  const decor = edge.map(([x, y, s, r], i) => `<div class="prop" data-occ style="left:${x - s / 2}px;top:${y - s / 2}px;width:${s}px;transform:rotate(${r}deg)">${art.pic(d[i % d.length], `${s}px`)}</div>`).join('');
   const circles = `<svg style="position:absolute;inset:0" viewBox="0 0 640 828"><g fill="none" stroke="${ink}" stroke-width="7" stroke-linecap="round" opacity=".85"><ellipse cx="420" cy="300" rx="50" ry="45" transform="rotate(-12 420 300)"/><ellipse cx="200" cy="520" rx="48" ry="44"/></g></svg><div class="gloss"></div>`;
   return `<!doctype html><html><head><meta charset="utf-8"><style>
 body{margin:0;width:${W}px;height:${H}px;overflow:hidden;position:relative}
@@ -109,8 +112,8 @@ ${card(`gallery/${id}/hunt-3.webp`, true, 390, 500, 330, 8)}
 ${sheet(`gallery/${id}/kit-1.webp`, 700, 70, 320, -4)}
 ${sheet(`gallery/${id}/party-1.webp`, 900, 300, 290, 9)}
 ${sheet(`gallery/${id}/activity-2.webp`, 1150, 40, 330, 4, circles)}
-<div class="phone" style="left:1290px;top:400px;transform:rotate(-10deg)"><img src="${url(`host/${id}-play.webp`)}"></div>
-`}<div class="marker" style="left:820px;top:620px;transform:rotate(-18deg)"></div>
+<div class="phone" data-key="img/host/${id}-play.webp" style="left:1290px;top:400px;transform:rotate(-10deg)"><img src="${url(`host/${id}-play.webp`)}"></div>
+`}<div class="marker" data-occ style="left:820px;top:620px;transform:rotate(-18deg)"></div>
 ${decor}
 <div class="light"></div></body></html>`;
 }
@@ -121,6 +124,8 @@ ${decor}
   fs.mkdirSync(path.join(IMG, 'hero'), { recursive: true });
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: W, height: H } });
+  const index = {};
+  const twins = [];
   const ids = [...Object.keys(THEMES), ...SHOPS].filter((k) => !only.length || only.includes(k));
   for (const id of ids) {
     const file = path.join(tmp, `${id}.html`);
@@ -128,9 +133,22 @@ ${decor}
     await page.goto('file://' + file);
     await page.waitForTimeout(400);
     await page.screenshot({ path: path.join(tmp, `${id}.png`) });
+    // The twin: the same scene from the nameless pages, and where each page landed.
+    const shard = path.join(IMG, 'n', `${id}.json`);
+    const slots = fs.existsSync(shard) ? JSON.parse(fs.readFileSync(shard, 'utf8')) : {};
+    const layers = await page.evaluate(sheetLayers);
+    if (blankLayers(index, path.join(IMG, 'hero', `${id}.webp`), W, H, layers, (k) => slots[k] || null)) {
+      await page.evaluate((keys) => document.querySelectorAll('[data-key]').forEach((el) => {
+        if (keys.includes(el.dataset.key)) el.querySelector('img').src = el.querySelector('img').src.replace('/img/', '/img/n/');
+      }), Object.keys(slots));
+      await page.waitForTimeout(400);
+      await page.screenshot({ path: path.join(tmp, `blank-${id}.png`) });
+      twins.push(id);
+    }
     console.log('Rendered', id);
   }
   await browser.close();
+  saveIndex(index);
   execFileSync('python3', ['-c', `
 import sys, os
 from PIL import Image
@@ -140,6 +158,15 @@ for t in sys.argv[3:]:
     im.save(os.path.join(out, t + '.webp'), 'WEBP', quality=76)
     im.resize((800, 350), Image.LANCZOS).save(os.path.join(out, t + '-sm.webp'), 'WEBP', quality=76)
 `, tmp, path.join(IMG, 'hero'), ...ids]);
+  if (twins.length) execFileSync('python3', ['-c', `
+import sys, os
+from PIL import Image
+tmp, out = sys.argv[1], sys.argv[2]
+for t in sys.argv[3:]:
+    im = Image.open(os.path.join(tmp, 'blank-' + t + '.png')).convert('RGB')
+    im.save(os.path.join(out, t + '.webp'), 'WEBP', quality=76)
+    im.resize((800, 350), Image.LANCZOS).save(os.path.join(out, t + '-sm.webp'), 'WEBP', quality=76)
+`, tmp, path.join(IMG, 'n', 'hero'), ...twins]);
   fs.rmSync(tmp, { recursive: true, force: true });
   console.log('Wrote docs/img/hero for', only.length ? only.join(', ') : 'every theme and shop kit');
 })();

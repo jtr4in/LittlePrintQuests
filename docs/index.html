@@ -23,6 +23,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&display=swap">
+<!-- the printed pages' own fonts, for writing the kid's name over the previews (js/names.js); files load only when used -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:wght@200..1000&family=Bangers&family=Pirata+One&family=Orbitron:wght@400..900&family=Cinzel+Decorative:wght@700&family=Pacifico&family=Comic+Neue:wght@700&display=swap">
+<script src="js/names.js"></script>
 <style>
 /* Layout: the printed clue card is the hero object; sections stack on a wide
    single column, and the order builder pairs the form with a live trail. */
@@ -122,6 +125,43 @@ main { position: relative; }
 .hero h1 { font-size: clamp(32px, 4.6vw, 50px); margin-top: 10px; }
 .hero h1 em { font-style: normal; background: linear-gradient(transparent 60%, var(--hl) 60%); padding: 0 4px; }
 .hero .lede { font-size: 18px; color: var(--ink-soft); margin-top: 10px; max-width: 40em; }
+/* the name hook: type your kid's name and every preview on the page becomes theirs (js/names.js) */
+.hook { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 28px; align-items: center; margin-bottom: 22px; }
+.hook-title { font: 700 clamp(30px, 4.4vw, 48px)/1.08 var(--display); text-wrap: balance; margin-top: 10px; }
+.hook-title b { color: var(--orange-edge); background: linear-gradient(transparent 62%, var(--hl) 62%); padding: 0 4px; font-weight: 700; overflow-wrap: anywhere; }
+.hook-sub { color: var(--ink-soft); font-size: 18px; margin-top: 10px; max-width: 34em; }
+.hook-form { display: flex; gap: 10px; margin-top: 18px; max-width: 560px; }
+.hook-form input[type="text"] { flex: 1; min-width: 0; font: 600 22px/1.2 var(--display); color: var(--ink); background: var(--sheet); border: 2.5px solid var(--orange); border-radius: 999px; padding: 13px 22px; box-shadow: 0 8px 22px -14px rgba(239, 157, 49, .9); }
+.hook-form input::placeholder { color: var(--ink-soft); font-weight: 500; opacity: .75; }
+.hook-form .btn { white-space: nowrap; }
+.hook-note { font-size: 14px; color: var(--ink-soft); margin-top: 10px; }
+.hook-pages { position: relative; height: 330px; }
+.hook-pages img { position: absolute; width: 210px; height: auto; aspect-ratio: 480 / 621; background: #fff; border-radius: 4px; box-shadow: 0 16px 30px -14px rgba(40, 50, 90, .55); }
+.hook-pages .back { left: 0; top: 18px; transform: rotate(-7deg); }
+.hook-pages .front { right: 0; top: 40px; transform: rotate(5deg); }
+@media (max-width: 860px) {
+  .hook { grid-template-columns: minmax(0, 1fr) 112px; column-gap: 12px; row-gap: 0; align-items: start; }
+  .hook-copy { display: contents; }
+  .hook-copy > * { grid-column: 1; }
+  .hook-pages { grid-column: 2; grid-row: 1 / span 3; height: 160px; align-self: center; }
+  .hook-pages .back { display: none; }
+  .hook-pages .front { width: 108px; top: 8px; right: 2px; }
+  .hook-copy > .hook-form, .hook-copy > .hook-note { grid-column: 1 / -1; }
+}
+@media (max-width: 520px) {
+  .hook-title { font-size: 29px; }
+  .hook-sub { font-size: 16px; }
+  .hook-form { flex-direction: column; }
+  .hook-form input[type="text"] { font-size: 20px; padding: 12px 18px; }
+  .hook-form .btn { justify-content: center; }
+}
+/* the words laid over a nameless preview */
+.nm { all: initial; position: absolute; display: block; pointer-events: none; overflow: hidden; }
+.nm-scene { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.nm-layer { position: absolute; inset: 0; }
+.nm-sheet { position: absolute; overflow: hidden; }
+.nm-page { position: relative; }
+.nm-slot { position: absolute; }
 /* theme strip inside the builder */
 .themes.mini { display: flex; gap: 10px; overflow-x: auto; margin-top: 10px; padding-bottom: 6px; scroll-snap-type: x proximity; }
 .themes.mini .theme { flex: 0 0 92px; padding: 6px; gap: 4px; scroll-snap-align: start; border-width: 1.5px; }
@@ -417,6 +457,22 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 
 <main id="top">
   <section class="hero" id="order">
+    <div class="wrap hook">
+      <div class="hook-copy">
+        <p class="eyebrow">Personalized printables · ages 3 to 8</p>
+        <p class="hook-title" id="hookTitle">A birthday adventure starring <b>your kid</b>.</p>
+        <p class="hook-sub">Type their first name and watch every page on this site become theirs.</p>
+        <form class="hook-form" id="hookForm">
+          <input type="text" id="hookName" maxlength="24" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="Your kid’s first name" aria-label="Your kid’s first name">
+          <button class="btn btn-orange" type="submit" id="hookGo">Make my hunt</button>
+        </form>
+        <p class="hook-note">Hunts, play kits and party packs, ready to print in minutes.</p>
+      </div>
+      <div class="hook-pages" aria-hidden="true">
+        <img class="back" id="hookBack" alt="" width="480" height="621">
+        <img class="front" id="hookFront" alt="" width="480" height="621">
+      </div>
+    </div>
     <div class="wrap">
       <div class="hero-banner" id="heroBanner">
         <img class="hb on" alt="" width="1600" height="700" sizes="(max-width: 1240px) 100vw, 1200px" fetchpriority="high">
@@ -425,7 +481,6 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       </div>
     </div>
     <div class="wrap hero-head">
-      <p class="eyebrow">Personalized hunts, play kits and activities · ages 3 to 8</p>
       <h1>A treasure hunt written for <em>your</em> house.</h1>
       <p class="lede">Pick a theme and the spots in your home. We write rhyming clues for each one, and you get your PDF in minutes.</p>
     </div>
@@ -530,6 +585,8 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         <label class="box-theme">Theme <select id="boxSelect"></select></label>
       </div>
       <div class="box-panel" data-panel="hunt">
+        <p class="kits-lede">A host guide, a read-aloud briefing, rhyming clue cards and a certificate, all with your child’s name. Real <span id="huntName">Deep Space Expedition</span> pages, made for <span data-kid-name>Maya</span>’s 6th birthday:</p>
+        <div class="kit">
         <p class="kits-lede">A host guide, a read-aloud briefing, rhyming clue cards, a puzzle to collect piece by piece and a certificate, all with your child’s name, plus two bonus games to play again another day. Real <span id="huntName">Deep Space Expedition</span> pages, made for Maya’s 6th birthday:</p>
         <div class="kit five">
         <div class="page-thumb"><img class="mini-img" id="huntGuide" src="img/pages/space-guide.webp" alt="Host guide page listing where each clue card hides" width="480" height="621" loading="lazy"><h3>Host guide</h3><p>Your secret checklist: which card hides where, and where the prize goes.</p></div>
@@ -937,6 +994,7 @@ function setTheme(id) {
   $('boxSelect').value = id;
   document.querySelectorAll('.theme').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.id === id)));
   drawBox();
+  if (typeof drawHookPages === 'function') drawHookPages();
   render();
 }
 
@@ -1453,6 +1511,31 @@ $('sampleForm').addEventListener('submit', async (e) => {
   }
 });
 
+// The name hook at the top: what a parent types there (or in any name box) goes onto every preview
+// (js/names.js), into the headline and button, and into the builder, and is kept for next visit.
+const kidFields = ['hookName', 'childName', 'shopChild', 'craftChild'];
+function showKid(from) {
+  const typed = LPQName.typed();
+  const b = document.querySelector('#hookTitle b');
+  b.textContent = typed || 'your kid';
+  $('hookGo').textContent = typed ? `Make ${typed}’s hunt` : 'Make my hunt';
+  for (const id of kidFields) if (id !== from) $(id).value = typed || (id === 'childName' ? LPQName.sample : '');
+  document.querySelectorAll('[data-kid-name]').forEach((el) => { el.textContent = LPQName.get(); });
+  if (from !== 'childName') render();
+}
+for (const id of kidFields) $(id).addEventListener('input', () => { LPQName.set($(id).value); showKid(id); });
+$('hookForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (!LPQName.typed()) return $('hookName').focus();
+  $('orderForm').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+});
+// The two pages beside the box follow the builder's theme: the story letter and the certificate.
+function drawHookPages() {
+  $('hookBack').src = `img/pages/${state.theme}-briefing.webp`;
+  $('hookFront').src = `img/pages/${state.theme}-cert.webp`;
+  LPQName.preload(state.theme);
+}
+
 // Links from the idea pages can pick the theme, the trail and the age: /?theme=dino&space=apartment&age=5#order
 // or a shop kit: /?kit=burger#order
 const params = new URLSearchParams(location.search);
@@ -1462,6 +1545,7 @@ drawThemes();
 setTheme(THEMES.some((t) => t.id === params.get('theme')) ? params.get('theme') : seasonal || state.theme);
 if (params.get('theme')) heroLocked = true; // they came for this theme
 startHero();
+showKid();
 useSpace(params.get('space'));
 if (shopName(params.get('kit'))) chooseShop(params.get('kit'), { scroll: false });
 </script>
