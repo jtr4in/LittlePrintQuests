@@ -152,6 +152,7 @@ main { position: relative; }
 .page-thumb { background: var(--sheet); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 12px; align-content: start; }
 .page-thumb p { font-size: 15px; color: var(--ink-soft); }
 .mini-img { width: 100%; height: auto; aspect-ratio: 8.5 / 11; border-radius: 4px; border: 1px solid var(--line); box-shadow: 0 6px 16px -10px rgba(40, 50, 90, .35); }
+@media (min-width: 861px) { .kit.five { grid-template-columns: repeat(5, 1fr); gap: 14px; } }
 @media (max-width: 860px) { .kit { grid-template-columns: repeat(2, 1fr); } }
 
 /* themes */
@@ -523,12 +524,13 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         <label class="box-theme">Theme <select id="boxSelect"></select></label>
       </div>
       <div class="box-panel" data-panel="hunt">
-        <p class="kits-lede">A host guide, a read-aloud briefing, rhyming clue cards, a puzzle to collect piece by piece and a certificate, all with your child’s name. Real <span id="huntName">Deep Space Expedition</span> pages, made for Maya’s 6th birthday:</p>
-        <div class="kit">
+        <p class="kits-lede">A host guide, a read-aloud briefing, rhyming clue cards, a puzzle to collect piece by piece and a certificate, all with your child’s name, plus two bonus games to play again another day. Real <span id="huntName">Deep Space Expedition</span> pages, made for Maya’s 6th birthday:</p>
+        <div class="kit five">
         <div class="page-thumb"><img class="mini-img" id="huntGuide" src="img/pages/space-guide.webp" alt="Host guide page listing where each clue card hides" width="480" height="621" loading="lazy"><h3>Host guide</h3><p>Your secret checklist: which card hides where, and where the prize goes.</p></div>
         <div class="page-thumb"><img class="mini-img" id="huntCards" src="img/pages/space-cards.webp" alt="Two rhyming clue cards with dashed cut lines" width="480" height="621" loading="lazy"><h3>Clue cards</h3><p>4 × 6 inch rhyming cards, two per page, with dashed cut lines and big read-aloud type.</p></div>
         <div class="page-thumb"><img class="mini-img" id="huntPuzzle" src="img/pages/space-puzzle.webp" alt="Jigsaw puzzle page that shows where the prize is hidden" width="480" height="621" loading="lazy"><h3>Puzzle finale</h3><p>Kids find a puzzle piece with every clue, then put them together to see where the prize is.</p></div>
         <div class="page-thumb"><img class="mini-img" id="huntCert" src="img/pages/space-cert.webp" alt="Certificate with Maya’s name" width="480" height="621" loading="lazy"><h3>Certificate</h3><p>A themed certificate with your child’s name and a special title for the big finish.</p></div>
+        <div class="page-thumb"><img class="mini-img" id="huntBonus" src="img/pages/space-bonus.webp" alt="Picture hunt checklist with twelve pictures to find and tick off" width="480" height="621" loading="lazy"><h3>Bonus games</h3><p>A picture hunt to cut out and hide, plus a look-around hunt to take outside. Great for round two.</p></div>
       </div>
       </div>
       <div class="box-panel" data-panel="host" hidden>
@@ -615,7 +617,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       </div>
       <div class="singles">
         <p class="eyebrow">Or get just one</p>
-        <a class="single" href="#order" data-pick="hunt"><b>Custom hunt</b><span>Clue cards, puzzle finale and certificate, with Host Mode</span><strong>$9.99</strong></a>
+        <a class="single" href="#order" data-pick="hunt"><b>Custom hunt</b><span>Clue cards, puzzle finale, certificate and bonus games, with Host Mode</span><strong>$9.99</strong></a>
         <a class="single" href="#order" data-pick="kit"><b>Pretend play kit</b><span>Hands-on toys, a shop set and signs</span><strong>$7.99</strong></a>
         <a class="single" href="#order" data-pick="activity"><b>Activity pack</b><span>10 Wipe &amp; Play pages</span><strong>$4.99</strong></a>
         <a class="single" href="#order" data-pick="party"><b>Party pack</b><span>Invitations, toppers, banner and tags</span><strong>$6.99</strong></a>
@@ -872,7 +874,7 @@ function drawBox() {
     $('howtoName').textContent = HOWTO[t.id];
   }
   $('huntName').textContent = t.name;
-  for (const [el, part] of [['huntGuide', 'guide'], ['huntPuzzle', 'puzzle'], ['huntCards', 'cards'], ['huntCert', 'cert']]) $(el).src = `img/pages/${t.id}-${part}.webp`;
+  for (const [el, part] of [['huntGuide', 'guide'], ['huntPuzzle', 'puzzle'], ['huntCards', 'cards'], ['huntCert', 'cert'], ['huntBonus', 'bonus']]) $(el).src = `img/pages/${t.id}-${part}.webp`;
   for (const [el, part] of [['hostHide', 'hide'], ['hostPlay', 'play'], ['hostSidekick', 'sidekick']]) $(el).src = `img/host/${t.id}-${part}.webp`;
   for (const [el, n] of [['actSpy', 2], ['actSpot', 3], ['actMaze', 4], ['actWords', 5]]) $(el).src = `img/gallery/${t.id}/activity-${n}.webp`;
   $('partyImg').src = `img/pages/${t.id}-party.webp`;
@@ -1003,7 +1005,7 @@ $('childAge').addEventListener('input', render);
 // The cart is a stack of papers: the hunt, its play kit, the activity pack and the party pack.
 // Pick any mix; two together cost less. The first three are ticked to start; the party pack is the add-on.
 const LAYERS = [
-  { id: 'hunt', name: 'Custom scavenger hunt', note: 'Clue cards, host guide, puzzle finale and certificate', price: 9.99 },
+  { id: 'hunt', name: 'Custom scavenger hunt', note: 'Clue cards, host guide, puzzle finale, certificate and two bonus games', price: 9.99 },
   { id: 'kit', name: 'Pretend play kit', note: 'Hands-on toys, a shop set and signs with their name', price: 7.99 },
   { id: 'activity', name: 'Activity pack', note: 'Mazes, spot the difference, I spy, word search and more to wipe and play', price: 4.99 },
   { id: 'party', name: 'Party pack', note: 'Invitations, toppers, banner, favor tags and more', price: 6.99 },
