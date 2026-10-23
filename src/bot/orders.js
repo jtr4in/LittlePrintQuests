@@ -290,10 +290,11 @@ function formAsText(f) {
 }
 
 // Called once Stripe confirms payment. Builds the PDF and emails it.
-async function fulfillWebOrder(id, { email, buyerName }) {
+async function fulfillWebOrder(id, { email, buyerName, paidCents }) {
   const order = store.get().orders[id];
   if (!order || order.status !== 'awaiting_payment') return; // already handled (Stripe can resend)
-  store.update((s) => Object.assign(s.orders[id], { status: 'processing', email, buyerName, paidAt: new Date().toISOString() }));
+  // paidCents is only set when a promotion code lowered the price.
+  store.update((s) => Object.assign(s.orders[id], { status: 'processing', email, buyerName, paidAt: new Date().toISOString() }, paidCents === undefined ? {} : { paidCents }));
   const f = order.form;
   try {
     const main = products.mainOf(order);
