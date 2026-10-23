@@ -446,7 +446,7 @@ async function route(req, res) {
     if (event.type === 'checkout.session.completed' && payments.isPaid(session) && session.metadata?.upgrade_of) {
       const add = products.normalize(String(session.metadata.add || '').split(','));
       orders
-        .upgradeWebOrder(session.metadata.upgrade_of, { add, cents: payments.discountedCents(session) ?? (Number(session.metadata.cents) || session.amount_total || 0), sessionId: session.id })
+        .upgradeWebOrder(session.metadata.upgrade_of, { add, cents: Number(session.metadata.cents) || session.amount_total || 0, discountCents: payments.discountCents(session), sessionId: session.id })
         .catch((err) => {
           console.error('Add-on failed:', err);
           health.recordError('Adding to a website order', err.message);
@@ -455,7 +455,7 @@ async function route(req, res) {
     if (event.type === 'checkout.session.completed' && payments.isPaid(session) && session.metadata?.order_id) {
       // Answer Stripe right away; building the PDF takes a few seconds.
       orders
-        .fulfillWebOrder(session.metadata.order_id, { email: session.customer_details?.email, buyerName: session.customer_details?.name || '', paidCents: payments.discountedCents(session) })
+        .fulfillWebOrder(session.metadata.order_id, { email: session.customer_details?.email, buyerName: session.customer_details?.name || '', discountCents: payments.discountCents(session) })
         .catch((err) => {
           console.error('Fulfillment failed:', err);
           health.recordError('Building a website order', err.message);

@@ -465,7 +465,10 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     const free = state.orders[orderId];
     assert.equal(free.status, 'ready', JSON.stringify(free));
     assert.ok(free.sent);
-    assert.equal(free.paidCents, 0);
+    // The code is noted, but add-ons are still priced as the bundle difference ($10 more for a hunt).
+    assert.equal(free.discountCents, 999);
+    assert.equal(free.paidCents, 999);
+    assert.match(await (await realFetch(`${base}/order/${orderId}`)).text(), /Add to my order · \$10\.00/);
     assert.deepEqual(emails.at(-1).to, ['friend@example.com']);
     assert.ok(emails.at(-1).html.includes(`/d/${free.downloadToken}.pdf`));
     assert.equal((await realFetch(`${base}/d/${free.downloadToken}.pdf`)).status, 200);
