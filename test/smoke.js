@@ -229,22 +229,23 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.ok((preview.match(/stroke-dasharray/g) || []).length < (book.match(/stroke-dasharray/g) || []).length);
   // Ready-made trails: only library spots, and the website's copy matches.
   const SPACE_TRAILS = require('../src/generator/spaces');
-  const site = fs.readFileSync(path.join(__dirname, '..', 'docs', 'index.html'), 'utf8');
+  const site = fs.readFileSync(path.join(__dirname, '..', 'docs', 'js', 'data.js'), 'utf8');
   for (const sp of Object.values(SPACE_TRAILS)) {
     assert.ok(sp.spots.every((id) => require('../src/generator/spots')[id]), sp.id);
     assert.ok(site.includes(`${sp.id}: ['${sp.label}', ${JSON.stringify(sp.spots).replace(/"/g, "'").replace(/,/g, ', ')}]`), `site trail ${sp.id}`);
   }
   // The idea pages: a hub, one per home, one per theme and one per play kit, all in the sitemap, with no blanks.
   const ideaUrls = require('../scripts/idea-pages').build();
-  assert.equal(ideaUrls.length, 2 + Object.keys(SPACE_TRAILS).length + Object.keys(require('../src/generator/themes')).length + Object.keys(require('../src/kits/engine').KITS).length);
+  // (plus the home page, make/, play-kits/ and handprint-art/)
+  assert.equal(ideaUrls.length, 5 + Object.keys(SPACE_TRAILS).length + Object.keys(require('../src/generator/themes')).length + Object.keys(require('../src/kits/engine').KITS).length);
   const pizzaIdeas = fs.readFileSync(path.join(__dirname, '..', 'docs', 'ideas', 'pizza-shop-pretend-play', 'index.html'), 'utf8');
-  assert.match(pizzaIdeas, /\?theme=pizza#order/);
+  assert.match(pizzaIdeas, /make\/\?theme=pizza"/);
   assert.match(pizzaIdeas, /Delivery Driver/);
   const sitemap = fs.readFileSync(path.join(__dirname, '..', 'docs', 'sitemap.xml'), 'utf8');
   for (const u of ideaUrls) assert.ok(sitemap.includes(`<loc>${u}</loc>`), u);
   const dinoIdeas = fs.readFileSync(path.join(__dirname, '..', 'docs', 'ideas', 'dinosaur-scavenger-hunt', 'index.html'), 'utf8');
   assert.match(dinoIdeas, /Junior Rangers/);
-  assert.match(dinoIdeas, /\?theme=dino#order/);
+  assert.match(dinoIdeas, /make\/\?theme=dino"/);
   for (const f of fs.readdirSync(path.join(__dirname, '..', 'docs', 'ideas'))) {
     if (!f.endsWith('.html') && fs.statSync(path.join(__dirname, '..', 'docs', 'ideas', f)).isDirectory()) {
       assert.doesNotMatch(fs.readFileSync(path.join(__dirname, '..', 'docs', 'ideas', f, 'index.html'), 'utf8'), /undefined|\{kids\}|\{count\}|NaN/, f);
@@ -832,10 +833,21 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.deepEqual(['activity', 'hunt+kit+activity', 'bundle+activity', 'kit+party+activity'].map(prices.priceFor), [499, 1799, 1999, 1599]);
   assert.equal(prices.productFor(['hunt', 'kit', 'activity', 'party']), 'bundle+activity');
   // The site's cart prices must match the bot's.
-  const homePage = fs.readFileSync(path.join(__dirname, '..', 'docs', 'index.html'), 'utf8');
-  assert.match(homePage, /activity: 4\.99, activityAdd: 3 \}/);
-  assert.match(homePage, /const picked = new Set\(\['hunt', 'kit', 'activity'\]\)/);
-  assert.match(homePage, /id="childAge" min="2" max="12" placeholder="Optional">/);
+  const docs = (...f) => fs.readFileSync(path.join(__dirname, '..', 'docs', ...f), 'utf8');
+  assert.match(docs('js', 'data.js'), /activity: 4\.99, activityAdd: 3 \}/);
+  // The order page (make/) starts with everything ticked.
+  assert.match(docs('js', 'make.js'), /const picked = new Set\(\['hunt', 'kit', 'activity', 'party'\]\)/);
+  assert.match(docs('make', 'index.html'), /id="childAge" min="2" max="12" placeholder="Optional">/);
+  // Old order links (/?theme=dino#order, pins, the bot's emails) still reach the order page.
+  assert.match(docs('index.html'), /location\.hash === '#order'[^\n]*location\.replace\('make\/' \+ location\.search\)/);
+  // Each storefront page loads the shared code, and no page repeats an id.
+  for (const f of [['index.html'], ['make', 'index.html'], ['play-kits', 'index.html'], ['handprint-art', 'index.html']]) {
+    const html = docs(...f);
+    for (const s of ['css/site.css', 'js/names.js', 'js/data.js', 'js/site.js']) assert.ok(html.includes(s), `${f.join('/')} loads ${s}`);
+    const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
+    assert.deepEqual(ids.filter((id, i) => ids.indexOf(id) !== i), [], `${f.join('/')} repeats an id`);
+    if (f.length > 1) assert.match(html, /<base href="\.\.\/">/, `${f.join('/')} links from the site root`);
+  }
 
   // The homepage banner has a scene (big and small) for every theme and shop kit.
   const shopIds = Object.values(KITS).filter((k) => !k.hunt).map((k) => k.id);

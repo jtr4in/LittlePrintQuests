@@ -16,7 +16,7 @@ const OUT = path.join(__dirname, '..', 'docs', 'pins');
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 const slug = (s) => s.toLowerCase().replace(/’s\b/g, 's').replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const data = (f) => `data:image/${f.endsWith('png') ? 'png' : 'webp'};base64,${fs.readFileSync(path.join(IMG, f)).toString('base64')}`;
-const link = (q) => `${SITE}?${new URLSearchParams({ ...q, utm_source: 'pinterest', utm_medium: 'pin' })}#order`;
+const link = (q) => `${SITE}make/?${new URLSearchParams({ ...q, utm_source: 'pinterest', utm_medium: 'pin' })}`;
 // "Dinosaur" -> "dinosaur" mid-sentence, but holidays keep their capital.
 const lower = (s) => (/^(Halloween|Christmas|Easter|Valentine)/.test(s) ? s : s.replace(/^[A-Z](?=[a-z])/, (c) => c.toLowerCase()));
 

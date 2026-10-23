@@ -64,7 +64,7 @@ The website's hunt builder sends its form to the bot, which opens a Stripe Check
 1. **Stripe.** Create an account at [stripe.com](https://stripe.com). Under Developers > API keys, copy the secret key into `STRIPE_SECRET_KEY` (start with the `sk_test_` key).
 2. **Webhook.** Under Developers > Webhooks, add the endpoint `<PUBLIC_URL>/webhooks/stripe` with the event `checkout.session.completed`, then copy its signing secret into `STRIPE_WEBHOOK_SECRET`.
 3. **Email.** Create a [Resend](https://resend.com) account, verify a domain you own, create an API key, and set `RESEND_API_KEY` and `EMAIL_FROM` (an address on that domain).
-4. **Website.** In `docs/index.html`, set `CHECKOUT_URL` to `<PUBLIC_URL>/api/checkout`. Set `SITE_URL` (and optionally `SITE_ORIGIN`) on the bot.
+4. **Website.** In `docs/js/data.js`, set `CHECKOUT_URL` to `<PUBLIC_URL>/api/checkout`. Set `SITE_URL` (and optionally `SITE_ORIGIN`) on the bot.
 5. **Test.** With test keys, order on your site using card `4242 4242 4242 4242`, any future date and any CVC. You should get the email within a minute. Then swap in the live keys and a live webhook.
 
 **Promo codes.** The checkout pages for orders and add-ons show an **Add promotion code** link. Make codes in the Stripe dashboard under Product catalog > Coupons: create a coupon (for example 100% off, once), then add a customer-facing promotion code to it such as `100OFF`, with a max number of redemptions or an end date if you like. A 100%-off order costs $0, Stripe skips the card, and the bot builds and emails it like any other order. Test-mode and live-mode codes are separate. The Family Pass checkout doesn't take codes.
@@ -82,7 +82,7 @@ Every hunt order (Etsy or website) gets a private Host Mode link at `/h/<token>`
 
 ## Website
 
-`docs/index.html` is the LittlePrintQuests storefront: themes, what's inside, pricing, FAQ, and a hunt builder that collects the child's name, age, theme and spots. To publish it free on GitHub Pages: repo Settings > Pages > Deploy from a branch > `main` / `docs`.
+`docs/` is the LittlePrintQuests storefront: the home page (`index.html`: themes, what's inside, pricing, FAQ), the step-by-step order page (`make/`) that collects the kid's name, age, theme and spots, and the `play-kits/` and `handprint-art/` pages. They share `css/site.css` and `js/data.js` (themes, prices, page counts) and `js/site.js` (menu, preview gallery, checkout). To publish it free on GitHub Pages: repo Settings > Pages > Deploy from a branch > `main` / `docs`.
 
 The Contact, Refunds, Privacy and Terms pages (`docs/contact/` and so on) come from `scripts/help-pages.js`: change the words there, including the contact email, and run `node scripts/help-pages.js`.
 

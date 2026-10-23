@@ -19,7 +19,8 @@ const slug = (s) => s.toLowerCase().replace(/’s\b/g, 's').replace(/&/g, 'and')
 const themeSlug = (t) => `${slug(t.label)}-scavenger-hunt`;
 const spaceSlug = (s) => slug(s.title);
 const kitSlug = (k) => `${slug(k.name)}-pretend-play`;
-const builder = (q) => `../../?${new URLSearchParams(q)}#order`;
+// The order page, with the theme, trail or kit already picked.
+const builder = (q) => `../../make/?${new URLSearchParams(q)}`;
 const lines = (couplet) => couplet.map(esc).join('<br>');
 // Kits with photos of the printed kit at home (docs/img/life/): the play stand leads the page, the flat lay of
 // everything in the kit sits with the printable, and a play shot sits with the games.
@@ -277,7 +278,7 @@ function hub(themes, kits) {
 <ul class="links">${themes.map((t) => `<li><a href="../ideas/${themeSlug(t)}/">${esc(t.label)} scavenger hunt</a></li>`).join('')}</ul>
 <h2>Pretend play</h2>
 <ul class="links">${kits.map((k) => `<li><a href="../ideas/${kitSlug(k)}/">${esc(k.name)}</a></li>`).join('')}</ul>
-<p><a class="btn" href="../#order">Make a personalized hunt</a></p>`;
+<p><a class="btn" href="../make/">Make a personalized hunt</a></p>`;
   // The hub sits one level up from the other pages, so its links are written from docs/ideas/.
   return page({
     file: path.join(OUT, 'index.html'),
@@ -291,7 +292,7 @@ function build() {
   fs.rmSync(OUT, { recursive: true, force: true });
   const themes = Object.values(THEMES);
   const kits = Object.values(KITS);
-  const urls = [SITE, hub(themes, kits), ...Object.values(SPACES).map((s) => spacePage(s, themes)), ...themes.map((t, i) => themePage(t, i, themes)), ...kits.map((k) => kitPage(k, kits))];
+  const urls = [SITE, `${SITE}make/`, `${SITE}play-kits/`, `${SITE}handprint-art/`, hub(themes, kits), ...Object.values(SPACES).map((s) => spacePage(s, themes)), ...themes.map((t, i) => themePage(t, i, themes)), ...kits.map((k) => kitPage(k, kits))];
   // The hub lives one folder higher than the other pages, so its links back to the shop go up one level.
   const hubFile = path.join(OUT, 'index.html');
   fs.writeFileSync(hubFile, fs.readFileSync(hubFile, 'utf8').replaceAll('href="../../"', 'href="../"').replace('<a href="../">More party and hunt ideas</a> · ', ''));
