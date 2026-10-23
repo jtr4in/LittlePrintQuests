@@ -49,7 +49,8 @@ p { margin: 0; }
 .btn-ghost { background: transparent; color: var(--ink); border: 2px solid var(--line); }
 
 /* header */
-.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+/* solid, not a see-through blur: blurring what scrolls under it every frame made phones choppy */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); border-bottom: 1px solid var(--line); }
 .top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; }
 .logo { display: flex; align-items: center; gap: 10px; font: 600 23px/1 var(--display); text-decoration: none; letter-spacing: -.01em; white-space: nowrap; }
 .logo img { width: 52px; height: auto; flex: none; }
@@ -527,9 +528,16 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 }
 @media (max-width: 860px) {
   body.make { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
-  .wiz-nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; margin: 0; padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); background: color-mix(in srgb, var(--sheet) 96%, transparent); backdrop-filter: blur(8px); border-top: 1px solid var(--line); box-shadow: 0 -10px 24px -18px rgba(20, 25, 50, .45); }
+  .wiz-nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; margin: 0; padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); background: var(--sheet); border-top: 1px solid var(--line); box-shadow: 0 -10px 24px -18px rgba(20, 25, 50, .45); }
   .wiz-nav #wizNext { flex: 1; justify-content: center; max-width: 260px; }
   .wiz-nav #wizNext.pay { max-width: none; }
   .builder[data-step="who"] .summary, .builder[data-step="theme"] .summary, .builder[data-step="details"] .summary { display: none; }
   .make .summary { gap: 14px; }
 }
+
+/* ---- Smoother moves (2026-10-23) ---------------------------------------------------------------- */
+/* page to page (home -> make/ and back) cross-fades instead of flashing white, where browsers support it */
+@view-transition { navigation: auto; }
+/* each order step eases in instead of popping */
+.wiz-step:not([hidden]) { animation: step-in .22s ease-out; }
+@keyframes step-in { from { opacity: 0; transform: translateY(6px); } }

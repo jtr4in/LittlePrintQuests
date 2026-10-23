@@ -74,6 +74,15 @@ Paths like `project-files/...` are in this repo. Paths like `/mnt/project-files/
 - The homepage "type your kid's name" hook live-updates all previews. `renderHtml(..., { nameSlots: 'Maya' })` also writes `pngDir/blank/` pages with the name hidden plus `slots.json`. `gallery-images.js`, `site-images.js`, `craft-gallery.js` and `hero-scenes.js` write twins to `docs/img/n/<same path>` and per-set JSON `docs/img/n/<set>.json`. `docs/js/names.js` swaps each matching `<img>` and draws the typed name (scenes use layers plus SVG masks). Name saved in localStorage `lpq.kidName`.
 - Regenerate in order: `gallery-images.js` -> `craft-gallery.js` -> `site-images.js` -> `hero-scenes.js`. If you only meant to refresh twins, `git checkout` the non-`n` images afterwards (they re-encode slightly differently). If a print layout changes, re-run the scripts or the overlay text sits in the old spot.
 
+### Keeping the site smooth on phones (2026-10-23)
+Jason found navigating choppy. What it was and the rules now:
+- Swapping a preview's src made phones download the sample-name picture and then its nameless twin, plus that theme's ~50 KB name data (`img/n/<theme>.json`). Use `LPQName.setSrc(img, src, srcset)` after `LPQName.preload(theme)` resolves for pictures that change at runtime (banners, hook pages, order stack): it goes straight to the twin.
+- The home banner rotates through 7 themes (`ROTATE` in `home.js`), every 6 s, only while on screen. The rotating occasion words no longer swap the pages beside the name box.
+- No `backdrop-filter` blur on the sticky header or the phone checkout bar (costly repaints while scrolling).
+- The name-overlay fonts load without blocking the first paint, `names.js` loads at the end of `<body>` before `data.js`, and `<img>` tags use `decoding="async"`.
+- Home prefetches `make/`; pages cross-fade with `@view-transition`; order steps ease in.
+- Measured with a 4x CPU slowdown at 390px: home 703 KB / 1.7 s → 345 KB / 1.0 s to load, worst scroll frame 433 ms → 83 ms.
+
 ### Page counts (PR #104, 2026-10-23)
 - The "45 pages" bubbles come from a hardcoded `PAGES` line in `docs/js/data.js`. When pages are added to a kit, activity pack, party pack or craft, run `node scripts/page-counts.js` and paste the printed line over `PAGES`. Hunts follow 7 + ceil(spots/2) pages; the script throws if that changes.
 - The order-stack hint says "Tap to see sample pages" (the gallery is only samples).
