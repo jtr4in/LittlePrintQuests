@@ -1,0 +1,19 @@
+{"pieces": {
+ "p1": "first (leftmost) triangular pennant with the dinosaur footprint",
+ "p2": "pennant with the letter M",
+ "p3": "pennant with the first letter A",
+ "p4": "pennant with the letter Y",
+ "p5": "last (rightmost) pennant with the letter A",
+ "invite": "party invitation card on the easel",
+ "t1": "round cupcake topper 'MAYA is turning 5' (the circle only)",
+ "t2": "round cupcake topper '5 today!' (the circle only)",
+ "t3": "round cupcake topper 'Happy Birthday' (the circle only)",
+ "tag1": "favor tag on the front goodie bag",
+ "tag2": "favor tag on the back goodie bag (including the part hidden behind the front bag)",
+ "tent1": "front face of the 'Dino eggs' tent card",
+ "tent2": "front face of the 'Volcano punch' tent card",
+ "tent3": "front face of the 'Fossil bones' tent card"},
+ "occluders": {
+ "bag": "the front kraft goodie bag (whole bag)",
+ "hand1": "the child's hand holding the cupcake",
+ "twine": "the twine string of the banner"}}

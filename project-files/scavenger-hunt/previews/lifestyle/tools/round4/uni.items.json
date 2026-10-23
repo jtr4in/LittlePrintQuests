@@ -1,0 +1,116 @@
+[
+{
+"label": "sign",
+"piece": "r4/cut/uni-sign.png",
+"fit": "contain",
+"tol": 10
+},
+{
+"label": "open",
+"piece": "r4/cut/uni-open.png",
+"fit": "cover",
+"anchor": "top",
+"tol": 10,
+"grow": 1.02,
+"refine": false
+},
+{
+"label": "hayloft",
+"piece": "r4/cut/uni-hayloft.png",
+"fit": "stretch"
+},
+{
+"label": "ros1",
+"piece": "r4/cut/uni-ros1.png",
+"fit": "stretch",
+"refine": false,
+"fill": "telea"
+},
+{
+"label": "ros2",
+"piece": "r4/cut/uni-ros2.png",
+"fit": "stretch",
+"refine": false,
+"fill": "telea"
+},
+{
+"label": "puzzle",
+"piece": "r4/cut/uni-puzzle.png",
+"fit": "stretch"
+},
+{
+"label": "s1",
+"piece": "r4/cut/uni-s1.png",
+"fit": "cover",
+"tol": 10,
+"grow": 1.03
+},
+{
+"label": "s2",
+"piece": "r4/cut/uni-s2.png",
+"fit": "cover",
+"tol": 10
+},
+{
+"label": "s3",
+"piece": "r4/cut/uni-s3.png",
+"fit": "cover",
+"tol": 10,
+"grow": 1.03
+},
+{
+"label": "m1",
+"piece": "r4/cut/uni-coin1.png",
+"fit": "stretch",
+"refine": false,
+"quad": [
+[
+1392,
+1022
+],
+[
+1580,
+1022
+],
+[
+1575,
+1074
+],
+[
+1386,
+1074
+]
+]
+},
+{
+"label": "m2",
+"piece": "r4/cut/uni-coin2.png",
+"fit": "stretch",
+"refine": false,
+"quad": [
+[
+1530,
+1018
+],
+[
+1712,
+1018
+],
+[
+1712,
+1072
+],
+[
+1530,
+1072
+]
+]
+},
+{
+"label": "map",
+"piece": "r4/cut/uni-map.png",
+"fit": "stretch",
+"rot": 1,
+"refine": false
+}
+]

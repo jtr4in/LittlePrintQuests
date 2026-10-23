@@ -1,0 +1,80 @@
+[
+{
+"label": "sign",
+"piece": "r4/cut/hw-sign.png",
+"fit": "stretch"
+},
+{
+"label": "open",
+"piece": "r4/cut/hw-open.png",
+"fit": "cover",
+"anchor": "top",
+"refine": false
+},
+{
+"label": "lab1",
+"piece": "r4/cut/hw-lab1.png",
+"fit": "stretch"
+},
+{
+"label": "lab2",
+"piece": "r4/cut/hw-lab2.png",
+"fit": "stretch"
+},
+{
+"label": "lab3",
+"piece": "r4/cut/hw-lab3.png",
+"fit": "stretch"
+},
+{
+"label": "mask",
+"piece": "r4/cut/hw-mask.png",
+"fit": "contain",
+"refine": false,
+"tol": 45,
+"fill": "telea",
+"clear": [
+[
+636,
+1080
+],
+[
+915,
+1080
+],
+[
+915,
+1238
+],
+[
+636,
+1238
+]
+],
+"fdil": 11,
+"grow": 1.12
+},
+{
+"label": "wanted",
+"piece": "r4/cut/hw-wanted.png",
+"fit": "cover",
+"refine": false
+},
+{
+"label": "bill1",
+"piece": "r4/cut/hw-coin1.png",
+"fit": "stretch",
+"refine": false
+},
+{
+"label": "bill2",
+"piece": "r4/cut/hw-coin2.png",
+"fit": "stretch",
+"refine": false
+},
+{
+"label": "mixing",
+"piece": "r4/cut/hw-mixing.png",
+"fit": "stretch"
+}
+]
