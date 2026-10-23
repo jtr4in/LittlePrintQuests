@@ -197,7 +197,7 @@ function spacePage(s, themes) {
 <ul class="tips">${s.tips.map((tip) => `<li>${esc(tip)}</li>`).join('')}</ul>
 
 <h2>Pick a theme</h2>
-<p>Every theme comes with a story, matching clue cards with pictures for little ones, your child’s name on every page and a certificate at the end. Tap one to start with this trail already filled in.</p>
+<p>Every theme comes with a story, matching clue cards with pictures for little ones, your child’s name on every page and a certificate at the end, plus a picture hunt and a look-around hunt to play again another day. Tap one to start with this trail already filled in.</p>
 <ul class="links">${themes.map((t) => `<li><a href="${builder({ theme: t.id, space: s.id })}">${esc(t.label)}</a></li>`).join('')}</ul>
 
 <h2>Questions</h2>

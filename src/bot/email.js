@@ -60,7 +60,7 @@ async function sendPassEmail(pass) {
   const ends = new Date(pass.expiresAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
   const html = `<div style="font-family:Arial,sans-serif;max-width:520px;margin:auto;color:#3f4a73;line-height:1.5">
     <h2 style="margin-bottom:4px">Your Family Pass is ready!</h2>
-    <p>Thanks for joining! Your pass covers <b>${pass.total} orders</b> on our website until <b>${ends}</b>. Each one can be the whole bundle: a custom scavenger hunt, its pretend play kit, the activity pack and the party pack, in any theme, for any of your kids.</p>
+    <p>Thanks for joining! Your pass covers <b>${pass.total} orders</b> on our website until <b>${ends}</b>. Each one can be the whole bundle: the scavenger hunts, their pretend play kit, the activity pack and the party pack, in any theme, for any of your kids.</p>
     <p style="font-size:13px;margin-bottom:2px">Your pass code:</p>
     <p style="font:bold 26px/1.2 'Courier New',monospace;letter-spacing:2px;background:#fbf3df;border-radius:10px;padding:14px 18px;display:inline-block;margin-top:0">${esc(pass.code)}</p>
     <p><b>How to use it:</b> build your order on our site, then type this code under “Have a Family Pass code?” next to the total. Your order is free and arrives in minutes, like always.</p>
