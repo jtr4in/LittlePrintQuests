@@ -19,11 +19,13 @@ $('hookForm').addEventListener('submit', (e) => {
 // The two pages beside the name box: the play kit and the party pack, in the theme that goes with
 // the occasion in the headline.
 function drawHookPages(id = theme) {
-  $('hookBack').src = `img/pages/${id}-kit.webp`;
-  $('hookFront').src = `img/pages/${id}-party.webp`;
-  LPQName.preload(id);
+  LPQName.preload(id).then(() => {
+    LPQName.setSrc($('hookBack'), `img/pages/${id}-kit.webp`);
+    LPQName.setSrc($('hookFront'), `img/pages/${id}-party.webp`);
+  });
 }
-// The occasion under the headline rotates so it reads as more than a birthday thing, each a nod to a theme.
+// The occasion under the headline rotates so it reads as more than a birthday thing. (Only the words
+// change: swapping the pages beside it too meant downloads every few seconds, which made phones choppy.)
 const OCCASIONS = [
   // (all follow "Made for", which stays put while the occasion fades)
   ['birthdays', null], ['rainy days', 'pirate'], ['sleepovers', 'space'], ['snow days', 'ice'],
@@ -39,15 +41,17 @@ function nextOccasion() {
   setTimeout(() => {
     $('occasion').textContent = words;
     $('occasion').classList.remove('out');
-    drawHookPages(id || theme);
   }, 350);
 }
 if (!calm()) setInterval(nextOccasion, 3200);
 
 // ---- Hero banner: each set laid out on a table that matches the theme (scripts/hero-scenes.js) -----
-// It rotates through the themes; its button opens the order page with that theme.
+// It rotates through a handful of themes, only while it's on screen, and fetches the next one's
+// picture and name data ahead so each change is one quiet download. Its button opens make/ with that theme.
+const ROTATE = [...new Set([theme, 'dino', 'unicorn', 'space', 'pirate', 'mermaid', 'vet', 'royal'])];
 let heroAt = null;
 const heroSrc = (id) => ({ src: `img/hero/${id}.webp`, srcset: `img/hero/${id}-sm.webp 800w, img/hero/${id}.webp 1600w` });
+const nextHero = () => ROTATE[(ROTATE.indexOf(heroAt) + 1) % ROTATE.length];
 function showHero(id) {
   if (id === heroAt) return;
   heroAt = id;
@@ -57,17 +61,17 @@ function showHero(id) {
   const back = imgs.find((i) => i !== front);
   const { src, srcset } = heroSrc(id);
   back.onload = () => { back.classList.add('on'); front.classList.remove('on'); };
-  back.srcset = srcset;
-  back.src = src;
   back.alt = `The ${name} set printed out: host guide, story briefing, clue cards, play kit, activity page, party invitation and Host Mode on a phone`;
+  LPQName.setSrc(back, src, srcset);
   $('heroCap').innerHTML = `<b>${esc(name)}</b><span>Make this set</span>`;
   $('heroCap').dataset.id = id;
-  // warm up the next one so the fade is instant
-  new Image().src = heroSrc(ordered[(ordered.findIndex((x) => x.id === id) + 1) % ordered.length].id).src;
+  LPQName.preload(nextHero());
 }
 $('heroCap').addEventListener('click', () => { location.href = `make/?theme=${$('heroCap').dataset.id}`; });
-showHero(theme);
-if (!calm()) setInterval(() => { if (!document.hidden) showHero(ordered[(ordered.findIndex((x) => x.id === heroAt) + 1) % ordered.length].id); }, 5000);
+LPQName.preload(theme).then(() => showHero(theme));
+let heroSeen = true;
+new IntersectionObserver(([e]) => { heroSeen = e.isIntersecting; }).observe($('heroBanner'));
+if (!calm()) setInterval(() => { if (!document.hidden && heroSeen) showHero(nextHero()); }, 6000);
 
 // ---- What you get: each product card opens its real pages, the photo first ------------------------
 $('productCards').querySelectorAll('.product').forEach((b) => b.addEventListener('click', () => {
@@ -87,7 +91,7 @@ function drawThemeGrid() {
   $('themeGrid').innerHTML = ordered.map((t) => `
   <button type="button" class="theme" data-id="${t.id}" aria-haspopup="dialog" title="${esc(t.name)}, ages ${t.ages}">
     ${t.id === seasonal ? '<span class="now">Now</span>' : ''}
-    <img src="img/icons/${t.id}.webp" alt="" width="240" height="240" loading="lazy"><span>${THEME_LABELS[t.id]}</span>
+    <img decoding="async" src="img/icons/${t.id}.webp" alt="" width="240" height="240" loading="lazy"><span>${THEME_LABELS[t.id]}</span>
   </button>`).join('');
   $('themeGrid').querySelectorAll('.theme').forEach((b) => b.addEventListener('click', () => previewTheme(b.dataset.id)));
 }

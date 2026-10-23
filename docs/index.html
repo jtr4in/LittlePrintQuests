@@ -32,16 +32,18 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&display=swap">
 <!-- the printed pages' own fonts, for writing the kid's name over the previews (js/names.js); files load only when used -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:wght@200..1000&family=Bangers&family=Pirata+One&family=Orbitron:wght@400..900&family=Cinzel+Decorative:wght@700&family=Pacifico&family=Comic+Neue:wght@700&display=swap">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:wght@200..1000&family=Bangers&family=Pirata+One&family=Orbitron:wght@400..900&family=Cinzel+Decorative:wght@700&family=Pacifico&family=Comic+Neue:wght@700&display=swap">
 <link rel="stylesheet" href="css/site.css">
-<script src="js/names.js"></script>
+<!-- most visits go on to the order page: fetch it and its script while they read -->
+<link rel="prefetch" href="make/">
+<link rel="prefetch" href="js/make.js">
 </head>
 <body class="home">
 
 <header class="top">
   <div class="wrap">
     <a class="logo" href="#top" aria-label="LittlePrintQuests home">
-      <img src="img/mark.png" alt="" width="52" height="40">
+      <img decoding="async" src="img/mark.png" alt="" width="52" height="40">
       <span class="wordmark"><span class="l">Little</span><span class="p">Print</span><span class="q">Quests</span></span>
     </a>
     <nav class="nav" aria-label="Main">
@@ -73,14 +75,14 @@
         <p class="hook-note">Type their name and every page here becomes theirs. Not sure yet? <a href="#sample">Try a free mini hunt</a>.</p>
       </div>
       <div class="hook-pages" aria-hidden="true">
-        <img class="back" id="hookBack" alt="" width="400" height="518">
-        <img class="front" id="hookFront" alt="" width="400" height="518">
+        <img decoding="async" class="back" id="hookBack" alt="" width="400" height="518">
+        <img decoding="async" class="front" id="hookFront" alt="" width="400" height="518">
       </div>
     </div>
     <div class="wrap">
       <div class="hero-banner" id="heroBanner">
-        <img class="hb on" alt="" width="1600" height="700" sizes="(max-width: 1240px) 100vw, 1200px" fetchpriority="high">
-        <img class="hb" alt="" width="1600" height="700" sizes="(max-width: 1240px) 100vw, 1200px">
+        <img decoding="async" class="hb on" alt="" width="1600" height="700" sizes="(max-width: 1240px) 100vw, 1200px" fetchpriority="high">
+        <img decoding="async" class="hb" alt="" width="1600" height="700" sizes="(max-width: 1240px) 100vw, 1200px">
         <button type="button" class="hb-cap" id="heroCap"></button>
       </div>
     </div>
@@ -93,24 +95,24 @@
       <p class="kits-lede">Every theme comes as a set. Get all four in one bundle, or just the one you need. Tap one to see its pages.</p>
       <div class="products" id="productCards">
         <button type="button" class="product" data-k="hunt" data-theme="dino" data-photo="img/life/hunt-dino.webp" aria-haspopup="dialog">
-          <img src="img/life/hunt-dino-sm.webp" srcset="img/life/hunt-dino-sm.webp 640w, img/life/hunt-dino.webp 1200w" sizes="(max-width: 760px) 46vw, 270px" width="640" height="478" alt="A kid by the bookshelf holding up a dino clue card, with another clue taped to the shelf" loading="lazy">
+          <img decoding="async" src="img/life/hunt-dino-sm.webp" srcset="img/life/hunt-dino-sm.webp 640w, img/life/hunt-dino.webp 1200w" sizes="(max-width: 760px) 46vw, 270px" width="640" height="478" alt="A kid by the bookshelf holding up a dino clue card, with another clue taped to the shelf" loading="lazy">
           <span class="p-body"><b>Treasure hunt</b><span>Rhyming clues for your home’s own hiding spots, a puzzle finale and a certificate.</span><small>See the pages</small></span>
         </button>
         <button type="button" class="product" data-k="kit" data-theme="vet" data-photo="img/life/vet-stand.webp" aria-haspopup="dialog">
-          <img src="img/life/vet-stand-sm.webp" srcset="img/life/vet-stand-sm.webp 640w, img/life/vet-stand.webp 1200w" sizes="(max-width: 760px) 46vw, 270px" width="640" height="478" alt="The printed Vet Clinic play kit on a play stand with signs and basket labels" loading="lazy">
+          <img decoding="async" src="img/life/vet-stand-sm.webp" srcset="img/life/vet-stand-sm.webp 640w, img/life/vet-stand.webp 1200w" sizes="(max-width: 760px) 46vw, 270px" width="640" height="478" alt="The printed Vet Clinic play kit on a play stand with signs and basket labels" loading="lazy">
           <span class="p-body"><b>Pretend play kit</b><span>A shop to set up: signs with their name, play money, order forms and toys to cut out.</span><small>See the pages</small></span>
         </button>
         <button type="button" class="product" data-k="activity" data-theme="unicorn" data-photo="img/life/activity-unicorn.webp" aria-haspopup="dialog">
-          <img src="img/life/activity-unicorn-sm.webp" srcset="img/life/activity-unicorn-sm.webp 640w, img/life/activity-unicorn.webp 1200w" sizes="(max-width: 760px) 46vw, 270px" width="640" height="478" alt="Unicorn wipe and play pages in sheet protectors with a dry-erase marker" loading="lazy">
+          <img decoding="async" src="img/life/activity-unicorn-sm.webp" srcset="img/life/activity-unicorn-sm.webp 640w, img/life/activity-unicorn.webp 1200w" sizes="(max-width: 760px) 46vw, 270px" width="640" height="478" alt="Unicorn wipe and play pages in sheet protectors with a dry-erase marker" loading="lazy">
           <span class="p-body"><b>Activity pages</b><span>Wipe &amp; play mazes, I spy and codes for quiet time and car rides.</span><small>See the pages</small></span>
         </button>
         <button type="button" class="product" data-k="party" data-theme="dino" data-photo="img/life/party-dino.webp" aria-haspopup="dialog">
-          <img src="img/life/party-dino-sm.webp" srcset="img/life/party-dino-sm.webp 640w, img/life/party-dino.webp 1200w" sizes="(max-width: 760px) 46vw, 270px" width="640" height="478" alt="A dino birthday table with a name banner, invitation, cupcake toppers and favor tags" loading="lazy">
+          <img decoding="async" src="img/life/party-dino-sm.webp" srcset="img/life/party-dino-sm.webp 640w, img/life/party-dino.webp 1200w" sizes="(max-width: 760px) 46vw, 270px" width="640" height="478" alt="A dino birthday table with a name banner, invitation, cupcake toppers and favor tags" loading="lazy">
           <span class="p-body"><b>Party pack</b><span>Invitations, a banner that spells their name, cupcake toppers and favor tags.</span><small>See the pages</small></span>
         </button>
       </div>
       <div class="host-line">
-        <span class="phone"><img id="hostThumb" src="img/host/dino-play.webp" alt="" width="360" height="720" loading="lazy"></span>
+        <span class="phone"><img decoding="async" id="hostThumb" src="img/host/dino-play.webp" alt="" width="360" height="720" loading="lazy"></span>
         <p><b>Plus Host Mode on your phone.</b> It shows where to hide each clue, then runs the hunt with you, with play ideas for the kit and a party checklist.</p>
         <button type="button" class="btn btn-ghost" id="seeHost" aria-haspopup="dialog">See it</button>
       </div>
@@ -154,7 +156,7 @@
             <li>Wipe &amp; Play activity pages</li>
             <li>The party pack: invitations, banner, toppers and tags</li>
           </ul>
-          <div class="plan-host"><span class="phone"><img src="img/host/space-play.webp" alt="" width="360" height="720" loading="lazy"></span><span><b>+ Host Mode included</b>Run the hunt and play kit from your phone</span></div>
+          <div class="plan-host"><span class="phone"><img decoding="async" src="img/host/space-play.webp" alt="" width="360" height="720" loading="lazy"></span><span><b>+ Host Mode included</b>Run the hunt and play kit from your phone</span></div>
           <a class="btn btn-orange" href="make/">Make my kit</a>
           <p class="hint">No party? Untick the party pack and it’s $17.99.</p>
         </div>
@@ -189,8 +191,8 @@
     <div class="wrap">
       <div class="pin"><b></b><span class="eyebrow">More to print</span></div>
       <div class="more-cards">
-        <a class="theme shop-card" href="play-kits/"><img src="img/kit-pizza.webp" alt="Pizza Shop play kit pages" width="677" height="497" loading="lazy"><h3>Pretend shops to set up at home</h3><p>Eleven play kits like a pizza shop, a post office and a vet clinic, $7.99 each.</p><span class="see">See the play kits</span></a>
-        <a class="theme shop-card" href="handprint-art/"><img src="img/craft-christmas.webp" alt="Christmas handprint art pages" width="1000" height="750" loading="lazy"><h3>Handprint keepsakes</h3><p>Handprint and fingerprint crafts with their name and age, ready to frame. From $5.99.</p><span class="see">See the handprint art</span></a>
+        <a class="theme shop-card" href="play-kits/"><img decoding="async" src="img/kit-pizza.webp" alt="Pizza Shop play kit pages" width="677" height="497" loading="lazy"><h3>Pretend shops to set up at home</h3><p>Eleven play kits like a pizza shop, a post office and a vet clinic, $7.99 each.</p><span class="see">See the play kits</span></a>
+        <a class="theme shop-card" href="handprint-art/"><img decoding="async" src="img/craft-christmas.webp" alt="Christmas handprint art pages" width="1000" height="750" loading="lazy"><h3>Handprint keepsakes</h3><p>Handprint and fingerprint crafts with their name and age, ready to frame. From $5.99.</p><span class="see">See the handprint art</span></a>
       </div>
     </div>
   </section>
@@ -235,10 +237,11 @@
 
 <footer>
   <div class="wrap">
-    <div class="brand"><img src="img/mark.png" alt="" width="64" height="49"><span><b class="wordmark"><span class="l">Little</span><span class="p">Print</span><span class="q">Quests</span></b>Printable Party Games &amp; Quests · © 2026</span></div>
+    <div class="brand"><img decoding="async" src="img/mark.png" alt="" width="64" height="49"><span><b class="wordmark"><span class="l">Little</span><span class="p">Print</span><span class="q">Quests</span></b>Printable Party Games &amp; Quests · © 2026</span></div>
     <nav class="foot-links"><a href="make/">Make a kit</a><a href="play-kits/">Play kits</a><a href="handprint-art/">Handprint art</a><a href="ideas/">Party and hunt ideas</a><a href="contact/">Contact</a><a href="refunds/">Refunds</a><a href="privacy/">Privacy</a><a href="terms/">Terms</a></nav>
   </div>
 </footer>
+<script src="js/names.js"></script>
 <script src="js/data.js"></script>
 <script src="js/site.js"></script>
 <script src="js/home.js"></script>

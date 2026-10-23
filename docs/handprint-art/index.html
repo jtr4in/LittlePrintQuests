@@ -22,16 +22,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&display=swap">
 <!-- the printed pages' own fonts, for writing the kid's name over the previews (js/names.js); files load only when used -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:wght@200..1000&family=Bangers&family=Pirata+One&family=Orbitron:wght@400..900&family=Cinzel+Decorative:wght@700&family=Pacifico&family=Comic+Neue:wght@700&display=swap">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:wght@200..1000&family=Bangers&family=Pirata+One&family=Orbitron:wght@400..900&family=Cinzel+Decorative:wght@700&family=Pacifico&family=Comic+Neue:wght@700&display=swap">
 <link rel="stylesheet" href="css/site.css">
-<script src="js/names.js"></script>
 </head>
 <body>
 
 <header class="top">
   <div class="wrap">
     <a class="logo" href="./" aria-label="LittlePrintQuests home">
-      <img src="img/mark.png" alt="" width="52" height="40">
+      <img decoding="async" src="img/mark.png" alt="" width="52" height="40">
       <span class="wordmark"><span class="l">Little</span><span class="p">Print</span><span class="q">Quests</span></span>
     </a>
     <nav class="nav" aria-label="Main">
@@ -72,10 +71,11 @@
 
 <footer>
   <div class="wrap">
-    <div class="brand"><img src="img/mark.png" alt="" width="64" height="49"><span><b class="wordmark"><span class="l">Little</span><span class="p">Print</span><span class="q">Quests</span></b>Printable Party Games &amp; Quests · © 2026</span></div>
+    <div class="brand"><img decoding="async" src="img/mark.png" alt="" width="64" height="49"><span><b class="wordmark"><span class="l">Little</span><span class="p">Print</span><span class="q">Quests</span></b>Printable Party Games &amp; Quests · © 2026</span></div>
     <nav class="foot-links"><a href="make/">Make a kit</a><a href="play-kits/">Play kits</a><a href="ideas/">Party and hunt ideas</a><a href="contact/">Contact</a><a href="refunds/">Refunds</a><a href="privacy/">Privacy</a><a href="terms/">Terms</a></nav>
   </div>
 </footer>
+<script src="js/names.js"></script>
 <script src="js/data.js"></script>
 <script src="js/site.js"></script>
 <script>
@@ -84,7 +84,7 @@ let craft = new Date().getMonth() >= 10 ? 'christmas' : 'halloween';
 // kept as references: the form lives in the gallery while it's open
 const craftForm = $('craftForm'), craftBtn = $('craftBtn'), craftChild = $('craftChild'), craftAge = $('craftAge'), craftStatus = $('craftStatus');
 $('craftList').innerHTML = CRAFTS.map(([id, name, blurb, title]) => `<button type="button" class="theme shop-card" data-craft="${id}" aria-haspopup="dialog">
-    <img src="img/craft-${id}.webp" alt="${title} pages" width="1000" height="750" loading="lazy"><h3>${title}</h3><p>${esc(blurb)}</p><span class="foot"><span class="see">See what’s inside</span><span class="pages-badge">${PAGES.craft[id]} pages</span></span></button>`).join('');
+    <img decoding="async" src="img/craft-${id}.webp" alt="${title} pages" width="1000" height="750" loading="lazy"><h3>${title}</h3><p>${esc(blurb)}</p><span class="foot"><span class="see">See what’s inside</span><span class="pages-badge">${PAGES.craft[id]} pages</span></span></button>`).join('');
 $('craftList').querySelectorAll('[data-craft]').forEach((b) => b.addEventListener('click', () => openCraft(b.dataset.craft)));
 // Real pages of each pack, made by scripts/craft-gallery.js (img/gallery/crafts/<id>-1.webp...).
 function openCraft(id) {

@@ -8,6 +8,8 @@
 //
 // LPQName.get() is the name to show (the sample name until a parent types one), LPQName.typed() what
 // they typed, LPQName.set(name) saves it for next time, and LPQName.on(fn) hears every change.
+// LPQName.setSrc(img, src, srcset) swaps a picture without downloading the sample-name version first
+// (call LPQName.preload(set) a little ahead so the set's data is there).
 (() => {
   const SAMPLE = 'Maya';
   const KEY = 'lpq.kidName';
@@ -219,6 +221,20 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();
 
+  // Sets a picture's src (and srcset), going straight to its nameless twin when that set's data is
+  // already loaded, so a phone doesn't download the sample-name picture first and then the twin.
+  function setSrc(img, src, srcset) {
+    const key = src.replace(/^.*?(img\/)/, '$1');
+    const d = ready(shardOf(key));
+    if (srcset !== undefined) img.setAttribute('srcset', srcset);
+    if (d && d[key]) {
+      img.setAttribute('src', src);
+      track(img, key, d[key]);
+    } else {
+      img.setAttribute('src', src);
+    }
+  }
+
   // ---- The name itself -------------------------------------------------------------------------
   function set(v) {
     const next = clean(v);
@@ -229,5 +245,5 @@
     document.querySelectorAll('[data-kid-name]').forEach((el) => { el.textContent = get(); });
     listeners.forEach((fn) => fn(get(), typed));
   }
-  window.LPQName = { get, typed: () => typed, set, on: (fn) => listeners.add(fn), sample: SAMPLE, preload: (set) => load(set) };
+  window.LPQName = { get, typed: () => typed, set, on: (fn) => listeners.add(fn), sample: SAMPLE, preload: (set) => Promise.resolve(load(set)), setSrc };
 })();

@@ -74,7 +74,7 @@ function drawThemes() {
   $('themeList').innerHTML = ordered.map((t) => `
   <button type="button" class="theme" data-id="${t.id}" aria-pressed="${t.id === state.theme}" title="${esc(t.name)}, ages ${t.ages}">
     ${t.id === seasonal ? '<span class="now">Now</span>' : ''}
-    <img src="img/icons/${t.id}.webp" alt="" width="240" height="240" loading="lazy"><span>${THEME_LABELS[t.id]}</span>
+    <img decoding="async" src="img/icons/${t.id}.webp" alt="" width="240" height="240" loading="lazy"><span>${THEME_LABELS[t.id]}</span>
   </button>`).join('');
   $('themeList').querySelectorAll('.theme').forEach((b) => b.addEventListener('click', () => setTheme(b.dataset.id)));
   $('themeSelect').innerHTML = ordered.map((t) => `<option value="${t.id}">${esc(THEME_LABELS[t.id])} · ages ${t.ages}</option>`).join('');
@@ -98,9 +98,8 @@ function showHero(id) {
   const front = imgs.find((i) => i.classList.contains('on'));
   const back = imgs.find((i) => i !== front);
   back.onload = () => { back.classList.add('on'); front.classList.remove('on'); };
-  back.srcset = `img/hero/${id}-sm.webp 800w, img/hero/${id}.webp 1600w`;
-  back.src = `img/hero/${id}.webp`;
   back.alt = `The ${name} set printed out: host guide, story briefing, clue cards, play kit, activity page, party invitation and Host Mode on a phone`;
+  LPQName.setSrc(back, `img/hero/${id}.webp`, `img/hero/${id}-sm.webp 800w, img/hero/${id}.webp 1600w`);
   $('heroCap').innerHTML = `<b>${esc(name)}</b><span>See the pages</span>`;
 }
 $('heroCap').addEventListener('click', () => Gallery.open(setPages(state.theme, state.ages), { tabs: ['hunt', 'kit', 'activity', 'party'].map((k) => [k, LABELS[k]]), label: `${THEMES.find((t) => t.id === state.theme).name} pages` }));
@@ -110,9 +109,10 @@ function setTheme(id, { scroll = false } = {}) {
   document.querySelectorAll('#themeList .theme').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.id === id)));
   if (scroll) showTile(id);
   $('themeName').textContent = THEMES.find((t) => t.id === id).name;
-  showHero(id);
-  LPQName.preload(id);
   render();
+  // The banner and the order stack's papers wait for the theme's name data (a small file), so each
+  // picture downloads once, already without the sample name.
+  LPQName.preload(id).then(() => { named.add(id); if (state.theme === id) { showHero(id); drawCart(); } });
 }
 
 // ---- Hiding spots --------------------------------------------------------------------------------
@@ -271,6 +271,7 @@ $('childAge').addEventListener('input', render);
 
 // ---- The cart: a stack of papers, one per thing picked --------------------------------------------
 const little = (k) => state.ages === 'little' && (k === 'kit' || k === 'activity');
+const named = new Set(); // themes whose name data has loaded, so their papers can go straight to the twins
 function pick(id) {
   picked.has(id) ? picked.delete(id) : picked.add(id);
   drawCart();
@@ -289,7 +290,8 @@ function drawCart() {
   $('stack').querySelectorAll(':scope > img').forEach((img) => img.classList.toggle('out', !gets.includes(img.dataset.k)));
   order.forEach((k, i) => {
     const img = $('stack').querySelector(`[data-k="${k}"]`);
-    img.src = `img/pages/${state.theme}-${little(k) ? 'little-' : ''}${k}.webp`;
+    const src = `img/pages/${state.theme}-${little(k) ? 'little-' : ''}${k}.webp`;
+    if (named.has(state.theme) && img.dataset.src !== src) { img.dataset.src = src; LPQName.setSrc(img, src); }
     img.style.zIndex = i + 1;
     img.style.transform = `translate(calc(-50% + ${pos[i][0]}px), ${Math.abs(pos[i][0]) / 5}px) rotate(${pos[i][1]}deg)`;
   });
@@ -299,7 +301,8 @@ function drawCart() {
   // tuck the phone against the lower left of the hunt's clue cards, outside the rest of the stack
   const huntX = gets.includes('hunt') ? pos[order.indexOf('hunt')][0] : 0;
   phone.style.left = `max(4px, calc(50% + ${huntX - 104}px))`;
-  phone.querySelector('img').src = `img/host/${state.theme}-play.webp`;
+  const host = phone.querySelector('img'), hostSrc = `img/host/${state.theme}-play.webp`;
+  if (named.has(state.theme) && host.dataset.src !== hostSrc) { host.dataset.src = hostSrc; LPQName.setSrc(host, hostSrc); }
   $('layers').innerHTML = LAYERS.map((l) => `<li><button type="button" class="layer" data-id="${l.id}" aria-pressed="${gets.includes(l.id)}">
       <span class="box">✓</span><span><b>${l.name}</b><small>${l.note}<span class="plus">${{ hunt: '+ Host Mode phone guide included', kit: '+ Play ideas in Host Mode', activity: '+ Reusable with a dry-erase marker', party: '+ Party checklist in Host Mode' }[l.id] || ''}</span></small></span><span class="amt">${l.id === 'activity' && gets.some((k) => k !== 'activity') ? `+${money(PRICES.activityAdd)}` : money(l.price)}</span></button></li>`).join('');
   $('layers').querySelectorAll('button.layer').forEach((b) => b.addEventListener('click', () => pick(b.dataset.id)));
