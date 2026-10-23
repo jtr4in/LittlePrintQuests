@@ -46,7 +46,7 @@
     </a>
     <nav class="nav" aria-label="Main">
       <div class="links" id="navLinks">
-        <a href="#how">How it works</a>
+        <a href="#products">What you get</a>
         <a href="#themes">Themes</a>
         <a href="#pricing">Pricing</a>
         <a href="play-kits/">Play kits</a>
@@ -64,17 +64,17 @@
     <div class="wrap hook">
       <div class="hook-copy">
         <p class="eyebrow">Personalized printables · ages 2 to 8</p>
-        <h1 class="hook-title" id="hookTitle">A <span class="occasion" id="occasion">birthday</span> adventure starring <b>your kid</b>.</h1>
-        <p class="hook-sub">A treasure hunt written for your house, with a matching play kit and party pack. Type their name and every page here becomes theirs.</p>
+        <h1 class="hook-title" id="hookTitle">Printable play starring <b>your kid</b>.</h1>
+        <p class="hook-sub">A treasure hunt for your house, a pretend play shop, activity pages and a party pack, all in the theme they love and all with their name. Made for <span class="occasion" id="occasion">birthdays</span>.</p>
         <form class="hook-form" id="hookForm">
           <input type="text" id="hookName" maxlength="24" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="Your kid’s first name" aria-label="Your kid’s first name">
           <button class="btn btn-orange" type="submit" id="hookGo">Make my kit</button>
         </form>
-        <p class="hook-note">Ready to print in minutes. Not sure yet? <a href="#sample">Try a free mini hunt</a>.</p>
+        <p class="hook-note">Type their name and every page here becomes theirs. Not sure yet? <a href="#sample">Try a free mini hunt</a>.</p>
       </div>
       <div class="hook-pages" aria-hidden="true">
-        <img class="back" id="hookBack" alt="" width="480" height="621">
-        <img class="front" id="hookFront" alt="" width="480" height="621">
+        <img class="back" id="hookBack" alt="" width="400" height="518">
+        <img class="front" id="hookFront" alt="" width="400" height="518">
       </div>
     </div>
     <div class="wrap">
@@ -86,30 +86,45 @@
     </div>
   </section>
 
-  <section class="stop" id="how">
+  <section class="stop" id="products">
     <div class="wrap">
-      <div class="pin"><b></b><span class="eyebrow">How it works</span></div>
-      <h2>From form to first clue in about ten minutes</h2>
-      <div class="steps">
-        <div class="step"><span class="n">1 · About a minute</span><h3>Tell us about your kid</h3><p>Their name, a theme and 6 to 10 spots around your home.</p></div>
-        <div class="step"><span class="n">2 · Instant</span><h3>We write the hunt</h3><p>A rhyming clue for every spot, even one we’ve never seen, like Grandma’s piano.</p></div>
-        <div class="step"><span class="n">3 · About ten minutes</span><h3>Print, cut and hide</h3><p>Host Mode on your phone shows where each card goes, then runs the hunt with you.</p></div>
+      <div class="pin"><b></b><span class="eyebrow">What you get</span></div>
+      <h2>Four ways to play, one theme</h2>
+      <p class="kits-lede">Every theme comes as a set. Get all four in one bundle, or just the one you need. Tap one to see its pages.</p>
+      <div class="products" id="productCards">
+        <button type="button" class="product" data-k="hunt" data-theme="dino" data-photo="img/life/hunt-dino.webp" aria-haspopup="dialog">
+          <img src="img/life/hunt-dino-sm.webp" srcset="img/life/hunt-dino-sm.webp 640w, img/life/hunt-dino.webp 1200w" sizes="(max-width: 760px) 46vw, 270px" width="640" height="478" alt="A kid by the bookshelf holding up a dino clue card, with another clue taped to the shelf" loading="lazy">
+          <span class="p-body"><b>Treasure hunt</b><span>Rhyming clues for your home’s own hiding spots, a puzzle finale and a certificate.</span><small>See the pages</small></span>
+        </button>
+        <button type="button" class="product" data-k="kit" data-theme="vet" data-photo="img/life/vet-stand.webp" aria-haspopup="dialog">
+          <img src="img/life/vet-stand-sm.webp" srcset="img/life/vet-stand-sm.webp 640w, img/life/vet-stand.webp 1200w" sizes="(max-width: 760px) 46vw, 270px" width="640" height="478" alt="The printed Vet Clinic play kit on a play stand with signs and basket labels" loading="lazy">
+          <span class="p-body"><b>Pretend play kit</b><span>A shop to set up: signs with their name, play money, order forms and toys to cut out.</span><small>See the pages</small></span>
+        </button>
+        <button type="button" class="product" data-k="activity" data-theme="unicorn" data-photo="img/life/activity-unicorn.webp" aria-haspopup="dialog">
+          <img src="img/life/activity-unicorn-sm.webp" srcset="img/life/activity-unicorn-sm.webp 640w, img/life/activity-unicorn.webp 1200w" sizes="(max-width: 760px) 46vw, 270px" width="640" height="478" alt="Unicorn wipe and play pages in sheet protectors with a dry-erase marker" loading="lazy">
+          <span class="p-body"><b>Activity pages</b><span>Wipe &amp; play mazes, I spy and codes for quiet time and car rides.</span><small>See the pages</small></span>
+        </button>
+        <button type="button" class="product" data-k="party" data-theme="dino" data-photo="img/life/party-dino.webp" aria-haspopup="dialog">
+          <img src="img/life/party-dino-sm.webp" srcset="img/life/party-dino-sm.webp 640w, img/life/party-dino.webp 1200w" sizes="(max-width: 760px) 46vw, 270px" width="640" height="478" alt="A dino birthday table with a name banner, invitation, cupcake toppers and favor tags" loading="lazy">
+          <span class="p-body"><b>Party pack</b><span>Invitations, a banner that spells their name, cupcake toppers and favor tags.</span><small>See the pages</small></span>
+        </button>
+      </div>
+      <div class="host-line">
+        <span class="phone"><img id="hostThumb" src="img/host/dino-play.webp" alt="" width="360" height="720" loading="lazy"></span>
+        <p><b>Plus Host Mode on your phone.</b> It shows where to hide each clue, then runs the hunt with you, with play ideas for the kit and a party checklist.</p>
+        <button type="button" class="btn btn-ghost" id="seeHost" aria-haspopup="dialog">See it</button>
       </div>
     </div>
   </section>
 
-  <section class="stop" id="athome">
+  <section class="stop" id="how">
     <div class="wrap">
-      <div class="pin"><b></b><span class="eyebrow">At home</span></div>
-      <h2>Print it, tape it up, start playing</h2>
-      <p class="kits-lede">Everything prints on plain Letter paper with your kid’s name on it. Tap a photo to see it bigger.</p>
-      <div class="life" id="lifePhotos">
-        <button type="button" data-big="img/life/hunt-dino.webp" data-theme="dino" data-cta="Make this hunt"><img src="img/life/hunt-dino-sm.webp" srcset="img/life/hunt-dino-sm.webp 640w, img/life/hunt-dino.webp 1200w" sizes="(max-width: 760px) 78vw, 400px" width="640" height="478" alt="A kid by the bookshelf holding up a Dino Ranger Field Note clue card, with another clue taped to the shelf and the Urgent Field Report letter on the rug" loading="lazy"><span>Dino hunt<small>See it bigger</small></span></button>
-        <button type="button" data-big="img/life/dino-styled.webp" data-theme="dino" data-cta="Make this kit"><img src="img/life/dino-styled-sm.webp" srcset="img/life/dino-styled-sm.webp 640w, img/life/dino-styled.webp 1200w" sizes="(max-width: 760px) 78vw, 400px" width="640" height="478" alt="The printed Dino Dig Lab kit set up for play: shop sign, open sign, fossil puzzle, dig map and badges" loading="lazy"><span>Dino Dig Lab<small>See it bigger</small></span></button>
-        <button type="button" data-big="img/life/party-dino.webp" data-theme="dino" data-cta="Make this party"><img src="img/life/party-dino-sm.webp" srcset="img/life/party-dino-sm.webp 640w, img/life/party-dino.webp 1200w" sizes="(max-width: 760px) 78vw, 400px" width="640" height="478" alt="A dino birthday table with a MAYA name banner, invitation on an easel, cupcake toppers, food tent cards and favor bag tags" loading="lazy"><span>Party pack<small>See it bigger</small></span></button>
-        <button type="button" data-big="img/life/activity-unicorn.webp" data-theme="unicorn" data-cta="Make these pages"><img src="img/life/activity-unicorn-sm.webp" srcset="img/life/activity-unicorn-sm.webp 640w, img/life/activity-unicorn.webp 1200w" sizes="(max-width: 760px) 78vw, 400px" width="640" height="478" alt="Unicorn Wipe and Play pages in sheet protectors, a kid halfway through the maze with a dry-erase marker" loading="lazy"><span>Activity pack<small>See it bigger</small></span></button>
-        <button type="button" data-big="img/life/unicorn-stand.webp" data-theme="unicorn" data-cta="Make this kit"><img src="img/life/unicorn-stand-sm.webp" srcset="img/life/unicorn-stand-sm.webp 640w, img/life/unicorn-stand.webp 1200w" sizes="(max-width: 760px) 78vw, 400px" width="640" height="478" alt="The printed Unicorn Stable kit on a play stand with a plush unicorn, treat baskets and signs" loading="lazy"><span>Unicorn Stable<small>See it bigger</small></span></button>
-        <button type="button" data-big="img/life/vet-stand.webp" data-theme="vet" data-cta="Make this kit"><img src="img/life/vet-stand-sm.webp" srcset="img/life/vet-stand-sm.webp 640w, img/life/vet-stand.webp 1200w" sizes="(max-width: 760px) 78vw, 400px" width="640" height="478" alt="The printed Vet Clinic kit on a play stand: clinic sign, Open sign, treatment prices, welcome poster and basket labels" loading="lazy"><span>Vet Clinic<small>See it bigger</small></span></button>
+      <div class="pin"><b></b><span class="eyebrow">How it works</span></div>
+      <h2>Ready to print in minutes</h2>
+      <div class="steps">
+        <div class="step"><span class="n">1 · About a minute</span><h3>Pick a theme, add their name</h3><p>Plus their age for the birthday pages and 6 to 10 spots around your home for the hunt.</p></div>
+        <div class="step"><span class="n">2 · Instant</span><h3>We make it theirs</h3><p>Their name on every sign, card and banner, and a rhyming clue for each of your spots.</p></div>
+        <div class="step"><span class="n">3 · Same day</span><h3>Print and play</h3><p>Plain Letter paper at home. Cut, tape it up and play, with Host Mode to guide you.</p></div>
       </div>
     </div>
   </section>
@@ -120,80 +135,6 @@
       <h2>Pick a world to play in</h2>
       <p class="kits-lede">Every theme has a hunt, a play kit, an activity pack and a party pack. Swipe for more, and tap one to see its pages.</p>
       <div class="themes mini rows" id="themeGrid" aria-label="Themes, swipe for more"></div>
-    </div>
-  </section>
-
-  <section class="stop" id="inside">
-    <div class="wrap">
-      <div class="pin"><b></b><span class="eyebrow">What’s in the box</span></div>
-      <h2>Everything in the <span id="boxTheme">Dino Fossil Recovery</span> bundle</h2>
-      <div class="box-bar">
-        <div class="tabs" role="tablist" aria-label="What’s included">
-          <button type="button" role="tab" data-tab="hunt" aria-selected="true">The hunt</button>
-          <button type="button" role="tab" data-tab="host" aria-selected="false">Host Mode</button>
-          <button type="button" role="tab" data-tab="kit" aria-selected="false">Play kit</button>
-          <button type="button" role="tab" data-tab="activity" aria-selected="false">Activity pack</button>
-          <button type="button" role="tab" data-tab="party" aria-selected="false">Party pack</button>
-        </div>
-        <label class="box-theme">Theme <select id="boxSelect"></select></label>
-      </div>
-      <div class="box-panel" data-panel="hunt">
-        <p class="kits-lede">Rhyming clue cards, a host guide, a puzzle finale and a certificate, all with your kid’s name, plus two bonus games for another day. Real <span id="huntName">Deep Space Expedition</span> pages, made for <span data-kid-name>Maya</span>’s 6th birthday:</p>
-        <div class="kit five">
-          <div class="page-thumb"><img class="mini-img" id="huntGuide" src="img/pages/space-guide.webp" alt="Host guide page listing where each clue card hides" width="480" height="621" loading="lazy"><h3>Host guide</h3><p>Which card hides where, and where the prize goes.</p></div>
-          <div class="page-thumb"><img class="mini-img" id="huntCards" src="img/pages/space-cards.webp" alt="Two rhyming clue cards with dashed cut lines" width="480" height="621" loading="lazy"><h3>Clue cards</h3><p>4 × 6 inch rhyming cards with big read-aloud type.</p></div>
-          <div class="page-thumb"><img class="mini-img" id="huntPuzzle" src="img/pages/space-puzzle.webp" alt="Jigsaw puzzle page that shows where the prize is hidden" width="480" height="621" loading="lazy"><h3>Puzzle finale</h3><p>A piece with every clue shows where the prize is.</p></div>
-          <div class="page-thumb"><img class="mini-img" id="huntCert" src="img/pages/space-cert.webp" alt="Certificate with Maya’s name" width="480" height="621" loading="lazy"><h3>Certificate</h3><p>Their name and a special title for the big finish.</p></div>
-          <div class="page-thumb"><img class="mini-img" id="huntBonus" src="img/pages/space-bonus.webp" alt="Picture hunt checklist with twelve pictures to find and tick off" width="480" height="621" loading="lazy"><h3>Bonus games</h3><p>A picture hunt and a look-around hunt for round two.</p></div>
-        </div>
-      </div>
-      <div class="box-panel" data-panel="host" hidden>
-        <p class="kits-lede">Every order comes with a private Host Mode link for your phone. It walks you through hiding the cards, then runs the hunt with you one tap at a time. Nothing to download.</p>
-        <div class="phones">
-          <figure><span class="phone"><img id="hostHide" src="img/host/space-hide.webp" alt="Host Mode screen: Hide Card 3 at the Shoe Rack, with a Hidden checkbox" width="360" height="720" loading="lazy"></span><figcaption><b>1 · Hide the cards</b>One card per screen, in your hiding order.</figcaption></figure>
-          <figure><span class="phone"><img id="hostPlay" src="img/host/space-play.webp" alt="Host Mode screen: They found Card 3, with a quick challenge, a line to say in character, and the clue to read" width="360" height="720" loading="lazy"></span><figcaption><b>2 · Play along</b>A quick challenge, a line to say in character and the clue to read.</figcaption></figure>
-          <figure><span class="phone"><img id="hostSidekick" src="img/host/space-sidekick.webp" alt="Sidekick screen: a line to say in character, following the host live" width="360" height="720" loading="lazy"></span><figcaption><b>3 · Bring a sidekick</b>A second grown-up gets their own lines and sound effects.</figcaption></figure>
-        </div>
-        <ul class="host-points">
-          <li>A “They’re stuck” button with three gentle hints</li>
-          <li>Play Kit tab: 8 pretend-play scenarios per kit and quick games</li>
-          <li>Party tab: a checklist from invitations to thank-you cards</li>
-          <li>Prefer paper? The printed Host Guide is still in your PDF</li>
-        </ul>
-      </div>
-      <div class="box-panel" data-panel="kit" hidden>
-        <div class="box-split">
-          <img id="kitImg" src="img/kit-dino.webp" alt="" width="677" height="497" loading="lazy">
-          <div>
-            <span class="tag">Matching play kit</span>
-            <h3 id="kitName">Dino Dig Lab</h3>
-            <p id="kitBlurb" class="kits-lede"></p>
-            <ul class="kit-points"><li>Signs with your kid’s name: door, station, open/closed and pay-here signs</li><li>Two hands-on toys that spin, slide, lift or go on your head</li><li>A whole shop to set up: menu board, order slips and play money</li><li>ID badges, tickets, passports and a certificate</li></ul>
-            <a class="howto-link" id="howtoLink" href="img/howto/dino.webp"><img id="howtoImg" src="img/howto/dino-sm.webp" alt="" width="640" height="960" loading="lazy"><span><b>Build it from a box</b><span id="howtoName">Make a Dino Dig Pit</span>Six simple steps with a cardboard box and the kit’s own signs.</span></a>
-          </div>
-        </div>
-      </div>
-      <div class="box-panel" data-panel="activity" hidden>
-        <p class="kits-lede">Wipe &amp; Play pages made from the same pictures as the play kit. Slip them into sheet protectors, use a dry-erase marker, wipe clean and play again.</p>
-        <div class="kit">
-          <div class="page-thumb"><img class="mini-img" id="actSpy" src="img/gallery/dino/activity-2.webp" alt="Activity page" width="480" height="621" loading="lazy"><h3 id="actSpyCap">I spy</h3></div>
-          <div class="page-thumb"><img class="mini-img" id="actSpot" src="img/gallery/dino/activity-3.webp" alt="Activity page" width="480" height="621" loading="lazy"><h3 id="actSpotCap">Secret code</h3></div>
-          <div class="page-thumb"><img class="mini-img" id="actMaze" src="img/gallery/dino/activity-4.webp" alt="Activity page" width="480" height="621" loading="lazy"><h3 id="actMazeCap">Color by number</h3></div>
-          <div class="page-thumb"><img class="mini-img" id="actWords" src="img/gallery/dino/activity-5.webp" alt="Activity page" width="480" height="621" loading="lazy"><h3 id="actWordsCap">Roll a silly creature</h3></div>
-        </div>
-      </div>
-      <div class="box-panel" data-panel="party" hidden>
-        <div class="box-split">
-          <img id="partyImg" class="party-page" src="img/pages/dino-party.webp" alt="" width="400" height="518" loading="lazy">
-          <div>
-            <span class="tag">Matching party pack</span>
-            <h3>Party printables in the same theme</h3>
-            <p class="kits-lede">Made with your kid’s name. Add your party details and the invitations come filled in.</p>
-            <ul class="kit-points"><li>Invitations and thank-you cards</li><li>Cupcake toppers and favor tags</li><li>A HAPPY BIRTHDAY banner that spells their name</li><li>Food tent cards and water bottle labels</li></ul>
-          </div>
-        </div>
-      </div>
-      <p style="margin-top:26px"><a class="btn btn-orange" id="boxGo" href="make/?theme=dino">Make this bundle</a></p>
     </div>
   </section>
 
