@@ -862,6 +862,18 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     for (const f of [`pages/${id}-little-kit`, `pages/${id}-little-activity`]) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', `${f}.webp`)), f);
     for (const k of ['kit', 'activity']) for (let i = 1; i <= 5; i++) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'gallery', id, 'little', `${k}-${i}.webp`)), `little ${id} ${k}-${i}`);
   }
+  // Stripe checkout shows a picture beside the product, linked from the website (scripts/checkout-images.py).
+  {
+    const pay = require('../src/bot/payments');
+    const site = process.env.SITE_URL;
+    process.env.SITE_URL = 'https://littleprintquests.com';
+    for (const id of Object.keys(require('../src/generator/themes'))) assert.deepEqual(pay.checkoutImages(pay.imageFor({ theme: id })), [`https://littleprintquests.com/img/checkout/${id}.jpg`], `checkout picture ${id}`);
+    for (const h of Object.keys(require('../src/crafts/build').HOLIDAYS)) assert.ok(pay.checkoutImages(pay.imageFor({ holiday: h })), `checkout picture craft ${h}`);
+    assert.ok(pay.checkoutImages('pass'));
+    process.env.SITE_URL = 'http://localhost:3000/';
+    assert.equal(pay.checkoutImages('dino'), undefined, 'Stripe needs https pictures');
+    if (site === undefined) delete process.env.SITE_URL; else process.env.SITE_URL = site;
+  }
   // The theme pickers show one illustration per theme (scripts/theme-icons.py).
   for (const id of Object.keys(require('../src/generator/themes'))) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'icons', `${id}.webp`)), `theme icon ${id}`);
   // The order preview gallery has five pages per item for every theme.

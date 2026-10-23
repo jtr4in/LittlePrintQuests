@@ -1,6 +1,8 @@
 // Stripe Checkout for orders placed on the website. Order and add-on pages take promotion codes
 // (made in the Stripe dashboard); the Family Pass page does not.
 
+const fs = require('fs');
+const path = require('path');
 const Stripe = require('stripe');
 const THEMES = require('../generator/themes');
 const { kitForHunt, KITS } = require('../kits/engine');
@@ -36,6 +38,18 @@ async function createWithPromo(params) {
   }
 }
 
+// The picture shown beside the product on the Stripe checkout page: the theme's illustration, the
+// handprint pack's card or the logo for the Family Pass (docs/img/checkout/, made by
+// scripts/checkout-images.py, served by the website at SITE_URL). Left out if SITE_URL isn't an
+// https address or the picture doesn't exist, since Stripe needs a public https link.
+const CHECKOUT_IMAGES = path.join(__dirname, '..', '..', 'docs', 'img', 'checkout');
+function checkoutImages(name) {
+  const site = process.env.SITE_URL || '';
+  if (!name || !/^https:\/\//.test(site) || !fs.existsSync(path.join(CHECKOUT_IMAGES, `${name}.jpg`))) return undefined;
+  return [new URL(`img/checkout/${name}.jpg`, site.endsWith('/') ? site : `${site}/`).href];
+}
+const imageFor = (form) => (form.holiday ? `craft-${form.holiday}` : form.theme || form.kit);
+
 async function createCheckout(order) {
   const theme = THEMES[order.form.theme];
   const items = products.itemsOf(order.form);
@@ -63,6 +77,7 @@ async function createCheckout(order) {
             tax_code: process.env.STRIPE_TAX_CODE || 'txcd_10000000',
             name: items.length >= 3 ? `${items.length === 4 ? 'Everything Bundle' : 'Bundle'}: ${items.map((i) => parts[i]).join(' + ')}` : items.map((i) => parts[i]).join(' + '),
             description: `Printable ${items.map((i) => details[i]).join(' · ')} for ${order.form.childName} · PDF`,
+            images: checkoutImages(imageFor(order.form)),
           },
         },
       },
@@ -92,6 +107,7 @@ async function createUpgradeCheckout(order, upgrade) {
           tax_code: process.env.STRIPE_TAX_CODE || 'txcd_10000000',
           name: `Add to your order: ${upgrade.add.map((i) => parts[i]).join(' + ')}`,
           description: `Printable PDF for ${order.config.childName}, added to the order you already have`,
+          images: checkoutImages(imageFor(order.config)),
         },
       },
     }],
@@ -119,6 +135,7 @@ async function createPassCheckout(pass) {
         product_data: {
           tax_code: process.env.STRIPE_TAX_CODE || 'txcd_10000000',
           name: 'Family Pass: 6 everything bundles',
+          images: checkoutImages('pass'),
           description: `${pass.total} printable orders (hunt, play kit, activity pack and party pack) to use within a year · PDF · no subscription`,
         },
       },
@@ -130,4 +147,4 @@ async function createPassCheckout(pass) {
   });
 }
 
-module.exports = { enabled, isPaid, discountCents, createCheckout, createPassCheckout, createUpgradeCheckout, readWebhook, stripe, PRICES, PRICE_CENTS, BUNDLE_PRICE_CENTS, PARTY_PRICE_CENTS, priceFor };
+module.exports = { enabled, isPaid, discountCents, checkoutImages, imageFor, createCheckout, createPassCheckout, createUpgradeCheckout, readWebhook, stripe, PRICES, PRICE_CENTS, BUNDLE_PRICE_CENTS, PARTY_PRICE_CENTS, priceFor };
