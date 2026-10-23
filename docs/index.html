@@ -597,14 +597,14 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <div class="pin"><b></b><span class="eyebrow">Pricing</span></div>
       <h2>Pick what you need, save when you bundle</h2>
       <div class="plans">
-        <div class="plan main"><span class="eyebrow">Play bundle · most popular</span><div class="price">$17.99</div><p class="was"><s>$22.97</s> value: the hunt, its play kit and activity pack</p><ul><li>Custom hunt with your child’s name and your home’s own spots</li><li>Matching pretend play kit with hands-on toys and a shop to set up</li><li>10 Wipe &amp; Play activity pages: mazes, spot the difference, I spy and more</li><li>Delivered to your inbox in minutes</li></ul><div class="plan-host"><span class="phone"><img src="img/host/space-play.webp" alt="" width="360" height="720" loading="lazy"></span><span><b>+ Host Mode included</b>Hunt and play kit tabs on your phone</span></div><a class="btn btn-orange" href="#order" data-pick="hunt kit activity">Make my play bundle</a></div>
+        <div class="plan main"><span class="eyebrow">Play bundle · most popular</span><div class="price">$17.99</div><p class="was"><s>$22.97</s> value: the hunt, its play kit and activity pack</p><ul><li>Scavenger hunts with your child’s name and your home’s own spots</li><li>Matching pretend play kit with hands-on toys and a shop to set up</li><li>10 Wipe &amp; Play activity pages: mazes, spot the difference, I spy and more</li><li>Delivered to your inbox in minutes</li></ul><div class="plan-host"><span class="phone"><img src="img/host/space-play.webp" alt="" width="360" height="720" loading="lazy"></span><span><b>+ Host Mode included</b>Hunt and play kit tabs on your phone</span></div><a class="btn btn-orange" href="#order" data-pick="hunt kit activity">Make my play bundle</a></div>
         <div class="plan"><span class="eyebrow">Having a party?</span><div class="price">$19.99</div><p class="was"><s>$29.96</s> value: everything, plus the party pack</p><ul><li>The whole play bundle</li><li>Matching invitations, cupcake toppers, favor tags, a name banner and more</li><li>Host Mode party checklist</li></ul><a class="btn btn-ghost" href="#order" data-pick="hunt kit activity party">Make the everything bundle</a></div>
       </div>
       <div class="pass-card" id="pass">
         <div>
           <span class="eyebrow">Family Pass · for the whole year</span>
           <h3>Six everything bundles to use all year</h3>
-          <p>One payment covers six orders in the next 12 months, each with the custom hunt, its play kit, the activity pack and the party pack. That’s $6.66 an event instead of $19.99.</p>
+          <p>One payment covers six orders in the next 12 months, each with the scavenger hunts, their play kit, the activity pack and the party pack. That’s $6.66 an event instead of $19.99.</p>
           <ul><li>Birthdays, Halloween, Christmas or a rainy weekend: any theme, for any of your kids</li><li>Use them all at once or spread them out. Every order shows how many you have left</li><li>One payment. No subscription, and nothing renews by itself</li></ul>
         </div>
         <div class="pass-buy">
@@ -617,7 +617,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       </div>
       <div class="singles">
         <p class="eyebrow">Or get just one</p>
-        <a class="single" href="#order" data-pick="hunt"><b>Custom hunt</b><span>Clue cards, puzzle finale, certificate and bonus games, with Host Mode</span><strong>$9.99</strong></a>
+        <a class="single" href="#order" data-pick="hunt"><b>Scavenger Hunts</b><span>Clue cards, puzzle finale, certificate and bonus games, with Host Mode</span><strong>$9.99</strong></a>
         <a class="single" href="#order" data-pick="kit"><b>Pretend play kit</b><span>Hands-on toys, a shop set and signs</span><strong>$7.99</strong></a>
         <a class="single" href="#order" data-pick="activity"><b>Activity pack</b><span>10 Wipe &amp; Play pages</span><strong>$4.99</strong></a>
         <a class="single" href="#order" data-pick="party"><b>Party pack</b><span>Invitations, toppers, banner and tags</span><strong>$6.99</strong></a>
@@ -666,7 +666,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <div class="pin"><b></b><span class="eyebrow">Questions</span></div>
       <h2>Before you print</h2>
       <div class="faq">
-        <details><summary>How does the Family Pass work?</summary><p>One payment of $39.99 gets you 6 orders to use within 12 months. Each order can be the whole bundle: the custom hunt, its play kit, the activity pack and the party pack, in any theme and for any of your kids. Your code arrives by email. Build an order as usual and type the code under “Have a Family Pass code?” next to the total. It covers anything in the order builder, shop play kits included; handprint art is sold separately. It doesn’t renew by itself.</p></details>
+        <details><summary>How does the Family Pass work?</summary><p>One payment of $39.99 gets you 6 orders to use within 12 months. Each order can be the whole bundle: the scavenger hunts, their play kit, the activity pack and the party pack, in any theme and for any of your kids. Your code arrives by email. Build an order as usual and type the code under “Have a Family Pass code?” next to the total. It covers anything in the order builder, shop play kits included; handprint art is sold separately. It doesn’t renew by itself.</p></details>
         <details><summary>Is there a version for younger kids?</summary><p>Yes. Pick Little kids (2 to 4) or Big kids (5 to 8) in the order builder. The little kids version has thicker cut lines, bigger pictures, picture clues in the hunt and order forms they fill in by circling pictures. The big kids version has more to read and write, plus a word search in the activity pack. Same price either way.</p></details>
         <details><summary>Is anything shipped to me?</summary><p>No. You get a PDF to print at home on regular Letter paper, in color or black and white.</p></details>
         <details><summary>How fast will I get it?</summary><p>Usually within a few minutes of checkout. It shows on screen and arrives by email, so it works even the morning of the party.</p></details>
@@ -1005,14 +1005,14 @@ $('childAge').addEventListener('input', render);
 // The cart is a stack of papers: the hunt, its play kit, the activity pack and the party pack.
 // Pick any mix; two together cost less. The first three are ticked to start; the party pack is the add-on.
 const LAYERS = [
-  { id: 'hunt', name: 'Custom scavenger hunt', note: 'Clue cards, host guide, puzzle finale, certificate and two bonus games', price: 9.99 },
+  { id: 'hunt', name: 'Scavenger Hunts', note: 'Clue cards, host guide, puzzle finale, certificate and two bonus games', price: 9.99 },
   { id: 'kit', name: 'Pretend play kit', note: 'Hands-on toys, a shop set and signs with their name', price: 7.99 },
   { id: 'activity', name: 'Activity pack', note: 'Mazes, spot the difference, I spy, word search and more to wipe and play', price: 4.99 },
   { id: 'party', name: 'Party pack', note: 'Invitations, toppers, banner, favor tags and more', price: 6.99 },
 ];
 // Must match PRICES in the order bot (src/bot/products.js).
 const PRICES = { hunt: 9.99, kit: 7.99, party: 6.99, 'hunt+kit': 14.99, 'hunt+party': 13.99, 'kit+party': 12.99, bundle: 16.99, activity: 4.99, activityAdd: 3 };
-const LABELS = { hunt: 'Custom hunt', kit: 'Play kit', activity: 'Activity pack', party: 'Party pack' };
+const LABELS = { hunt: 'Scavenger Hunts', kit: 'Play kit', activity: 'Activity pack', party: 'Party pack' };
 const picked = new Set(['hunt', 'kit', 'activity']);
 let passInfo = null; // { code, left, total } once a Family Pass code checks out
 let product = 'hunt+kit+activity';
