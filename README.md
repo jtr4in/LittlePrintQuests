@@ -67,6 +67,8 @@ The website's hunt builder sends its form to the bot, which opens a Stripe Check
 4. **Website.** In `docs/index.html`, set `CHECKOUT_URL` to `<PUBLIC_URL>/api/checkout`. Set `SITE_URL` (and optionally `SITE_ORIGIN`) on the bot.
 5. **Test.** With test keys, order on your site using card `4242 4242 4242 4242`, any future date and any CVC. You should get the email within a minute. Then swap in the live keys and a live webhook.
 
+**Promo codes.** The checkout pages for orders and add-ons show an **Add promotion code** link. Make codes in the Stripe dashboard under Product catalog > Coupons: create a coupon (for example 100% off, once), then add a customer-facing promotion code to it such as `100OFF`, with a max number of redemptions or an end date if you like. A 100%-off order costs $0, Stripe skips the card, and the bot builds and emails it like any other order. Test-mode and live-mode codes are separate. The Family Pass checkout doesn't take codes.
+
 **Add-ons after checkout.** Once a website order is ready, its order page and email offer the rest of the everything bundle (play kit, activity pack and party pack) for the bundle price minus what the buyer already paid, already made with the child's name. The button opens a Stripe page for the difference; when it's paid, the order is rebuilt with the same download links and emailed again. Shop kits only offer the activity pack, and handprint art and Family Pass orders get no offer.
 
 ## Host Mode

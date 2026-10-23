@@ -447,6 +447,31 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal(emails.length, 9);
   assert.deepEqual(charged, [1699, 999, 699, 1499, 1299, 1799, 499, 1699, 1099]);
 
+  // A 100%-off promotion code: Stripe says 'no_payment_required', and the order is still built and emailed.
+  {
+    const co = await realFetch(base + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ theme: 'space', childName: 'Free', age: 5, spots: ['front_door', 'pet_bed', 'kitchen_table'] }) });
+    const orderId = (await co.json()).url.split('/').pop();
+    const payload = JSON.stringify({ id: 'evt_free', type: 'checkout.session.completed', data: { object: {
+      id: 'cs_test_free', payment_status: 'no_payment_required', amount_subtotal: 999, amount_total: 0, total_details: { amount_discount: 999 },
+      metadata: { order_id: orderId }, customer_details: { email: 'friend@example.com', name: 'A Friend' } } } });
+    const sig = payments.stripe().webhooks.generateTestHeaderString({ payload, secret: 'whsec_test' });
+    assert.equal((await realFetch(base + '/webhooks/stripe', { method: 'POST', body: payload, headers: { 'stripe-signature': sig } })).status, 200);
+    for (let i = 0; i < 60; i++) {
+      state = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
+      if (state.orders[orderId].sent || state.orders[orderId].status === 'needs_attention') break;
+      await wait(500);
+    }
+    const free = state.orders[orderId];
+    assert.equal(free.status, 'ready', JSON.stringify(free));
+    assert.ok(free.sent);
+    assert.equal(free.paidCents, 0);
+    assert.deepEqual(emails.at(-1).to, ['friend@example.com']);
+    assert.ok(emails.at(-1).html.includes(`/d/${free.downloadToken}.pdf`));
+    assert.equal((await realFetch(`${base}/d/${free.downloadToken}.pdf`)).status, 200);
+    charged.pop();
+  }
+
   // After checkout: the order page and email offer the rest of the bundle for the difference.
   state = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
   const huntOnly = Object.values(state.orders).find((o) => o.source === 'web' && o.product === 'hunt' && o.status === 'ready');

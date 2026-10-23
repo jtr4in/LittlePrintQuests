@@ -472,7 +472,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
           </details>
           <button class="btn btn-orange" type="submit" id="checkoutBtn" style="justify-content:center">Continue to checkout</button>
           <p class="status" id="formStatus"></p>
-          <p class="trust"><span>Apple Pay, Google Pay or card, secure checkout by Stripe</span><span>Not right? We fix it free, or <a href="refunds/">refund you</a></span></p>
+          <p class="trust"><span>Apple Pay, Google Pay or card, secure checkout by Stripe</span><span>Have a promo code? Add it on the payment page</span><span>Not right? We fix it free, or <a href="refunds/">refund you</a></span></p>
         </aside>
       </form>
     </div>
@@ -1211,7 +1211,9 @@ async function applyPass() {
     $('passNote').textContent = `Pass applied. This order uses 1 of your ${data.left} left.`;
   } catch (err) {
     passInfo = null;
-    $('passNote').textContent = err.message === 'Failed to fetch' ? 'We couldn’t check that code just now. Please try again.' : err.message;
+    // Promo codes (not Family Pass codes) go on the Stripe payment page.
+    const promo = !/^LPQ/i.test(code) && err.message !== 'Failed to fetch';
+    $('passNote').textContent = promo ? 'That looks like a promo code. Click Continue to checkout and enter it under “Add promotion code” on the payment page.' : err.message === 'Failed to fetch' ? 'We couldn’t check that code just now. Please try again.' : err.message;
   }
   drawCart();
 }
