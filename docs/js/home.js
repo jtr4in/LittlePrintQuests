@@ -82,7 +82,7 @@ function drawThemeGrid() {
   $('themeGrid').innerHTML = ordered.map((t) => `
   <button type="button" class="theme" data-id="${t.id}" aria-haspopup="dialog" title="${esc(t.name)}, ages ${t.ages}">
     ${t.id === seasonal ? '<span class="now">Now</span>' : ''}
-    <img src="img/wow/${t.id}.webp" alt="" width="240" height="240" loading="lazy"><span>${THEME_LABELS[t.id]}</span>
+    <img src="img/themes/${t.id}.webp" alt="" width="220" height="220" loading="lazy"><span>${THEME_LABELS[t.id]}</span>
   </button>`).join('');
   $('themeGrid').querySelectorAll('.theme').forEach((b) => b.addEventListener('click', () => previewTheme(b.dataset.id)));
 }
