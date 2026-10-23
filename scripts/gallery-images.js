@@ -20,6 +20,8 @@ const THEMES = require('../src/generator/themes');
 const OUT = path.join(__dirname, '..', 'docs', 'img', 'gallery');
 const SPOTS = ['front_door', 'shoe_rack', 'couch', 'dryer', 'bathtub', 'bookshelf', 'pet_bed', 'kitchen_table'];
 const PARTY = { date: 'Saturday, June 3', time: '2 to 4 pm', place: 'Our house', rsvp: 'Text Sam' };
+// The page the hands-on toys start after: shop-style kits have a big shop sign first.
+const firstToy = (kitId) => (KITS[kitId].hunt && !KITS[kitId].bigSign ? 4 : 5);
 const count = (dir) => fs.readdirSync(dir).filter((f) => /^page-\d+\.png$/.test(f)).length;
 
 // The little-kids kit and activity pack: thicker cut lines, bigger pictures, no word search.
@@ -28,7 +30,7 @@ async function little(id, kitId, tmp, jobs) {
   await renderKit({ kit: kitId, childName: 'Maya', ages: 'little', subjects: [], lenient: true }, `${dir('kit')}.pdf`, { pngDir: dir('kit') });
   await renderActivities({ kit: kitId, childName: 'Maya', ages: 'little', lenient: true }, `${dir('activity')}.pdf`, { pngDir: dir('activity') });
   const kit = count(dir('kit'));
-  const start = KITS[kitId].hunt ? 4 : 5;
+  const start = firstToy(kitId);
   const picks = {
     kit: [2, start - 1, ...[0.35, 0.55, 0.75].map((f) => Math.round(start + f * (kit - start)))],
     activity: [1, 6, 7, 9, 5], // cover, I spy, spot the difference, maze, counting
@@ -74,11 +76,12 @@ async function little(id, kitId, tmp, jobs) {
     await renderActivities({ kit: kitForHunt(id).id, childName: 'Maya', lenient: true }, `${dir('activity')}.pdf`, { pngDir: dir('activity') });
     const hunt = count(dir('hunt'));
     const kit = count(dir('kit'));
+    const start = firstToy(kitForHunt(id).id);
     const picks = {
       hunt: [1, 2, 3, 4, hunt], // host guide, briefing, two clue card sheets, certificate
       activity: [1, 6, 7, 9, 10], // cover, I spy, spot the difference, maze, word search
       party: [2, 3, 4, 5, 6], // invitations, thank-you cards, toppers, favor tags, banner
-      kit: [2, 3, ...[0.35, 0.55, 0.75].map((f) => Math.round(4 + f * (kit - 4)))], // welcome poster, sign, three toys
+      kit: [2, start - 1, ...[0.35, 0.55, 0.75].map((f) => Math.round(start + f * (kit - start)))], // welcome poster, sign, three toys
     };
     fs.mkdirSync(path.join(OUT, id), { recursive: true });
     for (const [k, pages] of Object.entries(picks)) {

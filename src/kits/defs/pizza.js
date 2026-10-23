@@ -1,7 +1,9 @@
-// Pizza Shop: a shop-style play kit of its own (no matching hunt).
+// Pizza Shop: a shop-style play kit of its own, with its own hunt and party pack.
 module.exports = {
   id: 'pizza',
   name: 'Pizza Shop',
+  hunt: 'pizza',
+  bigSign: true, // a shop-style kit: it keeps the big shop sign
   colors: { main: '#d9442f', dark: '#9e2d1e', soft: '#ffd9a8', light: '#fff3e2', accent: '#3f9a4a', accentInk: '#ffffff' },
   icon: '🍕',
   placeName: (who) => `${who} Pizzeria`,
@@ -76,6 +78,7 @@ module.exports = {
   },
   certificate: { title: 'Master Pizza Chef', icon: '🏅', seal: '🍕', line: 'made the cheesiest, yummiest pizzas in town and served every customer with a smile.' },
   guide: {
+    afterHunt: 'Every topping is back! Open {place} right where the last ticket was hiding, and make the first pizza with the toppings the chefs found. Master Pizza Chef {child} takes the first order.',
     intro: 'Everything {child} needs to run a pretend pizzeria. Print on regular Letter paper, cut along the dashed lines, and line up some stuffed animals to be hungry customers.',
     setup: [
       'Tape the pizzeria sign and Open sign by the “front door”.', 'Set up the register on the counter.',

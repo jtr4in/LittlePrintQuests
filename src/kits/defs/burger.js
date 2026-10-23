@@ -1,7 +1,9 @@
-// Burger Shop: a shop-style play kit of its own (no matching hunt).
+// Burger Shop: a shop-style play kit of its own, with its own hunt and party pack.
 module.exports = {
   id: 'burger',
   name: 'Burger Shop',
+  hunt: 'burger',
+  bigSign: true, // a shop-style kit: it keeps the big shop sign
   colors: { main: '#e2782a', dark: '#a8501a', soft: '#ffe08a', light: '#fff6e0', accent: '#d93a2f', accentInk: '#ffffff' },
   icon: '🍔',
   placeName: (who) => `${who} Burger Shack`,
@@ -80,6 +82,7 @@ module.exports = {
   },
   certificate: { title: 'Master Burger Chef', icon: '🏅', seal: '🍔', line: 'flipped the juiciest, tastiest burgers in town and served every customer with a smile.' },
   guide: {
+    afterHunt: 'The Secret Sauce recipe is back together! Open {place} right where the last card was found, and grill the first burgers with Secret Sauce on top. Burger Boss {child} works the grill first.',
     intro: 'Everything {child} needs to run a pretend burger shop. Print on regular Letter paper, cut along the dashed lines, and line up some stuffed animals to be hungry customers.',
     setup: [
       'Tape the burger shop sign and Open sign by the “front door”.', 'Set up the register on the counter by the Please Pay Here sign.',

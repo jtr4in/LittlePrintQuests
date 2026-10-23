@@ -1,8 +1,10 @@
-// Pet Shop: a shop-style play kit of its own (no matching hunt). A store for pet supplies,
+// Pet Shop: a shop-style play kit of its own, with its own hunt and party pack. A store for pet supplies,
 // grooming and adopting, where the stuffed animals are the pets.
 module.exports = {
   id: 'petshop',
   name: 'Pet Shop',
+  hunt: 'petshop',
+  bigSign: true, // a shop-style kit: it keeps the big shop sign
   colors: { main: '#8a56c2', dark: '#5f3790', soft: '#e5d4f7', light: '#f6f0fd', accent: '#f5b335' },
   icon: '🐾',
   placeName: (who) => `${who} Pet Shop`,
@@ -81,6 +83,7 @@ module.exports = {
   },
   certificate: { title: 'Super Pet Shop Owner', icon: '🏅', seal: '🐾', line: 'fed, groomed and cuddled every pet, and found each one a loving home.' },
   guide: {
+    afterHunt: 'Every name tag is found! Open {place} right where the last tag was hiding, and fill in adoption papers for each stuffed pet. Pet Shop Superstar {child} runs the adoption desk first.',
     intro: 'Everything {child} needs to run a pretend pet shop. Print on regular Letter paper, cut along the dashed lines, and gather some stuffed animals to be the pets.',
     setup: [
       'Tape the pet shop sign and Open sign by the “front door”.', 'Set up the register on the counter.',

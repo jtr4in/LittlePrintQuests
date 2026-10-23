@@ -1,7 +1,9 @@
-// Grocery Store: a shop-style play kit of its own (no matching hunt).
+// Grocery Store: a shop-style play kit of its own, with its own hunt and party pack.
 module.exports = {
   id: 'grocery',
   name: 'Grocery Store',
+  hunt: 'grocery',
+  bigSign: true, // a shop-style kit: it keeps the big shop sign
   colors: { main: '#3a9d4f', dark: '#25713a', soft: '#cdeec0', light: '#effaea', accent: '#f2a03d' },
   icon: '🛒',
   placeName: (who) => `${who} Grocery Store`,
@@ -77,6 +79,7 @@ module.exports = {
   },
   certificate: { title: 'Super Store Manager', icon: '🏅', seal: '🛒', line: 'kept the shelves full, rang up every order and helped every shopper with a smile.' },
   guide: {
+    afterHunt: 'The Big Party Shopping List is all found! Open {place} right where the last item was hiding, and shop for everything on the list. Shopper of the Year {child} is the first cashier.',
     intro: 'Everything {child} needs to run a pretend grocery store. Print on regular Letter paper, cut along the dashed lines, and line up some stuffed animals to be shoppers.',
     setup: [
       'Tape the store sign and Open sign by the “front door”.', 'Set up the checkout register on a table.',

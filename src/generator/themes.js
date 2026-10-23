@@ -19,6 +19,17 @@ const ICONS = {
   fire: `<svg viewBox="0 0 64 64" fill="currentColor"><path d="M9 41C9 23 19 11 33 11c13 0 22 11 22 28z"/><path d="M2 40h59c2 0 3 7-1 7H9c-5 0-7-3-7-7z"/><path d="M23 16h16v14l-8 6-8-6z" fill="#fff"/><circle cx="31" cy="24" r="4"/><path d="M46 20c3 4 4 8 4 13" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>`,
   ice: `<svg viewBox="0 0 64 64" fill="currentColor"><g stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"><path d="M32 4v56M7.8 18l48.4 28M7.8 46l48.4-28"/><path d="M24 7l8 8 8-8M24 57l8-8 8 8M5 28l11-3-3-11M59 36l-11 3 3 11M5 36l11 3-3 11M59 28l-11-3 3-11"/></g><polygon points="32,23 39.8,27.5 39.8,36.5 32,41 24.2,36.5 24.2,27.5"/><circle cx="32" cy="32" r="3.2" fill="#fff"/></svg>`,
   racecar: `<svg viewBox="0 0 64 64" fill="currentColor"><path d="M2 25h13v4h-4v6H8v-6H2z"/><path d="M4 43c0-5 3-8 7-9l9-2 7-9c1-1 2-2 4-2h11c2 0 3 1 4 2l5 8 6 1c3 1 5 3 5 6v5c0 1-1 2-2 2H6c-1 0-2-1-2-2z"/><path d="M30 25h6v7h-11zM39 25h5l5 7H39z" fill="#fff"/><circle cx="18" cy="46" r="9" stroke="#fff" stroke-width="2.5"/><circle cx="18" cy="46" r="3.2" fill="#fff"/><circle cx="48" cy="46" r="9" stroke="#fff" stroke-width="2.5"/><circle cx="48" cy="46" r="3.2" fill="#fff"/></svg>`,
+  pizza: `<svg viewBox="0 0 64 64" fill="currentColor"><path d="M32 61L5 15c17-9 37-9 54 0z"/><path d="M8 16c15-7 33-7 48 0" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><circle cx="25" cy="28" r="5" fill="#fff"/><circle cx="39" cy="30" r="4.5" fill="#fff"/><circle cx="32" cy="44" r="4" fill="#fff"/></svg>`,
+  burger: `<svg viewBox="0 0 64 64" fill="currentColor"><path d="M6 27C6 14 18 6 32 6s26 8 26 21z"/><rect x="3" y="31" width="58" height="9" rx="4.5"/><path d="M6 44h52v3c0 6-4 10-10 10H16C10 57 6 53 6 47z"/><g fill="#fff"><ellipse cx="22" cy="16" rx="2.4" ry="1.4" transform="rotate(-20 22 16)"/><ellipse cx="33" cy="12" rx="2.4" ry="1.4"/><ellipse cx="43" cy="17" rx="2.4" ry="1.4" transform="rotate(20 43 17)"/><ellipse cx="30" cy="21" rx="2.4" ry="1.4"/></g></svg>`,
+  cart: `<svg viewBox="0 0 64 64" fill="currentColor"><path d="M3 8h9l7 32h33l6-22H16" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/><path d="M16 18h42l-6 22H20z"/><path d="M27 22v14M37 22v14M47 22v14" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><circle cx="23" cy="53" r="5.5"/><circle cx="47" cy="53" r="5.5"/></svg>`,
+  envelope: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linejoin="round" stroke-linecap="round"><rect x="4" y="13" width="56" height="40" rx="5"/><path d="M7 17l25 19 25-19"/><path d="M7 49l17-13M57 49L40 36" stroke-width="4"/></svg>`,
+  book: `<svg viewBox="0 0 64 64" fill="currentColor"><path d="M31 15C23 9 13 8 3 10v42c10-2 20-1 28 5z"/><path d="M33 15c8-6 18-7 28-5v42c-10-2-20-1-28 5z"/><path d="M9 19c6-1 12 0 16 2M9 27c6-1 12 0 16 2M9 35c6-1 12 0 16 2M39 21c4-2 10-3 16-2M39 29c4-2 10-3 16-2M39 37c4-2 10-3 16-2" stroke="#fff" stroke-width="2.4" stroke-linecap="round" fill="none"/></svg>`,
+  shield: `<svg viewBox="0 0 64 64" fill="currentColor"><path d="M32 3l24 8v18c0 16-10 27-24 32C18 56 8 45 8 29V11z"/><polygon points="32,17 36.4,26.6 46.8,27.6 39,34.6 41.2,44.8 32,39.6 22.8,44.8 25,34.6 17.2,27.6 27.6,26.6" fill="#fff"/></svg>`,
+  tooth: `<svg viewBox="0 0 64 64" fill="currentColor"><path d="M18 6C10 6 5 13 5 21c0 7 3 11 5 17 2 7 3 20 9 20 5 0 5-14 13-14s8 14 13 14c6 0 7-13 9-20 2-6 5-10 5-17 0-8-5-15-13-15-6 0-9 3-14 3S24 6 18 6z"/><path d="M15 15c-3 1-5 4-5 8" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M50 3l1.5 3.5L55 8l-3.5 1.5L50 13l-1.5-3.5L45 8l3.5-1.5z"/></svg>`,
+  tag: `<svg viewBox="0 0 64 64" fill="currentColor"><circle cx="32" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="4"/><path d="M32 61C16 49 6 40 6 28c0-8 6-14 14-14 5 0 9 3 12 7 3-4 7-7 12-7 8 0 14 6 14 14 0 12-10 21-26 33z"/><g fill="#fff"><ellipse cx="32" cy="40" rx="6" ry="5"/><circle cx="23.5" cy="31" r="2.8"/><circle cx="28.5" cy="26.5" r="2.8"/><circle cx="35.5" cy="26.5" r="2.8"/><circle cx="40.5" cy="31" r="2.8"/></g></svg>`,
+  mug: `<svg viewBox="0 0 64 64" fill="currentColor"><path d="M7 23h39v19c0 9-7 16-16 16h-7C14 58 7 51 7 42z"/><path d="M46 28h4c5 0 8 3 8 8s-3 8-8 8h-4" fill="none" stroke="currentColor" stroke-width="5"/><path d="M17 17c-3-4 3-6 0-11M27 17c-3-4 3-6 0-11M37 17c-3-4 3-6 0-11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M26.5 49c-6-4-8.5-7-8.5-10 0-2.2 1.8-4 4-4 2 0 3.5 1.2 4.5 3 1-1.8 2.5-3 4.5-3 2.2 0 4 1.8 4 4 0 3-2.5 6-8.5 10z" fill="#fff"/></svg>`,
+  pasta: `<svg viewBox="0 0 64 64" fill="currentColor"><path d="M3 34h58c0 14-12 24-29 24S3 48 3 34z"/><path d="M9 31c2-11 12-17 23-17s21 6 23 17z"/><path d="M15 29c4-7 10-9 17-9M23 30c4-4 9-5 14-4M36 30c3-3 8-4 12-2" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M46 3v10M50 3v10M54 3v10M46 11c0 4 8 4 8 0M50 14v10" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`,
+  wrench: `<svg viewBox="0 0 64 64" fill="currentColor"><path d="M45 3a15 15 0 0 0-14 20L6 48a6.4 6.4 0 0 0 0 9l1 1a6.4 6.4 0 0 0 9 0l25-25a15 15 0 0 0 20-14l-10 10-9-2-2-9 10-10z"/><circle cx="11.5" cy="52.5" r="2.8" fill="#fff"/></svg>`,
 };
 
 module.exports = {
@@ -869,5 +880,679 @@ module.exports = {
 .cert-title { font-size:68pt; letter-spacing:.03em; }
 .award { font-size:38pt; color:var(--primary); text-shadow:2px 2px 0 var(--soft); letter-spacing:.04em; }
 .seal { background:var(--primary); color:#fff; outline-color:var(--ink); }`,
+  },
+  // The shop play kits' hunts: each one's trail ends where the kit's shop opens.
+  pizza: {
+    id: 'pizza',
+    name: 'Pizza Shop Topping Hunt',
+    label: 'Pizza Shop',
+    ages: '3–7',
+    cardHeader: 'Pizza Shop Order Up',
+    badge: 'Order Ticket',
+    hunters: 'Junior Pizza Chefs',
+    treasureWord: 'pizza slice',
+    icon: ICONS.pizza,
+    colors: { paper: '#fff8ec', ink: '#3a2114', primary: '#d9442f', accent: '#3f9a4a', soft: '#ffd9a8' },
+    fonts: { display: 'Fredoka', displayWeight: 700, displayTransform: 'uppercase' },
+    openers: {
+      start: ['The oven is hot and the dough’s ready to go,', 'But Mozzie the Mouse took the toppings! Oh no!'],
+      middle: [
+        ['Squeak, squeak! Was that Mozzie the Mouse?', 'He hid one more topping somewhere in the house!'],
+        ['Knead it and roll it and spin it up high,', 'The next order ticket is close by, oh my!'],
+        ['Pepperoni, peppers and olives so round,', 'Another lost topping is waiting to be found!'],
+        ['Ding! goes the oven, the timer is done,', 'Hunting for toppings is so much fun!'],
+        ['Sauce in a swirl and cheese in a pile,', 'Keep up the good work, you chefs have such style!'],
+        ['A slice for you and a slice for me,', 'The next clue is waiting, so go and see!'],
+        ['Mozzie left crumbs in a long, twisty line,', 'Follow this riddle, you’re doing just fine!'],
+        ['You found a topping, now give a big cheer,', 'The very next ticket is hiding quite near!'],
+      ],
+      last: ['Just one topping left, then the pizza’s complete,', 'Find the last ticket for a hot, cheesy treat!'],
+    },
+    briefing: {
+      title: 'Order Up!',
+      from: 'Chef Sal, Head Pizza Chef',
+      paragraphs: [
+        'Calling all {kids}!',
+        'This is Chef Sal at the Pizza Shop. Today we have a very special order: the biggest, cheesiest pizza in town! But while I was stretching the dough, Mozzie the Mouse scurried in and carried off all of our toppings. The pepperoni, the mushrooms, the peppers and even the cheese are hiding somewhere nearby!',
+        'Mozzie left a trail of crumbs, and I have tucked {count} Order Tickets along the way. Each one has a rhyming riddle that tells you where to search next.',
+        'Good chefs work as a team, keep their hands clean and never run in the kitchen. Walk, don’t run, take turns, and shout “Order up!” every time you find a ticket. Follow the trail to the very end, where a hot, cheesy surprise is waiting!',
+        'Your first Order Ticket is attached. Aprons on, chefs!',
+      ],
+      signoff: 'Extra cheese and big smiles,',
+    },
+    certificate: {
+      title: 'Pizza Perfect!',
+      subtitle: 'Official Junior Pizza Chef',
+      body: 'has found every topping Mozzie the Mouse carried off, followed every Order Ticket and made the cheesiest pizza in town, earning the title of',
+      award: 'Master Pizza Chef',
+      signer: 'Chef Sal, Head Pizza Chef',
+    },
+    css: `
+.card { border:.11in solid transparent; border-radius:8px; background:
+  linear-gradient(var(--paper), var(--paper)) padding-box,
+  repeating-conic-gradient(#d9442f 0 25%, #fff 0 50%) 0 0/14px 14px border-box; }
+.card-head { border-bottom:2.5px dashed var(--primary); }
+.card-head .icon { color:var(--primary); }
+.card-title { font-size:16pt; }
+.badge { background:var(--accent); border-radius:4px; transform:rotate(-2deg); }
+.kicker { color:var(--accent); }
+.frame { border:.22in solid transparent; outline:none; border-radius:10px; background:
+  linear-gradient(var(--paper), var(--paper)) padding-box,
+  repeating-conic-gradient(#d9442f 0 25%, #fff 0 50%) 0 0/26px 26px border-box; }
+.briefing h1 { font-size:36pt; }
+.cert-title { font-size:56pt; }
+.award { font-size:32pt; color:var(--primary); }
+.seal { background:var(--primary); outline-color:var(--accent); }`,
+  },
+  burger: {
+    id: 'burger',
+    name: 'Burger Shack Secret Sauce Hunt',
+    label: 'Burger Shop',
+    ages: '3–7',
+    cardHeader: 'Burger Shack Grill Crew',
+    badge: 'Recipe Card',
+    hunters: 'Grill Crew',
+    treasureWord: 'french fry',
+    icon: ICONS.burger,
+    colors: { paper: '#fff8e6', ink: '#3a2410', primary: '#e2782a', accent: '#d93a2f', soft: '#ffe08a' },
+    fonts: { display: 'Bangers', displayWeight: 400, displayTransform: 'uppercase' },
+    openers: {
+      start: ['The grill’s sizzling hot and the buns are just right,', 'But Gus took the Secret Sauce and flew out of sight!'],
+      middle: [
+        ['Sizzle and flip and then sizzle some more,', 'The next recipe card is close, that’s for sure!'],
+        ['Bun on the bottom and cheese on the top,', 'Keep hunting, Grill Crew, and don’t you stop!'],
+        ['Squawk! goes Gus from up high in the sky,', 'He dropped one more card as he went flying by!'],
+        ['Pickles and lettuce and tomatoes so red,', 'Another card’s waiting, so hurry ahead!'],
+        ['Ketchup and mustard, a squirt and a squeeze,', 'Go find the next card as quick as you please!'],
+        ['Stack it up tall like a big burger tower,', 'You’re finding these clues with real burger power!'],
+        ['Ding, ding! An order! The bell gives a ring,', 'You found it, Grill Crew! You can do anything!'],
+        ['Crispy fries crunching, munch, munch, munch,', 'You’re the best crew to make burgers for lunch!'],
+      ],
+      last: ['Just one card left and the sauce will be done,', 'Find the last spot for the burger-iest fun!'],
+    },
+    briefing: {
+      title: 'Grill Crew Alert',
+      from: 'Cook Patty, Grill Boss',
+      paragraphs: [
+        'Calling all {kids}!',
+        'This is Cook Patty at the Burger Shack. Today we are making the most famous burgers in town, with our Secret Sauce on top. But this morning Gus the Seagull swooped through the window, grabbed the Secret Sauce recipe cards and flew off, dropping them all around!',
+        'I followed Gus and tucked {count} Recipe Cards along his flight path. Each one has a rhyming riddle that tells you where to search next.',
+        'Great grill crews work together, wait their turn and keep the kitchen safe. Walk, don’t run, help each other, and shout “Order up!” every time you find a card. Collect every card and the Secret Sauce can be made again!',
+        'Your first Recipe Card is attached. Spatulas ready, crew!',
+      ],
+      signoff: 'Stay saucy,',
+    },
+    certificate: {
+      title: 'Order Up!',
+      subtitle: 'Official Burger Shack Grill Crew',
+      body: 'has found every Secret Sauce recipe card Gus the Seagull dropped, followed the trail all the way and saved the Burger Shack’s famous burgers, earning the title of',
+      award: 'Burger Boss',
+      signer: 'Cook Patty, Grill Boss',
+    },
+    css: `
+.card { border:3px solid var(--ink); border-radius:12px; padding-top:.3in; background:linear-gradient(180deg, #fff, var(--paper)); }
+.card::before { content:''; position:absolute; left:0; right:0; top:0; height:.16in; border-bottom:2px solid var(--ink);
+  background:repeating-linear-gradient(90deg, var(--accent) 0 .3in, #fff .3in .6in); }
+.card-head { border-bottom:3px solid var(--soft); }
+.card-head .icon { color:var(--primary); }
+.card-title { font-size:18pt; color:var(--accent); letter-spacing:.04em; }
+.badge { background:var(--soft); color:var(--ink); border:2px solid var(--ink); border-radius:6px; font-size:13pt; letter-spacing:.04em; }
+.kicker { color:var(--accent); }
+.frame { border:3px solid var(--ink); outline:none; border-radius:16px; padding-top:.7in; overflow:hidden; background:linear-gradient(180deg, #fff, var(--paper)); }
+.frame::before { content:''; position:absolute; left:0; right:0; top:0; height:.34in; border-bottom:3px solid var(--ink);
+  background:repeating-linear-gradient(90deg, var(--accent) 0 .55in, #fff .55in 1.1in); }
+.briefing h1 { font-size:40pt; letter-spacing:.03em; color:var(--accent); }
+.cert-title { font-size:66pt; letter-spacing:.03em; color:var(--accent); }
+.award { font-size:38pt; color:var(--primary); text-shadow:2px 2px 0 var(--ink); letter-spacing:.04em; }
+.seal { background:var(--accent); outline-color:var(--ink); }`,
+  },
+  grocery: {
+    id: 'grocery',
+    name: 'Grocery Store Shopping List Hunt',
+    label: 'Grocery Store',
+    ages: '3–7',
+    cardHeader: 'Super Shopper List',
+    badge: 'List Item',
+    hunters: 'Super Shoppers',
+    treasureWord: 'apple',
+    icon: ICONS.cart,
+    colors: { paper: '#f6fcf2', ink: '#1f3a22', primary: '#3a9d4f', accent: '#f2a03d', soft: '#cdeec0' },
+    fonts: { display: 'Fredoka', displayWeight: 700, displayTransform: 'none' },
+    openers: {
+      start: ['Grab a cart, shoppers, the store’s open today,', 'But Zippy the Cart scattered our list on the way!'],
+      middle: [
+        ['Apples and bananas and carrots that crunch,', 'Find the next item for our party lunch!'],
+        ['Beep! goes the scanner, the price is just right,', 'The next list item is hiding in sight!'],
+        ['Wheel your cart slowly and look left and right,', 'You’re the best shoppers, so clever and bright!'],
+        ['Milk in the fridge and bread on the shelf,', 'Zippy the Cart has been rolling himself!'],
+        ['Squeak, squeak! go the wheels as they roll down the aisle,', 'You found an item! Now give a big smile!'],
+        ['Coupons and stickers and price tags so neat,', 'You’re shopping so well, you just can’t be beat!'],
+        ['Clean-up on aisle three! Oh, what a mess!', 'Zippy was here! Where’s the next clue? Let’s guess!'],
+        ['Into the basket, one, two and three,', 'The next list item is waiting, let’s see!'],
+      ],
+      last: ['One item is left on the Big Party List,', 'Find it, and nothing at all will be missed!'],
+    },
+    briefing: {
+      title: 'Store Announcement',
+      from: 'Manager Mo, Store Manager',
+      paragraphs: [
+        'Attention, {kids}!',
+        'This is Manager Mo at the Grocery Store. Today we are shopping for the biggest party of the year! But this morning Zippy, our runaway shopping cart, went zooming down every aisle all by itself, and the Big Party Shopping List flew out in pieces!',
+        'Zippy left a trail of squeaky wheel marks, and I have tucked {count} List Items along the way. Each one has a rhyming riddle that tells you where to search next.',
+        'Super shoppers are careful, kind and great at working as a team. Walk, don’t run, push your carts slowly, and say “Beep!” like a checkout scanner every time you find an item. Find every piece of the list, and a party surprise is waiting at the end!',
+        'Your first List Item is attached. Happy shopping!',
+      ],
+      signoff: 'See you at the checkout,',
+    },
+    certificate: {
+      title: 'List Complete!',
+      subtitle: 'Official Super Shopper',
+      body: 'has found every piece of the Big Party Shopping List, shopped every aisle with care and filled the cart for the party, earning the title of',
+      award: 'Shopper of the Year',
+      signer: 'Manager Mo, Store Manager',
+    },
+    css: `
+.card { border-radius:14px; background:linear-gradient(180deg, #fff, var(--paper)); }
+.card-head { border-bottom:2px dashed var(--primary); }
+.card-head .icon { color:var(--primary); }
+.card-title { font-size:15pt; }
+.badge { position:relative; background:var(--accent); color:#3a2405; border-radius:4px 14px 14px 4px; padding-left:.22in; }
+.badge::before { content:''; position:absolute; left:.08in; top:50%; width:.07in; height:.07in; margin-top:-.035in; border-radius:50%; background:#fff; }
+.card-foot { border-top:1.5px dashed var(--soft); }
+.frame { border-radius:20px; outline:2px dashed var(--accent); outline-offset:-12px; }
+.briefing h1 { font-size:32pt; }
+.award { color:var(--primary); }
+.seal { background:var(--primary); outline-color:var(--accent); }`,
+  },
+  post: {
+    id: 'post',
+    name: 'Post Office Special Delivery',
+    label: 'Post Office',
+    ages: '3–7',
+    cardHeader: 'Special Delivery',
+    badge: 'Stamp',
+    hunters: 'Junior Mail Carriers',
+    treasureWord: 'letter',
+    icon: ICONS.envelope,
+    colors: { paper: '#f6f9ff', ink: '#1b2b4d', primary: '#2f5fb3', accent: '#e8513a', soft: '#cfe0ff' },
+    fonts: { display: 'Fredoka', displayWeight: 700, displayTransform: 'uppercase' },
+    openers: {
+      start: ['Bags on your shoulders, it’s mail day today!', 'But Bertha went “ACHOO!” and the letters flew away!'],
+      middle: [
+        ['Stamp it and sort it and send it with care,', 'The next special letter is hiding somewhere!'],
+        ['Knock, knock! Who’s there? It’s the mail on its way!', 'You’re the best mail carriers working today!'],
+        ['ACHOO! went Bertha, oh what a big sneeze!', 'The letters went flying like leaves in the breeze!'],
+        ['Through rain and through snow, the mail gets there fast,', 'You found one more letter, you’re having a blast!'],
+        ['Big boxes, small parcels and postcards to send,', 'The next one is waiting just around the bend!'],
+        ['Ring-a-ding-ding goes the post office bell,', 'You’re sorting the mail so incredibly well!'],
+        ['A letter for Grandma, a card for a friend,', 'Keep up the good work right up to the end!'],
+        ['Sort by the colors and sort by the size,', 'The next special letter will be a surprise!'],
+      ],
+      last: ['One letter is left, with a big golden seal,', 'Find it and see what the end will reveal!'],
+    },
+    briefing: {
+      title: 'Special Delivery Alert',
+      from: 'Postmaster Polly',
+      paragraphs: [
+        'Calling all {kids}!',
+        'This is Postmaster Polly at the Post Office. Today we have a very important Special Delivery to make! But this morning Bertha, our big sorting machine, gave the most enormous sneeze. ACHOO! All of the special letters flew out of their mailbags and landed all over the place.',
+        'I gathered up {count} Special Delivery cards and stamped a rhyming riddle on each one. Every riddle tells you where to look for the next letter.',
+        'Mail carriers are careful, friendly and always on time. Walk, don’t run, take turns, and shout “Special delivery!” every time you find a card. Follow the trail to the very end, where a surprise package is waiting just for you!',
+        'Your first Special Delivery card is attached. Mailbags on, carriers!',
+      ],
+      signoff: 'Signed, sealed and delivered,',
+    },
+    certificate: {
+      title: 'Delivered!',
+      subtitle: 'Official Junior Mail Carrier',
+      body: 'has found every letter Bertha sneezed away, followed every Special Delivery card and brought the mail home on time, earning the title of',
+      award: 'Star Mail Carrier',
+      signer: 'Postmaster Polly',
+    },
+    css: `
+.card { border:.09in solid transparent; border-radius:4px; background:
+  linear-gradient(var(--paper), var(--paper)) padding-box,
+  repeating-linear-gradient(-45deg, #e8513a 0 10px, #fff 10px 18px, #2f5fb3 18px 28px, #fff 28px 36px) border-box; }
+.card-head .icon { color:var(--primary); }
+.card-title { font-size:16pt; letter-spacing:.03em; }
+.badge { background:var(--accent); border-radius:0; outline:2px dashed #fff; outline-offset:-4px; padding:.05in .16in; }
+.kicker { color:var(--accent); }
+.frame { border:.17in solid transparent; outline:none; border-radius:6px; background:
+  linear-gradient(var(--paper), var(--paper)) padding-box,
+  repeating-linear-gradient(-45deg, #e8513a 0 16px, #fff 16px 28px, #2f5fb3 28px 44px, #fff 44px 56px) border-box; }
+.briefing h1 { font-size:34pt; }
+.cert-title { font-size:60pt; }
+.award { font-size:30pt; color:var(--accent); }
+.seal { background:var(--primary); outline-color:var(--accent); }`,
+  },
+  library: {
+    id: 'library',
+    name: 'Library Lost Pages Mystery',
+    label: 'Library',
+    ages: '3–7',
+    cardHeader: 'Book Detective Case',
+    badge: 'Lost Page',
+    hunters: 'Book Detectives',
+    treasureWord: 'bookmark',
+    icon: ICONS.book,
+    colors: { paper: '#fbf9ff', ink: '#2b1d4d', primary: '#6a4fb3', accent: '#f2a93b', soft: '#e3d8ff' },
+    fonts: { display: 'Fredoka', displayWeight: 600, displayTransform: 'none' },
+    openers: {
+      start: ['Shh! Book Detectives, come quick, take a look,', 'The pages flew out of our Big Storybook!'],
+      middle: [
+        ['Hoo-hoo! says Hoot from the top of the stack,', 'You found a lost page! Let’s put the book back!'],
+        ['Turn the page slowly and read every word,', 'The next clue is hiding, or so I have heard!'],
+        ['Once upon a time, in a land far away,', 'Some Book Detectives found pages today!'],
+        ['Fairy tales, dragons and fish in the sea,', 'The next page is waiting, so where could it be?'],
+        ['A page! What a story! Now don’t make a peep,', 'Tiptoe so quietly, the books are asleep!'],
+        ['Tick-tock goes the clock, it’s nearly story time,', 'Let’s find the next page with this little rhyme!'],
+        ['Big books, small books, books old and new,', 'The next missing page is waiting for you!'],
+        ['Put on your thinking cap, look high and low,', 'One more lost page, and then off we go!'],
+      ],
+      last: ['The very last page is the one that says “The End,”', 'Find it and finish the story, my friend!'],
+    },
+    briefing: {
+      title: 'A Library Mystery',
+      from: 'Librarian Lou',
+      paragraphs: [
+        'Psst, {kids}!',
+        'This is Librarian Lou at the Library. Today was supposed to be the biggest Story Time of the year! But just as I opened the Big Storybook, Hoot the library owl stretched his wings and gave a giant flap. WHOOSH! The pages flew out of the book and fluttered all around.',
+        'Hoot feels terrible, so he helped me tuck {count} Lost Page cards along the way. Each one has a rhyming riddle that tells you where to search next.',
+        'Book detectives are clever, careful and very good listeners. Use quiet feet, look closely, and whisper “Hoo-hoo!” every time you find a page. Put the whole story back together, and a happily-ever-after surprise is waiting at the end!',
+        'Your first Lost Page is attached. Happy hunting, detectives!',
+      ],
+      signoff: 'Your friend in the stacks,',
+    },
+    certificate: {
+      title: 'The End!',
+      subtitle: 'Official Book Detective',
+      body: 'has found every page Hoot the Owl flapped away, solved the Library Mystery and put the Big Storybook back together, earning the title of',
+      award: 'Master Book Detective',
+      signer: 'Librarian Lou',
+    },
+    css: `
+.card { border-radius:6px 14px 14px 6px; border-left:.16in solid var(--primary); background:
+  repeating-linear-gradient(180deg, transparent 0 .31in, rgba(106,79,179,.09) .31in .325in),
+  linear-gradient(90deg, rgba(43,29,77,.06), transparent .3in), #fff; }
+.card-head .icon { color:var(--accent); }
+.card-title { font-size:15pt; }
+.badge { background:var(--accent); color:#2b1d06; border-radius:0; padding-right:.2in; clip-path:polygon(0 0, 100% 0, 88% 50%, 100% 100%, 0 100%); }
+.frame { border-radius:8px; border-left-width:.3in; outline-color:var(--accent); }
+.briefing h1 { font-size:34pt; }
+.award { color:var(--primary); }
+.seal { background:var(--primary); outline-color:var(--accent); }`,
+  },
+  police: {
+    id: 'police',
+    name: 'Police Station Missing Teddy Case',
+    label: 'Police Station',
+    ages: '3–7',
+    cardHeader: 'Junior Officer Case',
+    badge: 'Evidence',
+    hunters: 'Junior Officers',
+    treasureWord: 'police badge',
+    icon: ICONS.shield,
+    colors: { paper: '#f5f8fe', ink: '#16244a', primary: '#2c4f9e', accent: '#f2c230', soft: '#cfdcf7' },
+    fonts: { display: 'Fredoka', displayWeight: 700, displayTransform: 'uppercase' },
+    openers: {
+      start: ['Calling all officers, we’ve got a big case,', 'Buttons the Teddy is lost! Search the place!'],
+      middle: [
+        ['Wee-oo, wee-oo! You found the next clue,', 'Officers, Buttons is counting on you!'],
+        ['Grab your magnifier, look high and low,', 'Follow the buttons wherever they go!'],
+        ['A shiny round button, right here on the floor!', 'Buttons came this way, of that I am sure!'],
+        ['Officers help and officers care,', 'Buttons is hiding, but where, oh where?'],
+        ['Put on your hat and stand straight and tall,', 'You are the bravest officers of all!'],
+        ['Stop, look and listen, then go with care,', 'The next little clue is waiting right there!'],
+        ['Beep-beep! goes the radio, “Over and out!”', 'The next clue is near, there isn’t a doubt!'],
+        ['Ten-four, officers, the case is going great,', 'Buttons is close now, so don’t be late!'],
+      ],
+      last: ['The very last clue will crack the case wide,', 'Go find out where Buttons decided to hide!'],
+    },
+    briefing: {
+      title: 'Missing Teddy Report',
+      from: 'Sergeant Sunny',
+      paragraphs: [
+        'Attention, {kids}!',
+        'This is Sergeant Sunny at the Police Station. We have a brand new case, and it’s a big one! Buttons the Teddy, our station’s cuddliest helper, was sitting at the front desk this morning. Now he’s gone! All he left behind is a trail of his shiny buttons.',
+        'My officers followed the trail and tucked {count} Evidence cards along the way. Each one has a rhyming riddle that tells you where to look next.',
+        'Good officers are helpful, kind and great at working as a team. Walk, don’t run, look closely with your detective eyes, and say “Ten-four!” every time you find a card. Follow the evidence to the very end to find out where Buttons went!',
+        'Your first Evidence card is attached. Good luck, officers!',
+      ],
+      signoff: 'Over and out,',
+    },
+    certificate: {
+      title: 'Case Closed!',
+      subtitle: 'Official Junior Police Officer',
+      body: 'has followed every clue, found Buttons the Teddy and solved the Case of the Missing Teddy, earning the rank of',
+      award: 'Super Detective',
+      signer: 'Sergeant Sunny',
+    },
+    css: `
+.card { border:3px solid var(--primary); border-radius:8px; padding-top:.26in; background:linear-gradient(180deg, #fff, var(--paper)); }
+.card::before { content:''; position:absolute; left:0; right:0; top:0; height:.14in;
+  background:repeating-conic-gradient(var(--primary) 0 25%, #fff 0 50%) 0 0/.14in .14in; }
+.card-head { border-bottom:2px solid var(--primary); }
+.card-title { font-size:15pt; letter-spacing:.03em; }
+.badge { background:var(--primary); color:var(--accent); border:2px solid var(--accent); border-radius:4px; }
+.kicker { color:var(--primary); }
+.frame { border:4px solid var(--primary); outline:none; border-radius:10px; padding-top:.75in; overflow:hidden; }
+.frame::before { content:''; position:absolute; left:0; right:0; top:0; height:.3in;
+  background:repeating-conic-gradient(var(--primary) 0 25%, #fff 0 50%) 0 0/.3in .3in; }
+.briefing h1 { font-size:32pt; }
+.cert-title { font-size:54pt; }
+.award { font-size:32pt; color:var(--primary); }
+.seal { background:var(--primary); color:var(--accent); outline-color:var(--accent); }`,
+  },
+  dentist: {
+    id: 'dentist',
+    name: 'Dentist Office Sparkle Smile Quest',
+    label: 'Dentist',
+    ages: '3–6',
+    cardHeader: 'Sparkle Smile Quest',
+    badge: 'Sparkle Card',
+    hunters: 'Smile Squad',
+    treasureWord: 'toothbrush',
+    icon: ICONS.tooth,
+    colors: { paper: '#f2fbfd', ink: '#123c46', primary: '#2a9fb4', accent: '#f48aa8', soft: '#c7eef3' },
+    fonts: { display: 'Fredoka', displayWeight: 600, displayTransform: 'none' },
+    openers: {
+      start: ['Smile Squad, hurry, there’s trouble today,', 'The Sugar Bugs carried the toothbrushes away!'],
+      middle: [
+        ['Brush up and down and then round and round,', 'Another lost toothbrush is waiting to be found!'],
+        ['Swish, swish, swish, then spit in the sink,', 'The next clue is closer than you might think!'],
+        ['Show me your smile, it’s sparkly and bright,', 'You’re chasing those Sugar Bugs out of sight!'],
+        ['Count all your teeth, one, two, three, four,', 'A toothbrush is hiding, let’s look for one more!'],
+        ['Crunchy red apples and carrots so sweet,', 'Healthy teeth love them, now that is a treat!'],
+        ['Brush in the morning and brush before bed,', 'Then follow this riddle to find what’s ahead!'],
+        ['Wiggle a tooth, wiggle it free,', 'The Tooth Fairy’s watching and smiling with glee!'],
+        ['Sugar Bugs giggle and run off to hide,', 'But nothing can stop the Smile Squad’s stride!'],
+      ],
+      last: ['One brush is left, the sparkliest one,', 'Find it, and all of the Sugar Bugs run!'],
+    },
+    briefing: {
+      title: 'Smile Emergency',
+      from: 'Dr. Molar, Head Dentist',
+      paragraphs: [
+        'Calling all {kids}!',
+        'This is Dr. Molar at the Dentist Office. Today is Big Smile Day, when everybody gets a sparkly clean smile! But last night the sneaky Sugar Bugs crept into the office and carried off all of our Sparkle Toothbrushes. Without them, nobody’s teeth will shine!',
+        'The Sugar Bugs left a trail of sticky footprints, and I have tucked {count} Sparkle Cards along the way. Each one has a rhyming riddle that tells you where to search next.',
+        'The Smile Squad is gentle, helpful and great at working together. Walk, don’t run, take turns, and flash your biggest smile every time you find a card. Follow the trail to the very end, where a sparkly surprise is waiting!',
+        'Your first Sparkle Card is attached. Brushes up, Smile Squad!',
+      ],
+      signoff: 'Keep smiling,',
+    },
+    certificate: {
+      title: 'Sparkling Smiles!',
+      subtitle: 'Official Smile Squad Member',
+      body: 'has found every Sparkle Toothbrush, chased away the sneaky Sugar Bugs and made every smile shine, earning the title of',
+      award: 'Super Smile Hero',
+      signer: 'Dr. Molar, Head Dentist',
+    },
+    css: `
+.card { border-radius:22px; background:
+  radial-gradient(circle at 92% 24%, rgba(42,159,180,.14) 0 9px, transparent 10px),
+  radial-gradient(circle at 96% 36%, rgba(42,159,180,.12) 0 5px, transparent 6px),
+  radial-gradient(circle at 6% 78%, rgba(244,138,168,.16) 0 8px, transparent 9px),
+  radial-gradient(circle at 10% 88%, rgba(244,138,168,.14) 0 4px, transparent 5px), linear-gradient(180deg, #fff, var(--paper)); }
+.card-head { border-bottom:2px dotted var(--primary); }
+.card-head .icon { color:var(--primary); }
+.card-title { font-size:15pt; }
+.badge { background:var(--accent); color:#4a1325; border-radius:99px; }
+.frame { border-radius:30px; outline:2px dotted var(--accent); outline-offset:-12px; }
+.briefing h1 { font-size:34pt; }
+.cert-title { font-size:50pt; }
+.award { color:#e0607f; }
+.seal { background:var(--primary); outline-color:var(--accent); }`,
+  },
+  petshop: {
+    id: 'petshop',
+    name: 'Pet Shop Adoption Day Hunt',
+    label: 'Pet Shop',
+    ages: '3–7',
+    cardHeader: 'Adoption Day Hunt',
+    badge: 'Name Tag',
+    hunters: 'Pet Pals',
+    treasureWord: 'dog bone',
+    icon: ICONS.tag,
+    colors: { paper: '#faf6ff', ink: '#2d1a45', primary: '#8a56c2', accent: '#f5b335', soft: '#e5d4f7' },
+    fonts: { display: 'Fredoka', displayWeight: 700, displayTransform: 'none' },
+    openers: {
+      start: ['It’s Adoption Day, Pet Pals, hip, hip, hooray!', 'But Noodle the Kitten batted the name tags away!'],
+      middle: [
+        ['“Meow,” says Noodle, “I’m sorry, it’s true,', 'I hid the next name tag, I’ll give you a clue!”'],
+        ['Puppies need cuddles and kittens need play,', 'Find the next tag and they’ll go home today!'],
+        ['Hop like a bunny and flap like a bird,', 'You found a name tag! The best news I’ve heard!'],
+        ['Fishy goes swish in a bowl full of blue,', 'Another name tag is waiting for you!'],
+        ['Bark like a puppy and purr like a cat,', 'Then find the next tag, just like that!'],
+        ['Squeak! goes the hamster, he spins on his wheel,', 'Pet Pals, you’re helping, and that’s a big deal!'],
+        ['Every pet needs a name and a home,', 'Follow this riddle wherever you roam!'],
+        ['Gentle hands, happy hearts, you’re doing it right,', 'Keep hunting for tags, the end is in sight!'],
+      ],
+      last: ['One tag is left for the very last pet,', 'Find it, the happiest Adoption Day yet!'],
+    },
+    briefing: {
+      title: 'Adoption Day News',
+      from: 'Miss Biscuit, Pet Shop Owner',
+      paragraphs: [
+        'Calling all {kids}!',
+        'This is Miss Biscuit at the Pet Shop. Today is Adoption Day, when our puppies, kittens, bunnies and fish find their forever homes! But this morning Noodle the Kitten got very playful. She batted every single name tag off the pet beds, and they skidded and slid all over the place.',
+        'Without their name tags, the pets can’t go home! Noodle feels a little bit sorry, so she helped me tuck {count} Name Tag cards along the way. Each one has a rhyming riddle that tells you where to search next.',
+        'Pet Pals are gentle, kind and great at working together. Walk, don’t run, use soft voices so you don’t scare the pets, and give a happy “Meow!” every time you find a card. Follow the trail to the very end, where a furry surprise is waiting!',
+        'Your first Name Tag card is attached. Let’s go, Pet Pals!',
+      ],
+      signoff: 'Purrs and tail wags,',
+    },
+    certificate: {
+      title: 'Happy Adoption Day!',
+      subtitle: 'Official Pet Pal',
+      body: 'has found every name tag Noodle the Kitten batted away and helped every pet find a forever home, earning the title of',
+      award: 'Pet Shop Superstar',
+      signer: 'Miss Biscuit, Pet Shop Owner',
+    },
+    css: `
+.card { border-radius:18px; background:
+  radial-gradient(circle at 6% 84%, rgba(245,179,53,.16) 0 .28in, transparent .29in),
+  radial-gradient(circle at 5% 12%, rgba(138,86,194,.09) 0 .24in, transparent .25in), linear-gradient(180deg, #fff, var(--paper)); }
+.card-head { border-bottom:2px dashed var(--accent); }
+.card-head .icon { color:var(--accent); }
+.card-title { font-size:16pt; }
+.badge { position:relative; background:var(--accent); color:#3a2405; border-radius:99px 6px 6px 99px; padding-left:.22in; }
+.badge::before { content:''; position:absolute; left:.08in; top:50%; width:.08in; height:.08in; margin-top:-.04in; border-radius:50%; background:#fff; }
+.frame { border-radius:26px; border-width:4px; outline:2px dashed var(--accent); outline-offset:-12px; }
+.briefing h1 { font-size:34pt; }
+.cert-title { font-size:44pt; }
+.award { color:var(--primary); }
+.seal { background:var(--primary); outline-color:var(--accent); }`,
+  },
+  coffee: {
+    id: 'coffee',
+    name: 'Café Magic Cocoa Bean Hunt',
+    label: 'Coffee Shop',
+    ages: '3–7',
+    cardHeader: 'Café Cocoa Quest',
+    badge: 'Cocoa Bean',
+    hunters: 'Junior Baristas',
+    treasureWord: 'cookie',
+    icon: ICONS.mug,
+    colors: { paper: '#fcf4eb', ink: '#3d2416', primary: '#9a6340', accent: '#e8708a', soft: '#f1dcc5' },
+    fonts: { display: 'Pacifico', displayWeight: 400, displayTransform: 'none' },
+    openers: {
+      start: ['Good morning, baristas, the mugs are all out,', 'But Mocha the Squirrel hid the beans all about!'],
+      middle: [
+        ['Stir it and swirl it, a marshmallow on top,', 'Another bean’s waiting, so hippity-hop!'],
+        ['Whirr! goes the blender, a smoothie for you,', 'Now sip it and find the next cocoa bean clue!'],
+        ['Chitter-chatter! Mocha’s tail gives a flick,', 'He hid one more bean, so go find it quick!'],
+        ['Muffins and cookies and croissants so sweet,', 'Finding these beans is a marvelous treat!'],
+        ['Pour it in slowly and don’t let it spill,', 'You’re finding these beans with such super skill!'],
+        ['Hot cocoa, warm milk, a babyccino too,', 'The next cocoa bean is hiding from you!'],
+        ['Ding! goes the bell as a customer comes in,', 'Find the next bean with a great big grin!'],
+        ['Steam goes a-swirling, so cozy and warm,', 'You’re hunting for beans in fantastic form!'],
+      ],
+      last: ['One bean is left for the Big Cocoa Pot,', 'Find it and sip something yummy and hot!'],
+    },
+    briefing: {
+      title: 'A Note from the Café',
+      from: 'Barista Bea',
+      paragraphs: [
+        'Good morning, {kids}!',
+        'This is Barista Bea at the Café. Today we are making our famous Magic Hot Cocoa for the whole town! But this morning Mocha, the little squirrel who lives in the café garden, sneaked in and carried off our Magic Cocoa Beans. He hid them all around, just like acorns!',
+        'Mocha left a trail of crumbs and tiny paw prints, and I have tucked {count} Cocoa Bean cards along the way. Each one has a rhyming riddle that tells you where to search next.',
+        'Great baristas are friendly, careful and always say please and thank you. Walk, don’t run, take turns, and say a happy “Mmm!” every time you find a card. Find every bean and the Magic Hot Cocoa can be made, with a cozy surprise waiting at the end!',
+        'Your first Cocoa Bean card is attached. Grab your mugs, baristas!',
+      ],
+      signoff: 'Warm wishes,',
+    },
+    certificate: {
+      title: 'Cocoa Time!',
+      subtitle: 'Official Junior Barista',
+      body: 'has found every Magic Cocoa Bean that Mocha the Squirrel hid and helped make Magic Hot Cocoa for the whole town, earning the title of',
+      award: 'Barista of the Day',
+      signer: 'Barista Bea',
+    },
+    css: `
+.card { border:2.5px solid var(--primary); border-radius:12px; background:
+  radial-gradient(circle at 5% 84%, rgba(154,99,64,.10) 0 .3in, transparent .31in), linear-gradient(180deg, #fff, var(--paper)); }
+.card-head { border-bottom:2px solid var(--soft); padding-bottom:.04in; }
+.card-head .icon { color:var(--primary); }
+.card-title { font-size:17pt; line-height:1.15; }
+.host h1 { line-height:1.4; }
+.badge { background:var(--accent); font-family:'Fredoka'; font-weight:600; font-size:9.5pt; letter-spacing:.06em; text-transform:uppercase; }
+.kicker { font-family:'Fredoka'; font-weight:600; text-transform:uppercase; color:var(--accent); }
+.frame { border-radius:18px; outline-color:var(--accent); }
+.briefing h1 { font-size:36pt; line-height:1.3; }
+.cert-title { font-size:54pt; line-height:1.3; }
+.award { font-size:30pt; color:var(--accent); }
+.sign .signer { font-size:22pt; }
+.seal { background:var(--primary); outline-color:var(--accent); }`,
+  },
+  italian: {
+    id: 'italian',
+    name: 'Trattoria Runaway Meatball Hunt',
+    label: 'Italian Restaurant',
+    ages: '3–7',
+    cardHeader: 'Nonna’s Trattoria',
+    badge: 'Meatball',
+    hunters: 'Little Chefs',
+    treasureWord: 'meatball',
+    icon: ICONS.pasta,
+    colors: { paper: '#fff8f2', ink: '#3a1a14', primary: '#c8372d', accent: '#2f8a4c', soft: '#f9d6c8' },
+    fonts: { display: 'Fredoka', displayWeight: 700, displayTransform: 'none' },
+    openers: {
+      start: ['Mamma mia! The meatballs rolled out of the pot!', 'Little Chefs, let’s go find them, we need the whole lot!'],
+      middle: [
+        ['On top of spaghetti, all covered with cheese,', 'Another lost meatball! Go find it, please!'],
+        ['Twirl your fork round with a twirl, twirl, twirl,', 'The next meatball rolled off to give it a whirl!'],
+        ['Basil and garlic and tomato sauce,', 'Nonna says, “Bravo! You’re the boss!”'],
+        ['A meatball! Delizioso! Give it a cheer,', 'The next one rolled off, but it’s probably near!'],
+        ['Noodles go slurp and the sauce goes plop,', 'The meatballs keep rolling, they just won’t stop!'],
+        ['Gelato for dessert, so creamy and cold,', 'You’re the best chefs, so clever and bold!'],
+        ['Ciao, little meatball, where did you go?', 'Follow this riddle, now nice and slow!'],
+        ['Roll it and roll it around and around,', 'Another lost meatball is there to be found!'],
+      ],
+      last: ['One meatball is left, the biggest one yet,', 'Find it, the yummiest dinner you’ll get!'],
+    },
+    briefing: {
+      title: 'Kitchen Catastrophe!',
+      from: 'Nonna Lucia, Head Chef',
+      paragraphs: [
+        'Buongiorno, {kids}!',
+        'This is Nonna Lucia at the Trattoria. Tonight we are serving my famous spaghetti and meatballs! But while I was stirring the sauce, I gave the biggest sneeze in all of Italy. ACHOO! The meatballs jumped right out of the pot and rolled away in every direction.',
+        'I chased them as fast as my little legs could go, and I tucked {count} Meatball cards along the way. Each one has a rhyming riddle that tells you where to search next.',
+        'Good chefs are careful, kind and great at working as a team. Walk, don’t run, take turns, and shout “Mamma mia!” every time you find a card. Bring every meatball home, and a delicious surprise is waiting at the end!',
+        'Your first Meatball card is attached. Buon appetito, Little Chefs!',
+      ],
+      signoff: 'With love from the kitchen,',
+    },
+    certificate: {
+      title: 'Bravissimo!',
+      subtitle: 'Official Little Chef',
+      body: 'has found every runaway meatball, saved Nonna’s famous spaghetti dinner and made the whole Trattoria proud, earning the title of',
+      award: 'Master Chef',
+      signer: 'Nonna Lucia, Head Chef',
+    },
+    css: `
+.card { border:.1in solid transparent; border-radius:6px; background:
+  linear-gradient(var(--paper), var(--paper)) padding-box,
+  repeating-linear-gradient(0deg, rgba(200,55,45,.5) 0 7px, transparent 7px 14px) border-box,
+  repeating-linear-gradient(90deg, rgba(200,55,45,.5) 0 7px, #fff 7px 14px) border-box; }
+.card-head { border-bottom:3px solid; border-image:linear-gradient(90deg, #2f8a4c 0 33.3%, #e9e4dc 33.3% 66.6%, #c8372d 66.6%) 1; }
+.card-head .icon { color:var(--primary); }
+.card-title { font-size:17pt; }
+.badge { background:var(--accent); border-radius:4px; }
+.kicker { color:var(--accent); }
+.frame { border:.22in solid transparent; outline:none; border-radius:10px; background:
+  linear-gradient(var(--paper), var(--paper)) padding-box,
+  repeating-linear-gradient(0deg, rgba(200,55,45,.5) 0 12px, transparent 12px 24px) border-box,
+  repeating-linear-gradient(90deg, rgba(200,55,45,.5) 0 12px, #fff 12px 24px) border-box; }
+.briefing h1 { font-size:36pt; }
+.cert-title { font-size:60pt; }
+.award { font-size:34pt; color:var(--accent); }
+.seal { background:var(--primary); outline-color:var(--accent); }`,
+  },
+  auto: {
+    id: 'auto',
+    name: 'Auto Shop Toolbox Rescue',
+    label: 'Auto Shop',
+    ages: '3–7',
+    cardHeader: 'Auto Shop Work Order',
+    badge: 'Tool Tag',
+    hunters: 'Junior Mechanics',
+    treasureWord: 'wrench',
+    icon: ICONS.wrench,
+    colors: { paper: '#fffbea', ink: '#1a2a3d', primary: '#34618f', accent: '#ec6a2c', soft: '#ffdf7e' },
+    fonts: { display: 'Fredoka', displayWeight: 700, displayTransform: 'uppercase' },
+    openers: {
+      start: ['Honk, honk! Mechanics, the cars need a fix,', 'But the tools rolled away from a tow truck’s tricks!'],
+      middle: [
+        ['A wrench! You found it! Now give it a twist,', 'There are more tools to find on the work order list!'],
+        ['Check the tires, check the oil, check the lights,', 'You’re the best mechanics, you get it just right!'],
+        ['Beep, beep! Honk, honk! The cars wait in line,', 'You found a tool, crew, you’re doing just fine!'],
+        ['Bang goes the hammer and buzz goes the drill,', 'Find the next tool with your mechanic skill!'],
+        ['Scrub-a-dub-dub at the bubbly car wash,', 'The next tool is hiding! Oh my gosh!'],
+        ['Tighten the bolts and pump up the tires,', 'You’re the best mechanics a garage ever hires!'],
+        ['Toot! goes Tilly, “I’m sorry, my friends,', 'I’ll help you find tools till the trail ends!”'],
+        ['Grease on your hands and a smile on your face,', 'The next tool is hiding in some tricky place!'],
+      ],
+      last: ['One tool is left, the Golden Wrench, wow!', 'Find it and the cars can all be fixed now!'],
+    },
+    briefing: {
+      title: 'Garage Emergency',
+      from: 'Mechanic Max, Head Mechanic',
+      paragraphs: [
+        'Calling all {kids}!',
+        'This is Mechanic Max at the Auto Repair Shop. Today is our busiest day ever, with a long line of cars waiting for tune-ups and car washes! But this morning Tilly the Tow Truck backed up a little too fast and bumped our big red toolbox. CRASH! The wrenches, the screwdrivers and even the Golden Wrench rolled away.',
+        'Tilly feels terrible, so she helped me tuck {count} Tool Tag cards along the way. Each one has a rhyming riddle that tells you where to search next.',
+        'Good mechanics are careful, helpful and great at working as a team. Walk, don’t run, take turns, and honk “Beep, beep!” every time you find a card. Find every tool, and a shiny surprise is waiting at the end!',
+        'Your first Tool Tag card is attached. Grab your toolboxes, mechanics!',
+      ],
+      signoff: 'Keep on rolling,',
+    },
+    certificate: {
+      title: 'All Fixed!',
+      subtitle: 'Official Junior Mechanic',
+      body: 'has found every tool Tilly the Tow Truck bumped away, rescued the Golden Wrench and fixed every car in the shop, earning the title of',
+      award: 'Master Mechanic',
+      signer: 'Mechanic Max, Head Mechanic',
+    },
+    css: `
+.card { border:.1in solid transparent; border-radius:8px; background:
+  linear-gradient(180deg, #fff, var(--paper)) padding-box,
+  repeating-linear-gradient(45deg, rgba(255,255,255,.4) 0 2px, transparent 2px 9px) border-box,
+  repeating-linear-gradient(-45deg, rgba(255,255,255,.4) 0 2px, transparent 2px 9px) border-box,
+  linear-gradient(#7d8fa5, #56687e) border-box; }
+.card-head { border-bottom:2.5px solid var(--accent); }
+.card-head .icon { color:var(--primary); }
+.card-title { font-size:15pt; letter-spacing:.03em; }
+.badge { background:var(--accent); border-radius:3px; letter-spacing:.03em; }
+.kicker { color:var(--accent); }
+.frame { border:.2in solid transparent; outline:none; border-radius:10px; background:
+  linear-gradient(var(--paper), var(--paper)) padding-box,
+  repeating-linear-gradient(45deg, rgba(255,255,255,.4) 0 3px, transparent 3px 14px) border-box,
+  repeating-linear-gradient(-45deg, rgba(255,255,255,.4) 0 3px, transparent 3px 14px) border-box,
+  linear-gradient(#7d8fa5, #56687e) border-box; }
+.briefing h1 { font-size:34pt; }
+.cert-title { font-size:58pt; }
+.award { font-size:32pt; color:var(--accent); }
+.seal { background:var(--primary); color:var(--soft); outline-color:var(--accent); }`,
   },
 };

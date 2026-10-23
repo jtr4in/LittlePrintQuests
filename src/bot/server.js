@@ -298,7 +298,7 @@ ${listingsPanel(s)}
     <p><input name="buyerName" placeholder="Buyer name (optional)"></p>
     <textarea name="personalization" rows="4" required placeholder="Maya, turning 6, space theme. Spots: front door, shoe rack, washer, dryer, grandma's piano, dog bed, kitchen table (prize). Pets: Rover (dog)"></textarea>
     <button type="button" class="secondary" onclick="const t=this.form.personalization;t.value=t.placeholder;t.focus()">Use the sample</button>
-    <div class="row"><select name="theme"><option value="">Theme: from the notes</option><optgroup label="Hunt themes">${Object.entries(THEMES).map(([id, t]) => `<option value="${esc(id)}">${esc(t.name)}</option>`).join('')}</optgroup><optgroup label="Shop kits (play kit and activity pack)">${Object.values(KITS).filter((k) => !k.hunt).map((k) => `<option value="kit:${esc(k.id)}">${esc(k.name)}</option>`).join('')}</optgroup><optgroup label="Handprint art">${Object.values(HOLIDAYS).map((h) => `<option value="craft:${esc(h.id)}">${esc(h.kicker)}</option>`).join('')}</optgroup></select></div>
+    <div class="row"><select name="theme"><option value="">Theme: from the notes</option><optgroup label="Hunt themes">${Object.entries(THEMES).map(([id, t]) => `<option value="${esc(id)}">${esc(t.name)}</option>`).join('')}</optgroup>${Object.values(KITS).some((k) => !k.hunt) ? `<optgroup label="Shop kits (play kit and activity pack)">${Object.values(KITS).filter((k) => !k.hunt).map((k) => `<option value="kit:${esc(k.id)}">${esc(k.name)}</option>`).join('')}</optgroup>` : ''}<optgroup label="Handprint art">${Object.values(HOLIDAYS).map((h) => `<option value="craft:${esc(h.id)}">${esc(h.kicker)}</option>`).join('')}</optgroup></select></div>
     <div class="row picks">${[['hunt', 'Scavenger hunt'], ['kit', 'Play kit'], ['activity', 'Activity pack'], ['party', 'Party pack']].map(([v, l]) => `<label><input type="checkbox" name="item" value="${v}"${v === 'activity' ? '' : ' checked'}> ${l}</label>`).join('')}</div>
     <div class="row"><select name="ages"><option value="">Version: from the child’s age</option><option value="little">Little kids, ages 2 to 4</option><option value="big">Big kids, ages 5 to 8</option></select><button>Make it</button></div>
   </form>
@@ -556,6 +556,7 @@ async function route(req, res) {
     }
     // The boxes pick what's in it; older forms send one product name. A shop kit has no hunt or party pack.
     const shopKit = KITS[String(f.theme || '').replace(/^kit:/, '')];
+    if (f.theme?.startsWith('kit:') && shopKit?.hunt) f.theme = shopKit.hunt; // a kit that has its own theme now
     const shop = f.theme?.startsWith('kit:') && shopKit && !shopKit.hunt ? shopKit : null;
     const picked = f.item ? products.normalize(f.item) : f.product === 'kit' ? ['kit'] : products.itemsOf({ product: ['bundle', 'hunt', 'party'].includes(f.product) ? f.product : 'hunt' });
     const items = shop ? products.normalize(picked.filter((i) => i === 'activity').concat('kit')) : picked;

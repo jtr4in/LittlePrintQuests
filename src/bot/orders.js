@@ -224,9 +224,10 @@ function validateWebForm(body) {
     const age = Number.isInteger(body.age) && body.age > 0 && body.age < 16 ? body.age : null;
     return { items: ['craft'], product: 'craft', holiday, theme: null, childName, age, spots: [], pets: [], party: null };
   }
-  // A shop kit (pizza, library...) has no hunt or party theme, so it comes as the kit, with or without its activity pack.
+  // A kit with no hunt or party theme comes as the kit, with or without its activity pack. Every kit
+  // has a theme now, so a kit sent by an older page (pizza, library...) stands for its theme.
   const shopKit = KITS[body.kit] && !KITS[body.kit].hunt ? KITS[body.kit].id : null;
-  const theme = shopKit ? null : String(body.theme || '');
+  const theme = shopKit ? null : String(KITS[body.kit]?.hunt || body.theme || '');
   if (!shopKit && !THEMES[theme]) throw new Error('Please pick a theme.');
   const childName = String(body.childName || '').trim().slice(0, 24);
   if (!childName) throw new Error('Please add your child’s first name.');

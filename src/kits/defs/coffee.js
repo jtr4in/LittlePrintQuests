@@ -1,8 +1,10 @@
-// Coffee Shop: a shop-style play kit of its own (no matching hunt). A cozy café with
+// Coffee Shop: a shop-style play kit of its own, with its own hunt and party pack. A cozy café with
 // kid-friendly drinks (hot cocoa, babyccinos, smoothies) next to pretend coffee and tea.
 module.exports = {
   id: 'coffee',
   name: 'Coffee Shop',
+  hunt: 'coffee',
+  bigSign: true, // a shop-style kit: it keeps the big shop sign
   colors: { main: '#9a6340', dark: '#68402a', soft: '#f1dcc5', light: '#fcf4eb', accent: '#e8708a', accentInk: '#ffffff' },
   icon: '☕',
   placeName: (who) => `${who} Café`,
@@ -81,6 +83,7 @@ module.exports = {
   },
   certificate: { title: 'Best Barista', icon: '🏅', seal: '☕', line: 'stirred the coziest cocoa, served every customer with a smile and never spilled a drop.' },
   guide: {
+    afterHunt: 'Every Magic Cocoa Bean is found! Open {place} right where the last bean was hiding, and make the first cup of Magic Hot Cocoa. Barista of the Day {child} takes the first order.',
     intro: 'Everything {child} needs to run a pretend café. Print on regular Letter paper, cut along the dashed lines, and line up some stuffed animals to be thirsty customers.',
     setup: [
       'Tape the café sign and Open sign by the “front door”.', 'Set up the register and the Café Menu on the counter.',

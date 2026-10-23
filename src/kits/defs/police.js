@@ -1,8 +1,10 @@
-// Police Station: a friendly community-helper play kit of its own (no matching hunt).
+// Police Station: a friendly community-helper play kit of its own, with its own hunt and party pack.
 // Officers help find lost things, keep the roads safe and hand out silly parking tickets.
 module.exports = {
   id: 'police',
   name: 'Police Station',
+  hunt: 'police',
+  bigSign: true, // a shop-style kit: it keeps the big shop sign
   colors: { main: '#2c4f9e', dark: '#1b3166', soft: '#cfdcf7', light: '#eef3fc', accent: '#f2c230', accentInk: '#1b3166', gold: '#f7d65a' },
   icon: '🚓',
   placeName: (who) => `${who} Police Station`,
@@ -80,6 +82,7 @@ module.exports = {
   },
   certificate: { title: 'Super Police Officer', icon: '🏅', seal: '⭐', line: 'helped every visitor, found every lost thing and kept the roads safe for the whole town.' },
   guide: {
+    afterHunt: 'Case closed, and Buttons the Teddy is safe! Open {place} right where the last clue was found, and write up the report together. Super Detective {child} drives the first patrol.',
     intro: 'Everything {child} needs to run a friendly pretend police station. Print on regular Letter paper, cut along the dashed lines, and line up some stuffed animals to be visitors.',
     setup: [
       'Tape the station sign and Open sign by the “front door”.', 'Set up the front desk with a bell and the desk labels.',

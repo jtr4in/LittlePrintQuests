@@ -168,7 +168,7 @@ function card(c, theme, pictures) {
         <span class="badge">${esc(theme.badge)} #${c.n}</span>
       </div>
       <div class="body${pictures ? ' with-pic' : ''}">
-        <div class="riddle">
+        <div class="riddle"${pictures ? fitLines(c.lines) : ''}>
           <p>${esc(c.lines[0])}<br>${esc(c.lines[1])}</p>
           <p>${esc(c.lines[2])}<br>${esc(c.lines[3])}</p>
         </div>
@@ -180,6 +180,12 @@ function card(c, theme, pictures) {
       </div>
     </div>
   </div>`;
+}
+
+// Next to a picture the riddle lines don't wrap, so a long line gets a smaller font to fit.
+function fitLines(lines) {
+  const longest = Math.max(...lines.map((l) => l.length));
+  return longest > 46 ? ` style="font-size:${Math.max(10, 12.5 * 46 / longest).toFixed(1)}pt"` : '';
 }
 
 function cardSheets(plan) {
@@ -225,6 +231,7 @@ ${font('Bangers', 'Bangers-Regular.ttf')}
 ${font('Pirata One', 'PirataOne-Regular.ttf')}
 ${font('Orbitron', 'Orbitron.ttf', '400 900')}
 ${font('Cinzel Decorative', 'CinzelDecorative-Bold.ttf', '700')}
+${font('Pacifico', 'Pacifico-latin.woff2', '400')}
 @page { size: letter; margin: 0; }
 :root { --paper:${c.paper}; --ink:${c.ink}; --primary:${c.primary}; --accent:${c.accent}; --soft:${c.soft}; }
 * { box-sizing: border-box; }

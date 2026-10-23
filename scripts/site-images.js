@@ -25,7 +25,8 @@ const dataUrl = (f) => `data:image/png;base64,${fs.readFileSync(f).toString('bas
   const browser = await chromium.launch();
   for (const id of Object.keys(THEMES).filter((k) => !only.length || only.includes(k))) {
     const dir = (k) => path.join(tmp, `${id}-${k}`);
-    const kit = kitForHunt(id);
+    // Shop-style kits (pizza, library...) keep the kit card and page theme-photos.js and gallery-images.js made.
+    const kit = kitForHunt(id)?.bigSign ? null : kitForHunt(id);
     await renderPdf({ theme: id, childName: 'Maya', age: 6, spots: SPOTS, pictures: true }, `${dir('hunt')}.pdf`, { pngDir: dir('hunt') });
     await renderParty({ theme: id, childName: 'Maya', age: 6, party: PARTY }, `${dir('party')}.pdf`, { pngDir: dir('party') });
     if (kit) await renderKit({ kit: kit.id, childName: 'Maya', subjects: [], lenient: true }, `${dir('kit')}.pdf`, { pngDir: dir('kit') });

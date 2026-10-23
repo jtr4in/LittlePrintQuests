@@ -1,7 +1,9 @@
-// Auto Repair Shop: an everyday car repair and car wash shop-style play kit (no matching hunt).
+// Auto Repair Shop: an everyday car repair and car wash shop-style play kit, with its own hunt and party pack.
 module.exports = {
   id: 'auto',
   name: 'Auto Repair Shop',
+  hunt: 'auto',
+  bigSign: true, // a shop-style kit: it keeps the big shop sign
   colors: { main: '#34618f', dark: '#203f60', soft: '#ffdf7e', light: '#fff8e2', accent: '#ec6a2c', accentInk: '#ffffff' },
   icon: '🔧',
   placeName: (who) => `${who} Auto Shop`,
@@ -84,6 +86,7 @@ module.exports = {
   },
   certificate: { title: 'Master Mechanic', icon: '🏅', seal: '🔧', line: 'fixed every car, washed every truck and sent everyone home safe and shiny.' },
   guide: {
+    afterHunt: 'Every tool is back in the toolbox! Open {place} right where the Golden Wrench was found, and fix up the first car. Master Mechanic {child} runs the shop today.',
     intro: 'Everything {child} needs to run a pretend car repair shop and car wash. Print on regular Letter paper, cut along the dashed lines, and line up some toy cars and trucks as customers.',
     setup: [
       'Tape the shop sign and Open sign by the “front door”.', 'Mark a parking spot with the Drive In Here sign and a car wash corner with the Car Wash sign.',
