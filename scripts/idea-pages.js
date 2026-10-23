@@ -24,6 +24,10 @@ const lines = (couplet) => couplet.map(esc).join('<br>');
 // Kits with photos of the printed kit at home (docs/img/life/): the play stand leads the page, the flat lay of
 // everything in the kit sits with the printable, and a play shot sits with the games.
 const LIFE = { pizza: 'b', vet: 'b', dino: 'a', unicorn: 'a', halloween: 'b' };
+// A styled shot of the cut-out kit in use replaces the play stand at the top where we have one.
+const STYLED = { dino: 'The printed Dino Dig Lab kit set up for play: shop sign, open sign, fossil puzzle, dig map and badges' };
+// Hunt themes with a photo of the printed hunt being played, shown with the printable.
+const HUNT_LIFE = { dino: 'A child by the bookshelf holding up a Dino Ranger Field Note clue card, with another clue taped to the shelf and the Urgent Field Report letter on the rug' };
 const lifePhoto = (k, v, alt, lazy = true) => (LIFE[k.id] ? `<img class="photo" src="../../img/life/${k.id}-${v}.webp" srcset="../../img/life/${k.id}-${v}-sm.webp 640w, ../../img/life/${k.id}-${v}.webp 1200w" sizes="(max-width: 760px) 100vw, 720px" width="1200" height="896" alt="${esc(alt)}"${lazy ? ' loading="lazy"' : ''}>` : '');
 
 const CSS = `
@@ -148,7 +152,7 @@ function themePage(t, i, all) {
 
 <h2>Want it printed and personalized?</h2>
 <p>The printable ${esc(t.name)} has your child’s name on every page and a rhyming clue for each spot in your home, including ones you type in, like “Grandma’s piano”. You get a host guide, the story briefing, clue cards with pictures for little ones and a finisher certificate, plus Host Mode on your phone for party day. It’s $9.99, or $17.99 with its matching pretend play kit and activity pack, and arrives by email in minutes.</p>
-<div class="pages">${['hunt', 'briefing', 'cards', 'cert'].map((k) => `<img src="../../img/pages/${t.id}-${k}.webp" alt="${esc(t.name)} printable ${k} page" width="400" height="518" loading="lazy">`).join('')}</div>
+${HUNT_LIFE[t.id] ? `<img class="photo" src="../../img/life/hunt-${t.id}.webp" srcset="../../img/life/hunt-${t.id}-sm.webp 640w, ../../img/life/hunt-${t.id}.webp 1200w" sizes="(max-width: 760px) 100vw, 720px" width="1200" height="896" alt="${esc(HUNT_LIFE[t.id])}" loading="lazy">\n` : ''}<div class="pages">${['hunt', 'briefing', 'cards', 'cert'].map((k) => `<img src="../../img/pages/${t.id}-${k}.webp" alt="${esc(t.name)} printable ${k} page" width="400" height="518" loading="lazy">`).join('')}</div>
 <p>
 <a class="btn" href="${builder({ theme: t.id })}">Build my ${esc(t.label)} hunt</a>
 ${Object.values(SPACES).map((s) => `<a class="btn ghost" href="${builder({ theme: t.id, space: s.id })}">${esc(s.label)} trail</a>`).join('')}
@@ -221,7 +225,7 @@ function kitPage(k, kits) {
 <h1>${esc(k.name)} pretend play for kids</h1>
 <p class="lede">${esc(fill(g.intro))} Here’s how to set it up, games to play and a printable kit with your child’s name on every page.</p>
 <a class="btn" href="${builder(q)}">Make a personalized ${esc(k.name)} kit</a>
-${lifePhoto(k, 'stand', `The printed ${k.name} kit set up on a play stand: shop sign, open sign, price list, poster and labels`, false)}
+${STYLED[k.id] ? lifePhoto(k, 'styled', STYLED[k.id], false) : lifePhoto(k, 'stand', `The printed ${k.name} kit set up on a play stand: shop sign, open sign, price list, poster and labels`, false)}
 <h2>How to set it up</h2>
 <ol class="tips">${g.setup.map((x) => `<li>${esc(fill(x))}</li>`).join('')}</ol>
 
