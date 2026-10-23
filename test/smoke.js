@@ -817,7 +817,12 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   for (const id of Object.keys(allKits)) {
     for (const age of [3, 6]) {
       const html = activityPackHtml({ kit: id, childName: 'Ava', age, lenient: true });
-      assert.equal((html.match(/<section class="page/g) || []).length, age === 3 ? 10 : 11, `${id} activity pages`);
+      assert.equal((html.match(/<section class="page/g) || []).length, age === 3 ? 17 : 16, `${id} activity pages`);
+      // The newer pages: little kids get dot, path, shapes and glue pages; big kids a secret code and a roll-and-draw.
+      for (const cls of age === 3 ? ['wp-dots', 'wp-path', 'wp-shapes', 'wp-glue'] : ['wp-code', 'wp-roll']) assert.match(html, new RegExp(`class="page wp ${cls}`), `${id} ${cls}`);
+      for (const cls of ['wp-color', 'wp-me', 'wp-story']) assert.match(html, new RegExp(`class="page wp ${cls}`), `${id} ${cls}`);
+      assert.match(html, new RegExp(`class="wp-cb-key">(<div>.*?</div>){2,}</div>`), `${id} color by number has colors`);
+      if (age === 6) assert.doesNotMatch(html, /class="wp-k-num"/, `${id} secret code has enough pictures`);
       assert.doesNotMatch(html.replace(/<style>[\s\S]*?<\/style>|data:[^"')]+/g, ''), /undefined|NaN|\{\w+\}/, id);
       if (age === 6) assert.ok((html.match(/class="wp-w-list"><div>|<\/b><\/div><div>/g) || []).length >= 4, `${id} word search has words`);
     }
