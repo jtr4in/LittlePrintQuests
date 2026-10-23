@@ -77,7 +77,7 @@ function drawThemes() {
     <img decoding="async" src="img/icons/${t.id}.webp" alt="" width="240" height="240" loading="lazy"><span>${THEME_LABELS[t.id]}</span>
   </button>`).join('');
   $('themeList').querySelectorAll('.theme').forEach((b) => b.addEventListener('click', () => setTheme(b.dataset.id)));
-  $('themeSelect').innerHTML = ordered.map((t) => `<option value="${t.id}">${esc(THEME_LABELS[t.id])} · ages ${t.ages}</option>`).join('');
+  $('themeSelect').innerHTML = ordered.map((t) => `<option value="${t.id}">${esc(THEME_LABELS[t.id])}</option>`).join('');
 }
 $('themeSelect').addEventListener('change', (e) => setTheme(e.target.value, { scroll: true }));
 // Slides the tile row (not the page) so the chosen theme's tile shows.
