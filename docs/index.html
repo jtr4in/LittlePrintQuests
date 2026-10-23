@@ -252,20 +252,26 @@ input[type="text"], input[type="number"], input[type="email"], select { width: 1
 .presets button { font: 600 14px/1 var(--body); color: var(--ink); background: var(--tint); border: 1.5px dashed var(--line); border-radius: 999px; padding: 8px 12px; cursor: pointer; }
 .presets button[aria-pressed="true"] { border-style: solid; border-color: var(--mint-deep); }
 .chip { display: inline-flex; align-items: center; gap: 6px; font: 15px/1 var(--body); color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); border-radius: 999px; padding: 8px 12px; cursor: pointer; }
-.chip b { display: none; width: 20px; height: 20px; border-radius: 50%; background: var(--ink); color: var(--paper); font: 700 11px/20px var(--mono); text-align: center; }
-.chip[aria-pressed="true"] { border-color: var(--ink); background: var(--tint); }
-.chip[aria-pressed="true"] b { display: inline-block; }
-.chip.prize b { background: var(--orange); color: var(--orange-ink); }
 .addspot { display: flex; gap: 8px; }
 .addspot input { flex: 1; min-width: 0; }
 .addspot button { flex: none; }
 .summary { position: static; }
-.route { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; font-size: 15px; }
-.route li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; padding: 7px 0; position: relative; }
-.route li::before { content: attr(data-n); width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--tint); font: 700 12px/1 var(--mono); }
-.route li:not(:last-child)::after { content: ''; position: absolute; left: 12px; top: 33px; bottom: -7px; border-left: 2px dashed var(--line); }
-.route li.prize::before { content: '★'; background: var(--orange); color: var(--orange-ink); }
-.route small { display: block; color: var(--ink-soft); font: 12.5px/1.3 var(--mono); }
+/* the picked spots join into one wrapping trail above the chips: tap a stop to take it off, drag it to move it */
+.route { list-style: none; margin: 0 0 12px; padding: 10px 12px; display: flex; flex-wrap: wrap; align-items: center; row-gap: 8px; min-height: 50px; border: 1.5px dashed var(--line); border-radius: 14px; background: var(--tint); font-size: 14.5px; }
+.route li { display: flex; align-items: center; }
+.route li:not(:last-child)::after { content: '→'; margin: 0 6px; color: var(--ink-soft); font-size: 14px; }
+.route button { display: inline-flex; align-items: center; gap: 5px; font: 600 14px/1 var(--body); color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: 999px; padding: 6px 8px 6px 6px; cursor: grab; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.route button b { width: 18px; height: 18px; border-radius: 50%; background: var(--ink); color: var(--paper); font: 700 10px/18px var(--mono); text-align: center; flex: none; }
+.route button i { font-style: normal; color: var(--ink-soft); font-size: 13px; margin-left: 1px; }
+.route .prize button { border-color: var(--orange); }
+.route .prize button b { background: var(--orange); color: var(--orange-ink); }
+.route .dragging button { opacity: .35; }
+.route .drop-before button { box-shadow: -4px 0 0 var(--orange); }
+.route .drop-after button { box-shadow: 4px 0 0 var(--orange); }
+.route-ghost { position: fixed; z-index: 50; pointer-events: none; transform: translate(-50%, -60%) rotate(-3deg); box-shadow: 0 10px 22px -8px rgba(20, 25, 50, .5); }
+.route .empty { font-size: 14.5px; }
+.route-tip { margin: -6px 0 12px; font-size: 12.5px; color: var(--ink-soft); }
+@media (max-width: 480px) { .route { padding: 8px 10px; font-size: 13.5px; } .route button { font-size: 13.5px; padding: 5px 7px 5px 5px; } .route li:not(:last-child)::after { margin: 0 4px; } }
 .empty { color: var(--ink-soft); font-size: 15px; }
 .total { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px dashed var(--line); padding-top: 16px; font-variant-numeric: tabular-nums; }
 .total strong { font: 700 30px/1 var(--display); }
@@ -451,13 +457,13 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
             <legend>Hiding spots, in order</legend>
             <p class="hint">Tap 6 to 10 spots in the order the kids should find them. The last one is where the prize goes.</p>
             <div class="presets" id="presets" role="group" aria-label="Start from a ready-made trail"><span>Start from:</span></div>
+            <ol class="route" id="route" aria-label="Your trail, in order"></ol>
+            <p class="route-tip" id="routeTip" hidden>Tap a stop to take it off, or drag it to change the order.</p>
             <div class="chips" id="spotChips"></div>
             <div class="addspot"><input type="text" id="customSpot" maxlength="30" placeholder="Add your own, like “Grandma’s piano”" aria-label="Add your own spot"><button type="button" class="btn btn-ghost" id="addSpot">Add</button></div>
           </fieldset>
         </div>
         <aside class="panel summary" id="summary" aria-live="polite">
-          <div class="field"><span class="eyebrow" id="trailEyebrow">Your trail</span><p id="trailTitle" style="font:600 20px/1.2 var(--display)"></p></div>
-          <ol class="route" id="route"></ol>
           <div class="field"><span class="eyebrow">What’s in your order</span>
             <div class="stack" id="stack" role="button" tabindex="0" aria-label="See every page in your order"></div>
             <p class="peek"><button type="button" id="peek">Tap to see every page</button></p>
@@ -935,12 +941,9 @@ function setTheme(id) {
 // Spot chips
 function labelOf(key) { return state.custom[key] || (SPOTS.find((s) => s[0] === key) || [, key])[1]; }
 function drawChips() {
-  const all = [...SPOTS, ...Object.entries(state.custom)];
-  $('spotChips').innerHTML = all.map(([key, label]) => {
-    const i = state.picks.indexOf(key);
-    const last = i === state.picks.length - 1 && i >= 0;
-    return `<button type="button" class="chip${last ? ' prize' : ''}" data-key="${key}" aria-pressed="${i >= 0}"><b>${last ? '★' : i + 1}</b>${label}</button>`;
-  }).join('');
+  // a picked spot moves up into the trail, so only the spots still to pick are listed here
+  const all = [...SPOTS, ...Object.entries(state.custom)].filter(([key]) => !state.picks.includes(key));
+  $('spotChips').innerHTML = all.map(([key, label]) => `<button type="button" class="chip" data-key="${key}">${esc(label)}</button>`).join('');
   $('spotChips').querySelectorAll('.chip').forEach((c) => c.addEventListener('click', () => toggle(c.dataset.key)));
 }
 function toggle(key) {
@@ -971,24 +974,114 @@ function addCustom() {
   toggle(key);
 }
 
+// The trail: the picked spots in order. Tap a stop to take it off; drag it (long-press on a phone) to move it.
+function drawRoute() {
+  const n = state.picks.length;
+  $('route').innerHTML = n
+    ? state.picks.map((k, i) => {
+        const last = i === n - 1;
+        const label = esc(labelOf(k));
+        return `<li class="${last ? 'prize' : ''}" data-i="${i}"><button type="button" aria-label="Stop ${i + 1}: ${label}${last ? ', the prize' : ''}. Tap to remove">${last ? '<b>★</b>' : `<b>${i + 1}</b>`}${label}<i aria-hidden="true">×</i></button></li>`;
+      }).join('')
+    : '<li class="empty">Your trail shows up here. Tap spots below, or start from a ready-made one.</li>';
+  $('routeTip').hidden = n < 2;
+}
+(() => {
+  const route = $('route');
+  let drag = null; // { i, x, y, on, timer, ghost, to }
+  const end = () => {
+    if (!drag) return;
+    clearTimeout(drag.timer);
+    drag.ghost?.remove();
+    route.querySelectorAll('li').forEach((li) => li.classList.remove('dragging', 'drop-before', 'drop-after'));
+    drag = null;
+  };
+  const start = () => {
+    drag.on = true;
+    const li = route.querySelector(`li[data-i="${drag.i}"]`);
+    li.classList.add('dragging');
+    drag.ghost = li.querySelector('button').cloneNode(true);
+    drag.ghost.className = 'route-ghost';
+    document.body.append(drag.ghost);
+    move(drag.x, drag.y);
+  };
+  const move = (x, y) => {
+    Object.assign(drag.ghost.style, { left: x + 'px', top: y + 'px' });
+    route.querySelectorAll('li').forEach((li) => li.classList.remove('drop-before', 'drop-after'));
+    // drop next to the stop nearest the finger
+    let best = null;
+    route.querySelectorAll('li[data-i]').forEach((li) => {
+      const r = li.getBoundingClientRect();
+      const d = Math.hypot(x - (r.left + r.width / 2), Math.max(0, Math.abs(y - (r.top + r.height / 2)) - r.height / 2) * 3);
+      if (!best || d < best.d) best = { li, d, after: x > r.left + r.width / 2 };
+    });
+    if (!best) return;
+    best.li.classList.add(best.after ? 'drop-after' : 'drop-before');
+    const at = +best.li.dataset.i + (best.after ? 1 : 0);
+    drag.to = at > drag.i ? at - 1 : at;
+  };
+  route.addEventListener('pointerdown', (e) => {
+    const li = e.target.closest('li[data-i]');
+    if (!li || e.button > 0) return;
+    drag = { i: +li.dataset.i, x: e.clientX, y: e.clientY, x0: e.clientX, y0: e.clientY, on: false, to: +li.dataset.i };
+    // a mouse drags as soon as it moves; a finger holds still for a moment first, so the page still scrolls
+    if (e.pointerType !== 'mouse') drag.timer = setTimeout(() => drag && start(), 280);
+  });
+  addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    drag.x = e.clientX; drag.y = e.clientY;
+    if (drag.on) return move(e.clientX, e.clientY);
+    if (Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 6) return;
+    // a finger that moves before the hold is scrolling the page, so it's not a tap either
+    if (e.pointerType === 'mouse') start(); else end();
+  });
+  const drop = () => {
+    if (!drag) return;
+    const { i, on, to } = drag;
+    end();
+    if (!on) return toggle(state.picks[i]);
+    if (to === i) return;
+    const [k] = state.picks.splice(i, 1);
+    state.picks.splice(to, 0, k);
+    render();
+  };
+  addEventListener('pointerup', drop);
+  route.addEventListener('touchend', drop);
+  // the browser may cancel the pointer once a finger drag is under way; the touch events carry it from there
+  addEventListener('pointercancel', () => { if (!drag?.on) end(); });
+  // once a finger drag starts, stop the page from scrolling under it
+  route.addEventListener('touchmove', (e) => {
+    if (!drag?.on) return;
+    e.preventDefault();
+    drag.x = e.touches[0].clientX; drag.y = e.touches[0].clientY;
+    move(drag.x, drag.y);
+  }, { passive: false });
+  route.addEventListener('contextmenu', (e) => { if (drag) e.preventDefault(); });
+  // keyboard: Enter/Space removes (taps are handled above); arrows move a stop
+  route.addEventListener('click', (e) => {
+    const li = e.target.closest('li[data-i]');
+    if (li && e.detail === 0) toggle(state.picks[+li.dataset.i]);
+  });
+  route.addEventListener('keydown', (e) => {
+    const li = e.target.closest('li[data-i]');
+    if (!li || !['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+    const i = +li.dataset.i, to = i + (e.key === 'ArrowLeft' ? -1 : 1);
+    if (to < 0 || to >= state.picks.length) return;
+    e.preventDefault();
+    [state.picks[i], state.picks[to]] = [state.picks[to], state.picks[i]];
+    render();
+    route.querySelector(`li[data-i="${to}"] button`).focus();
+  });
+})();
+
 function status(msg, bad) { $('formStatus').textContent = msg; $('formStatus').classList.toggle('bad', !!bad); }
 function esc(s) { return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]); }
 
 function render() {
-  const t = THEMES.find((x) => x.id === state.theme);
-  const name = $('childName').value.trim() || 'your child';
-  // trail summary
   const age = parseInt($('childAge').value, 10);
-  $('trailTitle').textContent = `${t.name} for ${name}${age ? `, turning ${age}` : ''}`;
   if (!state.agesPicked && age) state.ages = age <= 4 ? 'little' : 'big';
   $('agesPick').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.ages === state.ages)));
-  $('route').innerHTML = state.picks.length
-    ? state.picks.map((k, i) => {
-        const last = i === state.picks.length - 1;
-        const from = i === 0 ? 'Clue 1 is read after the briefing' : `Clue ${i + 1} hides at ${labelOf(state.picks[i - 1])}`;
-        return `<li data-n="${i + 1}" class="${last ? 'prize' : ''}"><span>${esc(labelOf(k))}${last ? ' · prize here' : ''}<small>${esc(from)}</small></span></li>`;
-      }).join('')
-    : '<li class="empty">Tap spots on the left to build your trail.</li>';
+  drawRoute();
   drawChips();
   if (typeof drawCart === 'function' && $('stack').children.length) drawCart();
 }
@@ -1085,7 +1178,6 @@ function drawCart() {
   $('peek').parentElement.hidden = !product;
   // Hiding spots are only for the hunt, and invitations only come in the party pack.
   $('spotsField').hidden = !picked.has('hunt');
-  $('route').hidden = !picked.has('hunt');
   document.querySelector('.party-details').hidden = !picked.has('party');
   // only the party pack is the same for every age
   $('agesField').hidden = !gets.some((k) => k !== 'party');
