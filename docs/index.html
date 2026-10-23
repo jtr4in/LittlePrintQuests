@@ -86,7 +86,21 @@ p { margin: 0; }
 .nav a:hover { color: var(--ink); }
 .nav a.btn { color: var(--orange-ink); }
 .nav .btn { padding: 10px 18px; font-size: 15px; }
-@media (max-width: 760px) { .nav a:not(.btn) { display: none; } }
+.menu-btn { display: none; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 12px; background: var(--sheet); color: var(--ink); cursor: pointer; padding: 0; flex: none; }
+.menu-btn svg { display: block; margin: auto; }
+.nav .links { display: contents; }
+@media (max-width: 760px) {
+  .nav { gap: 8px; }
+  .nav .btn { white-space: nowrap; padding: 10px 14px; }
+  .nav .links { display: none; }
+  .menu-btn { display: block; }
+  .top.open .links { display: grid; position: absolute; left: 0; right: 0; top: 100%; padding: 6px 16px 14px; background: var(--paper); border-bottom: 1px solid var(--line); box-shadow: 0 16px 30px -18px rgba(20, 25, 50, .5); }
+  .top.open .links a { padding: 13px 4px; font-size: 17px; color: var(--ink); border-bottom: 1px solid var(--line); }
+  .top.open .links a:last-child { border-bottom: 0; }
+}
+/* room for the menu button: drop the map mark next to the wordmark */
+@media (max-width: 480px) { .top .logo img { display: none; } .top .logo { font-size: 19px; } .top .wrap { gap: 10px; } }
+@media (max-width: 359px) { .top .logo { font-size: 16px; } .nav .btn { padding: 9px 10px; font-size: 14px; } }
 
 /* the trail */
 main { position: relative; }
@@ -382,13 +396,16 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <span class="wordmark"><span class="l">Little</span><span class="p">Print</span><span class="q">Quests</span></span>
     </a>
     <nav class="nav" aria-label="Main">
-      <a href="#how">How it works</a>
-      <a href="#inside">What’s included</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#shops">Play kits</a>
-      <a href="#crafts">Handprint art</a>
-      <a href="#faq">FAQ</a>
+      <div class="links" id="navLinks">
+        <a href="#how">How it works</a>
+        <a href="#inside">What’s included</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#shops">Play kits</a>
+        <a href="#crafts">Handprint art</a>
+        <a href="#faq">FAQ</a>
+      </div>
       <a class="btn btn-orange" href="#order">Make my hunt</a>
+      <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks" aria-label="Menu"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h16M3 11h16M3 16h16"/></svg></button>
     </nav>
   </div>
 </header>
@@ -1063,6 +1080,16 @@ function drawCart() {
   // only the party pack is the same for every age
   $('agesField').hidden = !gets.some((k) => k !== 'party');
 }
+// Phone menu: the header links fold into a drop-down behind the menu button.
+function setMenu(open) {
+  document.querySelector('.top').classList.toggle('open', open);
+  $('menuBtn').setAttribute('aria-expanded', open);
+}
+$('menuBtn').addEventListener('click', () => setMenu($('menuBtn').getAttribute('aria-expanded') !== 'true'));
+$('navLinks').addEventListener('click', (e) => { if (e.target.closest('a')) setMenu(false); });
+document.addEventListener('click', (e) => { if (!e.target.closest('.top')) setMenu(false); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
+
 $('stack').innerHTML = ['hunt', 'kit', 'activity', 'party'].map((k) => `<img data-k="${k}" class="out" alt="" width="400" height="518">`).join('')
   + '<span class="phone out"><img alt="" width="240" height="480"></span>';
 
