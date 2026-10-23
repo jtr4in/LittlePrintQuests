@@ -493,4 +493,13 @@ function buildHtml(cfg) {
   return `<!doctype html><html><head><meta charset="utf-8"><title>${esc(plan.theme.name)}</title><style>${css(plan.theme)}</style></head><body>${body}</body></html>`;
 }
 
-module.exports = { buildHtml, planHunt };
+// Where each kind of page first appears (numbered from 1), by the classes on its section:
+// { host: 1, briefing: 2, sheet: 3, puzzle: 7, cert: 8, bonus: 9, 'pic-lists': 10, ... }. For scripts that
+// pick sample pages, so they don't depend on the page order.
+function pageRoles(html) {
+  const roles = {};
+  [...html.matchAll(/<section class="page ([^"]*)"/g)].forEach((m, i) => m[1].split(/\s+/).forEach((c) => { roles[c] ||= i + 1; }));
+  return roles;
+}
+
+module.exports = { buildHtml, planHunt, pageRoles };

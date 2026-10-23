@@ -13,6 +13,7 @@ const os = require('os');
 const path = require('path');
 const { execFileSync } = require('child_process');
 const { renderPdf } = require('../src/generator/render');
+const { buildHtml, pageRoles } = require('../src/generator/build');
 const { renderKit, renderActivities } = require('../src/kits/render-kit');
 const { renderParty } = require('../src/party/render-party');
 const { kitForHunt, KITS, buildKitHtml } = require('../src/kits/engine');
@@ -80,15 +81,16 @@ async function little(id, kitId, tmp, jobs) {
       console.log('Rendered', id);
       continue;
     }
-    await renderPdf({ theme: id, childName: 'Maya', age: 6, spots: SPOTS, pictures: true }, `${dir('hunt')}.pdf`, { pngDir: dir('hunt'), nameSlots: 'Maya' });
+    const huntCfg = { theme: id, childName: 'Maya', age: 6, spots: SPOTS, pictures: true };
+    await renderPdf(huntCfg, `${dir('hunt')}.pdf`, { pngDir: dir('hunt'), nameSlots: 'Maya' });
+    const roles = pageRoles(buildHtml(huntCfg));
     await renderParty({ theme: id, childName: 'Maya', age: 6, party: PARTY }, `${dir('party')}.pdf`, { pngDir: dir('party'), nameSlots: 'Maya' });
     await renderKit({ kit: kitForHunt(id).id, childName: 'Maya', subjects: [], lenient: true }, `${dir('kit')}.pdf`, { pngDir: dir('kit'), nameSlots: 'Maya' });
     await renderActivities({ kit: kitForHunt(id).id, childName: 'Maya', lenient: true }, `${dir('activity')}.pdf`, { pngDir: dir('activity'), nameSlots: 'Maya' });
-    const hunt = count(dir('hunt'));
     const kit = count(dir('kit'));
     const start = firstToy(kitForHunt(id).id);
     const picks = {
-      hunt: [1, 2, 3, 4, hunt], // host guide, briefing, two clue card sheets, certificate
+      hunt: [roles.host, roles.briefing, roles.sheet, roles.sheet + 1, roles.cert], // host guide, briefing, two clue card sheets, certificate
       activity: [1, 6, 11, 12, 13], // cover, I spy, secret code, color by number, roll a creature
       party: [2, 3, 4, 5, 6], // invitations, thank-you cards, toppers, favor tags, banner
       kit: [2, start - 1, wowPage(kitForHunt(id).id), ...[0.55, 0.75].map((f) => Math.round(start + f * (kit - start)))], // welcome poster, sign, wow prop, two toys
