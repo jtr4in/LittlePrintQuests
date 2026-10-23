@@ -1,0 +1,8 @@
+{
+  "theme": "space",
+  "childName": "Maya",
+  "age": 6,
+  "spots": ["front_door", "shoe_rack", "coat_closet", "washing_machine", "dryer",
+            { "label": "Grandma’s Piano", "tip": "On the piano bench", "riddle": ["Grandma’s big piano goes plink, plonk, and ping,", "Check by the keys where we all love to sing!"] },
+            "pet_bed", "kitchen_table"]
+}

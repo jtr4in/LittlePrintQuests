@@ -1,0 +1,12 @@
+[{"label":"sign","piece":"r4/cut/dino-sign.png","fit":"cover"},
+ {"label":"open","piece":"r4/cut/dino-open.png","fit":"cover"},
+ {"label":"puzzle","piece":"r4/cut/dino-puzzle.png","fit":"stretch"},
+ {"label":"hatch","piece":"r4/cut/dino-hatch.png","fit":"cover","refine":false},
+ {"label":"map","piece":"r4/cut/dino-map.png","fit":"stretch","rot":1},
+ {"label":"f1","piece":"r4/cut/dino-f1.png","fit":"stretch"},
+ {"label":"f2","piece":"r4/cut/dino-f2.png","fit":"stretch"},
+ {"label":"f3","piece":"r4/cut/dino-f3.png","fit":"stretch"},
+ {"label":"badge","piece":"r4/cut/dino-badge.png","fit":"stretch","refine":false},
+ {"label":"bill_back","piece":"r4/cut/dino-coin1.png","fit":"stretch","refine":false},
+ {"label":"bill_front","piece":"r4/cut/dino-coin2.png","fit":"stretch","refine":false},
+ {"label":"boneyard","piece":"r4/cut/dino-boneyard.png","fit":"stretch"}]

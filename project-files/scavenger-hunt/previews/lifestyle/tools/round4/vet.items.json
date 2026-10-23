@@ -1,0 +1,178 @@
+[
+{
+"label": "welcome",
+"piece": "r4/cut/vet-welcome.png",
+"fit": "stretch"
+},
+{
+"label": "xfilm",
+"piece": "r4/cut/vet-xfilm.png",
+"fit": "stretch",
+"fill": "telea"
+},
+{
+"label": "bag",
+"piece": "r4/cut/vet-bag.png",
+"fit": "stretch",
+"refine": false,
+"quad": [
+[
+1038,
+738
+],
+[
+1350,
+738
+],
+[
+1346,
+1010
+],
+[
+1040,
+1010
+]
+]
+},
+{
+"label": "xray",
+"piece": "r4/cut/vet-xray.png",
+"fit": "stretch",
+"refine": false,
+"quad": [
+[
+1598,
+616
+],
+[
+1806,
+614
+],
+[
+1798,
+924
+],
+[
+1585,
+926
+]
+]
+},
+{
+"label": "prices",
+"piece": "pages/vet/page-25.png",
+"fit": "stretch"
+},
+{
+"label": "badge",
+"piece": "r4/cut/vet-badge.png",
+"fit": "stretch",
+"refine": false
+},
+{
+"label": "sticker1",
+"piece": "r4/cut/vet-sticker1.png",
+"fit": "stretch",
+"refine": false,
+"quad": [
+[
+1206,
+1080
+],
+[
+1434,
+1080
+],
+[
+1434,
+1163
+],
+[
+1206,
+1163
+]
+]
+},
+{
+"label": "sticker2",
+"piece": "r4/cut/vet-sticker2.png",
+"fit": "stretch",
+"refine": false,
+"quad": [
+[
+1410,
+1036
+],
+[
+1630,
+1036
+],
+[
+1630,
+1116
+],
+[
+1410,
+1116
+]
+]
+},
+{
+"label": "bill_under",
+"piece": "r4/cut/vet-coin2.png",
+"fit": "stretch",
+"refine": false,
+"quad": [
+[
+1554,
+1590
+],
+[
+1766,
+1528
+],
+[
+1846,
+1580
+],
+[
+1638,
+1646
+]
+]
+},
+{
+"label": "bill_top",
+"piece": "r4/cut/vet-coin1.png",
+"fit": "stretch",
+"refine": false,
+"quad": [
+[
+1597,
+1548
+],
+[
+1798,
+1491
+],
+[
+1876,
+1540
+],
+[
+1677,
+1602
+]
+]
+},
+{
+"label": "checkup",
+"piece": "r4/cut/vet-checkup.png",
+"fit": "stretch"
+},
+{
+"label": "open",
+"piece": "r4/cut/vet-open.png",
+"fit": "stretch"
+}
+]

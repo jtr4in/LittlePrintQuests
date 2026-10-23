@@ -1,0 +1,252 @@
+[
+{
+"label": "p1",
+"piece": "r5/cut/pen-dino.png",
+"fit": "contain",
+"quad": [
+[
+490,
+118
+],
+[
+743,
+197
+],
+[
+648.5,
+517.5
+],
+[
+395.5,
+438.5
+]
+],
+"refine": false,
+"clear": [
+[
+484.3,
+109.22
+],
+[
+752.48,
+192.95999999999998
+],
+[
+518.22,
+490.82000000000005
+]
+],
+"tol": 40,
+"fill": "telea",
+"shadow": 0.15
+},
+{
+"label": "p2",
+"piece": "r5/cut/pen-M.png",
+"fit": "contain",
+"quad": [
+[
+757,
+204
+],
+[
+1016,
+247
+],
+[
+964.5,
+573.5
+],
+[
+705.5,
+530.5
+]
+],
+"refine": false,
+"clear": [
+[
+750.26,
+196.18
+],
+[
+1024.8,
+241.76
+],
+[
+832.94,
+565.06
+]
+],
+"tol": 40,
+"fill": "telea",
+"shadow": 0.15
+},
+{
+"label": "p3",
+"piece": "r5/cut/pen-A1.png",
+"fit": "contain",
+"quad": [
+[
+1043,
+251
+],
+[
+1306,
+252
+],
+[
+1307.5,
+582.5
+],
+[
+1044.5,
+581.5
+]
+],
+"refine": false,
+"clear": [
+[
+1035.08,
+244.36
+],
+[
+1313.8600000000001,
+245.42
+],
+[
+1176.06,
+595.22
+]
+],
+"tol": 40,
+"fill": "telea",
+"shadow": 0.15
+},
+{
+"label": "p4",
+"piece": "r5/cut/pen-Y.png",
+"fit": "contain",
+"quad": [
+[
+1333,
+251
+],
+[
+1595,
+210
+],
+[
+1643.0,
+539.5
+],
+[
+1381.0,
+580.5
+]
+],
+"refine": false,
+"clear": [
+[
+1324.18,
+245.64
+],
+[
+1601.9,
+202.18
+],
+[
+1513.92,
+573.1800000000001
+]
+],
+"tol": 40,
+"fill": "telea",
+"shadow": 0.15
+},
+{
+"label": "p5",
+"piece": "r5/cut/pen-A2.png",
+"fit": "contain",
+"quad": [
+[
+1620,
+203
+],
+[
+1876,
+122
+],
+[
+1973.0,
+446.5
+],
+[
+1717.0,
+527.5
+]
+],
+"refine": false,
+"clear": [
+[
+1610.38,
+198.94
+],
+[
+1881.74,
+113.07999999999998
+],
+[
+1848.88,
+499.98
+]
+],
+"tol": 40,
+"fill": "telea",
+"shadow": 0.15
+},
+{
+"label": "invite",
+"piece": "r5/cut/invite.png",
+"fit": "stretch",
+"grow": 1.015
+},
+{
+"label": "t1",
+"piece": "r5/cut/top1.png",
+"fit": "stretch",
+"refine": false,
+"fill": "telea",
+"grow": 1.06
+},
+{
+"label": "t2",
+"piece": "r5/cut/top2.png",
+"fit": "stretch",
+"refine": false,
+"fill": "telea",
+"grow": 1.06
+},
+{
+"label": "t3",
+"piece": "r5/cut/top3.png",
+"fit": "stretch",
+"refine": false,
+"fill": "telea",
+"grow": 1.06
+},
+{
+"label": "tent1",
+"piece": "r5/cut/tent1.png",
+"fit": "stretch"
+},
+{
+"label": "tent2",
+"piece": "r5/cut/tent2.png",
+"fit": "stretch"
+},
+{
+"label": "tent3",
+"piece": "r5/cut/tent3.png",
+"fit": "stretch"
+}
+]

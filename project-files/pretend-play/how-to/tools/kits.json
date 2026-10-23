@@ -1,0 +1,339 @@
+{
+ "auto": {
+  "name": "Auto Repair Shop",
+  "colors": {
+   "main": "#34618f",
+   "dark": "#203f60",
+   "soft": "#ffdf7e",
+   "light": "#fff8e2",
+   "accent": "#ec6a2c",
+   "accentInk": "#ffffff"
+  },
+  "hunt": null
+ },
+ "burger": {
+  "name": "Burger Shop",
+  "colors": {
+   "main": "#e2782a",
+   "dark": "#a8501a",
+   "soft": "#ffe08a",
+   "light": "#fff6e0",
+   "accent": "#d93a2f",
+   "accentInk": "#ffffff"
+  },
+  "hunt": null
+ },
+ "christmas": {
+  "name": "Santa’s Workshop",
+  "colors": {
+   "main": "#b3202a",
+   "dark": "#7d141b",
+   "soft": "#f6dfa0",
+   "light": "#fdf6e8",
+   "accent": "#1f6b45",
+   "accentInk": "#ffffff",
+   "gold": "#f3c94f"
+  },
+  "hunt": "christmas"
+ },
+ "coffee": {
+  "name": "Coffee Shop",
+  "colors": {
+   "main": "#9a6340",
+   "dark": "#68402a",
+   "soft": "#f1dcc5",
+   "light": "#fcf4eb",
+   "accent": "#e8708a",
+   "accentInk": "#ffffff"
+  },
+  "hunt": null
+ },
+ "construction": {
+  "name": "Construction Site",
+  "colors": {
+   "main": "#33373d",
+   "dark": "#1f2226",
+   "soft": "#ffe08a",
+   "light": "#fff7dc",
+   "accent": "#f2a900",
+   "accentInk": "#2b2b2b",
+   "gold": "#ffd23f"
+  },
+  "hunt": "construction"
+ },
+ "dentist": {
+  "name": "Dentist Office",
+  "colors": {
+   "main": "#2a9fb4",
+   "dark": "#1b6f80",
+   "soft": "#c7eef3",
+   "light": "#eefafc",
+   "accent": "#f48aa8",
+   "accentInk": "#4a1325"
+  },
+  "hunt": null
+ },
+ "dino": {
+  "name": "Dino Dig Lab",
+  "colors": {
+   "main": "#4f6b3a",
+   "dark": "#34481f",
+   "soft": "#d8e4c2",
+   "light": "#f1f5e8",
+   "accent": "#c98a2b",
+   "accentInk": "#ffffff",
+   "gold": "#f0cf8a"
+  },
+  "hunt": "dino"
+ },
+ "easter": {
+  "name": "Bunny Egg Factory",
+  "colors": {
+   "main": "#6f58a8",
+   "dark": "#4a3a78",
+   "soft": "#d3efe0",
+   "light": "#fdfaec",
+   "accent": "#f2c84b",
+   "accentInk": "#3a2f5a",
+   "gold": "#ffe58a"
+  },
+  "hunt": "easter"
+ },
+ "fire": {
+  "name": "Fire Station",
+  "colors": {
+   "main": "#c62828",
+   "dark": "#8e1b1b",
+   "soft": "#ffe08a",
+   "light": "#fff6dc",
+   "accent": "#ffb703",
+   "accentInk": "#2b2b2b",
+   "gold": "#ffd23f"
+  },
+  "hunt": "fire"
+ },
+ "grocery": {
+  "name": "Grocery Store",
+  "colors": {
+   "main": "#3a9d4f",
+   "dark": "#25713a",
+   "soft": "#cdeec0",
+   "light": "#effaea",
+   "accent": "#f2a03d"
+  },
+  "hunt": null
+ },
+ "halloween": {
+  "name": "Potion Shop",
+  "colors": {
+   "main": "#5e2f91",
+   "dark": "#3d1d63",
+   "soft": "#d6ef8f",
+   "light": "#f4effb",
+   "accent": "#ec6f12",
+   "accentInk": "#2b1406",
+   "gold": "#ffd166"
+  },
+  "hunt": "halloween"
+ },
+ "hero": {
+  "name": "Hero HQ",
+  "colors": {
+   "main": "#1d3f91",
+   "dark": "#12285e",
+   "soft": "#cdd9f5",
+   "light": "#eef2fc",
+   "accent": "#d62828",
+   "accentInk": "#ffffff",
+   "gold": "#ffd60a"
+  },
+  "hunt": "hero"
+ },
+ "ice": {
+  "name": "Ice Palace",
+  "colors": {
+   "main": "#3f6fb5",
+   "dark": "#24467e",
+   "soft": "#d6e6f7",
+   "light": "#f1f7fd",
+   "accent": "#7b68b8",
+   "accentInk": "#ffffff",
+   "gold": "#cfd8ea"
+  },
+  "hunt": "ice"
+ },
+ "italian": {
+  "name": "Italian Restaurant",
+  "colors": {
+   "main": "#c8372d",
+   "dark": "#8f231c",
+   "soft": "#f9d6c8",
+   "light": "#fff5ef",
+   "accent": "#2f8a4c",
+   "accentInk": "#ffffff"
+  },
+  "hunt": null
+ },
+ "library": {
+  "name": "Library",
+  "colors": {
+   "main": "#6a4fb3",
+   "dark": "#47317f",
+   "soft": "#e3d8ff",
+   "light": "#f5f1ff",
+   "accent": "#f2a93b",
+   "accentInk": "#2b1d06"
+  },
+  "hunt": null
+ },
+ "mermaid": {
+  "name": "Mermaid Lagoon",
+  "colors": {
+   "main": "#11798a",
+   "dark": "#0b5563",
+   "soft": "#bfe9e4",
+   "light": "#effaf8",
+   "accent": "#e8685b",
+   "accentInk": "#ffffff",
+   "gold": "#f6d38a"
+  },
+  "hunt": "mermaid"
+ },
+ "petshop": {
+  "name": "Pet Shop",
+  "colors": {
+   "main": "#8a56c2",
+   "dark": "#5f3790",
+   "soft": "#e5d4f7",
+   "light": "#f6f0fd",
+   "accent": "#f5b335"
+  },
+  "hunt": null
+ },
+ "pirate": {
+  "name": "Pirate Ship",
+  "colors": {
+   "main": "#1f2f4d",
+   "dark": "#131d33",
+   "soft": "#e6d3a8",
+   "light": "#f8f1e1",
+   "accent": "#b8901f",
+   "accentInk": "#ffffff",
+   "gold": "#f1d48f"
+  },
+  "hunt": "pirate"
+ },
+ "pizza": {
+  "name": "Pizza Shop",
+  "colors": {
+   "main": "#d9442f",
+   "dark": "#9e2d1e",
+   "soft": "#ffd9a8",
+   "light": "#fff3e2",
+   "accent": "#3f9a4a",
+   "accentInk": "#ffffff"
+  },
+  "hunt": null
+ },
+ "police": {
+  "name": "Police Station",
+  "colors": {
+   "main": "#2c4f9e",
+   "dark": "#1b3166",
+   "soft": "#cfdcf7",
+   "light": "#eef3fc",
+   "accent": "#f2c230",
+   "accentInk": "#1b3166",
+   "gold": "#f7d65a"
+  },
+  "hunt": null
+ },
+ "post": {
+  "name": "Post Office",
+  "colors": {
+   "main": "#2f5fb3",
+   "dark": "#1d3f7d",
+   "soft": "#cfe0ff",
+   "light": "#eef4ff",
+   "accent": "#e8513a",
+   "accentInk": "#ffffff"
+  },
+  "hunt": null
+ },
+ "racecar": {
+  "name": "Pit Stop Garage",
+  "colors": {
+   "main": "#d7261e",
+   "dark": "#1b1b1f",
+   "soft": "#ffe27a",
+   "light": "#fff8dc",
+   "accent": "#f2a900",
+   "accentInk": "#1b1b1f",
+   "gold": "#ffd23f"
+  },
+  "hunt": "racecar"
+ },
+ "royal": {
+  "name": "Royal Castle",
+  "colors": {
+   "main": "#7d5ba6",
+   "dark": "#563c7a",
+   "soft": "#e7dbf3",
+   "light": "#f8f2fb",
+   "accent": "#b8901f",
+   "accentInk": "#ffffff",
+   "gold": "#f1d48f"
+  },
+  "hunt": "royal"
+ },
+ "space": {
+  "name": "Mission Control",
+  "colors": {
+   "main": "#2b4c9b",
+   "dark": "#14245a",
+   "soft": "#c9d8f5",
+   "light": "#eef3fc",
+   "accent": "#f26b1d",
+   "accentInk": "#ffffff",
+   "gold": "#ffd166"
+  },
+  "hunt": "space"
+ },
+ "unicorn": {
+  "name": "Unicorn Stable",
+  "colors": {
+   "main": "#8e5cc4",
+   "dark": "#643b96",
+   "soft": "#f6d5e6",
+   "light": "#fbf3ff",
+   "accent": "#e8558f",
+   "accentInk": "#ffffff",
+   "gold": "#ffe08a"
+  },
+  "hunt": "unicorn"
+ },
+ "valentine": {
+  "name": "Valentine Post Office",
+  "colors": {
+   "main": "#c2255c",
+   "dark": "#8c1941",
+   "soft": "#ffd6e2",
+   "light": "#fff0f4",
+   "accent": "#e03131",
+   "accentInk": "#ffffff",
+   "gold": "#ffc2d4"
+  },
+  "hunt": "valentine"
+ },
+ "vet": {
+  "name": "Vet Clinic",
+  "colors": {
+   "main": "#2a9d8f",
+   "dark": "#1f6f66",
+   "soft": "#bfe9d6",
+   "light": "#eaf7f0",
+   "accent": "#ef9d31"
+  },
+  "hunt": "vet"
+ }
+}

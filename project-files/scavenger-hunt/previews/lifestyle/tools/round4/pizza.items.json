@@ -1,0 +1,133 @@
+[
+{
+"label": "banner",
+"piece": "r4/cut/pizza-banner.png",
+"fit": "stretch",
+"quad": [
+[
+568,
+-15
+],
+[
+1746,
+155
+],
+[
+1736,
+353
+],
+[
+575,
+229
+]
+]
+},
+{
+"label": "oven",
+"piece": "r4/cut/pizza-oven.png",
+"fit": "stretch",
+"refine": false,
+"quad": [
+[
+1425,
+680
+],
+[
+1818,
+680
+],
+[
+1818,
+1142
+],
+[
+1428,
+1160
+]
+],
+"tol": 22,
+"fill": "plane"
+},
+{
+"label": "open",
+"piece": "r4/cut/pizza-open.png",
+"fit": "stretch"
+},
+{
+"label": "menu",
+"piece": "pages/pizza/page-34.png",
+"fit": "stretch",
+"quad": [
+[
+872,
+842
+],
+[
+1100,
+814
+],
+[
+1157,
+1212
+],
+[
+932,
+1240
+]
+],
+"refine": false
+},
+{
+"label": "register",
+"piece": "r4/cut/pizza-register.png",
+"fit": "stretch",
+"tol": 14,
+"fill": "telea"
+},
+{
+"label": "payhere",
+"piece": "r4/cut/pizza-payhere.png",
+"fit": "stretch"
+},
+{
+"label": "bill1",
+"piece": "r4/cut/pizza-bill1.png",
+"fit": "stretch"
+},
+{
+"label": "bill2",
+"piece": "r4/cut/pizza-bill2.png",
+"fit": "stretch"
+},
+{
+"label": "badge",
+"piece": "r4/cut/pizza-badge.png",
+"fit": "stretch"
+},
+{
+"label": "order",
+"piece": "r4/cut/pizza-order1.png",
+"fit": "stretch"
+},
+{
+"label": "lab_sauce",
+"piece": "r4/cut/pizza-lab1.png",
+"fit": "stretch",
+"refine": false,
+"fill": "telea"
+},
+{
+"label": "lab_cheese",
+"piece": "r4/cut/pizza-lab2.png",
+"fit": "stretch",
+"refine": false,
+"fill": "telea"
+},
+{
+"label": "lab_third",
+"piece": "r4/cut/pizza-lab3.png",
+"fit": "stretch",
+"refine": false,
+"fill": "telea"
+}
+]
