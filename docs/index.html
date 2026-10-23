@@ -645,17 +645,6 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <h2>Handprint keepsakes</h2>
       <p class="kits-lede">Eight handprint, footprint and fingerprint crafts per holiday, each with a little poem, a light dotted guide showing where to press (plus a set with no outlines) and a finished example to copy. Your child’s name, age and the month are printed on every page, so they’re ready to frame or send to Grandma. Includes 2 handprint cards, cut-out add-ons and a “These Little Hands” poem page. $5.99 each. Or get the Memory Handprint Book: a handprint page for every month of the year, with a cover and a “look how I’ve grown” page, for $7.99.</p>
       <div class="themes three" id="craftList"></div>
-      <form class="shop-buy" id="craftForm" novalidate>
-        <div>
-          <p class="eyebrow" id="craftPicked">Halloween handprint art</p>
-          <div class="row2" style="margin-top:10px">
-            <div class="field"><label for="craftChild">Child’s first name</label><input type="text" id="craftChild" maxlength="24" autocomplete="off" placeholder="Maya"></div>
-            <div class="field"><label for="craftAge">Age (optional)</label><input type="number" id="craftAge" min="1" max="15" inputmode="numeric"></div>
-          </div>
-        </div>
-        <button class="btn btn-orange" type="submit" id="craftBtn">Get this pack · $5.99</button>
-        <p class="status" id="craftStatus" role="status"></p>
-      </form>
     </div>
   </section>
   <section class="stop" id="sample">
@@ -717,6 +706,14 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       </div>
       <button class="btn btn-orange" type="submit" id="shopBtn">Get this kit · $7.99</button>
       <p class="status" id="shopStatus" role="status"></p>
+    </form>
+    <form class="shop-buy" id="craftForm" novalidate hidden>
+      <div class="row2">
+        <div class="field"><label for="craftChild">Child’s first name</label><input type="text" id="craftChild" maxlength="24" autocomplete="off" placeholder="Maya"></div>
+        <div class="field"><label for="craftAge">Age (optional)</label><input type="number" id="craftAge" min="1" max="15" inputmode="numeric"></div>
+      </div>
+      <button class="btn btn-orange" type="submit" id="craftBtn">Get this pack · $5.99</button>
+      <p class="status" id="craftStatus" role="status"></p>
     </form>
   </div>
 </dialog>
@@ -1123,12 +1120,13 @@ function openGallery(k) {
   gOpen(gets.map((x) => [x, LABELS[x]]), 'Pages in your order');
   gShow(Math.max(0, gPages.findIndex((p) => p.k === k)));
 }
-// Shared by the order gallery and the shop kit preview. With a buy form (the shop kits), it shows under the pages.
+// Shared by the order gallery and the shop kit and handprint previews. With a buy form ('shop' or 'craft'), it shows under the pages.
 function gOpen(tabs, label, buy) {
   $('gallery').setAttribute('aria-label', label);
   $('gTitle').hidden = !buy;
   $('gTitle').textContent = label;
   $('shopForm').hidden = buy !== 'shop';
+  $('craftForm').hidden = buy !== 'craft';
   $('gallery').classList.toggle('buying', Boolean(buy));
   $('gTabs').innerHTML = tabs.map(([x, name]) => `<button type="button" data-k="${x}">${name}</button>`).join('');
   $('gTabs').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => gShow(gPages.findIndex((p) => p.k === b.dataset.k))));
@@ -1297,16 +1295,28 @@ const CRAFTS = [
 ];
 let craft = new Date().getMonth() >= 10 ? 'christmas' : 'halloween';
 function drawCrafts() {
-  $('craftList').innerHTML = CRAFTS.map(([id, name, blurb, title]) => `<button type="button" class="theme shop-card" data-craft="${id}" aria-pressed="${id === craft}">
-      <img src="img/craft-${id}.webp" alt="${title} pages" width="1000" height="750" loading="lazy"><h3>${title}</h3><p>${blurb}</p></button>`).join('');
-  $('craftList').querySelectorAll('[data-craft]').forEach((b) => b.addEventListener('click', () => {
-    craft = b.dataset.craft;
-    drawCrafts();
-    $('craftForm').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }));
-  const [, , , title, what, price] = CRAFTS.find(([id]) => id === craft);
-  $('craftPicked').textContent = title;
+  $('craftList').innerHTML = CRAFTS.map(([id, name, blurb, title]) => `<button type="button" class="theme shop-card" data-craft="${id}" aria-haspopup="dialog">
+      <img src="img/craft-${id}.webp" alt="${title} pages" width="1000" height="750" loading="lazy"><h3>${title}</h3><p>${blurb}</p><span class="see">See what’s inside</span></button>`).join('');
+  $('craftList').querySelectorAll('[data-craft]').forEach((b) => b.addEventListener('click', () => openCraft(b.dataset.craft)));
+  const [, , , , what, price] = CRAFTS.find(([id]) => id === craft);
   $('craftBtn').textContent = `Get the ${what} · $${price}`;
+}
+// Real pages of each pack, made by scripts/craft-gallery.js (docs/img/gallery/crafts/<id>-1.webp...).
+const CRAFT_PAGES = {
+  halloween: ['Handprint Ghosts', 'Itsy Bitsy Spider', 'Batty for You', 'Fingerprint Pumpkin Patch', 'Handprint cards', 'Cut-out add-ons', 'These Little Hands poem'],
+  christmas: ['Handprint Christmas Tree', 'Reindeer Footprint', 'Ho Ho Ho Santa', 'Fingerprint Christmas Lights', 'Handprint cards', 'Cut-out add-ons', 'These Little Hands poem'],
+  memory: ['Cover', 'How to make each page', 'January', 'May', 'October', 'Look how I’ve grown'],
+  zoo: ['Cover', 'How to make each page', 'Lion', 'Dinosaur', 'Unicorn', 'Bumblebee'],
+  fingerprint: ['Cover', 'How to make each page', 'Ladybugs', 'Balloons', 'Fishbowl', 'Fireflies'],
+};
+// Tapping a handprint pack opens its pages with the buy form under them.
+function openCraft(id) {
+  craft = id;
+  drawCrafts();
+  const title = CRAFTS.find(([k]) => k === id)[3];
+  gPages = CRAFT_PAGES[id].map((cap, i) => ({ k: id, tab: title, cap, src: `img/gallery/crafts/${id}-${i + 1}.webp` }));
+  gOpen([], title, 'craft');
+  gShow(0);
 }
 drawCrafts();
 $('craftForm').addEventListener('submit', async (e) => {
