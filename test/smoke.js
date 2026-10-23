@@ -134,6 +134,21 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   }
   assert.ok(!hunt({ puzzle: false }).includes('class="page puzzle"') && !hunt({ puzzle: false }).includes('class="puzzle-note"'));
 
+  // Bonus games: a picture hunt (12 cards + two matching checklists) and a look-around hunt with 12 finds,
+  // after the certificate, for every theme; every picture resolves; `bonus: false` leaves them out.
+  const { PICTURES, LOOK, entry } = require('../src/generator/bonus');
+  for (const theme of Object.keys(require('../src/generator/themes'))) {
+    assert.equal(PICTURES[theme].length, 12, theme);
+    assert.equal(LOOK[theme].items.length, 12, theme);
+    for (const s of [...PICTURES[theme], ...LOOK[theme].items]) entry(theme, s);
+    const html = buildHtml({ theme, spots: spotIds.slice(0, 5) });
+    assert.equal((html.match(/class="pc"/g) || []).length, 12, theme);
+    assert.equal((html.match(/class="pl-item"/g) || []).length, 24, theme);
+    assert.equal((html.match(/class="lk-item"/g) || []).length, 12, theme);
+    assert.ok(html.indexOf('class="page cert"') < html.indexOf('class="page bonus'), theme);
+  }
+  assert.ok(!hunt({ bonus: false }).includes('class="page bonus') && !hunt({ bonus: false }).includes('Play again another day'));
+
   // Party Pack: builds for every theme, fills party details or leaves write-in lines, renders a real PDF.
   const { buildPartyHtml } = require('../src/party/build');
   const { renderParty } = require('../src/party/render-party');

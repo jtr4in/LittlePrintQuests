@@ -7,11 +7,14 @@
 // The last spot is where the prize/cake goes. One clue card per spot:
 // card 1 is handed to the kids after the briefing, card k is hidden at spot k-1.
 // Each card also has a matching puzzle piece (see puzzle.js) unless the config says `puzzle: false`.
+// Two bonus games for another day (a picture hunt and a look-around hunt, see bonus.js) go after the
+// certificate unless the config says `bonus: false`.
 
 const path = require('path');
 const THEMES = require('./themes');
 const SPOTS = require('./spots');
 const { puzzlePage, puzzleCss } = require('./puzzle');
+const { bonusPages, bonusCss } = require('./bonus');
 
 const FONT_DIR = path.join(__dirname, '..', '..', 'fonts');
 
@@ -80,7 +83,8 @@ function planHunt(cfg) {
   // Picture clues: on for ages 3 to 5 unless the order says otherwise.
   const pictures = cfg.pictures !== undefined ? Boolean(cfg.pictures) : Boolean(cfg.age && cfg.age <= 5);
   const puzzle = cfg.puzzle !== false;
-  return { theme, spots, cards, prize: spots[spots.length - 1], pictures, puzzle };
+  const bonus = cfg.bonus !== false;
+  return { theme, spots, cards, prize: spots[spots.length - 1], pictures, puzzle, bonus };
 }
 
 function fill(text, ctx) {
@@ -132,6 +136,7 @@ function hostGuide(plan, cfg) {
         : '<div><b>Ages 3–4:</b> read each riddle aloud and give little hints. <b>Ages 6–8:</b> let the kids take turns reading.</div>'}
       <div><b>Bonus fun:</b> tuck a sticker or small treat (like a toy ${esc(theme.treasureWord)}) with each card.</div>
       <div><b>Safety:</b> only hide cards in spots that are safe for little hands to open.</div>
+      ${plan.bonus ? '<div><b>Play again another day:</b> the last three pages are bonus games, a Picture Hunt to cut out and hide and a look-around hunt to take outside.</div>' : ''}
     </div>
     ${cfg.promo ? `<div class="promo">${esc(cfg.promo)}</div>` : ''}
   </section>`;
@@ -315,6 +320,7 @@ h1, .card-title, .badge, .cert-title, .award, .signer, .kicker {
   border-radius:99px; padding:.03in .15in; margin:.02in auto .05in; position:relative; z-index:1; }
 .puzzle-note .emoji { font-family:'Noto Color Emoji', sans-serif; }
 ${puzzleCss(theme)}
+${bonusCss(theme)}
 
 /* certificate */
 .cert .frame { text-align:center; align-items:center; justify-content:center; border-width:5px; }
@@ -483,7 +489,7 @@ function themeCss(theme) {
 
 function buildHtml(cfg) {
   const plan = planHunt(cfg);
-  const body = [hostGuide(plan, cfg), briefing(plan, cfg), cardSheets(plan), plan.puzzle ? puzzlePage(plan, cfg, picHtml) : '', certificate(plan, cfg)].join('\n');
+  const body = [hostGuide(plan, cfg), briefing(plan, cfg), cardSheets(plan), plan.puzzle ? puzzlePage(plan, cfg, picHtml) : '', certificate(plan, cfg), plan.bonus ? bonusPages(plan) : ''].join('\n');
   return `<!doctype html><html><head><meta charset="utf-8"><title>${esc(plan.theme.name)}</title><style>${css(plan.theme)}</style></head><body>${body}</body></html>`;
 }
 

@@ -30,7 +30,7 @@ function hints(spot) {
 // Every screen of Host Mode, plus the sidekick's cue for each one.
 function plan(order, sidekickUrl) {
   const cfg = order.config;
-  const { theme, cards, prize, puzzle } = planHunt(cfg);
+  const { theme, cards, prize, puzzle, bonus } = planHunt(cfg);
   const s = SCRIPTS[cfg.theme];
   const name = cfg.childName || 'our birthday star';
   const kids = cfg.childName ? `${cfg.childName} and the ${theme.hunters}` : theme.hunters;
@@ -56,7 +56,7 @@ function plan(order, sidekickUrl) {
     steps.push(step);
   });
   if (puzzle) steps.push({ phase: 'play', title: 'Puzzle time! 🧩', body: [`Lay all ${n} pieces on the floor and let the kids put them together. The numbers go in order, left to right, if little ones need a hand.`, `The picture shows where the prize is: the ${prize.label}. Let them run!`] });
-  steps.push({ phase: 'play', title: 'Treasure found! 🎉', say: fill(s.finale, ctx), body: [`Hand ${name} the certificate from the last page of the PDF.`] });
+  steps.push({ phase: 'play', title: 'Treasure found! 🎉', say: fill(s.finale, ctx), body: [bonus ? `Hand ${name} the certificate that comes right after the puzzle page.` : `Hand ${name} the certificate from the last page of the PDF.`, ...(bonus ? ['Want to play again another day? The last three pages are bonus games: a Picture Hunt to cut out and hide, and a look-around hunt to take outside.'] : [])] });
 
   // The sidekick's cue for each host screen.
   const third = Math.max(2, Math.ceil(n / 3));
