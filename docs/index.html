@@ -289,6 +289,7 @@ input[type="text"], input[type="number"], input[type="email"], select { width: 1
 .shop-card h3 { font-size: 19px; }
 .shop-card .see { font: 600 14px/1.2 var(--body); color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 .gallery header .g-title { display: block; margin-bottom: 8px; font: 600 17px/1.2 var(--display); }
+#summary { scroll-margin-top: 76px; }
 .shop-buy[hidden], .gallery .shop-buy .status:empty { display: none; }
 .gallery .shop-buy { margin-top: 0; padding: 12px 14px; gap: 10px 16px; grid-template-columns: 1fr auto; }
 .gallery .shop-buy .field { gap: 4px; }
@@ -440,7 +441,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
             <div class="addspot"><input type="text" id="customSpot" maxlength="30" placeholder="Add your own, like “Grandma’s piano”" aria-label="Add your own spot"><button type="button" class="btn btn-ghost" id="addSpot">Add</button></div>
           </fieldset>
         </div>
-        <aside class="panel summary" aria-live="polite">
+        <aside class="panel summary" id="summary" aria-live="polite">
           <div class="field"><span class="eyebrow" id="trailEyebrow">Your trail</span><p id="trailTitle" style="font:600 20px/1.2 var(--display)"></p></div>
           <ol class="route" id="route"></ol>
           <div class="field"><span class="eyebrow">What’s in your order</span>
@@ -1228,7 +1229,8 @@ function openShop(id) {
 }
 function shopName(id) { return (SHOP_KITS.find(([k]) => k === id) || [])[1]; }
 drawShops();
-function chooseShop(id, { scroll = true } = {}) {
+// scroll: the id to bring into view after, or false to stay put.
+function chooseShop(id, { scroll = 'order' } = {}) {
   state.shop = id;
   shopKit = id;
   drawShops();
@@ -1241,7 +1243,8 @@ function chooseShop(id, { scroll = true } = {}) {
   showHero(id);
   setPicks(['kit']);
   render();
-  if (scroll) $('order').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // after the dialog hands focus back to the card, or it pulls the page back there
+  if (scroll) requestAnimationFrame(() => $(scroll).scrollIntoView({ behavior: 'smooth', block: 'start' }));
 }
 // Back to a themed set (hunt, kit, activities and party pack all available again).
 function leaveShop() {
@@ -1254,7 +1257,7 @@ function leaveShop() {
 $('shopForm').addEventListener('submit', (e) => {
   e.preventDefault();
   $('gallery').close();
-  chooseShop(shopKit);
+  chooseShop(shopKit, { scroll: 'summary' });
 });
 
 // Handprint art packs: one per holiday, ordered on their own.
