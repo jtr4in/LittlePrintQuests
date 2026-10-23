@@ -90,6 +90,10 @@ Jason found navigating choppy. What it was and the rules now:
 ### Shop kit card photos (2026-10-23)
 - The 11 shop kit card thumbnails (`docs/img/kit-<id>.webp`, 1354x994, used by `SHOP_KITS` in `docs/js/data.js`) are styled Gemini photos, each starring the kit's signature piece, prompts say "no cash register". Prompts and scripts: `project-files/scavenger-hunt/previews/shop-kit-cards/`. Gemini redraws kit art loosely; use the round 4 lifestyle tools to restore exact art.
 
+## Stripe checkout page (2026-10-23)
+- Each Checkout line item has a picture (`product_data.images`): the theme's illustration on cream, the handprint pack's card, or the logo for the Family Pass. Made by `python3 scripts/checkout-images.py` into `docs/img/checkout/*.jpg` (JPEG, no kid's name), linked from `SITE_URL` by `checkoutImages()` in `src/bot/payments.js`; left out unless `SITE_URL` is https and the file exists. Re-run the script after changing a theme pick in `scripts/theme-icons.py`.
+- Logo, icon and colors on the Stripe page come from the Stripe Dashboard (Settings > Business > Branding), which Jason sets himself: brand color #EF9D31, background #FBF8F1.
+
 ## Lifestyle photo pipeline (2026-10-22)
 
 Tools: `project-files/scavenger-hunt/previews/lifestyle/tools/`. Outputs are large files under `/mnt/project-files/scavenger-hunt/previews/lifestyle/`.
