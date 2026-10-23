@@ -82,7 +82,7 @@ module.exports = {
     intro: 'Everything {child} needs to run a pretend pizzeria. Print on regular Letter paper, cut along the dashed lines, and line up some stuffed animals to be hungry customers.',
     setup: [
       'Tape the pizzeria sign and Open sign by the “front door”.', 'Set up the register on the counter.',
-      'Lay out the toppings in small bowls or cups with their labels.', 'Use a baking tray or a shoebox as the pizza oven.',
+      'Lay out the toppings in small bowls or cups with their labels.', 'Tape the pizza oven inside a play kitchen oven door, or onto a shoebox.',
       'Pin on the badges and take the first order!',
     ],
     play: [
