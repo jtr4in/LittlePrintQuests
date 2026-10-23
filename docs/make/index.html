@@ -55,6 +55,7 @@
 
       <form class="builder" id="orderForm" novalidate>
         <div class="panel wiz">
+          <div class="wiz-progress" aria-hidden="true"><span id="wizBar"></span></div>
           <p class="eyebrow" id="wizCount">Step 1 of 5</p>
 
           <section class="wiz-step" data-step="who">
@@ -120,7 +121,7 @@
               <div class="passrow"><input type="text" id="passCode" maxlength="20" placeholder="LPQ-XXXX-XXXX" autocomplete="off" spellcheck="false" aria-label="Family Pass code"><button type="button" class="btn btn-ghost" id="passApply">Apply</button></div>
               <p class="save" id="passNote"></p>
             </details>
-            <button class="btn btn-orange pay-btn" type="submit" id="checkoutBtn">Continue to checkout</button>
+            <button class="btn btn-orange pay-btn" type="submit" id="checkoutBtn" hidden>Continue to checkout</button>
             <p class="trust"><span>Apple Pay, Google Pay or card, secure checkout by Stripe</span><span>Have a promo code? Add it on the payment page</span><span>Not right? We fix it free, or <a href="refunds/">refund you</a></span></p>
           </section>
 

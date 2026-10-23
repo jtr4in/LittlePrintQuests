@@ -9,6 +9,7 @@ const state = { ages: 'big', agesPicked: false, theme: 'dino', picks: ['front_do
 const picked = new Set(['hunt', 'kit', 'activity', 'party']);
 let passInfo = null; // { code, left, total } once a Family Pass code checks out
 let product = 'bundle+activity';
+let payLabel = 'Pay $19.99'; // the bottom button's words on the last step
 
 // ---- Steps ---------------------------------------------------------------------------------------
 const STEPS = ['who', 'theme', 'box', 'details', 'pay'];
@@ -32,8 +33,15 @@ function drawSteps() {
   if (cur) $('wizSteps').scrollLeft += cur.getBoundingClientRect().left - $('wizSteps').getBoundingClientRect().left - 16;
   document.querySelectorAll('.wiz-step').forEach((el) => (el.hidden = el.dataset.step !== step));
   $('wizBack').hidden = i === 0;
-  $('wizNext').hidden = step === 'pay';
-  $('wizCount').textContent = `Step ${i + 1} of ${steps.length}`;
+  // On the last step the Continue button becomes the pay button, so it's always in the same spot
+  // (a bar fixed to the bottom of the screen on phones).
+  $('wizNext').textContent = step === 'pay' ? payLabel : 'Continue';
+  $('wizNext').classList.toggle('pay', step === 'pay');
+  $('navTotal').hidden = step === 'pay';
+  $('wizCount').textContent = `Step ${i + 1} of ${steps.length} · ${stepLabel(step)}`;
+  $('wizBar').style.width = `${((i + 1) / steps.length) * 100}%`;
+  // phones show the order summary only where it helps: choosing what's inside, and checking out
+  $('orderForm').dataset.step = step;
 }
 // Forward only past steps that are done; back any time.
 function go(to, { push = true, scroll = true } = {}) {
@@ -42,7 +50,8 @@ function go(to, { push = true, scroll = true } = {}) {
   const ahead = steps.slice(0, steps.indexOf(to)).find((s) => problem(s));
   if (ahead && steps.indexOf(to) > steps.indexOf(step)) {
     if (ahead !== step) { step = ahead; drawSteps(); }
-    return status(problem(ahead), true);
+    status(problem(ahead), true);
+    return $('formStatus').scrollIntoView({ block: 'nearest', behavior: calm() ? 'auto' : 'smooth' });
   }
   status('');
   if (to === step) return;
@@ -56,7 +65,7 @@ function go(to, { push = true, scroll = true } = {}) {
   if (matchMedia('(hover: hover)').matches) document.querySelector(`.wiz-step[data-step="${step}"] input:not([type="hidden"])`)?.focus({ preventScroll: true });
 }
 const next = () => { const steps = live(); go(steps[steps.indexOf(step) + 1] || 'pay'); };
-$('wizNext').addEventListener('click', next);
+$('wizNext').addEventListener('click', () => (step === 'pay' ? $('orderForm').requestSubmit() : next()));
 $('wizBack').addEventListener('click', () => { const steps = live(); go(steps[Math.max(0, steps.indexOf(step) - 1)]); });
 addEventListener('popstate', (e) => go(e.state?.step || 'who', { push: false }));
 
@@ -310,7 +319,8 @@ function drawCart() {
     $('totalLabel').textContent += ' · Family Pass';
   } else $('totalPrice').textContent = money(price);
   $('navTotal').textContent = product ? shown : '';
-  $('checkoutBtn').textContent = passInfo && product ? 'Make my order with my pass' : `Pay ${money(price)} at secure checkout`;
+  payLabel = passInfo && product ? 'Make my order with my pass' : `Pay ${money(price)}`;
+  $('checkoutBtn').textContent = payLabel;
   // the pass pays off for anyone spending this much more than once a year
   $('passUp').hidden = Boolean(passInfo) || price < 13;
   $('peek').parentElement.hidden = !product;
@@ -371,7 +381,7 @@ $('orderForm').addEventListener('submit', async (e) => {
   // Enter in a field before the last step means "Continue"
   if (step !== 'pay') return next();
   const bad = live().find((s) => problem(s));
-  if (bad) { go(bad); return status(problem(bad), true); }
+  if (bad) { go(bad); status(problem(bad), true); return $('formStatus').scrollIntoView({ block: 'nearest' }); }
   const items = [...picked];
   const order = {
     product,

@@ -491,3 +491,45 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 @media (min-width: 861px) { .make .summary { position: sticky; top: 84px; } }
 /* room under the pages for the "Make this set" button */
 .gallery.footed:not(.buying) .view img { max-height: max(220px, calc(100dvh - 300px)); }
+
+/* ---- Home: what you get (2026-10-23) ------------------------------------------------------------- */
+.hook-sub .occasion { display: inline-block; font-weight: 700; color: var(--ink); transition: opacity .35s ease, transform .35s ease; }
+.hook-sub .occasion.out { opacity: 0; transform: translateY(-.25em); }
+.products { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-top: 26px; }
+.product { display: flex; flex-direction: column; padding: 0; text-align: left; font: inherit; color: var(--ink); background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; cursor: pointer; transition: transform .15s ease; }
+.product:hover { transform: translateY(-3px); }
+.product img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+.product .p-body { display: grid; gap: 6px; padding: 14px 16px 16px; }
+.product b { font: 600 19px/1.2 var(--display); }
+.product .p-body > span { font-size: 15px; line-height: 1.45; color: var(--ink-soft); }
+.product small { font: 600 14px/1.2 var(--body); text-decoration: underline; text-underline-offset: 3px; margin-top: 2px; }
+@media (max-width: 860px) { .products { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
+@media (max-width: 520px) { .product .p-body { padding: 10px 12px 12px; gap: 4px; } .product b { font-size: 16px; } .product .p-body > span { font-size: 13.5px; line-height: 1.4; } .product small { font-size: 13px; } }
+.host-line { display: flex; align-items: center; gap: 14px; margin-top: 18px; padding: 12px 16px; border-radius: var(--r); background: var(--tint); border: 1px solid var(--line); }
+.host-line .phone { width: 44px; flex: none; padding: 3px; border-radius: 10px; box-shadow: none; }
+.host-line .phone img { border-radius: 7px; }
+.host-line p { flex: 1; font-size: 15px; line-height: 1.45; color: var(--ink-soft); }
+.host-line p b { color: var(--ink); }
+.host-line .btn { flex: none; padding: 10px 18px; font-size: 15px; }
+@media (max-width: 520px) { .host-line { flex-wrap: wrap; } .host-line p { flex-basis: calc(100% - 60px); } .host-line .btn { margin-left: 58px; } }
+
+/* ---- Order page on phones (2026-10-23): a progress bar instead of the step pills, the Back/total/
+   Continue bar fixed to the bottom (it turns into Pay on the last step), and the order summary only
+   on the "What's inside" and "Checkout" steps. ---------------------------------------------------- */
+.wiz-progress { display: none; height: 6px; border-radius: 99px; background: var(--paper); overflow: hidden; margin-bottom: -6px; }
+.wiz-progress span { display: block; height: 100%; width: 20%; background: var(--orange); border-radius: 99px; transition: width .3s ease; }
+.wiz-nav #wizNext.pay { min-width: 180px; justify-content: center; font-size: 18px; }
+.wiz .status { scroll-margin-bottom: 110px; }
+@media (max-width: 640px) {
+  .wiz-steps { display: none; }
+  .wiz-progress { display: block; }
+  .make .builder { margin-top: 12px; }
+}
+@media (max-width: 860px) {
+  body.make { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+  .wiz-nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; margin: 0; padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); background: color-mix(in srgb, var(--sheet) 96%, transparent); backdrop-filter: blur(8px); border-top: 1px solid var(--line); box-shadow: 0 -10px 24px -18px rgba(20, 25, 50, .45); }
+  .wiz-nav #wizNext { flex: 1; justify-content: center; max-width: 260px; }
+  .wiz-nav #wizNext.pay { max-width: none; }
+  .builder[data-step="who"] .summary, .builder[data-step="theme"] .summary, .builder[data-step="details"] .summary { display: none; }
+  .make .summary { gap: 14px; }
+}

@@ -1,6 +1,6 @@
 // The home page: shows what the kits are and sends people to make/ to order. The name typed at the top
 // goes onto every preview (js/names.js) and is kept for the order page.
-let theme = seasonal || 'dino'; // the theme the "What's in the box" section shows
+let theme = seasonal || 'dino'; // the theme the hero and free sample start on
 
 // ---- The name hook -------------------------------------------------------------------------------
 function showKid() {
@@ -16,19 +16,19 @@ $('hookForm').addEventListener('submit', (e) => {
   LPQName.set($('hookName').value);
   location.href = 'make/';
 });
-// The two pages beside the name box: the story letter and the certificate, in the theme that goes
-// with the occasion in the headline.
+// The two pages beside the name box: the play kit and the party pack, in the theme that goes with
+// the occasion in the headline.
 function drawHookPages(id = theme) {
-  $('hookBack').src = `img/pages/${id}-briefing.webp`;
-  $('hookFront').src = `img/pages/${id}-cert.webp`;
+  $('hookBack').src = `img/pages/${id}-kit.webp`;
+  $('hookFront').src = `img/pages/${id}-party.webp`;
   LPQName.preload(id);
 }
-// The headline's occasion rotates so it reads as more than a birthday thing, each a nod to a theme.
+// The occasion under the headline rotates so it reads as more than a birthday thing, each a nod to a theme.
 const OCCASIONS = [
-  // (all take "A", which stays put while the occasion fades)
-  ['birthday', null], ['rainy day', 'pirate'], ['sleepover', 'space'], ['snow day', 'ice'],
-  ['Halloween', 'halloween'], ['playdate', 'dino'], ['Christmas morning', 'christmas'],
-  ['Valentine’s Day', 'valentine'], ['spring break', 'easter'], ['weekend', 'royal'],
+  // (all follow "Made for", which stays put while the occasion fades)
+  ['birthdays', null], ['rainy days', 'pirate'], ['sleepovers', 'space'], ['snow days', 'ice'],
+  ['Halloween', 'halloween'], ['playdates', 'dino'], ['Christmas morning', 'christmas'],
+  ['Valentine’s Day', 'valentine'], ['spring break', 'easter'], ['weekends', 'royal'],
 ];
 let occasionAt = 0;
 function nextOccasion() {
@@ -69,12 +69,17 @@ $('heroCap').addEventListener('click', () => { location.href = `make/?theme=${$(
 showHero(theme);
 if (!calm()) setInterval(() => { if (!document.hidden) showHero(ordered[(ordered.findIndex((x) => x.id === heroAt) + 1) % ordered.length].id); }, 5000);
 
-// ---- Photos open bigger, with a button to make that set -------------------------------------------
-$('lifePhotos').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
-  const img = b.querySelector('img');
-  const name = b.querySelector('span').firstChild.textContent;
-  Gallery.open([{ src: b.dataset.big, cap: name, alt: img.alt }], { label: name, foot: Gallery.cta(`make/?theme=${b.dataset.theme}`, b.dataset.cta) });
+// ---- What you get: each product card opens its real pages, the photo first ------------------------
+$('productCards').querySelectorAll('.product').forEach((b) => b.addEventListener('click', () => {
+  const k = b.dataset.k, id = b.dataset.theme, name = b.querySelector('b').textContent;
+  const pages = [{ k, cap: `${name}, printed and set up`, src: b.dataset.photo, alt: b.querySelector('img').alt },
+    ...setPages(id).filter((p) => p.k === k).map((p) => ({ ...p, tab: '' }))];
+  Gallery.open(pages, { label: `${name}: ${THEMES.find((t) => t.id === id).name}`, title: true, foot: Gallery.cta(`make/?theme=${id}`, 'Make my kit') });
 }));
+// Host Mode: three phone screens from a real order.
+const HOST = [['hide', 'Hide the cards: one per screen, in your hiding order'], ['play', 'Play along: a quick challenge, a line to say and the clue to read'], ['sidekick', 'Bring a sidekick: a second grown-up gets their own lines']];
+$('hostThumb').src = `img/host/${theme}-play.webp`;
+$('seeHost').addEventListener('click', () => Gallery.open(HOST.map(([f, cap]) => ({ k: f, cap, src: `img/host/${theme}-${f}.webp` })), { label: 'Host Mode', title: true, foot: Gallery.cta('make/', 'Make my kit') }));
 
 // ---- Themes: tap one to see its pages ------------------------------------------------------------
 // Two rows of tiles that swipe sideways, so 27 themes don't make a long page.
@@ -96,44 +101,9 @@ function previewTheme(id) {
 }
 drawThemeGrid();
 
-// ---- What's in the box: one set of tabs that follows the chosen theme -----------------------------
-document.querySelectorAll('#inside [role="tab"]').forEach((b) => b.addEventListener('click', () => {
-  document.querySelectorAll('#inside [role="tab"]').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
-  document.querySelectorAll('#inside .box-panel').forEach((p) => (p.hidden = p.dataset.panel !== b.dataset.tab));
-}));
-const options = ordered.map((t) => `<option value="${t.id}">${esc(t.name)} (ages ${t.ages})</option>`).join('');
-$('boxSelect').innerHTML = options;
-$('sampleTheme').innerHTML = options;
-$('boxSelect').addEventListener('change', (e) => { theme = e.target.value; drawBox(); });
-function drawBox() {
-  const t = THEMES.find((x) => x.id === theme);
-  const k = KITS[t.id];
-  $('boxSelect').value = t.id;
-  $('boxTheme').textContent = t.name;
-  $('boxGo').href = `make/?theme=${t.id}`;
-  $('kitImg').src = `img/kit-${t.id}.webp`;
-  $('kitImg').alt = k.alt;
-  $('kitName').textContent = k.name;
-  $('kitBlurb').textContent = k.blurb.replace(/your child’s/g, 'your kid’s');
-  $('howtoLink').hidden = !HOWTO[t.id];
-  if (HOWTO[t.id]) {
-    $('howtoLink').href = `img/howto/${t.id}.webp`;
-    $('howtoImg').src = `img/howto/${t.id}-sm.webp`;
-    $('howtoImg').alt = `${HOWTO[t.id]}: six illustrated cardboard box steps`;
-    $('howtoName').textContent = HOWTO[t.id];
-  }
-  $('huntName').textContent = t.name;
-  for (const [el, part] of [['huntGuide', 'guide'], ['huntPuzzle', 'puzzle'], ['huntCards', 'cards'], ['huntCert', 'cert'], ['huntBonus', 'bonus']]) $(el).src = `img/pages/${t.id}-${part}.webp`;
-  for (const [el, part] of [['hostHide', 'hide'], ['hostPlay', 'play'], ['hostSidekick', 'sidekick']]) $(el).src = `img/host/${t.id}-${part}.webp`;
-  for (const [el, n] of [['actSpy', 2], ['actSpot', 3], ['actMaze', 4], ['actWords', 5]]) {
-    $(el).src = `img/gallery/${t.id}/activity-${n}.webp`;
-    $(el).alt = `${GALLERY.activity[n - 1]} activity page`;
-    $(`${el}Cap`).textContent = GALLERY.activity[n - 1];
-  }
-  $('partyImg').src = `img/pages/${t.id}-party.webp`;
-  $('partyImg').alt = `${t.name} party invitation with your kid’s name`;
-  $('sampleTheme').value = t.id;
-}
+// The free sample's theme list.
+$('sampleTheme').innerHTML = ordered.map((t) => `<option value="${t.id}">${esc(t.name)} (ages ${t.ages})</option>`).join('');
+$('sampleTheme').value = theme;
 
 // ---- Pricing -------------------------------------------------------------------------------------
 // The price card can't know the theme or spots, so it says the fewest pages any theme gets.
@@ -167,6 +137,5 @@ $('sampleForm').addEventListener('submit', async (e) => {
   }
 });
 
-drawBox();
 drawHookPages();
 showKid();
