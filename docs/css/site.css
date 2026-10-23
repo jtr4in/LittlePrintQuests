@@ -423,11 +423,13 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 .page-title { font-size: clamp(32px, 4.6vw, 48px); }
 .sub-title { font-size: clamp(22px, 3vw, 28px); margin-top: 8px; }
 /* theme tiles that wrap into a grid (home and the order page) */
-.themes.mini.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); overflow: visible; margin-top: 20px; padding-bottom: 0; }
-.themes.mini.grid .theme { flex: none; }
-.home .themes.mini.grid { grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 14px; }
-.home .themes.mini.grid .theme { padding: 10px; }
-.home .themes.mini.grid .theme span { font-size: 15px; text-align: center; }
+.themes.mini.rows { display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); grid-auto-columns: clamp(88px, calc((100% - 20px) / 3.3), 120px); gap: 10px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; margin-top: 14px; padding: 2px 2px 10px; }
+.themes.mini.rows .theme { flex: none; }
+.home .themes.mini.rows { grid-auto-columns: clamp(96px, calc((100% - 20px) / 3.3), 140px); gap: 12px; }
+.home .themes.mini.rows .theme { padding: 8px; }
+.home .themes.mini.rows .theme span { font-size: 14px; text-align: center; }
+/* the theme dropdown above the tiles */
+.theme-pick { display: grid; gap: 6px; max-width: 420px; font: 700 15px/1.2 var(--body); }
 /* the preview gallery: one photo needs no arrows, and a button or buy form can sit under the pages */
 .gallery.single .nav { display: none; }
 .gallery .g-foot:empty { display: none; }

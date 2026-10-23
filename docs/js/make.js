@@ -50,6 +50,7 @@ function go(to, { push = true, scroll = true } = {}) {
   if (push) history.pushState({ step }, '', location.pathname + location.search);
   drawSteps();
   if (step === 'pay') drawReview();
+  if (step === 'theme') requestAnimationFrame(() => showTile(state.theme));
   if (scroll) $('wizTop').scrollIntoView({ behavior: calm() ? 'auto' : 'smooth', block: 'start' });
   // the first field of the new step, for keyboards (not on phones, where it would pop the keyboard up)
   if (matchMedia('(hover: hover)').matches) document.querySelector(`.wiz-step[data-step="${step}"] input:not([type="hidden"])`)?.focus({ preventScroll: true });
@@ -67,6 +68,16 @@ function drawThemes() {
     <img src="img/themes/${t.id}.webp" alt="" width="220" height="220" loading="lazy"><span>${THEME_LABELS[t.id]}</span>
   </button>`).join('');
   $('themeList').querySelectorAll('.theme').forEach((b) => b.addEventListener('click', () => setTheme(b.dataset.id)));
+  $('themeSelect').innerHTML = ordered.map((t) => `<option value="${t.id}">${esc(THEME_LABELS[t.id])} · ages ${t.ages}</option>`).join('');
+}
+$('themeSelect').addEventListener('change', (e) => setTheme(e.target.value, { scroll: true }));
+// Slides the tile row (not the page) so the chosen theme's tile shows.
+function showTile(id) {
+  const row = $('themeList');
+  const tile = row.querySelector(`.theme[data-id="${id}"]`);
+  if (!tile || !row.offsetWidth) return;
+  const r = tile.getBoundingClientRect(), box = row.getBoundingClientRect();
+  if (r.left < box.left || r.right > box.right) row.scrollTo({ left: row.scrollLeft + r.left - box.left - 8, behavior: calm() ? 'auto' : 'smooth' });
 }
 // The banner under the themes shows the chosen theme's whole set laid out on a table (scripts/hero-scenes.js).
 let heroAt = null;
@@ -84,9 +95,11 @@ function showHero(id) {
   $('heroCap').innerHTML = `<b>${esc(name)}</b><span>See the pages</span>`;
 }
 $('heroCap').addEventListener('click', () => Gallery.open(setPages(state.theme, state.ages), { tabs: ['hunt', 'kit', 'activity', 'party'].map((k) => [k, LABELS[k]]), label: `${THEMES.find((t) => t.id === state.theme).name} pages` }));
-function setTheme(id) {
+function setTheme(id, { scroll = false } = {}) {
   state.theme = id;
+  $('themeSelect').value = id;
   document.querySelectorAll('#themeList .theme').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.id === id)));
+  if (scroll) showTile(id);
   $('themeName').textContent = THEMES.find((t) => t.id === id).name;
   showHero(id);
   LPQName.preload(id);
