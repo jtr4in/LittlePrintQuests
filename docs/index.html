@@ -287,6 +287,14 @@ input[type="text"], input[type="number"], input[type="email"], select { width: 1
 /* shop play kits */
 .shop-card img { width: 100%; height: auto; border-radius: 12px; background: var(--tint); }
 .shop-card h3 { font-size: 19px; }
+.shop-card .see { font: 600 14px/1.2 var(--body); color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.gallery header .g-title { display: block; margin-bottom: 8px; font: 600 17px/1.2 var(--display); }
+.shop-buy[hidden], .gallery .shop-buy .status:empty { display: none; }
+.gallery .shop-buy { margin-top: 0; padding: 12px 14px; gap: 10px 16px; grid-template-columns: 1fr auto; }
+.gallery .shop-buy .field { gap: 4px; }
+.gallery .shop-buy .field label { font-size: 13.5px; }
+.gallery.buying .view img { max-height: max(240px, calc(100dvh - 380px)); }
+@media (max-width: 720px) { .gallery .shop-buy { grid-template-columns: 1fr; } .gallery .shop-buy .row2 { grid-template-columns: 2fr 1fr; } .gallery.buying .thumbs { display: none; } .gallery.buying .view img { max-height: max(220px, calc(100dvh - 400px)); } }
 .ages-pick { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
 .ages-pick button { text-align: left; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--paper); font: inherit; color: inherit; cursor: pointer; }
 .ages-pick button[aria-pressed="true"] { border-color: var(--ink); background: var(--tint); }
@@ -611,17 +619,6 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         <figure><img src="img/life/pizza-flat-sm.webp" srcset="img/life/pizza-flat-sm.webp 640w, img/life/pizza-flat.webp 1200w" sizes="(max-width: 760px) 78vw, 600px" width="640" height="478" alt="Everything in the Pizza Shop kit printed out: welcome poster, menu, shop sign, order cards, play money and staff badges" loading="lazy"><figcaption>Everything that prints</figcaption></figure>
       </div>
       <div class="themes" id="shopList"></div>
-      <form class="shop-buy" id="shopForm" novalidate>
-        <div>
-          <p class="eyebrow" id="shopPicked">Pizza Shop play kit</p>
-          <div class="row2" style="margin-top:10px">
-            <div class="field"><label for="shopChild">Child’s first name</label><input type="text" id="shopChild" maxlength="24" autocomplete="off" placeholder="Maya"></div>
-            <div class="field"><label for="shopAge">Age (optional)</label><input type="number" id="shopAge" min="1" max="15" inputmode="numeric"></div>
-          </div>
-        </div>
-        <button class="btn btn-orange" type="submit" id="shopBtn">Get this kit · $7.99</button>
-        <p class="status" id="shopStatus" role="status"></p>
-      </form>
     </div>
   </section>
   <section class="stop" id="crafts">
@@ -687,7 +684,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 
 <dialog class="gallery" id="gallery" aria-label="Pages in your order">
   <div class="g-in">
-    <header><div class="tabs" id="gTabs"></div><button type="button" class="x" id="gClose" aria-label="Close">×</button></header>
+    <header><div><b class="g-title" id="gTitle" hidden></b><div class="tabs" id="gTabs"></div></div><button type="button" class="x" id="gClose" aria-label="Close">×</button></header>
     <div class="view" id="gView">
       <img id="gImg" alt="" width="640" height="828">
       <button type="button" class="nav prev" id="gPrev" aria-label="Previous page">‹</button>
@@ -695,6 +692,14 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
     </div>
     <p class="cap" id="gCap"></p>
     <div class="thumbs" id="gThumbs"></div>
+    <form class="shop-buy" id="shopForm" novalidate hidden>
+      <div class="row2">
+        <div class="field"><label for="shopChild">Child’s first name</label><input type="text" id="shopChild" maxlength="24" autocomplete="off" placeholder="Maya"></div>
+        <div class="field"><label for="shopAge">Age (optional)</label><input type="number" id="shopAge" min="1" max="15" inputmode="numeric"></div>
+      </div>
+      <button class="btn btn-orange" type="submit" id="shopBtn">Get this kit · $7.99</button>
+      <p class="status" id="shopStatus" role="status"></p>
+    </form>
   </div>
 </dialog>
 <script>
@@ -1077,7 +1082,7 @@ function gShow(i) {
   const p = gPages[gAt];
   $('gImg').src = p.src;
   $('gImg').alt = `${p.cap}, page ${gAt + 1} of ${gPages.length}`;
-  $('gCap').textContent = `${LABELS[p.k]} · ${p.cap} (${gAt + 1} of ${gPages.length})`;
+  $('gCap').textContent = `${p.tab} · ${p.cap} (${gAt + 1} of ${gPages.length})`;
   $('gThumbs').querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-current', j === gAt));
   $('gThumbs').children[gAt]?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   $('gTabs').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.k === p.k));
@@ -1085,14 +1090,23 @@ function gShow(i) {
 function openGallery(k) {
   const gets = ['hunt', 'kit', 'activity', 'party'].filter((x) => picked.has(x) && shown().some((l) => l.id === x));
   if (!gets.length) return;
-  gPages = gets.flatMap((x) => [...(little(x) && GALLERY[`${x}Little`] || GALLERY[x]).map((cap, i) => ({ k: x, cap, src: `img/gallery/${setId()}/${little(x) ? 'little/' : ''}${x}-${i + 1}.webp` })),
-    ...(x === 'kit' && HOWTO[setId()] ? [{ k: x, cap: `Build it from a box: ${HOWTO[setId()]}`, src: `img/howto/${setId()}-sm.webp` }] : [])]);
-  $('gTabs').innerHTML = gets.map((x) => `<button type="button" data-k="${x}">${LABELS[x]}</button>`).join('');
+  gPages = gets.flatMap((x) => [...(little(x) && GALLERY[`${x}Little`] || GALLERY[x]).map((cap, i) => ({ k: x, tab: LABELS[x], cap, src: `img/gallery/${setId()}/${little(x) ? 'little/' : ''}${x}-${i + 1}.webp` })),
+    ...(x === 'kit' && HOWTO[setId()] ? [{ k: x, tab: LABELS[x], cap: `Build it from a box: ${HOWTO[setId()]}`, src: `img/howto/${setId()}-sm.webp` }] : [])]);
+  gOpen(gets.map((x) => [x, LABELS[x]]), 'Pages in your order');
+  gShow(Math.max(0, gPages.findIndex((p) => p.k === k)));
+}
+// Shared by the order gallery and the shop kit preview. With a buy form (the shop kits), it shows under the pages.
+function gOpen(tabs, label, buy) {
+  $('gallery').setAttribute('aria-label', label);
+  $('gTitle').hidden = !buy;
+  $('gTitle').textContent = label;
+  $('shopForm').hidden = buy !== 'shop';
+  $('gallery').classList.toggle('buying', Boolean(buy));
+  $('gTabs').innerHTML = tabs.map(([x, name]) => `<button type="button" data-k="${x}">${name}</button>`).join('');
   $('gTabs').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => gShow(gPages.findIndex((p) => p.k === b.dataset.k))));
   $('gThumbs').innerHTML = gPages.map((p, i) => `<button type="button" aria-label="${p.cap}"><img src="${p.src}" alt="" loading="lazy" width="46" height="60"></button>`).join('');
   $('gThumbs').querySelectorAll('button').forEach((b, i) => b.addEventListener('click', () => gShow(i)));
   $('gallery').showModal();
-  gShow(Math.max(0, gPages.findIndex((p) => p.k === k)));
 }
 $('stack').addEventListener('click', (e) => openGallery(e.target.closest('[data-k]')?.dataset.k));
 $('stack').addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openGallery(); } });
@@ -1195,16 +1209,22 @@ const SHOP_KITS = [
 ];
 let shopKit = 'pizza';
 function drawShops() {
-  $('shopList').innerHTML = SHOP_KITS.map(([id, name, blurb]) => `<button type="button" class="theme shop-card" data-kit="${id}" aria-pressed="${id === shopKit}">
-      <img src="img/kit-${id}.webp" alt="${name} play kit pages" width="677" height="497" loading="lazy"><h3>${name}</h3><p>${blurb}</p></button>`).join('');
-  $('shopList').querySelectorAll('[data-kit]').forEach((b) => b.addEventListener('click', () => {
-    shopKit = b.dataset.kit;
-    drawShops();
-    $('shopForm').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }));
+  $('shopList').innerHTML = SHOP_KITS.map(([id, name, blurb]) => `<button type="button" class="theme shop-card" data-kit="${id}" aria-haspopup="dialog">
+      <img src="img/kit-${id}.webp" alt="${name} play kit pages" width="677" height="497" loading="lazy"><h3>${name}</h3><p>${blurb}</p><span class="see">See what’s inside</span></button>`).join('');
+  $('shopList').querySelectorAll('[data-kit]').forEach((b) => b.addEventListener('click', () => openShop(b.dataset.kit)));
   const name = SHOP_KITS.find(([id]) => id === shopKit)[1];
-  $('shopPicked').textContent = `${name} play kit`;
   $('shopBtn').textContent = `Get the ${name} kit · $7.99`;
+}
+// Tapping a shop kit opens its pages (both age versions and the box build), with the buy form under them.
+function openShop(id) {
+  shopKit = id;
+  drawShops();
+  const name = shopName(id);
+  gPages = [['big', 'Big kids (5 to 8)', ''], ['little', 'Little kids (2 to 4)', 'little/']].flatMap(([k, tab, dir]) =>
+    GALLERY.kit.map((cap, i) => ({ k, tab, cap, src: `img/gallery/${id}/${dir}kit-${i + 1}.webp` })))
+    .concat(HOWTO[id] ? [{ k: 'box', tab: 'Box build', cap: HOWTO[id], src: `img/howto/${id}-sm.webp` }] : []);
+  gOpen([['big', 'Big kids (5 to 8)'], ['little', 'Little kids (2 to 4)'], ...(HOWTO[id] ? [['box', 'Box build']] : [])], `${name} play kit`, 'shop');
+  gShow(0);
 }
 function shopName(id) { return (SHOP_KITS.find(([k]) => k === id) || [])[1]; }
 drawShops();
@@ -1233,6 +1253,7 @@ function leaveShop() {
 }
 $('shopForm').addEventListener('submit', (e) => {
   e.preventDefault();
+  $('gallery').close();
   chooseShop(shopKit);
 });
 
