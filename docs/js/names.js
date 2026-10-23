@@ -40,30 +40,28 @@
     const all = pages.flatMap((p) => p.s);
     slots.forEach((el, i) => {
       el.innerHTML = all[i].html.split('{N}').join(esc(name));
-      el.dataset.fit = name === SAMPLE ? '' : '1';
-      el.dataset.i = i;
+      el.dataset.fit = '1';
     });
-    root.nmAll = all;
     fit(root);
   }
-  // Only boxes on screen can be measured; the rest wait for the next sync. A box counts as too full
-  // when the name makes it spill further than the sample name does (font metrics differ a hair
-  // between devices, so the sample is the yardstick, not the box).
+  // Only boxes on screen can be measured; the rest wait for the next sync. A box is too full when the
+  // name pushes the words past its sides, or onto another line: anything printed under it is baked
+  // into the picture, so a wrapped name would run over it. Heights get a little slack because the
+  // fonts' line metrics differ a hair between devices.
   function fit(root) {
     if (!root.offsetWidth) return;
-    const size = (el) => [el.firstElementChild.scrollWidth, el.firstElementChild.scrollHeight, el.firstElementChild.clientWidth, el.firstElementChild.clientHeight];
     root.querySelectorAll('.nm-slot[data-fit="1"]').forEach((el) => {
       el.dataset.fit = '';
-      if (!el.firstElementChild) return;
-      const html = el.innerHTML;
-      el.innerHTML = root.nmAll[el.dataset.i].html.split('{N}').join(SAMPLE);
-      const [rw, rh, cw, ch] = size(el);
-      const over = () => { const [w, h] = size(el); return w > Math.max(rw, cw) + 1 || h > Math.max(rh, ch) + 1; };
-      el.innerHTML = html;
+      const box = () => el.firstElementChild;
+      if (!box()) return;
+      const cw = box().clientWidth;
+      const ch = box().clientHeight;
+      const over = () => box().scrollWidth > cw + 1 || box().scrollHeight > ch * 1.2 + 2;
       if (!over()) return;
+      const html = el.innerHTML;
       let lo = 0.3;
       let hi = 1;
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 7; i++) {
         const f = (lo + hi) / 2;
         el.innerHTML = sized(html, f);
         if (over()) hi = f;

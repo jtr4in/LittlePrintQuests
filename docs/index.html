@@ -128,6 +128,8 @@ main { position: relative; }
 /* the name hook: type your kid's name and every preview on the page becomes theirs (js/names.js) */
 .hook { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 28px; align-items: center; margin-bottom: 22px; }
 .hook-title { font: 700 clamp(30px, 4.4vw, 48px)/1.08 var(--display); text-wrap: balance; margin-top: 10px; }
+.hook-title .occasion { display: inline-block; transition: opacity .35s ease, transform .35s ease; }
+.hook-title .occasion.out { opacity: 0; transform: translateY(-.25em); }
 .hook-title b { color: var(--orange-edge); background: linear-gradient(transparent 62%, var(--hl) 62%); padding: 0 4px; font-weight: 700; overflow-wrap: anywhere; }
 .hook-sub { color: var(--ink-soft); font-size: 18px; margin-top: 10px; max-width: 34em; }
 .hook-form { display: flex; gap: 10px; margin-top: 18px; max-width: 560px; }
@@ -162,6 +164,8 @@ main { position: relative; }
 .nm-sheet { position: absolute; overflow: hidden; }
 .nm-page { position: relative; }
 .nm-slot { position: absolute; }
+/* gaps left for emoji and pictures (still in the picture) keep their width only, so a line never grows */
+.nm-slot span[style^="display:inline-block"] { height: 0 !important; vertical-align: baseline !important; }
 /* theme strip inside the builder */
 .themes.mini { display: flex; gap: 10px; overflow-x: auto; margin-top: 10px; padding-bottom: 6px; scroll-snap-type: x proximity; }
 .themes.mini .theme { flex: 0 0 92px; padding: 6px; gap: 4px; scroll-snap-align: start; border-width: 1.5px; }
@@ -460,7 +464,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
     <div class="wrap hook">
       <div class="hook-copy">
         <p class="eyebrow">Personalized printables · ages 3 to 8</p>
-        <p class="hook-title" id="hookTitle">A birthday adventure starring <b>your kid</b>.</p>
+        <p class="hook-title" id="hookTitle"><span class="occasion" id="occasion">A birthday</span> adventure starring <b>your kid</b>.</p>
         <p class="hook-sub">Type their first name and watch every page on this site become theirs.</p>
         <form class="hook-form" id="hookForm">
           <input type="text" id="hookName" maxlength="24" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="Your kid’s first name" aria-label="Your kid’s first name">
@@ -1527,12 +1531,32 @@ $('hookForm').addEventListener('submit', (e) => {
   if (!LPQName.typed()) return $('hookName').focus();
   $('orderForm').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
 });
-// The two pages beside the box follow the builder's theme: the story letter and the certificate.
-function drawHookPages() {
-  $('hookBack').src = `img/pages/${state.theme}-briefing.webp`;
-  $('hookFront').src = `img/pages/${state.theme}-cert.webp`;
-  LPQName.preload(state.theme);
+// The two pages beside the box: the story letter and the certificate, in the builder's theme, or
+// while nobody has picked one, the theme that goes with the occasion in the headline.
+function drawHookPages(id = state.theme) {
+  $('hookBack').src = `img/pages/${id}-briefing.webp`;
+  $('hookFront').src = `img/pages/${id}-cert.webp`;
+  LPQName.preload(id);
 }
+// The headline's occasion rotates so it reads as more than a birthday thing, each a nod to a theme.
+const OCCASIONS = [
+  ['A birthday', null], ['A rainy day', 'pirate'], ['A sleepover', 'space'], ['A snow day', 'ice'],
+  ['A Halloween', 'halloween'], ['A playdate', 'dino'], ['A Christmas morning', 'christmas'],
+  ['A Valentine’s Day', 'valentine'], ['An Easter morning', 'easter'], ['A weekend', 'royal'],
+];
+let occasionAt = 0;
+function nextOccasion() {
+  if (document.hidden) return;
+  occasionAt = (occasionAt + 1) % OCCASIONS.length;
+  const [words, theme] = OCCASIONS[occasionAt];
+  $('occasion').classList.add('out');
+  setTimeout(() => {
+    $('occasion').textContent = words;
+    $('occasion').classList.remove('out');
+    if (!heroLocked) drawHookPages(theme || state.theme);
+  }, 350);
+}
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(nextOccasion, 3200);
 
 // Links from the idea pages can pick the theme, the trail and the age: /?theme=dino&space=apartment&age=5#order
 // or a shop kit: /?kit=burger#order
