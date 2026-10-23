@@ -42,7 +42,7 @@ const OrderSchema = z.object({
   ),
 });
 
-const SYSTEM = `You set up personalized birthday scavenger hunts for children aged 3 to 8.
+const SYSTEM = `You set up personalized birthday scavenger hunts for children aged 2 to 8.
 You receive a buyer's order notes from an Etsy shop and return the hunt details.
 
 Themes (use the id): ${Object.values(THEMES).map((t) => `${t.id} = ${t.name}`).join('; ')}.
@@ -128,7 +128,7 @@ async function parseKitOrder({ personalization, kit }) {
     model: MODEL,
     max_tokens: 1000,
     output_config: { effort: 'low', format: zodOutputFormat(KitSchema) },
-    system: `You set up personalized ${def.name} pretend play kits for children aged 3 to 8 from a buyer's Etsy order notes.
+    system: `You set up personalized ${def.name} pretend play kits for children aged 2 to 8 from a buyer's Etsy order notes.
 Return the child's first name, their age if given, and up to 6 pets or toys. For each, keep the name the buyer gave and set kind to the closest of: ${Object.keys(def.kinds).join(', ')}.
 Missing pets are fine. Set ok to false only if there's no child's name.`,
     messages: [{ role: 'user', content: `Buyer's personalization text:\n"""\n${personalization}\n"""` }],

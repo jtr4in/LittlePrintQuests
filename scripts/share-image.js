@@ -25,7 +25,7 @@ h1 em{font-style:normal;background:linear-gradient(transparent 62%,#89dcb0 62%)}
 <div class="trail"></div>
 <div class="brand"><img src="${img('mark.png')}"><span><span class="l">Little</span><span class="p">Print</span><span class="q">Quests</span></span></div>
 <h1>A treasure hunt <em>made for your kid</em></h1>
-<div class="sub">Printable birthday scavenger hunts with their name and your home’s own hiding spots. Ages 3 to 8.</div>
+<div class="sub">Printable birthday scavenger hunts with their name and your home’s own hiding spots. Ages 2 to 8.</div>
 <div class="pill">Ready to print in minutes</div>
 <img class="pg" src="${img('pages/unicorn-party.webp')}" style="left:690px;top:120px;transform:rotate(-9deg)">
 <img class="pg" src="${img('pages/pirate-kit.webp')}" style="left:880px;top:150px;transform:rotate(8deg)">
