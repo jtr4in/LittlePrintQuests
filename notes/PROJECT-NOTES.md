@@ -32,6 +32,17 @@ Paths like `project-files/...` are in this repo. Paths like `/mnt/project-files/
 - One realistic prop per kit (like vet X-rays), most fit a play kitchen spot. `def.wow` text is shown by `wowPage` in `src/kits/extras.js`, with `src/kits/art/<kit>/wow.webp` made by `scripts/wow-cutout.py`.
 - Prompts: `project-files/pretend-play/wow/` (run `tools/genall.sh` with `bash`). Raw images and `all-wow-pages.jpg` are large files.
 - Gotcha: Gemini "white" studio backgrounds come back grey and shadowed, so pale pieces (snow globe, unicorn, cake) are made on chroma green, listed in `GREEN` in `prompts.py`.
+- The wow page is the third Play kit sample in the order preview gallery for every theme, big and little (PR #106, captioned "Wow piece"); `wowPage()` in `scripts/gallery-images.js` finds its page number. The order stack cards still show the first toy page.
+
+### Activity packs (PR #107, 2026-10-23)
+- Jason asked for more pages ("do them all"). Pages live in `src/kits/activities.js`; the `PAGES` list there sets the order and which age version gets each page, and the cover checklist and `activityCount` come from it. Big kids (5 to 8): 15 pages plus cover. Little kids (2 to 4): 16 pages plus cover.
+- Both ages: clean-up, trace the words, match it up, how many, I spy, spot the difference, which one is different, find the way (maze), color by number (color by dot for little kids), draw yourself as the kit's boss, my adventure story (little kids circle pictures instead of writing), invent something new.
+- Little kids only: trace the path, dot the letter (first letter of the kid's name), shapes and colors, stick it on (cut and glue on shadows). Dot the letter and stick it on are marked "Print & Play" (paper); everything else is "Wipe & Play".
+- Big kids only: word search, secret code (a themed "YOU ..." message per kit in `SECRETS`, in picture code; the answer is printed upside down at the bottom), roll a silly creature.
+- Color-by-number pictures: one emoji per kit in `MOSAIC_PICS`, turned into crayon-color grids in `src/kits/mosaics.json` by `node scripts/color-mosaics.js [kit]` (18 squares on the long side for big kids, 11 for little). Pick pictures with 3+ clear colors; single-color emoji (dino, shield, tooth) make dull pages. Re-run the script after changing `MOSAIC_PICS`.
+- Previews: the order gallery shows big = cover, I spy, secret code, color by number, roll a creature; little = cover, trace the path, stick it on, color by dot, I spy. Don't preview dot the letter: its big letter is drawn from the name, so the name-swap overlay can't change it.
+- To refresh only the activity previews: run `gallery-images.js`, `git checkout` every changed file without "activity" in its path, and in `docs/img/n/<set>.json` keep main's entries and swap in only the `activity` keys.
+- Sample PDFs (Maya, both ages, dino, pirate, unicorn, space, pizza): `/mnt/project-files/activity-packs/`.
 
 ### Play kitchen fit (PR #98, 2026-10-23)
 - Kits should work with IKEA Duktig and KidKraft (Vintage, Ultimate Corner) play kitchens. Measurements come from retail listings: Duktig oven glass about 8x8 in, back opening about 26.75x12.5 in; KidKraft Vintage oven shelf 10.4x8.1 in. Only the pizza oven didn't fit; it's now a 7.6 in square plus a separate woodpile strip.
