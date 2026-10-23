@@ -19,6 +19,17 @@ const FLAVOR = {
   fire: { party: 'Firefighter Party', tagline: 'Sirens on, it’s party time!', foods: ['Hydrant Punch', 'Ladder Pretzels', 'Dalmatian Bites'] },
   ice: { party: 'Winter Wonderland Party', tagline: 'Bundle up for a snowy celebration!', foods: ['Snowballs', 'Snowflake Punch', 'Icicle Sticks'] },
   racecar: { party: 'Race Car Party', tagline: 'Start your engines, it’s party time!', foods: ['Racing Fuel', 'Spare Tires', 'Stoplight Bites'] },
+  pizza: { party: 'Pizza Party', tagline: 'Grab a slice, it’s party time!', foods: ['Pizza Slices', 'Tomato Punch', 'Cheesy Bites'] },
+  burger: { party: 'Burger Party', tagline: 'Order up! It’s party time!', foods: ['Mini Burgers', 'Milkshake Punch', 'Crispy Fries'] },
+  grocery: { party: 'Grocery Store Party', tagline: 'Fill your cart with party fun!', foods: ['Fresh Fruit', 'Aisle 5 Punch', 'Checkout Snacks'] },
+  post: { party: 'Post Office Party', tagline: 'Special delivery: you’re invited!', foods: ['Stamp Cookies', 'Mailbag Mix', 'Postage Punch'] },
+  library: { party: 'Book Party', tagline: 'Turn the page to a party!', foods: ['Bookworm Bites', 'Story Time Punch', 'Bookmark Cookies'] },
+  police: { party: 'Police Party', tagline: 'Calling all officers to the party!', foods: ['Donut Patrol', 'Siren Punch', 'Badge Cookies'] },
+  dentist: { party: 'Sparkle Smile Party', tagline: 'Flash a smile, it’s party time!', foods: ['Crunchy Apples', 'Sparkle Water', 'Cheese Smiles'] },
+  petshop: { party: 'Pet Shop Party', tagline: 'Paws and party hats on!', foods: ['Doggy Bones', 'Fishbowl Punch', 'Kitty Crunch'] },
+  coffee: { party: 'Café Party', tagline: 'Join us for cocoa and cake!', foods: ['Hot Cocoa', 'Mini Muffins', 'Marshmallow Clouds'] },
+  italian: { party: 'Pasta Party', tagline: 'Mangia! Come party with us!', foods: ['Meatball Bites', 'Garlic Bread', 'Gelato Cups'] },
+  auto: { party: 'Car Party', tagline: 'Rev your engines for a party!', foods: ['Motor Oil Punch', 'Spare Tire Donuts', 'Lug Nut Snacks'] },
 };
 
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);

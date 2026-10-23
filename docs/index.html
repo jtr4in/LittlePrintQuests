@@ -315,8 +315,6 @@ input[type="text"], input[type="number"], input[type="email"], select { width: 1
 .ages-pick button[aria-pressed="true"] { border-color: var(--ink); background: var(--tint); }
 .ages-pick b { display: block; font-size: 15px; }
 .ages-pick small { display: block; font-size: 13px; line-height: 1.35; opacity: .8; margin-top: 2px; }
-.shop-pill { margin: 0 0 14px; padding: 10px 14px; border: 1.5px solid var(--ink); border-radius: 12px; background: var(--tint); display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; justify-content: space-between; }
-.shop-pill button { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
 .shop-buy { margin-top: 26px; background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; display: grid; grid-template-columns: 1fr auto; gap: 16px 20px; align-items: end; }
 .shop-buy .row2 { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
 .shop-buy .status { grid-column: 1 / -1; }
@@ -427,7 +425,6 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
     <div class="wrap">
       <form class="builder" id="orderForm" novalidate>
         <div class="panel">
-          <p class="shop-pill" id="shopPill" hidden></p>
           <div class="row2">
             <div class="field"><label for="childName">Child’s first name</label><input type="text" id="childName" maxlength="24" autocomplete="off" value="Maya"></div>
             <div class="field"><label for="childAge" id="ageLabel">Turning</label><input type="number" id="childAge" min="2" max="12" placeholder="Optional"></div>
@@ -631,7 +628,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
     <div class="wrap">
       <div class="pin"><b></b><span class="eyebrow">Shop play kits</span></div>
       <h2>Eleven pretend places to set up at home</h2>
-      <p class="kits-lede">Print, cut and tape them up around a play kitchen, a shelf or a corner of the room. Every kit is made with your child’s name: a long shop sign, station and counter signs, shelf labels, a cash register, play money, order forms and a menu to run it all. $7.99 each, with play ideas in Host Mode. Every kit comes in two versions: big kids (5 to 8), and little kids (2 to 4) with thicker cut lines, bigger pictures and order forms they fill in by circling pictures.</p>
+      <p class="kits-lede">Print, cut and tape them up around a play kitchen, a shelf or a corner of the room. Every kit is made with your child’s name: a long shop sign, station and counter signs, shelf labels, a cash register, play money, order forms and a menu to run it all. $7.99 each, with play ideas in Host Mode. Each one also has its own scavenger hunt and party pack, so you can get the whole set in one everything bundle. Every kit comes in two versions: big kids (5 to 8), and little kids (2 to 4) with thicker cut lines, bigger pictures and order forms they fill in by circling pictures.</p>
       <div class="life life-2">
         <figure><img src="img/life/pizza-stand-sm.webp" srcset="img/life/pizza-stand-sm.webp 640w, img/life/pizza-stand.webp 1200w" sizes="(max-width: 760px) 78vw, 600px" width="640" height="478" alt="The printed Pizza Shop kit on a play stand: long shop sign, Open sign, menu, oven poster, Pay Here sign and topping labels" loading="lazy"><figcaption>Set up on a play stand</figcaption></figure>
         <figure><img src="img/life/pizza-flat-sm.webp" srcset="img/life/pizza-flat-sm.webp 640w, img/life/pizza-flat.webp 1200w" sizes="(max-width: 760px) 78vw, 600px" width="640" height="478" alt="Everything in the Pizza Shop kit printed out: welcome poster, menu, shop sign, order cards, play money and staff badges" loading="lazy"><figcaption>Everything that prints</figcaption></figure>
@@ -758,6 +755,39 @@ const THEMES = [
   { id: 'ice', name: 'Ice Palace Snowflake Quest', ages: '3–7', header: 'Ice Palace Quest', badge: 'Snowflake', colors: ['#3f6fb5', '#7b68b8', '#d6e6f7'],
     hook: 'Pip the Snow Fox swished Queen Glacia’s crystal snowflakes away. Follow the trail and bring winter magic home!',
     opener: ['A snowflake! It sparkles and twinkles so bright,', 'Now tiptoe along to the next one in sight!'] },
+  { id: 'pizza', name: 'Pizza Shop Topping Hunt', ages: '3–7', header: 'Pizza Shop Order Up', badge: 'Order Ticket', colors: ['#d9442f', '#3f9a4a', '#ffd9a8'],
+    hook: 'Mozzie the Mouse ran off with every pizza topping. Junior Pizza Chefs, follow the Order Tickets and save the cheesiest pizza in town!',
+    opener: ['Squeak, squeak! Was that Mozzie the Mouse?', 'He hid one more topping somewhere in the house!'] },
+  { id: 'burger', name: 'Burger Shack Secret Sauce', ages: '3–7', header: 'Burger Shack Grill Crew', badge: 'Recipe Card', colors: ['#e2782a', '#d93a2f', '#ffe08a'],
+    hook: 'Gus the Seagull swooped off with the Secret Sauce recipe. Grill Crew, collect every card before lunch!',
+    opener: ['Squawk! goes Gus from up high in the sky,', 'He dropped one more card as he went flying by!'] },
+  { id: 'grocery', name: 'Grocery Store Shopping List', ages: '3–7', header: 'Super Shopper List', badge: 'List Item', colors: ['#3a9d4f', '#f2a03d', '#cdeec0'],
+    hook: 'Zippy the runaway cart scattered the Big Party Shopping List. Super Shoppers, find every piece!',
+    opener: ['Beep! goes the scanner, the price is just right,', 'The next list item is hiding in sight!'] },
+  { id: 'post', name: 'Post Office Special Delivery', ages: '3–7', header: 'Special Delivery', badge: 'Stamp', colors: ['#2f5fb3', '#e8513a', '#cfe0ff'],
+    hook: 'Bertha the sorting machine sneezed and the special letters flew everywhere. Junior Mail Carriers, deliver them all!',
+    opener: ['ACHOO! went Bertha, oh what a big sneeze!', 'The letters went flying like leaves in the breeze!'] },
+  { id: 'library', name: 'Library Lost Pages Mystery', ages: '3–7', header: 'Book Detective Case', badge: 'Lost Page', colors: ['#6a4fb3', '#f2a93b', '#e3d8ff'],
+    hook: 'Hoot the library owl flapped the Big Storybook’s pages away. Book Detectives, put the story back together!',
+    opener: ['Hoo-hoo! says Hoot from the top of the stack,', 'You found a lost page! Let’s put the book back!'] },
+  { id: 'police', name: 'Police Station Missing Teddy', ages: '3–7', header: 'Junior Officer Case', badge: 'Evidence', colors: ['#2c4f9e', '#f2c230', '#cfdcf7'],
+    hook: 'Buttons the Teddy is missing from the station. Junior Officers, follow the evidence and crack the case!',
+    opener: ['Wee-oo, wee-oo! You found the next clue,', 'Officers, Buttons is counting on you!'] },
+  { id: 'dentist', name: 'Dentist Sparkle Smile Quest', ages: '3–6', header: 'Sparkle Smile Quest', badge: 'Sparkle Card', colors: ['#2a9fb4', '#f48aa8', '#c7eef3'],
+    hook: 'The sneaky Sugar Bugs hid the Sparkle Toothbrushes. Smile Squad, find them all for Big Smile Day!',
+    opener: ['Show me your smile, it’s sparkly and bright,', 'You’re chasing those Sugar Bugs out of sight!'] },
+  { id: 'petshop', name: 'Pet Shop Adoption Day', ages: '3–7', header: 'Adoption Day Hunt', badge: 'Name Tag', colors: ['#8a56c2', '#f5b335', '#e5d4f7'],
+    hook: 'Noodle the Kitten batted the name tags away on Adoption Day. Pet Pals, find them so every pet goes home!',
+    opener: ['Puppies need cuddles and kittens need play,', 'Find the next tag and they’ll go home today!'] },
+  { id: 'coffee', name: 'Café Magic Cocoa Beans', ages: '3–7', header: 'Café Cocoa Quest', badge: 'Cocoa Bean', colors: ['#9a6340', '#e8708a', '#f1dcc5'],
+    hook: 'Mocha the Squirrel hid the Magic Cocoa Beans like acorns. Junior Baristas, find them for Magic Hot Cocoa!',
+    opener: ['Stir it and swirl it, a marshmallow on top,', 'Another bean’s waiting, so hippity-hop!'] },
+  { id: 'italian', name: 'Trattoria Runaway Meatballs', ages: '3–7', header: 'Nonna’s Trattoria', badge: 'Meatball', colors: ['#c8372d', '#2f8a4c', '#f9d6c8'],
+    hook: 'Nonna sneezed and the meatballs rolled out of the pot. Little Chefs, bring them all home before dinner!',
+    opener: ['On top of spaghetti, all covered with cheese,', 'Another lost meatball! Go find it, please!'] },
+  { id: 'auto', name: 'Auto Shop Toolbox Rescue', ages: '3–7', header: 'Auto Shop Work Order', badge: 'Tool Tag', colors: ['#34618f', '#ec6a2c', '#ffdf7e'],
+    hook: 'Tilly the Tow Truck bumped the toolbox and the tools rolled away. Junior Mechanics, find the Golden Wrench!',
+    opener: ['Bang goes the hammer and buzz goes the drill,', 'Find the next tool with your mechanic skill!'] },
   { id: 'halloween', name: 'Not-So-Spooky Halloween Hunt', ages: '3–7', header: 'Halloween Treat Trail', badge: 'Boo Note', colors: ['#5e2f91', '#ec6f12', '#d6ef8f'],
     hook: 'Wispy the little ghost sneezed and blew the Halloween treats away. Find them all before the costume parade!',
     opener: ['A treat! You found it! Hip, hip, hooray!', 'The rest of the candy is not far away!'] },
@@ -787,12 +817,11 @@ const SPACES = {
 };
 
 const $ = (id) => document.getElementById(id);
-// shop is set when a shop play kit (pizza, library...) is being ordered instead of a themed set.
 // ages is the little kids (2 to 4) or big kids (5 to 8) version; it follows the age until they pick one.
-const state = { shop: null, ages: 'big', agesPicked: false, theme: 'dino', picks: ['front_door', 'shoe_rack', 'couch', 'dryer', 'bathtub', 'bookshelf', 'pet_bed', 'kitchen_table'], custom: {} };
+const state = { ages: 'big', agesPicked: false, theme: 'dino', picks: ['front_door', 'shoe_rack', 'couch', 'dryer', 'bathtub', 'bookshelf', 'pet_bed', 'kitchen_table'], custom: {} };
 
 // Theme cards: everyday themes and holidays. The holiday coming up goes first with a "Now" badge.
-const KITS = {"dino":{"name":"Dino Dig Lab","blurb":"A T-Rex puzzle with your child’s name to dig up and put back together, a dino egg that hatches when you pull the tab, plus a whole shop to set up.","alt":"Dino Dig Lab kit pages: a welcome poster and two hands-on toys"},"hero":{"name":"Hero HQ","blurb":"A Super Power Spinner to pick today’s power, a Hero Power Meter and a Villain Alarm with needles that spin, plus a whole shop to set up.","alt":"Hero HQ kit pages: a welcome poster and two hands-on toys"},"pirate":{"name":"Pirate Ship","blurb":"A pirate spyglass to roll up, with a Spot It! list, a lift-the-flap treasure chest with six treasures, plus a whole shop to set up.","alt":"Pirate Ship kit pages: a welcome poster and two hands-on toys"},"space":{"name":"Mission Control","blurb":"A Planet Picker spinner to choose where to fly next, a launch pad card: pull the tab and the rocket blasts off, plus a whole shop to set up.","alt":"Mission Control kit pages: a welcome poster and two hands-on toys"},"royal":{"name":"Royal Castle","blurb":"A lift-the-flap castle with someone behind every window, a Royal Wish Wheel to spin for a royal wish, plus a whole shop to set up.","alt":"Royal Castle kit pages: a welcome poster and two hands-on toys"},"unicorn":{"name":"Unicorn Stable","blurb":"A Rainbow Maker spinner with six magic surprises, a unicorn puzzle with your child’s name, plus a whole shop to set up.","alt":"Unicorn Stable kit pages: a welcome poster and two hands-on toys"},"mermaid":{"name":"Mermaid Lagoon","blurb":"A seashell tiara with your child’s name, an under-the-sea puzzle with your child’s name, plus a whole shop to set up.","alt":"Mermaid Lagoon kit pages: a welcome poster and two hands-on toys"},"construction":{"name":"Construction Site","blurb":"A hard hat to wear, with your child’s name, a lift-the-flap toolbox with six tools, plus a whole shop to set up.","alt":"Construction Site kit pages: a welcome poster and two hands-on toys"},"vet":{"name":"Vet Clinic","blurb":"A lift-the-flap doctor’s bag with six tools to find, an X-ray machine: pull the tab to see inside a patient, plus a whole shop to set up.","alt":"Vet Clinic kit pages: a welcome poster and two hands-on toys"},"racecar":{"name":"Pit Stop Garage","blurb":"A full-size steering wheel with your child’s name on the horn, a speedometer and fuel gauge with needles that really spin, plus a whole shop to set up.","alt":"Pit Stop Garage kit pages: a welcome poster and two hands-on toys"},"fire":{"name":"Fire Station","blurb":"A firefighter helmet shield with your child’s name, a rescue card: pull the tab to put out the fire, plus a whole shop to set up.","alt":"Fire Station kit pages: a welcome poster and two hands-on toys"},"ice":{"name":"Ice Palace","blurb":"A Snowflake Spell spinner with six frosty spells, an ice palace puzzle with your child’s name, plus a whole shop to set up.","alt":"Ice Palace kit pages: a welcome poster and two hands-on toys"},"halloween":{"name":"Potion Shop","blurb":"A lift-the-flap potion cauldron with six secret ingredients, a Ghost-o-Meter and a Spell-o-Meter with needles that spin, plus a whole shop to set up.","alt":"Potion Shop kit pages: a welcome poster and two hands-on toys"},"christmas":{"name":"Santa’s Workshop","blurb":"Reindeer antlers to wear, with your child’s name, a Nice-o-Meter and a Sleigh Speed meter with needles that spin, plus a whole shop to set up.","alt":"Santa’s Workshop kit pages: a welcome poster and two hands-on toys"},"valentine":{"name":"Valentine Post Office","blurb":"A lift-the-flap Love Mailbox with six sweet surprises, a Kindness Spinner full of kind things to do, plus a whole shop to set up.","alt":"Valentine Post Office kit pages: a welcome poster and two hands-on toys"},"easter":{"name":"Bunny Egg Factory","blurb":"Bunny ears to wear, with your child’s name, a lift-the-flap egg basket with six surprises, plus a whole shop to set up.","alt":"Bunny Egg Factory kit pages: a welcome poster and two hands-on toys"}};
+const KITS = {"dino":{"name":"Dino Dig Lab","blurb":"A T-Rex puzzle with your child’s name to dig up and put back together, a dino egg that hatches when you pull the tab, plus a whole shop to set up.","alt":"Dino Dig Lab kit pages: a welcome poster and two hands-on toys"},"hero":{"name":"Hero HQ","blurb":"A Super Power Spinner to pick today’s power, a Hero Power Meter and a Villain Alarm with needles that spin, plus a whole shop to set up.","alt":"Hero HQ kit pages: a welcome poster and two hands-on toys"},"pirate":{"name":"Pirate Ship","blurb":"A pirate spyglass to roll up, with a Spot It! list, a lift-the-flap treasure chest with six treasures, plus a whole shop to set up.","alt":"Pirate Ship kit pages: a welcome poster and two hands-on toys"},"space":{"name":"Mission Control","blurb":"A Planet Picker spinner to choose where to fly next, a launch pad card: pull the tab and the rocket blasts off, plus a whole shop to set up.","alt":"Mission Control kit pages: a welcome poster and two hands-on toys"},"royal":{"name":"Royal Castle","blurb":"A lift-the-flap castle with someone behind every window, a Royal Wish Wheel to spin for a royal wish, plus a whole shop to set up.","alt":"Royal Castle kit pages: a welcome poster and two hands-on toys"},"unicorn":{"name":"Unicorn Stable","blurb":"A Rainbow Maker spinner with six magic surprises, a unicorn puzzle with your child’s name, plus a whole shop to set up.","alt":"Unicorn Stable kit pages: a welcome poster and two hands-on toys"},"mermaid":{"name":"Mermaid Lagoon","blurb":"A seashell tiara with your child’s name, an under-the-sea puzzle with your child’s name, plus a whole shop to set up.","alt":"Mermaid Lagoon kit pages: a welcome poster and two hands-on toys"},"construction":{"name":"Construction Site","blurb":"A hard hat to wear, with your child’s name, a lift-the-flap toolbox with six tools, plus a whole shop to set up.","alt":"Construction Site kit pages: a welcome poster and two hands-on toys"},"vet":{"name":"Vet Clinic","blurb":"A lift-the-flap doctor’s bag with six tools to find, an X-ray machine: pull the tab to see inside a patient, plus a whole shop to set up.","alt":"Vet Clinic kit pages: a welcome poster and two hands-on toys"},"racecar":{"name":"Pit Stop Garage","blurb":"A full-size steering wheel with your child’s name on the horn, a speedometer and fuel gauge with needles that really spin, plus a whole shop to set up.","alt":"Pit Stop Garage kit pages: a welcome poster and two hands-on toys"},"fire":{"name":"Fire Station","blurb":"A firefighter helmet shield with your child’s name, a rescue card: pull the tab to put out the fire, plus a whole shop to set up.","alt":"Fire Station kit pages: a welcome poster and two hands-on toys"},"ice":{"name":"Ice Palace","blurb":"A Snowflake Spell spinner with six frosty spells, an ice palace puzzle with your child’s name, plus a whole shop to set up.","alt":"Ice Palace kit pages: a welcome poster and two hands-on toys"},"halloween":{"name":"Potion Shop","blurb":"A lift-the-flap potion cauldron with six secret ingredients, a Ghost-o-Meter and a Spell-o-Meter with needles that spin, plus a whole shop to set up.","alt":"Potion Shop kit pages: a welcome poster and two hands-on toys"},"christmas":{"name":"Santa’s Workshop","blurb":"Reindeer antlers to wear, with your child’s name, a Nice-o-Meter and a Sleigh Speed meter with needles that spin, plus a whole shop to set up.","alt":"Santa’s Workshop kit pages: a welcome poster and two hands-on toys"},"valentine":{"name":"Valentine Post Office","blurb":"A lift-the-flap Love Mailbox with six sweet surprises, a Kindness Spinner full of kind things to do, plus a whole shop to set up.","alt":"Valentine Post Office kit pages: a welcome poster and two hands-on toys"},"easter":{"name":"Bunny Egg Factory","blurb":"Bunny ears to wear, with your child’s name, a lift-the-flap egg basket with six surprises, plus a whole shop to set up.","alt":"Bunny Egg Factory kit pages: a welcome poster and two hands-on toys"},"pizza":{"name":"Pizza Shop","blurb":"A big pizza to top and slice with order cards, a cash register and a pizza menu.","alt":"Pizza Shop kit pages: a welcome poster, a shop sign and hands-on toys"},"burger":{"name":"Burger Shop","blurb":"Burger layers to stack to order, a drive-thru, a cash register and a burger menu.","alt":"Burger Shop kit pages: a welcome poster, a shop sign and hands-on toys"},"grocery":{"name":"Grocery Store","blurb":"Play food with price tags, aisle signs, coupons, a basket game and a checkout register.","alt":"Grocery Store kit pages: a welcome poster, a shop sign and hands-on toys"},"post":{"name":"Post Office","blurb":"Stamps, postcards and letters to mail, a parcel card with a pull tab and a post office till.","alt":"Post Office kit pages: a welcome poster, a shop sign and hands-on toys"},"library":{"name":"Library","blurb":"Library cards, a checkout desk, a Story Spinner and Quiet Please and Story Time signs.","alt":"Library kit pages: a welcome poster, a shop sign and hands-on toys"},"police":{"name":"Police Station","blurb":"A patrol car steering wheel with your child’s name, a lost teddy to find and report slips.","alt":"Police Station kit pages: a welcome poster, a shop sign and hands-on toys"},"dentist":{"name":"Dentist Office","blurb":"A big wipe-clean smile to brush, a lift-the-flap dentist bag, tooth charts and a front desk register.","alt":"Dentist Office kit pages: a welcome poster, a shop sign and hands-on toys"},"petshop":{"name":"Pet Shop","blurb":"Adoption papers for stuffed animals, a bubble-bath grooming card and a cash register.","alt":"Pet Shop kit pages: a welcome poster, a shop sign and hands-on toys"},"coffee":{"name":"Coffee Shop","blurb":"A café menu, a Drink Spinner for the barista, a tip jar sign and a cash register.","alt":"Coffee Shop kit pages: a welcome poster, a shop sign and hands-on toys"},"italian":{"name":"Italian Restaurant","blurb":"A pasta pot with a pull tab, a waiter’s order pad, table labels and a trattoria menu.","alt":"Italian Restaurant kit pages: a welcome poster, a shop sign and hands-on toys"},"auto":{"name":"Auto Repair Shop","blurb":"A lift-the-flap toolbox, work orders, car check-up forms, a car wash sign and a cash register.","alt":"Auto Repair Shop kit pages: a welcome poster, a shop sign and hands-on toys"}};
 const HOLIDAYS = {
   halloween: { from: [9, 1], to: [10, 31] },
   christmas: { from: [11, 1], to: [12, 25] },
@@ -806,7 +835,7 @@ const seasonal = Object.keys(HOLIDAYS).find((id) => { const h = HOLIDAYS[id]; re
 const ordered = seasonal ? [THEMES.find((t) => t.id === seasonal), ...THEMES.filter((t) => t.id !== seasonal)] : THEMES;
 
 // Short names for the theme strip.
-const THEME_LABELS = { dino: 'Dinosaur', hero: 'Superhero', pirate: 'Pirate', space: 'Outer Space', royal: 'Princess & Knights', unicorn: 'Unicorn', mermaid: 'Mermaid', construction: 'Construction', vet: 'Pet Vet', easter: 'Easter', halloween: 'Halloween', christmas: 'Christmas', valentine: 'Valentine’s', fire: 'Firefighter', ice: 'Ice Kingdom', racecar: 'Race Car' };
+const THEME_LABELS = { dino: 'Dinosaur', hero: 'Superhero', pirate: 'Pirate', space: 'Outer Space', royal: 'Princess & Knights', unicorn: 'Unicorn', mermaid: 'Mermaid', construction: 'Construction', vet: 'Pet Vet', easter: 'Easter', halloween: 'Halloween', christmas: 'Christmas', valentine: 'Valentine’s', fire: 'Firefighter', ice: 'Ice Kingdom', racecar: 'Race Car', pizza: 'Pizza Shop', burger: 'Burger Shop', grocery: 'Grocery Store', post: 'Post Office', library: 'Library', police: 'Police', dentist: 'Dentist', petshop: 'Pet Shop', coffee: 'Café', italian: 'Italian', auto: 'Auto Shop' };
 function drawThemes() {
   $('themeList').innerHTML = ordered.map((t) => `
   <button type="button" class="theme" data-id="${t.id}" aria-pressed="${t.id === state.theme}" title="${t.name}, ages ${t.ages}">
@@ -852,10 +881,6 @@ function drawBox() {
 
 // Someone chose a theme: the banner shows that set and stops rotating.
 function pickTheme(id) {
-  if (state.shop) {
-    state.shop = null;
-    setPicks(['hunt', 'kit', 'activity']);
-  }
   setTheme(id);
   heroLocked = true;
   clearInterval(heroTimer);
@@ -871,7 +896,7 @@ const heroSrc = (id) => ({ src: `img/hero/${id}.webp`, srcset: `img/hero/${id}-s
 function showHero(id) {
   if (id === heroAt) return;
   heroAt = id;
-  const name = shopName(id) ? `${shopName(id)} play kit` : THEMES.find((x) => x.id === id).name;
+  const name = THEMES.find((x) => x.id === id).name;
   const imgs = [...document.querySelectorAll('#heroBanner .hb')];
   const front = imgs.find((i) => i.classList.contains('on'));
   const back = imgs.find((i) => i !== front);
@@ -882,9 +907,8 @@ function showHero(id) {
   };
   back.srcset = srcset;
   back.src = src;
-  back.alt = shopName(id) ? `The ${name} printed out: shop signs, order cards, play pages and activity pages`
-    : `The ${name} set printed out: host guide, story briefing, clue cards, play kit, activity page, party invitation and Host Mode on a phone`;
-  $('heroCap').innerHTML = `<b>${esc(name)}</b><span>${heroLocked ? (shopName(id) ? 'Your kit' : 'Your theme') : 'Make this set'}</span>`;
+  back.alt = `The ${name} set printed out: host guide, story briefing, clue cards, play kit, activity page, party invitation and Host Mode on a phone`;
+  $('heroCap').innerHTML = `<b>${esc(name)}</b><span>${heroLocked ? 'Your theme' : 'Make this set'}</span>`;
   $('heroCap').dataset.id = id;
   // warm up the next one so the fade is instant
   if (!heroLocked) new Image().src = heroSrc(ordered[(ordered.findIndex((x) => x.id === id) + 1) % ordered.length].id).src;
@@ -897,7 +921,7 @@ function startHero() {
     showHero(ordered[(ordered.findIndex((x) => x.id === heroAt) + 1) % ordered.length].id);
   }, 5000);
 }
-$('heroCap').addEventListener('click', () => (shopName($('heroCap').dataset.id) ? chooseShop($('heroCap').dataset.id) : pickTheme($('heroCap').dataset.id)));
+$('heroCap').addEventListener('click', () => pickTheme($('heroCap').dataset.id));
 
 function setTheme(id) {
   state.theme = id;
@@ -955,17 +979,9 @@ function render() {
   const name = $('childName').value.trim() || 'your child';
   // trail summary
   const age = parseInt($('childAge').value, 10);
-  $('trailTitle').textContent = state.shop ? `${shopName(state.shop)} play kit for ${name}${age ? `, age ${age}` : ''}` : `${t.name} for ${name}${age ? `, turning ${age}` : ''}`;
-  $('trailEyebrow').textContent = state.shop ? 'Your kit' : 'Your trail';
-  $('ageLabel').textContent = state.shop ? 'Age' : 'Turning';
+  $('trailTitle').textContent = `${t.name} for ${name}${age ? `, turning ${age}` : ''}`;
   if (!state.agesPicked && age) state.ages = age <= 4 ? 'little' : 'big';
   $('agesPick').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.ages === state.ages)));
-  $('themeField').hidden = Boolean(state.shop);
-  $('shopPill').hidden = !state.shop;
-  if (state.shop) {
-    $('shopPill').innerHTML = `<span>Making the <b>${esc(shopName(state.shop))}</b> play kit</span><button type="button" id="leaveShop">Get a themed hunt and party pack instead</button>`;
-    $('leaveShop').addEventListener('click', leaveShop);
-  }
   $('route').innerHTML = state.picks.length
     ? state.picks.map((k, i) => {
         const last = i === state.picks.length - 1;
@@ -1007,13 +1023,11 @@ function productOf(gets) {
 const priceOf = (p) => (p && p !== 'activity' && p.endsWith('+activity') ? priceOf(p.slice(0, -9)) + PRICES.activityAdd : PRICES[p] || 0);
 const money = (n) => '$' + n.toFixed(2);
 
-// A shop kit order is always its play kit, with the activity pack as the add-on.
-const shown = () => (state.shop ? LAYERS.filter((l) => l.id === 'kit' || l.id === 'activity') : LAYERS);
-const setId = () => state.shop || state.theme;
+const shown = () => LAYERS;
+const setId = () => state.theme;
 // The kit and activity pack have their own little-kids pages to show.
 const little = (k) => state.ages === 'little' && (k === 'kit' || k === 'activity');
 function pick(id) {
-  if (state.shop && id === 'kit') return;
   // Ticking items shows or hides whole sections (the spots list goes with the hunt), so keep the
   // tapped row where it was on screen instead of letting the page jump.
   const at = () => document.querySelector(`button.layer[data-id="${id}"]`)?.getBoundingClientRect().top;
@@ -1059,9 +1073,8 @@ function drawCart() {
   const addNext = next && ` Add the ${nextName} for ${money(priceOf(productOf([...gets, next].sort((a, b) => LAYERS.findIndex((l) => l.id === a) - LAYERS.findIndex((l) => l.id === b)))) - price)} more.`;
   $('saveNote').innerHTML = !product ? 'Pick at least one thing to print.'
     : gets.length > 1 ? `<s>${money(value)}</s> together for ${money(price)}, so you save ${money(value - price)}.${addNext || ''}`
-    : state.shop ? (addNext || '').trim()
     : `Add another one and save. All four are ${money(priceOf('bundle+activity'))}.`;
-  $('totalLabel').textContent = !product ? 'Nothing picked yet' : state.shop ? `${shopName(state.shop)} kit${gets.includes('activity') ? ' + activity pack' : ''}, PDF` : gets.length === 4 ? 'Everything bundle, PDF' : product === 'hunt+kit+activity' ? 'Play bundle, PDF' : product === 'bundle' ? 'Party bundle, PDF' : `${gets.map((k) => LABELS[k]).join(' + ')}, PDF`;
+  $('totalLabel').textContent = !product ? 'Nothing picked yet' : gets.length === 4 ? 'Everything bundle, PDF' : product === 'hunt+kit+activity' ? 'Play bundle, PDF' : product === 'bundle' ? 'Party bundle, PDF' : `${gets.map((k) => LABELS[k]).join(' + ')}, PDF`;
   if (passInfo && product) {
     $('totalPrice').innerHTML = `<s>${money(price)}</s>$0.00`;
     $('totalLabel').textContent += ' · Family Pass';
@@ -1152,7 +1165,7 @@ $('gView').addEventListener('touchend', (e) => {
   if (gTouch !== null && Math.abs(dx) > 40) gShow(gAt + (dx < 0 ? 1 : -1));
   gTouch = null;
 });
-document.querySelectorAll('[data-pick]').forEach((a) => a.addEventListener('click', () => { leaveShop(); setPicks(a.dataset.pick.split(' ')); }));
+document.querySelectorAll('[data-pick]').forEach((a) => a.addEventListener('click', () => setPicks(a.dataset.pick.split(' '))));
 
 $('orderForm').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -1165,7 +1178,6 @@ $('orderForm').addEventListener('submit', async (e) => {
     product,
     items,
     theme: state.theme,
-    ...(state.shop ? { kit: state.shop } : {}),
     childName,
     age: parseInt($('childAge').value, 10) || null,
     ages: state.ages,
@@ -1218,8 +1230,8 @@ $('buyPass').addEventListener('click', async () => {
   }
 });
 
-// Shop play kits: no hunt or party to match. "Get the kit" loads it into the order builder
-// with just the play kit ticked, so the activity pack (and the Family Pass) can be offered there.
+// Shop play kits: each one is a theme too, with its own hunt and party pack. "Get the kit" loads its
+// theme into the order builder with just the play kit ticked, so the rest of the set can be added there.
 const SHOP_KITS = [
   ['pizza', 'Pizza Shop', 'A big pizza to top and slice with order cards, a cash register and a pizza menu.'],
   ['burger', 'Burger Shop', 'Burger layers to stack to order, a drive-thru, a cash register and a burger menu.'],
@@ -1256,28 +1268,15 @@ function shopName(id) { return (SHOP_KITS.find(([k]) => k === id) || [])[1]; }
 drawShops();
 // scroll: the id to bring into view after, or false to stay put.
 function chooseShop(id, { scroll = 'order' } = {}) {
-  state.shop = id;
   shopKit = id;
   drawShops();
   // carry over what they typed down here
   if ($('shopChild').value.trim()) $('childName').value = $('shopChild').value.trim();
   if ($('shopAge').value) $('childAge').value = $('shopAge').value;
-  document.querySelectorAll('#themeList .theme').forEach((b) => b.setAttribute('aria-pressed', 'false'));
-  heroLocked = true;
-  clearInterval(heroTimer);
-  showHero(id);
+  pickTheme(id);
   setPicks(['kit']);
-  render();
   // after the dialog hands focus back to the card, or it pulls the page back there
   if (scroll) requestAnimationFrame(() => $(scroll).scrollIntoView({ behavior: 'smooth', block: 'start' }));
-}
-// Back to a themed set (hunt, kit, activities and party pack all available again).
-function leaveShop() {
-  if (!state.shop) return;
-  state.shop = null;
-  setPicks(['hunt', 'kit', 'activity']);
-  setTheme(state.theme);
-  showHero(state.theme);
 }
 $('shopForm').addEventListener('submit', (e) => {
   e.preventDefault();

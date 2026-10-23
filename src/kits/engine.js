@@ -240,7 +240,7 @@ function guidePage(k) {
   const d = k.def;
   const signCount = d.signs.length + 1;
   const inside = [
-    ...(d.hunt ? [] : ['A big shop sign: two pages that glue into one 20 inch banner']),
+    ...(d.hunt && !d.bigSign ? [] : ['A big shop sign: two pages that glue into one 20 inch banner']),
     `${signCount} signs for doors and walls${signCount % 2 ? ' (and a blank one)' : ''}, plus ${signageCount(d) ? `${signageCount(d)} big station ${signageCount(d) === 1 ? 'sign' : 'signs'}, ` : ''}7 counter signs (a fold-over Open/Closed sign, pay here, our hours and more) and 15 shelf and bin labels`,
     ...(d.appliances ? [`A ${d.appliances.map((a) => ({ oven: 'pizza oven', stove: 'stovetop' })[a]).join(' and a ')} to tape onto a box`] : []),
     ...(d.jars ? [`${d.jars.length} wrap-around jar labels`] : []),
@@ -630,7 +630,7 @@ function buildKitHtml(cfg) {
   const pages = [
     guidePage(k),
     welcomePage(k),
-    def.hunt ? '' : extras.bigSignPages(k),
+    def.hunt && !def.bigSign ? '' : extras.bigSignPages(k),
     signsPages(k),
     extras.appliancePages(k),
     stationPages(k),

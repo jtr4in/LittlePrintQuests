@@ -163,7 +163,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     const html = buildKitHtml({ kit: id, childName: 'Ava', lenient: true });
     assert.ok(html.includes('class="draw-cap">Draw yourself') && !html.includes('Draw<br>yourself'), id);
     assert.ok(html.includes('flip-sign') && html.includes('Money Machine') && html.includes('Good Morning,'), id);
-    assert.equal(html.includes('Big sign, page 2 of 2'), !KITS[id].hunt, id);
+    assert.equal(html.includes('Big sign, page 2 of 2'), !KITS[id].hunt || Boolean(KITS[id].bigSign), id);
   }
   // The Italian kit: oven and stove that look like the real thing, jar labels, a peel, a chef hat and a folding menu.
   for (const piece of ['ov-dome', 'sv-ring', 'Jar Labels', 'Pizza Peel', 'Draw Your Own Pizza', 'Chef Hat', 'Menu, page 2 of 2']) assert.ok(bigKit.includes(piece), piece);
@@ -208,7 +208,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const ideaUrls = require('../scripts/idea-pages').build();
   assert.equal(ideaUrls.length, 2 + Object.keys(SPACE_TRAILS).length + Object.keys(require('../src/generator/themes')).length + Object.keys(require('../src/kits/engine').KITS).length);
   const pizzaIdeas = fs.readFileSync(path.join(__dirname, '..', 'docs', 'ideas', 'pizza-shop-pretend-play', 'index.html'), 'utf8');
-  assert.match(pizzaIdeas, /\?kit=pizza#order/);
+  assert.match(pizzaIdeas, /\?theme=pizza#order/);
   assert.match(pizzaIdeas, /Delivery Driver/);
   const sitemap = fs.readFileSync(path.join(__dirname, '..', 'docs', 'sitemap.xml'), 'utf8');
   for (const u of ideaUrls) assert.ok(sitemap.includes(`<loc>${u}</loc>`), u);
@@ -293,9 +293,9 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   state = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
   const themed = Object.values(state.orders).find((x) => x.personalization === 'Leo 5');
   assert.equal(themed.options.Theme, 'Race Car Grand Prix Chase');
-  // Shop kits are in the dropdown and make a play kit on its own; "Play kit only" makes a theme's kit.
-  assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /<option value="kit:dentist">Dentist Office<\/option>/);
-  await realFetch(base + '/admin/orders', { method: 'POST', headers: form, body: 'personalization=Ivy+4&theme=kit%3Adentist&product=bundle', redirect: 'manual' });
+  // The shop kits are hunt themes now; "Play kit only" makes a theme's kit, and an old kit: pick still works.
+  assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /<option value="dentist">Dentist Office Sparkle Smile Quest<\/option>/);
+  await realFetch(base + '/admin/orders', { method: 'POST', headers: form, body: 'personalization=Ivy+4&theme=kit%3Adentist&product=kit', redirect: 'manual' });
   await realFetch(base + '/admin/orders', { method: 'POST', headers: form, body: 'personalization=Max+7&theme=pirate&product=kit', redirect: 'manual' });
   state = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
   const byHand = (n) => Object.values(state.orders).find((x) => x.personalization === n);
@@ -353,13 +353,14 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     { items: ['party', 'kit'], spots: [], has: ['kit', 'party'] },
     { items: ['activity', 'kit', 'hunt'], spots: ['front_door', 'pet_bed', 'kitchen_table'], has: ['hunt', 'kit', 'activity'] },
     { items: ['activity'], spots: [], has: ['activity'] },
-    // A shop kit has no theme of its own, so it comes as the kit, with or without its activity pack.
-    { kit: 'pizza', items: ['hunt', 'kit'], spots: [], has: ['kit'] },
-    { kit: 'burger', items: ['activity', 'party'], spots: [], has: ['kit', 'activity'], ages: 'little' },
+    // The shop kits have their own hunt and party pack now, so they get the everything bundle too.
+    { theme: 'pizza', items: ['hunt', 'kit', 'party'], spots: ['front_door', 'pet_bed', 'kitchen_table'], has: ['hunt', 'kit', 'party'] },
+    // An older page sends the shop kit by itself: it stands for its theme.
+    { kit: 'burger', items: ['kit', 'activity'], spots: [], has: ['kit', 'activity'], ages: 'little' },
   ];
-  for (const { product, items, spots, has, kit, ages } of webOrders) {
+  for (const { product, items, spots, has, kit, ages, theme = 'dino' } of webOrders) {
     const co = await realFetch(base + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ product, items, kit, ages, theme: 'dino', childName: 'Ava', age: 5, spots, pets: [{ name: 'Rex', kind: 'trex' }], party: { date: 'Saturday, June 3', place: '' } }) });
+      body: JSON.stringify({ product, items, kit, ages, theme, childName: 'Ava', age: 5, spots, pets: [{ name: 'Rex', kind: 'trex' }], party: { date: 'Saturday, June 3', place: '' } }) });
     assert.equal(co.status, 200);
     const orderId = (await co.json()).url.split('/').pop();
     assert.match(orderId, /^web-/);
@@ -381,7 +382,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     }
     const w = state.orders[orderId];
     assert.equal(w.status, 'ready', JSON.stringify(w));
-    assert.equal(w.config.theme, kit ? undefined : 'dino');
+    assert.equal(w.config.theme, kit || theme);
     if (kit) assert.equal(w.config.kit, kit);
     // the website's Little kids / Big kids choice reaches the kit
     assert.equal(w.config.ages, ages);
@@ -444,7 +445,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   }
   await wait(500);
   assert.equal(emails.length, 9);
-  assert.deepEqual(charged, [1699, 999, 699, 1499, 1299, 1799, 499, 799, 1099]);
+  assert.deepEqual(charged, [1699, 999, 699, 1499, 1299, 1799, 499, 1699, 1099]);
 
   // After checkout: the order page and email offer the rest of the bundle for the difference.
   state = JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));

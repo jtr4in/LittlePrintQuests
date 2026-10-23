@@ -1,8 +1,10 @@
-// Library: a shop-style play kit of its own (no matching hunt). Readers borrow books, write
+// Library: a shop-style play kit of its own, with its own hunt and party pack. Readers borrow books, write
 // book reviews and stamp their library cards; the money is for the book fair.
 module.exports = {
   id: 'library',
   name: 'Library',
+  hunt: 'library',
+  bigSign: true, // a shop-style kit: it keeps the big shop sign
   colors: { main: '#6a4fb3', dark: '#47317f', soft: '#e3d8ff', light: '#f5f1ff', accent: '#f2a93b', accentInk: '#2b1d06' },
   icon: '📚',
   placeName: (who) => `${who} Library`,
@@ -79,6 +81,7 @@ module.exports = {
   },
   certificate: { title: 'Star Librarian', icon: '🏅', seal: '📚', line: 'helped every reader find a great book, kept the shelves tidy and read the best stories in town.' },
   guide: {
+    afterHunt: 'The Big Storybook is whole again! Open {place} right where the last page was found, and read the story together. Master Book Detective {child} stamps the first library card.',
     intro: 'Everything {child} needs to run a pretend library. Print on regular Letter paper, cut along the dashed lines, and line up some stuffed animals to be readers.',
     setup: [
       'Tape the library sign and Open sign by the “front door”.', 'Set up the checkout desk on a table with a stamp or crayon.',

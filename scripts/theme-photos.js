@@ -39,7 +39,7 @@ function kitPhotos(k, p, n) {
   // 9–10 the counter signs, 11 the bin labels, 12–13 the hands-on toys; the shop set (menu,
   // specials, money) sits just before the two certificates at the end.
   // Shop kits have a play kitchen sign at page 3, so everything after it sits one page later.
-  const o = k.hunt ? 0 : 1;
+  const o = k.hunt && !k.bigSign ? 0 : 1;
   const pick = [2, 3, 7 + o, 9 + o, 11 + o, 12 + o, 13 + o, n - 3].filter((i, j, a) => i > 1 && i <= n && a.indexOf(i) === j);
   return {
     inside: `<div class="top"><h1>What’s Inside</h1><div class="sub">${n}-page printable ${k.name} play kit · US Letter</div></div>${grid(pick.map((i) => [p(i)]))}`,

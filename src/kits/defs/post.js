@@ -1,7 +1,9 @@
-// Post Office: an everyday mail and parcel shop-style play kit (no matching hunt).
+// Post Office: an everyday mail and parcel shop-style play kit, with its own hunt and party pack.
 module.exports = {
   id: 'post',
   name: 'Post Office',
+  hunt: 'post',
+  bigSign: true, // a shop-style kit: it keeps the big shop sign
   colors: { main: '#2f5fb3', dark: '#1d3f7d', soft: '#cfe0ff', light: '#eef4ff', accent: '#e8513a', accentInk: '#ffffff' },
   icon: '📮',
   placeName: (who) => `${who} Post Office`,
@@ -78,6 +80,7 @@ module.exports = {
   },
   certificate: { title: 'Star Postmaster', icon: '🏅', seal: '📮', line: 'stamped, sorted and delivered every letter and parcel safely to the right door.' },
   guide: {
+    afterHunt: 'Every special letter is found! Open {place} right where the last letter was hiding, and stamp and sort the mail. Star Mail Carrier {child} runs the counter first.',
     intro: 'Everything {child} needs to run a pretend post office. Print on regular Letter paper, cut along the dashed lines, and line up some stuffed animals to be customers with mail to send.',
     setup: [
       'Tape the post office sign and Open sign by the “front door”.', 'Set up the till on the counter next to a kitchen scale or a pretend one.',

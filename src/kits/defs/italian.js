@@ -1,7 +1,9 @@
-// Italian Restaurant: a sit-down, shop-style play kit of its own (no matching hunt).
+// Italian Restaurant: a sit-down, shop-style play kit of its own, with its own hunt and party pack.
 module.exports = {
   id: 'italian',
   name: 'Italian Restaurant',
+  hunt: 'italian',
+  bigSign: true, // a shop-style kit: it keeps the big shop sign
   colors: { main: '#c8372d', dark: '#8f231c', soft: '#f9d6c8', light: '#fff5ef', accent: '#2f8a4c', accentInk: '#ffffff' },
   icon: '🍝',
   placeName: (who) => `${who} Trattoria`,
@@ -85,6 +87,7 @@ module.exports = {
   },
   certificate: { title: 'Master Italian Chef', icon: '🏅', seal: '🍝', line: 'cooked the tastiest spaghetti in town and served every table with a smile. Grazie!' },
   guide: {
+    afterHunt: 'Every runaway meatball is back in the pot! Open {place} right where the last card was found, and serve the first plate of spaghetti and meatballs. Master Chef {child} takes the first order.',
     intro: 'Everything {child} needs to run a pretend sit-down Italian restaurant. Print on regular Letter paper, cut along the dashed lines, and seat some stuffed animals at the tables as hungry guests.',
     setup: [
       'Tape the restaurant sign and Open sign by the “front door”, with Please Wait to Be Seated just inside.', 'Set a table or two with plates, napkins and a Table Card on each.',

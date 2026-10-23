@@ -1,8 +1,10 @@
-// Dentist Office: a shop-style play kit of its own (no matching hunt). Check-ups, cleanings and
+// Dentist Office: a shop-style play kit of its own, with its own hunt and party pack. Check-ups, cleanings and
 // sparkly smiles, where the stuffed animals are the patients.
 module.exports = {
   id: 'dentist',
   name: 'Dentist Office',
+  hunt: 'dentist',
+  bigSign: true, // a shop-style kit: it keeps the big shop sign
   colors: { main: '#2a9fb4', dark: '#1b6f80', soft: '#c7eef3', light: '#eefafc', accent: '#f48aa8', accentInk: '#4a1325' },
   icon: '🦷',
   placeName: (who) => `${who} Dental Office`,
@@ -81,6 +83,7 @@ module.exports = {
   },
   certificate: { title: 'Super Smile Dentist', icon: '🏅', seal: '🦷', line: 'counted, brushed and polished every tooth, and sent each patient home with a sparkly smile.' },
   guide: {
+    afterHunt: 'The Sparkle Toothbrushes are back and the Sugar Bugs ran away! Open {place} right where the last card was found, and give every stuffed patient a sparkly check-up. Super Smile Hero {child} is the first dentist.',
     intro: 'Everything {child} needs to run a pretend dentist office. Print on regular Letter paper, cut along the dashed lines, and line up some stuffed animals to be the patients.',
     setup: [
       'Tape the dental office sign and Open sign by the “front door”.', 'Set a chair or a cushion in the Exam Room for the patients.',

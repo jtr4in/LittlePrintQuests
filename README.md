@@ -2,7 +2,7 @@
 
 Personalized, print-ready birthday scavenger hunts for kids ages 3 to 8.
 
-Each hunt is a PDF with a host guide (where to hide every card), a read-aloud mission briefing, 4x6 rhyming clue cards (two per page with cut lines), and a certificate. Sixteen themes, each with a matching play kit and party pack: Dino, Superhero, Pirate, Space, Royal Castle, Unicorn, Mermaid, Construction, Pet Vet, Race Car, Fire & Rescue and Ice Kingdom, plus Halloween, Christmas, Easter and Valentine’s. `scripts/site-images.js` builds a theme’s website pictures.
+Each hunt is a PDF with a host guide (where to hide every card), a read-aloud mission briefing, 4x6 rhyming clue cards (two per page with cut lines), and a certificate. Twenty-seven themes, each with a matching play kit and party pack: Dino, Superhero, Pirate, Space, Royal Castle, Unicorn, Mermaid, Construction, Pet Vet, Race Car, Fire & Rescue and Ice Kingdom; the shop kits Pizza Shop, Burger Shop, Grocery Store, Post Office, Library, Police Station, Dentist Office, Pet Shop, Coffee Shop, Italian Restaurant and Auto Repair Shop; plus Halloween, Christmas, Easter and Valentine’s. The shop kits’ hunts and party packs are sold on the website only, not on Etsy. `scripts/site-images.js` builds a theme’s website pictures.
 
 ## Make a hunt
 

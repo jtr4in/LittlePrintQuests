@@ -23,6 +23,8 @@ const PACK_PROMO = 'Want a hunt with your child’s name and your own hiding spo
 const KIT_ORDER = ['vet', 'pizza', 'space', 'grocery', 'dino', 'burger', 'hero', 'post', 'pirate', 'coffee', 'dentist', 'petshop', 'library', 'police', 'italian', 'auto', 'royal', 'unicorn', 'mermaid', 'construction', 'easter', 'halloween', 'christmas', 'valentine', 'fire', 'ice', 'racecar'];
 // etsy-listings.md section for each theme's pack (the newer themes come after the bundle, kit and party pack).
 const PACK_SECTIONS = { dino: 1, hero: 2, pirate: 3, space: 4, royal: 5, unicorn: 9, mermaid: 10, construction: 11, vet: 12, easter: 15, halloween: 16, christmas: 17, valentine: 18, fire: 19, ice: 20, racecar: 21 };
+// The themes listed on Etsy. The shop kits' hunts and party packs (pizza, library...) are sold on the website only.
+const ETSY_THEMES = Object.keys(PACK_SECTIONS);
 
 // Etsy takes up to 20 photos per listing.
 const MAX_PHOTOS = 20;
@@ -30,7 +32,7 @@ const MAX_PHOTOS = 20;
 const closeUps = (prefix) => Array.from({ length: MAX_PHOTOS }, (_, i) => `${prefix}-p${String(i + 1).padStart(2, '0')}.jpg`).filter((f) => fs.existsSync(path.join(ASSETS, f)));
 
 const CATALOG = [
-  ...Object.keys(THEMES).map((theme) => ({
+  ...ETSY_THEMES.map((theme) => ({
     key: `pack-${theme}`,
     section: PACK_SECTIONS[theme],
     shopSection: 'Scavenger Hunt Packs',
@@ -72,9 +74,9 @@ const CATALOG = [
     shopSection: 'Party Printables',
     label: 'Party Pack',
     price: 6.99,
-    variation: { name: 'Theme', options: Object.values(THEMES).map((t) => ({ value: t.label, price: 6.99 })) },
+    variation: { name: 'Theme', options: ETSY_THEMES.map((t) => ({ value: THEMES[t].label, price: 6.99 })) },
     personalization: { question: 'Child’s name and age' },
-    photos: ['party-main.jpg', ...Object.keys(THEMES).map((k) => `party-${k}.jpg`)].slice(0, MAX_PHOTOS),
+    photos: ['party-main.jpg', ...ETSY_THEMES.map((k) => `party-${k}.jpg`)].slice(0, MAX_PHOTOS),
     file: { name: 'your-party-printables.pdf', build: (out) => thankYouPdf(out, 'party printables') },
   },
   // One play kit and one party pack listing per theme as well, so each shows up in its own searches.
@@ -90,7 +92,7 @@ const CATALOG = [
     photos: [`kit-${k}.jpg`, `kit-${k}-inside.jpg`, `kit-${k}-feature.jpg`, ...closeUps(`kit-${k}`)].slice(0, MAX_PHOTOS),
     file: { name: 'your-pretend-play-kit.pdf', build: (out) => thankYouPdf(out, 'play kit') },
   })),
-  ...Object.keys(THEMES).map((theme) => ({
+  ...ETSY_THEMES.map((theme) => ({
     key: `party-${theme}`,
     section: 14,
     perTheme: theme,
@@ -164,7 +166,7 @@ function placeholders(c) {
       kit: k.name, place: k.placeName('[Name]’s'), toys: k.toys.map((t) => t.inside).join('\n• '), subjects: k.subjectPlural,
       props: list(Object.values(k.props).map((p) => p.title)),
       forms: `${k.record.title} forms and ${k.passport.pageTitle}`,
-      pairing: k.hunt
+      pairing: PACK_SECTIONS[k.hunt]
         ? `Our ${THEMES[k.hunt].name} scavenger hunt: the trail ends at the ${k.name}, so the party keeps going. Find it in our shop, or get the hunt, this kit and a matching party pack together in our Custom Party Bundle.`
         : 'Any of our personalized scavenger hunts, for a party that keeps going. Find them in our shop.',
     };
