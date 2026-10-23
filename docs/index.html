@@ -241,7 +241,7 @@ main { position: relative; }
 .plan-host b { display: block; font: 600 15px/1.2 var(--display); }
 
 /* checkout stack: one paper per thing in the cart */
-.stack { position: relative; height: 210px; border-radius: 12px; overflow: hidden; }
+.stack { position: relative; isolation: isolate; height: 210px; border-radius: 12px; overflow: hidden; }
 .stack > img { position: absolute; left: 50%; top: 18px; width: 128px; height: auto; aspect-ratio: 400 / 518; background: #fff; border-radius: 3px; box-shadow: 0 10px 22px -10px rgba(40, 50, 90, .5); transition: transform .35s cubic-bezier(.2, .9, .3, 1.2), opacity .25s ease; }
 .stack .phone { position: absolute; top: 58px; width: 68px; padding: 4px; border-radius: 14px; z-index: 9; transition: left .35s cubic-bezier(.2, .9, .3, 1.2), transform .35s cubic-bezier(.2, .9, .3, 1.2), opacity .25s ease; transform: rotate(-8deg); }
 .stack .phone img { border-radius: 10px; }
@@ -249,6 +249,16 @@ main { position: relative; }
 .stack > img.out { opacity: 0; transform: translate(-50%, 40px) scale(.85) !important; }
 .stack { cursor: zoom-in; }
 .stack:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+/* page count bubble: a little sticker on the order stack and the kit cards */
+.pages-badge { position: absolute; top: 8px; right: 8px; z-index: 12; display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px 5px 8px; border-radius: 99px; background: var(--sheet); color: var(--ink); border: 1.5px solid var(--orange); font: 600 12.5px/1 var(--display); font-variant-numeric: tabular-nums; box-shadow: 0 4px 10px -6px rgba(40, 50, 90, .45); transform: rotate(4deg); pointer-events: none; }
+.pages-badge::before { content: ""; width: 7px; height: 9px; margin-right: 2px; border: 1.5px solid var(--orange); border-radius: 2px; background: var(--sheet); box-shadow: 2.5px 2.5px 0 -1px var(--sheet), 2.5px 2.5px 0 .5px var(--orange); }
+.pages-badge.pop { animation: pages-pop .35s cubic-bezier(.2, .9, .3, 1.4); }
+@keyframes pages-pop { 50% { transform: rotate(4deg) scale(1.12); } }
+@media (prefers-reduced-motion: reduce) { .pages-badge.pop { animation: none; } }
+.pages-badge[hidden] { display: none; }
+.shop-card .foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.shop-card .pages-badge, .plan .pages-badge { position: static; transform: rotate(-2deg); }
+.plan .pages-badge { justify-self: start; margin-top: -4px; }
 .peek { margin: 2px 0 8px; text-align: center; font-size: 14px; color: var(--ink-soft); }
 .peek button { font: inherit; color: inherit; background: none; border: 0; padding: 4px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 /* order preview gallery */
@@ -525,8 +535,8 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
         </div>
         <aside class="panel summary" id="summary" aria-live="polite">
           <div class="field"><span class="eyebrow">What’s in your order</span>
-            <div class="stack" id="stack" role="button" tabindex="0" aria-label="See every page in your order"></div>
-            <p class="peek"><button type="button" id="peek">Tap to see every page</button></p>
+            <div class="stack" id="stack" role="button" tabindex="0" aria-label="See sample pages from your order"></div>
+            <p class="peek"><button type="button" id="peek">Tap to see sample pages</button></p>
             <ul class="layers" id="layers" role="group" aria-label="What to include"></ul>
             <p class="save" id="saveNote"></p>
           </div>
@@ -662,8 +672,8 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
       <div class="pin"><b></b><span class="eyebrow">Pricing</span></div>
       <h2>Pick what you need, save when you bundle</h2>
       <div class="plans">
-        <div class="plan main"><span class="eyebrow">Play bundle · most popular</span><div class="price">$17.99</div><p class="was"><s>$22.97</s> value: the hunt, its play kit and activity pack</p><ul><li>Scavenger hunts with your child’s name and your home’s own spots</li><li>Matching pretend play kit with hands-on toys and a shop to set up</li><li>10 Wipe &amp; Play activity pages: mazes, spot the difference, I spy and more</li><li>Delivered to your inbox in minutes</li></ul><div class="plan-host"><span class="phone"><img src="img/host/space-play.webp" alt="" width="360" height="720" loading="lazy"></span><span><b>+ Host Mode included</b>Hunt and play kit tabs on your phone</span></div><a class="btn btn-orange" href="#order" data-pick="hunt kit activity">Make my play bundle</a></div>
-        <div class="plan"><span class="eyebrow">Having a party?</span><div class="price">$19.99</div><p class="was"><s>$29.96</s> value: everything, plus the party pack</p><ul><li>The whole play bundle</li><li>Matching invitations, cupcake toppers, favor tags, a name banner and more</li><li>Host Mode party checklist</li></ul><a class="btn btn-ghost" href="#order" data-pick="hunt kit activity party">Make the everything bundle</a></div>
+        <div class="plan main"><span class="eyebrow">Play bundle · most popular</span><div class="price">$17.99</div><span class="pages-badge" data-pages="hunt kit activity"></span><p class="was"><s>$22.97</s> value: the hunt, its play kit and activity pack</p><ul><li>Scavenger hunts with your child’s name and your home’s own spots</li><li>Matching pretend play kit with hands-on toys and a shop to set up</li><li>10 Wipe &amp; Play activity pages: mazes, spot the difference, I spy and more</li><li>Delivered to your inbox in minutes</li></ul><div class="plan-host"><span class="phone"><img src="img/host/space-play.webp" alt="" width="360" height="720" loading="lazy"></span><span><b>+ Host Mode included</b>Hunt and play kit tabs on your phone</span></div><a class="btn btn-orange" href="#order" data-pick="hunt kit activity">Make my play bundle</a></div>
+        <div class="plan"><span class="eyebrow">Having a party?</span><div class="price">$19.99</div><span class="pages-badge" data-pages="hunt kit activity party"></span><p class="was"><s>$29.96</s> value: everything, plus the party pack</p><ul><li>The whole play bundle</li><li>Matching invitations, cupcake toppers, favor tags, a name banner and more</li><li>Host Mode party checklist</li></ul><a class="btn btn-ghost" href="#order" data-pick="hunt kit activity party">Make the everything bundle</a></div>
       </div>
       <div class="pass-card" id="pass">
         <div>
@@ -1165,6 +1175,17 @@ const LAYERS = [
 ];
 // Must match PRICES in the order bot (src/bot/products.js).
 const PRICES = { hunt: 9.99, kit: 7.99, party: 6.99, 'hunt+kit': 14.99, 'hunt+party': 13.99, 'kit+party': 12.99, bundle: 16.99, activity: 4.99, activityAdd: 3 };
+// Real page counts from scripts/page-counts.js (re-run it after adding pages). A hunt is 7 pages plus
+// one sheet per two clue cards, so it follows the spots picked.
+const PAGES = {"kit":{"dino":31,"hero":31,"pirate":32,"space":31,"royal":31,"unicorn":32,"mermaid":32,"construction":32,"vet":31,"easter":34,"halloween":34,"christmas":34,"valentine":32,"fire":32,"ice":32,"racecar":32,"pizza":41,"burger":34,"grocery":35,"post":36,"library":33,"police":34,"dentist":34,"petshop":34,"coffee":35,"italian":41,"auto":34},"activity":{"big":11,"little":10},"party":15,"craft":{"halloween":20,"christmas":20,"memory":29,"zoo":28,"fingerprint":28}};
+function pagesOf(k, theme = state.theme, spots = state.picks.length, ages = state.ages) {
+  return { hunt: 7 + Math.ceil(Math.min(10, Math.max(6, spots)) / 2), kit: PAGES.kit[theme], activity: PAGES.activity[ages], party: PAGES.party }[k] || 0;
+}
+// Pricing cards can't know the theme or spots, so they say the fewest pages any theme gets.
+document.querySelectorAll('.plan [data-pages]').forEach((el) => {
+  const least = Math.min(...Object.keys(PAGES.kit).map((t) => el.dataset.pages.split(' ').reduce((n, k) => n + pagesOf(k, t, 6, 'little'), 0)));
+  el.textContent = `${Math.floor(least / 5) * 5}+ pages`;
+});
 const LABELS = { hunt: 'Scavenger Hunts', kit: 'Play kit', activity: 'Activity pack', party: 'Party pack' };
 const picked = new Set(['hunt', 'kit', 'activity']);
 let passInfo = null; // { code, left, total } once a Family Pass code checks out
@@ -1238,6 +1259,15 @@ function drawCart() {
   // the pass pays off for anyone spending this much more than once a year
   $('passUp').hidden = Boolean(passInfo) || price < 13;
   $('peek').parentElement.hidden = !product;
+  const badge = $('stack').querySelector('.pages-badge');
+  const total = gets.reduce((n, k) => n + pagesOf(k), 0);
+  badge.hidden = !total;
+  if (badge.textContent !== `${total} pages`) {
+    badge.textContent = `${total} pages`;
+    badge.classList.remove('pop');
+    void badge.offsetWidth;
+    badge.classList.add('pop');
+  }
   // Hiding spots are only for the hunt, and invitations only come in the party pack.
   $('spotsField').hidden = !picked.has('hunt');
   document.querySelector('.party-details').hidden = !picked.has('party');
@@ -1255,7 +1285,7 @@ document.addEventListener('click', (e) => { if (!e.target.closest('.top')) setMe
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
 
 $('stack').innerHTML = ['hunt', 'kit', 'activity', 'party'].map((k) => `<img data-k="${k}" class="out" alt="" width="400" height="518">`).join('')
-  + '<span class="phone out"><img alt="" width="240" height="480"></span>';
+  + '<span class="phone out"><img alt="" width="240" height="480"></span><span class="pages-badge" hidden></span>';
 
 // Tapping the stack opens a gallery of real pages for the picked items, made by scripts/gallery-images.js.
 const GALLERY = {
@@ -1404,7 +1434,7 @@ const SHOP_KITS = [
 let shopKit = 'pizza';
 function drawShops() {
   $('shopList').innerHTML = SHOP_KITS.map(([id, name, blurb]) => `<button type="button" class="theme shop-card" data-kit="${id}" aria-haspopup="dialog">
-      <img src="img/kit-${id}.webp" alt="${name} play kit pages" width="677" height="497" loading="lazy"><h3>${name}</h3><p>${blurb}</p><span class="see">See what’s inside</span></button>`).join('');
+      <img src="img/kit-${id}.webp" alt="${name} play kit pages" width="677" height="497" loading="lazy"><h3>${name}</h3><p>${blurb}</p><span class="foot"><span class="see">See what’s inside</span><span class="pages-badge">${PAGES.kit[id]} pages</span></span></button>`).join('');
   $('shopList').querySelectorAll('[data-kit]').forEach((b) => b.addEventListener('click', () => openShop(b.dataset.kit)));
   const name = SHOP_KITS.find(([id]) => id === shopKit)[1];
   $('shopBtn').textContent = `Get the ${name} kit · $7.99`;
@@ -1451,7 +1481,7 @@ const CRAFTS = [
 let craft = new Date().getMonth() >= 10 ? 'christmas' : 'halloween';
 function drawCrafts() {
   $('craftList').innerHTML = CRAFTS.map(([id, name, blurb, title]) => `<button type="button" class="theme shop-card" data-craft="${id}" aria-haspopup="dialog">
-      <img src="img/craft-${id}.webp" alt="${title} pages" width="1000" height="750" loading="lazy"><h3>${title}</h3><p>${blurb}</p><span class="see">See what’s inside</span></button>`).join('');
+      <img src="img/craft-${id}.webp" alt="${title} pages" width="1000" height="750" loading="lazy"><h3>${title}</h3><p>${blurb}</p><span class="foot"><span class="see">See what’s inside</span><span class="pages-badge">${PAGES.craft[id]} pages</span></span></button>`).join('');
   $('craftList').querySelectorAll('[data-craft]').forEach((b) => b.addEventListener('click', () => openCraft(b.dataset.craft)));
   const [, , , , what, price] = CRAFTS.find(([id]) => id === craft);
   $('craftBtn').textContent = `Get the ${what} · $${price}`;
