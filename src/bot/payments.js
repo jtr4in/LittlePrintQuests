@@ -41,10 +41,10 @@ async function createCheckout(order) {
   const items = products.itemsOf(order.form);
   const kit = KITS[order.form.kit] || (theme && kitForHunt(theme.id));
   const holiday = HOLIDAYS[order.form.holiday];
-  const parts = { hunt: `${theme?.label} Scavenger Hunts`, kit: `${kit?.name} play kit`, activity: `${kit?.name} activity pack`, party: `${theme?.label} party pack`, craft: craftLabel(holiday) };
+  const parts = { hunt: `${theme?.label} Scavenger Hunts`, kit: `${kit?.name} pretend play`, activity: `${kit?.name} activity pack`, party: `${theme?.label} party pack`, craft: craftLabel(holiday) };
   const details = {
     hunt: `scavenger hunt with ${order.form.spots.length} clues`,
-    kit: 'pretend play kit',
+    kit: 'pretend play',
     activity: 'Wipe & Play activity pages',
     party: 'invitations, toppers, tags, banner and more',
     craft: holiday?.book ? holiday.checkoutLine : '8 handprint and footprint keepsake crafts, cards and a poem page',
@@ -79,7 +79,7 @@ async function createCheckout(order) {
 async function createUpgradeCheckout(order, upgrade) {
   const theme = THEMES[order.config.theme];
   const kit = KITS[order.config.kit] || (theme && kitForHunt(theme.id));
-  const parts = { kit: `${kit?.name} play kit`, activity: `${kit?.name} activity pack`, party: `${theme?.label} party pack` };
+  const parts = { kit: `${kit?.name} pretend play`, activity: `${kit?.name} activity pack`, party: `${theme?.label} party pack` };
   return createWithPromo({
     mode: 'payment',
     customer_email: order.email || undefined,
