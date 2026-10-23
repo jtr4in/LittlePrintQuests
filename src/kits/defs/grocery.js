@@ -77,6 +77,7 @@ module.exports = {
     patches: { title: 'Store Stickers', howTo: 'Cut out and give one to every happy shopper.',
       items: [['⭐', 'Super shopper'], ['🛒', 'Cart champ'], ['😊', 'Thanks for shopping'], ['🍎', 'Healthy choice'], ['🛍️', 'Bag helper'], ['🏅', 'Top cashier'], ['🌈', 'Have a nice day'], ['🥕', 'Veggie fan'], ['💚', 'Come back soon']] },
   },
+  wow: { title: 'Scanner and Card Reader', howTo: 'Best on cardstock. Cut out the scanner and the card reader. Beep every item at checkout, then tap the card to pay.', inside: 'A real-looking barcode scanner and card reader to cut out' },
   certificate: { title: 'Super Store Manager', icon: '🏅', seal: '🛒', line: 'kept the shelves full, rang up every order and helped every shopper with a smile.' },
   guide: {
     afterHunt: 'The Big Party Shopping List is all found! Open {place} right where the last item was hiding, and shop for everything on the list. Shopper of the Year {child} is the first cashier.',

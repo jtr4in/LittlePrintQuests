@@ -80,6 +80,7 @@ module.exports = {
     wanted: { title: 'Wanted Posters', word: 'WANTED', howTo: 'Tape them up by the front desk. Can you find these silly troublemakers?',
       list: [['🧦', 'The Sock Sneaker', 'Hiding one sock from every pair'], ['🦆', 'Quackers the Duck', 'Splashing in every puddle'], ['🍪', 'Cookie Crumbs', 'Leaving crumbs on the couch'], ['🎈', 'Bobby Balloon', 'Floating away from the party']] },
   },
+  wow: { title: 'Police Radio', howTo: 'Best on cardstock. Cut out the radio and the shoulder mic. Press the button and call it in: “Officer to base, come in!”', inside: 'A real-looking police radio to cut out' },
   certificate: { title: 'Super Police Officer', icon: '🏅', seal: '⭐', line: 'helped every visitor, found every lost thing and kept the roads safe for the whole town.' },
   guide: {
     afterHunt: 'Case closed, and Buttons the Teddy is safe! Open {place} right where the last clue was found, and write up the report together. Super Detective {child} drives the first patrol.',

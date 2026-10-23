@@ -89,6 +89,7 @@ module.exports = {
     patches: { title: 'Egg-cellent Stickers', howTo: 'Cut out the stickers. Give one to every helper for a job well done.',
       items: [['🏆', 'Egg-cellent!'], ['🎨', 'Super painter'], ['🧺', 'Best packer'], ['🐰', 'Fastest hopper'], ['🌟', 'Golden helper'], ['🎀', 'Bow expert'], ['🥕', 'Carrot muncher'], ['🤝', 'Team player'], ['💛', 'Kind heart']] },
   },
+  wow: { title: 'Egg Painting Machine', howTo: 'Tape it to the back of the play kitchen above the counter. Turn the crank and the painted eggs roll out!', inside: 'A real-looking egg painting machine for the back of a play kitchen' },
   certificate: { title: 'Master Egg Painter', icon: '🏅', seal: '🐰', line: 'painted every egg, packed every basket, and hopped each order to the right door.' },
   guide: {
     afterHunt: 'Every golden egg is back! Set up {place} at the end of the trail and put the golden eggs on the Drying Rack. Golden Egg Champion {child} paints the first order.',

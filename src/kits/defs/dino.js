@@ -84,6 +84,7 @@ module.exports = {
       items: [['🦴', 'Dino bone', 2], ['🦷', 'T. rex tooth', 3], ['🥚', 'Dino egg', 3], ['🐚', 'Sea shell', 1], ['🍂', 'Fossil leaf', 1], ['🪨', 'Lucky rock', 1],
         ['🐾', 'Footprint', 2], ['💎', 'Amber', 3], ['🖌️', 'Dig brush', 1], ['🔍', 'Magnifier', 1], ['⛏️', 'Pickaxe', 2], ['🧢', 'Ranger cap', 2]] },
   },
+  wow: { title: 'Real Fossil Finds', howTo: 'Best on cardstock. Cut out the skull, bones and shell, bury them in a bin of rice or sand, and dig them up with a brush.', inside: 'A real-looking T-rex skull and fossils to bury and dig up' },
   certificate: { title: 'Junior Paleontologist', icon: '🏅', seal: '🦖', line: 'dug up fossils, cared for every dinosaur, and saved the eggs from the volcano.' },
   guide: {
     afterHunt: 'The Junior Rangers rescued every dinosaur egg! Set up {place} where the last egg was found, and bring the eggs in for a check-up. The Master Fossil Hunter runs the lab first.',

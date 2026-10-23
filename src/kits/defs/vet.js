@@ -85,6 +85,7 @@ module.exports = {
     patches: { title: 'Brave Patient Stickers', howTo: 'Cut out and tape one on every brave patient.',
       items: [['🏅', 'Brave patient'], ['⭐', 'Super pet'], ['💖', 'Get well soon'], ['🐾', 'Good boy'], ['🐾', 'Good girl'], ['🌈', 'All better'], ['🦷', 'Clean teeth'], ['💉', 'I had my vaccine'], ['😊', 'Happy & healthy']] },
   },
+  wow: { title: 'Real X-Ray Film', howTo: 'Cut out the film and tape it to a sunny window or the back of a play kitchen. Can you find the squeaky ball the puppy swallowed?', inside: 'A real-looking dog X-ray film to hold up to the light' },
   certificate: { title: 'Junior Vet Certificate', icon: '🏅', seal: '🐾', line: 'cared for every patient with kindness, gentle hands and a big heart.' },
   guide: {
     afterHunt: 'Every lost pet is found! Set up {place} at the end of the trail and give each rescued pet a check-up. Super Pet Rescuer {child} is the head vet today.',

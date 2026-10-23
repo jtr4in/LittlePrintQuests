@@ -85,6 +85,7 @@ module.exports = {
         ['🧲', 'Super magnet', 2], ['⚡', 'Power bolt', 3], ['🥤', 'Power shake', 1], ['🍌', 'Banana boost', 1], ['🗺️', 'City map', 1], ['🔑', 'Jail key', 2]] },
     wearable: { type: 'mask', title: 'Hero Masks', howTo: 'Print on cardstock. Cut out, cut the eye holes, then tie on with string or elastic.' },
   },
+  wow: { title: 'HQ Control Console', howTo: 'Tape it to the back of the play kitchen or a desk. Press the red button when the city needs help!', inside: 'A real-looking hero HQ control console' },
   certificate: { title: 'Official Superhero', icon: '🏆', seal: '⚡', line: 'trained hard, helped others, and saved the day with courage and kindness.' },
   guide: {
     afterHunt: 'Every rookie who passed the Secret HQ Trial reports for duty at {place}. Hand out the hero badges as the prize, and let {child} take the first call on the hero communicator.',

@@ -89,6 +89,7 @@ module.exports = {
     patches: { title: 'Rainbow Rosettes', howTo: 'Cut out the rosettes. After the pony show, give one to every unicorn.',
       items: [['🏆', 'Best in show'], ['🌈', 'Brightest mane'], ['✨', 'Shiniest horn'], ['💨', 'Fastest gallop'], ['💗', 'Kindest heart'], ['🎀', 'Best braids'], ['🥕', 'Best muncher'], ['😴', 'Best napper'], ['⭐', 'Star pony']] },
   },
+  wow: { title: 'Unicorn Horn and Ears', howTo: 'Best on cardstock. Cut out the horn and ears and glue them onto a headband or a strip of paper.', inside: 'A real-looking unicorn horn and ears for a headband' },
   certificate: { title: 'Official Unicorn Keeper', icon: '🏅', seal: '🦄', line: 'brushed every mane, fed every pony, and kept the rainbow sparkling bright.' },
   guide: {
     afterHunt: 'The rainbow is bright again! Set up {place} at the end of the trail and use the found gems to buy the first treats. Rainbow Guardian {child} opens the stable doors.',

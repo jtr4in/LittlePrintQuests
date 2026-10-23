@@ -83,6 +83,7 @@ module.exports = {
         ['👑', 'Crown', 5], ['💍', 'Ring', 3], ['📿', 'Necklace', 2], ['🗝️', 'Castle key', 2], ['📜', 'Royal scroll', 1], ['🌹', 'Rose', 1]] },
     wearable: { type: 'crown', title: 'Royal Crown', howTo: 'Print on cardstock. Cut out both pieces and tape them into a ring that fits.' },
   },
+  wow: { title: 'Royal Celebration Cake', howTo: 'Best on cardstock. Cut out the cake and stand it on the play kitchen counter for the royal feast.', inside: 'A real-looking royal cake for the feast' },
   certificate: { title: 'Royal Honor Award', icon: '🏅', seal: '👑', line: 'ruled the castle with kindness, welcomed every guest, and kept the crown jewels safe.' },
   guide: {
     afterHunt: 'The Crown Jewels are safe again! Carry them to {place} and put them in the Treasure Vault. The Hero of the Realm opens the castle gates and spins the Royal Wish Wheel.',

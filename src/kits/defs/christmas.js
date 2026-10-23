@@ -93,6 +93,7 @@ module.exports = {
       items: [['🎅', 'From Santa'], ['🎄', 'Merry Christmas'], ['❤️', 'Made with love'], ['⭐', 'Nice List kid'], ['🤫', 'Top secret toy'], ['🔔', 'Ho ho ho!'], ['🎁', 'Shake gently'], ['🧝', 'Elf approved'], ['❄️', 'Open on Christmas']] },
     wearable: { type: 'crown', title: 'Head Elf Crown', howTo: 'Print on cardstock. Cut out both pieces and tape them into a ring that fits.' },
   },
+  wow: { title: 'Fresh Gingerbread Cookies', howTo: 'Tape it inside the play kitchen oven door so the cookies bake behind the window, or cut out the tray and serve it.', inside: 'A real-looking tray of gingerbread cookies that fits a play kitchen oven window' },
   certificate: { title: 'Master Toymaker Award', icon: '🏅', seal: '🎄', line: 'built the toys, wrapped every present, checked the Nice List twice, and kept the workshop merry.' },
   guide: {
     afterHunt: 'Every jingle bell is found and Santa’s sleigh can fly again! Set up {place} where the last bell was hiding and get the toys ready for Christmas Eve. Super Elf {child} runs the workshop today.',

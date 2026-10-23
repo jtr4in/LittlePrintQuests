@@ -84,6 +84,7 @@ module.exports = {
         ['🧭', 'Compass', 2], ['🔭', 'Spyglass', 2], ['🗝️', 'Chest key', 2], ['🍌', 'Banana', 1], ['🥥', 'Coconut', 1], ['🐟', 'Fish', 1]] },
     wearable: { type: 'eyepatch', title: 'Pirate Eye Patches', howTo: 'Print on cardstock. Cut out, punch the two dots, and tie on with string or elastic.' },
   },
+  wow: { title: 'Real Treasure Map', howTo: 'Cut it out, scrunch it up and flatten it again so it looks old. Follow the dotted trail to the big red X!', inside: 'A real-looking old treasure map' },
   certificate: { title: 'Official Pirate Crew', icon: '🏴‍☠️', seal: '⚓', line: 'sailed the seven seas, followed the map, and shared the treasure fair and square.' },
   guide: {
     afterHunt: 'The crew found Captain Barnaby’s treasure, and now they need a ship! Set up {place} right where the treasure was buried, and put the treasure in the Treasure Room. Captain {child} takes the wheel.',

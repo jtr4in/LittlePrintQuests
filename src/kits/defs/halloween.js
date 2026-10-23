@@ -94,6 +94,7 @@ module.exports = {
       items: [['⭐', 'Super stirrer'], ['✨', 'Sparkle star'], ['🧪', 'Potion pro'], ['🎃', 'Happy Halloween'], ['👻', 'Friendly ghost'], ['😂', 'Giggle expert'], ['🌈', 'Rainbow maker'], ['🔮', 'Magic helper'], ['🏆', 'Master mixer']] },
     wearable: { type: 'mask', title: 'Costume Masks', howTo: 'Print on cardstock. Cut out, cut the eye holes, then tie on with string or elastic.' },
   },
+  wow: { title: 'Glowing Potion Bottles', howTo: 'Best on cardstock. Cut out the bottles and line them up on the play kitchen shelf. Mix them in a bowl to make a spell!', inside: 'Six real-looking potion bottles to cut out' },
   certificate: { title: 'Master Potion Maker', icon: '🧙', seal: '🧪', line: 'mixed the silliest potions, stirred every cauldron, and made every customer giggle.' },
   guide: {
     afterHunt: 'Every treat is found! Set up {place} right where the last Boo Note was hidden, and brew a “thank you” potion for Wispy. Super Treat Finder {child} stirs the cauldron first.',

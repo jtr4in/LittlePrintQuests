@@ -81,6 +81,7 @@ module.exports = {
       items: [['🐶', 'Dogs'], ['🐱', 'Cats'], ['🐰', 'Bunnies'], ['🐹', 'Hamsters'], ['🐠', 'Fish'], ['🐦', 'Birds'],
         ['🥣', 'Pet Food'], ['🦴', 'Treats'], ['🧸', 'Toys'], ['🦮', 'Leashes'], ['🛁', 'Bath Time'], ['💕', 'Adopt Me']] },
   },
+  wow: { title: 'Fish Tank', howTo: 'Tape it inside the play kitchen oven door so it shows through the window, or onto a box. Feed the fish twice a day!', inside: 'A real-looking fish tank that fits a play kitchen oven window' },
   certificate: { title: 'Super Pet Shop Owner', icon: '🏅', seal: '🐾', line: 'fed, groomed and cuddled every pet, and found each one a loving home.' },
   guide: {
     afterHunt: 'Every name tag is found! Open {place} right where the last tag was hiding, and fill in adoption papers for each stuffed pet. Pet Shop Superstar {child} runs the adoption desk first.',

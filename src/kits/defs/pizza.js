@@ -76,6 +76,7 @@ module.exports = {
     labels: { title: 'Topping Labels', howTo: 'Cut out, fold along the dotted line and stand each label by a bowl of toppings.',
       items: [['🍅', 'Sauce'], ['🧀', 'Cheese'], ['🍕', 'Pepperoni'], ['🍄', 'Mushrooms'], ['🫑', 'Peppers'], ['🫒', 'Olives']] },
   },
+  wow: { title: 'Hot Pepperoni Pizza', howTo: 'Glue onto cardboard and cut along the slice lines. Slide it into the play kitchen oven on the peel, then serve it slice by slice.', inside: 'A real-looking pepperoni pizza that cuts into 8 slices and fits a play kitchen oven' },
   certificate: { title: 'Master Pizza Chef', icon: '🏅', seal: '🍕', line: 'made the cheesiest, yummiest pizzas in town and served every customer with a smile.' },
   guide: {
     afterHunt: 'Every topping is back! Open {place} right where the last ticket was hiding, and make the first pizza with the toppings the chefs found. Master Pizza Chef {child} takes the first order.',

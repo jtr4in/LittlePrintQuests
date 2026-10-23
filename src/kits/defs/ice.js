@@ -91,6 +91,7 @@ module.exports = {
       items: [['❄️', 'Snowflake star'], ['⛸️', 'Super skater'], ['⛄', 'Snowman maker'], ['☕', 'Cocoa champ'], ['🦊', 'Fox friend'], ['🧣', 'Cozy and warm'], ['🤝', 'Kind helper'], ['✨', 'Winter magic'], ['👑', 'Ice royalty']] },
     wearable: { type: 'crown', title: 'Snowflake Tiara', howTo: 'Print on cardstock. Cut out both pieces and tape them into a ring that fits.' },
   },
+  wow: { title: 'Magic Snow Globe', howTo: 'Tape it inside the play kitchen oven door so it glows through the window, or cut it out and give it a shake!', inside: 'A real-looking snow globe that fits a play kitchen oven window' },
   certificate: { title: 'Ice Palace Honor', icon: '🏅', seal: '❄️', line: 'ruled the Ice Palace with kindness, welcomed every snowy guest, and kept winter magic sparkling.' },
   guide: {
     afterHunt: 'Every crystal snowflake is home! Carry them to {place} and put them in the Snowflake Vault. The Snowflake Guardian opens the palace gates and asks the crystal ball who’s visiting today.',

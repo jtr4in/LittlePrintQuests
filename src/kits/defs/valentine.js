@@ -91,6 +91,7 @@ module.exports = {
       items: [['💖', 'Be my friend'], ['🤗', 'Sending hugs'], ['😊', 'You make me smile'], ['🌟', 'You’re a star'], ['🐞', 'Love bug'], ['🍪', 'Sweet friend'], ['🌈', 'You’re awesome'], ['💌', 'Special delivery'], ['🤝', 'Friends forever']] },
     wearable: { type: 'crown', title: 'Valentine Crown', howTo: 'Print on cardstock. Cut out both pieces and tape them into a ring that fits.' },
   },
+  wow: { title: 'Heart Mailbox', howTo: 'Tape it onto a box, cut a slot where the gold slot is, and post your valentines inside!', inside: 'A real-looking heart-shaped mailbox for a box' },
   certificate: { title: 'Postmaster Award', icon: '🏅', seal: '💌', line: 'wrote, stamped, sorted and delivered every valentine with a big, kind heart.' },
   guide: {
     afterHunt: 'Every valentine is found! Open {place} right where the last love note was hiding, and put the valentines in the Mailbox. Kindness Champion {child} is the postmaster today.',

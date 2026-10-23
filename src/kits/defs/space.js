@@ -84,6 +84,7 @@ module.exports = {
     patches: { title: 'Mission Patches', howTo: 'Cut out and tape a patch on each astronaut after every mission.',
       items: [['🚀', 'Launch crew'], ['🌕', 'Moon walker'], ['🔴', 'Mars mission'], ['🪐', 'Ring explorer'], ['⭐', 'Star pilot'], ['👽', 'Alien friend'], ['🛰️', 'Satellite fixer'], ['☄️', 'Comet chaser'], ['🧑‍🚀', 'Space cadet']] },
   },
+  wow: { title: 'Spaceship Control Panel', howTo: 'Tape it to the back of the play kitchen above the counter, and flip the switches for launch. 3, 2, 1, blast off!', inside: 'A real-looking spaceship control panel for the back of a play kitchen' },
   certificate: { title: 'Certified Space Cadet', icon: '🎖️', seal: '🚀', line: 'completed astronaut training and is cleared for launch to anywhere in the galaxy.' },
   guide: {
     afterHunt: 'The beacons are found and the thrusters are back on. Time to launch! Set up {place} next to the last beacon, and Mission Commander {child} runs the countdown.',
