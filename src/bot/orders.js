@@ -290,11 +290,11 @@ function formAsText(f) {
 }
 
 // Called once Stripe confirms payment. Builds the PDF and emails it.
-async function fulfillWebOrder(id, { email, buyerName, paidCents }) {
+async function fulfillWebOrder(id, { email, buyerName, discountCents = 0 }) {
   const order = store.get().orders[id];
   if (!order || order.status !== 'awaiting_payment') return; // already handled (Stripe can resend)
-  // paidCents is only set when a promotion code lowered the price.
-  store.update((s) => Object.assign(s.orders[id], { status: 'processing', email, buyerName, paidAt: new Date().toISOString() }, paidCents === undefined ? {} : { paidCents }));
+  // A promotion code is noted, but paidCents stays at the list price so add-ons are priced as a bundle.
+  store.update((s) => Object.assign(s.orders[id], { status: 'processing', email, buyerName, paidAt: new Date().toISOString() }, discountCents ? { discountCents } : {}));
   const f = order.form;
   try {
     const main = products.mainOf(order);
@@ -330,14 +330,14 @@ async function fulfillWebOrder(id, { email, buyerName, paidCents }) {
 
 // Called once Stripe confirms an add-on payment: adds the items and rebuilds the order with the
 // same download links, then emails it again with the new PDFs.
-async function upgradeWebOrder(id, { add, cents, sessionId }) {
+async function upgradeWebOrder(id, { add, cents, discountCents = 0, sessionId }) {
   const order = store.get().orders[id];
   if (!order || order.status !== 'ready' || (order.upgrades || []).some((u) => u.sessionId === sessionId)) return; // Stripe can resend
   const items = products.normalize([...products.itemsOf(order), ...add]);
   store.update((s) => {
     const o = s.orders[id];
     o.paidCents = (o.paidCents ?? products.priceFor(o.product)) + cents;
-    Object.assign(o, { items, product: products.productFor(items), status: 'processing', upgrades: [...(o.upgrades || []), { sessionId, add, cents, at: new Date().toISOString() }] });
+    Object.assign(o, { items, product: products.productFor(items), status: 'processing', upgrades: [...(o.upgrades || []), { sessionId, add, cents, ...(discountCents ? { discountCents } : {}), at: new Date().toISOString() }] });
   });
   try {
     await generate(id);

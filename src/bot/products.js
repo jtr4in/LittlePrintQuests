@@ -64,7 +64,8 @@ function upgradeFor(order) {
   const themed = Boolean(order.config?.theme || order.form?.theme);
   const add = ITEMS.slice(ITEMS.indexOf(main) + 1).filter((i) => ALONE[i] && !items.includes(i) && (themed || i === 'activity'));
   if (!add.length) return null;
-  const paid = order.paidCents ?? priceFor(order.product || productFor(items));
+  // Orders taken with a 100%-off code before Oct 23, 2026 saved paidCents as 0; price those at list too.
+  const paid = order.paidCents || priceFor(order.product || productFor(items));
   const cents = priceFor(productFor(normalize([...items, ...add]))) - paid;
   if (cents <= 0) return null;
   const worth = add.reduce((n, i) => n + PRICES[ALONE[i]], 0);

@@ -20,11 +20,9 @@ const enabled = () => Boolean(process.env.STRIPE_SECRET_KEY && process.env.STRIP
 // Stripe reports 'no_payment_required' instead of 'paid'.
 const isPaid = (session) => ['paid', 'no_payment_required'].includes(session?.payment_status);
 
-// What the buyer paid before tax, after any promotion code, or undefined when no code was used.
-function discountedCents(session) {
-  const off = session?.total_details?.amount_discount;
-  return off > 0 && Number.isFinite(session.amount_subtotal) ? Math.max(0, session.amount_subtotal - off) : undefined;
-}
+// How much a promotion code took off, before tax (0 when no code was used). Kept apart from
+// paidCents, which stays at the list price so add-ons still cost the bundle difference.
+const discountCents = (session) => Math.max(0, session?.total_details?.amount_discount || 0);
 
 // Opens a Checkout page with the promotion code box. If this Stripe account won't take the box,
 // open it without one rather than losing the sale.
@@ -132,4 +130,4 @@ async function createPassCheckout(pass) {
   });
 }
 
-module.exports = { enabled, isPaid, discountedCents, createCheckout, createPassCheckout, createUpgradeCheckout, readWebhook, stripe, PRICES, PRICE_CENTS, BUNDLE_PRICE_CENTS, PARTY_PRICE_CENTS, priceFor };
+module.exports = { enabled, isPaid, discountCents, createCheckout, createPassCheckout, createUpgradeCheckout, readWebhook, stripe, PRICES, PRICE_CENTS, BUNDLE_PRICE_CENTS, PARTY_PRICE_CENTS, priceFor };
