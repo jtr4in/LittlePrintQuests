@@ -9,6 +9,7 @@ const os = require('os');
 const path = require('path');
 const { chromium } = require('playwright');
 const { renderPdf } = require('../src/generator/render');
+const { buildHtml, pageRoles } = require('../src/generator/build');
 const { renderKit } = require('../src/kits/render-kit');
 const { renderParty } = require('../src/party/render-party');
 const { kitForHunt } = require('../src/kits/engine');
@@ -26,13 +27,18 @@ const dataUrl = (f) => `data:image/png;base64,${fs.readFileSync(f).toString('bas
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'site-images-'));
   const browser = await chromium.launch();
   const index = {};
+  const huntParts = {};
   const blanks = []; // [png, out webp, width, height] (no size: keep it, with transparency)
   fs.mkdirSync(path.join(IMG, 'n', 'host'), { recursive: true });
   for (const id of Object.keys(THEMES).filter((k) => !only.length || only.includes(k))) {
     const dir = (k) => path.join(tmp, `${id}-${k}`);
     // Shop-style kits (pizza, library...) keep the kit card and page theme-photos.js and gallery-images.js made.
     const kit = kitForHunt(id)?.bigSign ? null : kitForHunt(id);
-    await renderPdf({ theme: id, childName: 'Maya', age: 6, spots: SPOTS, pictures: true }, `${dir('hunt')}.pdf`, { pngDir: dir('hunt'), nameSlots: 'Maya' });
+    const huntCfg = { theme: id, childName: 'Maya', age: 6, spots: SPOTS, pictures: true };
+    await renderPdf(huntCfg, `${dir('hunt')}.pdf`, { pngDir: dir('hunt'), nameSlots: 'Maya' });
+    const roles = pageRoles(buildHtml(huntCfg));
+    // The "What's in the box" hunt pages, by role: guide, briefing, first clue sheet, puzzle, certificate, picture hunt checklist.
+    huntParts[id] = { guide: roles.host, briefing: roles.briefing, cards: roles.sheet, puzzle: roles.puzzle, cert: roles.cert, bonus: roles['pic-lists'] };
     await renderParty({ theme: id, childName: 'Maya', age: 6, party: PARTY }, `${dir('party')}.pdf`, { pngDir: dir('party'), nameSlots: 'Maya' });
     if (kit) await renderKit({ kit: kit.id, childName: 'Maya', subjects: [], lenient: true }, `${dir('kit')}.pdf`, { pngDir: dir('kit'), nameSlots: 'Maya' });
     const pg = (k, n) => path.join(dir(k), `page-${n}.png`);
@@ -84,9 +90,9 @@ const dataUrl = (f) => `data:image/png;base64,${fs.readFileSync(f).toString('bas
       await phone.close();
     }
     // Twins of the order stack and "What's in the box" pages.
-    const hunt = fs.readdirSync(dir('hunt')).filter((f) => /^page-\d+\.png$/.test(f)).length;
-    const twins = [['hunt', 3, 'hunt', 400], ['party', 2, 'party', 400], ['hunt', 1, 'guide', 480], ['hunt', 2, 'briefing', 480],
-      ['hunt', 3, 'cards', 480], ['hunt', hunt, 'cert', 480], ...(kit ? [['kit', 7, 'kit', 400]] : [])];
+    const P = huntParts[id];
+    const twins = [['hunt', 3, 'hunt', 400], ['party', 2, 'party', 400], ['hunt', P.guide, 'guide', 480], ['hunt', P.briefing, 'briefing', 480],
+      ['hunt', P.cards, 'cards', 480], ['hunt', P.cert, 'cert', 480], ...(kit ? [['kit', 7, 'kit', 400]] : [])];
     for (const [k, n, part, w] of twins) {
       const twin = blankJob(index, pg(k, n), path.join(IMG, 'pages', `${id}-${part}.webp`));
       if (twin) blanks.push([...twin, w, Math.round((w * 1056) / 816)]);
@@ -100,7 +106,8 @@ const dataUrl = (f) => `data:image/png;base64,${fs.readFileSync(f).toString('bas
   execFileSync('python3', ['-c', `
 import sys, os
 from PIL import Image
-tmp, img = sys.argv[1], sys.argv[2]
+import json
+tmp, img, parts = sys.argv[1], sys.argv[2], json.loads(sys.argv[3])
 for f in os.listdir(tmp):
     p = os.path.join(tmp, f)
     if f.startswith('kit-') and f.endswith('.png'):
@@ -112,12 +119,10 @@ for f in os.listdir(tmp):
         n = {'hunt': 3, 'party': 2, 'kit': 7}[kind]
         Image.open(os.path.join(p, f'page-{n}.png')).convert('RGB').resize((400, 518), Image.LANCZOS).save(os.path.join(img, 'pages', f'{theme}-{kind}.webp'), 'WEBP', quality=80)
         if kind == 'hunt':
-            pages = sorted((x for x in os.listdir(p) if x.endswith('.png')), key=lambda x: int(x[5:-4]))
-            for part, page in (('guide', pages[0]), ('briefing', pages[1]), ('cards', pages[2]), ('cert', pages[-1])):
-            pages = sorted(os.listdir(p), key=lambda x: int(x[5:-4]))
-            for part, page in (('guide', pages[0]), ('briefing', pages[1]), ('cards', pages[2]), ('puzzle', pages[-5]), ('cert', pages[-4]), ('bonus', pages[-2])):
-                Image.open(os.path.join(p, page)).convert('RGB').resize((480, 621), Image.LANCZOS).save(os.path.join(img, 'pages', f'{theme}-{part}.webp'), 'WEBP', quality=80)
-`, tmp, IMG]);
+            for part, n in parts[theme].items():
+                if n is None: continue
+                Image.open(os.path.join(p, f'page-{n}.png')).convert('RGB').resize((480, 621), Image.LANCZOS).save(os.path.join(img, 'pages', f'{theme}-{part}.webp'), 'WEBP', quality=80)
+`, tmp, IMG, JSON.stringify(huntParts)]);
   fs.writeFileSync(path.join(tmp, 'blanks.json'), JSON.stringify(blanks));
   execFileSync('python3', ['-c', `
 import sys, json
