@@ -862,6 +862,8 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     for (const f of [`pages/${id}-little-kit`, `pages/${id}-little-activity`]) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', `${f}.webp`)), f);
     for (const k of ['kit', 'activity']) for (let i = 1; i <= 5; i++) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'gallery', id, 'little', `${k}-${i}.webp`)), `little ${id} ${k}-${i}`);
   }
+  // The theme pickers show each theme's wow prop (scripts/wow-tiles.py).
+  for (const id of Object.keys(require('../src/generator/themes'))) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'wow', `${id}.webp`)), `wow tile ${id}`);
   // The order preview gallery has five pages per item for every theme.
   for (const id of Object.keys(require('../src/generator/themes'))) {
     for (const k of ['hunt', 'party', 'kit', 'activity']) for (let i = 1; i <= 5; i++) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'gallery', id, `${k}-${i}.webp`)), `gallery ${id} ${k}-${i}`);
