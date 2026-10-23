@@ -16,13 +16,27 @@ def cutout(path):
     img = Image.open(path).convert('RGB')
     img.thumbnail(MAX, Image.LANCZOS)
     a = np.asarray(img).astype(np.int16)
-    # Background: near-white pixels connected to the edge, so white labels inside a piece stay.
-    light = a.min(axis=2) > 236
-    lab, _ = ndimage.label(light)
-    edge = set(np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]]))) - {0}
-    piece = ~np.isin(lab, list(edge))
+    # Background: smooth, greyish-light pixels connected to the edge. That takes the studio
+    # backdrop and its soft shadows but stops at a piece's outline, so white labels inside stay.
+    grey = a.max(axis=2) - a.min(axis=2) < 22
+    lum = a.mean(axis=2)
+    gy, gx = np.gradient(ndimage.gaussian_filter(lum, 1.5))
+    smooth = ndimage.maximum_filter(np.hypot(gx, gy), 5) < 5
+    light = grey & (lum > 170) & smooth | (a.min(axis=2) > 246)
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    green = (g > r + 40) & (g > b + 40)
+    if green[[0, 0, -1, -1], [0, -1, 0, -1]].all():
+        # Pale pieces are made on chroma green: key it out everywhere and pull the green
+        # spill off the edges.
+        piece = ~ndimage.binary_dilation(green, iterations=1)
+        a = a.copy()
+        a[..., 1] = np.minimum(g, np.maximum(r, b) + 12)
+    else:
+        lab, _ = ndimage.label(light)
+        edge = set(np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]]))) - {0}
+        piece = ~np.isin(lab, list(edge))
     # Close specks and pinholes, drop crumbs smaller than a fingernail.
-    piece = ndimage.binary_closing(piece, iterations=3)
+    piece = ndimage.binary_opening(ndimage.binary_closing(piece, iterations=3), iterations=2)
     piece = ndimage.binary_fill_holes(piece)
     lab, n = ndimage.label(piece)
     sizes = ndimage.sum(piece, lab, range(1, n + 1))
