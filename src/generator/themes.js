@@ -3,6 +3,13 @@
 // {name}, {age}, {count} (number of clues), {prize} (final spot label).
 
 const ICONS = {
+  chefhat: `<svg viewBox="0 0 64 64" fill="currentColor"><path d="M14 40c-8-2-11-11-6-17 4-5 10-5 13-3 1-8 7-13 11-13s10 5 11 13c3-2 9-2 13 3 5 6 2 15-6 17z"/><rect x="14" y="43" width="36" height="15" rx="3"/><path d="M24 30v8M32 26v12M40 30v8" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>`,
+  medical: `<svg viewBox="0 0 64 64" fill="currentColor"><rect x="4" y="4" width="56" height="56" rx="14"/><path d="M26 14h12v12h12v12H38v12H26V38H14V26h12z" fill="#fff"/></svg>`,
+  masks: `<svg viewBox="0 0 64 64" fill="currentColor"><path d="M4 8c8-4 20-4 28 0v16c0 12-6 20-14 20S4 36 4 24z"/><g fill="#fff"><ellipse cx="12" cy="20" rx="4" ry="3"/><ellipse cx="24" cy="20" rx="4" ry="3"/><path d="M10 30c4 5 12 5 16 0-4 2-12 2-16 0z"/></g><path d="M32 22c8-4 20-4 28 0v16c0 12-6 20-14 20s-14-8-14-20z" opacity=".75"/><g fill="#fff"><ellipse cx="40" cy="34" rx="4" ry="3"/><ellipse cx="52" cy="34" rx="4" ry="3"/><path d="M38 48c4-5 12-5 16 0-4-2-12-2-16 0z"/></g></svg>`,
+  magnifier: `<svg viewBox="0 0 64 64" fill="currentColor"><circle cx="26" cy="26" r="20" fill="none" stroke="currentColor" stroke-width="7"/><circle cx="26" cy="26" r="13" opacity=".25"/><path d="M40 40l18 18" stroke="currentColor" stroke-width="10" stroke-linecap="round"/><path d="M17 19c2-4 5-6 9-6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>`,
+  hanger: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"><path d="M26 14a6 6 0 1 1 9 5c-2 1-3 3-3 5v3"/><path d="M32 27L5 46c-3 2-2 6 2 6h50c4 0 5-4 2-6z"/></svg>`,
+  cone: `<svg viewBox="0 0 64 64" fill="currentColor"><path d="M17 30h30L32 62z"/><path d="M14 30c-4-1-6-5-4-9 2-3 5-4 8-3 0-8 6-14 14-14s14 6 14 14c3-1 6 0 8 3 2 4 0 8-4 9z"/><path d="M22 36l15 15M30 36l11 11M42 36L27 51" stroke="#fff" stroke-width="2" opacity=".7"/><circle cx="32" cy="5" r="4"/></svg>`,
+  plane: `<svg viewBox="0 0 64 64" fill="currentColor"><path d="M30 4c2-2 6-2 6 2v18l22 13v7l-22-6v14l7 6v5l-11-3-11 3v-5l7-6V38L6 44v-7l22-13V6z" transform="rotate(45 32 32)"/></svg>`,
   footprint: `<svg viewBox="0 0 64 64" fill="currentColor"><path d="M32 3c4 9 6 18 6 28H26c0-10 2-19 6-28z"/><path d="M6 13c9 4 16 12 20 21l-8 7C13 32 8 24 6 13z"/><path d="M58 13c-9 4-16 12-20 21l8 7c5-9 10-17 12-28z"/><path d="M19 39c5-7 21-7 26 0 4 9-4 20-13 22-9-2-17-13-13-22z"/></svg>`,
   bolt: `<svg viewBox="0 0 64 64" fill="currentColor"><polygon points="38,2 12,36 29,36 22,62 52,24 35,24 44,2"/></svg>`,
   compass: `<svg viewBox="0 0 64 64" fill="currentColor"><circle cx="32" cy="32" r="22" fill="none" stroke="currentColor" stroke-width="3"/><polygon points="32,2 37,27 62,32 37,37 32,62 27,37 2,32 27,27"/><circle cx="32" cy="32" r="4" fill="#fff"/></svg>`,
@@ -1554,5 +1561,419 @@ module.exports = {
 .cert-title { font-size:58pt; }
 .award { font-size:32pt; color:var(--accent); }
 .seal { background:var(--primary); color:var(--soft); outline-color:var(--accent); }`,
+  },
+  kitchen: {
+    id: 'kitchen',
+    name: 'Chef’s Kitchen Recipe Rescue',
+    label: 'Play Kitchen',
+    ages: '3–7',
+    cardHeader: 'Chef’s Recipe Rescue',
+    badge: 'Recipe Card',
+    hunters: 'Junior Chefs',
+    treasureWord: 'wooden spoon',
+    icon: ICONS.chefhat,
+    colors: { paper: '#fff6f0', ink: '#3d1f17', primary: '#e0573b', accent: '#2f9e8f', soft: '#ffd9c9' },
+    fonts: { display: 'Fredoka', displayWeight: 700, displayTransform: 'none' },
+    openers: {
+      start: ['Junior Chefs, the kitchen is ready to cook,', 'But Whisk the Kitten knocked over the cookbook!'],
+      middle: [
+        ['Stir it and stir it, around and around,', 'Another lost recipe is waiting to be found!'],
+        ['Sizzle goes the pan and ding goes the bell,', 'You found a card, you are cooking so well!'],
+        ['Crack goes the egg and plop goes the dough,', 'Follow this riddle, there’s more cards to go!'],
+        ['Mix up the flour and pour in the milk,', 'This recipe card is as smooth as silk!'],
+        ['Meow! says Whisk with a flick of her tail,', 'Keep hunting, chefs, you are hot on the trail!'],
+        ['A pinch of salt and a sprinkle of cheese,', 'The next card is near, so go find it, please!'],
+        ['Wash up the bowls till they sparkle and shine,', 'Your cooking is yummy, your hunting is fine!'],
+        ['Taste it and smile, it’s the best in the land,', 'Another card waits, give the chef a big hand!'],
+      ],
+      last: ['One recipe’s left for the Big Birthday Feast,', 'Find it and cook up the best treat at least!'],
+    },
+    briefing: {
+      title: 'A Note from the Kitchen',
+      from: 'Chef Rosa, Head Chef',
+      paragraphs: [
+        'Hello, {kids}!',
+        'This is Chef Rosa in the kitchen. Today we are cooking the Big Birthday Feast! But this morning Whisk, our kitchen kitten, jumped up on the counter to chase a fly and knocked the Big Cookbook right off the shelf. Flutter, flutter! The recipe cards flew all over the place.',
+        'Without the recipes, we can’t cook a thing! Whisk feels a little bit sorry, so she helped me tuck {count} Recipe Cards along the way. Each one has a rhyming riddle that tells you where to search next.',
+        'Great chefs wash their hands, take turns and walk, never run, in the kitchen. Say a happy “Yum!” every time you find a card. Find them all and the feast can begin, with a tasty surprise at the end!',
+        'Your first Recipe Card is attached. Aprons on, chefs!',
+      ],
+      signoff: 'Happy cooking,',
+    },
+    certificate: {
+      title: 'Feast Time!',
+      subtitle: 'Official Junior Chef',
+      body: 'has found every Recipe Card that Whisk the Kitten knocked away and cooked up the Big Birthday Feast, earning the title of',
+      award: 'Master Chef',
+      signer: 'Chef Rosa, Head Chef',
+    },
+    css: `
+.card { border-radius:16px; background:
+  repeating-linear-gradient(90deg, rgba(224,87,59,.07) 0 .28in, transparent .28in .56in) top / 100% .3in no-repeat,
+  linear-gradient(180deg, #fff, var(--paper)); border:2.5px solid var(--primary); }
+.card-head { border-bottom:2px dashed var(--primary); }
+.card-head .icon { color:var(--primary); }
+.card-title { font-size:16pt; }
+.badge { background:var(--accent); border-radius:99px; }
+.frame { border-radius:24px; outline:2px dashed var(--accent); outline-offset:-12px; }
+.briefing h1 { font-size:34pt; }
+.cert-title { font-size:48pt; }
+.award { color:var(--primary); }
+.seal { background:var(--primary); outline-color:var(--accent); }`,
+  },
+  doctor: {
+    id: 'doctor',
+    name: 'Doctor’s Clinic Get Well Quest',
+    label: 'Doctor',
+    ages: '3–7',
+    cardHeader: 'Get Well Quest',
+    badge: 'Medical Chart',
+    hunters: 'Junior Doctors',
+    treasureWord: 'bandage',
+    icon: ICONS.medical,
+    colors: { paper: '#f3f8ff', ink: '#16294a', primary: '#3a7bd5', accent: '#ef5b6b', soft: '#cfe1fa' },
+    fonts: { display: 'Fredoka', displayWeight: 700, displayTransform: 'none' },
+    openers: {
+      start: ['Calling Junior Doctors, the clinic is in!', 'But the patient charts blew away on a big gust of wind!'],
+      middle: [
+        ['Thump-thump goes the heart and achoo goes the nose,', 'Another chart’s hiding, so follow your toes!'],
+        ['Say “Ahh!” nice and wide and stick out your tongue,', 'You found a chart, and the hunt’s just begun!'],
+        ['A bandage, a hug and a sticker or two,', 'The next lost chart is waiting for you!'],
+        ['Listen real close with your stethoscope tight,', 'The next chart is near, you’re doing it right!'],
+        ['Knock on the knee and the leg goes up high,', 'Another chart’s close, give the hunt one more try!'],
+        ['Wash hands with soap and then count up to ten,', 'You found a chart, now go hunting again!'],
+        ['Breathe in so deep and then breathe out so slow,', 'One more chart to find, so off you go!'],
+        ['The patients are smiling, they’re starting to mend,', 'Keep going, doctors, you’re near the end!'],
+      ],
+      last: ['One chart is left, the last patient to see,', 'Find it and everyone’s healthy as can be!'],
+    },
+    briefing: {
+      title: 'Urgent Note from the Clinic',
+      from: 'Dr. Penny, Head Doctor',
+      paragraphs: [
+        'Calling all {kids}!',
+        'This is Dr. Penny at the Clinic. The waiting room is full of teddy bears, bunnies and dolls who need check-ups today! But when Nurse Ollie opened the window this morning, a big gust of wind blew the patient charts right off the desk. Whoosh! They flew all over the place.',
+        'Without the charts, we don’t know who needs a bandage and who needs a hug! So we tucked {count} Medical Chart cards along the way. Each one has a rhyming riddle that tells you where to search next.',
+        'Good doctors are gentle, careful and kind. Walk, don’t run, use your quiet clinic voices, and say a big “All better!” every time you find a card. Find them all and every patient gets well, with a brave surprise waiting at the end!',
+        'Your first Medical Chart is attached. Stethoscopes ready, doctors!',
+      ],
+      signoff: 'Get well soon,',
+    },
+    certificate: {
+      title: 'All Better!',
+      subtitle: 'Official Junior Doctor',
+      body: 'has found every lost patient chart, given every patient a check-up and made the whole waiting room feel all better, earning the title of',
+      award: 'Super Doctor',
+      signer: 'Dr. Penny, Head Doctor',
+    },
+    css: `
+.card { border-radius:16px; background:
+  radial-gradient(circle at 94% 16%, rgba(239,91,107,.14) 0 .22in, transparent .23in),
+  linear-gradient(180deg, #fff, var(--paper)); border:2.5px solid var(--primary); }
+.card-head { border-bottom:2px solid var(--soft); }
+.card-head .icon { color:var(--accent); }
+.card-title { font-size:16pt; }
+.badge { background:var(--primary); border-radius:6px; letter-spacing:.03em; }
+.frame { border-radius:22px; outline:2px solid var(--accent); outline-offset:-12px; }
+.briefing h1 { font-size:32pt; }
+.cert-title { font-size:50pt; }
+.award { color:var(--accent); }
+.seal { background:var(--primary); outline-color:var(--accent); }`,
+  },
+  puppet: {
+    id: 'puppet',
+    name: 'Puppet Theater Lost Ticket Hunt',
+    label: 'Puppet Theater',
+    ages: '3–7',
+    cardHeader: 'Showtime Ticket Hunt',
+    badge: 'Show Ticket',
+    hunters: 'Little Stars',
+    treasureWord: 'ticket',
+    icon: ICONS.masks,
+    colors: { paper: '#fff5f8', ink: '#3a0f20', primary: '#b8325a', accent: '#f2b632', soft: '#f7d2de' },
+    fonts: { display: 'Pacifico', displayWeight: 400, displayTransform: 'none' },
+    openers: {
+      start: ['Little Stars, the curtain goes up at three,', 'But Sockington hid every ticket, oh me!'],
+      middle: [
+        ['Bow to the left and then bow to the right,', 'Another lost ticket is hiding in sight!'],
+        ['Tap your toes, clap your hands, give a big cheer,', 'You found a ticket, the show’s getting near!'],
+        ['A puppet, a song and a dance on the stage,', 'Turn to the next clue like turning a page!'],
+        ['Shhh! says the usher, the lights are down low,', 'Tiptoe to the next one, it’s almost the show!'],
+        ['Sockington giggles and wiggles his nose,', 'He hid one more ticket, so off the hunt goes!'],
+        ['Popcorn is popping, pop, pop, pop, hooray,', 'You’re finding the tickets, the show’s on today!'],
+        ['Bravo! Encore! the audience shout,', 'The next ticket’s waiting, so go seek it out!'],
+        ['Find your best seat and get comfy and snug,', 'Another ticket’s hiding, maybe under a rug!'],
+      ],
+      last: ['One ticket is left for the very front row,', 'Find it, Little Stars, and on with the show!'],
+    },
+    briefing: {
+      title: 'Backstage News',
+      from: 'Madame Velvet, Show Director',
+      paragraphs: [
+        'Calling all {kids}!',
+        'This is Madame Velvet at the Puppet Theater. Today is our Grand Opening show, and the puppets are so excited! But this morning Sockington, our silliest sock puppet, wanted the whole show to himself. He wiggled off the stage and hid every single show ticket.',
+        'Without tickets, nobody can come to the show! Sockington feels a little bit silly now, so he helped me tuck {count} Show Ticket cards along the way. Each one has a rhyming riddle that tells you where to search next.',
+        'Little Stars take turns, cheer each other on and walk, never run, around the theater. Take a bow every time you find a card. Find them all and the curtain goes up, with a starry surprise at the end!',
+        'Your first Show Ticket is attached. Places, everyone!',
+      ],
+      signoff: 'Break a leg,',
+    },
+    certificate: {
+      title: 'Bravo!',
+      subtitle: 'Official Little Star',
+      body: 'has found every ticket Sockington the sock puppet hid and opened the Grand Opening show, earning the title of',
+      award: 'Star of the Show',
+      signer: 'Madame Velvet, Show Director',
+    },
+    css: `
+.card { border-radius:18px; background:
+  linear-gradient(90deg, rgba(184,50,90,.12) 0 .2in, transparent .2in calc(100% - .2in), rgba(184,50,90,.12) calc(100% - .2in)),
+  linear-gradient(180deg, #fff, var(--paper)); border:3px solid var(--primary); }
+.card-head { border-bottom:2px dotted var(--accent); }
+.card-head .icon { color:var(--primary); }
+.card-title { font-size:17pt; }
+.badge { background:var(--accent); color:#3a2405; border-radius:4px; border:1.5px dashed #fff; outline:2px solid var(--accent); }
+.frame { border-radius:26px; outline:3px dotted var(--accent); outline-offset:-12px; }
+.briefing h1 { font-size:34pt; }
+.cert-title { font-size:54pt; }
+.award { color:var(--primary); }
+.seal { background:var(--primary); outline-color:var(--accent); }`,
+  },
+  agent: {
+    id: 'agent',
+    name: 'Secret Agent Top Secret Mission',
+    label: 'Secret Agent',
+    ages: '4–8',
+    cardHeader: 'Top Secret Mission',
+    badge: 'Clue',
+    hunters: 'Secret Agents',
+    treasureWord: 'magnifying glass',
+    icon: ICONS.magnifier,
+    colors: { paper: '#f4f7f8', ink: '#16232c', primary: '#2f4858', accent: '#e8a33d', soft: '#cfe0e8' },
+    fonts: { display: 'Fredoka', displayWeight: 700, displayTransform: 'uppercase' },
+    openers: {
+      start: ['Agents, report! This message is top secret,', 'The Cookie Crown’s missing, and someone took it!'],
+      middle: [
+        ['Tiptoe so quiet, don’t make a sound,', 'Another top secret clue’s waiting around!'],
+        ['Check every footprint and look for a sign,', 'You cracked the clue, agent, you’re doing just fine!'],
+        ['Shh! Use a whisper and talk in code,', 'The next clue is hiding just down the road!'],
+        ['Dust for a fingerprint, look for a crumb,', 'The sneaky one’s near, so keep hunting, chum!'],
+        ['Peek through your spy glass, look left and right,', 'Another clue’s hiding somewhere in sight!'],
+        ['Put on a disguise and a mustache or two,', 'Then sneak to the next clue, it’s waiting for you!'],
+        ['Crumbs on the floor in a trail, I see,', 'Follow them, agent, where can they be?'],
+        ['Code word: “Banana!” Pass it along,', 'The case is near solved, you agents are strong!'],
+      ],
+      last: ['One clue is left and the case will be cracked,', 'Find it and the Cookie Crown comes right back!'],
+    },
+    briefing: {
+      title: 'Top Secret Mission Brief',
+      from: 'Agent Zero, Chief of HQ',
+      paragraphs: [
+        'Attention, {kids}! Read this, then keep it top secret.',
+        'This is Agent Zero at Secret HQ. Last night someone sneaked in and took the Golden Cookie Crown from the HQ snack vault! The only things left behind were a trail of cookie crumbs and some very sneaky clues.',
+        'Our best agents have found {count} top secret clue cards hidden along the way. Each one has a rhyming riddle that tells you where to search next. Follow them to crack the case!',
+        'Real agents move quietly, work as a team and never peek at the next clue too early. Whisper the password “Banana” every time you find a card. Solve the case and the Golden Cookie Crown comes home, with a top secret surprise at the end!',
+        'Your first clue card is attached. This message will self-destruct… just kidding!',
+      ],
+      signoff: 'Over and out,',
+    },
+    certificate: {
+      title: 'Case Closed!',
+      subtitle: 'Official Secret Agent',
+      body: 'has followed every top secret clue, cracked the case of the missing Golden Cookie Crown and brought it home to HQ, earning the title of',
+      award: 'Master Spy',
+      signer: 'Agent Zero, Chief of HQ',
+    },
+    css: `
+.card { border-radius:6px; background:
+  repeating-linear-gradient(0deg, rgba(47,72,88,.05) 0 1px, transparent 1px .25in),
+  linear-gradient(180deg, #fffdf6, #f3ead6); border:2.5px solid var(--primary); }
+.card-head { border-bottom:2.5px solid var(--primary); }
+.card-head .icon { color:var(--primary); }
+.card-title { font-size:15pt; letter-spacing:.05em; }
+.badge { background:transparent; color:#c4372f; border:2.5px solid #c4372f; border-radius:4px; transform:rotate(-4deg); letter-spacing:.08em; text-transform:uppercase; }
+.frame { border-radius:8px; outline:2px dashed var(--primary); outline-offset:-12px; }
+.briefing h1 { font-size:30pt; }
+.cert-title { font-size:46pt; }
+.award { color:var(--accent); }
+.seal { background:var(--primary); outline-color:var(--accent); }`,
+  },
+  dressup: {
+    id: 'dressup',
+    name: 'Costume Shop Dress-Up Dash',
+    label: 'Dress-Up',
+    ages: '3–7',
+    cardHeader: 'Dress-Up Dash',
+    badge: 'Costume Tag',
+    hunters: 'Super Stylists',
+    treasureWord: 'tiara',
+    icon: ICONS.hanger,
+    colors: { paper: '#fbf6ff', ink: '#2c1440', primary: '#8c4fc4', accent: '#2fb8a6', soft: '#e6d5f6' },
+    fonts: { display: 'Fredoka', displayWeight: 700, displayTransform: 'none' },
+    openers: {
+      start: ['Super Stylists, the fashion show’s near,', 'But Twirl the Magpie took every tag from here!'],
+      middle: [
+        ['A hat and a cape and some glittery shoes,', 'Another tag’s hiding, so follow these clues!'],
+        ['Swish goes the cape and twirl goes the skirt,', 'You found a tag, you’re a costume expert!'],
+        ['Caw! says Twirl, she loves shiny things,', 'She hid the next tag with her flappy wings!'],
+        ['Mix and match colors from yellow to blue,', 'The next costume tag is waiting for you!'],
+        ['A crown for a queen and a hat for a chef,', 'Look high and look low, and look right and look left!'],
+        ['Strut down the runway and give a big spin,', 'Another tag’s near, so let’s find it and win!'],
+        ['Sparkles and sequins and buttons that shine,', 'You’re finding the tags, you’re doing just fine!'],
+        ['Pop on a mask and a funny disguise,', 'The next tag is waiting, a fabulous prize!'],
+      ],
+      last: ['One tag is left for the Star of the Show,', 'Find it and onto the runway you go!'],
+    },
+    briefing: {
+      title: 'A Note from the Costume Shop',
+      from: 'Madame Bobbin, Head Designer',
+      paragraphs: [
+        'Hello, {kids}!',
+        'This is Madame Bobbin at the Costume Shop. Today is the Grand Fashion Show, and every costume is ready to wear! But this morning Twirl, the magpie who lives on our roof, flew in the window. Magpies love shiny things, and she carried off every sparkly costume tag!',
+        'Without the tags, nobody knows which costume is which! Twirl dropped them as she flew, and I have tucked {count} Costume Tag cards along the way. Each one has a rhyming riddle that tells you where to search next.',
+        'Super Stylists are kind, share the costumes and walk, never run. Strike a pose every time you find a card. Find them all and the fashion show can begin, with a dazzling surprise at the end!',
+        'Your first Costume Tag is attached. Let’s get styling!',
+      ],
+      signoff: 'With sparkles,',
+    },
+    certificate: {
+      title: 'Ta-da!',
+      subtitle: 'Official Super Stylist',
+      body: 'has found every costume tag Twirl the Magpie carried off and opened the Grand Fashion Show in style, earning the title of',
+      award: 'Star Stylist',
+      signer: 'Madame Bobbin, Head Designer',
+    },
+    css: `
+.card { border-radius:20px; background:
+  radial-gradient(circle at 8% 86%, rgba(47,184,166,.14) 0 .26in, transparent .27in),
+  radial-gradient(circle at 94% 12%, rgba(140,79,196,.12) 0 .22in, transparent .23in), linear-gradient(180deg, #fff, var(--paper)); border:2.5px solid var(--primary); }
+.card-head { border-bottom:2px dashed var(--accent); }
+.card-head .icon { color:var(--primary); }
+.card-title { font-size:16pt; }
+.badge { background:var(--accent); border-radius:99px 6px 6px 99px; }
+.frame { border-radius:28px; outline:2px dashed var(--accent); outline-offset:-12px; }
+.briefing h1 { font-size:34pt; }
+.cert-title { font-size:54pt; }
+.award { color:var(--primary); }
+.seal { background:var(--primary); outline-color:var(--accent); }`,
+  },
+  icecream: {
+    id: 'icecream',
+    name: 'Ice Cream Parlor Golden Scoop Hunt',
+    label: 'Ice Cream',
+    ages: '3–7',
+    cardHeader: 'Golden Scoop Hunt',
+    badge: 'Scoop',
+    hunters: 'Super Scoopers',
+    treasureWord: 'ice cream cone',
+    icon: ICONS.cone,
+    colors: { paper: '#fff6f9', ink: '#40182a', primary: '#e9708f', accent: '#46b7c9', soft: '#fbd5df' },
+    fonts: { display: 'Pacifico', displayWeight: 400, displayTransform: 'none' },
+    openers: {
+      start: ['Super Scoopers, the parlor’s about to begin,', 'But Sprinkles the Penguin slid off with a grin!'],
+      middle: [
+        ['Chocolate, vanilla and strawberry pink,', 'The next golden scoop is closer than you think!'],
+        ['Brrr! says Sprinkles, he slides on his tum,', 'You found a scoop, here comes another one!'],
+        ['A cherry on top and a swirl of whipped cream,', 'You’re finding the scoops, you’re a super team!'],
+        ['Lick it up slowly so it doesn’t drip,', 'Then off to the next one, hop, skip and flip!'],
+        ['Sprinkles of rainbow go shake, shake, shake,', 'Another gold scoop is waiting to take!'],
+        ['A cone or a cup or a sundae so tall,', 'Keep going, scoopers, you’ll find them all!'],
+        ['Slurp goes the milkshake, it’s frosty and cold,', 'The next scoop is shining, all sparkly and gold!'],
+        ['Waddle like Sprinkles from side to side,', 'Then find the next scoop where Sprinkles did slide!'],
+      ],
+      last: ['One golden scoop for the Big Sundae is near,', 'Find it, and give a great big ice cream cheer!'],
+    },
+    briefing: {
+      title: 'A Note from the Ice Cream Parlor',
+      from: 'Scoop Sally, Parlor Owner',
+      paragraphs: [
+        'Hello, {kids}!',
+        'This is Scoop Sally at the Ice Cream Parlor. Today we are making the Biggest Sundae Ever! But this morning Sprinkles, the little penguin who lives in our freezer, slid out on his tummy and carried off our Golden Scoops. He tucked them all over the place!',
+        'Without the Golden Scoops, the Biggest Sundae can’t be made! Sprinkles left a trail of tiny footprints, and I have tucked {count} Scoop cards along the way. Each one has a rhyming riddle that tells you where to search next.',
+        'Super Scoopers take turns, share nicely and walk, never run (the floor might be sticky!). Say a big “Yum!” every time you find a card. Find them all and the Biggest Sundae Ever is ready, with a sweet surprise at the end!',
+        'Your first Scoop card is attached. Grab your scoops!',
+      ],
+      signoff: 'Sweet wishes,',
+    },
+    certificate: {
+      title: 'Sundae Funday!',
+      subtitle: 'Official Super Scooper',
+      body: 'has found every Golden Scoop that Sprinkles the Penguin slid away with and built the Biggest Sundae Ever, earning the title of',
+      award: 'Super Scooper',
+      signer: 'Scoop Sally, Parlor Owner',
+    },
+    css: `
+.card { border-radius:22px; background:
+  radial-gradient(circle at 92% 18%, rgba(70,183,201,.16) 0 7px, transparent 8px),
+  radial-gradient(circle at 86% 10%, rgba(233,112,143,.18) 0 6px, transparent 7px),
+  radial-gradient(circle at 8% 88%, rgba(242,182,50,.2) 0 7px, transparent 8px), linear-gradient(180deg, #fff, var(--paper)); border:2.5px solid var(--primary); }
+.card-head { border-bottom:2px dotted var(--primary); }
+.card-head .icon { color:var(--primary); }
+.card-title { font-size:16pt; }
+.badge { background:var(--accent); border-radius:99px; }
+.frame { border-radius:30px; outline:2px dotted var(--accent); outline-offset:-12px; }
+.briefing h1 { font-size:32pt; }
+.cert-title { font-size:46pt; }
+.award { color:var(--primary); }
+.seal { background:var(--primary); outline-color:var(--accent); }`,
+  },
+  airport: {
+    id: 'airport',
+    name: 'Airport Lost Boarding Pass Hunt',
+    label: 'Airport',
+    ages: '3–8',
+    cardHeader: 'Flight Crew Hunt',
+    badge: 'Boarding Pass',
+    hunters: 'Junior Pilots',
+    treasureWord: 'toy airplane',
+    icon: ICONS.plane,
+    colors: { paper: '#f2f8fd', ink: '#0f2a40', primary: '#1f78b4', accent: '#f5a623', soft: '#cfe6f6' },
+    fonts: { display: 'Fredoka', displayWeight: 700, displayTransform: 'none' },
+    openers: {
+      start: ['Attention, Junior Pilots, the plane is all set,', 'But the boarding passes aren’t on board yet!'],
+      middle: [
+        ['Zoom like a jet with your arms out wide,', 'Another pass is waiting, it’s somewhere inside!'],
+        ['Buckle your seatbelt, click, click, hooray,', 'You found a pass, now you’re on your way!'],
+        ['Up through the clouds, so fluffy and white,', 'The next pass is hiding, keep hunting, all right?'],
+        ['Stamp goes the passport, stamp, stamp, stamp,', 'You found a pass, you’re a travel champ!'],
+        ['Bags on the belt and they roll, roll, roll,', 'Another pass waits, so let’s reach our goal!'],
+        ['Beep goes security, all clear, all clear,', 'The next boarding pass is somewhere near!'],
+        ['Look out the window, the wing’s shining bright,', 'Fly to the next clue, to the left or the right!'],
+        ['Tower to pilot: you’re cleared to go,', 'One more pass is waiting, so off you go!'],
+      ],
+      last: ['One pass is left for the Birthday Flight,', 'Find it and take off, the runway is bright!'],
+    },
+    briefing: {
+      title: 'A Message from the Control Tower',
+      from: 'Captain Skye, Chief Pilot',
+      paragraphs: [
+        'Attention, {kids}!',
+        'This is Captain Skye in the Control Tower. Today is the Birthday Flight, and the plane is fueled up and ready to fly! But this morning Gusty, the playful little wind, whooshed through the check-in desk and blew every boarding pass away.',
+        'Nobody can board without a boarding pass! The ground crew has spotted {count} Boarding Pass cards along the way. Each one has a rhyming riddle that tells you where to search next.',
+        'Junior Pilots stay together, listen to the crew and walk, never run, through the airport. Zoom your arms like airplane wings every time you find a card. Find them all and the Birthday Flight can take off, with a sky-high surprise at the end!',
+        'Your first Boarding Pass is attached. Fasten your seatbelts!',
+      ],
+      signoff: 'Happy flying,',
+    },
+    certificate: {
+      title: 'Cleared for Takeoff!',
+      subtitle: 'Official Junior Pilot',
+      body: 'has found every boarding pass Gusty the Wind blew away, checked in every passenger and flew the Birthday Flight, earning the title of',
+      award: 'Captain of the Skies',
+      signer: 'Captain Skye, Chief Pilot',
+    },
+    css: `
+.card { border-radius:14px; background:
+  linear-gradient(90deg, transparent calc(100% - .5in), rgba(31,120,180,.08) calc(100% - .5in)),
+  linear-gradient(180deg, #fff, var(--paper)); border:2.5px solid var(--primary); }
+.card-head { border-bottom:2px dashed var(--primary); }
+.card-head .icon { color:var(--primary); }
+.card-title { font-size:16pt; letter-spacing:.02em; }
+.badge { background:var(--accent); color:#2b1a02; border-radius:4px; letter-spacing:.04em; }
+.frame { border-radius:20px; outline:2px dashed var(--accent); outline-offset:-12px; }
+.briefing h1 { font-size:30pt; }
+.cert-title { font-size:42pt; }
+.award { color:var(--primary); }
+.seal { background:var(--primary); outline-color:var(--accent); }`,
   },
 };

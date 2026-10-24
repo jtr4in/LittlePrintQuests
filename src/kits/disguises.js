@@ -40,6 +40,13 @@ const DISGUISES = {
   unicorn: ['Flower crown', 'Rainbow heart glasses', 'Sparkle on!'],
   valentine: ['Heart boppers', 'Kissy lips', 'Be mine!'],
   vet: ['Scrub cap', 'Kitty nose', 'Next patient, please!'],
+  kitchen: ['Chef hat', 'Floury mustache', 'Order up, chef!'],
+  doctor: ['Scrub cap', 'Stethoscope smile', 'Say ahh!'],
+  puppet: ['Top hat', 'Theater masks', 'On with the show!'],
+  agent: ['Detective hat', 'Spy disguise', 'Top secret!'],
+  dressup: ['Wizard hat', 'Star glasses', 'Ta-da!'],
+  icecream: ['Ice cream cone hat', 'Sprinkle mustache', 'Brain freeze!'],
+  airport: ['Pilot cap', 'Aviator shades', 'Ready for takeoff!'],
 };
 
 const artFile = (k, n) => path.join(__dirname, 'art', k.def.id, `disguise-${n}.webp`);

@@ -75,6 +75,18 @@ module.exports = {
     dock: ['📅', '🩺', '💊', '🦴', '📞', '💬'],
     keys: [['🚨', 'Emergency'], ['💊', 'Pharmacy'], ['📞', 'Call owner'], ['🖨️', 'Print']],
   },
+  // Manila file folders for patient charts, intake forms and records (src/kits/rooms.js).
+  folders: {
+    title: 'Patient File Folders', label: 'PET RECORDS', tab: 'Patient', stamp: 'CONFIDENTIAL', wristbands: true,
+    inside: [['📝', 'New pet form'], ['🩺', 'Check-up'], ['🦴', 'X-rays'], ['💉', 'Vaccines']],
+    tags: ['X-RAYS', 'VACCINES', 'ALLERGIES', 'GROOMING'], stamps: ['URGENT', 'ALL BETTER', 'GOOD PET!', 'FOLLOW UP'],
+    intake: {
+      title: 'New Pet Form', fields: ['Pet name', 'Animal', 'Age', 'Owner'],
+      reasons: [['🐾', 'Sore paw'], ['🤧', 'Sneezing'], ['😣', 'Tummy ache'], ['🦷', 'Teeth'], ['🛁', 'Bath'], ['🩺', 'Check-up']],
+      allergies: [['🥜', 'Nuts'], ['🌸', 'Pollen'], ['🐝', 'Bees'], ['🍫', 'Chocolate'], ['🚫', 'None']],
+      body: 'Draw an X where it hurts', figure: 'pet',
+    },
+  },
   // Flat props to cut out and play with (see propsPages in engine.js).
   props: {
     scans: { title: 'Pet X-Rays', label: 'X-RAY', howTo: 'Cut out the X-rays. Hold one up to the window to “read” it, then tick what the vet found.',

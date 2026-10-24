@@ -23,6 +23,7 @@ const { stationPages, counterPages, labelsPage, signageCss, signageCount } = req
 const { disguisePages, hasDisguises, disguiseCss, DISGUISES } = require('./disguises');
 const { activityPages, activityTitles, activityCss, activityCount } = require('./activities');
 const extras = require('./extras');
+const rooms = require('./rooms');
 
 const FONT_DIR = path.join(__dirname, '..', '..', 'fonts');
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -236,6 +237,15 @@ function certificatePage(k, blank = false) {
   </section>`;
 }
 
+// The grown-up guide's line for the wall pieces: the old pizza oven and stovetop, and the newer room pieces.
+function appliancesLines(list) {
+  const NAMES = { oven: 'a pizza oven', stove: 'a stovetop', ...rooms.APPLIANCE_NAMES };
+  const kitchen = list.filter((a) => a !== 'stage').map((a) => NAMES[a]);
+  const and = (xs) => (xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}` : xs[0]);
+  const cap = (x) => x.charAt(0).toUpperCase() + x.slice(1);
+  return [...(kitchen.length ? [`${cap(and(kitchen))} to tape onto a box or a play kitchen`] : []), ...(list.includes('stage') ? [cap(NAMES.stage)] : [])];
+}
+
 function guidePage(k) {
   const G = k.def.guide;
   const d = k.def;
@@ -243,7 +253,7 @@ function guidePage(k) {
   const inside = [
     ...(d.hunt && !d.bigSign ? [] : ['A big shop sign: two pages that glue into one 20 inch banner']),
     `${signCount} signs for doors and walls${signCount % 2 ? ' (and a blank one)' : ''}, plus ${signageCount(d) ? `${signageCount(d)} big station ${signageCount(d) === 1 ? 'sign' : 'signs'}, ` : ''}7 counter signs (a fold-over Open/Closed sign, pay here, our hours and more) and 15 shelf and bin labels`,
-    ...(d.appliances ? [`A ${d.appliances.map((a) => ({ oven: 'pizza oven', stove: 'stovetop' })[a]).join(' and a ')} to tape onto a box or a play kitchen`] : []),
+    ...(d.appliances ? appliancesLines(d.appliances) : []),
     ...(extras.hasWow(k) ? [d.wow.inside] : []),
     ...(d.jars ? [`${d.jars.length} wrap-around jar labels`] : []),
     ...(d.toys ? d.toys.map((t) => t.inside) : [`${['laptop', 'console'].includes(d.dashboard.device) ? 'A fold-up' : 'A cut-out'} ${d.dashboard.gadget} with 3 screens`]),
@@ -252,6 +262,7 @@ function guidePage(k) {
     ...(hasDisguises(k) ? [`Photo booth disguises on a stick: a ${DISGUISES[d.id][0].toLowerCase()}, ${DISGUISES[d.id][1].toLowerCase()} and speech bubbles`] : []),
     ...(d.peel ? ['A pizza peel and two draw-your-own wipe-off pizzas'] : []),
     ...(d.props ? [`Props to cut out: ${Object.values(d.props).map((x) => x.title).join(', ')}`] : []),
+    ...(d.folders ? [`${d.folders.title}: manila folders with a tab to fold up, a ${d.folders.intake.title}, plus file labels and stamps`] : []),
     `${d.record.title} forms, two to a page, for ${k.subjects.length ? `each of your ${d.subjectPlural}` : `four ${d.subjectPlural}`} plus a blank one`,
     `${d.ticket.title} cards`,
     d.passport.pageTitle,
@@ -259,7 +270,10 @@ function guidePage(k) {
     `Shop set: welcome poster, ${d.menu.fold ? `a ${d.menu.title} that folds like a book` : `${d.menu.title} board`}, Today’s Specials, order slips, ${d.menu.coinsTitle.toLowerCase()} and a pull-tab money machine`,
     `${d.certificate.title} (named + blank)`,
   ];
-  return `<section class="page guide${k.withHunt && G.afterHunt ? ' with-hunt' : ''}">
+  // A long list (the shop kits with lots of extra pieces) gets a smaller type size so the play ideas still fit.
+  const len = inside.join('').length;
+  const dense = len > 980 ? ' dense denser' : len > 850 ? ' dense' : '';
+  return `<section class="page guide${k.withHunt && G.afterHunt ? ' with-hunt' : ''}${dense}">
     <div class="guide-head"><div class="guide-icon">${d.icon}</div><div><div class="clinic">Grown-up guide${k.little ? ' · little kids version, ages 3 to 5' : ''}</div><h1>Welcome to ${esc(k.placeName)}!</h1></div></div>
     <p class="lead">${esc(G.intro.replace('{child}', k.childName))}</p>
     <div class="guide-cols">
@@ -518,7 +532,7 @@ function wearablePage(k) {
 
 function propsPages(k) {
   const P = k.def.props || {};
-  const order = [['recipe', () => ''], ...SHOP_PROPS.filter(([key]) => key !== 'recipe'), ['scans', scansPage], ['map', mapPage], ['wanted', wantedPage], ['cards', cardsPage], ['patches', patchesPage], ['wearable', wearablePage]];
+  const order = [['recipe', () => ''], ...SHOP_PROPS.filter(([key]) => key !== 'recipe'), ...rooms.PROPS, ['scans', scansPage], ['map', mapPage], ['wanted', wantedPage], ['cards', cardsPage], ['patches', patchesPage], ['wearable', wearablePage]];
   return order.filter(([key]) => P[key]).map(([, fn]) => fn(k)).join('');
 }
 
@@ -621,6 +635,13 @@ const KITS = {
   coffee: require('./defs/coffee'),
   italian: require('./defs/italian'),
   auto: require('./defs/auto'),
+  kitchen: require('./defs/kitchen'),
+  doctor: require('./defs/doctor'),
+  puppet: require('./defs/puppet'),
+  agent: require('./defs/agent'),
+  dressup: require('./defs/dressup'),
+  icecream: require('./defs/icecream'),
+  airport: require('./defs/airport'),
 };
 
 function buildKitHtml(cfg) {
@@ -649,6 +670,7 @@ function buildKitHtml(cfg) {
     extras.peelPages(k),
     extras.morningPages(k),
     recordsPages(k),
+    rooms.folderPages(k),
     ticketPage(k),
     passportsPages(k),
     def.menu.fold ? extras.foldMenuPages(k) : menuBoard(k),
@@ -709,6 +731,7 @@ ${signageCss}
 ${activityCss}
 ${extras.extrasCss}
 ${disguiseCss}
+${rooms.roomsCss}
 ${shopCss(font)}
 :root { --teal:${c.main}; --teal-d:${c.dark}; --mint:${c.soft}; --mint-l:${c.light}; --orange:${c.accent}; --accent-ink:${c.accentInk || '#2b1d06'}; --navy:#3f4a73; --cream:#fbf8f1; --line:#c9d6d0; --gold:${c.gold || '#f1d48f'}; }
 * { box-sizing:border-box; }
@@ -742,6 +765,9 @@ p.lead { font-size:13.5pt; line-height:1.45; margin:.2in 0; }
 .guide-cols { display:grid; grid-template-columns:1fr 1fr; gap:.3in; }
 .guide h3 { font-size:18pt; color:var(--teal-d); margin-bottom:.08in; }
 .guide ul, .guide ol { margin:0; padding-left:.25in; font-size:12.5pt; line-height:1.42; }
+.guide.dense ul, .guide.dense ol { font-size:10.5pt; line-height:1.3; } .guide.dense p.lead { font-size:12pt; margin:.14in 0; } .guide.dense .play { margin-top:.14in; }
+.guide.dense .play-grid div { padding:.1in .16in; font-size:11pt; line-height:1.35; }
+.guide.denser ul, .guide.denser ol { font-size:10pt; line-height:1.24; } .guide.denser .guide-head h1 { font-size:26pt; } .guide.denser .play-grid { gap:.1in; }
 .play { margin-top:.22in; }
 .with-hunt .lead { margin:.16in 0; font-size:13.5pt; } .with-hunt ul, .with-hunt ol { font-size:11.5pt; line-height:1.36; }
 .with-hunt .play { margin-top:.18in; } .with-hunt .play-grid div { padding:.12in .16in; font-size:12pt; }

@@ -128,6 +128,23 @@ const VESSELS = {
       <rect x="50" y="160" width="600" height="40" rx="20" class="v-lid"/>
       ${em(150, 150, 56, '🌷')}${em(550, 150, 56, '🌼')}`,
   },
+  // A big double-door fridge with handles and a freezer drawer.
+  fridge: {
+    box: [140, 150, 420, 230],
+    art: () => `<rect x="90" y="20" width="520" height="430" rx="34" class="v-body"/><rect x="90" y="20" width="520" height="100" rx="34" class="v-lid"/>
+      <rect x="90" y="96" width="520" height="24" class="v-lid"/><rect x="250" y="44" width="200" height="22" rx="11" class="v-gold"/>
+      <rect x="118" y="134" width="12" height="80" rx="6" class="v-gold"/><rect x="570" y="134" width="12" height="80" rx="6" class="v-gold"/>
+      ${em(160, 72, 46, '❄️')}${em(540, 72, 46, '🧊')}<rect x="130" y="450" width="40" height="16" rx="4" class="v-lid"/><rect x="530" y="450" width="40" height="16" rx="4" class="v-lid"/>`,
+  },
+  // A wardrobe with a curved crown top and little legs.
+  wardrobe: {
+    box: [140, 150, 420, 230],
+    art: () => `<path d="M80,110 Q80,40 350,20 Q620,40 620,110 Z" class="v-lid"/>
+      <rect x="80" y="100" width="540" height="345" rx="16" class="v-body"/><line x1="350" y1="110" x2="350" y2="440" stroke="var(--teal-d)" stroke-width="6"/>
+      <circle cx="330" cy="130" r="9" class="v-gold"/><circle cx="370" cy="130" r="9" class="v-gold"/>
+      <rect x="110" y="440" width="34" height="26" rx="6" class="v-lid"/><rect x="556" y="440" width="34" height="26" rx="6" class="v-lid"/>
+      ${em(350, 62, 48, '✨')}`,
+  },
   // A little mailbox house with a heart flag.
   mailbox: {
     box: [140, 205, 420, 185],
