@@ -589,3 +589,18 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 .gallery .cap { font-size: 13.5px; }
 @media (max-width: 520px) { .gallery .g-in { padding: 12px 10px 10px; gap: 8px; } .gallery .tabs button { font-size: 13px; padding: 7px 11px; } }
 @media (max-width: 380px) { .gallery .tabs { gap: 5px; } .gallery .tabs button { font-size: 12.5px; padding: 7px 9px; } }
+
+/* the Field Kit band (2026-10-24): four phones; on a phone they swipe sideways */
+.field-kit { grid-template-columns: minmax(0, .8fr) minmax(0, 1.4fr); }
+.fk-phones { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.fk-phones button:nth-child(4) { margin-top: 22px; }
+.fk-phones .phone { max-width: 160px; }
+@media (max-width: 860px) { .field-kit { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 640px) {
+  .fk-phones { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 42%; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; padding-bottom: 6px; scrollbar-width: none; }
+  .fk-phones::-webkit-scrollbar { display: none; }
+  .fk-phones button { scroll-snap-align: start; }
+}
+.field-kit > * { min-width: 0; }
+/* the name layer over each phone stays inside its frame (otherwise a phone's page widens when a popup opens) */
+.fk-phones .phone { position: relative; overflow: hidden; }
