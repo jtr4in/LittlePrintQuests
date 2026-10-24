@@ -17,7 +17,7 @@ Last updated 2026-10-23 evening (after PR #118). Nothing in progress: every bran
 
 Work that is about to merge or is mid-merge, so sessions on the other account can hold off. Pull main and read this before starting and before merging. Add your entry directly on main (not only in your PR). Don't merge if another entry touches the same files; wait or coordinate. Remove your entry after merging. One line each: what, branch, files touched, thread, UTC time.
 
-- Pizza and Burger welcome posters show one pizza / one burger (`shop.hero` trio). Branch `claude/project-thread-xiuqeo`. Files: `src/kits/defs/pizza.js`, `src/kits/defs/burger.js`, `docs/img/gallery/{pizza,burger}/` and `docs/img/n/gallery/{pizza,burger}/` (kit-1, kit-2, little/). Thread "Shop kit card images". Started 2026-10-24 01:35 UTC.
+Nothing in progress right now.
 
 ## Business direction
 
@@ -104,6 +104,9 @@ Jason found navigating choppy. What it was and the rules now:
 ### Page counts (PR #104, 2026-10-23)
 - The "45 pages" bubbles come from a hardcoded `PAGES` line in `docs/js/data.js`. When pages are added to a kit, activity pack, party pack or craft, run `node scripts/page-counts.js` and paste the printed line over `PAGES`. Hunts follow 7 + ceil(spots/2) pages; the script throws if that changes.
 - The order-stack hint says "Tap to see sample pages" (the gallery is only samples).
+
+### Welcome poster trio (PR #121, 2026-10-24)
+- The shop welcome poster and big sign show three pictures: `shop.hero` in the kit def, or by default the first two menu items plus the kit icon. That default doubled up the pizza and the burger, so Pizza and Burger set their own trio. Jason checked the other kits on 2026-10-24 and they're fine.
 
 ### Shop kit card photos (2026-10-23)
 - The 11 shop kit card thumbnails (`docs/img/kit-<id>.webp`, 1354x994, used by `SHOP_KITS` in `docs/js/data.js`) are styled Gemini photos, each starring the kit's signature piece, prompts say "no cash register". Prompts and scripts: `project-files/scavenger-hunt/previews/shop-kit-cards/`. Gemini redraws kit art loosely; use the round 4 lifestyle tools to restore exact art.
