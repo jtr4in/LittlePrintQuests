@@ -2,7 +2,8 @@
 // piece per clue card. Piece k is tucked behind clue card k, so the kids collect a piece at every
 // stop, and at the last clue they put the picture together to see where the prize is hidden.
 //
-// The picture uses the theme's play kit illustrations (src/kits/art/<theme>/<slug>.webp).
+// The picture uses the theme's play kit illustrations (src/kits/art/<theme>/<slug>.webp), or another
+// kit's with 'other-kit/slug'.
 
 const fs = require('fs');
 const path = require('path');
@@ -39,6 +40,13 @@ const PUZZLES = {
   coffee: { title: 'Barista Bea’s Cocoa Recipe', reveal: 'The Big Cocoa Pot is waiting at the', art: ['pot-of-tea', 'waffle', 'bagel', 'honey', 'lemonade'] },
   italian: { title: 'Nonna’s Secret Recipe', reveal: 'The biggest meatball is waiting at the', art: ['meatballs', '1f468-200d-1f373', 'boil-the-water', '1f34b', 'table-5'] },
   auto: { title: 'Mechanic Max’s Repair Plan', reveal: 'The Golden Wrench is waiting at the', art: ['1f9f0', 'keys', 'battery', 'wipers', 'brakes'] },
+  kitchen: { title: 'Chef Rosa’s Secret Recipe', reveal: 'Chef Rosa’s surprise is waiting at the', art: ['chefs-kitchen-logo', 'pancakes', 'tacos', 'avocado', 'garlic'] },
+  doctor: { title: 'Dr. Penny’s Patient Chart', reveal: 'The Get Well Prize is waiting at the', art: ['doctor-bag', 'vet/bandage', 'vet/pills', 'vet/temperature', 'wheelchair-ride'] },
+  puppet: { title: 'Madame Velvet’s Show Poster', reveal: 'The Golden Ticket is waiting at the', art: ['puppet-stage', 'puppets', 'fox', 'grocery/1f37f', 'royal/crown'] },
+  agent: { title: 'Agent Zero’s Top Secret File', reveal: 'The Golden Cookie Crown is hidden at the', art: ['hq', 'crack-a-code', 'fingerprints-match', 'spy-shades', 'wear-a-disguise'] },
+  dressup: { title: 'Madame Bobbin’s Style Sketch', reveal: 'The Star of the Show prize is waiting at the', art: ['costume-wardrobe', 'a-hat', 'dresses', 'masks', 'goggles'] },
+  icecream: { title: 'Scoop Sally’s Sundae Recipe', reveal: 'The Golden Scoop is waiting at the', art: ['sundae', 'a-cherry', 'snow-cone', 'ice-pop', 'blueberries'] },
+  airport: { title: 'Captain Skye’s Flight Map', reveal: 'Your first class prize is waiting at the', art: ['airport-scene', 'passport', 'suitcase', 'carry-on', 'headphones'] },
 };
 
 // How many pieces sit in each row, top to bottom, for 3 to 12 pieces (roughly square pieces).
@@ -51,7 +59,7 @@ const H = 9.35;
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 function artUrl(themeId, slug) {
-  const f = path.join(ART_DIR, themeId, `${slug}.webp`);
+  const f = path.join(ART_DIR, slug.includes('/') ? slug : `${themeId}/${slug}`) + '.webp';
   return fs.existsSync(f) ? `file://${f}` : null;
 }
 

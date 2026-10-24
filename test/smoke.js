@@ -125,7 +125,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const spotIds = Object.keys(require('../src/generator/spots'));
   for (let n = 3; n <= 12; n++) assert.equal(ROWS[n].reduce((a, b) => a + b), n);
   for (const theme of Object.keys(require('../src/generator/themes'))) {
-    assert.equal(PUZZLES[theme].art.filter((a) => fs.existsSync(path.join(__dirname, '..', 'src', 'kits', 'art', theme, `${a}.webp`))).length, 5, theme);
+    assert.equal(PUZZLES[theme].art.filter((a) => fs.existsSync(path.join(__dirname, '..', 'src', 'kits', 'art', a.includes('/') ? a : `${theme}/${a}`) + '.webp')).length, 5, theme);
     const n = 3 + (theme.length % 10);
     const html = buildHtml({ theme, spots: spotIds.slice(0, n) });
     assert.equal((html.match(/<g class="num">/g) || []).length, n, theme);

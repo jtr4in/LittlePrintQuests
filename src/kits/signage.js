@@ -37,6 +37,13 @@ const STATIONS = {
   unicorn: [['Hay Loft', '🌾'], ['Glitter Bath', '🫧'], ['Rainbow Snacks', '🍭'], ['Ribbon Room', '🎀']],
   valentine: [['Heart Shop', '💝'], ['Wrapping Table', '🎁'], ['Flower Shop', '🌹'], ['Love Notes', '💌']],
   vet: [['Check-In Desk', '📋'], ['Pet Grooming', '🛁'], ['Pet Food', '🦴'], ['Recovery Room', '🛏️']],
+  kitchen: [['Chopping Board', '🔪'], ['Spice Rack', '🧂'], ['Baking Corner', '🧁'], ['Wash Up', '🧽']],
+  doctor: [['Exam Room', '🩺'], ['X-Ray Room', '🩻'], ['Pharmacy', '💊'], ['Waiting Room', '🪑']],
+  puppet: [['Box Office', '🎟️'], ['Backstage', '🧦'], ['Snack Bar', '🍿'], ['Audience Seats', '🪑']],
+  agent: [['Evidence Room', '🔍'], ['Code Room', '🔐'], ['Gadget Lab', '🔦'], ['Briefing Room', '📁']],
+  dressup: [['Dressing Room', '🚪'], ['Hat Shop', '🎩'], ['Runway', '🌟'], ['Mirror', '🪞']],
+  icecream: [['Toppings Bar', '🍒'], ['Cone Station', '🍦'], ['Milkshake Bar', '🥤'], ['Sundae Bar', '🍨']],
+  airport: [['Check-In', '🧳'], ['Security', '🛂'], ['Gate 1', '🛫'], ['Baggage Claim', '🛄']],
 };
 
 // A row of light bulbs around the frame, like a theater marquee.
