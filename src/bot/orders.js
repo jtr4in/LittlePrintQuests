@@ -75,7 +75,7 @@ function buyerMessage(order) {
     craft: () => craftLabel(HOLIDAYS[order.config.holiday]),
   }[main]();
   const host = order.hostToken
-    ? `\n${products.has(order, 'hunt') ? 'On party day, open' : 'Open'} Host Mode on your phone. It ${products.hostHelps(order)}:\n\n${hostUrl(order)}\n`
+    ? `\n${products.has(order, 'hunt') ? 'On party day, open' : 'Open'} your Field Kit on your phone. It ${products.hostHelps(order)}:\n\n${hostUrl(order)}\n`
     : '';
   const extras =
     (order.kitReady ? `\nAnd here's the matching ${kitOf(order).name} play kit:\n\n${base}-kit.pdf\n` : '') +
@@ -98,8 +98,8 @@ ${tips}`;
 async function generate(id) {
   const order = store.get().orders[id];
   const token = order.downloadToken || crypto.randomBytes(18).toString('base64url');
-  // Every order gets Host Mode, a private phone page with a tab for each thing in it.
-  // Hunts also get a second link for a helper (the sidekick). Handprint art needs no Host Mode.
+  // Every order gets a Field Kit, a private phone page with a tab for each thing in it.
+  // Hunts also get a second link for a helper (the sidekick). Handprint art needs no Field Kit.
   const main = products.mainOf(order);
   const hostTokens = !['hunt', 'kit', 'party'].some((i) => products.has(order, i)) ? {} : { hostToken: order.hostToken || newToken(), ...(products.has(order, 'hunt') ? { sidekickToken: order.sidekickToken || newToken() } : {}) };
   const out = (suffix = '') => path.join(store.PDF_DIR, `${token}${suffix}.pdf`);

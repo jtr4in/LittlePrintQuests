@@ -1,4 +1,4 @@
-// Play Kit ideas for the Bunny Egg Factory kit (Host Mode).
+// Play Kit ideas for the Bunny Egg Factory kit (Field Kit).
 module.exports = {
   scenarios: [
     { title: 'First Egg Order', setup: 'Set out the Egg Order Forms, crayons, and the Plain egg cards in the Paint Studio.', say: 'Hello, egg painter {name}! I’d love three spotty eggs in my favorite color, purple!', twist: 'The customer changes their mind and wants every egg to have a tiny smiley face.' },

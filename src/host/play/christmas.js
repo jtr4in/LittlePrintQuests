@@ -1,4 +1,4 @@
-// Play Kit ideas for the Santa’s Workshop kit (Host Mode).
+// Play Kit ideas for the Santa’s Workshop kit (Field Kit).
 module.exports = {
   scenarios: [
     { title: 'The First Toy Order', setup: 'Set out a Toy Order slip, building blocks, and crayons on the Toy Building table.', say: 'Head Elf {name}, a letter came in! Someone wishes for a toy train. Can you build one?', twist: 'The train comes out with square wheels. Back to the workshop to fix it!' },

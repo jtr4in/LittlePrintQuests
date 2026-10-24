@@ -61,7 +61,7 @@ function showHero(id) {
   const back = imgs.find((i) => i !== front);
   const { src, srcset } = heroSrc(id);
   back.onload = () => { back.classList.add('on'); front.classList.remove('on'); };
-  back.alt = `The ${name} set printed out: host guide, story briefing, clue cards, play kit, activity page, party invitation and Host Mode on a phone`;
+  back.alt = `The ${name} set printed out: host guide, story briefing, clue cards, play kit, activity page, party invitation and the Field Kit on a phone`;
   LPQName.setSrc(back, src, srcset);
   $('heroCap').innerHTML = `<b>${esc(name)}</b><span>Make this set</span>`;
   $('heroCap').dataset.id = id;
@@ -81,10 +81,12 @@ $('productCards').querySelectorAll('.product').forEach((b) => b.addEventListener
   Gallery.open(pagesFor('big'), { label: `${name}: ${THEMES.find((t) => t.id === id).name}`, title: true, foot: Gallery.cta(`make/?theme=${id}`, 'Make my kit'),
     ages: k === 'kit' || k === 'activity' ? { value: 'big', pages: pagesFor } : null });
 }));
-// Host Mode: three phone screens from a real order.
-const HOST = [['hide', 'Hide the cards: one per screen, in your hiding order'], ['play', 'Play along: a quick challenge, a line to say and the clue to read'], ['sidekick', 'Bring a sidekick: a second grown-up gets their own lines']];
-$('hostThumb').src = `img/host/${theme}-play.webp`;
-$('seeHost').addEventListener('click', () => Gallery.open(HOST.map(([f, cap]) => ({ k: f, cap, src: `img/host/${theme}-${f}.webp` })), { label: 'Host Mode', title: true, foot: Gallery.cta('make/', 'Make my kit') }));
+// The Field Kit (the grown-up's phone page): three screens from a real order, in the home theme.
+const HOST = [['hide', 'Hide the clues: one card per screen, in your hiding order'], ['play', 'Run the hunt: a quick challenge, a line to say and the clue to read'], ['sidekick', 'Your Sidekick: a second grown-up gets their own lines on their phone']];
+const fieldKit = (i = 0) => Gallery.open(HOST.map(([f, cap]) => ({ k: f, cap, src: `img/host/${theme}-${f}.webp` })), { label: 'Your Field Kit', title: true, start: i, foot: Gallery.cta('make/', 'Make my kit') });
+$('fkPhones').querySelectorAll('img').forEach((img, i) => LPQName.preload(theme).then(() => LPQName.setSrc(img, `img/host/${theme}-${HOST[i][0]}.webp`)));
+$('fkPhones').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => fieldKit(+b.dataset.i)));
+$('seeHost').addEventListener('click', () => fieldKit());
 
 // ---- Themes: tap one to see its pages ------------------------------------------------------------
 // Two rows of tiles that swipe sideways, so 27 themes don't make a long page.

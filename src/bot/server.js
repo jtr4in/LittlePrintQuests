@@ -107,7 +107,7 @@ function orderPage(o) {
          ${o.kitReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-kit.pdf" target="_blank">Download your play kit (PDF)</a></p>` : ''}
          ${o.activityReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-activities.pdf" target="_blank">Download your activity pack (PDF)</a></p>` : ''}
          ${o.partyReady ? `<p><a class="btn" href="/d/${esc(o.downloadToken)}-party.pdf" target="_blank">Download your party printables (PDF)</a></p>` : ''}
-         ${o.hostToken ? `<p><a class="btn alt" href="/h/${esc(o.hostToken)}">Open Host Mode</a><br><small>Help on your phone for ${esc(products.has(o, 'hunt') ? 'hiding the cards and running the hunt' : products.has(o, 'kit') ? 'playing with the kit' : 'planning the party')}.</small></p>` : ''}
+         ${o.hostToken ? `<p><a class="btn alt" href="/h/${esc(o.hostToken)}">Open your Field Kit</a><br><small>Help on your phone for ${esc(products.has(o, 'hunt') ? 'hiding the cards and running the hunt' : products.has(o, 'kit') ? 'playing with the kit' : 'planning the party')}.</small></p>` : ''}
          ${upgradeOffer(o)}
          <p>${o.email && o.deliveredAt ? `We also emailed the link to <b>${esc(o.email)}</b>.` : 'Save your PDF now, or bookmark this page to come back to it.'} Print at “Actual Size / 100%”${{ hunt: ', cut out the clue cards, and follow the Host Guide on page 1.', kit: ', and start with the grown-up guide on page 1.', activity: ', then slip the pages into sheet protectors for a dry-erase marker.', party: ', on cardstock if you have it.', craft: ', on white cardstock, and start with the tips on page 1.' }[main]}</p>`
       : working
@@ -305,7 +305,7 @@ ${listingsPanel(s)}
 </details>
 <h2>To send (${open.length})</h2>${open.map(orderCard).join('') || '<p class="muted">Nothing waiting.</p>'}
 <h2>Sent (${done.length})</h2>${done.length ? '<form method="post" action="/admin/orders/clear-sent"><button class="secondary">Clear all sent</button></form>' : ''}${done.slice(0, 30).map(orderCard).join('')}
-${cleared.length ? `<details class="cleared"${query.get('cleared') ? ' open' : ''}><summary><h2 style="display:inline">Cleared (${cleared.length})</h2> <span class="muted">Hidden from the list. Buyers’ download and Host Mode links still work.</span></summary>${cleared.slice(0, 50).map(orderCard).join('')}</details>` : ''}
+${cleared.length ? `<details class="cleared"${query.get('cleared') ? ' open' : ''}><summary><h2 style="display:inline">Cleared (${cleared.length})</h2> <span class="muted">Hidden from the list. Buyers’ download and Field Kit links still work.</span></summary>${cleared.slice(0, 50).map(orderCard).join('')}</details>` : ''}
 <script>
 function copyMsg(btn){const t=btn.closest('.order').querySelector('textarea');navigator.clipboard.writeText(t.value).then(()=>{btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy message',1500)})}
 ${open.some((o) => o.status === 'processing') ? 'setTimeout(()=>location.reload(),5000)' : ''}
@@ -464,7 +464,7 @@ async function route(req, res) {
     return send(res, 200, 'ok', { 'Content-Type': 'text/plain' });
   }
 
-  // Host Mode (/h/<token>) and the sidekick page (/s/<token>). /state keeps them in step.
+  // Field Kit (/h/<token>) and the sidekick page (/s/<token>). /state keeps them in step.
   const hm = p.match(/^\/(h|s)\/([A-Za-z0-9_-]{20,})(\/state)?$/);
   if (hm) {
     const [, kind, token, state] = hm;

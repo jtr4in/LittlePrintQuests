@@ -33,7 +33,7 @@ async function sendHuntEmail(order) {
     ${order.kitReady ? btn(pdf.replace(/\.pdf$/, '-kit.pdf'), `Download the ${esc(kit.name)} play kit (PDF)`) : ''}
     ${order.activityReady ? btn(pdf.replace(/\.pdf$/, '-activities.pdf'), 'Download the activity pack (PDF)') : ''}
     ${order.partyReady ? btn(pdf.replace(/\.pdf$/, '-party.pdf'), 'Download the party printables (PDF)') : ''}
-    ${order.hostToken ? `<p><b>New: Host Mode.</b> Open this on your phone${products.has(order, 'hunt') ? ' on party day' : ''}. It ${esc(products.hostHelps(order))}.</p>${btn(`${process.env.PUBLIC_URL}/h/${order.hostToken}`, 'Open Host Mode')}` : ''}
+    ${order.hostToken ? `<p><b>New: your Field Kit.</b> Open this on your phone${products.has(order, 'hunt') ? ' on party day' : ''}. It ${esc(products.hostHelps(order))}.</p>${btn(`${process.env.PUBLIC_URL}/h/${order.hostToken}`, 'Open your Field Kit')}` : ''}
     <p><b>Quick setup:</b> ${tips}${order.kitReady ? ' The play kit has its own grown-up guide on page 1.' : ''}</p>
     ${order.passId && store.get().passes?.[order.passId] ? `<p>Made with your Family Pass: <b>${pass.left(store.get().passes[order.passId])} of ${store.get().passes[order.passId].total}</b> orders left.</p>` : ''}
     ${upgrade ? `<div style="border:2px dashed #ef9d31;border-radius:14px;padding:4px 16px 12px;margin:20px 0"><p><b>Make it the whole set for $${(upgrade.cents / 100).toFixed(2)}</b><br>Add the ${esc(products.describe(upgrade.add))}, already made with ${esc(order.config.childName)}’s name. Worth $${(upgrade.worth / 100).toFixed(2)} on their own.</p>${btn(`${process.env.PUBLIC_URL}/order/${order.id}/add`, `Add to my order · $${(upgrade.cents / 100).toFixed(2)}`)}</div>` : ''}

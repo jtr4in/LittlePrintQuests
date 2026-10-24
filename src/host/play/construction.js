@@ -1,4 +1,4 @@
-// Play Kit ideas for the Construction Site kit (Host Mode).
+// Play Kit ideas for the Construction Site kit (Field Kit).
 module.exports = {
   scenarios: [
     { title: 'The Big Build', setup: 'Pick a Work Order, set out building blocks, and tape the Site Open sign by the door.', say: 'Good morning, Boss {name}! The town needs a brand new house. Can your crew build it today?', twist: 'Halfway through, the town calls back: they want a slide on the roof too!' },
