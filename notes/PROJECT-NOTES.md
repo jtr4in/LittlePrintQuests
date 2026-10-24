@@ -4,6 +4,15 @@ The shared memory for Little Print Quests, readable from any Claude account. Mov
 
 Paths like `project-files/...` are in this repo. Paths like `/mnt/project-files/...` are the Claude project files folder of the original account (large binaries; see [large-files.md](large-files.md)).
 
+## Handoff: where things stand
+
+Jason switches between two Claude accounts, sometimes when one runs low on usage. Keep this section current: before stopping, merge what's done, push anything half-finished to a branch, and list it here with what's left. Replace the list each time; history lives in the sections below and in git.
+
+Last updated 2026-10-23 evening (after PR #118). Nothing in progress: every branch is merged.
+- Today's site work, all live: the site split into a home page plus `make/`, `play-kits/` and `handprint-art/` (#110); swipeable theme rows with a dropdown (#111); theme tiles with one cute illustration each (#114, after the wow-prop tiles were tried and reverted, #112/#113); home leads with the four products, plus the phone checkout bar (#115); phone speed fixes (#116); theme dropdown without ages (#117); product pictures on the Stripe checkout (#118).
+- Waiting on Jason: set the Stripe logo and colors in the Dashboard (see "Stripe checkout page" below), and check that Railway redeployed the order bot after #118 (a test checkout should show a picture beside the product).
+- Ideas raised but not started: the Stage 0 growth items (analytics, email capture); a grill piece for Burger and an espresso machine for Coffee (play kitchen fit).
+
 ## Business direction
 
 - **Etsy is being faded out (Oct 2026).** Prioritize the direct webapp and order bot. Don't invest in new Etsy listing options. Etsy pack and party listings stay on the original 16 themes (`ETSY_THEMES` in `src/bot/listings.js`).
@@ -59,16 +68,17 @@ Paths like `project-files/...` are in this repo. Paths like `/mnt/project-files/
 ## Site mechanics
 
 ### Site pages (PR for the calmer home page, 2026-10-23)
-- The one-page site was split. `docs/index.html` is the home page (name hook, rotating hero banner, how it works, photos, themes, what's in the box, pricing, Family Pass, links to the other pages, free sample, FAQ). `docs/make/` is the step-by-step order page: who, theme, what's inside (everything ticked, $19.99), hiding spots and/or party details (skipped if neither), checkout. `docs/play-kits/` and `docs/handprint-art/` hold the shop kits and handprint packs with their preview galleries and buy forms.
+- The one-page site was split. `docs/index.html` is the home page; as of PR #115 it runs: name hook with a general headline, rotating hero banner, "What you get" (four product cards plus a Host Mode line), how it works, themes, pricing with the Family Pass, links to the other pages, free sample, FAQ. `docs/make/` is the step-by-step order page: who, theme, what's inside (everything ticked, $19.99), hiding spots and/or party details (skipped if neither), checkout. `docs/play-kits/` and `docs/handprint-art/` hold the shop kits and handprint packs with their preview galleries and buy forms.
 - Shared code: `docs/css/site.css`, `docs/js/data.js` (THEMES, KITS, SPACES, LAYERS, PRICES, PAGES, GALLERY, HOWTO, SHOP_KITS, CRAFTS, CHECKOUT_URL), `docs/js/site.js` (menu, `Gallery.open`, `setPages`, `goCheckout`), `docs/js/names.js`. Page code: `docs/js/home.js`, `docs/js/make.js`, inline scripts on the play-kits and handprint pages.
 - Subfolder pages use `<base href="../">` so every path stays root-relative like the home page. On those pages don't use `href="#x"` or a hash in `pushState` (they'd resolve to the home page); use `./#x` for home sections.
 - make/ takes `?theme=`, `?space=`, `?age=`, `?kit=` (just the play kit) and `?pick=hunt+kit`. Old links (`/?theme=dino#order`, already-posted Pinterest pins, the bot's `#order` email links and Stripe cancel URL) are forwarded to make/ by a script at the top of `docs/index.html`, so the bot wasn't changed. `#pass` still lands on the home page's Family Pass card.
 - Tried the kits' wow prop cutouts as the theme tiles (PR #112, 2026-10-23); Jason said it looked bad and it was reverted. Ask before trying again.
 - Theme tiles show one cute illustration from each theme's kit art (Jason approved, 2026-10-23): `scripts/theme-icons.py` makes `docs/img/icons/<theme>.webp` from the picks in its `ICONS` map (some borrow another kit's art: café = cocoa mug, pizza = pizza slice, dentist = smiling tooth, italian = spaghetti). Edit the map and re-run it to swap a pick. The older `docs/img/themes/` thumbnails are no longer shown.
+- The order page's theme dropdown shows just the theme name, no ages (Jason, 2026-10-23): step 1 already picks little kids or big kids.
 - Theme pickers are two rows of tiles that swipe sideways (`.themes.mini.rows`), not a tall grid: 27 tiles made the page too long on phones (Jason, 2026-10-23). The order page also has a theme dropdown kept in step with the tiles.
 - Home page pitches all four products up top (Jason, 2026-10-23: the home page read as all hunt while most photos were play kits). Headline is general ("Printable play starring your kid"), then "What you get": four product cards (hunt, play kit, activity pages, party pack) whose galleries open with the styled photo then that product's real pages, plus a Host Mode line. The "At home" photo grid and "What's in the box" tabs were removed: a gallery that only shows the same photo bigger felt weird, so every preview should lead to real pages.
 - Order page on phones: the Back / total / Continue bar is fixed to the bottom and becomes "Pay $x" on the last step (the in-page `#checkoutBtn` is hidden; `#wizNext` submits the form). Step pills become a progress bar under 640px. The order summary only shows on the What's inside and Checkout steps under 860px.
-- Photos and theme tiles open the preview gallery with a "Make this" button instead of jumping to the order form.
+- Product cards, theme tiles and the play kit photos open the preview gallery (real pages, with a "Make my kit" button) instead of jumping to the order form.
 
 ### Name swap previews (2026-10-23)
 - The homepage "type your kid's name" hook live-updates all previews. `renderHtml(..., { nameSlots: 'Maya' })` also writes `pngDir/blank/` pages with the name hidden plus `slots.json`. `gallery-images.js`, `site-images.js`, `craft-gallery.js` and `hero-scenes.js` write twins to `docs/img/n/<same path>` and per-set JSON `docs/img/n/<set>.json`. `docs/js/names.js` swaps each matching `<img>` and draws the typed name (scenes use layers plus SVG masks). Name saved in localStorage `lpq.kidName`.
