@@ -19,8 +19,7 @@ Work in flight is listed under **In progress** below.
 
 Work that is about to merge or is mid-merge, so sessions on the other account can hold off. Pull main and read this before starting and before merging. Add your entry directly on main (not only in your PR). Don't merge if another entry touches the same files; wait or coordinate. Remove your entry after merging. One line each: what, branch, files touched, thread, UTC time.
 
-- Host Mode renamed **Field Kit**, sharper phone screenshots, Field Kit band on the home page · branch `field-kit` · `src/host/*`, `src/bot/*`, `docs/` copy, `docs/img/host/` + twins, `scripts/site-images.js`, terms/privacy · thread session_011aUg5nhLU2T6k4vKZFPS6g · in progress
-- Planned in the same thread, not started: home banners showing more of the play kit (`scripts/hero-scenes.js`, `docs/img/hero/`); a themed handprint activity in every little kids activity pack (`src/kits/activities.js`, activity previews, page counts); a new **doctor** theme with pretend manila file folders for doctor, vet and dentist (`src/generator/themes`, `src/kits/*`, `src/party/*`, `src/host/*`, `docs/js/data.js`, `docs/img/`). Check here before touching those.
+- Planned in the same thread, not started: home banners showing more of the play kit (`scripts/hero-scenes.js`, `docs/img/hero/`); a themed handprint activity in every little kids activity pack (`src/kits/activities.js`, activity previews, page counts); new themes (each a full set: hunt, play kit with a wow piece, activity, party): **doctor** (plus pretend manila file folders for doctor, vet and dentist), **puppet theater**, **secret agent / detective HQ**, **costume & dress-up**, **ice cream parlor**, **airport** (`src/generator/themes`, `src/kits/*`, `src/party/*`, `src/host/*`, `docs/js/data.js`, `docs/img/`). Check here before touching those.
 
 ## Business direction
 
