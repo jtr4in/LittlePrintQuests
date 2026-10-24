@@ -976,6 +976,18 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   for (const id of Object.keys(require('../src/generator/themes'))) {
     for (const k of ['hunt', 'party', 'kit', 'activity']) for (let i = 1; i <= 5; i++) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'gallery', id, `${k}-${i}.webp`)), `gallery ${id} ${k}-${i}`);
   }
+  // The play kit previews show up to four big picture pages per theme (scripts/big-previews.js):
+  // BIGPICS in data.js must match the kits' big/pages.json, and each picture must exist.
+  {
+    const bp = require('../scripts/big-previews');
+    const want = bp.captions();
+    assert.ok(docs('js', 'data.js').includes(bp.line(want)), 'BIGPICS is out of date: run node scripts/big-previews.js');
+    assert.ok(Object.keys(want).length >= 30, 'most themes have big picture previews');
+    for (const [id, caps] of Object.entries(want)) {
+      assert.ok(caps.length <= bp.MAX && new Set(caps).size === caps.length, `big previews ${id}`);
+      caps.forEach((c, i) => assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'gallery', id, `big-${i + 1}.webp`)), `gallery ${id} big-${i + 1}`));
+    }
+  }
 
   // Every Pinterest pin has its picture and a link into the site; holiday pins wait for their season.
   const pins = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'docs', 'pins', 'pool.json'), 'utf8'));

@@ -81,8 +81,8 @@
   </div>
 </footer>
 <script src="js/names.js?v=22d37737"></script>
-<script src="js/data.js?v=f7ae741d"></script>
-<script src="js/site.js?v=475608de"></script>
+<script src="js/data.js?v=c2cf868b"></script>
+<script src="js/site.js?v=f6ed885c"></script>
 <script>
 // Tapping a shop kit opens its pages (both age versions and the box build) with a buy form under them.
 // "Get the kit" opens the order page with that kit ticked, so the rest of the set can be added there.
@@ -103,8 +103,8 @@ function openShop(id, photo) {
   shopKit = id;
   shopBtn.textContent = `Get the ${shopName(id)} kit · $7.99`;
   shopChild.value = LPQName.typed();
-  const pages = [['big', 'Big kids (6 to 8)', ''], ['little', 'Little kids (3 to 5)', 'little/']].flatMap(([k, tab, dir]) =>
-    GALLERY.kit.map((cap, i) => ({ k, tab, cap, src: `img/gallery/${id}/${dir}kit-${i + 1}.webp` })))
+  const pages = [['big', 'Big kids (6 to 8)'], ['little', 'Little kids (3 to 5)']].flatMap(([k, tab]) =>
+    (typeof kitPages === 'function' ? kitPages(id, k) : GALLERY.kit.map((cap, i) => ({ cap, src: `img/gallery/${id}/${k === 'little' ? 'little/' : ''}kit-${i + 1}.webp` }))).map((p) => ({ k, tab, ...p })))
     .concat(HOWTO[id] ? [{ k: 'box', tab: 'Box build', cap: HOWTO[id], src: `img/howto/${id}-sm.webp` }] : []);
   if (photo) pages.unshift({ k: 'big', tab: 'Big kids (6 to 8)', ...photo });
   Gallery.open(pages, { tabs: [['big', 'Big kids (6 to 8)'], ['little', 'Little kids (3 to 5)'], ...(HOWTO[id] ? [['box', 'Box build']] : [])], label: `${shopName(id)} play kit`, title: true, foot: shopForm });
