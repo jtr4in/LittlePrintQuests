@@ -37,6 +37,7 @@ Work that is about to merge or is mid-merge, so sessions on the other account ca
 - Don't pigeonhole the site as birthday-only; rotate occasions (rainy day, sleepover, snow day, Halloween, playdate, Christmas, Valentine's, Easter, weekend).
 - Keep the site calm (2026-10-23, from Jason's wife: the old one-page site felt like "a lot coming at her"). One idea per section, short copy, ordering on its own page. Never drop a feature to get there (name previews, hero banners, order stack, galleries): move it instead.
 - Photos: pieces must be cut to shape and used as the real thing, staged "like an Instagram mom, just perfect". DIY cardboard builds sell best. Never glue cut-and-assemble activity pages (lift-flap vet bag, cauldron) flat onto boxes; use signs, labels and cards on boxes instead.
+- Generated images: no faces on objects (no smiley stars, food, starfish...). Every Gemini prompt should say so (Jason, 2026-10-24). Face props that are meant to be worn as a mouth or nose (the disguises' grins, lips, kitty nose) are fine.
 - Jason runs paste-into-Gemini-app prompts himself for some image work (no API).
 - Jason raises the Gemini spend cap himself at ai.studio/spend when it hits the monthly cap (HTTP 429 "exceeded its monthly spending cap").
 
