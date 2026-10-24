@@ -34,12 +34,14 @@
     return `<div class="nm-slot" style="${t}"></div>`;
   };
   // One page's spots, in page units (816 x 1056 for Letter).
-  const pageHtml = (p) => `<div class="nm-page" style="width:${p.w}px;height:${p.h}px">${p.s.map(slotHtml).join('')}</div>`;
+  // Spots with no size were on something hidden when the picture was taken: nothing to draw.
+  const shown = (slot) => slot.w > 0 && slot.h > 0;
+  const pageHtml = (p) => `<div class="nm-page" style="width:${p.w}px;height:${p.h}px">${p.s.filter(shown).map(slotHtml).join('')}</div>`;
 
   // Fills every spot under `root` with the name, shrinking the words until they fit the box.
   function fill(root, pages, name) {
     const slots = root.querySelectorAll('.nm-slot');
-    const all = pages.flatMap((p) => p.s);
+    const all = pages.flatMap((p) => p.s.filter(shown));
     slots.forEach((el, i) => {
       el.innerHTML = all[i].html.split('{N}').join(esc(name));
       el.dataset.fit = '1';

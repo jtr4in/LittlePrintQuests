@@ -72,6 +72,9 @@ function nameSlots(name, sel = '.page') {
     const page = pages.find((p) => p.contains(el));
     const pr = page.getBoundingClientRect();
     const r = el.getBoundingClientRect();
+    // Nothing on screen to cover (a hidden tab, say): no slot, or the site draws its words in a
+    // squashed column at the top left (the Field Kit's Play Kit and Party tabs did, 2026-10-23).
+    if (!r.width || !r.height) continue;
     const svg = el instanceof SVGElement;
     // Emoji and pictures stay in the screenshot; the overlay leaves a gap of the same size for them.
     if (!svg) {
