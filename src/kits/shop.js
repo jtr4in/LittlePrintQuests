@@ -3,17 +3,13 @@
 // kit's own menu and words, so every theme gets its own set.
 
 const { em, pic, confetti, awning } = require('./art');
+const { splitPlace } = require('./fit');
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const coins = (M, n) => `${n} ${n === 1 ? M.coinWord : `${M.coinWord}s`}`;
 const W = 816; const H = 1056; // a Letter page at 96 px per inch
 const bg = (seed, avoid, n = 70) => `<svg class="shop-bg" viewBox="0 0 ${W} ${H}">${confetti(seed, W, H, n, avoid)}</svg>`;
 
-// "Maya’s Potion Shop" → ["Maya’s", "Potion Shop"], so the name can sit on its own line.
-function splitPlace(place) {
-  const i = place.indexOf('’ ') >= 0 && place.indexOf('’ ') < place.indexOf('’s ') ? place.indexOf('’ ') + 1 : place.indexOf('’s ') + 2;
-  return i > 1 ? [place.slice(0, i), place.slice(i + 1)] : ['', place];
-}
 
 function welcomePage(k) {
   const d = k.def;
@@ -25,8 +21,8 @@ function welcomePage(k) {
     <svg class="awning" viewBox="0 0 ${W} 80">${awning(W, 12)}</svg>
     <div class="poster-in">
       <div class="kicker">Welcome to</div>
-      ${who ? `<div class="script p-who">${esc(who)}</div>` : ''}
-      <div class="script p-what${what.length > 12 ? ' long' : ''}">${esc(what)}</div>
+      ${who ? `<div class="script p-who" data-lines="1">${esc(who)}</div>` : ''}
+      <div class="script p-what${what.length > 12 ? ' long' : ''}" data-lines="2">${esc(what)}</div>
       <div class="tag-line">${esc(d.tagline)}</div>
       <svg class="trio" viewBox="0 0 600 330">
         <ellipse cx="300" cy="290" rx="270" ry="38" class="puddle"/>

@@ -128,6 +128,14 @@ function nameSlots(name, sel = '.page') {
       ...(Math.abs(deg) > 0.2 ? { r: +deg.toFixed(2) } : {}), html,
     };
     if (!svg && scale !== 1) slot.s = +scale.toFixed(3);
+    // Centered words alone on their line can grow into their parent's width with a longer name
+    // ("Jaxon & Jonah’s"): docs/js/names.js widens the box that far before shrinking the words.
+    const par = !svg && el.parentElement;
+    const ps = par && getComputedStyle(par);
+    if (ps && getComputedStyle(el).textAlign === 'center' && (ps.display === 'block' || ps.flexDirection === 'column')) {
+      const mw = (par.clientWidth - parseFloat(ps.paddingLeft) - parseFloat(ps.paddingRight)) / scale;
+      if (mw > w + 1) slot.mw = +mw.toFixed(1);
+    }
     if (!out.has(page)) out.set(page, []);
     out.get(page).push(slot);
 

@@ -24,14 +24,20 @@ const { disguisePages, hasDisguises, disguiseCss, DISGUISES } = require('./disgu
 const { activityPages, activityTitles, activityCss, activityCount } = require('./activities');
 const extras = require('./extras');
 const rooms = require('./rooms');
+const { fitScript, placeHtml } = require('./fit');
+const { splitNames, joinNames } = require('../generator/kid-names');
 
 const FONT_DIR = path.join(__dirname, '..', '..', 'fonts');
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const possessive = (name) => (/s$/i.test(name) ? `${name}’` : `${name}’s`);
 
 function normalize(def, cfg) {
-  const childName = String(cfg.childName || '').trim();
+  // Two or more kids ("Jaxon and Jonah") share the kit: the words say "Jaxon & Jonah", and each kid
+  // gets their own lead badge and certificate.
+  const names = splitNames(cfg.childName);
+  const childName = joinNames(names);
   if (!childName) throw new Error('childName is required');
+  const lead = (n) => `${def.leadPrefix ? def.leadPrefix + ' ' : ''}${n}`;
   const aliases = def.kindAliases || {};
   const subjects = (cfg.subjects || cfg.pets || []).slice(0, 6).map((p, i) => {
     const key = String(p.kind || '').toLowerCase().replace(/\s+/g, '_');
@@ -42,7 +48,9 @@ function normalize(def, cfg) {
   return {
     def,
     childName,
-    lead: `${def.leadPrefix ? def.leadPrefix + ' ' : ''}${childName}`,
+    names,
+    lead: lead(childName),
+    leads: names.map(lead),
     placeName: String(cfg.placeName || cfg.clinicName || def.placeName(possessive(childName))).trim(),
     subjects,
     withHunt: Boolean(cfg.withHunt),
@@ -64,7 +72,7 @@ function sign(title, sub, icon, cls = '') {
   return `<div class="sign ${cls}"><div class="sign-in">
     <svg class="sign-deco" viewBox="0 0 700 440" preserveAspectRatio="none">${art.confetti(++signSeed, 700, 440, 26, [110, 40, 480, 360])}</svg>
     <div class="sign-icon">${art.pic(icon, '1.15in')}</div>
-    <div class="sign-title">${esc(title)}</div>
+    <div class="sign-title"${cls.includes('hero') ? ` data-lines="2">${placeHtml(title)}` : `>${esc(title)}`}</div>
     ${sub ? `<div class="sign-sub">${esc(sub)}</div>` : ''}
   </div></div>`;
 }
@@ -97,7 +105,7 @@ function badge(k, name, role, lead) {
       <div class="photo-col"><div class="photo"></div><span class="draw-cap">Draw yourself</span></div>
       <div class="badge-info">
         <div class="clinic">${esc(k.placeName)}</div>
-        <div class="who">${name ? esc(name) : '<span class="blank"></span>'}</div>
+        <div class="who"${name ? ' data-lines="2"' : ''}>${name ? esc(name) : '<span class="blank"></span>'}</div>
         <div class="role">${esc(role)}</div>
         <div class="barcode"></div>
       </div>
@@ -107,8 +115,9 @@ function badge(k, name, role, lead) {
 
 function badgesPage(k) {
   const d = k.def;
-  const cards = [badge(k, k.lead, d.leadRole, true)];
-  for (let i = 0; i < 7; i++) {
+  const cards = k.leads.slice(0, 4).map((n) => badge(k, n, d.leadRole, true));
+  const crew = 8 - cards.length;
+  for (let i = 0; i < crew; i++) {
     const n = k.staff[i];
     const [role, prefix] = d.roles[i % d.roles.length];
     cards.push(badge(k, n ? `${prefix ? prefix + ' ' : ''}${n}` : '', role, false));
@@ -221,16 +230,18 @@ function passportsPages(k) {
   return out.join('');
 }
 
-// The child's own certificate, then a blank copy to print for guests and siblings.
+// The child's own certificate (one each when the kit is for two kids), then a blank copy to print
+// for guests and siblings.
 function certificatePage(k, blank = false) {
+  if (!blank && k.leads.length > 1) return k.leads.map((who) => certificatePage({ ...k, lead: who, leads: [who] })).join('');
   const C = k.def.certificate;
   return `<section class="page cert${blank ? ' blank' : ''}">
     <div class="cert-in">
       <div class="cert-icon">${C.icon}</div>
-      <div class="cert-kicker">${esc(k.placeName)}</div>
+      <div class="cert-kicker">${placeHtml(k.placeName)}</div>
       <h1>${esc(C.title)}</h1>
       <p>This certifies that</p>
-      <div class="cert-name">${blank ? '&nbsp;' : esc(k.lead)}</div>
+      <div class="cert-name"${blank ? '' : ' data-lines="1"'}>${blank ? '&nbsp;' : esc(k.lead)}</div>
       <p>${esc(C.line)}</p>
       <div class="cert-row"><div><span class="fill"></span>Date</div><div class="seal">${C.seal}</div><div><span class="fill"></span>Signed</div></div>
     </div>
@@ -682,7 +693,7 @@ function buildKitHtml(cfg) {
     certificatePage(k, true),
   ].join('');
   art.setPicScale(1);
-  return `<!doctype html><html><head><meta charset="utf-8"><style>${k.little ? thicker(css(def.colors)) : css(def.colors)}</style></head><body class="${k.little ? 'little' : 'big'}">${pages}</body></html>`;
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${k.little ? thicker(css(def.colors)) : css(def.colors)}</style></head><body class="${k.little ? 'little' : 'big'}">${pages}${fitScript}</body></html>`;
 }
 
 // The Activity Pack: Wipe & Play pages made from a kit's own pictures, sold on its own
@@ -711,7 +722,7 @@ function activityPackHtml(cfg) {
 .act-list .box { margin-left:auto; }
 .act-pics { display:flex; justify-content:space-around; margin:.2in 0 .2in; }
 .act-tip { background:var(--mint-l); border-radius:14px; padding:.16in .22in; font-size:12pt; }
-</style></head><body class="${k.little ? 'little' : 'big'}">${html}</body></html>`;
+</style></head><body class="${k.little ? 'little' : 'big'}">${html}${fitScript}</body></html>`;
 }
 
 // The little-kids version doubles every cut line and border, so they're easy to see and follow.
@@ -888,7 +899,7 @@ p.lead { font-size:13.5pt; line-height:1.45; margin:.2in 0; }
 .cert h1 { font-size:40pt; color:var(--teal-d); }
 .cert p { font-size:15pt; max-width:5.5in; margin:0; }
 .cert.blank .cert-name { min-width:5in; }
-.cert-name { font:700 46pt 'Fredoka'; color:var(--orange); border-bottom:3px solid var(--orange); padding:0 .3in .05in; margin:.05in 0 .1in; }
+.cert-name { max-width:100%; box-sizing:border-box; font:700 46pt 'Fredoka'; color:var(--orange); border-bottom:3px solid var(--orange); padding:0 .3in .05in; margin:.05in 0 .1in; }
 .cert-row { display:flex; align-items:center; gap:.5in; margin-top:.5in; font:600 11pt 'Fredoka'; }
 .cert-row > div:not(.seal) { display:flex; flex-direction:column; gap:4px; width:2in; } .cert-row .fill { min-width:2in; }
 .seal { font-size:34pt; width:1.1in; height:1.1in; border-radius:50%; background:var(--orange); display:grid; place-items:center; box-shadow:0 0 0 5px #fff, 0 0 0 8px var(--orange); }

@@ -16,8 +16,14 @@
   const read = () => { try { return localStorage.getItem(KEY) || ''; } catch { return ''; } };
   let typed = read();
   const listeners = new Set();
-  const clean = (v) => String(v || '').replace(/\s+/g, ' ').trim().slice(0, 24);
-  const get = () => typed || SAMPLE;
+  const clean = (v) => String(v || '').replace(/\s+/g, ' ').trim().slice(0, 40);
+  // Two kids ("Jaxon and Jonah") show as "Jaxon & Jonah", like the printed pages
+  // (same rule as src/generator/kid-names.js).
+  const tidy = (v) => {
+    const n = v.split(/\s*(?:,|&|\+|\/|\band\b)\s*/i).map((x) => x.trim()).filter(Boolean);
+    return n.length > 1 ? `${n.slice(0, -1).join(', ')} & ${n[n.length - 1]}` : n[0] || v;
+  };
+  const get = () => (typed ? tidy(typed) : SAMPLE);
 
   // ---- The JSON for each set, loaded once ------------------------------------------------------
   const shards = {};
@@ -28,10 +34,12 @@
 
   // ---- Drawing the words -----------------------------------------------------------------------
   const esc = (s) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
-  const sized = (html, f) => (f === 1 ? html : html.replace(/(font-size|line-height|letter-spacing|word-spacing):(-?[\d.]+)px/g, (_, k, v) => `${k}:${(v * f).toFixed(2)}px`));
+  const sized = (html, f) => (f === 1 ? html : html.replace(/(font-size|line-height|letter-spacing|word-spacing):\s*(-?[\d.]+)px/g, (_, k, v) => `${k}:${(v * f).toFixed(2)}px`));
+  // mw: how wide a centered spot may grow before its words shrink, so a longer name ("Jaxon & Jonah’s")
+  // takes the free room around a title instead of wrapping small (see name-slots.js).
   const slotHtml = (slot) => {
     const t = `left:${slot.x}px;top:${slot.y}px;transform:translate(-50%,-50%)${slot.r ? ` rotate(${slot.r}deg)` : ''}${slot.s ? ` scale(${slot.s})` : ''}`;
-    return `<div class="nm-slot" style="${t}"></div>`;
+    return `<div class="nm-slot" style="${t}"${slot.mw ? ` data-mw="${slot.mw}"` : ''}></div>`;
   };
   // One page's spots, in page units (816 x 1056 for Letter).
   // Spots with no size were on something hidden when the picture was taken: nothing to draw.
@@ -58,20 +66,26 @@
       el.dataset.fit = '';
       const box = () => el.firstElementChild;
       if (!box()) return;
-      const cw = box().clientWidth;
+      let cw = box().clientWidth;
       const ch = box().clientHeight;
       const over = () => box().scrollWidth > cw + 1 || box().scrollHeight > ch * 1.2 + 2;
       if (!over()) return;
+      // First let the box grow sideways (centered), then shrink the words if it's still too full.
+      const mw = +el.dataset.mw || 0;
+      const wide = mw > cw + 1 ? mw : 0;
+      if (wide) box().style.width = `${(cw = wide)}px`;
+      if (!over()) return;
       const html = el.innerHTML;
+      const put = (h) => { el.innerHTML = h; if (wide) box().style.width = `${wide}px`; };
       let lo = 0.3;
       let hi = 1;
       for (let i = 0; i < 7; i++) {
         const f = (lo + hi) / 2;
-        el.innerHTML = sized(html, f);
+        put(sized(html, f));
         if (over()) hi = f;
         else lo = f;
       }
-      el.innerHTML = sized(html, lo);
+      put(sized(html, lo));
     });
   }
 
