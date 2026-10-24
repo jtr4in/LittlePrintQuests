@@ -889,7 +889,12 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   for (const id of Object.keys(allKits)) {
     for (const age of [3, 6]) {
       const html = activityPackHtml({ kit: id, childName: 'Ava', age, lenient: true });
-      assert.equal((html.match(/<section class="page/g) || []).length, age === 3 ? 17 : 16, `${id} activity pages`);
+      assert.equal((html.match(/<section class="page/g) || []).length, age === 3 ? 20 : 19, `${id} activity pages`);
+      // The move game: two sheets of 9 cards (6 specials) and a board with 4 stand-up pieces, for both ages.
+      assert.equal((html.match(/class="mv-card[ "]/g) || []).length, 18, `${id} move cards`);
+      assert.equal((html.match(/class="mv-card sp"/g) || []).length, 6, `${id} move specials`);
+      assert.equal((html.match(/class="mv-piece"/g) || []).length, 4, `${id} move pieces`);
+      assert.match(html, /Ava’s Move/, `${id} move game names the kid`);
       // The newer pages: little kids get dot, path, shapes and glue pages; big kids a secret code and a roll-and-draw.
       for (const cls of age === 3 ? ['wp-dots', 'wp-path', 'wp-shapes', 'wp-glue'] : ['wp-code', 'wp-roll']) assert.match(html, new RegExp(`class="page wp ${cls}`), `${id} ${cls}`);
       for (const cls of ['wp-color', 'wp-me', 'wp-story']) assert.match(html, new RegExp(`class="page wp ${cls}`), `${id} ${cls}`);

@@ -155,7 +155,7 @@ const THEME_GROUPS = [
 const LAYERS = [
   { id: 'hunt', name: 'Scavenger Hunts', note: 'Clue cards, host guide, puzzle finale, certificate and two bonus games', price: 9.99 },
   { id: 'kit', name: 'Pretend play', note: 'Hands-on toys, a shop set and signs with their name', price: 7.99 },
-  { id: 'activity', name: 'Activity pack', note: 'Mazes, I spy, secret codes, color by number and more to wipe and play', price: 4.99 },
+  { id: 'activity', name: 'Activity pack', note: 'Mazes, I spy, color by number and a get-up-and-move card game', price: 4.99 },
   { id: 'party', name: 'Party pack', note: 'Invitations, toppers, banner, favor tags and more', price: 6.99 },
 ];
 // Must match PRICES in the order bot (src/bot/products.js).
