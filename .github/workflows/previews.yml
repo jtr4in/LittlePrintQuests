@@ -1,0 +1,69 @@
+# Rebuilds the website's preview pictures (order gallery, theme cards, kit fans, hero scenes and their
+# name-swap twins) whenever a change to main touches what they show. scripts/preview-targets.js picks
+# the themes and kits from the changed files: a kit's own defs or art redo just that kit, shared print
+# code redoes everything. It looks back to its own last commit, so pushes that land while it runs are
+# picked up by the next run. Only pictures that really changed are committed.
+name: Site previews
+on:
+  push:
+    branches: [main]
+    paths: ['src/kits/**', 'src/generator/**', 'src/party/**', 'src/crafts/**', 'src/host/**', 'scripts/gallery-images.js', 'scripts/site-images.js', 'scripts/hero-scenes.js', 'scripts/craft-gallery.js']
+  workflow_dispatch:
+    inputs:
+      themes:
+        description: 'Themes or kits to rebuild, space separated, or "all"'
+        default: all
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: previews
+  cancel-in-progress: false
+jobs:
+  previews:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: What to rebuild
+        id: targets
+        run: |
+          npm ci
+          if [ -n "${{ github.event.inputs.themes }}" ]; then t="${{ github.event.inputs.themes }}"
+          else
+            since=$(git log -1 --format=%H --grep='^Site previews:' || true)
+            [ -z "$since" ] && since="${{ github.event.before }}"
+            t=$(git diff --name-only "$since" HEAD | node scripts/preview-targets.js)
+          fi
+          echo "Rebuilding: ${t:-nothing}"
+          echo "list=$t" >> "$GITHUB_OUTPUT"
+      - if: steps.targets.outputs.list != ''
+        run: |
+          npx playwright install --with-deps chromium
+          sudo apt-get install -y python3-pil
+      - name: Render (gallery, craft gallery, site images, hero scenes, in that order)
+        if: steps.targets.outputs.list != ''
+        run: |
+          t="${{ steps.targets.outputs.list }}"; [ "$t" = all ] && t=""
+          node scripts/gallery-images.js $t
+          [ -z "$t" ] && node scripts/craft-gallery.js
+          node scripts/site-images.js $t
+          node scripts/hero-scenes.js $t
+          python3 scripts/keep-changed-images.py
+      - name: Commit and rebuild the site
+        if: steps.targets.outputs.list != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add -A docs/img
+          git diff --cached --quiet && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Site previews: ${{ steps.targets.outputs.list }}"
+          for i in 1 2 3; do git pull --rebase -X theirs origin main && git push && break; sleep 5; done
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" || true

@@ -162,7 +162,7 @@ const LAYERS = [
 const PRICES = { hunt: 9.99, kit: 7.99, party: 6.99, 'hunt+kit': 14.99, 'hunt+party': 13.99, 'kit+party': 12.99, bundle: 16.99, activity: 4.99, activityAdd: 3 };
 // Real page counts from scripts/page-counts.js (re-run it after adding pages). A hunt is 7 pages plus
 // one sheet per two clue cards, so it follows the spots picked.
-const PAGES = {"kit":{"dino":44,"hero":44,"pirate":44,"space":44,"royal":44,"unicorn":45,"mermaid":45,"construction":45,"vet":53,"easter":37,"halloween":37,"christmas":37,"valentine":35,"fire":35,"ice":35,"racecar":35,"pizza":54,"burger":37,"grocery":38,"post":39,"library":38,"police":37,"dentist":41,"petshop":37,"coffee":38,"italian":44,"auto":37,"kitchen":47,"doctor":42,"puppet":40,"agent":44,"dressup":39,"icecream":41,"airport":39},"activity":{"big":16,"little":17},"party":15,"craft":{"halloween":20,"christmas":20,"memory":29,"zoo":28,"fingerprint":28}};
+const PAGES = {"kit":{"dino":44,"hero":44,"pirate":44,"space":44,"royal":44,"unicorn":45,"mermaid":45,"construction":45,"vet":53,"easter":45,"halloween":41,"christmas":40,"valentine":43,"fire":40,"ice":41,"racecar":39,"pizza":54,"burger":45,"grocery":45,"post":44,"library":45,"police":44,"dentist":49,"petshop":45,"coffee":47,"italian":54,"auto":46,"kitchen":57,"doctor":51,"puppet":49,"agent":54,"dressup":48,"icecream":49,"airport":49},"activity":{"big":16,"little":17},"party":15,"craft":{"halloween":20,"christmas":20,"memory":29,"zoo":28,"fingerprint":28}};
 function pagesOf(k, theme, spots = 6, ages = 'big') {
   return { hunt: 7 + Math.ceil(Math.min(10, Math.max(6, spots)) / 2), kit: PAGES.kit[theme], activity: PAGES.activity[ages], party: PAGES.party }[k] || 0;
 }
@@ -179,7 +179,7 @@ const priceOf = (p) => (p && p !== 'activity' && p.endsWith('+activity') ? price
 const GALLERY = {
   hunt: ['Host guide and hiding checklist', 'Mission briefing to read aloud', 'Clue cards', 'More clue cards', 'Certificate'],
   party: ['Invitations', 'Thank-you cards', 'Cupcake toppers', 'Favor tags', 'Birthday banner'],
-  kit: ['Welcome poster', 'Shop signs', 'Wow piece', 'Hands-on play page', 'Hands-on play page'],
+  kit: ['Welcome poster', 'Shop signs', 'Wow piece', 'Big picture page', 'Hands-on play page'],
   activity: ['Activity pack checklist', 'I spy', 'Secret code', 'Color by number', 'Roll a silly creature'],
   activityLittle: ['Activity pack checklist', 'Trace the path', 'Stick it on (cut and glue)', 'Color by dot', 'I spy'],
 };
