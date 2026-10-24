@@ -25,7 +25,8 @@ def cutout(path):
     light = grey & (lum > 170) & smooth | (a.min(axis=2) > 246)
     r, g, b = a[..., 0], a[..., 1], a[..., 2]
     green = (g > r + 40) & (g > b + 40)
-    if green[[0, 0, -1, -1], [0, -1, 0, -1]].all():
+    keyed = green[[0, 0, -1, -1], [0, -1, 0, -1]].all()
+    if keyed:
         # Pale pieces are made on chroma green: key it out everywhere and pull the green
         # spill off the edges.
         piece = ~ndimage.binary_dilation(green, iterations=1)
@@ -50,6 +51,9 @@ def cutout(path):
     rgba[inner & ~piece] = (255, 255, 255, 255)
     rgba[piece, :3] = a[piece]
     rgba[piece, 3] = 255
+    if keyed:
+        # Green holes inside a piece (the mouth gap in a beard) print white, not near-black.
+        rgba[piece & green, :3] = 255
     ys, xs = np.nonzero(outer)
     return Image.fromarray(rgba[ys.min():ys.max() + 1, xs.min():xs.max() + 1], 'RGBA')
 

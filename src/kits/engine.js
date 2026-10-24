@@ -20,6 +20,7 @@ const { welcomePage, menuBoard, specialsPage, moneyPage, shopCss } = require('./
 const art = require('./art');
 const { SHOP_PROPS, shopkitCss } = require('./shopkit');
 const { stationPages, counterPages, labelsPage, signageCss, signageCount } = require('./signage');
+const { disguisePages, hasDisguises, disguiseCss, DISGUISES } = require('./disguises');
 const { activityPages, activityTitles, activityCss, activityCount } = require('./activities');
 const extras = require('./extras');
 
@@ -248,6 +249,7 @@ function guidePage(k) {
     ...(d.toys ? d.toys.map((t) => t.inside) : [`${['laptop', 'console'].includes(d.dashboard.device) ? 'A fold-up' : 'A cut-out'} ${d.dashboard.gadget} with 3 screens`]),
     '8 ID badges',
     ...(d.chefHat ? [`A chef hat with ${k.lead} on the band`] : []),
+    ...(hasDisguises(k) ? [`Photo booth disguises on a stick: a ${DISGUISES[d.id][0].toLowerCase()}, ${DISGUISES[d.id][1].toLowerCase()} and speech bubbles`] : []),
     ...(d.peel ? ['A pizza peel and two draw-your-own wipe-off pizzas'] : []),
     ...(d.props ? [`Props to cut out: ${Object.values(d.props).map((x) => x.title).join(', ')}`] : []),
     `${d.record.title} forms, two to a page, for ${k.subjects.length ? `each of your ${d.subjectPlural}` : `four ${d.subjectPlural}`} plus a blank one`,
@@ -642,6 +644,7 @@ function buildKitHtml(cfg) {
     gadgetPages(k),
     badgesPage(k),
     extras.chefHatPage(k),
+    disguisePages(k),
     propsPages(k),
     extras.peelPages(k),
     extras.morningPages(k),
@@ -705,6 +708,7 @@ ${shopkitCss}
 ${signageCss}
 ${activityCss}
 ${extras.extrasCss}
+${disguiseCss}
 ${shopCss(font)}
 :root { --teal:${c.main}; --teal-d:${c.dark}; --mint:${c.soft}; --mint-l:${c.light}; --orange:${c.accent}; --accent-ink:${c.accentInk || '#2b1d06'}; --navy:#3f4a73; --cream:#fbf8f1; --line:#c9d6d0; --gold:${c.gold || '#f1d48f'}; }
 * { box-sizing:border-box; }

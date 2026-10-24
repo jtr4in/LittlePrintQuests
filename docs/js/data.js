@@ -131,7 +131,7 @@ const LAYERS = [
 const PRICES = { hunt: 9.99, kit: 7.99, party: 6.99, 'hunt+kit': 14.99, 'hunt+party': 13.99, 'kit+party': 12.99, bundle: 16.99, activity: 4.99, activityAdd: 3 };
 // Real page counts from scripts/page-counts.js (re-run it after adding pages). A hunt is 7 pages plus
 // one sheet per two clue cards, so it follows the spots picked.
-const PAGES = {"kit":{"dino":32,"hero":32,"pirate":33,"space":32,"royal":32,"unicorn":33,"mermaid":33,"construction":33,"vet":32,"easter":35,"halloween":35,"christmas":35,"valentine":33,"fire":33,"ice":33,"racecar":33,"pizza":42,"burger":35,"grocery":36,"post":37,"library":34,"police":35,"dentist":35,"petshop":35,"coffee":36,"italian":42,"auto":35},"activity":{"big":16,"little":17},"party":15,"craft":{"halloween":20,"christmas":20,"memory":29,"zoo":28,"fingerprint":28}};
+const PAGES = {"kit":{"dino":34,"hero":34,"pirate":35,"space":34,"royal":34,"unicorn":35,"mermaid":35,"construction":35,"vet":34,"easter":37,"halloween":37,"christmas":37,"valentine":35,"fire":35,"ice":35,"racecar":35,"pizza":44,"burger":37,"grocery":38,"post":39,"library":36,"police":37,"dentist":37,"petshop":37,"coffee":38,"italian":44,"auto":37},"activity":{"big":16,"little":17},"party":15,"craft":{"halloween":20,"christmas":20,"memory":29,"zoo":28,"fingerprint":28}};
 function pagesOf(k, theme, spots = 6, ages = 'big') {
   return { hunt: 7 + Math.ceil(Math.min(10, Math.max(6, spots)) / 2), kit: PAGES.kit[theme], activity: PAGES.activity[ages], party: PAGES.party }[k] || 0;
 }
