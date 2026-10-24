@@ -1,7 +1,7 @@
 # Turns checked raw pictures into kit art: src/kits/art/<kit>/big/NN-<slot>.jpg (portrait, landscape
 # ones turned a quarter turn) plus pages.json. Usage: RAW=dir python3 import.py kit ...
 #   vet: python3 import.py --vet "<Printable Vet Clinic Package.pdf>"
-import json, os, subprocess, sys, tempfile
+import glob, json, os, subprocess, sys, tempfile
 from PIL import Image
 from kits import K
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..'))
@@ -59,6 +59,9 @@ else:
         pages = []
         for slot in ORDER:
             f = os.path.join(RAW, f'{kit}-{slot}.png')
+            # Raw pictures don't outlive a session, so a slot with no raw one keeps the kit's current page.
+            old = [x for x in glob.glob(os.path.join(ROOT, 'src', 'kits', 'art', kit, 'big', f'*-{slot}.jpg'))]
             if os.path.exists(f): pages.append((Image.open(f), slot, title(slot, K[kit]['pages'][slot])))
+            elif old: pages.append((Image.open(old[0]).copy(), slot, title(slot, K[kit]['pages'][slot])))
             else: print('missing', f)
         write(kit, pages)
