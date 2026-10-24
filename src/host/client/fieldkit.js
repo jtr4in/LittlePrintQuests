@@ -417,7 +417,7 @@
     <div class="fk-sheet-head"><b>📄 Choose pages</b><button type="button" class="fk-x" aria-label="Close">×</button></div>
     <p class="small" style="margin:4px 0 0">Tap the pages you want, then print just those.</p>
     <div class="fk-pv" role="group" aria-label="Show pages as"><button type="button" data-v="tile">▦ Tiles</button><button type="button" data-v="list">☰ List</button></div>
-    <div id="fkPages"><p class="small">Getting your pages…</p></div>
+    <div id="fkPages"><p class="small">Getting your pages… The first time takes up to a minute.</p></div>
     <div class="fk-pbar"><button type="button" class="btn" data-clear>Clear</button><a class="btn fk-main" id="fkPrint" target="_blank" rel="noopener">Print</a></div>
   </div></div>`);
   pagesSheet.querySelector('.fk-x').onclick = () => { pagesSheet.hidden = true; };

@@ -6,6 +6,8 @@ const path = require('path');
 const assert = require('assert');
 
 const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'bot-'));
+// Each run's orders and PDFs take a few hundred MB: remove them when the run ends.
+process.on('exit', () => { try { fs.rmSync(dataDir, { recursive: true, force: true }); } catch {} });
 Object.assign(process.env, {
   DATA_DIR: dataDir, PORT: '3917', PUBLIC_URL: 'https://bot.example.com', ADMIN_PASSWORD: 'pw',
   ANTHROPIC_API_KEY: 'test', ETSY_KEYSTRING: 'key', ETSY_SHARED_SECRET: 'secret', POLL_MINUTES: '60',
