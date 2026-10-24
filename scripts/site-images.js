@@ -4,6 +4,7 @@
 // the play kit card (kit-<id>.webp) and the Host Mode phones (host/<id>-hide|play|sidekick.webp).
 // Each picture with the child's name also gets a twin without it in docs/img/n/ (see name-slots.js).
 // Usage: node scripts/site-images.js [theme ...]
+// HOST_ONLY=1 redoes just the phone screenshots (fast: no PDFs).
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -20,10 +21,12 @@ const { nameSlots, sheetLayers, blankJob, blankLayers, pageSlots, saveIndex } = 
 const IMG = path.join(__dirname, '..', 'docs', 'img');
 const SPOTS = ['front_door', 'shoe_rack', 'couch', 'dryer', 'bathtub', 'bookshelf', 'pet_bed', 'kitchen_table'];
 const PARTY = { date: 'Saturday, June 3', time: '2 to 4 pm', place: 'Our house', rsvp: 'Text Sam' };
+const HOST_SIZE = [540, 1080]; // the saved Host Mode phone screenshots (captured at 720x1440)
 const dataUrl = (f) => `data:image/png;base64,${fs.readFileSync(f).toString('base64')}`;
 
 (async () => {
   const only = process.argv.slice(2);
+  const hostOnly = Boolean(process.env.HOST_ONLY);
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'site-images-'));
   const browser = await chromium.launch();
   const index = {};
@@ -32,6 +35,7 @@ const dataUrl = (f) => `data:image/png;base64,${fs.readFileSync(f).toString('bas
   fs.mkdirSync(path.join(IMG, 'n', 'host'), { recursive: true });
   for (const id of Object.keys(THEMES).filter((k) => !only.length || only.includes(k))) {
     const dir = (k) => path.join(tmp, `${id}-${k}`);
+    if (!hostOnly) {
     // Shop-style kits (pizza, library...) keep the kit card and page theme-photos.js and gallery-images.js made.
     const kit = kitForHunt(id)?.bigSign ? null : kitForHunt(id);
     const huntCfg = { theme: id, childName: 'Maya', age: 6, spots: SPOTS, pictures: true };
@@ -60,35 +64,39 @@ const dataUrl = (f) => `data:image/png;base64,${fs.readFileSync(f).toString('bas
       }
       await fan.close();
     }
+    }
 
-    // Host Mode phones: hiding Card 3, then "They found Card 3" for the host and the sidekick, at 240x480.
+    // Host Mode phones: hiding Card 3, then "They found Card 3" for the host and the sidekick. Captured
+    // at 2x and saved at 540x1080: the 240x480 they used to be looked blurry blown up in the gallery.
     const order = { config: { theme: id, childName: 'Maya', age: 6, spots: SPOTS } };
     const steps = plan(order, null).steps;
     const hide = steps.findIndex((s) => /Card 3/.test(s.title) && s.phase === 'setup');
     const play = steps.findIndex((s) => /Card 3/.test(s.title) && s.phase === 'play');
     const screens = [
-      ['hide', hostPage(order, { stateUrl: '/s', sidekickUrl: null, downloads: [] }), hide],
-      ['play', hostPage(order, { stateUrl: '/s', sidekickUrl: null, downloads: [] }), play],
+      // as for an everything bundle, so the Play Kit and Party tabs show as included, not greyed out
+      ['hide', hostPage(order, { stateUrl: '/s', sidekickUrl: null, downloads: [], items: ['hunt', 'kit', 'party'] }), hide],
+      ['play', hostPage(order, { stateUrl: '/s', sidekickUrl: null, downloads: [], items: ['hunt', 'kit', 'party'] }), play],
       ['sidekick', sidekickPage(order, { stateUrl: '/s' }), play],
     ];
     for (const [name, html, step] of screens) {
-      const phone = await browser.newPage({ viewport: { width: 360, height: 720 }, deviceScaleFactor: 1 });
+      const phone = await browser.newPage({ viewport: { width: 360, height: 720 }, deviceScaleFactor: 2 });
       await phone.route('http://host.test/**', (route) => route.request().url().endsWith('/h')
         ? route.fulfill({ contentType: 'text/html', body: html })
         : route.fulfill({ contentType: 'application/json', body: JSON.stringify({ step }) }));
       await phone.goto('http://host.test/h');
       await phone.waitForTimeout(400);
       await phone.screenshot({ path: path.join(tmp, `host-${id}-${name}.png`) });
-      // and its twin without the name, drawn back at the 240x480 the picture is saved at
+      // and its twin without the name, saved at the same size
       const [screen] = await phone.evaluate(`(${nameSlots})('Maya', 'html')`);
       if (screen.slots.length) {
         await phone.screenshot({ path: path.join(tmp, `blank-host-${id}-${name}.png`) });
         const key = `img/host/${id}-${name}.webp`;
         index[key] = { w: 360, h: 720, s: screen.slots };
-        blanks.push([path.join(tmp, `blank-host-${id}-${name}.png`), path.join(IMG, 'n', 'host', `${id}-${name}.webp`), 240, 480]);
+        blanks.push([path.join(tmp, `blank-host-${id}-${name}.png`), path.join(IMG, 'n', 'host', `${id}-${name}.webp`), ...HOST_SIZE]);
       }
       await phone.close();
     }
+    if (hostOnly) { console.log('Rendered phones for', id); continue; }
     // Twins of the order stack and "What's in the box" pages.
     const P = huntParts[id];
     const twins = [['hunt', 3, 'hunt', 400], ['party', 2, 'party', 400], ['hunt', P.guide, 'guide', 480], ['hunt', P.briefing, 'briefing', 480],
@@ -113,7 +121,7 @@ for f in os.listdir(tmp):
     if f.startswith('kit-') and f.endswith('.png'):
         Image.open(p).save(os.path.join(img, f[:-4] + '.webp'), 'WEBP', quality=82)
     elif f.startswith('host-') and f.endswith('.png'):
-        Image.open(p).convert('RGB').resize((240, 480), Image.LANCZOS).save(os.path.join(img, 'host', f[5:-4] + '.webp'), 'WEBP', quality=85)
+        Image.open(p).convert('RGB').resize((540, 1080), Image.LANCZOS).save(os.path.join(img, 'host', f[5:-4] + '.webp'), 'WEBP', quality=84)
     elif os.path.isdir(p):
         theme, kind = f.rsplit('-', 1)
         n = {'hunt': 3, 'party': 2, 'kit': 7}[kind]
