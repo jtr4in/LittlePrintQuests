@@ -2,6 +2,8 @@
 // (two names, "Jaxon & Jonah’s Mission Control", are much longer than "Maya’s"):
 //   data-lines="2"   on an HTML block: no wider than its box, and at most that many lines.
 //   data-fit-w="990" on an SVG <text>: no wider than that many drawing units.
+//   .page.guide: steps up to the next tighter type size (dense, denser, densest) while its
+//                lists and play ideas run into the footer.
 // It runs before the PDF and screenshots (renderHtml waits for the fonts first), so the site's
 // name previews record the fitted sizes too.
 const FIT_JS = `
@@ -27,8 +29,24 @@ const FIT_JS = `
       while (el.getComputedTextLength() > w && s > min) { s *= 0.96; el.style.fontSize = s + 'px'; }
     });
   }
+  var LEVELS = [[], ['dense'], ['dense', 'denser'], ['dense', 'denser', 'densest']];
+  function fitGuides() {
+    document.querySelectorAll('.page.guide').forEach(function (g) {
+      var foot = g.querySelector('footer');
+      if (!foot) return;
+      var over = function () {
+        var bottom = 0;
+        for (var i = 0; i < g.children.length; i++) if (g.children[i] !== foot) bottom = Math.max(bottom, g.children[i].getBoundingClientRect().bottom);
+        return bottom > foot.getBoundingClientRect().top - 2;
+      };
+      var start = LEVELS.findIndex(function (l) { return l.length === ['dense', 'denser', 'densest'].filter(function (c) { return g.classList.contains(c); }).length; });
+      for (var n = start; over() && n < LEVELS.length - 1; n++) LEVELS[n + 1].forEach(function (c) { g.classList.add(c); });
+    });
+  }
   fitAll();
+  fitGuides();
   document.fonts.ready.then(fitAll);
+  document.fonts.ready.then(fitGuides);
 })();`;
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
