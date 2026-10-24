@@ -23,6 +23,8 @@ const { stationPages, counterPages, labelsPage, signageCss, signageCount } = req
 const { disguisePages, hasDisguises, disguiseCss, DISGUISES } = require('./disguises');
 const { activityPages, activityTitles, activityCss, activityCount } = require('./activities');
 const extras = require('./extras');
+const { bigPages, bigLine, bigCss } = require('./bigpages');
+const { bookCardPages, bookCardLine, bookCardCss } = require('./bookcards');
 const rooms = require('./rooms');
 const { fitScript, placeHtml } = require('./fit');
 const { splitNames, joinNames } = require('../generator/kid-names');
@@ -266,6 +268,7 @@ function guidePage(k) {
     `${signCount} signs for doors and walls${signCount % 2 ? ' (and a blank one)' : ''}, plus ${signageCount(d) ? `${signageCount(d)} big station ${signageCount(d) === 1 ? 'sign' : 'signs'}, ` : ''}7 counter signs (a fold-over Open/Closed sign, pay here, our hours and more) and 15 shelf and bin labels`,
     ...(d.appliances ? appliancesLines(d.appliances) : []),
     ...(extras.hasWow(k) ? [d.wow.inside] : []),
+    ...bigLine(k),
     ...(d.jars ? [`${d.jars.length} wrap-around jar labels`] : []),
     ...(d.toys ? d.toys.map((t) => t.inside) : [`${['laptop', 'console'].includes(d.dashboard.device) ? 'A fold-up' : 'A cut-out'} ${d.dashboard.gadget} with 3 screens`]),
     '8 ID badges',
@@ -277,6 +280,7 @@ function guidePage(k) {
     `${d.record.title} forms, two to a page, for ${k.subjects.length ? `each of your ${d.subjectPlural}` : `four ${d.subjectPlural}`} plus a blank one`,
     `${d.ticket.title} cards`,
     d.passport.pageTitle,
+    ...bookCardLine(k),
     'Morning paperwork: a Good Morning checklist and a Supply Order form',
     `Shop set: welcome poster, ${d.menu.fold ? `a ${d.menu.title} that folds like a book` : `${d.menu.title} board`}, Today’s Specials, order slips, ${d.menu.coinsTitle.toLowerCase()} and a pull-tab money machine`,
     `${d.certificate.title} (named + blank)`,
@@ -669,21 +673,28 @@ function buildKitHtml(cfg) {
     signsPages(k),
     extras.appliancePages(k),
     extras.wowPage(k),
+    bigPages(k, ['hero', 'poster']),
     stationPages(k),
+    bigPages(k, ['signs', 'rooms']),
     counterPages(k),
     labelsPage(k),
     extras.jarPages(k),
+    bigPages(k, ['labels', 'strips']),
     gadgetPages(k),
+    bigPages(k, ['screen']),
     badgesPage(k),
     extras.chefHatPage(k),
+    bigPages(k, ['wear', 'cards']),
     disguisePages(k),
     propsPages(k),
     extras.peelPages(k),
     extras.morningPages(k),
     recordsPages(k),
+    bigPages(k, ['forms']),
     rooms.folderPages(k),
     ticketPage(k),
     passportsPages(k),
+    bookCardPages(k),
     def.menu.fold ? extras.foldMenuPages(k) : menuBoard(k),
     k.def.props?.recipe ? SHOP_PROPS.find(([key]) => key === 'recipe')[1](k) : '',
     specialsPage(k),
@@ -743,6 +754,8 @@ ${activityCss}
 ${extras.extrasCss}
 ${disguiseCss}
 ${rooms.roomsCss}
+${bigCss}
+${bookCardCss}
 ${shopCss(font)}
 :root { --teal:${c.main}; --teal-d:${c.dark}; --mint:${c.soft}; --mint-l:${c.light}; --orange:${c.accent}; --accent-ink:${c.accentInk || '#2b1d06'}; --navy:#3f4a73; --cream:#fbf8f1; --line:#c9d6d0; --gold:${c.gold || '#f1d48f'}; }
 * { box-sizing:border-box; }
@@ -779,6 +792,7 @@ p.lead { font-size:13.5pt; line-height:1.45; margin:.2in 0; }
 .guide.dense ul, .guide.dense ol { font-size:10.5pt; line-height:1.3; } .guide.dense p.lead { font-size:12pt; margin:.14in 0; } .guide.dense .play { margin-top:.14in; }
 .guide.dense .play-grid div { padding:.1in .16in; font-size:11pt; line-height:1.35; }
 .guide.denser ul, .guide.denser ol { font-size:10pt; line-height:1.24; } .guide.denser .guide-head h1 { font-size:26pt; } .guide.denser .play-grid { gap:.1in; }
+.guide.densest ul, .guide.densest ol { font-size:9.3pt; line-height:1.18; } .guide.densest p.lead { font-size:11pt; margin:.1in 0; } .guide.densest .play-grid div { padding:.07in .14in; font-size:10pt; line-height:1.28; }
 .play { margin-top:.22in; }
 .with-hunt .lead { margin:.16in 0; font-size:13.5pt; } .with-hunt ul, .with-hunt ol { font-size:11.5pt; line-height:1.36; }
 .with-hunt .play { margin-top:.18in; } .with-hunt .play-grid div { padding:.12in .16in; font-size:12pt; }
