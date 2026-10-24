@@ -123,6 +123,7 @@ Work that is about to merge or is mid-merge, so sessions on the other account ca
 With 34 themes, the theme tiles on the home page and the order page have one line of filter chips above them: All, Adventure, Make-believe, Helpers, Food & shops, Holidays (Jason asked to organize them without adding clutter). The order page's dropdown uses the same groups as `<optgroup>`s, with the in-season holiday first, and picking a theme from it switches the chips to that theme's group. The Play Kits page uses chips too: Helpers, Food & shops, and Make-believe (the few adventure and magic kits together).
 - Groups live in `THEME_GROUPS` in `docs/js/data.js`; the chips come from `themeFilter()` in `docs/js/site.js`. A group needs at least 2 tiles on a page to get a chip.
 - **New theme: add its id to one group.** `npm test` fails if a theme has no group, is in two, or a group lists an unknown id.
+- Gotcha (2026-10-24): right after #134 deployed, a phone loaded the new `make.js` with an old cached `data.js`, hit an error and showed an empty theme dropdown and banner. Fix: the storefront pages load `js/*.js` and `css/site.css` with a content stamp (`?v=…`). **After changing anything in `docs/js` or `docs/css`, run `node scripts/stamp-assets.js`**; `npm test` fails if a stamp is stale. Page code that uses something new from another file also checks it exists first.
 
 ### Keeping the site smooth on phones (2026-10-23)
 Jason found navigating choppy. What it was and the rules now:
