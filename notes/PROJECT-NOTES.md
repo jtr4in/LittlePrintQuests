@@ -175,7 +175,7 @@ Jason found navigating choppy. What it was and the rules now:
 
 Jason: "there are a lot of pages now". The Get ready tab has **Choose pages to print**: a sheet listing every page of the order's PDFs (hunt, play kit, activity pack, party pack) as **tiles or a list** (his ask; the choice is remembered), with Select all per PDF and a Print button that opens one PDF of just the picked pages. Picks are remembered on the phone.
 - Thumbnails and titles: `renderHtml(..., { thumbs: dir })` in `src/generator/render.js` saves `page-N.jpg` (30% size) and `index.json` next to each order PDF (`<token><suffix>-pages/`). A page's title is its `data-title` (set for clue cards, the certificate and party sheets), else a name for its class (host guide, briefing, puzzle, picture cards), else its heading or first line. Give new page kinds a `data-title` for a good name.
-- `documents(order)` in `src/bot/orders.js` lists an order's PDFs (used by `generate` and the picker); orders made before this get thumbnails the first time the picker opens (`pageList`).
+- `documents(order)` in `src/bot/orders.js` lists an order's PDFs (used by `generate` and the picker). Thumbnails are made the first time the picker opens (`pageList`), not while the order is made: rendering them during or alongside order PDFs made Chromium fail with "Printing failed" and slowed delivery (PR #143 did that and was fixed the same day).
 - Routes (by download token): `/d/<token>/pages.json`, `/d/<token>/thumb/<main|kit|activities|party>/<n>.jpg`, `/d/<token>/pick.pdf?main=1,3&kit=2-5` (joined with `pdf-lib`, a new dependency).
 
 ### Field Kit extras (2026-10-24)
@@ -209,6 +209,8 @@ Tools: `project-files/scavenger-hunt/previews/lifestyle/tools/`. Outputs are lar
 - Products round: styled photos for party pack, scavenger hunt, activity pack (`tools/products/`). Bunting pennant quads are a parallelogram from top corners plus apex with fit contain; Gemini can re-render a small printed tag via `gen_edit`; for a half-drawn maze, solve it on a cell grid and draw the path before warping.
 
 ## Environment gotchas
+
+- 2026-10-24: `npm test` used to leave its data folder (~415 MB of orders and PDFs) in /tmp on every run, and `renderHtml` left a temp HTML folder per render; after a long session the Claude workspace disk filled up and tests failed oddly ("Printing failed", orders stuck processing). Both now clean up. If tests fail strangely, check `df -h /` first.
 
 - The repo pins playwright 1.56.1, which doesn't match the container's browser. Easiest fix: a preload that wraps `chromium.launch` to pass `executablePath: '/opt/pw-browsers/chromium'`, run as `node -r pre.js scripts/<script>.js`.
 - To click through the site locally: `python3 -m http.server` in `docs/`, then Playwright with the preload above. `npm test` also needs the preload (`node -r pre.js test/smoke.js`).

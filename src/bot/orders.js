@@ -105,7 +105,7 @@ async function generate(id) {
   const hostTokens = !['hunt', 'kit', 'party'].some((i) => products.has(order, i)) ? {} : { hostToken: order.hostToken || newToken(), ...(products.has(order, 'hunt') ? { sidekickToken: order.sidekickToken || newToken() } : {}) };
   const out = (suffix = '') => path.join(store.PDF_DIR, `${token}${suffix}.pdf`);
   const docs = documents(order);
-  for (const d of docs) await d.render(out(d.suffix), { thumbs: pagesDir(token, d.suffix) });
+  for (const d of docs) await d.render(out(d.suffix));
   const has = (suffix) => docs.some((d) => d.suffix === suffix);
   const kit = has('-kit'), activity = has('-activities'), party = has('-party');
   store.update((s) => {
@@ -132,8 +132,9 @@ function documents(order) {
 }
 const pagesDir = (token, suffix) => path.join(store.PDF_DIR, `${token}${suffix}-pages`);
 
-// The page picker's list: every document with its pages' titles. Orders made before the picker
-// existed get their thumbnails made the first time someone asks (once at a time per order).
+// The page picker's list: every document with its pages' titles. Thumbnails are made the first time
+// someone opens the picker (once at a time per order, and never while an order's PDFs are being
+// made: a second browser rendering alongside made PDF printing fail).
 const making = new Map();
 async function pageList(order) {
   const docs = documents(order).filter((d) => fs.existsSync(path.join(store.PDF_DIR, `${order.downloadToken}${d.suffix}.pdf`)));

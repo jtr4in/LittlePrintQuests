@@ -47,6 +47,7 @@ async function renderHtml(html, outPdf, { pngDir, nameSlots: name, thumbs } = {}
     }
   } finally {
     await browser.close();
+    fs.rmSync(path.dirname(tmp), { recursive: true, force: true });
   }
   return outPdf;
 }
