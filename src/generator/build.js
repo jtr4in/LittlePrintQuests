@@ -202,7 +202,7 @@ function cardSheets(plan) {
   const out = [];
   for (let i = 0; i < plan.cards.length; i += 2) {
     const pair = plan.cards.slice(i, i + 2);
-    out.push(`<section class="page sheet">${pair.map((c) => card(c, plan.theme, plan.pictures, plan.puzzle)).join('<div class="gap"></div>')}</section>`);
+    out.push(`<section class="page sheet" data-title="Clue cards ${pair.map((c) => c.n).join(' and ')}">${pair.map((c) => card(c, plan.theme, plan.pictures, plan.puzzle)).join('<div class="gap"></div>')}</section>`);
   }
   return out.join('');
 }
@@ -210,7 +210,7 @@ function cardSheets(plan) {
 function certificate(plan, cfg) {
   const { theme } = plan;
   const c = theme.certificate;
-  return `<section class="page cert">
+  return `<section class="page cert" data-title="Certificate">
     <div class="frame">
       <div class="icon big">${theme.icon}</div>
       <div class="kicker">${esc(c.subtitle)}</div>

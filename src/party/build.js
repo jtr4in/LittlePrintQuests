@@ -232,7 +232,8 @@ function bottleLabel(ctx, x, y, w, h) {
 
 // ---------- pages ----------
 
-const page = (cls, inner) => `<section class="page ${cls}">${inner}</section>`;
+// `title` names the page in the Field Kit's page picker.
+const page = (cls, inner, title = '') => `<section class="page ${cls}"${title ? ` data-title="${title}"` : ''}>${inner}</section>`;
 
 function guidePage(ctx, contents) {
   const { theme, name, age, flavor } = ctx;
@@ -283,11 +284,11 @@ function buildPartyHtml(cfg = {}) {
   // 1. Invitations, 7x5 landscape (5x7), two per page.
   const two = [0.5, 5.5];
   add('Invitations', '5×7 in, 2 per page. Fill in any blank lines by hand.', 'Cardstock',
-    page('sheet', two.map((y) => invitation(ctx, 0.75, y)).join('') + guides(two.map((y) => ({ rect: [0.75, y, 7, 5] }))) + scissors(1.1, 0.5)));
+    page('sheet', two.map((y) => invitation(ctx, 0.75, y)).join('') + guides(two.map((y) => ({ rect: [0.75, y, 7, 5] }))) + scissors(1.1, 0.5), 'Invitations'));
 
   // 2. Thank-you cards, 5x7, two per page.
   add('Thank-you cards', '5×7 in, 2 per page. Write a note to each guest.', 'Cardstock or paper',
-    page('sheet', two.map((y) => thankYou(ctx, 0.75, y)).join('') + guides(two.map((y) => ({ rect: [0.75, y, 7, 5] }))) + scissors(1.1, 0.5)));
+    page('sheet', two.map((y) => thankYou(ctx, 0.75, y)).join('') + guides(two.map((y) => ({ rect: [0.75, y, 7, 5] }))) + scissors(1.1, 0.5), 'Thank-you cards'));
 
   // 3. Cupcake toppers, 2 in circles, 12 per page.
   // Each row of three differs from the one above, so the mix looks even.
@@ -304,7 +305,7 @@ function buildPartyHtml(cfg = {}) {
     }
   }
   add('Cupcake toppers', '2 in circles. Tape to a toothpick, or glue two back to back.', 'Cardstock',
-    page('sheet', tops.join('') + guides(circles)));
+    page('sheet', tops.join('') + guides(circles), 'Cupcake toppers'));
 
   // 4. Favor tags, 10 per page.
   const tw = 3.6, th = 1.85, k = TAG_CUT;
@@ -319,7 +320,7 @@ function buildPartyHtml(cfg = {}) {
     }
   }
   add('Favor tags', '10 per page. Punch the dot and tie to favor bags with ribbon.', 'Cardstock or paper',
-    page('sheet', tags.join('') + guides(tagCuts)));
+    page('sheet', tags.join('') + guides(tagCuts), 'Favor tags'));
 
   // 5. Banner: HAPPY [icon] BIRTHDAY [icon] NAME, 3 pennants per page.
   const colors = [c.primary, c.accent, c.soft];
@@ -354,7 +355,7 @@ function buildPartyHtml(cfg = {}) {
       cuts.push({ fold: [x, fy + FS, x + FW, fy + FS] });
       return pennant(ctx, f, x, fy, i + j, flags.length);
     });
-    bannerPages.push(page('sheet', items.join('') + guides(cuts)));
+    bannerPages.push(page('sheet', items.join('') + guides(cuts), 'Name banner'));
   }
   add('Birthday banner', `${flags.length} flags spelling HAPPY BIRTHDAY ${esc(name.toUpperCase())}, 3 per page (the middle one prints upside down). Fold the top strip over string and tape.`, 'Cardstock', bannerPages);
 
@@ -371,14 +372,14 @@ function buildPartyHtml(cfg = {}) {
       items.push(tent(ctx, label, x, y, fw, fh));
       cuts.push({ rect: [x, y, fw, fh] }, { fold: [x, y + fh / 2, x + fw, y + fh / 2] });
     });
-    tentPages.push(page('sheet', items.join('') + guides(cuts)));
+    tentPages.push(page('sheet', items.join('') + guides(cuts), 'Food tent cards'));
   }
   add('Food tent cards', '8 cards, 3 already named. Write in the rest, fold on the dotted line.', 'Cardstock or paper', tentPages);
 
   // 7. Water bottle labels, 8.25 x 2 in, 4 per page.
   const ys = [0, 1, 2, 3].map((i) => 0.975 + i * 2.35);
   add('Water bottle labels', '8.25×2 in, 4 per page. Wrap around a bottle and tape the ends.', 'Paper',
-    page('sheet', ys.map((y) => bottleLabel(ctx, 0.125, y, 8.25, 2)).join('') + guides(ys.map((y) => ({ rect: [0.125, y, 8.25, 2] })))));
+    page('sheet', ys.map((y) => bottleLabel(ctx, 0.125, y, 8.25, 2)).join('') + guides(ys.map((y) => ({ rect: [0.125, y, 8.25, 2] }))), 'Water bottle labels'));
 
   const body = [guidePage(ctx, contents), ...pages].join('\n');
   return `<!doctype html><html><head><meta charset="utf-8"><title>${esc(possessive(name))} ${esc(flavor.party)} Pack</title><style>${css(ctx.theme)}</style></head><body>${body}<script>${FIT_JS}</script></body></html>`;
