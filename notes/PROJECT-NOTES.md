@@ -21,6 +21,8 @@ Work that is about to merge or is mid-merge, so sessions on the other account ca
 
 - Big full-page picture pages for every play kit, vet from the wife's Vet Clinic PDF (branch `claude/project-thread-m5qmd9`; `src/kits/engine.js`, new `src/kits/bigpages.js`, `src/kits/art/<kit>/big/`, kit defs, `docs/js/data.js` PAGES, gallery images; thread "Match vet clinic big-image quality", started 2026-10-24 12:50 UTC)
 
+- Field Kit band screens, branch `field-kit-screens`, touches `docs/img/host/`, `docs/img/n/host/`, `docs/img/n/*.json`, `docs/index.html`, `docs/js/home.js`, `docs/css/site.css`, storefront stamps, `scripts/site-images.js`, notes. Thread "Field Kit upgrade", 2026-10-24 13:08 UTC.
+
 ## Business direction
 
 - **Etsy is being faded out (Oct 2026).** Prioritize the direct webapp and order bot. Don't invest in new Etsy listing options. Etsy pack and party listings stay on the original 16 themes (`ETSY_THEMES` in `src/bot/listings.js`).
