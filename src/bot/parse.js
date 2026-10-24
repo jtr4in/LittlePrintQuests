@@ -7,6 +7,7 @@ const { zodOutputFormat } = require('@anthropic-ai/sdk/helpers/zod');
 const SPOTS = require('../generator/spots');
 const THEMES = require('../generator/themes');
 const { kitForHunt, KITS } = require('../kits/engine');
+const { tidyNames } = require('../generator/kid-names');
 
 const MODEL = process.env.CLAUDE_MODEL || 'claude-opus-5-5';
 const client = new Anthropic();
@@ -99,7 +100,7 @@ function toHuntConfig(p) {
   if (problems.length) return { ok: false, problem: problems.join('; '), draft: p };
   return {
     ok: true,
-    config: { theme: p.theme, childName: p.childName, ...(p.age ? { age: p.age } : {}), spots },
+    config: { theme: p.theme, childName: tidyNames(p.childName), ...(p.age ? { age: p.age } : {}), spots },
     pets: (p.pets || []).slice(0, 6),
     party: cleanParty(p.party),
   };
@@ -136,7 +137,7 @@ Missing pets are fine. Set ok to false only if there's no child's name.`,
   const p = response.parsed_output;
   if (!p) return { ok: false, problem: `Claude could not read this order (stop reason: ${response.stop_reason}).` };
   if (!p.ok || !p.childName) return { ok: false, problem: p.problem || 'missing child’s name', draft: p };
-  return { ok: true, config: { kit, childName: p.childName.trim(), ...(p.age ? { age: p.age } : {}), subjects: p.pets.slice(0, 6), lenient: true } };
+  return { ok: true, config: { kit, childName: tidyNames(p.childName), ...(p.age ? { age: p.age } : {}), subjects: p.pets.slice(0, 6), lenient: true } };
 }
 
 // ---------- party pack only orders ----------
@@ -167,7 +168,7 @@ Set ok to false only if the child's name or the theme is missing.`,
   if (!p) return { ok: false, problem: `Claude could not read this order (stop reason: ${response.stop_reason}).` };
   if (!p.ok || !p.childName || !THEMES[p.theme]) return { ok: false, problem: p.problem || 'missing child’s name or theme', draft: p };
   const party = cleanParty(p.party);
-  return { ok: true, config: { theme: p.theme, childName: p.childName.trim(), ...(p.age ? { age: p.age } : {}), ...(party ? { party } : {}) } };
+  return { ok: true, config: { theme: p.theme, childName: tidyNames(p.childName), ...(p.age ? { age: p.age } : {}), ...(party ? { party } : {}) } };
 }
 
 // ---------- handprint art orders ----------
@@ -192,7 +193,7 @@ Return the child's first name and their age if given. Set ok to false only if th
   const p = response.parsed_output;
   if (!p) return { ok: false, problem: `Claude could not read this order (stop reason: ${response.stop_reason}).` };
   if (!p.ok || !p.childName) return { ok: false, problem: p.problem || 'missing child’s name', draft: p };
-  return { ok: true, config: { holiday, childName: p.childName.trim(), ...(p.age ? { age: p.age } : {}) } };
+  return { ok: true, config: { holiday, childName: tidyNames(p.childName), ...(p.age ? { age: p.age } : {}) } };
 }
 
 module.exports = { parseOrder, parseKitOrder, parsePartyOrder, parseCraftOrder, toHuntConfig, OrderSchema };

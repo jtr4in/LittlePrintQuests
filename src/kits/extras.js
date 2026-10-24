@@ -32,7 +32,7 @@ function bigSignPages(k) {
   const art = `<rect x="0" y="0" width="${W}" height="${H}" rx="28" fill="var(--teal)"/>${awn}
     <rect x="22" y="92" width="${W - 44}" height="${H - 114}" rx="22" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="2 14" stroke-linecap="round"/>
     ${em(150, 255, 190, trio[0])}${em(W - 150, 255, 190, trio[2])}
-    <text x="${W / 2}" y="268" text-anchor="middle" class="ks-name" style="font-size:${Math.min(120, Math.round(1700 / k.placeName.length))}px">${esc(k.placeName)}</text>
+    <text x="${W / 2}" y="268" text-anchor="middle" class="ks-name" data-fit-w="${W - 560}">${esc(k.placeName)}</text>
     <text x="${W / 2}" y="345" text-anchor="middle" class="ks-sub">${esc(d.tagline)}</text>`;
   // The right half starts a little early: that strip goes under the left page when gluing.
   // Both halves print at the same inches per unit (sized off the wider right half), so the
@@ -70,7 +70,7 @@ function atmPage(k) {
         <svg class="slide-card" viewBox="0 0 360 520">
           <rect x="4" y="4" width="352" height="512" rx="30" class="card-bg"/>
           <text x="180" y="50" class="card-t atm-t" text-anchor="middle">ATM</text>
-          <text x="180" y="78" class="atm-bank" text-anchor="middle">${esc(`Bank of ${k.placeName}`)}</text>
+          <text x="180" y="78" class="atm-bank" text-anchor="middle" data-fit-w="320">${esc(`Bank of ${k.placeName}`)}</text>
           <rect x="40" y="96" width="280" height="280" rx="16" class="window"/>
           <text x="180" y="240" class="window-t" text-anchor="middle">cut out this window</text>
           ${keys}

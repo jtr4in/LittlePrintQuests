@@ -432,7 +432,7 @@ $('passCode').addEventListener('input', () => { if (passInfo) { passInfo = null;
 // What a parent typed on any page (js/names.js keeps it) fills the name box, the headline and every preview.
 function showKid() {
   const typed = LPQName.typed();
-  $('makeName').textContent = typed ? `${typed}’s` : 'your kid’s';
+  $('makeName').textContent = typed ? `${LPQName.get()}’s` : 'your kid’s';
   document.querySelectorAll('[data-kid-name]').forEach((el) => { el.textContent = LPQName.get(); });
 }
 $('childName').addEventListener('input', () => { LPQName.set($('childName').value); showKid(); if (step === 'pay') drawReview(); });

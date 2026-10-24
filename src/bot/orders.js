@@ -12,6 +12,7 @@ const { sendHuntEmail } = require('./email');
 const { renderKit, renderActivities } = require('../kits/render-kit');
 const { renderParty } = require('../party/render-party');
 const { renderCraft } = require('../crafts/render-craft');
+const { tidyNames } = require('../generator/kid-names');
 const { HOLIDAYS, craftLabel } = require('../crafts/build');
 const { kitForHunt, KITS } = require('../kits/engine');
 const THEMES = require('../generator/themes');
@@ -219,7 +220,7 @@ function validateWebForm(body) {
   if (body.craft !== undefined) {
     const holiday = HOLIDAYS[body.craft] ? body.craft : null;
     if (!holiday) throw new Error('Please pick a handprint art pack or book.');
-    const childName = String(body.childName || '').trim().slice(0, 24);
+    const childName = tidyNames(String(body.childName || '').slice(0, 40)); // "Jaxon and Jonah" → "Jaxon & Jonah"
     if (!childName) throw new Error('Please add your child’s first name.');
     const age = Number.isInteger(body.age) && body.age > 0 && body.age < 16 ? body.age : null;
     return { items: ['craft'], product: 'craft', holiday, theme: null, childName, age, spots: [], pets: [], party: null };
@@ -229,7 +230,7 @@ function validateWebForm(body) {
   const shopKit = KITS[body.kit] && !KITS[body.kit].hunt ? KITS[body.kit].id : null;
   const theme = shopKit ? null : String(KITS[body.kit]?.hunt || body.theme || '');
   if (!shopKit && !THEMES[theme]) throw new Error('Please pick a theme.');
-  const childName = String(body.childName || '').trim().slice(0, 24);
+  const childName = tidyNames(String(body.childName || '').slice(0, 40));
   if (!childName) throw new Error('Please add your child’s first name.');
   const age = Number.isInteger(body.age) && body.age > 0 && body.age < 16 ? body.age : null;
   // The website's "Little kids / Big kids" choice; without one the kit follows the age.

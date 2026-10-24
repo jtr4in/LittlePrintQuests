@@ -195,6 +195,18 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.ok(html.includes('flip-sign') && html.includes('Money Machine') && html.includes('Good Morning,'), id);
     assert.equal(html.includes('Big sign, page 2 of 2'), !KITS[id].hunt || Boolean(KITS[id].bigSign), id);
   }
+  // Two kids on one kit: "and" becomes "&", each kid gets a lead badge and a certificate, and the
+  // name spots shrink to fit in the browser.
+  const { tidyNames } = require('../src/generator/kid-names');
+  assert.equal(tidyNames(' Jaxon and  Jonah '), 'Jaxon & Jonah');
+  assert.equal(tidyNames('Mia, Leo + Ava'), 'Mia, Leo & Ava');
+  assert.equal(tidyNames('Anderson'), 'Anderson');
+  const twins = buildKitHtml({ kit: 'space', childName: 'Jaxon and Jonah', lenient: true });
+  assert.ok(twins.includes('Jaxon &amp; Jonah’s</span> <span style="white-space:nowrap">Mission Control'));
+  assert.equal((twins.match(/class="badge /g) || []).length, 8);
+  assert.ok(twins.includes('>Commander Jaxon</div>') && twins.includes('>Commander Jonah</div>'));
+  assert.equal((twins.match(/class="page cert"/g) || []).length, 2);
+  assert.ok(twins.includes('data-lines="1"') && twins.includes('data-fit-w=') && twins.includes('document.fonts.ready.then(fitAll)'));
   // The Italian kit: oven and stove that look like the real thing, jar labels, a peel, a chef hat and a folding menu.
   for (const piece of ['ov-dome', 'sv-ring', 'Jar Labels', 'Pizza Peel', 'Draw Your Own Pizza', 'Chef Hat', 'Menu, page 2 of 2']) assert.ok(bigKit.includes(piece), piece);
   assert.doesNotMatch(bigKit, /class="st-title"[^>]*>Pizza Oven/);

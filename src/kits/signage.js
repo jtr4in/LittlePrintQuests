@@ -5,6 +5,7 @@
 //                  thank you, our hours), 4 to a page
 //   bin labels     15 picture labels for shelves, bins and baskets, 1 page
 const art = require('./art');
+const { placeHtml } = require('./fit');
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -64,7 +65,7 @@ function stationSign(k, title, icon, n) {
       <rect x="62" y="62" width="${W - 124}" height="${H - 124}" rx="14" fill="#fff"/>
     </svg>
     <div class="st-body">
-      <div class="st-words"><div class="st-place">${k.def.icon} ${esc(k.placeName)}</div><div class="st-title" style="font-size:${Math.min(56, Math.floor(400 / Math.max(...title.split(' ').map((w) => w.length))))}pt">${esc(title)}</div></div>
+      <div class="st-words"><div class="st-place">${k.def.icon} ${placeHtml(k.placeName)}</div><div class="st-title" style="font-size:${Math.min(56, Math.floor(400 / Math.max(...title.split(' ').map((w) => w.length))))}pt">${esc(title)}</div></div>
       <div class="st-pic">${art.pic(icon, '2.1in')}</div>
     </div></div>`;
 }
@@ -101,7 +102,7 @@ function counterCard([lead, word, icon, cls = ''], k) {
 function hoursCard(k) {
   const rows = ['Open', 'Lunch', 'Snack', 'Close'].map((r) => `<div class="hr-row"><span>${r}</span><span class="hr-clock"></span><span class="hr-fill"></span></div>`).join('');
   return `<div class="ct-card hours"><div class="ct-in">
-    <div class="ct-lead">${esc(k.placeName)}</div>
+    <div class="ct-lead" data-lines="2">${placeHtml(k.placeName)}</div>
     <div class="ct-word">HOURS</div>
     <div class="hr-rows">${rows}</div>
     <div class="ct-foot">Draw the hands or write the times</div>

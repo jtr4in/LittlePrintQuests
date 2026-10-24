@@ -5,8 +5,8 @@ let theme = seasonal || 'dino'; // the theme the hero and free sample start on
 // ---- The name hook -------------------------------------------------------------------------------
 function showKid() {
   const typed = LPQName.typed();
-  document.querySelector('#hookTitle b').textContent = typed || 'your kid';
-  $('hookGo').textContent = typed ? `Make ${typed}’s kit` : 'Make my kit';
+  document.querySelector('#hookTitle b').textContent = typed ? LPQName.get() : 'your kid';
+  $('hookGo').textContent = typed ? `Make ${LPQName.get()}’s kit` : 'Make my kit';
   if ($('hookName').value.trim() !== typed) $('hookName').value = typed;
   document.querySelectorAll('[data-kid-name]').forEach((el) => { el.textContent = LPQName.get(); });
 }

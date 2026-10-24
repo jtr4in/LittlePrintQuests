@@ -340,7 +340,7 @@ function spyglass(T, k) {
     <svg class="tube" viewBox="0 0 760 400">
       <rect width="760" height="400" rx="12" class="tube-p"/>${rings}
       ${em(200, 120, 100, T.decor[0])}${em(530, 280, 100, T.decor[1])}${em(630, 90, 60, T.decor[2])}
-      <text x="200" y="290" class="tube-t" text-anchor="middle">${esc(fill(T.label, k))}</text>
+      <text x="200" y="290" class="tube-t" text-anchor="middle" data-fit-w="330">${esc(fill(T.label, k))}</text>
       <text x="530" y="120" class="tube-sub" text-anchor="middle">${esc(T.sub)}</text>
     </svg>
     <p class="toy-tip">Cut out the rectangle, roll it into a tube with the picture outside and tape it closed.</p>

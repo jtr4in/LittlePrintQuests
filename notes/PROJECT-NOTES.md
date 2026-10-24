@@ -131,6 +131,12 @@ Jason found navigating choppy. What it was and the rules now:
 - The "45 pages" bubbles come from a hardcoded `PAGES` line in `docs/js/data.js`. When pages are added to a kit, activity pack, party pack or craft, run `node scripts/page-counts.js` and paste the printed line over `PAGES`. Hunts follow 7 + ceil(spots/2) pages; the script throws if that changes.
 - The order-stack hint says "Tap to see sample pages" (the gallery is only samples).
 
+### Two kids on one order (2026-10-24)
+- Jason asked that parents can put two names without the name line looking crowded. `src/generator/kid-names.js` turns "Jaxon and Jonah" (or `,` `+` `/` `&`) into "Jaxon & Jonah"; the order bot (`orders.js`, `parse.js`), the kit engine and `docs/js/names.js` all use the same rule. Name fields allow 40 characters (was 24) and the order page has a "Two kids sharing?" hint.
+- Kits: each kid gets their own lead badge ("Chef Jaxon", "Chef Jonah") and certificate; everything else says "Jaxon & Jonah’s ...". Hunts, party packs and handprint art just use the joined name.
+- Kit pages fit long names in the browser before printing (`src/kits/fit.js`): `data-lines="N"` on HTML blocks, `data-fit-w` on SVG text. `placeHtml()` only lets a place name wrap between the names and the place ("Jaxon & Jonah’s / Mission Control"). Use them on any new spot that shows the name.
+- Site previews: `nameSlots` records `mw`, the room a centered name has on its line, and `names.js` widens the box that far before shrinking the words. Gotcha: `names.js` reads back `innerHTML` after changing a style, which the browser writes as `font-size: 12px` (with a space), so the size regex must allow a space.
+
 ### Welcome poster trio (PR #121, 2026-10-24)
 - The shop welcome poster and big sign show three pictures: `shop.hero` in the kit def, or by default the first two menu items plus the kit icon. That default doubled up the pizza and the burger, so Pizza and Burger set their own trio. Jason checked the other kits on 2026-10-24 and they're fine.
 
