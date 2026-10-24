@@ -25,7 +25,7 @@ const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const Gallery = (() => {
   document.body.insertAdjacentHTML('beforeend', `<dialog class="gallery" id="gallery" aria-label="Pages">
   <div class="g-in">
-    <header><div><b class="g-title" id="gTitle" hidden></b><div class="g-bar"><div class="tabs" id="gTabs"></div><div class="g-ages" id="gAges" role="group" aria-label="Show the pages for" hidden><button type="button" data-ages="little">Little kids · 3–5</button><button type="button" data-ages="big">Big kids · 6–8</button><span class="g-same" id="gSame" hidden>Same for both ages</span></div></div></div><button type="button" class="x" id="gClose" aria-label="Close">×</button></header>
+    <header><div><b class="g-title" id="gTitle" hidden></b><div class="g-bar"><div class="tabs" id="gTabs"></div><div class="g-ages" id="gAges" role="group" aria-label="Show the pages for" hidden><button type="button" data-ages="little">Ages 3–5</button><button type="button" data-ages="big">Ages 6–8</button><span class="g-same" id="gSame" hidden>Same for both ages</span></div></div></div><button type="button" class="x" id="gClose" aria-label="Close">×</button></header>
     <div class="view" id="gView">
       <img id="gImg" alt="" width="640" height="828">
       <button type="button" class="nav prev" id="gPrev" aria-label="Previous page">‹</button>
@@ -46,7 +46,7 @@ const Gallery = (() => {
     const many = pages.length > 1;
     $('gImg').src = p.src;
     $('gImg').alt = p.alt || `${p.cap}${many ? `, page ${at + 1} of ${pages.length}` : ''}`;
-    $('gCap').textContent = many ? `${p.tab ? `${p.tab} · ` : ''}${p.cap} (${at + 1} of ${pages.length})` : p.cap;
+    $('gCap').textContent = many ? `${p.cap} · ${at + 1} of ${pages.length}` : p.cap;
     $('gThumbs').querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-current', j === at));
     $('gThumbs').children[at]?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     $('gTabs').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.k === p.k));
@@ -83,7 +83,10 @@ const Gallery = (() => {
     $('gallery').classList.toggle('footed', Boolean(foot));
     $('gFoot').replaceChildren(...(foot ? [foot] : []));
     if (foot) foot.hidden = false;
-    $('gTabs').innerHTML = tabs.map(([k, name]) => `<button type="button" data-k="${k}">${esc(name)}</button>`).join('');
+    // Short names keep the tabs on one line on a phone.
+    const SHORT = { hunt: 'Hunt', kit: 'Play kit', activity: 'Activities', party: 'Party' };
+    $('gTabs').innerHTML = tabs.map(([k, name]) => `<button type="button" data-k="${k}">${esc(SHORT[k] || name)}</button>`).join('');
+    $('gTabs').scrollLeft = 0;
     $('gTabs').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => show(pages.findIndex((p) => p.k === b.dataset.k))));
     drawThumbs();
     if (!$('gallery').open) $('gallery').showModal();
