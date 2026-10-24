@@ -32,9 +32,18 @@ function bigLine(k) {
   return list.length ? [`${list.length} big full-page pictures: signs, labels, wrap-around props and posters`] : [];
 }
 
+// The big pictures shown in the website's preview gallery (scripts/big-previews.js), best first:
+// the kit's showpiece, its learning poster, the wearable, the tablet screen, then other kinds, one
+// of each kind, up to `max`. Jason asked for more of them in the previews (2026-10-24).
+const PREVIEW_KINDS = ['hero', 'poster', 'wear', 'screen', 'strips', 'signs', 'cards', 'rooms', 'forms', 'labels'];
+function bigPicks(id, max = 4) {
+  const list = bigList(id);
+  return PREVIEW_KINDS.map((kind) => list.find((p) => kindOf(p.file) === kind)).filter(Boolean).slice(0, max);
+}
+
 const bigCss = `
 .page.bigpic { padding:.25in; display:flex; align-items:center; justify-content:center; }
 .page.bigpic img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
 `;
 
-module.exports = { bigPages, bigLine, bigList, bigCss };
+module.exports = { bigPages, bigLine, bigList, bigPicks, bigCss };

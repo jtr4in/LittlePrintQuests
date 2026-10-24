@@ -33,8 +33,9 @@ const wowPage = (kitId, ages) => {
   return html.slice(0, at).split('<section class="page').length;
 };
 // The big picture pages (src/kits/bigpages.js): their page numbers, so the toy picks below skip
-// over them, and the first one (the kit's big showpiece) is the fourth kit sample. They sit among
-// the toy pages, next to pages of the same kind. A kit without them shows another toy there instead.
+// over them. The first one is kit-4, which the hero scenes and pins use; the site shows the
+// big-<n>.webp row from scripts/big-previews.js in its place. They sit among the toy pages, next to
+// pages of the same kind. A kit without them gets another toy as kit-4 instead.
 const bigPages = (kitId, ages) => {
   const html = buildKitHtml({ kit: kitId, childName: 'Maya', ages, subjects: [], lenient: true });
   return html.split('<section class="page').slice(1).map((s, i) => (s.startsWith(' bigpic"') ? i + 1 : 0)).filter(Boolean);
@@ -148,5 +149,7 @@ for t in sys.argv[2:]:
     bg.crop((left, top, left + side, top + side)).convert('RGB').resize((220, 220), Image.LANCZOS).save(os.path.join(img, 'themes', f'{t}.webp'), 'WEBP', quality=80)
 `, path.join(OUT, '..'), ...[...Object.keys(THEMES), ...shops].filter((k) => !only.length || only.includes(k))]);
   fs.rmSync(tmp, { recursive: true, force: true });
+  // The big picture pages shown after the wow piece (big-<n>.webp), cut from the kits' own pictures.
+  require('./big-previews').writeImages(only);
   console.log('Wrote docs/img/gallery for', only.length ? only.join(', ') : 'every theme');
 })();

@@ -8,7 +8,7 @@ Paths like `project-files/...` are in this repo. Paths like `/mnt/project-files/
 
 Jason switches between two Claude accounts, sometimes when one runs low on usage. Keep this section current: before stopping, merge what's done, push anything half-finished to a branch, and list it here with what's left. Replace the list each time; history lives in the sections below and in git.
 
-Last updated 2026-10-24 (after PR #131, Field Kit extras; needs a Railway redeploy of the order bot).
+Last updated 2026-10-24 (after the big picture previews PR: every Play kit preview shows up to 4 big pictures; earlier, PR #131 Field Kit extras needed a Railway redeploy of the order bot).
 
 Work in flight is listed under **In progress** below.
 - Today's site work, all live: the site split into a home page plus `make/`, `play-kits/` and `handprint-art/` (#110); swipeable theme rows with a dropdown (#111); theme tiles with one cute illustration each (#114, after the wow-prop tiles were tried and reverted, #112/#113); home leads with the four products, plus the phone checkout bar (#115); phone speed fixes (#116); theme dropdown without ages (#117); product pictures on the Stripe checkout (#118).
@@ -57,7 +57,11 @@ Work that is about to merge or is mid-merge, so sessions on the other account ca
 - Code: `src/kits/bigpages.js` reads `src/kits/art/<kit>/big/pages.json`. A kit without the folder just skips them. Pictures are stored portrait (landscape ones turned) as JPEG, because Chrome copies a JPEG into the PDF as is but re-encodes WebP losslessly (2.4 MB a page instead of about 300 KB).
 - Prompts, checker and tools: `project-files/pretend-play/big-pages/` (README there). Raw PNGs aren't in git.
 - The grown-up guide's "What's inside" list got one line longer, so `src/kits/fit.js` now steps the guide through `dense`, `denser` and a new `densest` type size until it clears the footer.
-- `scripts/gallery-images.js` shows the first big picture page as the fourth Play kit preview (captioned "Big picture page") and skips every big page when picking toy pages.
+- `scripts/gallery-images.js` skips every big page when picking toy pages (see "More of them in the previews" below for how they're shown).
+- **More of them in the previews** (Jason, 2026-10-24: "add more pages to the previews"). Every theme's Play kit preview now runs: welcome poster, sign, wow piece, then up to 4 big pictures, then a hands-on page and the box build. Picks are one per kind, best first: hero, poster, wear, screen, then strips, signs, cards, rooms, forms, labels (`bigPicks` in `src/kits/bigpages.js`). Captions are each page's `pages.json` title, capitalized.
+  - `node scripts/big-previews.js [theme...]` cuts them straight from the kit JPEGs to `docs/img/gallery/<theme>/big-<n>.webp` (same for both ages, no name twins), turns the landscape kinds (hero, cards, labels, screen, rooms, poster, stored turned clockwise by `import.py`) back upright, and writes `BIGPICS` in `docs/js/data.js` plus the asset stamps. `gallery-images.js` calls it too.
+  - **After importing big pictures, run `node scripts/big-previews.js <theme>` in the same PR**: `npm test` fails if `BIGPICS` doesn't match the kits' `pages.json` or a `big-<n>.webp` is missing. The previews workflow only commits `docs/img`, so it can't fix `data.js` for you.
+  - `kitPages()` in `docs/js/site.js` builds the kit list for `setPages` and the Play Kits page. `kit-4.webp` (the first big page, still used by `hero-scenes.js` and `pins.js`) isn't shown on the site any more, except for a kit with no big pictures.
 - The 24 later kits have 3 to 10 pages each so far (2026-10-24): Gemini credits ran out, so Jason is drawing the rest in his Gemini app from the prompts page https://claude.ai/artifact/MehiCM5zzdjpKydg284JQE (60 numbered prompts; he posts each picture in the thread with its number). Add one with `RAW=<dir with kit-slot.png> python3 import.py <kit>`: import keeps the kit's current pages for slots with no raw picture.
 - Hand-reviewed rejects (2026-10-24): duplicate items on a sheet, a small poster floating in a big page, leaked notes, and the pirate poster (Gemini keeps drawing a skull on the kid's hat). The kitchen room sign had a smiley icon painted out by hand.
 

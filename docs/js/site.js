@@ -140,10 +140,22 @@ function themeFilter(chips, row, { groups = THEME_GROUPS, key = 'id', min = 2 } 
   return { show(id) { const t = tiles().find((x) => x.dataset[key] === id); if (t && t.hidden) pick((list.find((g) => g.ids.includes(id)) || { id: 'all' }).id); } };
 }
 
+// A theme's play kit pages for the preview: welcome poster, sign and wow piece, then up to four big
+// picture pages (BIGPICS, the same for both ages), then a hands-on page. Each is { cap, src }.
+function kitPages(id, ages = 'big') {
+  const dir = ages === 'little' ? 'little/' : '';
+  const page = (n) => ({ cap: GALLERY.kit[n - 1], src: `img/gallery/${id}/${dir}kit-${n}.webp` });
+  const big = (typeof BIGPICS !== 'undefined' && BIGPICS[id]) || [];
+  return [page(1), page(2), page(3),
+    ...(big.length ? big.map((cap, i) => ({ cap, src: `img/gallery/${id}/big-${i + 1}.webp` })) : [page(4)]),
+    page(5)];
+}
+
 function setPages(id, ages = 'big') {
   const little = (k) => ages === 'little' && (k === 'kit' || k === 'activity');
   return ['hunt', 'kit', 'activity', 'party'].flatMap((x) => [
-    ...((little(x) && GALLERY[`${x}Little`]) || GALLERY[x]).map((cap, i) => ({ k: x, tab: LABELS[x], cap, src: `img/gallery/${id}/${little(x) ? 'little/' : ''}${x}-${i + 1}.webp` })),
+    ...(x === 'kit' ? kitPages(id, ages) : ((little(x) && GALLERY[`${x}Little`]) || GALLERY[x]).map((cap, i) => ({ cap, src: `img/gallery/${id}/${little(x) ? 'little/' : ''}${x}-${i + 1}.webp` })))
+      .map((p) => ({ k: x, tab: LABELS[x], ...p })),
     ...(x === 'kit' && HOWTO[id] ? [{ k: x, tab: LABELS[x], cap: `Build it from a box: ${HOWTO[id]}`, src: `img/howto/${id}-sm.webp` }] : []),
   ]);
 }
