@@ -464,17 +464,15 @@ async function route(req, res) {
     return send(res, 200, 'ok', { 'Content-Type': 'text/plain' });
   }
 
-  // Field Kit (/h/<token>), the sidekick page (/s/<token>) and the kids' Mission screen (/m/<token>).
-  // /state keeps them in step. The Field Kit also serves its offline worker, home-screen manifest and
+  // Field Kit (/h/<token>), and the sidekick page (/s/<token>).
+  // /state keeps the sidekick in step. The Field Kit also serves its offline worker, home-screen manifest and
   // icons, and the pictures for its photo pages (/art/<n>.webp), all under its own link.
-  const hm = p.match(/^\/(h|s|m)\/([A-Za-z0-9_-]{20,})(?:\/(state|sw\.js|manifest\.webmanifest|icon-(?:192|512)\.png|art\/(\d{1,2})\.webp))?$/);
+  const hm = p.match(/^\/(h|s)\/([A-Za-z0-9_-]{20,})(?:\/(state|sw\.js|manifest\.webmanifest|icon-(?:192|512)\.png|art\/(\d{1,2})\.webp))?$/);
   if (hm) {
     const [, kind, token, sub, artN] = hm;
     const field = kind === 'h' ? 'hostToken' : 'sidekickToken';
     const all = Object.values(store.get().orders);
-    const o = kind === 'm'
-      ? all.find((x) => x.status === 'ready' && x.hostToken && x.sidekickToken && host.missionToken(x) === token)
-      : all.find((x) => x[field] === token && x.status === 'ready');
+    const o = all.find((x) => x[field] === token && x.status === 'ready');
     if (!o) return send(res, 404, 'This link isn’t working. Check that you copied all of it.');
     const noStore = { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' };
     const state = sub === 'state';
@@ -498,7 +496,6 @@ async function route(req, res) {
     const stateUrl = `/h/${o.hostToken}/state`;
     const page = kind === 'h'
       ? host.hostPage(o, { stateUrl, items: products.itemsOf(o), sidekickUrl: o.sidekickToken && `${process.env.PUBLIC_URL}/s/${o.sidekickToken}`, downloads: `/d/${o.downloadToken}.pdf` })
-      : kind === 'm' ? host.missionPage(o, { stateUrl: `/m/${token}/state` })
       : host.sidekickPage(o, { stateUrl: `/s/${o.sidekickToken}/state` });
     return send(res, 200, page, noStore);
   }

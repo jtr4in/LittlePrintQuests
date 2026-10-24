@@ -7,13 +7,12 @@
 // print on what paper, a prep checklist, a party countdown and the party-day links.
 // Extras (2026-10-23, src/host/client/fieldkit.js): theme sound boards, confetti, photos kept on
 // the phone with a themed photo PDF, a "Mission complete" keepsake, a Shop day mode for the play
-// kit, a Mission screen for the kids (missionPage) and offline support (serviceWorker, manifest).
+// kit and offline support (serviceWorker, manifest).
 //
 // These pages come with Etsy orders too, so they stay plain: no shop links, prices or offers.
 
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
 const THEMES = require('../generator/themes');
 const { planHunt } = require('../generator/build');
 const SCRIPTS = require('./scripts');
@@ -39,7 +38,7 @@ function hints(spot) {
 }
 
 // Every screen of Field Kit, plus the sidekick's cue for each one.
-function plan(order, sidekickUrl, missionUrl = null) {
+function plan(order, sidekickUrl) {
   const cfg = order.config;
   const { theme, cards, prize, puzzle, bonus } = planHunt(cfg);
   const s = SCRIPTS[cfg.theme];
@@ -55,7 +54,6 @@ function plan(order, sidekickUrl, missionUrl = null) {
     steps.push({ phase: 'setup', check: true, title: `Hide Card ${c.n}`, spot: c.hiddenAt.label, body: [c.hiddenAt.tip], small: `Its riddle sends the kids to the ${c.leadsTo.label}.${puzzle ? ` Puzzle piece ${c.n} goes with it.` : ''}` });
   }
   steps.push({ phase: 'setup', check: true, title: 'Hide the prize', spot: prize.label, body: [`Cake, favor bags or treasure: it all goes at the ${prize.label}. The last clue leads here.`] });
-  if (missionUrl) steps.push({ phase: 'setup', title: 'A screen for the kids', mission: missionUrl, body: ['Open this on a tablet or a spare phone and prop it up where the kids can see it. It shows their clues filling in, the quick challenges, and a big finish with confetti.', 'It follows along as you tap Next, and never shows where the cards are hidden.'] });
   if (sidekickUrl) steps.push({ phase: 'setup', title: 'Want a sidekick?', share: sidekickUrl, body: ['Send this link to another grown-up. They get a secret role: radio calls in character, sound effects, and sneaking ahead to check the next card is still hidden.', 'Their screen follows along as you tap Next.'] });
   steps.push({ phase: 'setup', title: 'All set!', body: ['Gather the kids and tap Next to start the hunt.'] });
 
@@ -148,7 +146,7 @@ ${FK_CSS}
 </style>${head}</head><body>${body}<script>${cfg ? `window.FKCFG=${JSON.stringify(cfg).replace(/</g, '\\u003c')};\n${CLIENT}\n` : ''}${script}</script></body></html>`;
 }
 
-// Styles for the extras (sound boards, the camera and photo sheet, Shop day, Get ready, Mission).
+// Styles for the extras (sound boards, the camera and photo sheet, Shop day, Get ready).
 const FK_CSS = `
 .top .fk-mute{margin-left:auto;flex:none;width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.18);font-size:20px;line-height:40px;padding:0}
 .fk-board{margin:18px 0 6px}.fk-board .k{font:700 12px/1 ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
@@ -216,10 +214,6 @@ function stickers(order) {
   return out;
 }
 
-// The Mission screen's link: made from the host's token, so it needs nothing stored and never
-// reveals the host's own link (or the hiding spots) to the kids.
-const missionToken = (order) => crypto.createHash('sha256').update(`mission:${order.hostToken}`).digest('base64url').slice(0, 24);
-
 // What the phone-side extras need to know (window.FKCFG in src/host/client/fieldkit.js).
 function clientCfg(order, theme, { base, name, hunt = false }) {
   return {
@@ -232,22 +226,55 @@ function clientCfg(order, theme, { base, name, hunt = false }) {
 }
 
 // Shop day: customers come to the counter with an order from the kit's own menu.
+// What customers say on Shop day. Clinic kits get patients who say what's wrong; the rest order
+// in their own words, with a line about why they came now and then. Kits not listed get DEFAULT.
+const SHOP_TALK = {
+  doctor: { clinic: true, title: 'Doctor', why: ['My tummy feels wobbly.', 'I bumped my knee on the slide!', 'Ah… ah… ah-CHOO! I keep sneezing!', 'I have a little cough.', 'I feel a bit warm.', 'I fell off my scooter.', 'My arm is a bit sore.'] },
+  dentist: { clinic: true, title: 'Dr.', why: ['My tooth feels wiggly!', 'I ate a LOT of candy.', 'I want a super sparkly smile!', 'My tooth goes ouch when I eat ice cream.', 'It’s time for my check-up.'] },
+  vet: { clinic: true, title: 'Dr.', why: ['My paw is a bit sore.', 'I ate something funny.', 'My fur is sooo itchy!', 'My ear feels funny.', 'It’s time for my check-up.'] },
+  auto: { why: ['My engine goes clunk-clunk!', 'I drove through a big muddy puddle.', 'My lights are a bit blinky.', 'I squeak when I stop!'] },
+  racecar: { why: ['I’ve got a big race today!', 'I need to go super fast!', 'I did ten laps already!'] },
+  airport: { why: ['I’m going on a trip!', 'I’ve never been on a plane before!', 'I’m off to visit my grandma.'] },
+  police: { why: ['I found a lost mitten!', 'I just moved to town.', 'I want to help keep the town safe.'] },
+  post: { why: ['I’m sending something to my best friend.', 'It’s my grandpa’s birthday soon!', 'This one has to get there fast!'] },
+  library: { why: ['I love stories about dragons!', 'I finished my book already!', 'I want something funny to read.'] },
+  puppet: { why: ['I heard the show is super funny!', 'Is the show starting soon?', 'I love puppets!'] },
+  agent: { why: ['I’m on a top secret case.', 'Shh… I’m in disguise.', 'Someone took the last cookie. I must find out who!'] },
+  dressup: { why: ['I’m going to a costume party!', 'I want to look super fancy today.', 'I want to be someone new!'] },
+  petshop: { why: ['My pet is a little bit stinky.', 'I’d love a new furry friend.', 'My pet has been so good today.'] },
+  icecream: { why: ['It’s sooo hot today!', 'Ice cream is my favorite!', 'I finished all my veggies!'] },
+  coffee: { why: ['I need a cozy treat.', 'Brrr, it’s chilly out!', 'I’m meeting a friend here.'] },
+  grocery: { why: ['I’m making dinner tonight.', 'My fridge is empty!', 'I’m having a picnic!'] },
+  pizza: { why: ['My tummy is rumbling!', 'It’s pizza night!', 'I’m sooo hungry!'] },
+  burger: { why: ['My tummy is rumbling!', 'I’m sooo hungry!', 'I just finished soccer practice.'] },
+  italian: { why: ['My tummy is rumbling!', 'I’m sooo hungry!', 'It’s a special dinner tonight.'] },
+  kitchen: { why: ['My tummy is rumbling!', 'Something smells yummy!', 'I’m sooo hungry!'] },
+};
+const SHOP_DEFAULT = { why: ['What a cool place!', 'I heard this is the best spot in town!', 'I’ve been waiting all day for this!'] };
+// How an item sounds in a sentence: "a cheese pizza", "an apple", "some fries".
+const PHRASE = { 'X-ray': 'an X-ray', 'Fill the tank': 'a full tank', Parking: 'a parking spot', Express: 'express delivery', 'Air mail': 'air mail', 'Adopt a pet': 'a pet to adopt', 'Teeth clean': 'a teeth cleaning', 'Bath & brush': 'a bath and brush', Surgery: 'a tiny surgery', Temperature: 'my temperature checked', 'Wheelchair ride': 'a wheelchair ride', 'Wiggly tooth': 'my wiggly tooth checked', Flossing: 'some flossing', 'Late fee': 'my late fee paid', 'Front row': 'a front row seat', 'Prize box': 'a pick from the prize box', 'Brake fix': 'my brakes fixed', 'Mane braid': 'a mane braid', 'Horn polish': 'a horn polish', 'Crown polish': 'a crown polish', 'Trophy polish': 'a trophy polish', 'Flowers for the star': 'flowers for the star', 'Pot of tea': 'a pot of tea', 'Full basket': 'a full basket' };
+const MASS = /^(milk|tea|milk tea|soup|warm soup|minestrone soup|pasta|salad|popcorn|juice|moon juice|grog juice|power juice|hot cocoa|lemonade|glitter|pet food|bread|cheese|spaghetti|gelato|tiramisu|rainbow oats|kelp bubble tea|fish stew|chief’s chili|letter paper|new paint|carrot snack)$/i;
+function phraseOf(name) {
+  if (PHRASE[name]) return PHRASE[name];
+  const low = /^[A-Z][a-z]/.test(name) && !/^(T-Rex|X-ray|Paris|Milky|Captain|Chief|Driver)/.test(name) ? name[0].toLowerCase() + name.slice(1) : name;
+  if (MASS.test(name)) return `some ${low}`;
+  if (/[^s]s$/.test(name) || /ies$/.test(name)) return `some ${low}`;
+  return `${/^[aeiou]/i.test(low) ? 'an' : 'a'} ${low}`;
+}
 function shopData(kit, name) {
-  const P = play(kit);
-  const items = (kit.menu?.items || []).filter((x) => typeof x[2] === 'number').map(([e, n, pr]) => [e, n, pr]);
+  const items = (kit.menu?.items || []).filter((x) => typeof x[2] === 'number').map(([e, n, pr]) => [e, n, pr, phraseOf(n)]);
   if (items.length < 2) return null;
-  const ctx = { name, child: name, place: kit.placeName(possessive(name)) };
+  const talk = SHOP_TALK[kit.id] || SHOP_DEFAULT;
   const customers = Object.values(kit.kinds || {}).slice(0, 14).map(([e, n]) => [e, n]);
   return {
-    place: ctx.place, coinWord: kit.menu.coinWord || 'coin', items,
+    place: kit.placeName(possessive(name)), coinWord: kit.menu.coinWord || 'coin', items,
     customers: customers.length ? customers : [['🧸', 'Teddy bear'], ['🐶', 'Puppy'], ['🐱', 'Kitty'], ['🐰', 'Bunny']],
-    says: (P?.lines.grownup || ['Hello! Can I order, please?']).map((x) => fill(x, ctx)),
-    kidSays: (P?.lines.kid || ['Welcome! What would you like today?']).map((x) => fill(x, ctx)),
+    clinic: Boolean(talk.clinic), why: talk.why, staff: talk.title ? `${talk.title} ${name}` : name,
   };
 }
 
 // The Get ready tab: what to print on what paper, a prep checklist, a countdown and the party-day links.
-function prepSection({ name, has, items, puzzle, downloads, sidekick, mission }) {
+function prepSection({ name, has, items, puzzle, downloads, sidekick }) {
   const paper = [['🖨️', 'Printing', 'Print at “Actual size” (100%) on Letter paper. Color looks best; black and white works too.']];
   if (has.hunt) paper.push(['🗺️', 'Scavenger hunt', `Clue cards and the certificate look great on cardstock. Cutting the cards takes about 10 minutes${puzzle ? ', and the puzzle pieces about 5 more' : ''}.`]);
   if (has.kit) paper.push(['🎭', 'Play kit', 'Print the hands-on toys and the big wow piece on cardstock so they stand up to play; signs and menus are fine on plain paper. Cutting takes 20 to 30 minutes, and grown-ups do the tricky bits.']);
@@ -266,7 +293,7 @@ function prepSection({ name, has, items, puzzle, downloads, sidekick, mission })
     ${downloads ? `<p style="margin:10px 0 0"><a class="btn" href="${esc(downloads)}" target="_blank">Open the printable PDF</a></p>` : ''}</div>
   <div class="box"><div class="k">To do</div>${todo.map((x, i) => `<label class="tick"><input type="checkbox" data-key="prep:${i}"><span>${esc(x)}</span></label>`).join('')}</div>
   <h2>On the day</h2>
-  <div class="fk-row">${mission ? '<button type="button" class="btn" data-mission>📺 Mission screen for the kids</button>' : ''}${sidekick ? '<button type="button" class="btn" data-sidekick>🤝 Send the Sidekick link</button>' : ''}<button type="button" class="btn" data-photos>📸 Photos</button></div>
+  <div class="fk-row">${sidekick ? '<button type="button" class="btn" data-sidekick>🤝 Send the Sidekick link</button>' : ''}<button type="button" class="btn" data-photos>📸 Photos</button></div>
   <p class="small">Snap photos any time with the 📸 button. At the end you can make a printable photo page with a ${has.hunt ? 'hunt' : 'theme'} border, one big photo or a collage. Photos stay on this phone.</p>
   <div data-board="Try the sounds"></div>
   <div class="box"><div class="k">Keep it handy</div><p class="small" id="fkOffline" style="margin:0">Open this page once on Wi-Fi and it keeps working without signal.</p>
@@ -283,10 +310,14 @@ function kitSection(kit, name) {
   const checks = (key, items) => items.map((x, i) => `<label class="tick"><input type="checkbox" data-key="${key}:${i}"><span>${f(x)}</span></label>`).join('');
   let h = `<h1>${f(ctx.place)}</h1><p class="small">${f(kit.tagline)}. Ideas for playing with the printed kit, any day.</p>
   <div class="box"><div class="k">Set up the shop</div>${checks('kit-setup', setup)}</div>`;
-  if (shopData(kit, name)) {
-    h += `<div class="box fk-shop"><div class="k">Shop day</div><div class="head">Run ${f(ctx.place)} for real</div>
-    <p class="small">The phone becomes the order screen: customers come to the counter, ${esc(name)} serves them and earns ${esc(kit.menu.coinsTitle.toLowerCase())}. Six customers make a shift.</p>
-    <button type="button" class="btn fk-main" id="shopOpen">🛎️ Open the shop</button><div id="shopStage"></div></div>
+  const sd = shopData(kit, name);
+  if (sd) {
+    const intro = sd.clinic
+      ? `The phone becomes the front desk: patients come in and say what’s wrong, ${esc(sd.staff)} treats them and earns ${esc(kit.menu.coinsTitle.toLowerCase())}. Six patients make a shift.`
+      : `The phone becomes the order screen: customers come to the counter, ${esc(name)} serves them and earns ${esc(kit.menu.coinsTitle.toLowerCase())}. Six customers make a shift.`;
+    h += `<div class="box fk-shop"><div class="k">${sd.clinic ? 'Clinic day' : 'Shop day'}</div><div class="head">Run ${f(ctx.place)} for real</div>
+    <p class="small">${intro}</p>
+    <button type="button" class="btn fk-main" id="shopOpen">${sd.clinic ? '🩺 Open the doors' : '🛎️ Open the shop'}</button><div id="shopStage"></div></div>
     <div data-board="Shop sounds"></div>`;
   }
   if (P) {
@@ -315,7 +346,7 @@ function partySection(theme, name, has) {
 
 const SECTIONS = [['prep', '✂️', 'Get ready'], ['hunt', '🗺️', 'Hunt'], ['kit', '🎭', 'Play Kit'], ['party', '🎉', 'Party']];
 
-// The host's page. `stateUrl` saves the hunt's progress so the sidekick and the Mission screen can follow.
+// The host's page. `stateUrl` saves the hunt's progress so the sidekick can follow.
 // `items` says what the order includes (hunt, kit, party, activity); the other tabs are greyed out.
 function hostPage(order, { stateUrl, sidekickUrl, downloads, items = ['hunt'] }) {
   const cfg = order.config;
@@ -325,15 +356,14 @@ function hostPage(order, { stateUrl, sidekickUrl, downloads, items = ['hunt'] })
   const theme = THEMES[cfg.theme] || THEMES[kit?.hunt] || kitLook(kit || kitOf(cfg));
   const name = cfg.childName || 'our birthday star';
   const base = stateUrl.replace(/\/state$/, '');
-  const missionUrl = has.hunt && order.hostToken ? `/m/${missionToken(order)}` : null;
-  const p = has.hunt ? plan(order, sidekickUrl, missionUrl) : null;
+  const p = has.hunt ? plan(order, sidekickUrl) : null;
   const steps = p ? p.steps.map(({ cue, ...st }) => st) : [];
   if (downloads && steps.length) steps[0].download = downloads;
   const what = has.hunt ? theme.name : has.kit ? `${kit.name} play kit` : 'party';
-  const fk = { ...clientCfg(order, theme, { base, name, hunt: has.hunt }), shop: kit ? shopData(kit, name) : null, mission: missionUrl, sidekick: sidekickUrl || null, party: cfg.party?.date || '' };
+  const fk = { ...clientCfg(order, theme, { base, name, hunt: has.hunt }), shop: kit ? shopData(kit, name) : null, sidekick: sidekickUrl || null, party: cfg.party?.date || '' };
   const body = `${topBar(theme, `${possessive(name)} ${what}`, `Field Kit · ${has.hunt ? 'keep this screen secret!' : 'your party helper'}`, '<button type="button" class="fk-mute" id="fkMute"></button>')}
 <div class="sections">${SECTIONS.map(([k, icon, label]) => `<button data-sec="${k}" data-label="${label}"${has[k] ? '' : ' class="off" aria-disabled="true"'}><span>${icon}</span>${label}${has[k] ? '' : '<small>Not in this order</small>'}</button>`).join('')}</div>
-<section id="sec-prep" hidden><main>${prepSection({ name, has, items, puzzle: p?.puzzle, downloads, sidekick: sidekickUrl, mission: missionUrl })}</main></section>
+<section id="sec-prep" hidden><main>${prepSection({ name, has, items, puzzle: p?.puzzle, downloads, sidekick: sidekickUrl })}</main></section>
 <section id="sec-hunt" hidden>
   <div class="tabs"><button data-phase="setup">1 · Hide</button><button data-phase="play">2 · Play</button></div>
   <div class="bar"><i id="bar"></i></div>
@@ -363,12 +393,11 @@ function partyCount(){const all=[...document.querySelectorAll('[data-party]')],n
 document.querySelectorAll('input[data-key]').forEach(c=>{c.checked=get(KEY+':'+c.dataset.key)==='1';c.onchange=()=>{put(KEY+':'+c.dataset.key,c.checked?'1':'0');partyCount()}});partyCount();
 // Play kit: surprise me
 const sur=$('surprise');if(sur)sur.onclick=()=>{const all=[...document.querySelectorAll('.sc')];all.forEach(d=>d.open=false);const d=all[Math.floor(Math.random()*all.length)];d.open=true;d.scrollIntoView({behavior:'smooth',block:'center'})};
-// Links for the kids' Mission screen and the sidekick: share them, or copy, or open.
+// The sidekick link: share them, or copy, or open.
 async function sendLink(u,title,open){const url=new URL(u,location.href).href;if(navigator.share){try{await navigator.share({title,url});return}catch(e){if(e.name==='AbortError')return}}
   if(!open&&navigator.clipboard){try{await navigator.clipboard.writeText(url);FK.toast('Link copied!');return}catch(e){}}window.open(url,'_blank')}
 document.addEventListener('click',(e)=>{const b=e.target.closest('[data-snap]');if(b)FK.snap(b.dataset.snap);
   if(e.target.closest('[data-photos]'))FK.openSheet();
-  if(e.target.closest('[data-mission]'))sendLink(CFG.mission,'Mission screen',true);
   if(e.target.closest('[data-sidekick]'))sendLink(CFG.sidekick,'Be my hunt sidekick')});
 // Hunt
 let i=0;try{i=Math.min(STEPS.length-1,+get(KEY)||0)}catch(e){}
@@ -386,7 +415,6 @@ function draw(){
   (s.body||[]).forEach(p=>h+='<p>'+t(p)+'</p>');
   if(s.download)h+='<p><a class="btn" href="'+t(s.download)+'" target="_blank">Open the printable PDF</a></p>';
   if(s.hints)h+=box('The kids are heading to','<div class="head">'+t(s.heading)+'</div>')+'<button class="btn" id="stuck">They’re stuck 🤔</button>'+s.hints.map((x,k)=>'<div class="box hint" data-h="'+k+'"><div class="k">Hint '+(k+1)+'</div>'+t(x)+'</div>').join('');
-  if(s.mission)h+='<div class="fk-row"><a class="btn fk-main" href="'+t(s.mission)+'" target="_blank">Open the Mission screen</a><button class="btn" data-mission>Send the link</button></div>';
   if(s.share)h+='<button class="btn" id="share">Send the sidekick link</button> <span class="small" id="shared"></span>';
   if(s.check){const done=get(KEY+':'+i)==='1';h+='<label class="check"><input type="checkbox" id="chk"'+(done?' checked':'')+'> Hidden!</label>'}
   if(s.photo)h+='<p><button class="btn" data-snap="'+t(s.photo)+'">📸 Snap a photo</button></p>';
@@ -416,22 +444,35 @@ const SHOP=CFG.shop;
 if(SHOP&&$('shopOpen')){
   const stage=$('shopStage'),GOAL=6,pick=(a)=>a[Math.floor(Math.random()*a.length)];
   const coinsTxt=(n)=>n+' '+(n===1?SHOP.coinWord:SHOP.coinWord+'s');
-  let served=0,coins=0;
+  let served=0,coins=0,lastC=null,lastLine='';const WHO=SHOP.clinic?'patient':'customer';
+  // Each customer says hello their own way, then orders (or, at a clinic, says what's wrong).
+  const HI=[[/t-rex|dino|croc|lizard|long-neck|pterodactyl/i,'Rawr!'],[/robot/i,'Beep boop!'],[/alien/i,'Greetings, Earthling!'],[/astronaut|naut/i,'Hello from outer space!'],[/monkey/i,'Ooh ooh, aah aah!'],[/dragon/i,'Puff puff!'],[/unicorn|corn\b|pony|horse/i,'Neigh!'],[/owl/i,'Hoo hoo!'],[/parrot/i,'Squawk!'],[/chick|duck|hen|bird|swan/i,'Peep peep!'],[/pup|dog|wolf/i,'Woof woof!'],[/cat|kitty|kitten/i,'Meow!'],[/bunny|rabbit/i,'Hop hop!'],[/hamster|mouse/i,'Squeak!'],[/lamb|sheep/i,'Baa!'],[/cow/i,'Moo!'],[/pig/i,'Oink oink!'],[/frog/i,'Ribbit!'],[/lion/i,'Roar!'],[/bee|bug/i,'Bzzz!'],[/fish|dolphin|whale|octopus|shark|seal|otter|shrimp|lobster|crab/i,'Blub blub!'],[/penguin|polar|snow/i,'Brrr!'],[/ghost/i,'Boo!'],[/elf|santa|claus/i,'Ho ho ho!'],[/car|truck|bus|taxi|suv|van|digger|crane|tractor|ambulance|motorcycle|scooter|train/i,'Honk honk!'],[/hero/i,'Hello, citizen!'],[/panda|koala|bear/i,'Hello, hello!'],[/fox/i,'Yip yip!'],[/turtle/i,'Hi… sorry… I’m a bit slow!'],[/deer|llama|butterfly/i,'Hi, friend!'],[/hedgehog|squirrel/i,'Squeak squeak!'],[/teddy/i,'Hello there!']];
+  const hi=(n)=>(HI.find(([r])=>r.test(n))||[0,'Hi!'])[1];
+  const both=(a)=>a.length===1?a[0]:a.slice(0,-1).join(', ')+' and '+a[a.length-1];
+  const ASK=SHOP.clinic?[(l)=>'Can you help me, '+SHOP.staff+'?',(l)=>'Can you make me feel better?',(l)=>'I think I need '+l+'.',(l)=>'Can I get '+l+', please?']
+    :[(l)=>'Could I please have '+l+'?',(l)=>'I’d like '+l+', please.',(l)=>/\bmy\b/.test(l)?'I need '+l+'!':'Hmm… I’ll have '+l+'!',(l)=>/\bmy\b/.test(l)?'I’d like '+l+', please.':'Do you have '+l+'? Yes please!',(l)=>l[0].toUpperCase()+l.slice(1)+', please!',(l)=>'Can I get '+l+'? Thank you!'];
+  const KID=SHOP.clinic?['Let’s take a look. Say “ahh”!','Hold still. This won’t hurt a bit.','Take a big breath in… and out.','You were so brave! Here’s a sticker.','All better! Come back any time.']
+    :['Coming right up!','Here you go! That’s TOTAL.','Would you like anything else?','Enjoy! Come back soon!','Thank you for coming to '+SHOP.place+'!'];
+  function line(c,items){
+    const l=both(items.map(x=>x[3]));let out;
+    do{const parts=[];if(Math.random()<.8)parts.push(hi(c[1]));if(SHOP.clinic||Math.random()<.5)parts.push(pick(SHOP.why));parts.push(pick(ASK)(l));out=parts.join(' ')}while(out===lastLine&&Math.random()<.9);
+    return lastLine=out}
   function next(){
-    const c=pick(SHOP.customers),items=[...SHOP.items].sort(()=>Math.random()-.5).slice(0,Math.random()<.5?1:2),total=items.reduce((n,x)=>n+x[2],0);
-    stage.innerHTML='<div class="cust">'+c[0]+'</div><div class="head" style="text-align:center">'+t(c[1])+' is next in line!</div>'
-      +'<div class="box say"><div class="k">The customer says</div>“'+t(pick(SHOP.says))+'”</div>'
-      +'<div class="k">Order</div><ul class="order">'+items.map(x=>'<li><span>'+x[0]+' '+t(x[1])+'</span><b>'+coinsTxt(x[2])+'</b></li>').join('')+'<li><span><b>Total</b></span><b>'+coinsTxt(total)+'</b></li></ul>'
-      +'<p class="small">'+t(CFG.name)+' can say: “'+t(pick(SHOP.kidSays))+'”</p>'
-      +'<div class="fk-row"><button class="btn fk-main" id="shopServed">✅ Served!</button><button class="btn" id="shopSkip">Next customer</button><button class="btn" id="shopClose">Close the shop</button></div>'
+    let c;do{c=pick(SHOP.customers)}while(c===lastC&&SHOP.customers.length>1);lastC=c;
+    const items=[...SHOP.items].sort(()=>Math.random()-.5).slice(0,Math.random()<.5?1:2),total=items.reduce((n,x)=>n+x[2],0);
+    stage.innerHTML='<div class="cust">'+c[0]+'</div><div class="head" style="text-align:center">'+t(c[1])+(SHOP.clinic?' is here to see '+t(SHOP.staff)+'!':' is next in line!')+'</div>'
+      +'<div class="box say"><div class="k">'+(SHOP.clinic?'The patient says':'The customer says')+'</div>“'+t(line(c,items))+'”</div>'
+      +'<div class="k">'+(SHOP.clinic?'Treatment':'Order')+'</div><ul class="order">'+items.map(x=>'<li><span>'+x[0]+' '+t(x[1])+'</span><b>'+coinsTxt(x[2])+'</b></li>').join('')+'<li><span><b>Total</b></span><b>'+coinsTxt(total)+'</b></li></ul>'
+      +'<p class="small">'+t(CFG.name)+' can say: “'+t(pick(KID).replace('TOTAL',coinsTxt(total)))+'”</p>'
+      +'<div class="fk-row"><button class="btn fk-main" id="shopServed">✅ '+(SHOP.clinic?'All better!':'Served!')+'</button><button class="btn" id="shopSkip">Next '+WHO+'</button><button class="btn" id="shopClose">Close the shop</button></div>'
       +'<div class="tally"><span>Served: '+served+' of '+GOAL+'</span><span>'+coinsTxt(coins)+' earned</span></div>';
     $('shopServed').onclick=()=>{served++;coins+=total;FK.play('ding');if(served>=GOAL)end();else next()};
     $('shopSkip').onclick=next;$('shopClose').onclick=end;
   }
   function end(){
     FK.auto('fanfare');FK.confetti();
-    const did='ran '+SHOP.place+' and served '+served+' customer'+(served===1?'':'s');
-    stage.innerHTML='<div class="cust">⭐</div><div class="head" style="text-align:center">Shop closed! '+t(SHOP.place)+' served '+served+' customer'+(served===1?'':'s')+' and earned '+coinsTxt(coins)+'.</div>'
+    const did='ran '+SHOP.place+' and '+(SHOP.clinic?'helped':'served')+' '+served+' '+WHO+(served===1?'':'s');
+    stage.innerHTML='<div class="cust">⭐</div><div class="head" style="text-align:center">'+(SHOP.clinic?'Clinic closed! ':'Shop closed! ')+t(SHOP.place)+' '+(SHOP.clinic?'helped':'served')+' '+served+' '+WHO+(served===1?'':'s')+' and earned '+coinsTxt(coins)+'.</div>'
       +'<div class="fk-row"><button class="btn" data-snap="Shop day">📸 Snap a photo</button><button class="btn fk-main" id="shopKeep">⭐ Star of the Day page</button><button class="btn" id="shopAgain">Open again</button></div><div id="shopKeepOut"></div>';
     $('shopKeep').onclick=()=>FK.keepsake('shop',did,$('shopKeepOut'));
     $('shopAgain').onclick=()=>{served=0;coins=0;next()};
@@ -459,9 +500,9 @@ const saved=get(KEY+':tab');show(saved&&document.querySelector('[data-sec="'+sav
 }
 
 // The sidekick's page: their jobs, sound buttons, plus a live cue that follows the host's screen.
-// The sidekick and the Mission screen follow the host's step number, so they lay out the same steps
-// the host's page has (a hunt's host page always has the Mission screen and sidekick steps).
-const followPlan = (order) => plan(order, 'sidekick', 'mission');
+// The sidekick follows the host's step number, so it lays out the same steps the host's page has
+// (a hunt's host page always has the sidekick step).
+const followPlan = (order) => plan(order, 'sidekick');
 
 function sidekickPage(order, { stateUrl }) {
   const p = followPlan(order);
@@ -489,54 +530,6 @@ draw(0);poll();setInterval(poll,3000);`;
   return shell(p.theme, `${p.name}’s hunt · Sidekick`, body, script, { cfg: clientCfg(order, p.theme, { base: '', name: p.name }) });
 }
 
-// The kids' Mission screen (/m/<token>): big and bright for a tablet propped up during the hunt.
-// It follows the host's steps but never shows where cards are hidden.
-const MS_CSS = `<style>
-.ms{min-height:calc(100vh - 66px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 18px 110px;background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--soft) 75%,var(--bg)),var(--bg) 70%)}
-.ms-icon{width:clamp(90px,22vw,150px);height:clamp(90px,22vw,150px);border-radius:50%;background:var(--main);color:#fff;display:grid;place-items:center;box-shadow:0 14px 30px rgba(0,0,0,.2)}.ms-icon svg{width:60%;height:60%}
-.ms h1{font-size:clamp(34px,8vw,68px);line-height:1.05;margin:18px 0 6px}
-.ms-slots{display:grid;grid-template-columns:repeat(var(--cols,4),auto);justify-content:center;gap:clamp(8px,2vw,14px);margin:18px 0 6px;max-width:720px}
-.ms-slots span{width:clamp(46px,10vw,78px);height:clamp(46px,10vw,78px);border-radius:50%;border:4px dashed var(--line);display:grid;place-items:center;font:800 clamp(18px,4vw,30px) system-ui;color:var(--muted);background:var(--card)}
-.ms-slots span.on{border:4px solid var(--accent);background:var(--accent);color:var(--on-accent);animation:mspop .5s}
-@keyframes mspop{50%{transform:scale(1.25)}}
-.ms-count{font:800 clamp(22px,5vw,38px) system-ui;color:var(--main);margin:6px 0}@media (prefers-color-scheme:dark){.ms-count{color:var(--soft)}}
-.ms-ch{font:800 clamp(24px,5.5vw,44px)/1.2 system-ui;background:var(--card);border:4px solid var(--accent);border-radius:26px;padding:18px 24px;margin-top:18px;max-width:760px}
-.ms-ch small{display:block;font:700 clamp(13px,2.5vw,18px) ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-.ms-start{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));padding:18px;border-radius:18px;border:0;background:var(--accent);color:var(--on-accent);font:800 20px system-ui;box-shadow:0 12px 28px rgba(0,0,0,.25)}
-</style>`;
-function kidTitle(s, p) {
-  if (s.phase === 'setup') return 'The mission starts soon…';
-  if (s.title === 'Gather the kids') return `Gather round, ${p.theme.hunters || 'adventurers'}!`;
-  if (s.finale) return 'Mission complete!';
-  if (/^Puzzle time/.test(s.title)) return 'Puzzle time! 🧩';
-  if (s.hints && s.k === 1) return 'Clue 1: let’s go!';
-  if (s.hints) return `Card ${s.k} found!`;
-  return 'Mission briefing';
-}
-function missionPage(order, { stateUrl }) {
-  const p = followPlan(order);
-  const meta = p.steps.map((s) => ({ phase: s.phase, k: s.k || 0, finale: Boolean(s.finale), challenge: s.challenge || null, title: kidTitle(s, p) }));
-  const body = `${topBar(p.theme, `${p.name}’s ${p.theme.name}`, 'Mission screen')}
-<main class="ms" style="max-width:none;padding-bottom:110px"><div class="ms-icon">${p.theme.icon}</div><h1 id="msTitle">The mission starts soon…</h1>
-<div class="ms-slots" id="msSlots" style="--cols:${p.cards > 5 ? Math.ceil(p.cards / 2) : p.cards}">${Array.from({ length: p.cards }, (_, i) => `<span>${i + 1}</span>`).join('')}</div><p class="ms-count" id="msCount"></p><div class="ms-ch" id="msCh" hidden></div></main>
-<button type="button" class="ms-start" id="msStart">▶ Tap to start (turns on the sounds)</button>`;
-  const script = `
-const META=${JSON.stringify(meta).replace(/</g, '\\u003c')},STATE=${JSON.stringify(stateUrl)},N=${p.cards};
-const $=(id)=>document.getElementById(id);const t=(s)=>String(s).replace(/[&<>"]/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let last=-1,lastK=0,on=false;
-function draw(i){const m=META[i];if(!m||i===last)return;const first=last<0;last=i;
-  $('msTitle').textContent=m.title;
-  [...$('msSlots').children].forEach((el,j)=>{const got=j<m.k;if(got&&!el.classList.contains('on'))el.textContent='★';el.classList.toggle('on',got);if(!got)el.textContent=j+1});
-  $('msCount').textContent=m.phase==='setup'?'':m.k?m.k+' of '+N+' clues found':'';
-  $('msCh').hidden=!m.challenge;if(m.challenge)$('msCh').innerHTML='<small>Quick challenge</small>'+t(m.challenge);
-  if(!first&&on){if(m.finale){FK.play('fanfare');setTimeout(()=>FK.play('cheer'),700);FK.confetti(5000,220)}else if(m.k>lastK){FK.play('found');FK.confetti(1400,60)}}
-  lastK=m.k}
-function poll(){fetch(STATE).then(r=>r.json()).then(d=>draw(Number.isInteger(d.step)?d.step:0)).catch(()=>{})}
-$('msStart').onclick=async()=>{on=true;FK.play('found');$('msStart').remove();try{await navigator.wakeLock.request('screen')}catch(e){}};
-poll();setInterval(poll,2000);`;
-  return shell(p.theme, `${p.name}’s mission`, body, script, { cfg: clientCfg(order, p.theme, { base: '', name: p.name }), head: MS_CSS });
-}
-
 // Offline: the Field Kit page, its manifest and pictures are kept on the phone; the page is
 // fetched fresh when there's signal and comes from the phone when there isn't.
 function serviceWorker(base, artCount) {
@@ -559,4 +552,4 @@ function manifest(order, base) {
   });
 }
 
-module.exports = { plan, hostPage, sidekickPage, missionPage, missionToken, stickers, serviceWorker, manifest };
+module.exports = { plan, hostPage, sidekickPage, stickers, serviceWorker, manifest };

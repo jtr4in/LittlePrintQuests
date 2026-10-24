@@ -494,18 +494,10 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
       assert.match(await (await realFetch(`${base}/s/${w.sidekickToken}`)).text(), /Your jobs today/);
       assert.equal((await realFetch(`${base}/s/${w.sidekickToken}/state`, { method: 'POST', body: '{"step":1}' })).status, 200); // sidekick can't move the host
       assert.equal((await realFetch(`${base}/h/${'x'.repeat(24)}`)).status, 404);
-      // Field Kit extras: Get ready tab, kids' Mission screen that follows the host, and offline files.
+      // Field Kit extras: Get ready tab and offline files.
       assert.match(hostHtml, /data-sec="prep"[\s\S]*Keep it handy/);
       assert.match(hostHtml, /window\.FKCFG=/);
-      const mission = require('../src/host/host').missionToken(w);
-      assert.ok(hostHtml.includes(`/m/${mission}`) && !hostHtml.includes(`/m/${w.hostToken}`));
-      const missionHtml = await (await realFetch(`${base}/m/${mission}`)).text();
-      assert.match(missionHtml, /msStart/);
-      assert.ok(!missionHtml.includes(w.hostToken), 'Mission screen must not reveal the host link');
-      assert.ok(!/etsy\.com|github\.io|\$\d/i.test(missionHtml), 'Mission screen must not link to the shop or show prices');
-      assert.ok(!/\{\w+\}/.test(missionHtml.replace(/<script>[\s\S]*<\/script>/, '')), 'no unfilled placeholders');
-      assert.deepEqual(await (await realFetch(`${base}/m/${mission}/state`)).json(), { step: 5 });
-      assert.equal((await realFetch(`${base}/m/${'x'.repeat(24)}`)).status, 404);
+      assert.ok(!hostHtml.includes('/m/') && !hostHtml.includes('Mission screen'), 'no kids’ screen');
       const sw = await realFetch(`${base}/h/${w.hostToken}/sw.js`);
       assert.equal(sw.headers.get('service-worker-allowed'), `/h/${w.hostToken}`);
       assert.equal((await (await realFetch(`${base}/h/${w.hostToken}/manifest.webmanifest`)).json()).start_url, `/h/${w.hostToken}`);

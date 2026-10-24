@@ -1,4 +1,4 @@
-// The Field Kit's phone-side extras, inlined into the Field Kit, Sidekick and Mission pages
+// The Field Kit's phone-side extras, inlined into the Field Kit and Sidekick pages
 // (src/host/host.js). Settings come from window.FKCFG:
 //   { key, theme, name, title, hunters, colors: { main, accent, soft }, art: [urls], base, brand }
 // Everything here runs on the phone. Photos never leave it: they're kept in IndexedDB on the
