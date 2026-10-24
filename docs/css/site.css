@@ -604,3 +604,8 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 .field-kit > * { min-width: 0; }
 /* the name layer over each phone stays inside its frame (otherwise a phone's page widens when a popup opens) */
 .fk-phones .phone { position: relative; overflow: hidden; }
+
+/* the small line under the home headline (2026-10-24): always one line */
+.hook-tag { margin-top: 16px; white-space: nowrap; }
+@media (max-width: 520px) { .hook-tag { font-size: 11.5px; letter-spacing: .04em; position: relative; z-index: 1; } }
+.hook-tag + .hook-sub { margin-top: 8px; }
