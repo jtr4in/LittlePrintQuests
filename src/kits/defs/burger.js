@@ -57,7 +57,7 @@ module.exports = {
     title: 'Burger Menu', icon: '🍔', coinIcon: '🪙', coinWord: 'coin', coinsTitle: 'Burger coins',
     items: [['🍔', 'Hamburger', 3], ['🧀', 'Cheeseburger', 4], ['🥓', 'Bacon burger', 4], ['🥗', 'Veggie burger', 3], ['🌭', 'Hot dog', 2], ['🍟', 'Fries', 2], ['🥤', 'Milkshake', 2], ['🍦', 'Ice cream', 1]],
   },
-  shop: { open: 'Hot off the grill!', specials: [['🍔', 'Cheeseburger'], ['🍟', 'Fries'], ['🥤', 'Milkshake']] },
+  shop: { open: 'Hot off the grill!', hero: ['🍟', '🍔', '🥤'], specials: [['🍔', 'Cheeseburger'], ['🍟', 'Fries'], ['🥤', 'Milkshake']] },
   toys: [
     { type: 'burger', inside: 'Big burger layers to cut out and stack, plus 6 order cards', title: 'Build a Burger', howTo: 'Best on cardstock. Cut out the layers, then stack them to match an order card.',
       layers: ['bunTop', 'lettuce', 'tomato', 'cheese', 'patty', 'onion', 'pickles', 'bunBottom'],

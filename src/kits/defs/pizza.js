@@ -61,7 +61,7 @@ module.exports = {
     title: 'Pizza Menu', icon: '🍕', coinIcon: '🪙', coinWord: 'coin', coinsTitle: 'Pizza coins',
     items: [['🧀', 'Cheese pizza', 3], ['🍕', 'Pepperoni pizza', 4], ['🫑', 'Veggie pizza', 4], ['🍍', 'Hawaiian pizza', 4], ['🥖', 'Garlic bread', 2], ['🍝', 'Pasta', 3], ['🥗', 'Salad', 2], ['🥤', 'Drink', 1]],
   },
-  shop: { open: 'Fresh from the oven!' },
+  shop: { open: 'Fresh from the oven!', hero: ['🧀', '🍕', '🍅'] },
   toys: [
     { type: 'pizza', inside: 'A big pizza to top and slice, a sheet of toppings and 6 order cards', title: 'Make a Pizza', howTo: 'Best on cardstock. Cut out the pizza and toppings, then make the pizza on an order card.',
       toppings: [['pepperoni', 'Pepperoni'], ['🍄', 'Mushrooms'], ['🫑', 'Peppers'], ['🫒', 'Olives'], ['🍍', 'Pineapple'], ['🌿', 'Basil']],
