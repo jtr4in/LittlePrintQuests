@@ -92,7 +92,7 @@ Work that is about to merge or is mid-merge, so sessions on the other account ca
 - Jason asked why image generation costs so much. Older scripts use `gemini-3-pro-image` at 2K (roughly 13 to 15 cents a picture plus billed thinking), and the lifestyle photos add several Pro calls per photo (corner finding, placing pieces, retries). `gemini-3.1-flash-image` is about a third of that or less and was good enough for the flat disguise props (54 pictures). Default to Flash for simple cut-out art; use Pro only when Flash botches it.
 
 ### Activity packs (PR #107, 2026-10-23)
-- Jason asked for more pages ("do them all"). Pages live in `src/kits/activities.js`; the `PAGES` list there sets the order and which age version gets each page, and the cover checklist and `activityCount` come from it. Big kids (5 to 8): 15 pages plus cover. Little kids (2 to 4): 16 pages plus cover.
+- Jason asked for more pages ("do them all"). Pages live in `src/kits/activities.js`; the `PAGES` list there sets the order and which age version gets each page, and the cover checklist and `activityCount` come from it. Big kids: 15 pages plus cover. Little kids: 16 pages plus cover. Plus the 3 move game pages for both (see Move game below).
 - Both ages: clean-up, trace the words, match it up, how many, I spy, spot the difference, which one is different, find the way (maze), color by number (color by dot for little kids), draw yourself as the kit's boss, my adventure story (little kids circle pictures instead of writing), invent something new.
 - Little kids only: trace the path, dot the letter (first letter of the kid's name), shapes and colors, stick it on (cut and glue on shadows). Dot the letter and stick it on are marked "Print & Play" (paper); everything else is "Wipe & Play".
 - Big kids only: word search, secret code (a themed "YOU ..." message per kit in `SECRETS`, in picture code; the answer is printed upside down at the bottom), roll a silly creature.
@@ -100,6 +100,13 @@ Work that is about to merge or is mid-merge, so sessions on the other account ca
 - Previews: the order gallery shows big = cover, I spy, secret code, color by number, roll a creature; little = cover, trace the path, stick it on, color by dot, I spy. Don't preview dot the letter: its big letter is drawn from the name, so the name-swap overlay can't change it.
 - To refresh only the activity previews: run `gallery-images.js`, `git checkout` every changed file without "activity" in its path, and in `docs/img/n/<set>.json` keep main's entries and swap in only the `activity` keys.
 - Sample PDFs (Maya, both ages, dino, pirate, unicorn, space, pizza): `/mnt/project-files/activity-packs/`.
+
+### Move game (activity packs, 2026-10-23)
+- Jason asked for cut-out action/movement cards ("roar like a dinosaur", "hop on one foot") that work as a real game, not just words on cards. Every activity pack, both ages, now ends with 3 Print & Play pages from `src/kits/movegame.js`: two sheets of 9 cards and a board.
+- Cards: 12 moves (7 themed per kit in `MOVES`, with a game name like "Dino Stomp", plus everyday moves from `EVERYDAY`, skipping any whose picture the themed ones already use) and 6 specials (Freeze!, "<kid>'s Move", Super Slow, Super Fast, Dance Party, Copy Cat). Each card has a stick-figure picture of the move (`POSES`, 60x64 SVG line art, so pre-readers can follow), the kit picture, a count bubble (little kids also get dots to count along) and 1 to 3 stars.
+- Game: flip a card, everyone does the move, the flipper moves their piece one space per star; picture spaces mean everyone cheers; first to the kit's place wins. Board is 24 spaces; 4 fold-and-stand pieces use the order's own subjects first, then the kit's default kinds. A tip says you can skip the board.
+- Activity pack page counts are now big 19, little 20 (`PAGES` in `docs/js/data.js`, and the count in `test/smoke.js`). The order preview gallery doesn't show the move game yet.
+- New themes need a `MOVES` entry (falls back to "Move & Play" with only everyday moves).
 
 ### Play kitchen fit (PR #98, 2026-10-23)
 - Kits should work with IKEA Duktig and KidKraft (Vintage, Ultimate Corner) play kitchens. Measurements come from retail listings: Duktig oven glass about 8x8 in, back opening about 26.75x12.5 in; KidKraft Vintage oven shelf 10.4x8.1 in. Only the pizza oven didn't fit; it's now a 7.6 in square plus a separate woodpile strip.
