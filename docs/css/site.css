@@ -438,6 +438,8 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 .theme-chips button { flex: none; border: 1.5px solid var(--line); background: var(--sheet); color: var(--ink); border-radius: 999px; padding: 8px 13px; font: 700 13.5px/1 var(--body); cursor: pointer; }
 .theme-chips button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 .theme-chips + .themes.mini.rows { margin-top: 10px; }
+/* phones: three rows, so more themes show before swiping (Jason, 2026-10-24) */
+@media (max-width: 640px) { .themes.mini.rows { grid-template-rows: repeat(3, auto); } }
 /* the theme dropdown above the tiles */
 .theme-pick { display: grid; gap: 6px; max-width: 420px; font: 700 15px/1.2 var(--body); }
 /* the preview gallery: one photo needs no arrows, and a button or buy form can sit under the pages */
