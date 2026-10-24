@@ -885,6 +885,12 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     const N = path.join(__dirname, '..', 'docs', 'img', 'n');
     const keys = new Set(fs.readdirSync(N).filter((f) => f.endsWith('.json')).flatMap((f) => Object.keys(JSON.parse(fs.readFileSync(path.join(N, f), 'utf8')))));
     for (const k of keys) assert.ok(fs.existsSync(path.join(N, k.slice(4))), `twin for ${k}`);
+    // and no name spot without a size (text that was hidden when the picture was taken)
+    for (const f of fs.readdirSync(N).filter((x) => x.endsWith('.json'))) {
+      for (const [k, v] of Object.entries(JSON.parse(fs.readFileSync(path.join(N, f), 'utf8')))) {
+        for (const page of [v, ...(v.layers || []).map((l) => l.p)]) for (const s of page.s || []) assert.ok(s.w > 0 && s.h > 0, `empty name spot in ${k}`);
+      }
+    }
     const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]));
     for (const f of walk(path.join(N, 'gallery'))) assert.ok(keys.has(`img/${path.relative(N, f).split(path.sep).join('/')}`), `leftover twin ${f}`);
   }
