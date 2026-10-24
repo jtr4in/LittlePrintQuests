@@ -405,5 +405,69 @@
     deliver(await pdfOf([page]), kind === 'shop' ? 'star-of-the-day' : 'mission-complete', box);
   }
 
-  window.FK = { play, auto, soundBoard, autoToggle, confetti, snap, addFromLibrary, openSheet, mountCamera, keepsake, toast, pdfOf, photoPage, keepsakePage, SOUNDS };
+  // ---------------------------------------------------------------------------------------------
+  // The page picker: every page of the order as tiles or a list, grouped by PDF. Pick some and
+  // print just those (the bot joins them into one PDF). Picks are remembered on this phone.
+  // ---------------------------------------------------------------------------------------------
+  let pagesData = null, pagesView = store('fk:pages-view') || 'tile';
+  const PKEY = () => `fk:pages:${CFG.key}`;
+  let pagePicks = (() => { try { return JSON.parse(store(PKEY()) || '{}'); } catch (e) { return {}; } })();
+  const savePicked = () => store(PKEY(), JSON.stringify(pagePicks));
+  const pagesSheet = el(`<div class="fk-sheet" hidden role="dialog" aria-modal="true" aria-label="Choose pages to print"><div class="fk-sheet-in">
+    <div class="fk-sheet-head"><b>📄 Choose pages</b><button type="button" class="fk-x" aria-label="Close">×</button></div>
+    <p class="small" style="margin:4px 0 0">Tap the pages you want, then print just those.</p>
+    <div class="fk-pv" role="group" aria-label="Show pages as"><button type="button" data-v="tile">▦ Tiles</button><button type="button" data-v="list">☰ List</button></div>
+    <div id="fkPages"><p class="small">Getting your pages…</p></div>
+    <div class="fk-pbar"><button type="button" class="btn" data-clear>Clear</button><a class="btn fk-main" id="fkPrint" target="_blank" rel="noopener">Print</a></div>
+  </div></div>`);
+  pagesSheet.querySelector('.fk-x').onclick = () => { pagesSheet.hidden = true; };
+  pagesSheet.addEventListener('click', (e) => { if (e.target === pagesSheet) pagesSheet.hidden = true; });
+  pagesSheet.querySelectorAll('[data-v]').forEach((b) => { b.onclick = () => { pagesView = b.dataset.v; store('fk:pages-view', pagesView); drawPages(); }; });
+  pagesSheet.querySelector('[data-clear]').onclick = () => { pagePicks = {}; savePicked(); drawPages(); };
+  const countPicked = () => Object.values(pagePicks).reduce((n, a) => n + a.length, 0);
+  function printLink() {
+    const n = countPicked(), a = pagesSheet.querySelector('#fkPrint');
+    const q = Object.entries(pagePicks).filter(([, v]) => v.length).map(([k, v]) => `${k}=${[...v].sort((x, y) => x - y).join(',')}`).join('&');
+    a.textContent = n ? `🖨️ Print ${n} page${n === 1 ? '' : 's'}` : 'Pick some pages';
+    a.classList.toggle('off', !n);
+    if (n) a.href = `${CFG.pages}/pick.pdf?${q}`; else a.removeAttribute('href');
+  }
+  function drawPages() {
+    pagesSheet.querySelectorAll('[data-v]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === pagesView)));
+    const box = pagesSheet.querySelector('#fkPages');
+    if (!pagesData) return;
+    if (!pagesData.length) { box.innerHTML = '<p class="small">Your pages aren’t ready yet. Try again in a minute.</p>'; return; }
+    box.innerHTML = pagesData.map((d) => {
+      const on = new Set(pagePicks[d.id] || []), all = d.pages.length && on.size === d.pages.length;
+      const item = (p, i) => {
+        const n = i + 1, src = `${CFG.pages}/thumb/${d.id}/${n}.jpg`, cls = on.has(n) ? ' class="on"' : '';
+        return pagesView === 'tile'
+          ? `<button type="button" data-d="${d.id}" data-n="${n}"${cls} aria-pressed="${on.has(n)}"><img src="${src}" alt="" loading="lazy"><span class="fk-tick">✓</span><small>${n} · ${esc(p.title)}</small></button>`
+          : `<button type="button" data-d="${d.id}" data-n="${n}"${cls} aria-pressed="${on.has(n)}"><img src="${src}" alt="" loading="lazy"><span class="n">${n}</span><span>${esc(p.title)}</span><span class="ck">${on.has(n) ? '✓' : ''}</span></button>`;
+      };
+      return `<div class="fk-doc"><b>${esc(d.label)} <span class="small">· ${d.pages.length} pages</span></b><button type="button" data-all="${d.id}">${all ? 'Clear' : 'Select all'}</button></div>
+        <div class="${pagesView === 'tile' ? 'fk-pg' : 'fk-pl'}">${d.pages.map(item).join('')}</div>`;
+    }).join('');
+    box.querySelectorAll('[data-n]').forEach((b) => { b.onclick = () => {
+      const set = new Set(pagePicks[b.dataset.d] || []), n = +b.dataset.n;
+      if (set.has(n)) set.delete(n); else set.add(n);
+      pagePicks[b.dataset.d] = [...set]; savePicked(); drawPages();
+    }; });
+    box.querySelectorAll('[data-all]').forEach((b) => { b.onclick = () => {
+      const d = pagesData.find((x) => x.id === b.dataset.all), full = (pagePicks[d.id] || []).length === d.pages.length;
+      pagePicks[d.id] = full ? [] : d.pages.map((_, i) => i + 1); savePicked(); drawPages();
+    }; });
+    printLink();
+  }
+  async function openPages() {
+    if (!CFG.pages) return;
+    if (!pagesSheet.isConnected) document.body.append(pagesSheet);
+    pagesSheet.hidden = false; drawPages(); printLink();
+    if (!pagesData) {
+      try { pagesData = (await (await fetch(`${CFG.pages}/pages.json`)).json()).docs; } catch (e) { pagesData = null; pagesSheet.querySelector('#fkPages').innerHTML = '<p class="small">Couldn’t load your pages. Check your signal and try again.</p>'; return; }
+      drawPages();
+    }
+  }
+
+  window.FK = { openPages, play, auto, soundBoard, autoToggle, confetti, snap, addFromLibrary, openSheet, mountCamera, keepsake, toast, pdfOf, photoPage, keepsakePage, SOUNDS };
 })();

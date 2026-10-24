@@ -508,6 +508,26 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
       assert.match(await (await realFetch(`${base}/s/${w.sidekickToken}`)).text(), /Your jobs today/);
       assert.equal((await realFetch(`${base}/s/${w.sidekickToken}/state`, { method: 'POST', body: '{"step":1}' })).status, 200); // sidekick can't move the host
       assert.equal((await realFetch(`${base}/h/${'x'.repeat(24)}`)).status, 404);
+      // Page picker: every PDF's pages listed with thumbnails, and a PDF of just the picked pages.
+      assert.match(hostHtml, /data-pages/);
+      const { PDFDocument } = require('pdf-lib');
+      const pj = await (await realFetch(`${base}/d/${w.downloadToken}/pages.json`)).json();
+      assert.equal(pj.docs[0].id, 'main');
+      assert.equal(pj.docs.length, 1 + ['kit', 'activity', 'party'].filter((i) => has.includes(i)).length);
+      for (const d of pj.docs) {
+        const suffix = d.id === 'main' ? '' : `-${d.id}`;
+        const pdf = await PDFDocument.load(Buffer.from(await (await realFetch(`${base}/d/${w.downloadToken}${suffix}.pdf`)).arrayBuffer()));
+        assert.equal(d.pages.length, pdf.getPageCount(), `${d.id} page list matches its PDF`);
+        assert.ok(d.pages.every((x) => x.title && !/\{\w+\}/.test(x.title)), `${d.id} page titles`);
+      }
+      const th = await realFetch(`${base}/d/${w.downloadToken}/thumb/main/1.jpg`);
+      assert.equal(th.status, 200); assert.equal(th.headers.get('content-type'), 'image/jpeg');
+      const second = pj.docs[1]?.id;
+      const pick = await realFetch(`${base}/d/${w.downloadToken}/pick.pdf?main=1,3${second ? `&${second}=2-3,99` : ''}`);
+      assert.equal(pick.headers.get('content-type'), 'application/pdf');
+      assert.equal((await PDFDocument.load(Buffer.from(await pick.arrayBuffer()))).getPageCount(), second ? 4 : 2);
+      assert.equal((await realFetch(`${base}/d/${w.downloadToken}/pick.pdf`)).status, 400);
+      assert.equal((await realFetch(`${base}/d/${'x'.repeat(24)}/pages.json`)).status, 404);
       // Field Kit extras: Get ready tab and offline files.
       assert.match(hostHtml, /data-sec="prep"[\s\S]*Keep it handy/);
       assert.match(hostHtml, /window\.FKCFG=/);

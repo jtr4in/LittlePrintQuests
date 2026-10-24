@@ -164,6 +164,14 @@ body.no-nav .fk-cam{bottom:calc(20px + env(safe-area-inset-bottom))}
 .fk-sheet-head{display:flex;align-items:center;justify-content:space-between;font-size:20px}.fk-x{border:0;background:none;color:var(--ink);font-size:30px;width:44px;height:44px}
 .fk-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.btn.fk-main{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}.fk-wide{width:100%;margin-top:10px}
 .btn[disabled]{opacity:.5}a.btn{text-decoration:none}
+.fk-pv{display:flex;gap:4px;padding:3px;border-radius:99px;background:var(--card);border:1px solid var(--line);margin:10px 0 4px;width:max-content}.fk-pv button{border:0;background:none;color:var(--ink);font:700 14px system-ui;padding:7px 14px;border-radius:99px}.fk-pv button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.fk-doc{margin:14px 0 4px;display:flex;align-items:baseline;justify-content:space-between;gap:10px}.fk-doc b{font-size:17px}.fk-doc button{border:0;background:none;color:var(--main);font:700 14px system-ui;padding:6px 0}
+.fk-pg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.fk-pg button{position:relative;border:3px solid var(--line);border-radius:10px;padding:0;background:#fff;overflow:hidden;text-align:left;color:#2c3352}
+.fk-pg button.on{border-color:var(--accent)}.fk-pg img{display:block;width:100%;aspect-ratio:816/1056;object-fit:cover;background:#f4f2ec}.fk-pg small{display:block;font:600 11px/1.25 system-ui;padding:4px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fk-pg button .fk-tick{display:none}.fk-pg button.on .fk-tick{display:block}
+.fk-pl{display:grid;gap:6px}.fk-pl button{display:flex;align-items:center;gap:10px;border:2px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);padding:6px 10px;text-align:left;font:600 15px system-ui}.fk-pl button.on{border-color:var(--accent)}
+.fk-pl img{width:34px;height:44px;object-fit:cover;border-radius:3px;background:#fff;flex:none}.fk-pl .n{color:var(--muted);font-size:13px;min-width:22px}.fk-pl .ck{margin-left:auto;width:22px;height:22px;border-radius:6px;border:2px solid var(--line);flex:none;display:grid;place-items:center;font:800 13px system-ui}.fk-pl button.on .ck{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.fk-pbar{position:sticky;bottom:calc(-24px - env(safe-area-inset-bottom));margin:14px -16px calc(-24px - env(safe-area-inset-bottom));padding:12px 16px calc(14px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--line);display:flex;gap:10px;align-items:center}.fk-pbar .btn{flex:1;text-align:center}.fk-pbar .btn.off{opacity:.5;pointer-events:none}
 .fk-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
 .fk-th{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;border:3px solid transparent;opacity:.55}.fk-th.on{border-color:var(--accent);opacity:1}
 .fk-th img{width:100%;height:100%;object-fit:cover;display:block}.fk-th small{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);color:#fff;font:600 11px system-ui;padding:3px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -290,7 +298,7 @@ function prepSection({ name, has, items, puzzle, downloads, sidekick }) {
   return `<h1>Get ready</h1><p class="small">Everything for ${esc(possessive(name))} big day, from printing to party time. Your ticks are saved on this phone.</p>
   <div class="box" id="fkCountdown" hidden><div class="k">Countdown</div><div class="fk-count"></div></div>
   <div class="box"><div class="k">Print it</div><ul class="lines fk-paper">${paper.map(([e, t, x]) => `<li>${e} <b>${esc(t)}:</b> ${esc(x)}</li>`).join('')}</ul>
-    ${downloads ? `<p style="margin:10px 0 0"><a class="btn" href="${esc(downloads)}" target="_blank">Open the printable PDF</a></p>` : ''}</div>
+    ${downloads ? `<div class="fk-row" style="margin-top:10px"><button type="button" class="btn fk-main" data-pages>📄 Choose pages to print</button><a class="btn" href="${esc(downloads)}" target="_blank">Open the printable PDF</a></div>` : ''}</div>
   <div class="box"><div class="k">To do</div>${todo.map((x, i) => `<label class="tick"><input type="checkbox" data-key="prep:${i}"><span>${esc(x)}</span></label>`).join('')}</div>
   <h2>On the day</h2>
   <div class="fk-row">${sidekick ? '<button type="button" class="btn" data-sidekick>🤝 Send the Sidekick link</button>' : ''}<button type="button" class="btn" data-photos>📸 Photos</button></div>
@@ -360,7 +368,7 @@ function hostPage(order, { stateUrl, sidekickUrl, downloads, items = ['hunt'] })
   const steps = p ? p.steps.map(({ cue, ...st }) => st) : [];
   if (downloads && steps.length) steps[0].download = downloads;
   const what = has.hunt ? theme.name : has.kit ? `${kit.name} play kit` : 'party';
-  const fk = { ...clientCfg(order, theme, { base, name, hunt: has.hunt }), shop: kit ? shopData(kit, name) : null, sidekick: sidekickUrl || null, party: cfg.party?.date || '' };
+  const fk = { ...clientCfg(order, theme, { base, name, hunt: has.hunt }), shop: kit ? shopData(kit, name) : null, sidekick: sidekickUrl || null, party: cfg.party?.date || '', pages: typeof downloads === 'string' ? downloads.replace(/\.pdf$/, '') : null };
   const body = `${topBar(theme, `${possessive(name)} ${what}`, `Field Kit · ${has.hunt ? 'keep this screen secret!' : 'your party helper'}`, '<button type="button" class="fk-mute" id="fkMute"></button>')}
 <div class="sections">${SECTIONS.map(([k, icon, label]) => `<button data-sec="${k}" data-label="${label}"${has[k] ? '' : ' class="off" aria-disabled="true"'}><span>${icon}</span>${label}${has[k] ? '' : '<small>Not in this order</small>'}</button>`).join('')}</div>
 <section id="sec-prep" hidden><main>${prepSection({ name, has, items, puzzle: p?.puzzle, downloads, sidekick: sidekickUrl })}</main></section>
@@ -398,6 +406,7 @@ async function sendLink(u,title,open){const url=new URL(u,location.href).href;if
   if(!open&&navigator.clipboard){try{await navigator.clipboard.writeText(url);FK.toast('Link copied!');return}catch(e){}}window.open(url,'_blank')}
 document.addEventListener('click',(e)=>{const b=e.target.closest('[data-snap]');if(b)FK.snap(b.dataset.snap);
   if(e.target.closest('[data-photos]'))FK.openSheet();
+  if(e.target.closest('[data-pages]'))FK.openPages();
   if(e.target.closest('[data-sidekick]'))sendLink(CFG.sidekick,'Be my hunt sidekick')});
 // Hunt
 let i=0;try{i=Math.min(STEPS.length-1,+get(KEY)||0)}catch(e){}

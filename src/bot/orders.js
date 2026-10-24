@@ -3,6 +3,7 @@
 // An order can hold any mix of the hunt, its play kit and the party pack (see products.js).
 
 const crypto = require('crypto');
+const fs = require('fs');
 const path = require('path');
 const store = require('./store');
 const etsy = require('./etsy');
@@ -101,24 +102,50 @@ async function generate(id) {
   const token = order.downloadToken || crypto.randomBytes(18).toString('base64url');
   // Every order gets a Field Kit, a private phone page with a tab for each thing in it.
   // Hunts also get a second link for a helper (the sidekick). Handprint art needs no Field Kit.
-  const main = products.mainOf(order);
   const hostTokens = !['hunt', 'kit', 'party'].some((i) => products.has(order, i)) ? {} : { hostToken: order.hostToken || newToken(), ...(products.has(order, 'hunt') ? { sidekickToken: order.sidekickToken || newToken() } : {}) };
   const out = (suffix = '') => path.join(store.PDF_DIR, `${token}${suffix}.pdf`);
-  if (main === 'craft') await renderCraft(order.config, out());
-  else if (main === 'kit') await renderKit(order.config, out());
-  else if (main === 'activity') await renderActivities(order.config, out());
-  else if (main === 'party') await renderParty(order.config, out());
-  else await renderPdf(order.config, out());
+  const docs = documents(order);
+  for (const d of docs) await d.render(out(d.suffix), { thumbs: pagesDir(token, d.suffix) });
+  const has = (suffix) => docs.some((d) => d.suffix === suffix);
+  const kit = has('-kit'), activity = has('-activities'), party = has('-party');
+  store.update((s) => {
+    Object.assign(s.orders[id], hostTokens, { downloadToken: token, kitReady: kit, activityReady: activity, partyReady: party, status: 'ready', problem: null, generatedAt: new Date().toISOString() });
+    s.orders[id].message = buyerMessage(s.orders[id]);
+  });
+}
+
+// The order's PDFs in print order: the main one, then the play kit, activity pack and party pack it
+// comes with. Each has a file suffix, a label and a render(outPdf, opts).
+const MAIN_DOC = { craft: ['Handprint art', renderCraft], kit: ['Play kit', renderKit], activity: ['Activity pack', renderActivities], party: ['Party pack', renderParty] };
+function documents(order) {
+  const main = products.mainOf(order);
+  const [label, render] = MAIN_DOC[main] || ['Scavenger hunt', renderPdf];
+  const docs = [{ id: 'main', suffix: '', label, render: (out, o) => render(order.config, out, o) }];
   const kit = main !== 'kit' && products.has(order, 'kit') ? kitOf(order) : null;
   // Etsy kit listings still promise the Wipe & Play pages, so Etsy kit orders get the activity pack too.
   const activity = main !== 'activity' && (products.has(order, 'activity') || (order.source === 'etsy' && products.has(order, 'kit'))) ? kitOf(order) : null;
   const party = main !== 'party' && products.has(order, 'party');
-  if (kit) await renderKit(kitConfig(order, kit), out('-kit'));
-  if (activity) await renderActivities(kitConfig(order, activity), out('-activities'));
-  if (party) await renderParty(partyConfig(order), out('-party'));
-  store.update((s) => {
-    Object.assign(s.orders[id], hostTokens, { downloadToken: token, kitReady: Boolean(kit), activityReady: Boolean(activity), partyReady: party, status: 'ready', problem: null, generatedAt: new Date().toISOString() });
-    s.orders[id].message = buyerMessage(s.orders[id]);
+  if (kit) docs.push({ id: 'kit', suffix: '-kit', label: 'Play kit', render: (out, o) => renderKit(kitConfig(order, kit), out, o) });
+  if (activity) docs.push({ id: 'activities', suffix: '-activities', label: 'Activity pack', render: (out, o) => renderActivities(kitConfig(order, activity), out, o) });
+  if (party) docs.push({ id: 'party', suffix: '-party', label: 'Party pack', render: (out, o) => renderParty(partyConfig(order), out, o) });
+  return docs;
+}
+const pagesDir = (token, suffix) => path.join(store.PDF_DIR, `${token}${suffix}-pages`);
+
+// The page picker's list: every document with its pages' titles. Orders made before the picker
+// existed get their thumbnails made the first time someone asks (once at a time per order).
+const making = new Map();
+async function pageList(order) {
+  const docs = documents(order).filter((d) => fs.existsSync(path.join(store.PDF_DIR, `${order.downloadToken}${d.suffix}.pdf`)));
+  const missing = docs.filter((d) => !fs.existsSync(path.join(pagesDir(order.downloadToken, d.suffix), 'index.json')));
+  if (missing.length) {
+    if (!making.has(order.id)) making.set(order.id, (async () => { for (const d of missing) await d.render(null, { thumbs: pagesDir(order.downloadToken, d.suffix) }); })().finally(() => making.delete(order.id)));
+    await making.get(order.id);
+  }
+  return docs.map((d) => {
+    let pages = [];
+    try { pages = JSON.parse(fs.readFileSync(path.join(pagesDir(order.downloadToken, d.suffix), 'index.json'), 'utf8')); } catch {}
+    return { id: d.id, suffix: d.suffix, label: d.label, pages };
   });
 }
 
@@ -353,4 +380,4 @@ async function upgradeWebOrder(id, { add, cents, discountCents = 0, sessionId })
   await notify(store.get().orders[id]);
 }
 
-module.exports = { upgradeWebOrder, customRequest, hostUrl, addOrder, processOrder, generate, pollEtsy, validateWebForm, addWebOrder, fulfillWebOrder };
+module.exports = { documents, pagesDir, pageList, upgradeWebOrder, customRequest, hostUrl, addOrder, processOrder, generate, pollEtsy, validateWebForm, addWebOrder, fulfillWebOrder };

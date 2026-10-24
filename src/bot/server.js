@@ -336,6 +336,38 @@ async function route(req, res) {
 
   if (p === '/health') return send(res, 200, 'ok', { 'Content-Type': 'text/plain' });
 
+  // The Field Kit's page picker: the list of pages, their thumbnails, and a PDF of just the picked
+  // pages (?main=1,3&kit=2-5 by document, page numbers from 1).
+  const dp = p.match(/^\/d\/([A-Za-z0-9_-]{20,})\/(pages\.json|pick\.pdf|thumb\/(main|kit|activities|party)\/(\d{1,3})\.jpg)$/);
+  if (dp) {
+    const [, token, what, docId, n] = dp;
+    const o = Object.values(store.get().orders).find((x) => x.downloadToken === token && x.status === 'ready');
+    if (!o) return send(res, 404, 'Not found');
+    const docs = orders.documents(o);
+    if (what === 'pages.json') return send(res, 200, JSON.stringify({ docs: (await orders.pageList(o)).map(({ id, label, pages }) => ({ id, label, pages })) }), { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+    if (docId) {
+      const d = docs.find((x) => x.id === docId);
+      const file = d && path.join(orders.pagesDir(token, d.suffix), `page-${+n}.jpg`);
+      if (!file || !fs.existsSync(file)) return send(res, 404, 'Not found');
+      return send(res, 200, fs.readFileSync(file), { 'Content-Type': 'image/jpeg', 'Cache-Control': 'private, max-age=86400' });
+    }
+    const { PDFDocument } = require('pdf-lib');
+    const out = await PDFDocument.create();
+    for (const d of docs) {
+      const want = url.searchParams.get(d.id);
+      if (!want) continue;
+      const file = path.join(store.PDF_DIR, `${token}${d.suffix}.pdf`);
+      if (!fs.existsSync(file)) continue;
+      const src = await PDFDocument.load(fs.readFileSync(file));
+      const count = src.getPageCount();
+      const nums = [...new Set(want.split(',').flatMap((part) => { const [a, b] = part.split('-').map(Number); return b ? Array.from({ length: Math.max(0, Math.min(b, count) - a + 1) }, (_, k) => a + k) : [a]; }))]
+        .filter((x) => Number.isInteger(x) && x >= 1 && x <= count).sort((a, b) => a - b);
+      for (const pg of await out.copyPages(src, nums.map((x) => x - 1))) out.addPage(pg);
+    }
+    if (!out.getPageCount()) return send(res, 400, 'Pick at least one page.');
+    return send(res, 200, Buffer.from(await out.save()), { 'Content-Type': 'application/pdf', 'Content-Disposition': 'inline; filename="my-pages.pdf"', 'Cache-Control': 'no-store' });
+  }
+
   const dl = p.match(/^\/d\/([A-Za-z0-9_-]{20,})\.pdf$/);
   if (dl) {
     const file = path.join(store.PDF_DIR, `${dl[1]}.pdf`);

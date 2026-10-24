@@ -165,6 +165,13 @@ Jason found navigating choppy. What it was and the rules now:
 ### Shop kit card photos (2026-10-23)
 - The 11 shop kit card thumbnails (`docs/img/kit-<id>.webp`, 1354x994, used by `SHOP_KITS` in `docs/js/data.js`) are styled Gemini photos, each starring the kit's signature piece, prompts say "no cash register". Prompts and scripts: `project-files/scavenger-hunt/previews/shop-kit-cards/`. Gemini redraws kit art loosely; use the round 4 lifestyle tools to restore exact art.
 
+### Field Kit page picker (2026-10-24)
+
+Jason: "there are a lot of pages now". The Get ready tab has **Choose pages to print**: a sheet listing every page of the order's PDFs (hunt, play kit, activity pack, party pack) as **tiles or a list** (his ask; the choice is remembered), with Select all per PDF and a Print button that opens one PDF of just the picked pages. Picks are remembered on the phone.
+- Thumbnails and titles: `renderHtml(..., { thumbs: dir })` in `src/generator/render.js` saves `page-N.jpg` (30% size) and `index.json` next to each order PDF (`<token><suffix>-pages/`). A page's title is its `data-title` (set for clue cards, the certificate and party sheets), else a name for its class (host guide, briefing, puzzle, picture cards), else its heading or first line. Give new page kinds a `data-title` for a good name.
+- `documents(order)` in `src/bot/orders.js` lists an order's PDFs (used by `generate` and the picker); orders made before this get thumbnails the first time the picker opens (`pageList`).
+- Routes (by download token): `/d/<token>/pages.json`, `/d/<token>/thumb/<main|kit|activities|party>/<n>.jpg`, `/d/<token>/pick.pdf?main=1,3&kit=2-5` (joined with `pdf-lib`, a new dependency).
+
 ### Field Kit extras (2026-10-24)
 
 Added on top of the Field Kit (`src/host/host.js`), all driven by one browser script, `src/host/client/fieldkit.js`, which the bot inlines into the host, Sidekick and Mission pages with a `window.FKCFG` config (theme, name, colors, art, keepsake text...).
