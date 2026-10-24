@@ -13,7 +13,7 @@ const { renderPdf } = require('../src/generator/render');
 const { buildHtml, pageRoles } = require('../src/generator/build');
 const { renderKit } = require('../src/kits/render-kit');
 const { renderParty } = require('../src/party/render-party');
-const { kitForHunt } = require('../src/kits/engine');
+const { kitForHunt, buildKitHtml } = require('../src/kits/engine');
 const { plan, hostPage, sidekickPage } = require('../src/host/host');
 const THEMES = require('../src/generator/themes');
 const { nameSlots, sheetLayers, blankJob, blankLayers, pageSlots, saveIndex } = require('../src/generator/name-slots');
@@ -23,6 +23,11 @@ const SPOTS = ['front_door', 'shoe_rack', 'couch', 'dryer', 'bathtub', 'bookshel
 const PARTY = { date: 'Saturday, June 3', time: '2 to 4 pm', place: 'Our house', rsvp: 'Text Sam' };
 const HOST_SIZE = [540, 1080]; // the saved Field Kit phone screenshots (captured at 720x1440)
 const dataUrl = (f) => `data:image/png;base64,${fs.readFileSync(f).toString('base64')}`;
+// The kit page with the wow prop, counted from 1.
+const wowPage = (kitId) => {
+  const html = buildKitHtml({ kit: kitId, childName: 'Maya', subjects: [], lenient: true });
+  return html.slice(0, html.indexOf('<section class="page props wow"')).split('<section class="page').length;
+};
 
 (async () => {
   const only = process.argv.slice(2);
@@ -35,9 +40,11 @@ const dataUrl = (f) => `data:image/png;base64,${fs.readFileSync(f).toString('bas
   fs.mkdirSync(path.join(IMG, 'n', 'host'), { recursive: true });
   for (const id of Object.keys(THEMES).filter((k) => !only.length || only.includes(k))) {
     const dir = (k) => path.join(tmp, `${id}-${k}`);
+    // Shop-style kits (pizza, library...) keep their styled card photo and the page gallery-images.js made;
+    // a new one without a card photo yet gets the page fan like the other themes.
+    const kit = kitForHunt(id)?.bigSign && fs.existsSync(path.join(IMG, `kit-${id}.webp`)) ? null : kitForHunt(id);
+    const pg = (k, n) => path.join(dir(k), `page-${n}.png`);
     if (!hostOnly) {
-    // Shop-style kits (pizza, library...) keep the kit card and page theme-photos.js and gallery-images.js made.
-    const kit = kitForHunt(id)?.bigSign ? null : kitForHunt(id);
     const huntCfg = { theme: id, childName: 'Maya', age: 6, spots: SPOTS, pictures: true };
     await renderPdf(huntCfg, `${dir('hunt')}.pdf`, { pngDir: dir('hunt'), nameSlots: 'Maya' });
     const roles = pageRoles(buildHtml(huntCfg));
@@ -45,13 +52,14 @@ const dataUrl = (f) => `data:image/png;base64,${fs.readFileSync(f).toString('bas
     huntParts[id] = { guide: roles.host, briefing: roles.briefing, cards: roles.sheet, puzzle: roles.puzzle, cert: roles.cert, bonus: roles['pic-lists'] };
     await renderParty({ theme: id, childName: 'Maya', age: 6, party: PARTY }, `${dir('party')}.pdf`, { pngDir: dir('party'), nameSlots: 'Maya' });
     if (kit) await renderKit({ kit: kit.id, childName: 'Maya', subjects: [], lenient: true }, `${dir('kit')}.pdf`, { pngDir: dir('kit'), nameSlots: 'Maya' });
-    const pg = (k, n) => path.join(dir(k), `page-${n}.png`);
 
     // Play kit card: three kit pages fanned out on a transparent background.
     if (kit) {
       const fan = await browser.newPage({ viewport: { width: 677, height: 497 }, deviceScaleFactor: 2 });
       const sheet = (n, x, y, r, w, blank) => `<img data-key="${n}" src="${dataUrl(blank ? path.join(dir('kit'), 'blank', `page-${n}.png`) : pg('kit', n))}" style="position:absolute;left:${x}px;top:${y}px;width:${w}px;transform:rotate(${r}deg);box-shadow:0 10px 28px rgba(40,50,90,.25)">`;
-      const fanned = (blank) => `<body style="margin:0;background:transparent">${sheet(2, 0, 40, -8, 340, blank)}${sheet(8, 330, 30, 7, 340, blank)}${sheet(7, 150, 4, 0, 380, blank)}</body>`;
+      // Shop-style kits fan out the welcome poster, the shop sign and the wow prop; the others two toys.
+      const [left, right, middle] = kit.bigSign ? [2, 4, wowPage(kit.id)] : [2, 8, 7];
+      const fanned = (blank) => `<body style="margin:0;background:transparent">${sheet(left, 0, 40, -8, 340, blank)}${sheet(right, 330, 30, 7, 340, blank)}${sheet(middle, 150, 4, 0, 380, blank)}</body>`;
       await fan.setContent(fanned(false));
       await fan.screenshot({ path: path.join(tmp, `kit-${id}.png`), omitBackground: true });
       if (process.env.FAN_DIR) fs.copyFileSync(path.join(tmp, `kit-${id}.png`), path.join(process.env.FAN_DIR, `kit-${id}.png`));

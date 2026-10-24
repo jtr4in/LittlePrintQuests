@@ -33,6 +33,13 @@ P = {
  'unicorn': [('1', '16:9', 'a flower crown of pastel roses and daisies with rainbow ribbons hanging down the sides.'), ('2', '16:9', 'a pair of sunglasses with pink heart-shaped frames and rainbow lenses.')],
  'valentine': [('1', '4:3', 'a red headband with two bouncy red hearts on springs.'), ('2', '16:9', 'a pair of big glossy red lips puckered for a kiss.')],
  'vet': [('1', '16:9', 'a teal surgical scrub cap with little white paw prints, a rounded cap shape seen from the front.'), ('2', '16:9', 'a pink kitty nose with a little smiling mouth and long black whiskers on each side.')],
+ 'kitchen': [('1', '3:4', 'a tall puffy white chef hat with a little red tomato pin on the band.'), ('2', '16:9', 'a big brown curly mustache with a little dusting of white flour on it.')],
+ 'doctor': [('1', '16:9', 'a blue surgical scrub cap with little white hearts, a rounded cap shape seen from the front.'), ('2', '16:9', 'a silver doctor stethoscope laid out in a smile shape, with blue tubing and a round chest piece.')],
+ 'puppet': [('1', '4:3', 'a shiny black top hat with a red velvet band and a little gold star.'), ('2', '16:9', 'a pair of red theater masks, one happy and one sad, side by side.')],
+ 'agent': [('1', '4:3', 'a brown detective deerstalker hat with ear flaps tied up on top.'), ('2', '16:9', 'a pair of black spy sunglasses with a bushy black mustache attached below the nose bridge.')],
+ 'dressup': [('1', '4:3', 'a sparkly purple wizard hat with gold stars and a crescent moon.'), ('2', '16:9', 'a pair of huge pink star-shaped glasses with sparkly rhinestones.')],
+ 'icecream': [('1', '3:4', 'a giant ice cream cone hat: three scoops (pink strawberry, mint, chocolate) with rainbow sprinkles and a cherry on top.'), ('2', '16:9', 'a mustache made of melting chocolate ice cream with rainbow sprinkles.')],
+ 'airport': [('1', '4:3', 'a navy blue airline pilot cap with a shiny black brim and gold wings on the front.'), ('2', '16:9', 'a pair of gold aviator pilot sunglasses with dark green lenses.')],
 }
 # Pale props that melt into a white backdrop.
-GREEN = {('burger', '1'), ('christmas', '1'), ('christmas', '2'), ('easter', '1'), ('italian', '1'), ('ice', '1'), ('dentist', '2'), ('unicorn', '1'), ('mermaid', '1'), ('easter', '2')}
+GREEN = {('burger', '1'), ('christmas', '1'), ('christmas', '2'), ('easter', '1'), ('italian', '1'), ('ice', '1'), ('dentist', '2'), ('unicorn', '1'), ('mermaid', '1'), ('easter', '2'), ('kitchen', '1')}

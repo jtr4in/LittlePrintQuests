@@ -176,7 +176,8 @@ function wowPage(k) {
 }
 const hasWow = (k) => Boolean(k.def.wow && fs.existsSync(path.join(__dirname, 'art', k.def.id, 'wow.webp')));
 
-const APPLIANCES = { oven: ovenPage, stove: stovePage };
+const rooms = require('./rooms');
+const APPLIANCES = { oven: ovenPage, stove: stovePage, ...rooms.APPLIANCES };
 const appliancePages = (k) => (k.def.appliances || []).map((a) => APPLIANCES[a](k)).join('');
 
 // ---------- jar labels ----------

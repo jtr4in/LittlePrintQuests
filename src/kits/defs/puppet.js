@@ -1,0 +1,107 @@
+// Puppet Theater: turns a bookcase (an IKEA Billy or Kallax) or a doorway into a stage, with a ticket
+// booth, stick puppets and seats for the audience, plus its own hunt and party pack.
+module.exports = {
+  id: 'puppet',
+  name: 'Puppet Theater',
+  hunt: 'puppet',
+  bigSign: true, // a shop-style kit: it keeps the big shop sign
+  colors: { main: '#b8325a', dark: '#7e1f3d', soft: '#f7d2de', light: '#fff3f7', accent: '#f2b632', accentInk: '#3a2405' },
+  icon: '🎭',
+  placeName: (who) => `${who} Puppet Theater`,
+  tagline: 'The greatest little show in town',
+  subjectWord: 'guest',
+  subjectPlural: 'guests',
+  kinds: {
+    bear: ['🧸', 'Teddy bear'], dog: ['🐶', 'Dog'], cat: ['🐱', 'Cat'], bunny: ['🐰', 'Bunny'], unicorn: ['🦄', 'Unicorn'],
+    dino: ['🦕', 'Dinosaur'], pig: ['🐷', 'Pig'], fox: ['🦊', 'Fox'], lion: ['🦁', 'Lion'], monkey: ['🐵', 'Monkey'],
+    panda: ['🐼', 'Panda'], penguin: ['🐧', 'Penguin'], mouse: ['🐭', 'Mouse'], frog: ['🐸', 'Frog'], owl: ['🦉', 'Owl'], doll: ['🪆', 'Doll'],
+  },
+  kindAliases: { teddy: 'bear', puppy: 'dog', kitten: 'cat', rabbit: 'bunny', dinosaur: 'dino', toy: 'bear' },
+  defaultKinds: ['bear', 'bunny', 'dog', 'cat'],
+  signs: [
+    ['Open', 'Tickets on sale now!', '✅', 'go'],
+    ['Closed', 'The puppets are napping. Come back soon!', '🌙', 'stop'],
+    ['Box Office', 'Get your tickets here', '🎟️'],
+    ['Show Starts Soon', 'Find your seat and get comfy', '⏰'],
+    ['Quiet Please', 'The show is on!', '🤫'],
+    ['Snack Bar', 'Popcorn and juice', '🍿'],
+    ['Backstage', 'Puppeteers only', '🧦'],
+  ],
+  badgeIcon: '🎭',
+  leadPrefix: 'Director',
+  leadRole: 'Show Director',
+  roles: [['Puppeteer'], ['Ticket Seller'], ['Usher'], ['Stage Hand'], ['Snack Seller'], ['Music Maker'], ['Puppeteer']],
+  badgeTitle: 'Theater Crew Badges',
+  log: {
+    title: 'Ticket List', icon: '🎟️', cols: ['Guest', 'Who', 'Seat', 'Here'],
+    times: ['1:00', '1:00', '1:00', '1:00', '2:00', '2:00', '2:00', '2:00', '3:00', '3:00', '3:00', '3:00'],
+    reasons: ['Row A', 'Row A', 'Row B', 'Row B', 'Front row', 'Front row', 'Balcony', 'Balcony'],
+    note: 'Usher: write each guest in an empty row and tick them off when they find their seat.',
+  },
+  record: {
+    title: 'Show Plan', icon: '📜', drawLabel: 'Draw the stage',
+    fields: ['Show name', 'Starring', 'Where', 'Show time'],
+    cols: ['In the show', 'Not this time'],
+    checks: [['🎶', 'A song'], ['💃', 'A dance'], ['😂', 'A funny part'], ['😱', 'A big surprise'], ['🐉', 'A dragon'], ['👑', 'A king or queen'], ['🌧️', 'A storm'], ['🎉', 'A happy ending']],
+    moodLabel: 'How did the audience like it?', moods: ['🤩', '😂', '😀', '😮', '😴'],
+    notesLabel: 'Director’s notes', signer: 'Director',
+  },
+  ticket: {
+    title: 'Show Ticket', mark: '🎟️', forLabel: 'Guest', countLabel: 'Seat',
+    options: [['🅰️', 'Row A'], ['🅱️', 'Row B'], ['⭐', 'Front row'], ['🪑', 'Comfy seat'], ['🍿', 'Popcorn'], ['🧃', 'Juice'], ['🎈', 'Balloon'], ['📸', 'Meet the puppets']],
+  },
+  passport: {
+    pageTitle: 'Theater Club Cards', word: 'Theater Club', emblem: '🎭', drawLabel: 'Draw your favorite puppet',
+    fields: ['Name', 'Favorite show', 'Favorite puppet', 'Member since'], stampsLabel: 'Shows seen',
+    howTo: 'Cut along the dashed line and fold in the middle. Stamp a circle at every show. Fill them all for a front row seat!',
+  },
+  menu: {
+    title: 'Box Office', icon: '🎟️', coinIcon: '🪙', coinWord: 'coin', coinsTitle: 'Theater Coins',
+    items: [['🎟️', 'Show ticket', 2], ['⭐', 'Front row', 3], ['🍿', 'Popcorn', 1], ['🧃', 'Juice box', 1], ['🍭', 'Lollipop', 1], ['🎈', 'Balloon', 2], ['📸', 'Puppet photo', 2], ['🌹', 'Flowers for the star', 2]],
+  },
+  shop: {
+    open: 'The show starts soon!', hero: ['🎟️', '🎭', '🍿'],
+    specials: [['🐉', 'The Dragon Who Sneezed'], ['👑', 'The Lost Crown'], ['🚀', 'Puppets in Space']], specialTags: ['Today!', 'Funny!', 'New!'],
+    slipTitle: 'Ticket order', slipFields: ['Guest', 'Show', 'Seats'],
+  },
+  // A stage front for a bookcase or doorway: a curtain top with the theater's name, two side curtains and a stage edge.
+  appliances: ['stage'],
+  toys: [
+    { type: 'register', inside: 'A ticket booth register with a keypad and cash drawer, plus 3 play bank cards', title: 'Ticket Booth', howTo: 'Sell the tickets, tear off a stub and point each guest to a seat.',
+      buttons: [['🎟️', 'Tickets'], ['🍿', 'Snacks'], ['💳', 'Card']], giftCard: 'Show gift card', giftLine: 'Enjoy the show!', screenWord: 'SHOW' },
+    { type: 'spinner', inside: 'A Story Spinner to pick what the next show is about', title: 'Story Spinner', howTo: 'Spin the wheel, then put on a show about whatever it lands on!',
+      label: 'Director {child}', sub: 'What’s the show?', decor: ['⭐', '🎭', '⭐'],
+      items: [['🐉', 'A dragon'], ['👑', 'A royal ball'], ['🚀', 'Space trip'], ['🏴‍☠️', 'Pirates'], ['🦖', 'Dinosaurs'], ['🎂', 'A birthday']],
+      game: ['Director game:', 'Spin twice and mix the two together: dinosaurs at a royal ball, pirates in space!'] },
+  ],
+  props: {
+    // Big round stick puppets: tape each to a craft stick, a straw or a paint stirrer.
+    puppets: { title: 'Stick Puppets', howTo: 'Best on cardstock. Cut out each puppet and tape it to a craft stick, a straw or a paint stirrer.',
+      list: [['🐉', 'Dot the Dragon'], ['👑', 'King Crumble'], ['🦊', 'Fizz the Fox'], ['🐸', 'Prince Ribbit'], ['🦄', 'Sparkle'], ['🤖', 'Bolt the Robot']] },
+    labels: { title: 'Seat Signs', howTo: 'Cut out, fold along the dotted line and stand a sign on each seat or cushion.',
+      items: [['🅰️', 'Row A'], ['🅱️', 'Row B'], ['⭐', 'Front Row'], ['👑', 'Royal Seat'], ['🧸', 'Teddy Seat'], ['🎂', 'Birthday Seat'],
+        ['🍿', 'Snacks'], ['🧃', 'Drinks'], ['🎟️', 'Tickets'], ['🎶', 'Music'], ['🧦', 'Puppets'], ['🚻', 'Bathroom']] },
+    cards: { title: 'Show Props', howTo: 'Cut out the props. Puppeteers hold them up during the show!',
+      items: [['🌳', 'Tree', 1], ['🏰', 'Castle', 3], ['🌙', 'Moon', 1], ['☀️', 'Sun', 1], ['⛈️', 'Storm cloud', 2], ['🌈', 'Rainbow', 2],
+        ['🎁', 'Present', 1], ['🗝️', 'Magic key', 2], ['🍰', 'Cake', 1], ['🚪', 'Door', 1], ['💎', 'Jewel', 3], ['🪄', 'Magic wand', 2]] },
+    food: { title: 'Snack Bar', howTo: 'Cut out the snacks and set them out on the snack bar. Prices are in coins.',
+      items: [['🍿', 'Popcorn', 1], ['🧃', 'Juice box', 1], ['🥤', 'Lemonade', 2], ['🍭', 'Lollipop', 1], ['🍪', 'Cookie', 1], ['🥨', 'Pretzel', 1], ['🍫', 'Chocolate', 2], ['🍬', 'Candy', 1], ['🧁', 'Cupcake', 2]] },
+  },
+  wow: { title: 'Velvet Stage Curtains', howTo: 'Cut out the two curtains and the top swag. Tape them around the stage opening of the bookcase or a doorway. Places, everyone: the show is starting!', inside: 'Real-looking red velvet stage curtains with gold tassels to frame the stage' },
+  certificate: { title: 'Star of the Show', icon: '🏆', seal: '🎭', line: 'put on a show to remember, with brave voices, silly puppets and the biggest bow of all.' },
+  guide: {
+    afterHunt: 'Every lost Show Ticket is found! Open {place} right where the last ticket was hiding, and put on the Grand Opening show. Star of the Show {child} takes the first bow.',
+    intro: 'Everything {child} needs to run a puppet theater. Print on regular Letter paper, cut along the dashed lines, and set out some cushions and stuffed animals for the audience.',
+    setup: [
+      'Clear one shelf of a bookcase (a Billy or Kallax cube works) or use a doorway with a sheet across it.', 'Tape the curtain top and side curtains around the opening, and the stage edge along the bottom.',
+      'Tape the puppets to craft sticks and keep them backstage in a box.', 'Set up the Ticket Booth on a little table, with the seat signs on the cushions.',
+      'Pin on the badges, dim the lights and start the show!',
+    ],
+    play: [
+      ['🎟️ Sell the tickets', 'The ticket seller fills in a Show Ticket, tears it and the usher shows each guest to a seat.'],
+      ['🎡 Spin a story', 'Spin the Story Spinner and make up a show about whatever it lands on.'],
+      ['📜 Plan the show', 'Fill in a Show Plan: who’s in it, what happens, and how it ends.'],
+      ['👏 Take a bow', 'After the show, the puppeteers come out front and take a big bow. Bravo!'],
+    ],
+  },
+};

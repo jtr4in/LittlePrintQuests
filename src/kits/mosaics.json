@@ -901,5 +901,235 @@
    "yyyyyyyyyyy",
    "..y.....aay"
   ]
+ },
+ "kitchen": {
+  "e": "🍳",
+  "big": [
+   ".....kkkk.....",
+   "...kkkkkkkk...",
+   "..kkaaaaaakk..",
+   ".kkaawwwwaaak.",
+   ".kawwwwwwwwakk",
+   "kkawwwooowwaak",
+   "kkawwyyoowwwak",
+   "kkawwoooowwwak",
+   "kkawwoooowwaak",
+   "kkawwwwwwwaakk",
+   ".kkawwwwwwaak.",
+   "..kaawaaaaakk.",
+   "..kkkaaaakkk..",
+   "....kkkkkk...."
+  ],
+  "little": [
+   "...kkk...",
+   ".kkaaakk.",
+   ".awwwwak.",
+   "kawyowwak",
+   "kawyoowak",
+   "kawwowwak",
+   ".kwwwwak.",
+   ".kkaaakk.",
+   "...kkk..."
+  ]
+ },
+ "doctor": {
+  "e": "🚑",
+  "big": [
+   ".......rr.........",
+   ".......rr.........",
+   ".....aaaaawwwwww..",
+   "....awwwwwwwwwwww.",
+   "....wbbbbwwwwwwww.",
+   "...wbbbbbbwwwwwww.",
+   "..wwbbbbbwwwwwwwww",
+   ".wwwwwwwwwwwwwwwww",
+   ".rrrrrrrrrrrrrrrrr",
+   "yyrrrrrrrrrrrrrrrr",
+   "rrrrrrrrrrrrrrrrrr",
+   "aaaraaaaaaaaaaaraa",
+   "..aar........arar.",
+   "..rr..........rr.."
+  ],
+  "little": [
+   "....aa.....",
+   "...wwwwwww.",
+   "..wbbbwwwww",
+   ".wwwwwwwwww",
+   "yrrrrrrrrrr",
+   "yrrrrrrrrrr",
+   "aaaaaaaaaaa",
+   ".........aa"
+  ]
+ },
+ "puppet": {
+  "e": "🍿",
+  "big": [
+   ".....w.....",
+   "....wyy....",
+   ".wwwwyyyy..",
+   "wwwwwyyyyy.",
+   "wwwwwwyyyy.",
+   "wwwwwwyyyy.",
+   "wwwwwwwwyyy",
+   "wwwwwwwwyy.",
+   ".wwwwrwrwr.",
+   ".rrrwrarwr.",
+   ".rwrwrarwr.",
+   ".rwrwrarw..",
+   ".rwrwrarw..",
+   ".rwrwrarr..",
+   ".rwrwrarr..",
+   ".rwrwrarr..",
+   "..wrwrrrr..",
+   "...rwrr...."
+  ],
+  "little": [
+   "...w...",
+   "..wyyy.",
+   "wwwwyyy",
+   "wwwwwyy",
+   ".wwwwyy",
+   ".wrraw.",
+   ".wrraw.",
+   ".wrrrw.",
+   ".rrrrr.",
+   ".rrrrr.",
+   "..rrr.."
+  ]
+ },
+ "agent": {
+  "e": "🔍",
+  "big": [
+   "....wwww..........",
+   "..awbbbbw.........",
+   ".awbbbbbbww.......",
+   ".wbbbbbbbbwa......",
+   "abbbbbbbbbba......",
+   "abbbbbbbbbba......",
+   "abbbbbbbbbba......",
+   "abbbbbbbbbba......",
+   "aabbbbbbbbaa......",
+   ".abbbbbbbba.......",
+   "..aabbbbaaaa......",
+   "...aaaaaa.aaoo....",
+   "...........oooo...",
+   "...........ooooo..",
+   "............ooooo.",
+   ".............ooooo",
+   "..............oooo",
+   "...............ooo"
+  ],
+  "little": [
+   "..www......",
+   ".wbbbb.....",
+   "abbbbbb....",
+   "abbbbbb....",
+   "abbbbbb....",
+   "abbbbba....",
+   ".abbbaaa...",
+   "......aoo..",
+   ".......ooo.",
+   "........ooo",
+   ".........oo"
+  ]
+ },
+ "dressup": {
+  "e": "👑",
+  "big": [
+   ".....yy....yy.....",
+   ".....yy....yy.....",
+   ".....yy....yy.....",
+   "yy.y.yy.yy.yy.y.yy",
+   "yy.yyyyyyyyyyyy.yy",
+   ".yyyyyyyyyyyyyyyy.",
+   ".yyyyyyyyyyyyyyyy.",
+   ".yyyyyyyybyyyyyyy.",
+   ".byyppyybbbyypyybb",
+   ".byyppybbbbyppyybb",
+   ".yyyyyyybbyyyyyyy.",
+   ".yyyyyyyyyyyyyyyy.",
+   "..yyyyyyyyyyyyyy.."
+  ],
+  "little": [
+   "...y...y...",
+   "...y...y...",
+   "..yyyyyyy.y",
+   ".yyyyyyyyyy",
+   ".yyyyyyyyyy",
+   "yyyyybbyyyy",
+   ".yyyybyyyy.",
+   ".yyyyyyyyy."
+  ]
+ },
+ "icecream": {
+  "e": "🍦",
+  "big": [
+   ".....o......",
+   "....wow.....",
+   "...wwwww....",
+   "...wwwwww...",
+   "..wwwwwwww..",
+   ".oooooooww..",
+   ".wwwwwwwwwo.",
+   ".wwwwwwwoooo",
+   "oooooooooooo",
+   ".oooooyyyoo.",
+   ".yyyoyyyyyy.",
+   ".yyyyyyyyyy.",
+   "..yyyyyyyy..",
+   "...yyyyyy...",
+   "...yyyyyy...",
+   "...yyyyyy...",
+   "...yyyyyy...",
+   "...yyyyyy..."
+  ],
+  "little": [
+   "...w...",
+   "..www..",
+   ".wwwww.",
+   ".wwwww.",
+   "wwwwwoo",
+   "ooooooo",
+   ".yyyyy.",
+   ".yyyyy.",
+   ".yyyyy.",
+   "..yyy..",
+   "..yyy.."
+  ]
+ },
+ "airport": {
+  "e": "✈️",
+  "big": [
+   "................ww",
+   "..............awww",
+   ".............awwww",
+   "bbbbbbbb....awwww.",
+   "...bbbbbbbbawwwa..",
+   ".......bbbbwwwa...",
+   ".........awwwa....",
+   "........awwwab....",
+   "........aawabb....",
+   ".......aaaa.bb....",
+   "......aaaa...bb...",
+   ".....aaa.....bb...",
+   ".bbbaaa......bb...",
+   "...baa.......bb...",
+   "....bb.......bb...",
+   ".....bb.......b...",
+   ".....bb.......b...",
+   "..............b..."
+  ],
+  "little": [
+   "........ww",
+   ".......www",
+   "bbbbbbwww.",
+   "....bwww..",
+   "....awwb..",
+   "...aaabb..",
+   "..aaa..b..",
+   "bbaa...b..",
+   ".ab....b..",
+   "..b....b.."
+  ]
  }
 }

@@ -30,6 +30,13 @@ const FLAVOR = {
   coffee: { party: 'Café Party', tagline: 'Join us for cocoa and cake!', foods: ['Hot Cocoa', 'Mini Muffins', 'Marshmallow Clouds'] },
   italian: { party: 'Pasta Party', tagline: 'Mangia! Come party with us!', foods: ['Meatball Bites', 'Garlic Bread', 'Gelato Cups'] },
   auto: { party: 'Car Party', tagline: 'Rev your engines for a party!', foods: ['Motor Oil Punch', 'Spare Tire Donuts', 'Lug Nut Snacks'] },
+  kitchen: { party: 'Little Chef Party', tagline: 'Put on your apron and cook up some fun!', foods: ['Chef’s Special', 'Mini Pizzas', 'Kitchen Cookies'] },
+  doctor: { party: 'Doctor Party', tagline: 'The clinic is open for party check-ups!', foods: ['Get Well Juice', 'Bandage Bites', 'Apple a Day'] },
+  puppet: { party: 'Puppet Show Party', tagline: 'Grab a ticket, the show is about to start!', foods: ['Show Popcorn', 'Ticket Treats', 'Curtain Call Punch'] },
+  agent: { party: 'Secret Agent Party', tagline: 'Top secret: you are invited!', foods: ['Clue Cookies', 'Mystery Punch', 'Spy Snacks'] },
+  dressup: { party: 'Dress-Up Party', tagline: 'Come in costume and walk the runway!', foods: ['Runway Bites', 'Sparkle Punch', 'Crown Cookies'] },
+  icecream: { party: 'Ice Cream Party', tagline: 'Come get the scoop on all the fun!', foods: ['Sundae Bar', 'Sprinkle Punch', 'Cone Cookies'] },
+  airport: { party: 'Birthday Flight Party', tagline: 'Fasten your seatbelts for a birthday flight!', foods: ['Airplane Snacks', 'Cloud Puffs', 'Jet Fuel Juice'] },
 };
 
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);

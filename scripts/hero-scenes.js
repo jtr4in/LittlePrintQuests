@@ -32,6 +32,9 @@ const TABLES = {
   post: ['#a9c4e0', 'felt', '#2f5fa8'], library: ['#8a5a3a', 'wood', '#7a4fb0'], police: ['#2f3f63', 'felt', '#3d7fc1'],
   petshop: ['#f1d6a8', 'wood', '#e0698c'], dentist: ['#d6eef2', 'felt', '#2f9e8f'], coffee: ['#7a5236', 'wood', '#c88a4a'],
   italian: ['#c8a37a', 'wood', '#2f8a4a'], auto: ['#4a4f58', 'felt', '#f2a71b'],
+  kitchen: ['#c9a06a', 'wood', '#e0573b'], doctor: ['#d9e8f7', 'felt', '#3a7bd5'], puppet: ['#7e1f3d', 'felt', '#f2b632'],
+  agent: ['#2f3a44', 'felt', '#e8a33d'], dressup: ['#e6d5f6', 'felt', '#8c4fc4'], icecream: ['#fbd5df', 'felt', '#46b7c9'],
+  airport: ['#cfe6f6', 'felt', '#1f78b4'],
 };
 
 function table([base, grain]) {
@@ -57,6 +60,8 @@ const DECOR = {
   pizza: '🍕🧀🍅🫑🍄', burger: '🍔🍟🥤🧀🍅', grocery: '🍎🛒🥕🍌🥛', post: '✉️📦📮🏷️💌',
   library: '📚🔖✏️📖⭐', police: '🚓⭐🚨🔦🚔', petshop: '🐾🐶🐱🦴🐟', dentist: '🪥🦷✨🪞⭐',
   coffee: '☕🥐🍪🧁🍩', italian: '🍝🥖🍅🧀🍕', auto: '🔧🚗🛞🔩🚙',
+  kitchen: '🍳🥄🥕🧁🍅', doctor: '🩺🩹💊🌡️🧸', puppet: '🎟️🍿🧦⭐🎭', agent: '🔍🕶️🗝️📁🍪',
+  dressup: '👑🎩🎀✨👢', icecream: '🍦🍒🍨🧁🍓', airport: '✈️🧳🛂🎫☁️',
 };
 const SHOPS = Object.values(KITS).filter((k) => !k.hunt).map((k) => k.id);
 const pics = (s) => [...new Intl.Segmenter().segment(s)].map((x) => x.segment);

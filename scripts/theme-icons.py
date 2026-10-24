@@ -21,6 +21,9 @@ ICONS = {
     'pizza': 'space/freeze-dried-pizza', 'police': 'police/police-station', 'post': 'post/pop-it-in-the-mail-box',
     'racecar': 'racecar/race-car', 'royal': 'royal/crown', 'space': 'space/3-2-1',
     'unicorn': 'unicorn/unicorn', 'valentine': 'valentine/hearts', 'vet': 'vet/dog',
+    'kitchen': 'kitchen/pancakes', 'doctor': 'doctor/doctor-bag', 'puppet': 'puppet/puppet-stage',
+    'agent': 'agent/hq', 'dressup': 'dressup/costume-wardrobe', 'icecream': 'icecream/sundae',
+    'airport': 'airport/airport-scene',
 }
 
 

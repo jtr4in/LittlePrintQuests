@@ -29,8 +29,15 @@ P = {
  'valentine': ('3:4', 'A realistic vintage mailbox shaped like a heart, glossy red metal with a gold mail slot near the top, a small blank white plate below the slot, on a short gold stand, seen straight from the front.'),
  'fire': ('4:3', 'A realistic fire truck pump panel seen straight from the front, polished chrome diamond plate, three round pressure gauges with blank faces, red and yellow valve handles, and two brass hose connectors.'),
  'ice': ('1:1', 'A realistic magical snow globe seen from the front, a glass dome on a silver base, the dome filled with a deep frosty blue night sky, swirling white snow and glitter around a tiny glowing ice palace with spires, so the dome looks full and colorful with nothing seen through it.'),
+ 'kitchen': ('1:1', 'A realistic play kitchen oven window seen straight from the front: a square black-glass oven door window with a rounded chrome frame, glowing warm orange inside, showing a bubbling cheesy lasagna on the top rack and a tray of golden chocolate chip cookies on the lower rack, oven light on.'),
+ 'doctor': ('4:3', 'A realistic hospital patient monitor seen straight from the front: a grey and white plastic monitor with a black screen showing a glowing green heartbeat line, a blue wavy breathing line and a little red heart icon, rounded buttons and a knob along the bottom edge. The screen has no numbers or words.'),
+ 'puppet': ('3:4', 'Realistic rich red velvet theater stage curtains with deep folds: two side curtains pulled open and tied back with gold rope tassels, and a gathered red velvet swag with gold fringe across the top, the three pieces spaced apart with a gap between them, nothing behind them.'),
+ 'agent': ('3:4', 'A realistic high-tech handprint security scanner panel seen straight from the front: a brushed dark metal plate with a glowing blue glass pad showing a handprint outline and scan lines, a small green status light, a red status light and a small keypad with blank keys below.'),
+ 'dressup': ('3:4', 'A realistic Hollywood dressing room mirror frame seen straight from the front: a rectangular white wooden frame with a row of round glowing warm light bulbs all the way around it, and a plain flat empty light grey center panel inside the frame.'),
+ 'icecream': ('3:4', 'A realistic shiny soft serve ice cream machine seen straight from the front: stainless steel with a pastel pink front panel, two pull-down handles, a swirl spout with a tall vanilla and strawberry swirl coming out, and a drip tray, buttons with no writing.'),
+ 'airport': ('3:4', 'A realistic airplane cabin window seen from inside the plane: a rounded oval window in a light grey plastic frame with a pulled-up window shade at the top, looking out on a bright blue sky, fluffy white clouds below and the tip of the white airplane wing.'),
 }
 
 # Pale pieces that melt into a white backdrop are made on chroma green instead (wow-cutout keys it out).
-GREEN = {'ice', 'unicorn', 'royal'}
+GREEN = {'ice', 'unicorn', 'royal', 'dressup', 'airport'}
 GREEN_END = ' Photorealistic studio product photo, flat straight-on view, soft even lighting, no cast shadow, isolated on a solid flat pure chroma-key green (#00FF00) background with generous margin around it. No green on the object itself. No text, no letters, no numbers, no logos, no real brands, no faces on objects or food.'

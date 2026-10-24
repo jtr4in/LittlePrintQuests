@@ -74,6 +74,18 @@ module.exports = {
     { type: 'register', inside: 'A front desk register with a keypad and cash drawer, plus 3 play bank cards', title: 'Front Desk Register', howTo: 'Check in each patient and take the coins at the end of the visit.',
       buttons: [['📋', 'Check in'], ['📅', 'Next visit'], ['💳', 'Card']], giftCard: 'Smile gift card', giftLine: 'For a sparkly check-up!', screenWord: 'VISIT' },
   ],
+  // Manila file folders for tooth charts, intake forms and X-rays (src/kits/rooms.js).
+  folders: {
+    title: 'Patient File Folders', label: 'DENTAL RECORDS', tab: 'Patient', stamp: 'CONFIDENTIAL', wristbands: true,
+    inside: [['📝', 'New patient form'], ['🦷', 'Tooth chart'], ['📸', 'X-rays'], ['📅', 'Next visit']],
+    tags: ['X-RAYS', 'TOOTH CHART', 'BRACES', 'CLEANINGS'], stamps: ['SPARKLY!', 'NO CAVITIES', 'FOLLOW UP', 'BRAVE!'],
+    intake: {
+      title: 'New Patient Form', fields: ['Patient', 'Who', 'Age', 'Grown-up'],
+      reasons: [['🔦', 'Check-up'], ['🪥', 'Cleaning'], ['🦷', 'Wiggly tooth'], ['😬', 'Sore tooth'], ['📸', 'X-ray'], ['✨', 'Polish']],
+      allergies: [['🥜', 'Nuts'], ['🥛', 'Milk'], ['🌸', 'Pollen'], ['🧤', 'Gloves'], ['🚫', 'None']],
+      body: 'Circle the wiggly teeth', figure: 'teeth',
+    },
+  },
   props: {
     recipe: { title: 'How to Brush Your Teeth', steps: [['🧴', 'Squeeze a pea-sized blob of toothpaste.'], ['💧', 'Wet the toothbrush.'], ['⬆️', 'Brush the top teeth in little circles.'], ['⬇️', 'Brush the bottom teeth too.'], ['👅', 'Brush your tongue. Tickly!'], ['💦', 'Spit and rinse.'], ['😁', 'Smile! Two minutes, twice a day.']] },
     food: { title: 'Tooth-Friendly Snacks', howTo: 'Cut out the snacks. Sort them into teeth-happy snacks and once-in-a-while treats!',

@@ -40,7 +40,9 @@ const CLEAN = {
   racecar: ['🏎️', 'race car', 'mud'], pizza: ['🍽️', 'plate', 'sauce and crumbs'], burger: ['🍳', 'grill pan', 'grease'],
   grocery: ['🍎', 'apple', 'dirt'], post: ['📦', 'parcel', 'muddy footprints'], library: ['📖', 'book', 'crayon scribbles'],
   police: ['🚓', 'police car', 'mud'], petshop: ['🐶', 'puppy', 'mud'], dentist: ['🦷', 'tooth', 'sugar bugs'], coffee: ['☕', 'coffee mug', 'coffee stains'],
-  italian: ['🍽️', 'plate', 'sauce and crumbs'], auto: ['🚗', 'car', 'mud and oil'],
+  italian: ['🍽️', 'plate', 'sauce and crumbs'], auto: ['🚗', 'car', 'mud and oil'], kitchen: ['🍳', 'frying pan', 'pancake batter'],
+  doctor: ['🩺', 'stethoscope', 'smudges'], puppet: ['🧦', 'sock puppet', 'popcorn crumbs'], agent: ['🔍', 'magnifying glass', 'fingerprints'],
+  dressup: ['👢', 'boot', 'mud'], icecream: ['🍨', 'sundae dish', 'sticky drips'], airport: ['🧳', 'suitcase', 'travel dust'],
 };
 
 // The same "random" every time for the same seed, so a kit always prints the same.
@@ -298,6 +300,8 @@ const SECRETS = {
   pizza: 'YOU MAKE THE BEST PIZZA', burger: 'YOU COOK THE BEST', grocery: 'YOU RUN THE STORE', post: 'YOU HAVE MAIL',
   library: 'YOU LOVE BOOKS', police: 'YOU KEEP US SAFE', petshop: 'YOU ARE A PET HERO', dentist: 'YOU HAVE SHINY TEETH',
   coffee: 'YOU MAKE THE BEST COCOA', italian: 'YOU COOK THE BEST PASTA', auto: 'YOU FIXED THE CAR',
+  kitchen: 'YOU ARE A MASTER CHEF', doctor: 'YOU MADE EVERYONE BETTER', puppet: 'YOU ARE THE STAR', agent: 'YOU CRACKED THE CASE',
+  dressup: 'YOU LOOK FABULOUS', icecream: 'YOU GET AN EXTRA SCOOP', airport: 'YOU ARE CLEARED FOR TAKEOFF',
 };
 function codePage(k) {
   const msg = SECRETS[k.def.id] || 'YOU ARE A STAR';
@@ -355,6 +359,7 @@ const MOSAIC_PICS = {
   vet: '🐰', space: '🚀', dino: '🌋', hero: '🎭', pirate: '🦜', royal: '🍰', unicorn: '🌈', mermaid: '🏝️', construction: '🚜',
   easter: '🐣', halloween: '🎃', christmas: '🎅', valentine: '🧁', fire: '🚒', ice: '⛄', racecar: '🏁', pizza: '🍕', burger: '🍔',
   grocery: '🍎', post: '📮', library: '🦉', police: '🚓', petshop: '🐶', dentist: '😁', coffee: '🧋', italian: '🍝', auto: '🚕',
+  kitchen: '🍳', doctor: '🚑', puppet: '🍿', agent: '🔍', dressup: '👑', icecream: '🍦', airport: '✈️',
 };
 const CRAYONS = {
   r: ['Red', '#e53935'], o: ['Orange', '#fb8c00'], y: ['Yellow', '#fdd835'], g: ['Green', '#43a047'], b: ['Blue', '#1e88e5'], v: ['Purple', '#8e24aa'],

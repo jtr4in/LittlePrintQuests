@@ -19,8 +19,6 @@ Work in flight is listed under **In progress** below.
 
 Work that is about to merge or is mid-merge, so sessions on the other account can hold off. Pull main and read this before starting and before merging. Add your entry directly on main (not only in your PR). Don't merge if another entry touches the same files; wait or coordinate. Remove your entry after merging. One line each: what, branch, files touched, thread, UTC time.
 
-- Seven new themes with a wow piece each (play kitchen, doctor, puppet theater, secret agent, dress-up, ice cream parlor, airport) plus manila file folders for doctor, vet and dentist, branch `claude/project-thread-oty5ss`, touches new `src/kits/defs/*.js`, `src/kits/engine.js` (KITS map), `src/kits/art/<new kits>/`, `src/generator/themes.js`, `src/generator/{puzzle,bonus}.js`, `src/party/flavor.js`, `src/host/scripts.js`, `src/kits/{signage,activities,extras}.js`, `docs/js/data.js`, `docs/ideas/`, `docs/img/`. Will rebase after the disguises PR lands. Thread "Add new pretend play themes", 2026-10-24 02:20 UTC.
-- Not started, parked by Jason (2026-10-23): new themes, each a full set with a wow piece: **doctor** (plus pretend manila file folders for doctor, vet and dentist), **puppet theater**, **secret agent / detective HQ**, **costume & dress-up**, **ice cream parlor**, **airport**. Needs Gemini for the kit art (not reachable from the second account until a network secret for `generativelanguage.googleapis.com` is added). Dropped: reworking the home banners around the play kit, and a themed handprint page in little kids activity packs.
 
 ## Business direction
 
@@ -44,7 +42,15 @@ Work that is about to merge or is mid-merge, so sessions on the other account ca
 ## Products and how they're built
 
 ### Themes and kits
-- All 27 play kits are hunt themes with party packs, so every theme has an everything bundle (PR #87, 2026-10-23). The 11 shop kits (pizza, burger, grocery, post, library, police, dentist, petshop, coffee, italian, auto) have `hunt: '<id>'` and `bigSign: true` in their kit defs; the defs' `shop` key is a different thing (the shop config). Shop kits are website-only. Sample PDFs: `/mnt/project-files/scavenger-hunt/shop-kit-hunts/`.
+- All 34 play kits are hunt themes with party packs, so every theme has an everything bundle (PR #87, 2026-10-23). The 11 shop kits (pizza, burger, grocery, post, library, police, dentist, petshop, coffee, italian, auto) have `hunt: '<id>'` and `bigSign: true` in their kit defs; the defs' `shop` key is a different thing (the shop config). Shop kits are website-only. Sample PDFs: `/mnt/project-files/scavenger-hunt/shop-kit-hunts/`.
+
+### Seven room kits and manila folders (2026-10-24)
+- New kits, each a full set (kit, hunt, party pack, activity pack) with a wow piece and disguises: **kitchen** (Chef’s Kitchen, Glowing Oven Window), **doctor** (Doctor’s Clinic, Patient Monitor), **puppet** (Puppet Theater, Velvet Stage Curtains), **agent** (Secret Agent HQ, Handprint Scanner), **dressup** (Costume Shop, Dressing Room Mirror Lights), **icecream** (Ice Cream Parlor, Soft Serve Machine), **airport** (Airport, Airplane Window). Jason's list also had grocery, coffee, post office, mechanic (auto) and vet, which already existed. All are `bigSign` shop-style kits listed in `SHOP_KITS`.
+- `src/kits/rooms.js` holds the new shared pieces: room appliances (`burners`, `sink`, `backsplash`, `stage`, joined to `extras.js` APPLIANCES), the manila folder pages (`folders` key in a def: two folder covers, an intake form page, tab labels, dividers, optional patient wristbands; intake figure `person`, `teeth`, `pet` or `scene`), and props `puppets`, `fingerprints`, `hangtags`, `scoops`, `stampsheet`. Doctor, vet and dentist have folders (Jason asked for them on all three).
+- `toys.js` VESSELS gained `fridge` and `wardrobe` for lift-the-flap toys. The guide page shrinks its type (`dense`, `denser`) when the inside list is long.
+- Kit art was made with `gemini-3.1-flash-image`: it sometimes draws captions, extra objects or smiley faces, so look at each sheet. One-off pictures import with `python3 scripts/art-import.py <kit> <slug> <image>`. Puzzle art (`src/generator/puzzle.js`) can now borrow another kit's art as `'other-kit/slug'`, like bonus pictures.
+- 45 older shared pictures that the new kits borrow (bandage, pill, thermometer, syringe, sun, moons, stars, coin, heart, cloud, lock, trophy...) were redrawn without faces in place (same files), so every kit that uses them lost the faces too. Gallery previews of the older themes were not re-rendered and may still show the old faces until `gallery-images.js` runs for them.
+- The new kits' shop cards (`docs/img/kit-<id>.webp`) are page fans from `site-images.js`, not styled Gemini photos like the first 11. No box-build how-to guides yet.
 
 ### Hunt bonus games (PR #91, 2026-10-23)
 - Every hunt PDF ends with replay bonus games, lists in `src/generator/bonus.js`: a Picture Hunt (12 cut-out picture cards plus a page with 2 checklists) and a Look-around hunt (12 themed finds to spot outside).

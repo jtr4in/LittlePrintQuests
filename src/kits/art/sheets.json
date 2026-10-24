@@ -676,5 +676,106 @@
  ],
  "burger-3": [
   "1f373"
+ ],
+ "kitchen-1": [
+  "pancakes",
+  "chefs-kitchen-logo",
+  "23f2",
+  "a-grown-up-cooks-them-in-the-pan-flip",
+  "forks",
+  "a-pinch-of-salt",
+  "trash",
+  "recycling"
+ ],
+ "kitchen-2": [
+  "beans",
+  "rice",
+  "garlic",
+  "tacos",
+  "potatoes",
+  "avocado",
+  "26c5",
+  "1f522"
+ ],
+ "doctor-1": [
+  "26c5",
+  "wheelchair-ride",
+  "sniffles",
+  "bump",
+  "fever"
+ ],
+ "doctor-2": [
+  "tummy-ache",
+  "nuts",
+  "bees",
+  "none",
+  "1f522"
+ ],
+ "puppet-1": [
+  "puppets",
+  "row-a",
+  "row-b",
+  "a-birthday",
+  "bathroom",
+  "fox",
+  "26c5",
+  "1f522"
+ ],
+ "agent-1": [
+  "hq",
+  "wear-a-disguise",
+  "crack-a-code",
+  "fingerprints-match",
+  "notebook",
+  "keep-out",
+  "cold"
+ ],
+ "agent-2": [
+  "found-it",
+  "footprints-match",
+  "26c5",
+  "spy-shades",
+  "wearing-socks",
+  "morning",
+  "1f522"
+ ],
+ "dressup-1": [
+  "a-hat",
+  "dresses",
+  "masks",
+  "cool-shades",
+  "scarves",
+  "goggles",
+  "26c5",
+  "1f3f7",
+  "1f522"
+ ],
+ "icecream-1": [
+  "a-cherry",
+  "freezer",
+  "nuts",
+  "blueberries",
+  "snow-cone",
+  "ice-pop",
+  "26c5",
+  "1f522"
+ ],
+ "airport-1": [
+  "suitcase",
+  "1f6c3",
+  "passport",
+  "gate-1",
+  "arrivals",
+  "carry-on",
+  "headphones"
+ ],
+ "airport-2": [
+  "paris",
+  "grandmas",
+  "fun-fair-city",
+  "desert-dunes",
+  "big-city",
+  "26c5",
+  "1f522"
  ]
 }
