@@ -16,110 +16,41 @@
   // ---------------------------------------------------------------------------------------------
   let ac = null;
   let master = null;
-  let noiseBuf = null;
   function ctx() {
     if (!ac) {
       const A = window.AudioContext || window.webkitAudioContext;
       if (!A) return null;
       ac = new A();
       master = ac.createGain();
-      master.gain.value = 0.7;
+      master.gain.value = 1;
       master.connect(ac.destination);
     }
     if (ac.state === 'suspended') ac.resume();
     return ac;
   }
-  function env(g, t, v, attack, d) {
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(v, t + Math.min(attack, d * 0.8));
-    g.gain.exponentialRampToValueAtTime(0.0001, t + d);
-  }
-  function tone(f, d, o = {}) {
-    const a = ctx(); if (!a) return;
-    const t = a.currentTime + (o.at || 0);
-    const osc = a.createOscillator();
-    const g = a.createGain();
-    osc.type = o.type || 'sine';
-    osc.frequency.setValueAtTime(f, t);
-    if (o.to) osc.frequency.exponentialRampToValueAtTime(o.to, t + d);
-    if (o.vib) {
-      const l = a.createOscillator(); const lg = a.createGain();
-      l.frequency.value = o.vib; lg.gain.value = o.vibAmt || f * 0.04;
-      l.connect(lg); lg.connect(osc.frequency); l.start(t); l.stop(t + d + 0.05);
+  // The sounds themselves are built by sfx.js (inlined just before this file): each one is
+  // rendered once into a buffer, then replays instantly.
+  const SFX_NAMES = window.LPQSFX ? window.LPQSFX.make(44100).names : [];
+  let sfx = null;
+  const cache = {};
+  function buffer(name) {
+    const a = ctx(); if (!a || !window.LPQSFX) return null;
+    if (!cache[name]) {
+      sfx = sfx || window.LPQSFX.make(a.sampleRate);
+      const x = sfx.render(name), b = a.createBuffer(1, x.length, a.sampleRate);
+      b.getChannelData(0).set(x); cache[name] = b;
     }
-    env(g, t, o.vol || 0.3, o.attack || 0.01, d);
-    let node = osc;
-    if (o.lp) { const fl = a.createBiquadFilter(); fl.type = 'lowpass'; fl.frequency.value = o.lp; osc.connect(fl); node = fl; }
-    node.connect(g); g.connect(master);
-    osc.start(t); osc.stop(t + d + 0.05);
+    return cache[name];
   }
-  function noise(d, o = {}) {
-    const a = ctx(); if (!a) return;
-    if (!noiseBuf) {
-      noiseBuf = a.createBuffer(1, a.sampleRate * 2, a.sampleRate);
-      const c = noiseBuf.getChannelData(0);
-      for (let i = 0; i < c.length; i++) c[i] = Math.random() * 2 - 1;
-    }
-    const t = a.currentTime + (o.at || 0);
-    const s = a.createBufferSource(); s.buffer = noiseBuf; s.loop = true;
-    const f = a.createBiquadFilter(); f.type = o.ftype || 'lowpass';
-    f.frequency.setValueAtTime(o.f || 1000, t);
-    if (o.fto) f.frequency.exponentialRampToValueAtTime(o.fto, t + d);
-    f.Q.value = o.q || 1;
-    const g = a.createGain(); env(g, t, o.vol || 0.3, o.attack || 0.01, d);
-    s.connect(f); f.connect(g); g.connect(master);
-    s.start(t); s.stop(t + d + 0.05);
+  // Get the board's sounds (and the automatic ones) ready a little at a time once audio is on.
+  let warmed = false;
+  function warm() {
+    if (warmed) return; warmed = true;
+    const list = ['found', 'fanfare', 'cheer', 'ding', ...board().map((b) => b[0])].filter((n, i, all) => all.indexOf(n) === i);
+    const step = () => { const n = list.shift(); if (!n) return; try { buffer(n); } catch (e) { /* skip */ } setTimeout(step, 80); };
+    setTimeout(step, 50);
   }
-  const N = (m) => 440 * Math.pow(2, (m - 69) / 12);
-  const PENT = [0, 2, 4, 7, 9];
-  const SOUNDS = {
-    fanfare() { [60, 64, 67, 72].forEach((m, i) => tone(N(m), 0.2, { type: 'triangle', at: i * 0.12, vol: 0.3 })); [60, 64, 67, 72].forEach((m) => tone(N(m), 1, { type: 'triangle', at: 0.5, vol: 0.16 })); },
-    found() { [72, 76, 79, 84, 88].forEach((m, i) => tone(N(m), 0.28, { type: 'triangle', at: i * 0.06, vol: 0.22 })); },
-    cheer() { for (let i = 0; i < 45; i++) noise(0.05 + Math.random() * 0.08, { at: Math.random() * 1.8, ftype: 'bandpass', f: 1500 + Math.random() * 2500, q: 2, vol: 0.25 }); },
-    roar() { tone(95, 1.4, { type: 'sawtooth', to: 55, vol: 0.5, lp: 600, vib: 9, vibAmt: 12, attack: 0.08 }); noise(1.4, { f: 500, fto: 200, vol: 0.35, attack: 0.1 }); },
-    rumble() { noise(2.2, { f: 120, vol: 0.7, attack: 0.3 }); tone(45, 2.2, { vol: 0.4, vib: 6, vibAmt: 5, attack: 0.3 }); },
-    radio() { noise(0.35, { ftype: 'bandpass', f: 2500, q: 0.8, vol: 0.25 }); tone(1200, 0.09, { type: 'square', at: 0.4, vol: 0.12 }); tone(1200, 0.09, { type: 'square', at: 0.55, vol: 0.12 }); noise(0.25, { ftype: 'bandpass', f: 2500, q: 0.8, vol: 0.2, at: 0.75 }); },
-    countdown() { [0, 1, 2].forEach((i) => tone(880, 0.15, { type: 'square', at: i * 0.6, vol: 0.12 })); tone(1320, 0.5, { type: 'square', at: 1.8, vol: 0.14 }); noise(1.8, { at: 2.1, f: 200, fto: 6000, vol: 0.4, attack: 0.3 }); },
-    beeps() { for (let i = 0; i < 8; i++) tone(600 + Math.random() * 1400, 0.07, { type: 'square', at: i * 0.09, vol: 0.1 }); },
-    cannon() { noise(0.9, { f: 900, fto: 80, vol: 0.8 }); tone(70, 0.8, { to: 30, vol: 0.6 }); },
-    splash() { noise(0.6, { ftype: 'bandpass', f: 1200, fto: 400, q: 0.7, vol: 0.45 }); for (let i = 0; i < 6; i++) tone(400 + Math.random() * 500, 0.08, { to: 900 + Math.random() * 600, at: 0.2 + i * 0.07, vol: 0.15 }); },
-    bubbles() { for (let i = 0; i < 12; i++) tone(300 + Math.random() * 400, 0.1, { to: 800 + Math.random() * 900, at: i * 0.11, vol: 0.18 }); },
-    squawk() { [0, 0.24].forEach((at) => tone(1300, 0.17, { type: 'sawtooth', to: 900, at, vol: 0.16, vib: 40, vibAmt: 200 })); },
-    trumpet() { [[67, 0, 0.14], [67, 0.16, 0.14], [72, 0.32, 0.7]].forEach(([m, at, d]) => tone(N(m), d, { type: 'sawtooth', at, vol: 0.25, lp: 2200, attack: 0.03 })); },
-    magic() { for (let i = 0; i < 12; i++) tone(N(84 + PENT[i % 5] + 12 * Math.floor(i / 5)), 0.4, { type: 'triangle', at: i * 0.05, vol: 0.12 }); },
-    harp() { for (let i = 0; i < 10; i++) tone(N(67 + PENT[i % 5] + 12 * Math.floor(i / 5)), 0.7, { type: 'triangle', at: i * 0.07, vol: 0.15 }); },
-    gallop() { for (let i = 0; i < 8; i++) tone(i % 2 ? 900 : 700, 0.05, { type: 'square', at: Math.floor(i / 2) * 0.36 + (i % 2) * 0.1, vol: 0.12, lp: 1500 }); },
-    whale() { tone(220, 1.8, { to: 120, vol: 0.3, attack: 0.4, vib: 3, vibAmt: 8 }); tone(160, 1.2, { at: 1.6, to: 260, vol: 0.2, attack: 0.3 }); },
-    reverse() { [0, 1, 2, 3].forEach((i) => tone(1050, 0.25, { type: 'square', at: i * 0.5, vol: 0.12 })); },
-    hammer() { [0, 0.3, 0.6].forEach((at) => { noise(0.06, { at, ftype: 'highpass', f: 2000, vol: 0.5 }); tone(180, 0.1, { at, to: 90, vol: 0.3 }); }); },
-    drill() { tone(220, 1.3, { type: 'sawtooth', vib: 30, vibAmt: 40, vol: 0.15, lp: 1800, attack: 0.05 }); noise(1.3, { ftype: 'bandpass', f: 3000, q: 3, vol: 0.1 }); },
-    bark() { [0, 0.35].forEach((at) => { tone(420, 0.13, { type: 'sawtooth', at, to: 260, vol: 0.3, lp: 1400 }); noise(0.1, { at, ftype: 'bandpass', f: 900, q: 2, vol: 0.25 }); }); },
-    meow() { tone(600, 0.7, { type: 'triangle', to: 900, vol: 0.2, vib: 6, vibAmt: 30, attack: 0.1 }); tone(900, 0.45, { type: 'triangle', at: 0.55, to: 500, vol: 0.15 }); },
-    heartbeat() { [0, 0.25, 1, 1.25].forEach((at) => tone(60, 0.18, { at, to: 40, vol: 0.6 })); },
-    vroom() { tone(70, 1.7, { type: 'sawtooth', to: 230, vol: 0.3, lp: 900, attack: 0.1, vib: 25, vibAmt: 10 }); },
-    honk() { [0, 0.3].forEach((at) => tone(370, 0.22, { type: 'square', at, vol: 0.15, lp: 1500 })); },
-    lights() { [0, 0.7, 1.4].forEach((at) => tone(440, 0.25, { at, vol: 0.2 })); tone(880, 0.7, { at: 2.1, vol: 0.25 }); },
-    siren() { for (let i = 0; i < 3; i++) { tone(650, 0.5, { type: 'triangle', at: i, to: 950, vol: 0.2 }); tone(950, 0.5, { type: 'triangle', at: i + 0.5, to: 650, vol: 0.2 }); } },
-    bell() { for (let i = 0; i < 10; i++) { tone(1800, 0.12, { at: i * 0.09, vol: 0.15 }); tone(2700, 0.08, { at: i * 0.09, vol: 0.06 }); } },
-    spray() { noise(1.5, { ftype: 'highpass', f: 3000, vol: 0.3, attack: 0.1 }); },
-    wind() { noise(2.5, { ftype: 'bandpass', f: 400, fto: 1200, q: 4, vol: 0.4, attack: 0.6 }); },
-    jingle() { for (let i = 0; i < 14; i++) { const f = 2400 + Math.random() * 1200; tone(f, 0.25, { at: i * 0.08, vol: 0.08 }); tone(f * 1.5, 0.15, { at: i * 0.08, vol: 0.04 }); } },
-    ghost() { tone(380, 2, { to: 520, vol: 0.25, vib: 5, vibAmt: 25, attack: 0.3 }); },
-    creak() { tone(90, 1.6, { type: 'sawtooth', to: 160, vol: 0.15, lp: 900, vib: 14, vibAmt: 20, attack: 0.2 }); },
-    hop() { [0, 0.35, 0.7].forEach((at) => tone(300, 0.25, { at, to: 900, vol: 0.2 })); },
-    chirp() { for (let i = 0; i < 6; i++) tone(2600, 0.07, { at: i * 0.13, to: 3400, vol: 0.12 }); },
-    pop() { [0, 0.2, 0.4].forEach((at) => { tone(900, 0.06, { at, to: 200, vol: 0.3 }); noise(0.04, { at, ftype: 'highpass', f: 2500, vol: 0.3 }); }); },
-    kiss() { tone(1400, 0.12, { to: 2600, vol: 0.15 }); noise(0.05, { at: 0.1, ftype: 'highpass', f: 3000, vol: 0.2 }); },
-    power() { tone(200, 1, { type: 'sawtooth', to: 1600, vol: 0.15, lp: 3000 }); tone(400, 1, { type: 'square', to: 3200, vol: 0.05 }); },
-    whoosh() { noise(0.8, { ftype: 'bandpass', f: 300, fto: 3000, q: 2, vol: 0.45, attack: 0.2 }); },
-    ding() { tone(2093, 0.6, { vol: 0.25 }); tone(2637, 0.8, { at: 0.12, vol: 0.25 }); for (let i = 0; i < 5; i++) tone(3000 + Math.random() * 1500, 0.08, { at: 0.35 + i * 0.05, vol: 0.05 }); },
-    sizzle() { noise(1.7, { ftype: 'highpass', f: 4000, vol: 0.25, attack: 0.2 }); for (let i = 0; i < 20; i++) noise(0.02, { at: Math.random() * 1.5, ftype: 'highpass', f: 5000, vol: 0.3 }); },
-    steam() { noise(1.6, { ftype: 'bandpass', f: 2500, fto: 4500, q: 1.5, vol: 0.3, attack: 0.4 }); },
-    scan() { tone(1800, 0.12, { type: 'square', vol: 0.12 }); tone(1800, 0.12, { type: 'square', at: 0.25, vol: 0.12 }); },
-    stamp() { [0, 0.4].forEach((at) => { tone(110, 0.15, { at, to: 60, vol: 0.6 }); noise(0.08, { at, f: 800, vol: 0.4 }); }); },
-    shh() { noise(1.1, { ftype: 'highpass', f: 2500, vol: 0.3, attack: 0.15 }); },
-    drumroll() { for (let i = 0; i < 30; i++) noise(0.05, { at: i * 0.05, f: 1200, vol: 0.25 + i * 0.01 }); noise(1, { at: 1.55, ftype: 'highpass', f: 3000, vol: 0.4 }); tone(90, 0.4, { at: 1.5, to: 50, vol: 0.5 }); },
-  };
+  const SOUNDS = Object.fromEntries(SFX_NAMES.map((n) => [n, () => play(n)]));
   // Each theme's sound board: [sound, emoji, label]. New themes fall back to DEFAULT.
   const BOARD = {
     dino: [['roar', '🦖', 'Roar'], ['rumble', '🌋', 'Volcano'], ['radio', '📻', 'Ranger radio']],
@@ -138,7 +69,7 @@
     christmas: [['jingle', '🔔', 'Sleigh bells'], ['magic', '✨', 'Elf magic'], ['trumpet', '🎺', 'Fanfare']],
     valentine: [['harp', '💗', 'Love song'], ['pop', '🎈', 'Balloon pop'], ['kiss', '💋', 'Kiss']],
     easter: [['hop', '🐰', 'Hop'], ['chirp', '🐣', 'Chick'], ['magic', '✨', 'Magic']],
-    pizza: [['ding', '🛎️', 'Order up'], ['sizzle', '🔥', 'Oven'], ['scan', '💳', 'Pay']],
+    pizza: [['ding', '🛎️', 'Order up'], ['sizzle', '🔥', 'Oven'], ['register', '💳', 'Pay']],
     burger: [['ding', '🛎️', 'Order up'], ['sizzle', '🍔', 'Grill'], ['honk', '🚗', 'Drive-thru']],
     grocery: [['scan', '🛒', 'Scan'], ['ding', '🛎️', 'Checkout'], ['reverse', '🚚', 'Delivery']],
     post: [['stamp', '📮', 'Stamp'], ['ding', '🛎️', 'Next please'], ['reverse', '🚚', 'Mail truck']],
@@ -146,7 +77,7 @@
     police: [['siren', '🚓', 'Siren'], ['radio', '📻', 'Radio'], ['honk', '📣', 'Horn']],
     dentist: [['drill', '🦷', 'Polisher'], ['ding', '🛎️', 'Next patient'], ['magic', '✨', 'Sparkle']],
     petshop: [['bark', '🐶', 'Woof'], ['meow', '🐱', 'Meow'], ['chirp', '🐦', 'Tweet']],
-    coffee: [['steam', '☕', 'Steamer'], ['ding', '🛎️', 'Order up'], ['scan', '💳', 'Pay']],
+    coffee: [['steam', '☕', 'Steamer'], ['ding', '🛎️', 'Order up'], ['register', '💳', 'Pay']],
     italian: [['bubbles', '🍝', 'Boiling pot'], ['ding', '🛎️', 'Order up'], ['trumpet', '🎺', 'Bravo']],
     auto: [['drill', '🔧', 'Wrench'], ['vroom', '🚗', 'Engine'], ['honk', '📣', 'Horn']],
     kitchen: [['sizzle', '🍳', 'Sizzle'], ['ding', '⏲️', 'Timer'], ['meow', '🐱', 'Whisk']],
@@ -154,13 +85,20 @@
     puppet: [['drumroll', '🥁', 'Drumroll'], ['trumpet', '🎺', 'Curtain up'], ['magic', '🧦', 'Puppet magic']],
     agent: [['beeps', '📟', 'Gadget'], ['radio', '📻', 'HQ radio'], ['creak', '🚪', 'Sneaky door']],
     dressup: [['magic', '✨', 'Sparkle'], ['drumroll', '🥁', 'Runway'], ['trumpet', '🎺', 'Ta-da']],
-    icecream: [['ding', '🛎️', 'Order up'], ['scan', '💳', 'Pay'], ['magic', '🍒', 'Sprinkles']],
+    icecream: [['ding', '🛎️', 'Order up'], ['register', '💳', 'Pay'], ['magic', '🍒', 'Sprinkles']],
     airport: [['whoosh', '✈️', 'Takeoff'], ['ding', '🔔', 'Cabin chime'], ['radio', '📡', 'Control tower']],
   };
   const DEFAULT = [['fanfare', '🎺', 'Fanfare'], ['magic', '✨', 'Magic'], ['drumroll', '🥁', 'Drumroll']];
   const board = () => [...(BOARD[CFG.theme] || DEFAULT), ['cheer', '👏', 'Cheer']];
   const autoOn = () => store('fk:auto-sound') !== '0';
-  function play(name) { try { (SOUNDS[name] || SOUNDS.fanfare)(); } catch (e) { /* no audio here */ } }
+  function play(name) {
+    try {
+      const a = ctx(); if (!a) return;
+      const b = buffer(SFX_NAMES.includes(name) ? name : 'fanfare'); if (!b) return;
+      const src = a.createBufferSource(); src.buffer = b; src.connect(master); src.start();
+      warm();
+    } catch (e) { /* no audio here */ }
+  }
   // Sounds that play by themselves (a card found, the big finish) respect the on/off switch.
   function auto(name) { if (autoOn()) play(name); }
   function soundBoard(title = 'Sound effects') {

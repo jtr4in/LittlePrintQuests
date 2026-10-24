@@ -20,7 +20,7 @@ const { KITS, kitForHunt } = require('../kits/engine');
 const { checklist } = require('./party');
 const art = require('../kits/art');
 
-const CLIENT = fs.readFileSync(path.join(__dirname, 'client', 'fieldkit.js'), 'utf8');
+const CLIENT = ['sfx.js', 'fieldkit.js'].map((f) => fs.readFileSync(path.join(__dirname, 'client', f), 'utf8')).join('\n');
 const ROOT = path.join(__dirname, '..', '..');
 
 const possessive = (name) => (/s$/i.test(name) ? `${name}’` : `${name}’s`);
@@ -252,7 +252,7 @@ const SHOP_TALK = {
 };
 const SHOP_DEFAULT = { why: ['What a cool place!', 'I heard this is the best spot in town!', 'I’ve been waiting all day for this!'] };
 // How an item sounds in a sentence: "a cheese pizza", "an apple", "some fries".
-const PHRASE = { 'X-ray': 'an X-ray', 'Fill the tank': 'a full tank', Parking: 'a parking spot', Express: 'express delivery', 'Air mail': 'air mail', 'Adopt a pet': 'a pet to adopt', 'Teeth clean': 'a teeth cleaning', 'Bath & brush': 'a bath and brush', Surgery: 'a tiny surgery', Temperature: 'my temperature checked', 'Wheelchair ride': 'a wheelchair ride', 'Wiggly tooth': 'my wiggly tooth checked', Flossing: 'some flossing', 'Late fee': 'my late fee paid', 'Front row': 'a front row seat', 'Prize box': 'a pick from the prize box', 'Brake fix': 'my brakes fixed', 'Mane braid': 'a mane braid', 'Horn polish': 'a horn polish', 'Crown polish': 'a crown polish', 'Trophy polish': 'a trophy polish', 'Flowers for the star': 'flowers for the star', 'Pot of tea': 'a pot of tea', 'Full basket': 'a full basket' };
+const PHRASE = { 'X-ray': 'an X-ray', 'Dino coloring': 'a dino coloring page', 'Fill the tank': 'a full tank', Parking: 'a parking spot', Express: 'express delivery', 'Air mail': 'air mail', 'Adopt a pet': 'a pet to adopt', 'Teeth clean': 'a teeth cleaning', 'Bath & brush': 'a bath and brush', Surgery: 'a tiny surgery', Temperature: 'my temperature checked', 'Wheelchair ride': 'a wheelchair ride', 'Wiggly tooth': 'my wiggly tooth checked', Flossing: 'some flossing', 'Late fee': 'my late fee paid', 'Front row': 'a front row seat', 'Prize box': 'a pick from the prize box', 'Brake fix': 'my brakes fixed', 'Mane braid': 'a mane braid', 'Horn polish': 'a horn polish', 'Crown polish': 'a crown polish', 'Trophy polish': 'a trophy polish', 'Flowers for the star': 'flowers for the star', 'Pot of tea': 'a pot of tea', 'Full basket': 'a full basket' };
 const MASS = /^(milk|tea|milk tea|soup|warm soup|minestrone soup|pasta|salad|popcorn|juice|moon juice|grog juice|power juice|hot cocoa|lemonade|glitter|pet food|bread|cheese|spaghetti|gelato|tiramisu|rainbow oats|kelp bubble tea|fish stew|chief’s chili|letter paper|new paint|carrot snack)$/i;
 function phraseOf(name) {
   if (PHRASE[name]) return PHRASE[name];

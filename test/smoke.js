@@ -248,6 +248,20 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   }
   // Shared scripts and the stylesheet carry a fingerprint of their content, so phones never mix old and new copies.
   assert.deepEqual(require('../scripts/stamp-assets').run({ check: true }), [], 'run: node scripts/stamp-assets.js');
+  // Field Kit sounds: every one renders to clean audio, and every sound board button has a sound.
+  {
+    const sfx = require('../src/host/client/sfx').make(22050);
+    for (const n of sfx.names) {
+      const x = sfx.render(n);
+      assert.ok(x.length > 2000 && x.length < 22050 * 7, `sound ${n} length`);
+      let peak = 0; for (const v of x) { assert.ok(Number.isFinite(v), `sound ${n} is clean`); peak = Math.max(peak, Math.abs(v)); }
+      assert.ok(peak > 0.05 && peak < 1, `sound ${n} level ${peak}`);
+    }
+    const fk = fs.readFileSync(path.join(__dirname, '..', 'src', 'host', 'client', 'fieldkit.js'), 'utf8');
+    const used = [...fk.slice(fk.indexOf('const BOARD')).matchAll(/\['(\w+)', '/g)].map((m) => m[1]);
+    assert.ok(used.length > 80);
+    for (const n of new Set(used)) assert.ok(sfx.names.includes(n), `sound board uses missing sound ${n}`);
+  }
   // Theme filter chips: every theme on the site sits in exactly one group.
   {
     const vm = require('vm');
