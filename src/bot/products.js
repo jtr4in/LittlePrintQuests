@@ -73,7 +73,10 @@ function upgradeFor(order) {
 }
 
 // The age version picked for a play kit, activity pack or hunt.
-const VERSIONS = { little: 'Little kids, ages 2 to 4', big: 'Big kids, ages 5 to 8' };
+const VERSIONS = { little: 'Little kids, ages 3 to 5', big: 'Big kids, ages 6 to 8' };
+// The labels before 2026-10-23, when the split was 2 to 4 and 5 to 8: older orders still carry them.
+const OLD_VERSIONS = { little: 'Little kids, ages 2 to 4', big: 'Big kids, ages 5 to 8' };
+const versionOf = (label) => Object.keys(VERSIONS).find((k) => VERSIONS[k] === label || OLD_VERSIONS[k] === label);
 
 // What Host Mode does for this order, as the end of "Host Mode ...", for emails and messages.
 function hostHelps(order) {
@@ -85,4 +88,4 @@ function hostHelps(order) {
   return helps.length > 1 ? `${helps.slice(0, -1).join(', ')}, and ${helps[helps.length - 1]}` : helps[0];
 }
 
-module.exports = { upgradeFor, VERSIONS, hostHelps, ITEMS, PRICES, normalize, productFor, itemsOf, has, mainOf, priceFor, describe, packageName, NAMES };
+module.exports = { upgradeFor, VERSIONS, versionOf, hostHelps, ITEMS, PRICES, normalize, productFor, itemsOf, has, mainOf, priceFor, describe, packageName, NAMES };

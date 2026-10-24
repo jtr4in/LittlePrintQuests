@@ -287,7 +287,7 @@ ${setupPanel()}
 </div>
 <div class="panel">${
     payments.enabled()
-      ? `<b>Website checkout on.</b> <span class="muted">Buyers pick any mix of hunt ($${(payments.PRICES.hunt / 100).toFixed(2)}), play kit ($${(payments.PRICES.kit / 100).toFixed(2)}), activity pack ($${(payments.PRICES.activity / 100).toFixed(2)}, or $${(payments.PRICES.activityAdd / 100).toFixed(2)} added to anything) and party pack ($${(payments.PRICES.party / 100).toFixed(2)}), or the hunt, play kit and party pack for $${(payments.PRICES.bundle / 100).toFixed(2)}, in the little kids (ages 2 to 4) or big kids (5 to 8) version, built and emailed automatically.${unpaid.length ? ` ${unpaid.length} checkout${unpaid.length === 1 ? '' : 's'} started but not paid.` : ''}</span>`
+      ? `<b>Website checkout on.</b> <span class="muted">Buyers pick any mix of hunt ($${(payments.PRICES.hunt / 100).toFixed(2)}), play kit ($${(payments.PRICES.kit / 100).toFixed(2)}), activity pack ($${(payments.PRICES.activity / 100).toFixed(2)}, or $${(payments.PRICES.activityAdd / 100).toFixed(2)} added to anything) and party pack ($${(payments.PRICES.party / 100).toFixed(2)}), or the hunt, play kit and party pack for $${(payments.PRICES.bundle / 100).toFixed(2)}, in the little kids (ages 3 to 5) or big kids (6 to 8) version, built and emailed automatically.${unpaid.length ? ` ${unpaid.length} checkout${unpaid.length === 1 ? '' : 's'} started but not paid.` : ''}</span>`
       : `<b>Website checkout off.</b> <span class="muted">Add STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET to take orders on your site.</span>`
   }</div>
 ${passPanel(s)}
@@ -300,7 +300,7 @@ ${listingsPanel(s)}
     <button type="button" class="secondary" onclick="const t=this.form.personalization;t.value=t.placeholder;t.focus()">Use the sample</button>
     <div class="row"><select name="theme"><option value="">Theme: from the notes</option><optgroup label="Hunt themes">${Object.entries(THEMES).map(([id, t]) => `<option value="${esc(id)}">${esc(t.name)}</option>`).join('')}</optgroup>${Object.values(KITS).some((k) => !k.hunt) ? `<optgroup label="Shop kits (play kit and activity pack)">${Object.values(KITS).filter((k) => !k.hunt).map((k) => `<option value="kit:${esc(k.id)}">${esc(k.name)}</option>`).join('')}</optgroup>` : ''}<optgroup label="Handprint art">${Object.values(HOLIDAYS).map((h) => `<option value="craft:${esc(h.id)}">${esc(h.kicker)}</option>`).join('')}</optgroup></select></div>
     <div class="row picks">${[['hunt', 'Scavenger hunt'], ['kit', 'Play kit'], ['activity', 'Activity pack'], ['party', 'Party pack']].map(([v, l]) => `<label><input type="checkbox" name="item" value="${v}"${v === 'activity' ? '' : ' checked'}> ${l}</label>`).join('')}</div>
-    <div class="row"><select name="ages"><option value="">Version: from the child’s age</option><option value="little">Little kids, ages 2 to 4</option><option value="big">Big kids, ages 5 to 8</option></select><button>Make it</button></div>
+    <div class="row"><select name="ages"><option value="">Version: from the child’s age</option><option value="little">Little kids, ages 3 to 5</option><option value="big">Big kids, ages 6 to 8</option></select><button>Make it</button></div>
   </form>
 </details>
 <h2>To send (${open.length})</h2>${open.map(orderCard).join('') || '<p class="muted">Nothing waiting.</p>'}

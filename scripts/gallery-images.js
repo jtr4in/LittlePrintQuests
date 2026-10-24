@@ -4,7 +4,7 @@
 // length, so their toy pages are picked by position. Also writes the activity pack's card for the
 // order stack (docs/img/pages/<theme>-activity.webp) and the theme picker's square thumbnail
 // (docs/img/themes/<theme>.webp, cut from the play kit card made by site-images.js).
-// The little-kids version (ages 2 to 4) of the kit and activity pack goes in gallery/<theme>/little/,
+// The little-kids version (ages 3 to 5) of the kit and activity pack goes in gallery/<theme>/little/,
 // with its order stack cards in docs/img/pages/<theme>-little-kit.webp and -little-activity.webp.
 // Every picture with the child's name also gets a twin without it in docs/img/n/ (see name-slots.js).
 // Usage: node scripts/gallery-images.js [theme ...]

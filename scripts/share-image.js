@@ -4,13 +4,17 @@ const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
 const D = path.resolve('docs/img');
+// The fonts come from the repo's fonts/ folder, so the picture comes out the same without internet access.
+const font = (family, file, weight) => `@font-face{font-family:'${family}';font-weight:${weight};src:url(data:font/${file.endsWith('ttf') ? 'ttf' : 'woff2'};base64,${fs.readFileSync(path.resolve('fonts', file)).toString('base64')})}`;
 const img = (f) => `data:image/${f.endsWith('png') ? 'png' : 'webp'};base64,${fs.readFileSync(path.join(D, f)).toString('base64')}`;
 (async () => {
   const b = await chromium.launch();
   const p = await b.newPage({ viewport: { width: 1200, height: 630 } });
   await p.setContent(`<!doctype html><html><head>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>
+${font('Fredoka', 'Fredoka.ttf', '300 700')}
+${font('Atkinson Hyperlegible', 'AtkinsonHyperlegible-400.woff2', 400)}
+${font('Atkinson Hyperlegible', 'AtkinsonHyperlegible-700.woff2', 700)}
 body{margin:0;width:1200px;height:630px;overflow:hidden;background:#fbf8f1;font-family:'Atkinson Hyperlegible';color:#3f4a73;position:relative}
 .brand{position:absolute;left:64px;top:56px;display:flex;align-items:center;gap:14px;font:700 34px Fredoka}
 .brand img{width:76px}
@@ -25,12 +29,13 @@ h1 em{font-style:normal;background:linear-gradient(transparent 62%,#89dcb0 62%)}
 <div class="trail"></div>
 <div class="brand"><img src="${img('mark.png')}"><span><span class="l">Little</span><span class="p">Print</span><span class="q">Quests</span></span></div>
 <h1>A treasure hunt <em>made for your kid</em></h1>
-<div class="sub">Printable birthday scavenger hunts with their name and your home’s own hiding spots. Ages 2 to 8.</div>
+<div class="sub">Printable birthday scavenger hunts with their name and your home’s own hiding spots. Ages 3 to 8.</div>
 <div class="pill">Ready to print in minutes</div>
 <img class="pg" src="${img('pages/unicorn-party.webp')}" style="left:690px;top:120px;transform:rotate(-9deg)">
 <img class="pg" src="${img('pages/pirate-kit.webp')}" style="left:880px;top:150px;transform:rotate(8deg)">
 <img class="pg" src="${img('pages/dino-briefing.webp')}" style="left:780px;top:70px;transform:rotate(-1deg)">
 </body></html>`, { waitUntil: 'networkidle' });
+  await p.evaluate(() => document.fonts.ready);
   await p.screenshot({ path: process.argv[2] || path.join(D, 'share.jpg'), type: 'jpeg', quality: 88 });
   await b.close();
 })();

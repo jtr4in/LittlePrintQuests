@@ -35,9 +35,9 @@ for (const [id, t] of Object.entries(THEMES)) {
   PINS.push({
     id: `hunt-${id}`, feed: 'scavenger-hunts', color: c.primary,
     kicker: 'Printable birthday game', head: `${t.label} Scavenger Hunt`, sub: 'Rhyming clue cards with your child’s name and your own hiding spots',
-    tags: ['Ages 2 to 8', 'Print at home'], art: scene(`hero/${id}.webp`),
+    tags: ['Ages 3 to 8', 'Print at home'], art: scene(`hero/${id}.webp`),
     title: `${t.label} Birthday Scavenger Hunt for Kids, Printable and Personalized`,
-    description: `A ${lower(t.label)} treasure hunt made for your child: rhyming clue cards for the hiding spots in your own home, a mission briefing to read aloud and a finisher certificate. Print at home in minutes, great for birthday parties and rainy days. Ages 2 to 8.`,
+    description: `A ${lower(t.label)} treasure hunt made for your child: rhyming clue cards for the hiding spots in your own home, a mission briefing to read aloud and a finisher certificate. Print at home in minutes, great for birthday parties and rainy days. Ages 3 to 8.`,
     link: link({ theme: id }),
   });
   PINS.push({
@@ -64,7 +64,7 @@ for (const s of Object.values(SPACES)) {
   PINS.push({
     id: `ideas-${slug(s.title)}`, feed: 'scavenger-hunts', color: '#2f9a6b',
     kicker: 'Free ideas', head: s.title, sub: 'Free rhyming clues for the spots you really have',
-    tags: ['Use them today', 'Ages 2 to 8'], art: fan(['gallery/dino/hunt-3.webp', 'gallery/unicorn/hunt-3.webp', 'gallery/pirate/hunt-3.webp']),
+    tags: ['Use them today', 'Ages 3 to 8'], art: fan(['gallery/dino/hunt-3.webp', 'gallery/unicorn/hunt-3.webp', 'gallery/pirate/hunt-3.webp']),
     title: `${s.title} for Kids: Free Clues and Ideas`,
     description: `Free rhyming scavenger hunt clues for kids, picked for the spots you really have, plus easy tips for setting up a hunt at home.`,
     link: `${SITE}ideas/${slug(s.title)}/?utm_source=pinterest&utm_medium=pin`,
@@ -78,23 +78,23 @@ function kitPins(k, q) {
   PINS.push({
     id: `kit-${k.id}`, feed: 'pretend-play', color,
     kicker: 'Pretend play printable', head: `${k.name} Pretend Play Kit`, sub: 'Signs, menus, money and props with your child’s name on them',
-    tags: ['Ages 2 to 8', 'Print at home'], art: LIFE[k.id] ? scene(`life/${k.id}-${LIFE[k.id]}.webp`) : `<div class="wide"><img src="${data(`kit-${k.id}.webp`)}"></div>`,
+    tags: ['Ages 3 to 8', 'Print at home'], art: LIFE[k.id] ? scene(`life/${k.id}-${LIFE[k.id]}.webp`) : `<div class="wide"><img src="${data(`kit-${k.id}.webp`)}"></div>`,
     title: `${k.name} Pretend Play Printable Kit for Kids, Personalized`,
     description: `Turn the living room into your child’s own ${lower(k.name)}: shop signs, order forms, play money, props and a grown-up guide full of play ideas, all with their name on it. A screen-free dramatic play set to print at home.`,
     link: link(q),
   });
   PINS.push({
     id: `little-${k.id}`, feed: 'pretend-play', color,
-    kicker: 'For toddlers and preschoolers', head: `${k.name} Play Kit for Ages 2 to 4`, sub: 'Big pictures, thick cut lines and order forms they fill in by circling',
+    kicker: 'For toddlers and preschoolers', head: `${k.name} Play Kit for Ages 3 to 5`, sub: 'Big pictures, thick cut lines and order forms they fill in by circling',
     tags: ['No reading needed', 'Print at home'], art: fan([g('little/kit-3'), g('little/kit-1'), g('little/kit-4')]),
-    title: `Toddler Pretend Play Printable: ${k.name} for Ages 2 to 4`,
+    title: `Toddler Pretend Play Printable: ${k.name} for Ages 3 to 5`,
     description: `A ${lower(k.name)} dramatic play kit made for little hands: big pictures, thick cut lines and picture order forms toddlers and preschoolers fill in by circling. Personalized with your child’s name.`,
     link: link({ ...q, age: 3 }),
   });
   PINS.push({
     id: `activity-${k.id}`, feed: 'activity-pages', color,
     kicker: 'Wipe and play pages', head: `${k.name} Activity Pages`, sub: 'I spy, mazes, spot the difference and counting to use again and again',
-    tags: ['Ages 2 to 8', 'Dry-erase friendly'], art: fan([g('activity-2'), g('activity-1'), g('activity-4')]),
+    tags: ['Ages 3 to 8', 'Dry-erase friendly'], art: fan([g('activity-2'), g('activity-1'), g('activity-4')]),
     title: `${k.name} Activity Pages for Kids: I Spy, Mazes, Spot the Difference`,
     description: `Printable ${lower(k.name)} activity pages: I spy, a maze, spot the difference, counting and more. Slip them in a sheet protector and use a dry-erase marker again and again. Great for quiet time and travel.`,
     link: link(q),

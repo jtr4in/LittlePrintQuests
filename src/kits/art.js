@@ -39,7 +39,7 @@ function em(x, y, size, e, extra = '') {
   return `<g ${extra}><svg x="${(x - size / 2).toFixed(1)}" y="${(y - size / 2).toFixed(1)}" width="${size}" height="${size}" viewBox="${viewBox}">${body}</svg></g>`;
 }
 
-// Pictures come out bigger in the little-kids (ages 2 to 4) version of a kit.
+// Pictures come out bigger in the little-kids (ages 3 to 5) version of a kit.
 let picScale = 1;
 const setPicScale = (n) => { picScale = n; };
 const scaled = (size) => (picScale === 1 ? size : String(size).replace(/^([\d.]+)in$/, (m, n) => `${+(n * picScale).toFixed(3)}in`));

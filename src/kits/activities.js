@@ -11,12 +11,12 @@
 //   spot      spot the 5 differences between two pictures
 //   odd       circle the one that's different in each row
 //   words     a word search (5 and up only)
-// Little kids (2 to 4) also get:
+// Little kids (3 to 5) also get:
 //   path      dotted paths to trace from one picture to another
 //   dots      the first letter of their name in big dot-marker circles (paper)
 //   shapes    match each colored shape to its twin
 //   glue      cut out pictures and glue each one on its shadow (paper)
-// Big kids (5 to 8) also get:
+// Big kids (6 to 8) also get:
 //   code      a secret message for them, written in picture code
 //   roll      roll a die for each row and draw the silly creature it makes
 // And both get:
@@ -219,7 +219,7 @@ function wordsPage(k) {
     <div class="wp-w-list">${placed.map(([e, w]) => `<div>${art.pic(e, '.55in')}<b>${w}</b></div>`).join('')}</div>`);
 }
 
-// ---------- little kids (2 to 4) ----------
+// ---------- little kids (3 to 5) ----------
 
 // Dotted paths from each helper to a treat: straight, wavy, zigzag and hilly.
 const PATHS = [
@@ -287,7 +287,7 @@ function gluePage(k) {
     <div class="wp-g-stickers">${shuffle(list, rand).map(([e]) => `<div>${art.pic(e, '.8in')}</div>`).join('')}</div>`);
 }
 
-// ---------- big kids (5 to 8) ----------
+// ---------- big kids (6 to 8) ----------
 
 // The secret message for each kit, in capital letters.
 const SECRETS = {

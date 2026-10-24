@@ -103,7 +103,7 @@ ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script
 <main class="wrap">
 ${body}
 </main>
-<footer><div class="wrap">Printable party games and quests for kids ages 2 to 8 · <a href="../">More party and hunt ideas</a> · <a href="../../">LittlePrintQuests</a></div></footer>
+<footer><div class="wrap">Printable party games and quests for kids ages 3 to 8 · <a href="../">More party and hunt ideas</a> · <a href="../../">LittlePrintQuests</a></div></footer>
 </body>
 </html>
 `;
@@ -132,7 +132,7 @@ function themePage(t, i, all) {
   const young = t.ages.split('–')[0];
   const questions = [
     [`What age is a ${t.label.toLowerCase()} scavenger hunt for?`, `This hunt is written for ages ${t.ages}. Younger kids follow the picture on each card while a grown-up reads the rhyme; older kids can read the clues on their own.`],
-    ['How many clues should a scavenger hunt have?', 'Six to ten clues is the sweet spot for ages 2 to 8. It takes about 15 to 25 minutes, long enough to feel like a quest and short enough that nobody loses interest.'],
+    ['How many clues should a scavenger hunt have?', 'Six to ten clues is the sweet spot for ages 3 to 8. It takes about 15 to 25 minutes, long enough to feel like a quest and short enough that nobody loses interest.'],
     ['Can I do this hunt in a small apartment?', 'Yes. Pick spots in every room and zig-zag between them. The apartment trail below uses eight spots every apartment has.'],
   ];
   const body = `
@@ -182,7 +182,7 @@ ${Object.values(SPACES).map((s) => `<li><a href="../${spaceSlug(s)}/">${esc(s.ti
 
 function spacePage(s, themes) {
   const questions = [
-    [`How long does a ${s.label.toLowerCase()} scavenger hunt take?`, 'With eight clues, about 15 to 25 minutes for kids ages 2 to 8, plus a few minutes beforehand to hide the cards.'],
+    [`How long does a ${s.label.toLowerCase()} scavenger hunt take?`, 'With eight clues, about 15 to 25 minutes for kids ages 3 to 8, plus a few minutes beforehand to hide the cards.'],
     ['Where should the prize go?', `At the last spot on the trail. On this trail that’s the ${SPOTS[s.spots[s.spots.length - 1]].label.toLowerCase()}.`],
   ];
   const body = `
@@ -210,7 +210,7 @@ ${themes.map((t) => `<li><a href="../${themeSlug(t)}/">${esc(t.label)} hunt</a><
   return page({
     file: path.join(OUT, spaceSlug(s), 'index.html'),
     title: `${s.title} for Kids: 8 Free Rhyming Clues`,
-    description: `A ready-to-use ${s.label.toLowerCase()} scavenger hunt for ages 2 to 8: eight rhyming clues with answers, where to hide each one, and tips.`,
+    description: `A ready-to-use ${s.label.toLowerCase()} scavenger hunt for ages 3 to 8: eight rhyming clues with answers, where to hide each one, and tips.`,
     body,
     jsonLd: faq(questions),
   });
@@ -224,7 +224,7 @@ function kitPage(k, kits) {
   const q = k.hunt ? { theme: k.hunt } : { kit: k.id };
   const name = k.name.toLowerCase();
   const questions = [
-    [`What age is ${name} pretend play for?`, 'Ages 2 to 8. The little kids version (ages 2 to 4) has big pictures, thick cut lines and order forms they fill in by circling, so no reading or writing is needed. Ages 5 and up get the writing version.'],
+    [`What age is ${name} pretend play for?`, 'Ages 3 to 8. The little kids version (ages 3 to 5) has big pictures, thick cut lines and order forms they fill in by circling, so no reading or writing is needed. Ages 5 and up get the writing version.'],
     ['Do I need anything special to print it?', 'Regular Letter paper works for everything. Cardstock makes the money, menus and props last longer, and sheet protectors turn the activity pages into wipe-clean pages.'],
     [`How do I set up a pretend ${name} at home?`, `${g.setup.map(fill).join(' ')}`],
   ];
@@ -249,7 +249,7 @@ ${lifePhoto(k, LIFE[k.id], `Playing ${name} at home with the printed kit`)}
 <p>Little ones love pretend play before they can read. Give them the job with the most doing, like ${esc(k.roles[0][0].toLowerCase())}, keep the money to a few big coins and let them circle pictures on the order forms. Five to ten minutes of play is a win at this age.</p>
 
 <h2>Want it printed and personalized?</h2>
-<p>The printable ${esc(k.name)} kit has your child’s name on the signs, badges and certificate, plus play money, order forms, props and a grown-up guide full of ideas. Pick the little kids version (ages 2 to 4) or the big kids version (5 to 8), and add the activity pack of wipe-and-play pages if you like. It arrives by email in minutes.</p>
+<p>The printable ${esc(k.name)} kit has your child’s name on the signs, badges and certificate, plus play money, order forms, props and a grown-up guide full of ideas. Pick the little kids version (ages 3 to 5) or the big kids version (6 to 8), and add the activity pack of wipe-and-play pages if you like. It arrives by email in minutes.</p>
 ${lifePhoto(k, 'flat', `Everything in the ${k.name} kit printed out: poster, price list, shop sign, cards, play money and badges`)}
 <div class="pages">${[`${k.hunt || k.id}-kit`, `${k.hunt || k.id}-little-kit`, `${k.hunt || k.id}-activity`, `${k.hunt || k.id}-little-activity`].filter((f) => fs.existsSync(path.join(DOCS, 'img', 'pages', `${f}.webp`))).map((f) => `<img src="../../img/pages/${f}.webp" alt="${esc(k.name)} printable page" width="400" height="518" loading="lazy">`).join('')}</div>
 <p><a class="btn" href="${builder(q)}">Build my ${esc(k.name)} kit</a></p>
@@ -262,7 +262,7 @@ ${faqHtml(questions)}
   return page({
     file: path.join(OUT, kitSlug(k), 'index.html'),
     title: `${k.name} Pretend Play for Kids: Setup Ideas, Games and Printable`,
-    description: `How to set up a pretend ${name} at home for ages 2 to 8: setup steps, games to play, roles, tips for toddlers and a printable kit personalized with your child’s name.`,
+    description: `How to set up a pretend ${name} at home for ages 3 to 8: setup steps, games to play, roles, tips for toddlers and a printable kit personalized with your child’s name.`,
     body,
     jsonLd: faq(questions),
   });
@@ -271,7 +271,7 @@ ${faqHtml(questions)}
 function hub(themes, kits) {
   const body = `
 <h1>Scavenger hunt, party and pretend play ideas for kids</h1>
-<p class="lede">Free rhyming clues, read-aloud stories, hiding tips and pretend play setups for kids ages 2 to 8, sorted by theme, by the kind of home you have and by play kit.</p>
+<p class="lede">Free rhyming clues, read-aloud stories, hiding tips and pretend play setups for kids ages 3 to 8, sorted by theme, by the kind of home you have and by play kit.</p>
 <h2>By home</h2>
 <ul class="links">${Object.values(SPACES).map((s) => `<li><a href="../ideas/${spaceSlug(s)}/">${esc(s.title)}</a></li>`).join('')}</ul>
 <h2>By theme</h2>
@@ -283,7 +283,7 @@ function hub(themes, kits) {
   return page({
     file: path.join(OUT, 'index.html'),
     title: 'Scavenger Hunt and Party Ideas for Kids',
-    description: 'Free rhyming scavenger hunt clues, stories and tips for kids ages 2 to 8, by theme and by home: apartment, house or backyard.',
+    description: 'Free rhyming scavenger hunt clues, stories and tips for kids ages 3 to 8, by theme and by home: apartment, house or backyard.',
     body,
   });
 }

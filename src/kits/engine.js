@@ -7,7 +7,7 @@
 //     staff?: ['Leo', 'Grandpa'],                         // extra badge names, up to 7
 //     lenient?: true,   // unknown subject kinds fall back to the kit's defaults instead of throwing
 //     withHunt?: true,  // sold with the matching hunt: the guide explains how the two connect
-//     age?: 3, ages?: 'little' | 'big' }  // the little-kids version (ages 2 to 4) has thicker cut
+//     age?: 3, ages?: 'little' | 'big' }  // the little-kids version (ages 3 to 5) has thicker cut
 //                                         // lines, bigger pictures and picture-only order forms; it's
 //                                         // picked by age unless ages says which
 // Everything except kit and childName is optional; empty slots print as blanks to fill in.
@@ -44,7 +44,7 @@ function normalize(def, cfg) {
     placeName: String(cfg.placeName || cfg.clinicName || def.placeName(possessive(childName))).trim(),
     subjects,
     withHunt: Boolean(cfg.withHunt),
-    little: cfg.ages ? cfg.ages === 'little' : Number(cfg.age) > 0 && Number(cfg.age) <= 4,
+    little: cfg.ages ? cfg.ages === 'little' : Number(cfg.age) > 0 && Number(cfg.age) <= 5, // little kids are 3 to 5 (was 2 to 4 before 2026-10-23)
     staff: (cfg.staff || []).slice(0, 7).map((s) => String(s).trim()).filter(Boolean),
   };
 }
@@ -258,7 +258,7 @@ function guidePage(k) {
     `${d.certificate.title} (named + blank)`,
   ];
   return `<section class="page guide${k.withHunt && G.afterHunt ? ' with-hunt' : ''}">
-    <div class="guide-head"><div class="guide-icon">${d.icon}</div><div><div class="clinic">Grown-up guide${k.little ? ' · little kids version, ages 2 to 4' : ''}</div><h1>Welcome to ${esc(k.placeName)}!</h1></div></div>
+    <div class="guide-head"><div class="guide-icon">${d.icon}</div><div><div class="clinic">Grown-up guide${k.little ? ' · little kids version, ages 3 to 5' : ''}</div><h1>Welcome to ${esc(k.placeName)}!</h1></div></div>
     <p class="lead">${esc(G.intro.replace('{child}', k.childName))}</p>
     <div class="guide-cols">
       <div><h3>What’s inside</h3><ul>${inside.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
@@ -670,7 +670,7 @@ function activityPackHtml(cfg) {
   art.setPicScale(k.little ? 1.3 : 1);
   const list = activityTitles(k);
   const cover = `<section class="page guide act-cover">
-    <div class="guide-head"><div class="guide-icon">${def.icon}</div><div><div class="clinic">${esc(def.name)} · Wipe &amp; Play${k.little ? ' · little kids version, ages 2 to 4' : ''}</div><h1>${esc(possessive(k.childName))} Activity Pack</h1></div></div>
+    <div class="guide-head"><div class="guide-icon">${def.icon}</div><div><div class="clinic">${esc(def.name)} · Wipe &amp; Play${k.little ? ' · little kids version, ages 3 to 5' : ''}</div><h1>${esc(possessive(k.childName))} Activity Pack</h1></div></div>
     <p class="lead">${activityCount(k)} activity pages, made from the same pictures as ${esc(k.placeName)}. Use the Wipe &amp; Play pages again and again: slip each one into a sheet protector (or laminate it) and use a dry-erase marker, then wipe clean with a tissue.${k.little ? ' The two Print &amp; Play pages are for paper, with dot markers (or stickers), scissors and glue.' : ''}</p>
     <div class="act-list">${list.map((x, i) => `<div><span>${i + 1}</span>${esc(x)}<i class="box"></i></div>`).join('')}</div>
     <div class="act-pics">${def.menu.items.slice(0, 5).map(([e]) => art.pic(e, '.85in')).join('')}</div>
