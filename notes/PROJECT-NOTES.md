@@ -13,6 +13,12 @@ Last updated 2026-10-23 evening (after PR #118). Nothing in progress: every bran
 - Waiting on Jason: set the Stripe logo and colors in the Dashboard (see "Stripe checkout page" below), and check that Railway redeployed the order bot after #118 (a test checkout should show a picture beside the product).
 - Ideas raised but not started: the Stage 0 growth items (analytics, email capture); a grill piece for Burger and an espresso machine for Coffee (play kitchen fit).
 
+## In progress
+
+Work that is about to merge or is mid-merge, so sessions on the other account can hold off. Pull main and read this before starting and before merging. Add your entry directly on main (not only in your PR). Don't merge if another entry touches the same files; wait or coordinate. Remove your entry after merging. One line each: what, branch, files touched, thread, UTC time.
+
+- Pizza and Burger welcome posters show one pizza / one burger (`shop.hero` trio). Branch `claude/project-thread-xiuqeo`. Files: `src/kits/defs/pizza.js`, `src/kits/defs/burger.js`, `docs/img/gallery/{pizza,burger}/` and `docs/img/n/gallery/{pizza,burger}/` (kit-1, kit-2, little/). Thread "Shop kit card images". Started 2026-10-24 01:35 UTC.
+
 ## Business direction
 
 - **Etsy is being faded out (Oct 2026).** Prioritize the direct webapp and order bot. Don't invest in new Etsy listing options. Etsy pack and party listings stay on the original 16 themes (`ETSY_THEMES` in `src/bot/listings.js`).

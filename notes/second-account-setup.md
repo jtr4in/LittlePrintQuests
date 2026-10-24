@@ -12,8 +12,10 @@ Claude project memory and project files belong to one account and don't sync. Th
    > Merging: once a thread's PR passes tests/CI and its own checks, the thread merges it into main itself (squash). If it depends on another open PR, merge in dependency order or rebase onto main first. Don't wait for Jason to merge. Tell him when it's merged and live.
    >
    > Shared notes: this project is used from two Claude accounts. Read notes/PROJECT-NOTES.md in the repo before starting, and add anything a future session would need to it in the same PR.
+   >
+   > In progress log: before merging, pull main and add an entry to the "In progress" section of notes/PROJECT-NOTES.md directly on main (what, branch, files touched, thread, UTC time), so agents on the other account can see it and hold off. Read that section before starting and before merging, don't merge if another entry touches the same files, and remove your entry after merging.
 
-   Paste the same "Shared notes" paragraph into the first account's project instructions too.
+   Paste the same "Shared notes" and "In progress log" paragraphs into the first account's project instructions too.
 5. **Optional, for large files:** approve the shared folder on your computer (see below) so threads can read the photos, samples and raw art.
 6. **Optional, environment network access:** image tools call `generativelanguage.googleapis.com` (Gemini). If the second account's environment doesn't allow and authenticate that host, add a Gemini API key to the environment's secrets instead of to the repo.
 

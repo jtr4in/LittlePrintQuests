@@ -14,6 +14,7 @@ This repo is the shared home for the project. Jason works on it from more than o
 ## Working rules
 
 - Merging: once a PR passes `npm test`, CI and its own checks, the thread merges it into main itself (squash). If it depends on another open PR, merge in dependency order or rebase onto main first. Don't wait for Jason. Tell him when it's merged and live.
+- In progress log: pull main and read the "In progress" section of `notes/PROJECT-NOTES.md` before starting work and again before merging. Before you merge, add your entry there directly on main (what, branch, files touched, thread, UTC time). Don't merge if another entry touches the same files. Remove your entry after merging.
 - Before merging, check the PR merges cleanly into main; after merging, grep the storefront pages (`docs/index.html`, `docs/make/index.html`, `docs/play-kits/`, `docs/handprint-art/`) for duplicated blocks or ids (`npm test` checks ids too).
 - Never commit secrets. The Gemini key is injected by the Claude environment proxy, so no env var is needed.
 - Ask before committing large binaries (photos, PDFs, raw Gemini output).
