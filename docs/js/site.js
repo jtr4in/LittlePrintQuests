@@ -18,12 +18,14 @@ const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 })();
 
 // The preview gallery: real pages (or a photo) one at a time, with tabs, thumbnails, swipe and arrow
-// keys. Gallery.open(pages, { tabs, label, start, foot }) where each page is { k, tab, cap, src } and
-// foot is an element shown under the pages (a buy form or a "Make this" button).
+// keys. Gallery.open(pages, { tabs, label, start, foot, ages }) where each page is { k, tab, cap, src },
+// foot is an element shown under the pages (a buy form or a "Make this" button), and ages
+// ({ value: 'big' | 'little', pages: (ages) => pages }) adds a Little kids / Big kids switch: the play kit
+// and activity pack differ by age, so parents can flip between the two versions of the same page.
 const Gallery = (() => {
   document.body.insertAdjacentHTML('beforeend', `<dialog class="gallery" id="gallery" aria-label="Pages">
   <div class="g-in">
-    <header><div><b class="g-title" id="gTitle" hidden></b><div class="tabs" id="gTabs"></div></div><button type="button" class="x" id="gClose" aria-label="Close">×</button></header>
+    <header><div><b class="g-title" id="gTitle" hidden></b><div class="g-bar"><div class="tabs" id="gTabs"></div><div class="g-ages" id="gAges" role="group" aria-label="Show the pages for" hidden><button type="button" data-ages="little">Little kids · 2–4</button><button type="button" data-ages="big">Big kids · 5–8</button><span class="g-same" id="gSame" hidden>Same for both ages</span></div></div></div><button type="button" class="x" id="gClose" aria-label="Close">×</button></header>
     <div class="view" id="gView">
       <img id="gImg" alt="" width="640" height="828">
       <button type="button" class="nav prev" id="gPrev" aria-label="Previous page">‹</button>
@@ -36,6 +38,8 @@ const Gallery = (() => {
 </dialog>`);
   let pages = [];
   let at = 0;
+  let ages = null; // { value, pages } while the open preview has an age switch
+  const AGED = ['kit', 'activity', 'big', 'little', 'photo']; // no "same for both" note on these (they change with the age, or it's a photo)
   function show(i) {
     at = (i + pages.length) % pages.length;
     const p = pages[at];
@@ -46,22 +50,42 @@ const Gallery = (() => {
     $('gThumbs').querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-current', j === at));
     $('gThumbs').children[at]?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     $('gTabs').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.k === p.k));
+    if (ages) $('gSame').hidden = AGED.includes(p.k);
   }
-  function open(list, { tabs = [], label = 'Pages', title = false, start = 0, foot = null } = {}) {
+  function drawThumbs() {
+    $('gallery').classList.toggle('single', pages.length < 2);
+    $('gThumbs').innerHTML = pages.length < 2 ? '' : pages.map((p) => `<button type="button" aria-label="${esc(p.cap)}"><img src="${p.src}" alt="" loading="lazy" width="46" height="60"></button>`).join('');
+    $('gThumbs').querySelectorAll('button').forEach((b, i) => b.addEventListener('click', () => show(i)));
+  }
+  // Switching ages keeps you on the same thing (the 3rd play kit page stays the 3rd play kit page).
+  function setAges(value) {
+    if (!ages) return;
+    const p = pages[at];
+    const nth = pages.slice(0, at).filter((x) => x.k === p.k).length;
+    ages.value = value;
+    $('gAges').querySelectorAll('[data-ages]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ages === value));
+    pages = ages.pages(value);
+    drawThumbs();
+    const same = pages.map((x, i) => [x, i]).filter(([x]) => x.k === p.k);
+    show(same.length ? same[Math.min(nth, same.length - 1)][1] : Math.min(at, pages.length - 1));
+  }
+  $('gAges').querySelectorAll('[data-ages]').forEach((b) => b.addEventListener('click', () => setAges(b.dataset.ages)));
+  function open(list, { tabs = [], label = 'Pages', title = false, start = 0, foot = null, ages: agesOpt = null } = {}) {
     if (!list.length) return;
     pages = list;
+    ages = agesOpt ? { ...agesOpt } : null;
+    $('gAges').hidden = !ages;
+    if (ages) $('gAges').querySelectorAll('[data-ages]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ages === ages.value));
     $('gallery').setAttribute('aria-label', label);
     $('gTitle').hidden = !title;
     $('gTitle').textContent = label;
     $('gallery').classList.toggle('buying', Boolean(foot && foot.tagName === 'FORM'));
-    $('gallery').classList.toggle('single', pages.length < 2);
     $('gallery').classList.toggle('footed', Boolean(foot));
     $('gFoot').replaceChildren(...(foot ? [foot] : []));
     if (foot) foot.hidden = false;
     $('gTabs').innerHTML = tabs.map(([k, name]) => `<button type="button" data-k="${k}">${esc(name)}</button>`).join('');
     $('gTabs').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => show(pages.findIndex((p) => p.k === b.dataset.k))));
-    $('gThumbs').innerHTML = pages.length < 2 ? '' : pages.map((p) => `<button type="button" aria-label="${esc(p.cap)}"><img src="${p.src}" alt="" loading="lazy" width="46" height="60"></button>`).join('');
-    $('gThumbs').querySelectorAll('button').forEach((b, i) => b.addEventListener('click', () => show(i)));
+    drawThumbs();
     if (!$('gallery').open) $('gallery').showModal();
     show(Math.max(0, start));
   }

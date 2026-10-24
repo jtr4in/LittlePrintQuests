@@ -82,6 +82,8 @@ Last updated 2026-10-23 evening (after PR #118). Nothing in progress: every bran
 
 ### Name swap previews (2026-10-23)
 - The homepage "type your kid's name" hook live-updates all previews. `renderHtml(..., { nameSlots: 'Maya' })` also writes `pngDir/blank/` pages with the name hidden plus `slots.json`. `gallery-images.js`, `site-images.js`, `craft-gallery.js` and `hero-scenes.js` write twins to `docs/img/n/<same path>` and per-set JSON `docs/img/n/<set>.json`. `docs/js/names.js` swaps each matching `<img>` and draws the typed name (scenes use layers plus SVG masks). Name saved in localStorage `lpq.kidName`.
+- Previews of the play kit and activity pack have a Little kids / Big kids switch (`ages` option of `Gallery.open` in `docs/js/site.js`; Jason, 2026-10-23: lets parents compare, and shows there's more). Hunt and party pages are the same for both ages.
+- Gotcha fixed 2026-10-23: when a page lost its name (the wow piece, "Trace the path"), the old twin and its index entry stayed, so previews showed a different page once a name was typed (63 of them). `blankJob` now deletes both, and `npm test` checks that every twin has an entry and the other way round.
 - Regenerate in order: `gallery-images.js` -> `craft-gallery.js` -> `site-images.js` -> `hero-scenes.js`. If you only meant to refresh twins, `git checkout` the non-`n` images afterwards (they re-encode slightly differently). If a print layout changes, re-run the scripts or the overlay text sits in the old spot.
 
 ### Keeping the site smooth on phones (2026-10-23)

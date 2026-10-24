@@ -201,8 +201,14 @@ function blankJob(index, png, out) {
   const dir = path.join(path.dirname(png), 'blank');
   const n = +path.basename(png).match(/(\d+)\.png$/)[1];
   const page = JSON.parse(fs.readFileSync(path.join(dir, 'slots.json'), 'utf8'))[n - 1];
-  if (!page?.slots.length) return null;
   const key = path.relative(DOCS, out).split(path.sep).join('/');
+  if (!page?.slots.length) {
+    // No name on this page (any more): drop an older twin and its entry, or the site keeps swapping
+    // in that stale picture (it showed the wrong page for the wow piece and "Trace the path").
+    index[key] = null;
+    fs.rmSync(path.join(DOCS, 'img', 'n', key.slice(4)), { force: true });
+    return null;
+  }
   index[key] = { w: page.width, h: page.height, s: page.slots };
   const twin = path.join(DOCS, 'img', 'n', key.slice(4));
   fs.mkdirSync(path.dirname(twin), { recursive: true });
@@ -235,7 +241,9 @@ function saveIndex(index) {
     const file = path.join(DOCS, 'img', 'n', `${shard}.json`);
     const old = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : {};
     fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, JSON.stringify({ ...old, ...entries }));
+    const merged = { ...old, ...entries };
+    for (const k of Object.keys(merged)) if (merged[k] === null) delete merged[k]; // pages that lost their name
+    fs.writeFileSync(file, JSON.stringify(merged));
   }
 }
 
