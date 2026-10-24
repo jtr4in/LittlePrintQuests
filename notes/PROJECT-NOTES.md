@@ -19,8 +19,6 @@ Work in flight is listed under **In progress** below.
 
 Work that is about to merge or is mid-merge, so sessions on the other account can hold off. Pull main and read this before starting and before merging. Add your entry directly on main (not only in your PR). Don't merge if another entry touches the same files; wait or coordinate. Remove your entry after merging. One line each: what, branch, files touched, thread, UTC time.
 
-- Hotfix: content stamps on storefront scripts, branch `site-asset-stamps`, touches the four storefront pages, `docs/js/make.js`, `docs/js/home.js`, new `scripts/stamp-assets.js`, `test/smoke.js`, notes. Thread "Field Kit upgrade", 2026-10-24 11:45 UTC.
-
 ## Business direction
 
 - **Etsy is being faded out (Oct 2026).** Prioritize the direct webapp and order bot. Don't invest in new Etsy listing options. Etsy pack and party listings stay on the original 16 themes (`ETSY_THEMES` in `src/bot/listings.js`).
