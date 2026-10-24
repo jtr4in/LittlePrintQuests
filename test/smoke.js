@@ -281,10 +281,10 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.match(o.message, /Mission Control play kit:\s+https:\/\/bot\.example\.com\/d\/[\w-]+-kit\.pdf/);
   assert.ok(o.partyReady);
   assert.match(o.message, /party printables[^\n]*:\s+https:\/\/bot\.example\.com\/d\/[\w-]+-party\.pdf/);
-  // Host Mode: every order gets a private host link in the Etsy message; only hunts get a sidekick.
+  // Field Kit: every order gets a private host link in the Etsy message; only hunts get a sidekick.
   assert.ok(o.message.includes(`https://bot.example.com/h/${o.hostToken}`) && o.sidekickToken);
   assert.ok(kitOrder.message.includes(`/h/${kitOrder.hostToken}`) && !kitOrder.sidekickToken);
-  assert.match(kitOrder.message, /^Open Host Mode on your phone\. It has pretend-play scenarios/m);
+  assert.match(kitOrder.message, /^Open your Field Kit on your phone\. It has pretend-play scenarios/m);
   assert.equal(seen[0].headers['x-api-key'], 'key:secret');
   assert.match(seen[0].u, /shops\/42\/receipts\?was_paid=true/);
 
@@ -441,14 +441,14 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     }
     if (product === 'bundle') assert.equal((await realFetch(`${base}/d/${w.downloadToken}-party.pdf`)).headers.get('content-disposition'), 'inline; filename="party-printables.pdf"');
     assert.match(await (await realFetch(`${base}/order/${orderId}`)).text(), { hunt: /hunt is ready/, kit: /play kit is ready/, activity: /activity pack is ready/, party: /party pack is ready/ }[main]);
-    // The activity pack on its own has nothing for Host Mode to do.
+    // The activity pack on its own has nothing for the Field Kit to do.
     if (main === 'activity' && has.length === 1) {
       assert.ok(!w.hostToken && !mail.html.includes('/h/'));
       continue;
     }
     assert.ok(w.hostToken && mail.html.includes(`/h/${w.hostToken}`));
     assert.equal(Boolean(w.sidekickToken), has.includes('hunt'));
-    // Host Mode has a tab for each thing bought; the others are greyed out.
+    // Field Kit has a tab for each thing bought; the others are greyed out.
     const tabsHtml = await (await realFetch(`${base}/h/${w.hostToken}`)).text();
     for (const [item, label] of [['hunt', 'Hunt'], ['kit', 'Play Kit'], ['party', 'Party']]) {
       const greyed = new RegExp(`class="off"[^>]*><span>[^<]+</span>${label}<small>Not in this order`).test(tabsHtml);
@@ -457,19 +457,19 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (has.includes('kit')) assert.match(tabsHtml, /Pretend-play scenarios[\s\S]*Surprise me[\s\S]*Ava can say/);
     if (has.includes('party')) assert.match(tabsHtml, /Ava’s party plan[\s\S]*Hand out or mail the invitations/);
     assert.ok(!/\{\w+\}/.test(tabsHtml.replace(/<script>[\s\S]*<\/script>/, '')), 'no unfilled placeholders');
-    assert.ok(!/etsy\.com|github\.io|\$\d/i.test(tabsHtml), 'Host Mode must not link to the shop or show prices');
+    assert.ok(!/etsy\.com|github\.io|\$\d/i.test(tabsHtml), 'Field Kit must not link to the shop or show prices');
     if (main === 'hunt') {
-      // Host Mode and the sidekick page share progress, and stay free of shop links and prices (Etsy buyers get them too).
+      // Field Kit and the sidekick page share progress, and stay free of shop links and prices (Etsy buyers get them too).
       const hostHtml = await (await realFetch(`${base}/h/${w.hostToken}`)).text();
       assert.match(hostHtml, /Hide Card 2/);
       assert.match(hostHtml, /Read Clue #1 aloud/);
-      assert.ok(!/etsy\.com|github\.io|\$\d/i.test(hostHtml), 'Host Mode must not link to the shop or show prices');
+      assert.ok(!/etsy\.com|github\.io|\$\d/i.test(hostHtml), 'Field Kit must not link to the shop or show prices');
       assert.equal((await realFetch(`${base}/h/${w.hostToken}/state`, { method: 'POST', body: JSON.stringify({ step: 5 }) })).status, 204);
       assert.deepEqual(await (await realFetch(`${base}/s/${w.sidekickToken}/state`)).json(), { step: 5 });
       assert.match(await (await realFetch(`${base}/s/${w.sidekickToken}`)).text(), /Your jobs today/);
       assert.equal((await realFetch(`${base}/s/${w.sidekickToken}/state`, { method: 'POST', body: '{"step":1}' })).status, 200); // sidekick can't move the host
       assert.equal((await realFetch(`${base}/h/${'x'.repeat(24)}`)).status, 404);
-      assert.match(await (await realFetch(`${base}/order/${orderId}`)).text(), /Open Host Mode/);
+      assert.match(await (await realFetch(`${base}/order/${orderId}`)).text(), /Open your Field Kit/);
     }
     // Stripe retries the same event: no second email.
     await realFetch(base + '/webhooks/stripe', { method: 'POST', body: payload, headers: { 'stripe-signature': sig } });
@@ -603,7 +603,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.ok(!ordersNow.some((o) => o.status === 'awaiting_payment' && o.form?.items?.[0] === 'activity' && !o.passId), 'the refused 7th order is not kept');
   assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Family Passes:<\/b> 1 sold · 6 orders made with them/);
 
-  // Website handprint art order: on its own, no Host Mode.
+  // Website handprint art order: on its own, no Field Kit.
   const readState = () => JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));
   const badCraft = await realFetch(base + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ craft: 'easter', childName: 'Ava' }) });
   assert.equal(badCraft.status, 400);
@@ -622,7 +622,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal(charged.at(-1), 599);
   assert.ok(craftOrder.sent, JSON.stringify(craftOrder));
   assert.match(emails.at(-1).subject, /Halloween handprint art pack for Ava/);
-  assert.doesNotMatch(emails.at(-1).html, /Host Mode/);
+  assert.doesNotMatch(emails.at(-1).html, /Field Kit/);
   assert.match(await (await realFetch(`${base}/order/${craftId}`)).text(), /handprint art pack is ready/);
   assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Halloween handprint art/);
   // By hand from the dashboard, picking the holiday.
@@ -800,7 +800,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.ok(files.every((f) => f.body.file.size > 10000 && f.body.file.type === 'application/pdf'));
   assert.ok(!etsyCalls.some((c) => c.p.includes(`/listings/${listed['pack-dino'].id}/personalization`)));
 
-  // Shop kits (pizza, grocery...) have no matching hunt: their listing and Host Mode stand on their own.
+  // Shop kits (pizza, grocery...) have no matching hunt: their listing and Field Kit stand on their own.
   const shopCopy = require('../src/bot/listings').readCopy().find((l) => l.key === 'kit-pizza');
   assert.match(shopCopy.description, /Pizza Order forms and Pizza Club Cards/);
   assert.match(shopCopy.description, /Any of our personalized scavenger hunts/);

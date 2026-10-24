@@ -193,7 +193,7 @@ main { position: relative; }
 .themes.three { grid-template-columns: repeat(3, 1fr); }
 @media (max-width: 520px) { .themes, .themes.two, .themes.three { grid-template-columns: 1fr; } }
 
-/* Host Mode: phone frames */
+/* Field Kit: phone frames */
 .phone { display: block; background: #161b2e; padding: 7px; border-radius: 30px; box-shadow: 0 18px 40px -18px rgba(20, 28, 60, .55); }
 .phone img { display: block; width: 100%; height: auto; aspect-ratio: 1 / 2; border-radius: 23px; background: #fbf8f1; }
 .phones { display: grid; grid-template-columns: repeat(3, minmax(0, 250px)); gap: 28px; margin-top: 32px; justify-content: start; align-items: start; }
@@ -551,3 +551,19 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 .gallery .g-ages button[aria-pressed="true"] { background: var(--orange); color: var(--orange-ink); }
 .gallery .g-same { font-size: 12.5px; color: var(--ink-soft); padding: 0 8px 0 6px; white-space: nowrap; }
 @media (max-width: 520px) { .gallery .g-ages button { padding: 8px 10px; font-size: 13px; } .gallery .g-same { display: none; } }
+
+/* ---- The Field Kit on the home page (2026-10-23; it was "Field Kit") ----------------------------- */
+.field-kit { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 28px; align-items: center; margin-top: 22px; padding: 26px 28px; border-radius: 20px; background: var(--tint); border: 1px solid var(--line); }
+.fk-copy { display: grid; gap: 10px; justify-items: start; }
+.fk-copy h3 { font-size: clamp(24px, 3vw, 30px); }
+.fk-copy p { color: var(--ink-soft); }
+.fk-copy .fk-side { font-size: 15px; }
+.fk-copy .fk-side b { color: var(--ink); }
+.fk-phones { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.fk-phones button { display: grid; gap: 8px; justify-items: center; padding: 0; border: 0; background: none; font: inherit; color: var(--ink); cursor: zoom-in; }
+.fk-phones button:nth-child(2) { margin-top: 22px; }
+.fk-phones .phone { width: 100%; max-width: 170px; padding: 6px; border-radius: 24px; }
+.fk-phones .phone img { border-radius: 19px; }
+.fk-cap { font: 600 14px/1.2 var(--display); }
+@media (max-width: 860px) { .field-kit { grid-template-columns: 1fr; padding: 20px; } }
+@media (max-width: 520px) { .fk-phones { gap: 10px; } .fk-phones button:nth-child(2) { margin-top: 12px; } .fk-cap { font-size: 12.5px; } }

@@ -37,7 +37,7 @@ const PAGES = {
     body: `
 <h2>What we collect</h2>
 <ul class="tips">
-<li><b>Your order details:</b> your child’s first name, age, theme, hiding spots, pets or toys you list, and party details for the invitations. We use them only to make your PDFs and Host Mode page.</li>
+<li><b>Your order details:</b> your child’s first name, age, theme, hiding spots, pets or toys you list, and party details for the invitations. We use them only to make your PDFs and Field Kit page.</li>
 <li><b>Your email and name</b> from checkout, to send your download link and answer you.</li>
 <li><b>Free sample sign-ups:</b> your email, to send the sample and the occasional party idea. Every email has an unsubscribe link.</li>
 </ul>
@@ -52,14 +52,14 @@ const PAGES = {
 <h2>Kids’ information</h2>
 <p>This site is for parents and other grown-ups. We only know what you tell us about your child, which is usually a first name and age, and it’s used only to print on their pages.</p>
 <h2>How long we keep it</h2>
-<p>We keep your order so your download link and Host Mode keep working, and so we can fix it if you ask. To have your order or email deleted, write to ${mail} and we’ll remove it.</p>`,
+<p>We keep your order so your download link and your Field Kit keep working, and so we can fix it if you ask. To have your order or email deleted, write to ${mail} and we’ll remove it.</p>`,
   },
   terms: {
     title: 'Terms of use',
     lede: 'The short version: print as many copies as you like for your own family, parties and classroom, and please don’t resell them.',
     body: `
 <h2>What you’re buying</h2>
-<p>Every order is a digital PDF, plus a Host Mode page for your phone where your order includes one. Nothing is shipped. Print at home on Letter paper, or at a print shop.</p>
+<p>Every order is a digital PDF, plus a Field Kit page for your phone where your order includes one. Nothing is shipped. Print at home on Letter paper, or at a print shop.</p>
 <h2>How you can use it</h2>
 <ul class="tips">
 <li>Print and use it as often as you like for your own family, parties, playdates, classroom or homeschool group.</li>

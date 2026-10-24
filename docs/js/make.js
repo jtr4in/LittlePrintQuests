@@ -98,7 +98,7 @@ function showHero(id) {
   const front = imgs.find((i) => i.classList.contains('on'));
   const back = imgs.find((i) => i !== front);
   back.onload = () => { back.classList.add('on'); front.classList.remove('on'); };
-  back.alt = `The ${name} set printed out: host guide, story briefing, clue cards, play kit, activity page, party invitation and Host Mode on a phone`;
+  back.alt = `The ${name} set printed out: host guide, story briefing, clue cards, play kit, activity page, party invitation and the Field Kit on a phone`;
   LPQName.setSrc(back, `img/hero/${id}.webp`, `img/hero/${id}-sm.webp 800w, img/hero/${id}.webp 1600w`);
   $('heroCap').innerHTML = `<b>${esc(name)}</b><span>See the pages</span>`;
 }
@@ -295,7 +295,7 @@ function drawCart() {
     img.style.zIndex = i + 1;
     img.style.transform = `translate(calc(-50% + ${pos[i][0]}px), ${Math.abs(pos[i][0]) / 5}px) rotate(${pos[i][1]}deg)`;
   });
-  // Host Mode rides along with the hunt.
+  // Field Kit rides along with the hunt.
   const phone = $('stack').querySelector('.phone');
   phone.classList.toggle('out', !gets.includes('hunt'));
   // tuck the phone against the lower left of the hunt's clue cards, outside the rest of the stack
@@ -304,7 +304,7 @@ function drawCart() {
   const host = phone.querySelector('img'), hostSrc = `img/host/${state.theme}-play.webp`;
   if (named.has(state.theme) && host.dataset.src !== hostSrc) { host.dataset.src = hostSrc; LPQName.setSrc(host, hostSrc); }
   $('layers').innerHTML = LAYERS.map((l) => `<li><button type="button" class="layer" data-id="${l.id}" aria-pressed="${gets.includes(l.id)}">
-      <span class="box">✓</span><span><b>${l.name}</b><small>${l.note}<span class="plus">${{ hunt: '+ Host Mode phone guide included', kit: '+ Play ideas in Host Mode', activity: '+ Reusable with a dry-erase marker', party: '+ Party checklist in Host Mode' }[l.id] || ''}</span></small></span><span class="amt">${l.id === 'activity' && gets.some((k) => k !== 'activity') ? `+${money(PRICES.activityAdd)}` : money(l.price)}</span></button></li>`).join('');
+      <span class="box">✓</span><span><b>${l.name}</b><small>${l.note}<span class="plus">${{ hunt: '+ Field Kit phone guide included', kit: '+ Play ideas in the Field Kit', activity: '+ Reusable with a dry-erase marker', party: '+ Party checklist in the Field Kit' }[l.id] || ''}</span></small></span><span class="amt">${l.id === 'activity' && gets.some((k) => k !== 'activity') ? `+${money(PRICES.activityAdd)}` : money(l.price)}</span></button></li>`).join('');
   $('layers').querySelectorAll('button.layer').forEach((b) => b.addEventListener('click', () => pick(b.dataset.id)));
   const value = gets.reduce((sum, k) => sum + LAYERS.find((l) => l.id === k).price, 0);
   const price = priceOf(product);
@@ -356,7 +356,7 @@ function drawReview() {
   const rows = [
     ['who', 'For', `${esc(name)}${age ? `, turning ${age}` : ''}${gets.some((l) => l.id !== 'party') ? ` · ${state.ages === 'little' ? 'little kids (3 to 5)' : 'big kids (6 to 8)'}` : ''}`],
     ['theme', 'Theme', esc(THEMES.find((t) => t.id === state.theme).name)],
-    ['box', 'Includes', `${gets.map((l) => l.name).join(', ')}${picked.has('hunt') || picked.has('kit') || picked.has('party') ? ', plus Host Mode' : ''}`],
+    ['box', 'Includes', `${gets.map((l) => l.name).join(', ')}${picked.has('hunt') || picked.has('kit') || picked.has('party') ? ', plus the Field Kit' : ''}`],
     ...(picked.has('hunt') ? [['details', 'Hiding spots', state.picks.map((k, i) => `${i === state.picks.length - 1 ? '★ ' : ''}${esc(labelOf(k))}`).join(' → ')]] : []),
     ...(picked.has('party') ? [['details', 'Invitations', party.length ? party.map(esc).join(' · ') : 'Write-in lines for the date and place']] : []),
   ];

@@ -1,4 +1,4 @@
-// Play Kit ideas for the Potion Shop kit (Host Mode).
+// Play Kit ideas for the Potion Shop kit (Field Kit).
 module.exports = {
   scenarios: [
     { title: 'The Giggle Potion', setup: 'Put a big bowl and spoon on the Mixing Station with the Ingredient Cards next to it.', say: 'Hello, Wizard {name}! I feel a bit grumpy today. Do you have a giggle potion?', twist: 'The potion works too well and the customer can’t stop giggling. Mix a calm-down potion!' },

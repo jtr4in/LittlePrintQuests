@@ -1,6 +1,6 @@
 // Builds the Etsy photos for the Party Bundle and Play Kit listings (2400x1800 JPGs in listing-assets/).
 // Usage: node scripts/listing-photos.js <dir with hunt-1.png, hunt-3.png, hunt-7.png, party-space.png (party pack page 2),
-// host-hide|play|sidekick.png (360x720 Host Mode screens at 2x) and kit-<id>.png fans> [photo name ...]
+// host-hide|play|sidekick.png (360x720 Field Kit screens at 2x) and kit-<id>.png fans> [photo name ...]
 // Name photos (like kit-vet) to build only those; site-images.js writes the kit-<id>.png fans when FAN_DIR is set.
 const fs = require('fs');
 const path = require('path');
@@ -43,7 +43,7 @@ const pages = {
     <div class="page" style="left:905px;top:470px;width:250px;transform:rotate(6deg)"><img src="${img('party-space.png')}"></div>
     <div style="position:absolute;left:70px;bottom:40px;right:70px;display:flex;gap:16px">
       <span class="pill">Your child’s name on every page</span><span class="pill" style="background:#3f4a73;color:#fff">Printable PDF</span></div>`,
-  'bundle-host': `<div class="mint"></div><div class="top"><h1>Host Guide + Host Mode</h1>
+  'bundle-host': `<div class="mint"></div><div class="top"><h1>Host Guide + Field Kit</h1>
     <div class="sub">Every custom hunt includes the printed guide and a private phone guide: where each card goes, lines to say, hints and a sidekick role</div></div>
     <div class="page" style="left:70px;top:285px;width:330px;transform:rotate(-4deg)"><img src="${img('hunt-1.png')}"></div>
     <div class="cap" style="left:110px;top:725px">Printed Host Guide</div>

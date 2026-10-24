@@ -1,4 +1,4 @@
-// The Party tab of Host Mode: a planning checklist from a few weeks out to the clean-up,
+// The Party tab of Field Kit: a planning checklist from a few weeks out to the clean-up,
 // built around the printables in the party pack and whatever else the order includes.
 
 const { flavorFor } = require('../party/flavor');
@@ -37,7 +37,7 @@ function checklist(theme, { name, hunt, kit }) {
       'Bake or pick up the cake or cupcakes.',
       'Tape the toppers to toothpicks.',
       'Wrap the bottle labels around the drinks.',
-      ...(hunt ? ['Hide the clue cards (Host Mode’s Hunt tab walks you through it).'] : []),
+      ...(hunt ? ['Hide the clue cards (the Field Kit’s Hunt tab walks you through it).'] : []),
       ...(kit ? [`Set up ${name}’s play kit station so it’s ready to open.`] : []),
     ] },
     { when: 'Party morning', items: [

@@ -78,7 +78,7 @@ const VERSIONS = { little: 'Little kids, ages 3 to 5', big: 'Big kids, ages 6 to
 const OLD_VERSIONS = { little: 'Little kids, ages 2 to 4', big: 'Big kids, ages 5 to 8' };
 const versionOf = (label) => Object.keys(VERSIONS).find((k) => VERSIONS[k] === label || OLD_VERSIONS[k] === label);
 
-// What Host Mode does for this order, as the end of "Host Mode ...", for emails and messages.
+// What Field Kit does for this order, as the end of "Field Kit ...", for emails and messages.
 function hostHelps(order) {
   const helps = [
     has(order, 'hunt') && 'walks you through hiding each card and running the hunt, with lines to say, hints and a secret role for a second grown-up',

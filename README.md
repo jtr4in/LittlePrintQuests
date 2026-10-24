@@ -71,9 +71,9 @@ The website's hunt builder sends its form to the bot, which opens a Stripe Check
 
 **Add-ons after checkout.** Once a website order is ready, its order page and email offer the rest of the everything bundle (play kit, activity pack and party pack) for the bundle price minus what the buyer already paid, already made with the child's name. The button opens a Stripe page for the difference; when it's paid, the order is rebuilt with the same download links and emailed again. Shop kits only offer the activity pack, and handprint art and Family Pass orders get no offer.
 
-## Host Mode
+## Field Kit (formerly Field Kit)
 
-Every hunt order (Etsy or website) gets a private Host Mode link at `/h/<token>`: a phone page that walks the grown-up through hiding each card (and its puzzle piece) in order, then running the hunt with lines to say in character, quick challenges between clues, and step-by-step hints. A second link at `/s/<token>` gives a helper their own cues (radio calls, sound effects, checking the next card is still hidden), following along as the host taps Next. The link goes in the Etsy message, the website email and the order page. Because Etsy buyers see it, these pages have no shop links, prices or offers. Lines for each theme live in `src/host/scripts.js`.
+Every hunt order (Etsy or website) gets a private Field Kit link at `/h/<token>`: a phone page that walks the grown-up through hiding each card (and its puzzle piece) in order, then running the hunt with lines to say in character, quick challenges between clues, and step-by-step hints. A second link at `/s/<token>` gives a helper their own cues (radio calls, sound effects, checking the next card is still hidden), following along as the host taps Next. The link goes in the Etsy message, the website email and the order page. Because Etsy buyers see it, these pages have no shop links, prices or offers. Lines for each theme live in `src/host/scripts.js`.
 
 ### Development
 

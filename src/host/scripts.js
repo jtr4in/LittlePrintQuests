@@ -1,4 +1,4 @@
-// Host Mode lines for each theme: what the grown-up says in character, quick challenges
+// Field Kit lines for each theme: what the grown-up says in character, quick challenges
 // between clues, the finale, and cues for a second grown-up (the sidekick).
 // {name} is the birthday child, {kids} the team name, {spot} where the kids are heading.
 

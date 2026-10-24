@@ -1,4 +1,4 @@
-// Host Mode: the grown-up's phone page for everything in the order, in three tabs.
+// Field Kit: the grown-up's phone page for everything in the order, in three tabs.
 //  - Hunt: hiding the cards and running the hunt, one tap at a time, with lines to say, hints
 //    and quick challenges. A second link gives a helper (the "sidekick") their own cues.
 //  - Play Kit: setup, pretend-play scenarios, things to say and games for the kit.
@@ -27,7 +27,7 @@ function hints(spot) {
   ];
 }
 
-// Every screen of Host Mode, plus the sidekick's cue for each one.
+// Every screen of Field Kit, plus the sidekick's cue for each one.
 function plan(order, sidekickUrl) {
   const cfg = order.config;
   const { theme, cards, prize, puzzle, bonus } = planHunt(cfg);
@@ -135,7 +135,7 @@ ul.jobs{padding-left:20px;margin:6px 0}.live{display:inline-block;width:9px;heig
 </style></head><body>${body}<script>${script}</script></body></html>`;
 }
 
-// Shop kits (pizza, grocery...) have no matching hunt, so Host Mode takes its look from the kit.
+// Shop kits (pizza, grocery...) have no matching hunt, so Field Kit takes its look from the kit.
 const kitLook = (kit) => ({
   name: kit.name,
   colors: { primary: kit.colors.dark, accent: kit.colors.accent, soft: kit.colors.soft },
@@ -195,7 +195,7 @@ function hostPage(order, { stateUrl, sidekickUrl, downloads, items = ['hunt'] })
   if (downloads && steps.length) steps[0].download = downloads;
   const first = SECTIONS.find(([k]) => has[k])[0];
   const what = has.hunt ? theme.name : has.kit ? `${kit.name} play kit` : 'party';
-  const body = `${topBar(theme, `${possessive(name)} ${what}`, `Host Mode · ${has.hunt ? 'keep this screen secret!' : 'your party helper'}`)}
+  const body = `${topBar(theme, `${possessive(name)} ${what}`, `Field Kit · ${has.hunt ? 'keep this screen secret!' : 'your party helper'}`)}
 <div class="sections">${SECTIONS.map(([k, icon, label]) => `<button data-sec="${k}" data-label="${label}"${has[k] ? '' : ' class="off" aria-disabled="true"'}><span>${icon}</span>${label}${has[k] ? '' : '<small>Not in this order</small>'}</button>`).join('')}</div>
 <section id="sec-hunt" hidden>
   <div class="tabs"><button data-phase="setup">1 · Hide</button><button data-phase="play">2 · Play</button></div>
@@ -258,7 +258,7 @@ if(STEPS.length){
   fetch(STATE).then(r=>r.json()).then(d=>{if(Number.isInteger(d.step)&&d.step>i&&d.step<STEPS.length){i=d.step;draw()}}).catch(()=>{});
 }
 const saved=get(KEY+':tab');show(saved&&document.querySelector('[data-sec="'+saved+'"]:not(.off)')?saved:FIRST);`;
-  return shell(theme, `${possessive(name)} ${has.hunt ? 'hunt' : 'party'} · Host Mode`, body, script);
+  return shell(theme, `${possessive(name)} ${has.hunt ? 'hunt' : 'party'} · Field Kit`, body, script);
 }
 
 // The sidekick's page: their jobs, plus a live cue that follows the host's screen.
