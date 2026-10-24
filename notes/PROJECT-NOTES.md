@@ -19,7 +19,6 @@ Work in flight is listed under **In progress** below.
 
 Work that is about to merge or is mid-merge, so sessions on the other account can hold off. Pull main and read this before starting and before merging. Add your entry directly on main (not only in your PR). Don't merge if another entry touches the same files; wait or coordinate. Remove your entry after merging. One line each: what, branch, files touched, thread, UTC time.
 
-- Photo booth disguises on a stick (2 Gemini props + 1 name speech bubble per kit), branch `claude/project-thread-qgt9ip`, touches new `src/kits/disguises.js`, `src/kits/engine.js` (page list), `src/kits/art/<kit>/disguise-*.webp`, `scripts/disguise-*.py`, `docs/js/data.js` PAGES, `project-files/pretend-play/disguises/`. Thread "Add wow and room-changing kit pieces", 2026-10-24 02:05 UTC.
 - Seven new themes with a wow piece each (play kitchen, doctor, puppet theater, secret agent, dress-up, ice cream parlor, airport) plus manila file folders for doctor, vet and dentist, branch `claude/project-thread-oty5ss`, touches new `src/kits/defs/*.js`, `src/kits/engine.js` (KITS map), `src/kits/art/<new kits>/`, `src/generator/themes.js`, `src/generator/{puzzle,bonus}.js`, `src/party/flavor.js`, `src/host/scripts.js`, `src/kits/{signage,activities,extras}.js`, `docs/js/data.js`, `docs/ideas/`, `docs/img/`. Will rebase after the disguises PR lands. Thread "Add new pretend play themes", 2026-10-24 02:20 UTC.
 - Not started, parked by Jason (2026-10-23): new themes, each a full set with a wow piece: **doctor** (plus pretend manila file folders for doctor, vet and dentist), **puppet theater**, **secret agent / detective HQ**, **costume & dress-up**, **ice cream parlor**, **airport**. Needs Gemini for the kit art (not reachable from the second account until a network secret for `generativelanguage.googleapis.com` is added). Dropped: reworking the home banners around the play kit, and a themed handprint page in little kids activity packs.
 
@@ -56,6 +55,16 @@ Work that is about to merge or is mid-merge, so sessions on the other account ca
 - Prompts: `project-files/pretend-play/wow/` (run `tools/genall.sh` with `bash`). Raw images and `all-wow-pages.jpg` are large files.
 - Gotcha: Gemini "white" studio backgrounds come back grey and shadowed, so pale pieces (snow globe, unicorn, cake) are made on chroma green, listed in `GREEN` in `prompts.py`.
 - The wow page is the third Play kit sample in the order preview gallery for every theme, big and little (PR #106, captioned "Wow piece"); `wowPage()` in `scripts/gallery-images.js` finds its page number. The order stack cards still show the first toy page.
+
+### Photo booth disguises (2026-10-24)
+- Jason asked for printable cut-out disguises on a stick, like photo booth props, 2 to 3 per theme. Every kit now has two pages after the badges/chef hat: a head prop (hat, ears, tiara) plus a face prop (mustache, glasses, nose), and a speech bubble with the kit's catchphrase and `k.lead` ("Arrr, matey! – Captain Maya") plus a blank write-your-own bubble. The guide page lists them.
+- Code: `src/kits/disguises.js` (`DISGUISES` map: head label, face label, catchphrase). Art: `src/kits/art/<kit>/disguise-1.webp` (head) and `disguise-2.webp` (face), made by `python3 scripts/disguise-cutout.py <raw folder> [kit...]` (reuses `wow-cutout.py`; needs scipy). A kit missing either picture skips the pages, so new themes need entries plus art.
+- Prompts and generator: `project-files/pretend-play/disguises/tools/` (`prompts.py`, `gen.py`, run with `OUT=<raw folder> python3 gen.py [kit...]`; it skips pictures that already exist). Raw PNGs (large) are in `/mnt/project-files/pretend-play/disguises/raw/`, rejects in `rejected/`.
+- Gotcha: saying "prop on a stick" made Gemini draw sticks; the prompt now says "cut-out photo booth prop ... no stick or handle". Pale props (white hats, beards, bunny ears) are made on chroma green; `wow-cutout.py` now turns green holes inside a piece (the mouth gap in a beard) white instead of near-black.
+- Not in the order preview gallery yet.
+
+### Gemini image cost (2026-10-24)
+- Jason asked why image generation costs so much. Older scripts use `gemini-3-pro-image` at 2K (roughly 13 to 15 cents a picture plus billed thinking), and the lifestyle photos add several Pro calls per photo (corner finding, placing pieces, retries). `gemini-3.1-flash-image` is about a third of that or less and was good enough for the flat disguise props (54 pictures). Default to Flash for simple cut-out art; use Pro only when Flash botches it.
 
 ### Activity packs (PR #107, 2026-10-23)
 - Jason asked for more pages ("do them all"). Pages live in `src/kits/activities.js`; the `PAGES` list there sets the order and which age version gets each page, and the cover checklist and `activityCount` come from it. Big kids (5 to 8): 15 pages plus cover. Little kids (2 to 4): 16 pages plus cover.
