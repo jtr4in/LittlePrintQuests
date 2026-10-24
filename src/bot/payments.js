@@ -1,5 +1,5 @@
-// Stripe Checkout for orders placed on the website. Order and add-on pages take promotion codes
-// (made in the Stripe dashboard); the Family Pass page does not.
+// Stripe Checkout for orders placed on the website. Order, add-on and Family Pass pages all take
+// promotion codes (made in the Stripe dashboard).
 
 const fs = require('fs');
 const path = require('path');
@@ -123,9 +123,10 @@ function readWebhook(rawBody, signature) {
   return stripe().webhooks.constructEvent(rawBody, signature, process.env.STRIPE_WEBHOOK_SECRET);
 }
 
-// The Family Pass is one payment, no subscription.
+// The Family Pass is one payment, no subscription. It takes promotion codes too (Jason, 2026-10-24);
+// a 100%-off code still activates the pass, since isPaid counts 'no_payment_required'.
 async function createPassCheckout(pass) {
-  return stripe().checkout.sessions.create({
+  return createWithPromo({
     mode: 'payment',
     line_items: [{
       quantity: 1,

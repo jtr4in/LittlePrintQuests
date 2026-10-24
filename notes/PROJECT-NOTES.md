@@ -180,6 +180,8 @@ Added on top of the Field Kit (`src/host/host.js`), all driven by one browser sc
 - After merging, Railway has to redeploy the order bot for any of this to show up.
 
 ## Stripe checkout page (2026-10-23)
+
+- Promotion codes (2026-10-24): every checkout shows the promo code box, the Family Pass included (it was left out before; Jason couldn't use his coupon). Codes are made in the Stripe dashboard; a coupon can be limited to certain products there if it shouldn't apply to the pass.
 - Each Checkout line item has a picture (`product_data.images`): the theme's illustration on cream, the handprint pack's card, or the logo for the Family Pass. Made by `python3 scripts/checkout-images.py` into `docs/img/checkout/*.jpg` (JPEG, no kid's name), linked from `SITE_URL` by `checkoutImages()` in `src/bot/payments.js`; left out unless `SITE_URL` is https and the file exists. Re-run the script after changing a theme pick in `scripts/theme-icons.py`.
 - Logo, icon and colors on the Stripe page come from the Stripe Dashboard (Settings > Business > Branding), which Jason sets himself: brand color #EF9D31, background #FBF8F1.
 
