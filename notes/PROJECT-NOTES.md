@@ -8,7 +8,7 @@ Paths like `project-files/...` are in this repo. Paths like `/mnt/project-files/
 
 Jason switches between two Claude accounts, sometimes when one runs low on usage. Keep this section current: before stopping, merge what's done, push anything half-finished to a branch, and list it here with what's left. Replace the list each time; history lives in the sections below and in git.
 
-Last updated 2026-10-23 21:35 (after PR #120).
+Last updated 2026-10-24 (after PR #131, Field Kit extras; needs a Railway redeploy of the order bot).
 
 Work in flight is listed under **In progress** below.
 - Today's site work, all live: the site split into a home page plus `make/`, `play-kits/` and `handprint-art/` (#110); swipeable theme rows with a dropdown (#111); theme tiles with one cute illustration each (#114, after the wow-prop tiles were tried and reverted, #112/#113); home leads with the four products, plus the phone checkout bar (#115); phone speed fixes (#116); theme dropdown without ages (#117); product pictures on the Stripe checkout (#118).
@@ -19,7 +19,6 @@ Work in flight is listed under **In progress** below.
 
 Work that is about to merge or is mid-merge, so sessions on the other account can hold off. Pull main and read this before starting and before merging. Add your entry directly on main (not only in your PR). Don't merge if another entry touches the same files; wait or coordinate. Remove your entry after merging. One line each: what, branch, files touched, thread, UTC time.
 
-- Field Kit extras (sounds, Get ready tab, kids' Mission screen, Shop day, photo PDFs, offline), branch `field-kit-plus`, touches `src/host/host.js`, new `src/host/client/fieldkit.js`, `src/bot/server.js`, new `docs/img/icon-192.png` and `icon-512.png` only, `test/smoke.js`, `scripts/help-pages.js`, `docs/privacy/`, notes. Thread "Field Kit upgrade", 2026-10-24 02:58 UTC.
 - Seven new themes with a wow piece each (play kitchen, doctor, puppet theater, secret agent, dress-up, ice cream parlor, airport) plus manila file folders for doctor, vet and dentist, branch `claude/project-thread-oty5ss`, touches new `src/kits/defs/*.js`, `src/kits/engine.js` (KITS map), `src/kits/art/<new kits>/`, `src/generator/themes.js`, `src/generator/{puzzle,bonus}.js`, `src/party/flavor.js`, `src/host/scripts.js`, `src/kits/{signage,activities,extras}.js`, `docs/js/data.js`, `docs/ideas/`, `docs/img/`. Will rebase after the disguises PR lands. Thread "Add new pretend play themes", 2026-10-24 02:20 UTC.
 - Not started, parked by Jason (2026-10-23): new themes, each a full set with a wow piece: **doctor** (plus pretend manila file folders for doctor, vet and dentist), **puppet theater**, **secret agent / detective HQ**, **costume & dress-up**, **ice cream parlor**, **airport**. Needs Gemini for the kit art (not reachable from the second account until a network secret for `generativelanguage.googleapis.com` is added). Dropped: reworking the home banners around the play kit, and a themed handprint page in little kids activity packs.
 
