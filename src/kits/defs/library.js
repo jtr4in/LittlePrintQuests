@@ -5,6 +5,7 @@ module.exports = {
   name: 'Library',
   hunt: 'library',
   bigSign: true, // a shop-style kit: it keeps the big shop sign
+  bookCards: true, // book pockets and date due cards (src/kits/bookcards.js)
   colors: { main: '#6a4fb3', dark: '#47317f', soft: '#e3d8ff', light: '#f5f1ff', accent: '#f2a93b', accentInk: '#2b1d06' },
   icon: '📚',
   placeName: (who) => `${who} Library`,
