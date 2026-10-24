@@ -19,6 +19,7 @@ Work in flight is listed under **In progress** below.
 
 Work that is about to merge or is mid-merge, so sessions on the other account can hold off. Pull main and read this before starting and before merging. Add your entry directly on main (not only in your PR). Don't merge if another entry touches the same files; wait or coordinate. Remove your entry after merging. One line each: what, branch, files touched, thread, UTC time.
 
+- Two kids' names on kits ("Jaxon & Jonah", fit-to-box names, a badge and certificate each, site name previews), branch `claude/project-thread-wcpfvk`, touches new `src/kits/fit.js`, `src/generator/kid-names.js`, `src/kits/{engine,extras,shop,signage,toys}.js`, `src/generator/name-slots.js`, `src/bot/{orders,parse}.js`, `scripts/site-images.js`, `docs/js/{names,home,make}.js`, name fields in `docs/*.html`, `docs/img/n/*.json`. Thread "Fit two names on kit signs", 2026-10-24 05:55 UTC.
 
 ## Business direction
 
