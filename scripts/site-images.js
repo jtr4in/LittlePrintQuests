@@ -14,7 +14,7 @@ const { buildHtml, pageRoles } = require('../src/generator/build');
 const { renderKit } = require('../src/kits/render-kit');
 const { renderParty } = require('../src/party/render-party');
 const { kitForHunt, buildKitHtml } = require('../src/kits/engine');
-const { plan, hostPage, sidekickPage } = require('../src/host/host');
+const { plan, hostPage, sidekickPage, stickers } = require('../src/host/host');
 const THEMES = require('../src/generator/themes');
 const { nameSlots, sheetLayers, blankJob, blankLayers, pageSlots, saveIndex } = require('../src/generator/name-slots');
 
@@ -23,6 +23,25 @@ const SPOTS = ['front_door', 'shoe_rack', 'couch', 'dryer', 'bathtub', 'bookshel
 const PARTY = { date: 'Saturday, June 3', time: '2 to 4 pm', place: 'Our house', rsvp: 'Text Sam' };
 const HOST_SIZE = [540, 1080]; // the saved Field Kit phone screenshots (captured at 720x1440)
 const dataUrl = (f) => `data:image/png;base64,${fs.readFileSync(f).toString('base64')}`;
+// Stand-ins for the family's photos on the Field Kit photo screen: crops of the theme's printed set
+// (the hero scene and the box build), [url, label, [file, left, top, right, bottom as fractions]].
+function fieldKitPhotos(id) {
+  const hero = path.join(IMG, 'hero', `${id}.webp`), howto = path.join(IMG, 'howto', `${id}.webp`);
+  const list = [[hero, 0.04, 0.6, 0.42, 1], [hero, 0.71, 0.02, 0.97, 0.62], [hero, 0.17, 0.06, 0.42, 0.62]];
+  if (fs.existsSync(howto)) list.push([howto, 0.02, 0.2, 0.5, 0.48]);
+  const labels = ['Ready for the mission', 'Card 3 found', 'Puzzle time', 'Treasure found'];
+  return list.map((c, k) => [`/photo/${k}`, labels[k], c]);
+}
+function photoJpg([file, l, t, r, b]) {
+  const { execFileSync } = require('child_process');
+  return execFileSync('python3', ['-c', `
+import sys, io
+from PIL import Image
+im = Image.open(sys.argv[1]).convert('RGB'); W, H = im.size
+l, t, r, b = map(float, sys.argv[2:6])
+c = im.crop((int(l * W), int(t * H), int(r * W), int(b * H))); c.thumbnail((1200, 1200))
+o = io.BytesIO(); c.save(o, 'JPEG', quality=88); sys.stdout.buffer.write(o.getvalue())`, file, String(l), String(t), String(r), String(b)]);
+}
 // The kit page with the wow prop, counted from 1.
 const wowPage = (kitId) => {
   const html = buildKitHtml({ kit: kitId, childName: 'Maya', subjects: [], lenient: true });
@@ -76,24 +95,60 @@ const wowPage = (kitId) => {
 
     // Field Kit phones: hiding Card 3, then "They found Card 3" for the host and the sidekick. Captured
     // at 2x and saved at 540x1080: the 240x480 they used to be looked blurry blown up in the gallery.
-    const order = { config: { theme: id, childName: 'Maya', age: 6, spots: SPOTS } };
+    const order = { hostToken: 'x'.repeat(24), config: { theme: id, childName: 'Maya', age: 6, spots: SPOTS } };
     const steps = plan(order, null).steps;
     const hide = steps.findIndex((s) => /Card 3/.test(s.title) && s.phase === 'setup');
     const play = steps.findIndex((s) => /Card 3/.test(s.title) && s.phase === 'play');
+    // as for an everything bundle, so the Play Kit and Party tabs show as included, not greyed out
+    const fk = () => hostPage(order, { stateUrl: '/h/state', sidekickUrl: null, downloads: [], items: ['hunt', 'kit', 'party'] });
+    const photos = fieldKitPhotos(id);
     const screens = [
-      // as for an everything bundle, so the Play Kit and Party tabs show as included, not greyed out
-      ['hide', hostPage(order, { stateUrl: '/s', sidekickUrl: null, downloads: [], items: ['hunt', 'kit', 'party'] }), hide],
-      ['play', hostPage(order, { stateUrl: '/s', sidekickUrl: null, downloads: [], items: ['hunt', 'kit', 'party'] }), play],
+      ['hide', fk(), hide, (ph) => ph.click('[data-sec="hunt"]')],
+      ['play', fk(), play, (ph) => ph.click('[data-sec="hunt"]')],
       ['sidekick', sidekickPage(order, { stateUrl: '/s' }), play],
+      // Shop day (Clinic day for doctor, dentist and vet): a customer at the counter.
+      ['shop', fk(), 0, async (ph) => { await ph.click('[data-sec="kit"]'); await ph.click('#shopOpen'); // No scrolling (the name swap's spots are measured from the top): hide what comes before the Shop day box instead.
+        await ph.evaluate(() => { const box = document.querySelector('.fk-shop'); for (let e = box.previousElementSibling; e; e = e.previousElementSibling) e.style.display = 'none'; scrollTo(0, 0); }); }],
+      // The photo sheet, with crops of the printed set standing in for the family's photos.
+      ['photos', fk(), 0, async (ph) => {
+        await ph.evaluate(async (list) => {
+          const db = await new Promise((res) => { const r = indexedDB.open('lpq-fieldkit', 1); r.onupgradeneeded = () => r.result.createObjectStore('photos', { keyPath: 'id' }); r.onsuccess = () => res(r.result); });
+          for (const [k, [url, label]] of list.entries()) {
+            const blob = await (await fetch(url)).blob();
+            await new Promise((res) => { const t = db.transaction('photos', 'readwrite'); t.objectStore('photos').put({ id: `p${k}`, key: FKCFG.key, at: k, label, blob }); t.oncomplete = res; });
+          }
+        }, photos);
+        await ph.click('.fk-cam');
+        // only the sheet shows, so the name swap doesn't pick up text hidden behind it
+        await ph.evaluate(() => document.querySelectorAll('section[id^="sec-"], .sections').forEach((x) => { x.style.display = 'none'; }));
+      }],
     ];
-    for (const [name, html, step] of screens) {
+    for (const [name, html, step, act] of screens) {
       const phone = await browser.newPage({ viewport: { width: 360, height: 720 }, deviceScaleFactor: 2 });
-      await phone.route('http://host.test/**', (route) => route.request().url().endsWith('/h')
-        ? route.fulfill({ contentType: 'text/html', body: html })
-        : route.fulfill({ contentType: 'application/json', body: JSON.stringify({ step }) }));
+      // the same customer and lines on every run
+      await phone.addInitScript(() => { let a = 7; Math.random = () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; });
+      const art = stickers(order);
+      await phone.route('http://host.test/**', (route) => {
+        const u = new URL(route.request().url()).pathname;
+        if (u === '/h') return route.fulfill({ contentType: 'text/html', body: html });
+        const a = u.match(/\/art\/(\d+)\.webp$/);
+        if (a && art[+a[1]]) return route.fulfill({ contentType: 'image/webp', body: fs.readFileSync(art[+a[1]]) });
+        const f = u.match(/^\/photo\/(\d+)$/);
+        if (f) return route.fulfill({ contentType: 'image/jpeg', body: photoJpg(photos[+f[1]][2]) });
+        return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ step }) });
+      });
       await phone.goto('http://host.test/h');
       await phone.waitForTimeout(400);
+      if (act) { await act(phone); await phone.waitForTimeout(700); }
       await phone.screenshot({ path: path.join(tmp, `host-${id}-${name}.png`) });
+      // The printed photo page that the sheet makes, for the Field Kit gallery.
+      if (name === 'photos') {
+        const png = await phone.evaluate(async () => {
+          const list = await new Promise((res) => { const r = indexedDB.open('lpq-fieldkit', 1); r.onsuccess = () => { const out = []; const c = r.result.transaction('photos').objectStore('photos').openCursor(); c.onsuccess = () => { if (c.result) { out.push(c.result.value); c.result.continue(); } else res(out.sort((a, b) => a.at - b.at)); }; }; });
+          return (await FK.photoPage(list)).toDataURL('image/png');
+        });
+        fs.writeFileSync(path.join(tmp, `print-${id}.png`), Buffer.from(png.split(',')[1], 'base64'));
+      }
       // and its twin without the name, saved at the same size
       const [screen] = await phone.evaluate(`(${nameSlots})('Maya', 'html')`);
       if (screen.slots.length) {
@@ -128,6 +183,8 @@ for f in os.listdir(tmp):
     p = os.path.join(tmp, f)
     if f.startswith('kit-') and f.endswith('.png'):
         Image.open(p).save(os.path.join(img, f[:-4] + '.webp'), 'WEBP', quality=82)
+    elif f.startswith('print-') and f.endswith('.png'):
+        Image.open(p).convert('RGB').resize((640, 828), Image.LANCZOS).save(os.path.join(img, 'host', f[6:-4] + '-print.webp'), 'WEBP', quality=84)
     elif f.startswith('host-') and f.endswith('.png'):
         Image.open(p).convert('RGB').resize((540, 1080), Image.LANCZOS).save(os.path.join(img, 'host', f[5:-4] + '.webp'), 'WEBP', quality=84)
     elif os.path.isdir(p):

@@ -81,8 +81,11 @@ $('productCards').querySelectorAll('.product').forEach((b) => b.addEventListener
   Gallery.open(pagesFor('big'), { label: `${name}: ${THEMES.find((t) => t.id === id).name}`, title: true, foot: Gallery.cta(`make/?theme=${id}`, 'Make my kit'),
     ages: k === 'kit' || k === 'activity' ? { value: 'big', pages: pagesFor } : null });
 }));
-// The Field Kit (the grown-up's phone page): three screens from a real order, in the home theme.
-const HOST = [['hide', 'Hide the clues: one card per screen, in your hiding order'], ['play', 'Run the hunt: a quick challenge, a line to say and the clue to read'], ['sidekick', 'Your Sidekick: a second grown-up gets their own lines on their phone']];
+// The Field Kit (the grown-up's phone page): screens from a real order, in the home theme. The first
+// four are the phones on the page; the popup adds the printed photo page and the Sidekick.
+const HOST = [['hide', 'Hide the clues: one card per screen, in your hiding order'], ['play', 'Run the hunt: a quick challenge, a line to say and the clue to read'],
+  ['shop', 'Shop day: customers come to the counter and order from the real menu'], ['photos', 'Snap photos as you go. They stay on your phone.'],
+  ['print', 'Then print a photo page with a themed border'], ['sidekick', 'Your Sidekick: a second grown-up gets their own lines on their phone']];
 const fieldKit = (i = 0) => Gallery.open(HOST.map(([f, cap]) => ({ k: f, cap, src: `img/host/${theme}-${f}.webp` })), { label: 'Your Field Kit', title: true, start: i, foot: Gallery.cta('make/', 'Make my kit') });
 $('fkPhones').querySelectorAll('img').forEach((img, i) => LPQName.preload(theme).then(() => LPQName.setSrc(img, `img/host/${theme}-${HOST[i][0]}.webp`)));
 $('fkPhones').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => fieldKit(+b.dataset.i)));
