@@ -718,7 +718,7 @@ function activityPackHtml(cfg) {
   const list = activityTitles(k);
   const cover = `<section class="page guide act-cover">
     <div class="guide-head"><div class="guide-icon">${def.icon}</div><div><div class="clinic">${esc(def.name)} · Wipe &amp; Play${k.little ? ' · little kids version, ages 3 to 5' : ''}</div><h1>${esc(possessive(k.childName))} Activity Pack</h1></div></div>
-    <p class="lead">${activityCount(k)} activity pages, made from the same pictures as ${esc(k.placeName)}. Use the Wipe &amp; Play pages again and again: slip each one into a sheet protector (or laminate it) and use a dry-erase marker, then wipe clean with a tissue.${k.little ? ' The two Print &amp; Play pages are for paper, with dot markers (or stickers), scissors and glue.' : ''}</p>
+    <p class="lead">${activityCount(k)} activity pages, made from the same pictures as ${esc(k.placeName)}. Use the Wipe &amp; Play pages again and again: slip each one into a sheet protector (or laminate it) and use a dry-erase marker, then wipe clean with a tissue.${k.little ? ' The Print &amp; Play pages are for paper, with dot markers (or stickers), scissors and glue.' : ' The Print &amp; Play move game is for paper: cut out the cards and get everyone moving.'}</p>
     <div class="act-list">${list.map((x, i) => `<div><span>${i + 1}</span>${esc(x)}<i class="box"></i></div>`).join('')}</div>
     <div class="act-pics">${def.menu.items.slice(0, 5).map(([e]) => art.pic(e, '.85in')).join('')}</div>
     <p class="act-tip"><b>Grown-up tip:</b> keep the pages in a binder with a marker clipped on for car rides, waiting rooms and quiet time.</p>

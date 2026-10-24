@@ -155,14 +155,14 @@ const THEME_GROUPS = [
 const LAYERS = [
   { id: 'hunt', name: 'Scavenger Hunts', note: 'Clue cards, host guide, puzzle finale, certificate and two bonus games', price: 9.99 },
   { id: 'kit', name: 'Pretend play', note: 'Hands-on toys, a shop set and signs with their name', price: 7.99 },
-  { id: 'activity', name: 'Activity pack', note: 'Mazes, I spy, secret codes, color by number and more to wipe and play', price: 4.99 },
+  { id: 'activity', name: 'Activity pack', note: 'Mazes, I spy, color by number and a get-up-and-move card game', price: 4.99 },
   { id: 'party', name: 'Party pack', note: 'Invitations, toppers, banner, favor tags and more', price: 6.99 },
 ];
 // Must match PRICES in the order bot (src/bot/products.js).
 const PRICES = { hunt: 9.99, kit: 7.99, party: 6.99, 'hunt+kit': 14.99, 'hunt+party': 13.99, 'kit+party': 12.99, bundle: 16.99, activity: 4.99, activityAdd: 3 };
 // Real page counts from scripts/page-counts.js (re-run it after adding pages). A hunt is 7 pages plus
 // one sheet per two clue cards, so it follows the spots picked.
-const PAGES = {"kit":{"dino":44,"hero":44,"pirate":44,"space":44,"royal":44,"unicorn":45,"mermaid":45,"construction":45,"vet":53,"easter":45,"halloween":41,"christmas":40,"valentine":43,"fire":40,"ice":41,"racecar":39,"pizza":54,"burger":45,"grocery":45,"post":44,"library":45,"police":44,"dentist":49,"petshop":45,"coffee":47,"italian":54,"auto":46,"kitchen":57,"doctor":51,"puppet":49,"agent":54,"dressup":48,"icecream":49,"airport":49},"activity":{"big":16,"little":17},"party":15,"craft":{"halloween":20,"christmas":20,"memory":29,"zoo":28,"fingerprint":28}};
+const PAGES = {"kit":{"dino":44,"hero":44,"pirate":44,"space":44,"royal":44,"unicorn":45,"mermaid":45,"construction":45,"vet":53,"easter":45,"halloween":41,"christmas":40,"valentine":43,"fire":40,"ice":41,"racecar":39,"pizza":54,"burger":45,"grocery":45,"post":44,"library":45,"police":44,"dentist":49,"petshop":45,"coffee":47,"italian":54,"auto":46,"kitchen":57,"doctor":51,"puppet":49,"agent":54,"dressup":48,"icecream":49,"airport":49},"activity":{"big":19,"little":20},"party":15,"craft":{"halloween":20,"christmas":20,"memory":29,"zoo":28,"fingerprint":28}};
 function pagesOf(k, theme, spots = 6, ages = 'big') {
   return { hunt: 7 + Math.ceil(Math.min(10, Math.max(6, spots)) / 2), kit: PAGES.kit[theme], activity: PAGES.activity[ages], party: PAGES.party }[k] || 0;
 }

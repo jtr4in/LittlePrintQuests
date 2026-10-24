@@ -23,9 +23,11 @@
 //   color     color by number (color by dot for little kids), a kit picture as a grid of squares
 //   me        draw yourself as the kit's boss
 //   story     finish a story about their day (little kids circle pictures to choose)
+//   move      a get-up-and-move card game: 18 cut-out cards and a board (src/kits/movegame.js, paper)
 // They're sold on their own as the Activity Pack (see activityPackHtml in engine.js).
 const art = require('./art');
 const MOSAICS = require('./mosaics.json');
+const { movePages, moveCss } = require('./movegame');
 
 const possessive = (name) => (/s$/i.test(name) ? `${name}’` : `${name}’s`);
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -436,6 +438,8 @@ const PAGES = [
   ['Spot the difference', spotPage], ['Which one is different?', oddPage], ['Stick it on', gluePage, 'little'], ['Find the way', mazePage],
   ['Word search', wordsPage, 'big'], ['Secret code', codePage, 'big'], ['Color by dot', colorPage, 'little'], ['Color by number', colorPage, 'big'],
   ['Roll a silly creature', rollPage, 'big'], ['Draw yourself', mePage], ['My adventure story', storyPage], ['Invent something new', designPage],
+  // The get-up-and-move card game (src/kits/movegame.js) goes last: it's cut up, so it shouldn't sit between pages.
+  ['Move game cards', movePages.cards1], ['More move game cards', movePages.cards2], ['Move game board', movePages.board],
 ];
 const pagesFor = (k) => PAGES.filter(([, , who]) => !who || who === (k.little ? 'little' : 'big'));
 const activityTitles = (k) => pagesFor(k).map(([t]) => t);
@@ -551,6 +555,6 @@ const activityCss = `
 .wp-st-line p { margin:0; font:600 17pt 'Fredoka'; flex:1; }
 .wp-st-pick { display:flex; gap:.2in; }
 .wp-st-pick span { border:3px solid var(--line); border-radius:50%; padding:.08in; }
-`;
+${moveCss}`;
 
 module.exports = { activityPages, activityTitles, activityCss, activityCount, CLEAN, MOSAIC_PICS, CRAYONS };
