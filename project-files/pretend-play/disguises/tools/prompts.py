@@ -3,8 +3,8 @@
 # Pro; flat props don't need Pro). id -> [(slot, aspect, prompt), ...]; slot 1 is worn on the
 # head (hat, ears), slot 2 on the face (glasses, mustache, nose). Pale props go on chroma green.
 STYLE = 'Children\'s storybook illustration in soft watercolor and colored pencil, warm and friendly, gentle dark outlines, bright cheerful colors, cute rounded shapes. A single cut-out photo booth prop, shown flat and straight from the front, life size for a child, '
-END = ' Only the one prop, no stick or handle, no person, no face, no hands. Isolated on a pure white background with a wide white margin. No text, no letters, no numbers, no logos, no cast shadow.'
-GREEN_END = ' Only the one prop, no stick or handle, no person, no face, no hands. Isolated on a solid flat pure chroma-key green (#00FF00) background with a wide margin. No green anywhere on the prop. No text, no letters, no numbers, no logos, no cast shadow.'
+END = ' Only the one prop, no stick or handle, no person, no face, no hands. Isolated on a pure white background with a wide white margin. No text, no letters, no numbers, no logos, no cast shadow. No faces, eyes or smiles on objects (starfish, food, stars, hearts).'
+GREEN_END = ' Only the one prop, no stick or handle, no person, no face, no hands. Isolated on a solid flat pure chroma-key green (#00FF00) background with a wide margin. No green anywhere on the prop. No text, no letters, no numbers, no logos, no cast shadow. No faces, eyes or smiles on objects (starfish, food, stars, hearts).'
 P = {
  'auto': [('1', '4:3', 'an orange mechanic\'s baseball cap with a little silver wrench patch on the front.'), ('2', '16:9', 'a thick brown handlebar mustache with curled tips and one small smudge of black grease.')],
  'burger': [('1', '16:9', 'a white folded paper diner hat (soda fountain style) with a red stripe along the bottom edge.'), ('2', '16:9', 'a big curly mustache colored mustard yellow, like it is made of mustard.')],
@@ -21,7 +21,7 @@ P = {
  'ice': [('1', '16:9', 'a sparkling icy blue tiara made of snowflakes and ice crystals.'), ('2', '16:9', 'a pair of glasses with icy blue frames shaped like two snowflakes.')],
  'italian': [('1', '3:4', 'a tall puffy white chef hat.'), ('2', '16:9', 'a black curly mustache with big round curls at the ends.')],
  'library': [('1', '4:3', 'a brown hair bun with two yellow pencils stuck through it.'), ('2', '16:9', 'a pair of big red cat-eye reading glasses with little sparkles on the corners.')],
- 'mermaid': [('1', '16:9', 'a mermaid tiara made of pink and gold seashells and white pearls.'), ('2', '16:9', 'a pair of sunglasses with two orange starfish as frames and light blue lenses.')],
+ 'mermaid': [('1', '16:9', 'a mermaid tiara made of pink and gold seashells and white pearls.'), ('2', '16:9', 'a pair of sunglasses with two plain orange starfish as frames (no faces on the starfish) and light blue lenses.')],
  'petshop': [('1', '16:9', 'a pair of floppy brown puppy ears on a brown headband.'), ('2', '16:9', 'a shiny black puppy nose with a pink tongue sticking out below it.')],
  'pirate': [('1', '16:9', 'a black pirate tricorn hat with gold trim and a small white skull and crossbones.'), ('2', '1:1', 'a bushy black pirate beard and mustache with an open gap for the mouth.')],
  'pizza': [('1', '4:3', 'a red pizza delivery cap with a little pizza slice patch on the front.'), ('2', '16:9', 'a pair of funny glasses whose two lenses are round pepperoni slices.')],
