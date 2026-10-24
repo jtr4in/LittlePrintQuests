@@ -131,6 +131,19 @@ Jason found navigating choppy. What it was and the rules now:
 ### Shop kit card photos (2026-10-23)
 - The 11 shop kit card thumbnails (`docs/img/kit-<id>.webp`, 1354x994, used by `SHOP_KITS` in `docs/js/data.js`) are styled Gemini photos, each starring the kit's signature piece, prompts say "no cash register". Prompts and scripts: `project-files/scavenger-hunt/previews/shop-kit-cards/`. Gemini redraws kit art loosely; use the round 4 lifestyle tools to restore exact art.
 
+### Field Kit extras (2026-10-24)
+
+Added on top of the Field Kit (`src/host/host.js`), all driven by one browser script, `src/host/client/fieldkit.js`, which the bot inlines into the host, Sidekick and Mission pages with a `window.FKCFG` config (theme, name, colors, art, keepsake text...).
+- **Get ready tab** (opens first until the hunt starts): party countdown from `config.party.date`, print tips per item, to-do checklist, "On the day" buttons, sound test, and "Keep it handy" (add to home screen, works offline).
+- **Sounds**: about 46 synthesized with Web Audio (no audio files), 3 per theme in the `BOARD` map plus Cheer. A theme missing from `BOARD` gets `DEFAULT`, so new themes work; add a line to `BOARD` to give them their own. A mute button sits in the top bar; auto sounds (found, fanfare) remember the choice in localStorage.
+- **Mission screen** `/m/<token>`: a big kid-facing screen for a tablet or TV that follows the host (cards found, quick challenges, confetti), never shows hiding spots. Its token is `sha256('mission:'+hostToken)` base64url, first 24 characters, so nothing is stored and it never reveals the host link.
+- **Step numbers**: the Sidekick and Mission pages build the plan with `followPlan(order)` so their steps match the host's (the Sidekick was one step behind before this; fixed).
+- **Shop day** (Play Kit tab): the phone runs the counter for six customers using the kit's menu, prices and play lines (`shopData`), then offers a "Star of the day" keepsake. Hidden for kits with fewer than two priced items.
+- **Photos**: a 📸 button on every page. Photos are stored only on the phone (IndexedDB `lpq-fieldkit`, shrunk to 1600px), never uploaded; the privacy page says so. The photo sheet makes a themed Letter PDF on the phone: collage (up to 6 per page) or one per page, optionally led by a "Mission complete" keepsake page. The PDF writer is hand-written in fieldkit.js (JPEG pages), so no library. Border, colors and stickers come from the theme: `stickers(order)` picks the theme icon plus kit art.
+- **Offline / home screen**: served only under `/h/<token>`: `sw.js` (with `Service-Worker-Allowed`), `manifest.webmanifest`, `icon-192.png` / `icon-512.png` (from `docs/img/`), `art/<n>.webp` (the stickers).
+- Field Kit pages still must not contain shop links, `$` prices or `{placeholders}`; the smoke test checks the host and Mission pages, including the inlined script.
+- After merging, Railway has to redeploy the order bot for any of this to show up.
+
 ## Stripe checkout page (2026-10-23)
 - Each Checkout line item has a picture (`product_data.images`): the theme's illustration on cream, the handprint pack's card, or the logo for the Family Pass. Made by `python3 scripts/checkout-images.py` into `docs/img/checkout/*.jpg` (JPEG, no kid's name), linked from `SITE_URL` by `checkoutImages()` in `src/bot/payments.js`; left out unless `SITE_URL` is https and the file exists. Re-run the script after changing a theme pick in `scripts/theme-icons.py`.
 - Logo, icon and colors on the Stripe page come from the Stripe Dashboard (Settings > Business > Branding), which Jason sets himself: brand color #EF9D31, background #FBF8F1.

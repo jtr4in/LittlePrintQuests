@@ -51,6 +51,7 @@ const PAGES = {
 <p>We don’t use advertising trackers, and we don’t sell or share your information with anyone else.</p>
 <h2>Kids’ information</h2>
 <p>This site is for parents and other grown-ups. We only know what you tell us about your child, which is usually a first name and age, and it’s used only to print on their pages.</p>
+<p>Photos you take in the Field Kit stay on your phone. They’re never uploaded to us or anyone else, and the photo PDF is made on your phone too.</p>
 <h2>How long we keep it</h2>
 <p>We keep your order so your download link and your Field Kit keep working, and so we can fix it if you ask. To have your order or email deleted, write to ${mail} and we’ll remove it.</p>`,
   },

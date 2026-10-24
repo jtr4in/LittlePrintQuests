@@ -464,14 +464,29 @@ async function route(req, res) {
     return send(res, 200, 'ok', { 'Content-Type': 'text/plain' });
   }
 
-  // Field Kit (/h/<token>) and the sidekick page (/s/<token>). /state keeps them in step.
-  const hm = p.match(/^\/(h|s)\/([A-Za-z0-9_-]{20,})(\/state)?$/);
+  // Field Kit (/h/<token>), the sidekick page (/s/<token>) and the kids' Mission screen (/m/<token>).
+  // /state keeps them in step. The Field Kit also serves its offline worker, home-screen manifest and
+  // icons, and the pictures for its photo pages (/art/<n>.webp), all under its own link.
+  const hm = p.match(/^\/(h|s|m)\/([A-Za-z0-9_-]{20,})(?:\/(state|sw\.js|manifest\.webmanifest|icon-(?:192|512)\.png|art\/(\d{1,2})\.webp))?$/);
   if (hm) {
-    const [, kind, token, state] = hm;
+    const [, kind, token, sub, artN] = hm;
     const field = kind === 'h' ? 'hostToken' : 'sidekickToken';
-    const o = Object.values(store.get().orders).find((x) => x[field] === token && x.status === 'ready');
+    const all = Object.values(store.get().orders);
+    const o = kind === 'm'
+      ? all.find((x) => x.status === 'ready' && x.hostToken && x.sidekickToken && host.missionToken(x) === token)
+      : all.find((x) => x[field] === token && x.status === 'ready');
     if (!o) return send(res, 404, 'This link isn’t working. Check that you copied all of it.');
     const noStore = { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' };
+    const state = sub === 'state';
+    if (sub && !state) {
+      if (kind !== 'h') return send(res, 404, 'Not found');
+      const base = `/h/${token}`;
+      if (sub === 'sw.js') return send(res, 200, host.serviceWorker(base, host.stickers(o).length), { 'Content-Type': 'text/javascript; charset=utf-8', 'Service-Worker-Allowed': base, ...noStore });
+      if (sub === 'manifest.webmanifest') return send(res, 200, host.manifest(o, base), { 'Content-Type': 'application/manifest+json', ...noStore });
+      const file = artN !== undefined ? host.stickers(o)[+artN] : path.join(__dirname, '..', '..', 'docs', 'img', sub);
+      if (!file || !fs.existsSync(file)) return send(res, 404, 'Not found');
+      return send(res, 200, fs.readFileSync(file), { 'Content-Type': file.endsWith('.png') ? 'image/png' : 'image/webp', 'Cache-Control': 'private, max-age=86400', 'X-Robots-Tag': 'noindex' });
+    }
     if (state && req.method === 'POST' && kind === 'h') {
       try {
         const step = JSON.parse((await readRaw(req, 1_000)).toString()).step;
@@ -483,6 +498,7 @@ async function route(req, res) {
     const stateUrl = `/h/${o.hostToken}/state`;
     const page = kind === 'h'
       ? host.hostPage(o, { stateUrl, items: products.itemsOf(o), sidekickUrl: o.sidekickToken && `${process.env.PUBLIC_URL}/s/${o.sidekickToken}`, downloads: `/d/${o.downloadToken}.pdf` })
+      : kind === 'm' ? host.missionPage(o, { stateUrl: `/m/${token}/state` })
       : host.sidekickPage(o, { stateUrl: `/s/${o.sidekickToken}/state` });
     return send(res, 200, page, noStore);
   }
