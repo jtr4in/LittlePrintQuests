@@ -312,6 +312,24 @@ ${open.some((o) => o.status === 'processing') ? 'setTimeout(()=>location.reload(
 </script></body></html>`;
 }
 
+// Sends a PDF with its length, and in pieces when asked (Range). Play kits run 20 to 40 MB; without a
+// length a dropped connection left buyers with a file that opened with its last pages missing, and
+// phone PDF viewers fetch big files in ranges.
+function sendPdf(req, res, file, name) {
+  const size = fs.statSync(file).size;
+  const head = { 'Content-Type': 'application/pdf', 'Content-Disposition': `inline; filename="${name}.pdf"`, 'Accept-Ranges': 'bytes' };
+  const r = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '');
+  if (r && (r[1] || r[2])) {
+    const start = r[1] ? +r[1] : Math.max(0, size - +r[2]);
+    const end = r[1] && r[2] ? Math.min(+r[2], size - 1) : size - 1;
+    if (start > end || start >= size) return send(res, 416, '', { 'Content-Range': `bytes */${size}` });
+    res.writeHead(206, { ...head, 'Content-Length': end - start + 1, 'Content-Range': `bytes ${start}-${end}/${size}` });
+    return req.method === 'HEAD' ? res.end() : fs.createReadStream(file, { start, end }).pipe(res);
+  }
+  res.writeHead(200, { ...head, 'Content-Length': size });
+  return req.method === 'HEAD' ? res.end() : fs.createReadStream(file).pipe(res);
+}
+
 async function route(req, res) {
   const url = new URL(req.url, 'http://x');
   const p = url.pathname;
@@ -322,8 +340,7 @@ async function route(req, res) {
   if (dl) {
     const file = path.join(store.PDF_DIR, `${dl[1]}.pdf`);
     if (!fs.existsSync(file)) return send(res, 404, 'Not found');
-    res.writeHead(200, { 'Content-Type': 'application/pdf', 'Content-Disposition': `inline; filename="${dl[1].endsWith('-kit') ? 'play-kit' : dl[1].endsWith('-activities') ? 'activity-pack' : dl[1].endsWith('-party') ? 'party-printables' : 'scavenger-hunt'}.pdf"` });
-    return fs.createReadStream(file).pipe(res);
+    return sendPdf(req, res, file, dl[1].endsWith('-kit') ? 'play-kit' : dl[1].endsWith('-activities') ? 'activity-pack' : dl[1].endsWith('-party') ? 'party-printables' : 'scavenger-hunt');
   }
 
   if (p === '/api/sample') {
@@ -346,8 +363,7 @@ async function route(req, res) {
   const sp = p.match(/^\/sample\/([a-z]+)\.pdf$/);
   if (sp && THEMES[sp[1]]) {
     const file = await sample.samplePdf(sp[1]);
-    res.writeHead(200, { 'Content-Type': 'application/pdf', 'Content-Disposition': 'inline; filename="mini-scavenger-hunt.pdf"' });
-    return fs.createReadStream(file).pipe(res);
+    return sendPdf(req, res, file, 'mini-scavenger-hunt');
   }
 
   if (p === '/unsubscribe') {
