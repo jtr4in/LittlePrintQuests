@@ -248,6 +248,20 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   }
   // Shared scripts and the stylesheet carry a fingerprint of their content, so phones never mix old and new copies.
   assert.deepEqual(require('../scripts/stamp-assets').run({ check: true }), [], 'run: node scripts/stamp-assets.js');
+  // Field Kit sounds: every one renders to clean audio, and every sound board button has a sound.
+  {
+    const sfx = require('../src/host/client/sfx').make(22050);
+    for (const n of sfx.names) {
+      const x = sfx.render(n);
+      assert.ok(x.length > 2000 && x.length < 22050 * 7, `sound ${n} length`);
+      let peak = 0; for (const v of x) { assert.ok(Number.isFinite(v), `sound ${n} is clean`); peak = Math.max(peak, Math.abs(v)); }
+      assert.ok(peak > 0.05 && peak < 1, `sound ${n} level ${peak}`);
+    }
+    const fk = fs.readFileSync(path.join(__dirname, '..', 'src', 'host', 'client', 'fieldkit.js'), 'utf8');
+    const used = [...fk.slice(fk.indexOf('const BOARD')).matchAll(/\['(\w+)', '/g)].map((m) => m[1]);
+    assert.ok(used.length > 80);
+    for (const n of new Set(used)) assert.ok(sfx.names.includes(n), `sound board uses missing sound ${n}`);
+  }
   // Theme filter chips: every theme on the site sits in exactly one group.
   {
     const vm = require('vm');
@@ -494,18 +508,10 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
       assert.match(await (await realFetch(`${base}/s/${w.sidekickToken}`)).text(), /Your jobs today/);
       assert.equal((await realFetch(`${base}/s/${w.sidekickToken}/state`, { method: 'POST', body: '{"step":1}' })).status, 200); // sidekick can't move the host
       assert.equal((await realFetch(`${base}/h/${'x'.repeat(24)}`)).status, 404);
-      // Field Kit extras: Get ready tab, kids' Mission screen that follows the host, and offline files.
+      // Field Kit extras: Get ready tab and offline files.
       assert.match(hostHtml, /data-sec="prep"[\s\S]*Keep it handy/);
       assert.match(hostHtml, /window\.FKCFG=/);
-      const mission = require('../src/host/host').missionToken(w);
-      assert.ok(hostHtml.includes(`/m/${mission}`) && !hostHtml.includes(`/m/${w.hostToken}`));
-      const missionHtml = await (await realFetch(`${base}/m/${mission}`)).text();
-      assert.match(missionHtml, /msStart/);
-      assert.ok(!missionHtml.includes(w.hostToken), 'Mission screen must not reveal the host link');
-      assert.ok(!/etsy\.com|github\.io|\$\d/i.test(missionHtml), 'Mission screen must not link to the shop or show prices');
-      assert.ok(!/\{\w+\}/.test(missionHtml.replace(/<script>[\s\S]*<\/script>/, '')), 'no unfilled placeholders');
-      assert.deepEqual(await (await realFetch(`${base}/m/${mission}/state`)).json(), { step: 5 });
-      assert.equal((await realFetch(`${base}/m/${'x'.repeat(24)}`)).status, 404);
+      assert.ok(!hostHtml.includes('/m/') && !hostHtml.includes('Mission screen'), 'no kids’ screen');
       const sw = await realFetch(`${base}/h/${w.hostToken}/sw.js`);
       assert.equal(sw.headers.get('service-worker-allowed'), `/h/${w.hostToken}`);
       assert.equal((await (await realFetch(`${base}/h/${w.hostToken}/manifest.webmanifest`)).json()).start_url, `/h/${w.hostToken}`);
