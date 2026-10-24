@@ -19,8 +19,6 @@ Work in flight is listed under **In progress** below.
 
 Work that is about to merge or is mid-merge, so sessions on the other account can hold off. Pull main and read this before starting and before merging. Add your entry directly on main (not only in your PR). Don't merge if another entry touches the same files; wait or coordinate. Remove your entry after merging. One line each: what, branch, files touched, thread, UTC time.
 
-- Move game in every activity pack (18 cut-out action cards + a board), branch `move-game`, touches new `src/kits/movegame.js`, `src/kits/activities.js`, `src/kits/engine.js` (activity cover line), `test/smoke.js`, `docs/js/data.js` (PAGES, activity note), stamped storefront pages. Thread session_019K2jx5sSfTTZVTsRvzUWDC, 2026-10-24 19:21 UTC.
-
 ## Business direction
 
 - **Etsy is being faded out (Oct 2026).** Prioritize the direct webapp and order bot. Don't invest in new Etsy listing options. Etsy pack and party listings stay on the original 16 themes (`ETSY_THEMES` in `src/bot/listings.js`).
