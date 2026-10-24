@@ -146,7 +146,7 @@ async function processOrder(id) {
       store.update((s) => Object.assign(s.orders[id], { status: 'needs_attention', problem: parsed.problem, draft: parsed.draft || null }));
     } else {
       // A version picked by hand (or an Etsy "Version" option) wins over the child's age.
-      const ages = order.ages || Object.entries(products.VERSIONS).find(([, v]) => v === order.options?.Version)?.[0];
+      const ages = order.ages || products.versionOf(order.options?.Version);
       const config = ages ? { ...parsed.config, ages, ...(ages === 'little' && products.mainOf(order) === 'hunt' ? { pictures: true } : {}) } : parsed.config;
       store.update((s) => Object.assign(s.orders[id], { config, pets: parsed.pets || [], party: parsed.party || null }));
       await generate(id);
@@ -278,7 +278,7 @@ function addWebOrder(form) {
     party: form.party,
     form,
     personalization: formAsText(form),
-    options: form.holiday ? { Holiday: HOLIDAYS[form.holiday].name } : { Theme: form.kit ? KITS[form.kit].name : THEMES[form.theme].name, Package: products.packageName(form.items), ...(form.ages ? { Version: form.ages === 'little' ? 'Little kids, ages 2 to 4' : 'Big kids, ages 5 to 8' } : {}) },
+    options: form.holiday ? { Holiday: HOLIDAYS[form.holiday].name } : { Theme: form.kit ? KITS[form.kit].name : THEMES[form.theme].name, Package: products.packageName(form.items), ...(form.ages ? { Version: products.VERSIONS[form.ages] } : {}) },
   });
 }
 

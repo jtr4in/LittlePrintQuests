@@ -240,7 +240,7 @@ Turn the living room into a vet clinic, a pizzeria, a grocery store or mission c
 • HOST MODE on your phone: 8 pretend-play scenarios for your kit with lines to say and silly twists, a "Surprise me" button, and quick games. Works in any phone browser, nothing to download
 
 ★ MADE FOR THEIR AGE
-Tell us your child's age and we make the right version. Ages 2 to 4 get thicker cut lines, bigger pictures and order forms they can fill in by circling pictures. Ages 5 and up get the writing version.
+Tell us your child's age and we make the right version. Ages 3 to 5 get thicker cut lines, bigger pictures and order forms they can fill in by circling pictures. Ages 5 and up get the writing version.
 
 ★ BUILT FOR REAL PLAY
 Things that spin, slide, lift and go on your head, plus cards, maps and posters kids can hold, trade and hide.
@@ -397,7 +397,7 @@ The same kits as listing 7, each on its own listing so it can have its own title
 • HOST MODE on your phone: 8 pretend-play scenarios with lines to say and silly twists, a "Surprise me" button, and quick games. Works in any phone browser, nothing to download
 
 ★ MADE FOR THEIR AGE
-Tell us your child's age and we make the right version. Ages 2 to 4 get thicker cut lines, bigger pictures and order forms they can fill in by circling pictures. Ages 5 and up get the writing version.
+Tell us your child's age and we make the right version. Ages 3 to 5 get thicker cut lines, bigger pictures and order forms they can fill in by circling pictures. Ages 5 and up get the writing version.
 
 ★ PERFECT WITH
 {pairing}

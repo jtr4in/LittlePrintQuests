@@ -25,7 +25,7 @@ const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const Gallery = (() => {
   document.body.insertAdjacentHTML('beforeend', `<dialog class="gallery" id="gallery" aria-label="Pages">
   <div class="g-in">
-    <header><div><b class="g-title" id="gTitle" hidden></b><div class="g-bar"><div class="tabs" id="gTabs"></div><div class="g-ages" id="gAges" role="group" aria-label="Show the pages for" hidden><button type="button" data-ages="little">Little kids · 2–4</button><button type="button" data-ages="big">Big kids · 5–8</button><span class="g-same" id="gSame" hidden>Same for both ages</span></div></div></div><button type="button" class="x" id="gClose" aria-label="Close">×</button></header>
+    <header><div><b class="g-title" id="gTitle" hidden></b><div class="g-bar"><div class="tabs" id="gTabs"></div><div class="g-ages" id="gAges" role="group" aria-label="Show the pages for" hidden><button type="button" data-ages="little">Little kids · 3–5</button><button type="button" data-ages="big">Big kids · 6–8</button><span class="g-same" id="gSame" hidden>Same for both ages</span></div></div></div><button type="button" class="x" id="gClose" aria-label="Close">×</button></header>
     <div class="view" id="gView">
       <img id="gImg" alt="" width="640" height="828">
       <button type="button" class="nav prev" id="gPrev" aria-label="Previous page">‹</button>

@@ -52,7 +52,7 @@
     <div class="wrap">
       <div class="pin"><b></b><span class="eyebrow">Shop play kits</span></div>
       <h1 class="page-title">Eleven pretend places to set up at home</h1>
-      <p class="kits-lede">Print, cut and tape them up around a play kitchen, a shelf or a corner of the room. Each kit has a shop sign with your kid’s name, a cash register, play money, order forms and a menu. $7.99 each, in a big kids (5 to 8) or little kids (2 to 4) version.</p>
+      <p class="kits-lede">Print, cut and tape them up around a play kitchen, a shelf or a corner of the room. Each kit has a shop sign with your kid’s name, a cash register, play money, order forms and a menu. $7.99 each, in a big kids (6 to 8) or little kids (3 to 5) version.</p>
       <div class="life life-2" id="lifePhotos">
         <button type="button" data-big="img/life/pizza-stand.webp"><img decoding="async" src="img/life/pizza-stand-sm.webp" srcset="img/life/pizza-stand-sm.webp 640w, img/life/pizza-stand.webp 1200w" sizes="(max-width: 760px) 78vw, 600px" width="640" height="478" alt="The printed Pizza Shop kit on a play stand: long shop sign, Open sign, menu, oven poster, Pay Here sign and topping labels" loading="lazy"><span>Set up on a play stand<small>See the pages</small></span></button>
         <button type="button" data-big="img/life/pizza-flat.webp"><img decoding="async" src="img/life/pizza-flat-sm.webp" srcset="img/life/pizza-flat-sm.webp 640w, img/life/pizza-flat.webp 1200w" sizes="(max-width: 760px) 78vw, 600px" width="640" height="478" alt="Everything in the Pizza Shop kit printed out: welcome poster, menu, shop sign, order cards, play money and staff badges" loading="lazy"><span>Everything that prints<small>See the pages</small></span></button>
@@ -97,11 +97,11 @@ function openShop(id, photo) {
   shopKit = id;
   shopBtn.textContent = `Get the ${shopName(id)} kit · $7.99`;
   shopChild.value = LPQName.typed();
-  const pages = [['big', 'Big kids (5 to 8)', ''], ['little', 'Little kids (2 to 4)', 'little/']].flatMap(([k, tab, dir]) =>
+  const pages = [['big', 'Big kids (6 to 8)', ''], ['little', 'Little kids (3 to 5)', 'little/']].flatMap(([k, tab, dir]) =>
     GALLERY.kit.map((cap, i) => ({ k, tab, cap, src: `img/gallery/${id}/${dir}kit-${i + 1}.webp` })))
     .concat(HOWTO[id] ? [{ k: 'box', tab: 'Box build', cap: HOWTO[id], src: `img/howto/${id}-sm.webp` }] : []);
-  if (photo) pages.unshift({ k: 'big', tab: 'Big kids (5 to 8)', ...photo });
-  Gallery.open(pages, { tabs: [['big', 'Big kids (5 to 8)'], ['little', 'Little kids (2 to 4)'], ...(HOWTO[id] ? [['box', 'Box build']] : [])], label: `${shopName(id)} play kit`, title: true, foot: shopForm });
+  if (photo) pages.unshift({ k: 'big', tab: 'Big kids (6 to 8)', ...photo });
+  Gallery.open(pages, { tabs: [['big', 'Big kids (6 to 8)'], ['little', 'Little kids (3 to 5)'], ...(HOWTO[id] ? [['box', 'Box build']] : [])], label: `${shopName(id)} play kit`, title: true, foot: shopForm });
 }
 shopChild.addEventListener('input', () => LPQName.set(shopChild.value));
 shopForm.addEventListener('submit', (e) => {

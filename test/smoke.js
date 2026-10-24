@@ -165,7 +165,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   await renderParty({ theme: 'space', childName: 'Bo', age: 3 }, partyPdf);
   assert.ok(fs.statSync(partyPdf).size > 50000);
 
-  // Play kits come in two versions: little kids (2 to 4) get picture-only order forms, bigger
+  // Play kits come in two versions: little kids (3 to 5) get picture-only order forms, bigger
   // pictures and thicker cut lines; the version follows the child's age.
   const { buildKitHtml, KITS } = require('../src/kits/engine');
   const littleKit = buildKitHtml({ kit: 'italian', childName: 'Ava', age: 3, lenient: true });
@@ -335,7 +335,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   // Boxes pick what's in it, and the version can be picked by hand.
   const page0 = await (await realFetch(base + '/admin', { headers: auth })).text();
   assert.match(page0, /name="item" value="activity"/);
-  assert.match(page0, /<option value="little">Little kids, ages 2 to 4<\/option>/);
+  assert.match(page0, /<option value="little">Little kids, ages 3 to 5<\/option>/);
   await realFetch(base + '/admin/orders', { method: 'POST', headers: form, body: 'personalization=Zoe+6&theme=kit%3Apizza&item=kit&item=activity&ages=little', redirect: 'manual' });
   await realFetch(base + '/admin/orders', { method: 'POST', headers: form, body: 'personalization=Eli+3&theme=dino&item=activity', redirect: 'manual' });
   for (let i = 0; i < 60; i++) {
@@ -343,7 +343,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (['Zoe 6', 'Eli 3', 'Ivy 4'].every((n) => byHand(n)?.status === 'ready')) break;
     await wait(500);
   }
-  assert.deepEqual([byHand('Zoe 6').items, byHand('Zoe 6').config.ages, byHand('Zoe 6').options.Version, byHand('Zoe 6').activityReady], [['kit', 'activity'], 'little', 'Little kids, ages 2 to 4', true]);
+  assert.deepEqual([byHand('Zoe 6').items, byHand('Zoe 6').config.ages, byHand('Zoe 6').options.Version, byHand('Zoe 6').activityReady], [['kit', 'activity'], 'little', 'Little kids, ages 3 to 5', true]);
   assert.deepEqual([byHand('Eli 3').product, byHand('Eli 3').kit, byHand('Eli 3').kitReady], ['activity', 'dino', false]);
   assert.ok(!byHand('Ivy 4').activityReady, 'a hand-made play kit leaves out the activity pack unless ticked');
   await realFetch(`${base}/admin/orders/${manual.id}/clear`, { method: 'POST', headers: form, redirect: 'manual' });
@@ -417,7 +417,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     if (kit) assert.equal(w.config.kit, kit);
     // the website's Little kids / Big kids choice reaches the kit
     assert.equal(w.config.ages, ages);
-    if (ages) assert.equal(w.options.Version, 'Little kids, ages 2 to 4');
+    if (ages) assert.equal(w.options.Version, 'Little kids, ages 3 to 5');
     assert.ok(w.sent && w.deliveredAt);
     const mail = emails.at(-1);
     assert.deepEqual(mail.to, ['ava.parent@example.com']);
@@ -861,6 +861,11 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   for (const id of [...Object.keys(require('../src/generator/themes')), ...shopIds]) {
     for (const f of [`pages/${id}-little-kit`, `pages/${id}-little-activity`]) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', `${f}.webp`)), f);
     for (const k of ['kit', 'activity']) for (let i = 1; i <= 5; i++) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'gallery', id, 'little', `${k}-${i}.webp`)), `little ${id} ${k}-${i}`);
+  }
+  // Age versions are little kids 3 to 5 and big kids 6 to 8; orders saved before the change still read.
+  {
+    const products = require('../src/bot/products');
+    assert.deepEqual(['Little kids, ages 3 to 5', 'Big kids, ages 6 to 8', 'Little kids, ages 2 to 4', 'Big kids, ages 5 to 8', 'Other'].map(products.versionOf), ['little', 'big', 'little', 'big', undefined]);
   }
   // Stripe checkout shows a picture beside the product, linked from the website (scripts/checkout-images.py).
   {

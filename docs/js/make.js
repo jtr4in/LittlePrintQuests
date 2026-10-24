@@ -3,7 +3,7 @@
 // Links can pick the theme, trail, age, items or a shop kit: make/?theme=dino&space=apartment&age=5,
 // make/?pick=hunt+kit, make/?kit=burger. The old /?theme=…#order links land here too (index.html).
 
-// ages is the little kids (2 to 4) or big kids (5 to 8) version; it follows the age until they pick one.
+// ages is the little kids (3 to 5) or big kids (6 to 8) version; it follows the age until they pick one.
 const state = { ages: 'big', agesPicked: false, theme: 'dino', picks: ['front_door', 'shoe_rack', 'couch', 'dryer', 'bathtub', 'bookshelf', 'pet_bed', 'kitchen_table'], custom: {} };
 // Everything is ticked to start; untick what you don't need.
 const picked = new Set(['hunt', 'kit', 'activity', 'party']);
@@ -256,7 +256,7 @@ function status(msg, bad) { $('formStatus').textContent = msg; $('formStatus').c
 
 function render() {
   const age = parseInt($('childAge').value, 10);
-  if (!state.agesPicked && age) state.ages = age <= 4 ? 'little' : 'big';
+  if (!state.agesPicked && age) state.ages = age <= 5 ? 'little' : 'big'; // little kids are 3 to 5
   $('agesPick').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.ages === state.ages)));
   drawRoute();
   drawChips();
@@ -354,7 +354,7 @@ function drawReview() {
   const gets = LAYERS.filter((l) => picked.has(l.id));
   const party = ['partyDate', 'partyTime', 'partyPlace', 'partyRsvp'].map((id) => $(id).value.trim()).filter(Boolean);
   const rows = [
-    ['who', 'For', `${esc(name)}${age ? `, turning ${age}` : ''}${gets.some((l) => l.id !== 'party') ? ` · ${state.ages === 'little' ? 'little kids (2 to 4)' : 'big kids (5 to 8)'}` : ''}`],
+    ['who', 'For', `${esc(name)}${age ? `, turning ${age}` : ''}${gets.some((l) => l.id !== 'party') ? ` · ${state.ages === 'little' ? 'little kids (3 to 5)' : 'big kids (6 to 8)'}` : ''}`],
     ['theme', 'Theme', esc(THEMES.find((t) => t.id === state.theme).name)],
     ['box', 'Includes', `${gets.map((l) => l.name).join(', ')}${picked.has('hunt') || picked.has('kit') || picked.has('party') ? ', plus Host Mode' : ''}`],
     ...(picked.has('hunt') ? [['details', 'Hiding spots', state.picks.map((k, i) => `${i === state.picks.length - 1 ? '★ ' : ''}${esc(labelOf(k))}`).join(' → ')]] : []),
@@ -452,7 +452,9 @@ if (kit) setPicks(['kit']);
 else if (pickParam.length) setPicks(pickParam);
 showKid();
 render();
-// Start at the first thing still to do: their name, then the theme unless a link already chose one.
-step = !$('childName').value.trim() ? 'who' : asked ? 'box' : 'theme';
+// Always start on step 1, even with a name already typed: it also asks which age version they want
+// (Jason, 2026-10-23: skipping ahead meant nobody saw it). A theme, kit or items from the link are
+// already picked, so later steps start filled in.
+step = 'who';
 history.replaceState({ step }, '', location.pathname + location.search);
 drawSteps();

@@ -31,6 +31,8 @@ Work that is about to merge or is mid-merge, so sessions on the other account ca
 ## Jason's preferences
 
 - Threads merge their own PRs once tests pass (said 2026-10-23), squash into main. Reason: PRs were piling up and landing out of order (the #88/#91/#93/#94 stack left a duplicate lede in `docs/index.html`, fixed in #95).
+- Age versions are **Little kids 3 to 5** (pre-readers: picture clues, circling, thick cut lines) and **Big kids 6 to 8** (early readers); the site says ages 3 to 8 overall (Jason, 2026-10-23; it was 2 to 4 / 5 to 8). A typed age of 5 or under picks little. Orders saved before the change carry the old version labels; `products.versionOf` reads both. Already-posted pins and their pictures still say 2 to 8 / 2 to 4: re-run `scripts/pins.js` before making new pin images.
+- The order page always opens on step 1 (who it's for, and the age version), even when a name is already saved; a theme, kit or items from the link stay picked (Jason, 2026-10-23).
 - Site copy says "kid", not "child" (keep "child" only for formal spots like policies).
 - Don't pigeonhole the site as birthday-only; rotate occasions (rainy day, sleepover, snow day, Halloween, playdate, Christmas, Valentine's, Easter, weekend).
 - Keep the site calm (2026-10-23, from Jason's wife: the old one-page site felt like "a lot coming at her"). One idea per section, short copy, ordering on its own page. Never drop a feature to get there (name previews, hero banners, order stack, galleries): move it instead.
@@ -133,4 +135,5 @@ Tools: `project-files/scavenger-hunt/previews/lifestyle/tools/`. Outputs are lar
 
 - The repo pins playwright 1.56.1, which doesn't match the container's browser. Easiest fix: a preload that wraps `chromium.launch` to pass `executablePath: '/opt/pw-browsers/chromium'`, run as `node -r pre.js scripts/<script>.js`.
 - To click through the site locally: `python3 -m http.server` in `docs/`, then Playwright with the preload above. `npm test` also needs the preload (`node -r pre.js test/smoke.js`).
+- `scripts/share-image.js` loads Fredoka and Atkinson Hyperlegible from the repo's `fonts/` folder (Google Fonts can't be reached from the Claude sandbox, and the picture fell back to a serif font).
 - Some tools in `project-files/` still hard-code `/mnt/project-files/...` paths; adjust them if that folder doesn't exist in your account.
