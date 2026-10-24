@@ -149,6 +149,13 @@
     coffee: [['steam', '☕', 'Steamer'], ['ding', '🛎️', 'Order up'], ['scan', '💳', 'Pay']],
     italian: [['bubbles', '🍝', 'Boiling pot'], ['ding', '🛎️', 'Order up'], ['trumpet', '🎺', 'Bravo']],
     auto: [['drill', '🔧', 'Wrench'], ['vroom', '🚗', 'Engine'], ['honk', '📣', 'Horn']],
+    kitchen: [['sizzle', '🍳', 'Sizzle'], ['ding', '⏲️', 'Timer'], ['meow', '🐱', 'Whisk']],
+    doctor: [['heartbeat', '🩺', 'Heartbeat'], ['siren', '🚑', 'Ambulance'], ['ding', '🛎️', 'Next patient']],
+    puppet: [['drumroll', '🥁', 'Drumroll'], ['trumpet', '🎺', 'Curtain up'], ['magic', '🧦', 'Puppet magic']],
+    agent: [['beeps', '📟', 'Gadget'], ['radio', '📻', 'HQ radio'], ['creak', '🚪', 'Sneaky door']],
+    dressup: [['magic', '✨', 'Sparkle'], ['drumroll', '🥁', 'Runway'], ['trumpet', '🎺', 'Ta-da']],
+    icecream: [['ding', '🛎️', 'Order up'], ['scan', '💳', 'Pay'], ['magic', '🍒', 'Sprinkles']],
+    airport: [['whoosh', '✈️', 'Takeoff'], ['ding', '🔔', 'Cabin chime'], ['radio', '📡', 'Control tower']],
   };
   const DEFAULT = [['fanfare', '🎺', 'Fanfare'], ['magic', '✨', 'Magic'], ['drumroll', '🥁', 'Drumroll']];
   const board = () => [...(BOARD[CFG.theme] || DEFAULT), ['cheer', '👏', 'Cheer']];
