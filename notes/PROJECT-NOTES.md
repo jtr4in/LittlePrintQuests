@@ -19,6 +19,7 @@ Work in flight is listed under **In progress** below.
 
 Work that is about to merge or is mid-merge, so sessions on the other account can hold off. Pull main and read this before starting and before merging. Add your entry directly on main (not only in your PR). Don't merge if another entry touches the same files; wait or coordinate. Remove your entry after merging. One line each: what, branch, files touched, thread, UTC time.
 
+- Promo codes on the Family Pass checkout, branch `pass-promo-codes`, touches `src/bot/payments.js`, notes. Thread "Field Kit upgrade", 2026-10-24 16:07 UTC.
 
 ## Business direction
 
