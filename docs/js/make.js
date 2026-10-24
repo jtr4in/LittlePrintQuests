@@ -77,8 +77,15 @@ function drawThemes() {
     <img decoding="async" src="img/icons/${t.id}.webp" alt="" width="240" height="240" loading="lazy"><span>${THEME_LABELS[t.id]}</span>
   </button>`).join('');
   $('themeList').querySelectorAll('.theme').forEach((b) => b.addEventListener('click', () => setTheme(b.dataset.id)));
-  $('themeSelect').innerHTML = ordered.map((t) => `<option value="${t.id}">${esc(THEME_LABELS[t.id])}</option>`).join('');
+  // The dropdown lists the themes by group (the in-season one first), so 34 names are easy to scan.
+  const opt = (t) => `<option value="${t.id}">${esc(THEME_LABELS[t.id])}</option>`;
+  const grouped = new Set(THEME_GROUPS.flatMap((g) => g.ids));
+  $('themeSelect').innerHTML = (seasonal ? opt(THEMES.find((t) => t.id === seasonal)) : '') +
+    THEME_GROUPS.map((g) => `<optgroup label="${esc(g.label)}">${g.ids.filter((id) => id !== seasonal).map((id) => THEMES.find((t) => t.id === id)).filter(Boolean).map(opt).join('')}</optgroup>`).join('') +
+    THEMES.filter((t) => !grouped.has(t.id) && t.id !== seasonal).map(opt).join('');
+  themeChips = themeFilter($('themeChips'), $('themeList'));
 }
+let themeChips = null;
 $('themeSelect').addEventListener('change', (e) => setTheme(e.target.value, { scroll: true }));
 // Slides the tile row (not the page) so the chosen theme's tile shows.
 function showTile(id) {
@@ -107,6 +114,7 @@ function setTheme(id, { scroll = false } = {}) {
   state.theme = id;
   $('themeSelect').value = id;
   document.querySelectorAll('#themeList .theme').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.id === id)));
+  themeChips?.show(id);
   if (scroll) showTile(id);
   $('themeName').textContent = THEMES.find((t) => t.id === id).name;
   render();

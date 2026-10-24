@@ -246,6 +246,17 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.ok(sp.spots.every((id) => require('../src/generator/spots')[id]), sp.id);
     assert.ok(site.includes(`${sp.id}: ['${sp.label}', ${JSON.stringify(sp.spots).replace(/"/g, "'").replace(/,/g, ', ')}]`), `site trail ${sp.id}`);
   }
+  // Theme filter chips: every theme on the site sits in exactly one group.
+  {
+    const vm = require('vm');
+    const ctx = { document: {}, window: {} };
+    vm.createContext(ctx);
+    vm.runInContext(`${site};this.T=THEMES;this.G=THEME_GROUPS;`, ctx);
+    const grouped = ctx.G.flatMap((g) => g.ids);
+    assert.equal(new Set(grouped).size, grouped.length, 'a theme is in two groups');
+    for (const t of ctx.T) assert.ok(grouped.includes(t.id), `theme ${t.id} needs a group in THEME_GROUPS`);
+    for (const id of grouped) assert.ok(ctx.T.some((t) => t.id === id), `THEME_GROUPS lists unknown theme ${id}`);
+  }
   // The idea pages: a hub, one per home, one per theme and one per play kit, all in the sitemap, with no blanks.
   const ideaUrls = require('../scripts/idea-pages').build();
   // (plus the home page, make/, play-kits/ and handprint-art/)

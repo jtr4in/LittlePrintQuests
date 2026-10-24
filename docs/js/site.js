@@ -117,6 +117,26 @@ const Gallery = (() => {
 })();
 
 // One theme's whole set (hunt, play kit, activity pack, party pack and the box build), for previews.
+// Filter chips over a row of tiles: All plus each group with at least `min` tiles in the row.
+// Tiles carry their id in data-<key>. Returns { show(id) } to bring a hidden tile's group up.
+function themeFilter(chips, row, { groups = THEME_GROUPS, key = 'id', min = 2 } = {}) {
+  const tiles = () => [...row.querySelectorAll(`[data-${key}]`)];
+  const have = new Set(tiles().map((t) => t.dataset[key]));
+  const list = groups.map((g) => ({ ...g, ids: g.ids.filter((id) => have.has(id)) })).filter((g) => g.ids.length >= min);
+  chips.innerHTML = `<button type="button" data-g="all" aria-pressed="true">All</button>` +
+    list.map((g) => `<button type="button" data-g="${g.id}" aria-pressed="false">${esc(g.label)}</button>`).join('');
+  const pick = (gid) => {
+    const g = list.find((x) => x.id === gid);
+    chips.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.g === gid)));
+    tiles().forEach((t) => { t.hidden = Boolean(g) && !g.ids.includes(t.dataset[key]); });
+    row.scrollLeft = 0;
+    const on = chips.querySelector('[aria-pressed="true"]');
+    chips.scrollTo({ left: Math.max(0, on.offsetLeft - chips.offsetLeft - 8), behavior: calm() ? 'auto' : 'smooth' });
+  };
+  chips.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => pick(b.dataset.g)));
+  return { show(id) { const t = tiles().find((x) => x.dataset[key] === id); if (t && t.hidden) pick((list.find((g) => g.ids.includes(id)) || { id: 'all' }).id); } };
+}
+
 function setPages(id, ages = 'big') {
   const little = (k) => ages === 'little' && (k === 'kit' || k === 'activity');
   return ['hunt', 'kit', 'activity', 'party'].flatMap((x) => [

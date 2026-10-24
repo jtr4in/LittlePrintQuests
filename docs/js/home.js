@@ -97,6 +97,7 @@ function drawThemeGrid() {
     <img decoding="async" src="img/icons/${t.id}.webp" alt="" width="240" height="240" loading="lazy"><span>${THEME_LABELS[t.id]}</span>
   </button>`).join('');
   $('themeGrid').querySelectorAll('.theme').forEach((b) => b.addEventListener('click', () => previewTheme(b.dataset.id)));
+  themeFilter($('themeChips'), $('themeGrid'));
 }
 function previewTheme(id) {
   const t = THEMES.find((x) => x.id === id);
