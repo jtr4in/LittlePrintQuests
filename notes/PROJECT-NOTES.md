@@ -8,7 +8,18 @@ Paths like `project-files/...` are in this repo. Paths like `/mnt/project-files/
 
 Jason switches between two Claude accounts, sometimes when one runs low on usage. Keep this section current: before stopping, merge what's done, push anything half-finished to a branch, and list it here with what's left. Replace the list each time; history lives in the sections below and in git.
 
-Last updated 2026-10-23 evening (after PR #118). Nothing in progress: every branch is merged.
+Last updated 2026-10-23 21:35 (after PR #120).
+
+**In progress right now (account: jtr4in, this Claude session). Other sessions: don't merge PRs that touch these areas, or rebase onto main after these land. Ask Jason if unsure.**
+| Work | Branch | Touches |
+|---|---|---|
+| Age versions become 3–5 / 6–8, order page always opens on step 1 | `age-ranges` | `docs/js/*`, `docs/index.html`, `docs/make/`, `docs/play-kits/`, `docs/img/gallery/*/little/activity-1.webp` and twins, `src/kits/engine.js`, `src/bot/*`, idea pages, `docs/img/share.jpg` |
+| Host Mode renamed **Field Kit**, sharper phone screenshots, Field Kit band on the home page | `field-kit` | `src/host/*`, `src/bot/*`, `docs/*` copy, `docs/img/host/`, `scripts/site-images.js`, terms/privacy |
+| Home banners show more of the pretend play kit | not started | `scripts/hero-scenes.js`, `docs/img/hero/` |
+| Themed handprint activity in every little kids (3–5) activity pack | not started | `src/kits/activities.js`, activity previews, page counts |
+| New **doctor** theme (hunt, kit, activity, party, site) plus pretend manila file folders (patient charts, intake forms, records) for doctor, vet and dentist | not started | `src/generator/themes`, `src/kits/*`, `src/party/*`, `src/host/*`, `docs/js/data.js`, lots of `docs/img/` |
+
+Remove a row when its PR merges.
 - Today's site work, all live: the site split into a home page plus `make/`, `play-kits/` and `handprint-art/` (#110); swipeable theme rows with a dropdown (#111); theme tiles with one cute illustration each (#114, after the wow-prop tiles were tried and reverted, #112/#113); home leads with the four products, plus the phone checkout bar (#115); phone speed fixes (#116); theme dropdown without ages (#117); product pictures on the Stripe checkout (#118).
 - Waiting on Jason: set the Stripe logo and colors in the Dashboard (see "Stripe checkout page" below), and check that Railway redeployed the order bot after #118 (a test checkout should show a picture beside the product).
 - Ideas raised but not started: the Stage 0 growth items (analytics, email capture); a grill piece for Burger and an espresso machine for Coffee (play kitchen fit).
