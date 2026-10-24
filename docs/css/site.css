@@ -574,3 +574,18 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 .fk-cap { font: 600 14px/1.2 var(--display); }
 @media (max-width: 860px) { .field-kit { grid-template-columns: 1fr; padding: 20px; } }
 @media (max-width: 520px) { .fk-phones { gap: 10px; } .fk-phones button:nth-child(2) { margin-top: 12px; } .fk-cap { font-size: 12.5px; } }
+
+/* the preview's top (2026-10-24): one line of tabs that swipes, the close button beside it, a small age pill under */
+.gallery header { align-items: flex-start; }
+.gallery header > div { flex: 1; min-width: 0; }
+.gallery .g-bar { flex-direction: column; align-items: flex-start; gap: 8px; }
+.gallery .tabs { flex-wrap: nowrap; overflow-x: auto; max-width: 100%; scrollbar-width: none; padding: 1px; }
+.gallery .tabs::-webkit-scrollbar { display: none; }
+.gallery .tabs button { flex: none; font-size: 13.5px; padding: 8px 12px; white-space: nowrap; }
+.gallery .tabs:empty { display: none; }
+.gallery .x { width: 36px; height: 36px; font-size: 24px; margin: -2px -4px 0 0; }
+.gallery .g-ages { padding: 2px; }
+.gallery .g-ages button { font-size: 12.5px; padding: 6px 11px; }
+.gallery .cap { font-size: 13.5px; }
+@media (max-width: 520px) { .gallery .g-in { padding: 12px 10px 10px; gap: 8px; } .gallery .tabs button { font-size: 13px; padding: 7px 11px; } }
+@media (max-width: 380px) { .gallery .tabs { gap: 5px; } .gallery .tabs button { font-size: 12.5px; padding: 7px 9px; } }
