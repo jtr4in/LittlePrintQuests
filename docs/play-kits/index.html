@@ -23,7 +23,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&display=swap">
 <!-- the printed pages' own fonts, for writing the kid's name over the previews (js/names.js); files load only when used -->
 <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:wght@200..1000&family=Bangers&family=Pirata+One&family=Orbitron:wght@400..900&family=Cinzel+Decorative:wght@700&family=Pacifico&family=Comic+Neue:wght@700&display=swap">
-<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/site.css?v=648a9c73">
 </head>
 <body>
 
@@ -80,9 +80,9 @@
     <nav class="foot-links"><a href="make/">Make a kit</a><a href="handprint-art/">Handprint art</a><a href="ideas/">Party and hunt ideas</a><a href="contact/">Contact</a><a href="refunds/">Refunds</a><a href="privacy/">Privacy</a><a href="terms/">Terms</a></nav>
   </div>
 </footer>
-<script src="js/names.js"></script>
-<script src="js/data.js"></script>
-<script src="js/site.js"></script>
+<script src="js/names.js?v=22d37737"></script>
+<script src="js/data.js?v=fa29ee5f"></script>
+<script src="js/site.js?v=d0e3004f"></script>
 <script>
 // Tapping a shop kit opens its pages (both age versions and the box build) with a buy form under them.
 // "Get the kit" opens the order page with that kit ticked, so the rest of the set can be added there.
@@ -94,7 +94,7 @@ $('shopList').innerHTML = SHOP_KITS.map(([id, name, blurb]) => `<button type="bu
     <img decoding="async" src="img/kit-${id}.webp" alt="${name} play kit pages" width="677" height="497" loading="lazy"><h3>${name}</h3><p>${esc(blurb.replace(/your child’s/g, 'your kid’s'))}</p><span class="foot"><span class="see">See what’s inside</span><span class="pages-badge">${PAGES.kit[id]} pages</span></span></button>`).join('');
 $('shopList').querySelectorAll('[data-kit]').forEach((b) => b.addEventListener('click', () => openShop(b.dataset.kit)));
 // Kits by kind; the few make-believe and adventure kits share a chip here.
-themeFilter($('kitChips'), $('shopList'), { key: 'kit', groups: [
+if (typeof THEME_GROUPS !== 'undefined' && typeof themeFilter === 'function') themeFilter($('kitChips'), $('shopList'), { key: 'kit', groups: [
   ...THEME_GROUPS.filter((g) => g.id === 'shops' || g.id === 'helpers'),
   { id: 'pretend', label: 'Make-believe', ids: THEME_GROUPS.filter((g) => g.id === 'magic' || g.id === 'adventure').flatMap((g) => g.ids) },
 ] });

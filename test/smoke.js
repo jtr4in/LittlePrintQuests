@@ -246,6 +246,8 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.ok(sp.spots.every((id) => require('../src/generator/spots')[id]), sp.id);
     assert.ok(site.includes(`${sp.id}: ['${sp.label}', ${JSON.stringify(sp.spots).replace(/"/g, "'").replace(/,/g, ', ')}]`), `site trail ${sp.id}`);
   }
+  // Shared scripts and the stylesheet carry a fingerprint of their content, so phones never mix old and new copies.
+  assert.deepEqual(require('../scripts/stamp-assets').run({ check: true }), [], 'run: node scripts/stamp-assets.js');
   // Theme filter chips: every theme on the site sits in exactly one group.
   {
     const vm = require('vm');
