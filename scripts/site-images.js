@@ -23,14 +23,12 @@ const SPOTS = ['front_door', 'shoe_rack', 'couch', 'dryer', 'bathtub', 'bookshel
 const PARTY = { date: 'Saturday, June 3', time: '2 to 4 pm', place: 'Our house', rsvp: 'Text Sam' };
 const HOST_SIZE = [540, 1080]; // the saved Field Kit phone screenshots (captured at 720x1440)
 const dataUrl = (f) => `data:image/png;base64,${fs.readFileSync(f).toString('base64')}`;
-// Stand-ins for the family's photos on the Field Kit photo screen: crops of the theme's printed set
-// (the hero scene and the box build), [url, label, [file, left, top, right, bottom as fractions]].
-function fieldKitPhotos(id) {
-  const hero = path.join(IMG, 'hero', `${id}.webp`), howto = path.join(IMG, 'howto', `${id}.webp`);
-  const list = [[hero, 0.04, 0.6, 0.42, 1], [hero, 0.71, 0.02, 0.97, 0.62], [hero, 0.17, 0.06, 0.42, 0.62]];
-  if (fs.existsSync(howto)) list.push([howto, 0.02, 0.2, 0.5, 0.48]);
-  const labels = ['Ready for the mission', 'Card 3 found', 'Puzzle time', 'Treasure found'];
-  return list.map((c, k) => [`/photo/${k}`, labels[k], c]);
+// Stand-ins for the family's photos on the Field Kit photo screen and printed page: four kids-at-play
+// photos Jason made in the Gemini app (2026-10-24), the same for every theme. [url, label, [file, crop]].
+function fieldKitPhotos() {
+  const dir = path.join(__dirname, '..', 'project-files', 'fieldkit-photos');
+  return [['hallway', 'Off on the hunt'], ['couch', 'Card 3 found'], ['living-room', 'Which way next?'], ['party', 'Mission complete!']]
+    .map(([f, label], k) => [`/photo/${k}`, label, [path.join(dir, `${f}.webp`), 0, 0, 1, 1]]);
 }
 function photoJpg([file, l, t, r, b]) {
   const { execFileSync } = require('child_process');
@@ -101,7 +99,7 @@ const wowPage = (kitId) => {
     const play = steps.findIndex((s) => /Card 3/.test(s.title) && s.phase === 'play');
     // as for an everything bundle, so the Play Kit and Party tabs show as included, not greyed out
     const fk = () => hostPage(order, { stateUrl: '/h/state', sidekickUrl: null, downloads: [], items: ['hunt', 'kit', 'party'] });
-    const photos = fieldKitPhotos(id);
+    const photos = fieldKitPhotos();
     const screens = [
       ['hide', fk(), hide, (ph) => ph.click('[data-sec="hunt"]')],
       ['play', fk(), play, (ph) => ph.click('[data-sec="hunt"]')],
