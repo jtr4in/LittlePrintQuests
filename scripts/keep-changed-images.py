@@ -3,7 +3,7 @@
 # a full set of previews on every kit edit). Used by .github/workflows/previews.yml.
 # Usage: python3 scripts/keep-changed-images.py
 import io, subprocess
-from PIL import Image, ImageChops, ImageStat
+from PIL import Image, ImageChops
 
 changed = subprocess.run(['git', 'diff', '--name-only', '--', 'docs/img'], capture_output=True, text=True, check=True).stdout.split()
 kept = reverted = 0
@@ -18,9 +18,13 @@ for f in changed:
         continue
     same = False
     if old.size == new.size:
-        diff = ImageChops.difference(old, new)
-        # Re-encoding moves pixels by a few levels; a real change (new text, a new page) moves them a lot.
-        same = max(ImageStat.Stat(diff).mean) < 1 and diff.convert('L').point(lambda v: 255 if v > 40 else 0).getbbox() is None
+        # Re-encoding and font hinting move edges by a pixel; a real change (new text, a new page) moves
+        # whole areas. So compare at a quarter size and call it changed when over 3% of it differs
+        # (a text page re-rendered on another machine moves about 1%, a new picture 30% or more).
+        small = (max(1, old.width // 4), max(1, old.height // 4))
+        diff = ImageChops.difference(old.resize(small, Image.BOX), new.resize(small, Image.BOX)).convert('L')
+        moved = diff.point(lambda v: 255 if v > 32 else 0).histogram()[255]
+        same = moved <= 0.03 * small[0] * small[1]
     if same:
         subprocess.run(['git', 'checkout', '--', f], check=True)
         reverted += 1
