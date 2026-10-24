@@ -39,7 +39,7 @@ function burnersPages(k) {
     <div class="rm-knobs"><svg viewBox="0 0 1000 190">${[130, 375, 625, 870].map(knob).join('')}</svg></div>
     <div class="rm-oven-clock"><svg viewBox="0 0 1000 300"><rect x="6" y="6" width="988" height="288" rx="30" class="sv-top"/>
       <rect x="250" y="60" width="500" height="150" rx="18" class="rm-clock-face"/><text x="500" y="168" text-anchor="middle" class="rm-clock-t">12:00</text>
-      <text x="500" y="262" text-anchor="middle" class="rm-clock-n">${esc(k.lead)}</text>${em(130, 140, 140, '🔥')}${em(870, 140, 140, '⏲️')}
+      <text x="500" y="262" text-anchor="middle" class="rm-clock-n" data-fit-w="560">${esc(k.lead)}</text>${em(130, 140, 140, '🔥')}${em(870, 140, 140, '⏲️')}
       <rect x="2" y="2" width="996" height="296" rx="34" class="cut-dash" fill="none"/></svg>
       <p class="ap-tip">Oven clock: tape it above the oven door. Write the timer in with a dry-erase marker.</p></div>
   </section>`;
@@ -102,7 +102,7 @@ function backsplashPages(k) {
   const tools = [['🥄', 'Spoon'], ['🍳', 'Pan'], ['🍴', 'Fork'], ['🧤', 'Mitt']];
   const page1 = wall(`
     <rect x="130" y="230" width="500" height="200" rx="26" class="rm-plaque"/><rect x="146" y="246" width="468" height="168" rx="18" class="rm-plaque-in"/>
-    <text x="380" y="330" text-anchor="middle" class="rm-plaque-t" style="font-size:${Math.min(64, Math.round(980 / k.placeName.length))}px">${esc(k.placeName)}</text>
+    <text x="380" y="330" text-anchor="middle" class="rm-plaque-t" style="font-size:${Math.min(64, Math.round(980 / k.placeName.length))}px" data-fit-w="430">${esc(k.placeName)}</text>
     <text x="380" y="388" text-anchor="middle" class="rm-plaque-s">${esc(k.def.tagline)}</text>
     <rect x="60" y="560" width="640" height="22" rx="11" class="rm-rail"/>
     ${tools.map(([e], i) => { const x = 140 + i * 160; return `<path d="M${x},582 L${x},620" class="rm-hook"/>${em(x, 700, 150, e)}`; }).join('')}`);
@@ -129,7 +129,7 @@ function stagePages(k) {
   const bulbs = Array.from({ length: 14 }, (_, i) => `<circle cx="${80 + i * 46}" cy="62" r="11" class="rm-bulb"/><circle cx="${80 + i * 46}" cy="196" r="11" class="rm-bulb"/>`).join('');
   const top = `<svg viewBox="0 0 760 340" class="rm-valance"><rect x="0" y="0" width="760" height="250" class="rm-velvet"/>${scallops}${fringe}
     <rect x="50" y="40" width="660" height="178" rx="20" class="rm-marquee"/>${bulbs}
-    <text x="380" y="148" text-anchor="middle" class="rm-marquee-t" style="font-size:${Math.min(62, Math.round(1120 / k.placeName.length))}px">${esc(k.placeName)}</text>
+    <text x="380" y="148" text-anchor="middle" class="rm-marquee-t" style="font-size:${Math.min(62, Math.round(1120 / k.placeName.length))}px" data-fit-w="640">${esc(k.placeName)}</text>
     <path d="M0,0 L760,0 L760,250 ${Array.from({ length: 8 }, (_, i) => `Q${760 - i * 95 - 47.5},330 ${760 - (i + 1) * 95},250`).join(' ')} Z" class="cut-dash" fill="none"/></svg>`;
   const lights = `<svg viewBox="0 0 760 170" class="rm-footlights"><rect x="0" y="40" width="760" height="130" rx="10" class="rm-boards"/>
     ${Array.from({ length: 6 }, (_, i) => `<line x1="0" y1="${62 + i * 20}" x2="760" y2="${62 + i * 20}" class="rm-board-line"/>`).join('')}
@@ -171,7 +171,7 @@ function folderPage(k, subject, n) {
     ${letters.map((c, i) => `<rect x="${704}" y="${80 + i * 72}" width="58" height="64" rx="6" fill="${TAB_COLORS[(c.charCodeAt(0) + i) % TAB_COLORS.length]}"/><text x="733" y="${125 + i * 72}" class="mf-letter" text-anchor="middle">${esc(c.trim())}</text>`).join('')}
     <rect x="704" y="224" width="58" height="64" rx="6" fill="${TAB_COLORS[(n + 3) % TAB_COLORS.length]}"/><text x="733" y="268" class="mf-letter" text-anchor="middle">${n + 1}</text>
     <rect x="60" y="88" width="420" height="150" rx="10" class="mf-label"/>
-    <text x="80" y="128" class="mf-kicker">${esc(k.placeName)}</text>
+    <text x="80" y="128" class="mf-kicker" data-fit-w="380">${esc(k.placeName)}</text>
     <text x="80" y="180" class="mf-big">${esc(F.label)}</text>
     <text x="80" y="220" class="mf-no">File no. ${String(1000 + n * 137).slice(-4)}</text>
     ${subject ? `<circle cx="580" cy="165" r="78" class="mf-photo"/>${em(580, 165, 110, k.def.kinds[subject.kind][0])}` : `<circle cx="580" cy="165" r="78" class="mf-photo"/><text x="580" y="172" class="mf-small" text-anchor="middle">photo</text>`}
@@ -179,7 +179,7 @@ function folderPage(k, subject, n) {
       <text x="570" y="342" class="mf-stamp-t" text-anchor="middle" style="font-size:${Math.min(34, Math.round(520 / F.stamp.length))}px">${esc(F.stamp)}</text></g>
     <text x="60" y="300" class="mf-in">In this file:</text>
     ${F.inside.map(([e, t], i) => { const y = 340 + i * 44; return `<rect x="62" y="${y - 24}" width="28" height="28" rx="5" class="mf-box"/>${em(122, y - 10, 34, e)}<text x="150" y="${y}" class="mf-item">${esc(t)}</text>`; }).join('')}
-    <text x="420" y="430" class="mf-in">${esc(k.def.leadRole)}</text><line x1="420" y1="480" x2="740" y2="480" class="mf-line"/><text x="420" y="472" class="mf-sign">${esc(k.lead)}</text>`;
+    <text x="420" y="430" class="mf-in">${esc(k.def.leadRole)}</text><line x1="420" y1="480" x2="740" y2="480" class="mf-line"/><text x="420" y="472" class="mf-sign" data-fit-w="320">${esc(k.lead)}</text>`;
   // The back panel prints upside down so it reads the right way once folded behind.
   const back = `<g transform="rotate(180 395 760)">
     <rect x="10" y="520" width="770" height="480" class="mf-manila back"/>

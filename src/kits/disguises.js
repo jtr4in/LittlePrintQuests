@@ -61,7 +61,7 @@ function bubble(words, who) {
     <path d="${shape}" fill="#fff" stroke="#9aa5b8" stroke-width="16"/>
     <path d="${shape}" fill="#fff" stroke="var(--teal)" stroke-width="9"/>
     ${words ? `<foreignObject x="85" y="70" width="430" height="${who ? 190 : 250}"><div xmlns="http://www.w3.org/1999/xhtml" class="dg-words" style="font-size:${size}px">${esc(words)}</div></foreignObject>` : ''}
-    ${who ? `<text x="300" y="300" text-anchor="middle" class="dg-who">${esc(who)}</text>` : [130, 205, 280].map((y, i) => `<line x1="${i === 2 ? 170 : 110}" y1="${y}" x2="${i === 2 ? 430 : 490}" y2="${y}" stroke="#d5dbe6" stroke-width="3" stroke-dasharray="10 10"/>`).join('')}
+    ${who ? `<text x="300" y="300" text-anchor="middle" class="dg-who" data-fit-w="400">${esc(who)}</text>` : [130, 205, 280].map((y, i) => `<line x1="${i === 2 ? 170 : 110}" y1="${y}" x2="${i === 2 ? 430 : 490}" y2="${y}" stroke="#d5dbe6" stroke-width="3" stroke-dasharray="10 10"/>`).join('')}
   </svg>`;
 }
 
