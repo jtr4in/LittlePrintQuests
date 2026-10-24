@@ -874,6 +874,15 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.equal(pay.checkoutImages('dino'), undefined, 'Stripe needs https pictures');
     if (site === undefined) delete process.env.SITE_URL; else process.env.SITE_URL = site;
   }
+  // Every name-swap entry has its nameless twin, and no twin is left over without an entry (a leftover
+  // twin of a page that lost its name showed the wrong page in the previews).
+  {
+    const N = path.join(__dirname, '..', 'docs', 'img', 'n');
+    const keys = new Set(fs.readdirSync(N).filter((f) => f.endsWith('.json')).flatMap((f) => Object.keys(JSON.parse(fs.readFileSync(path.join(N, f), 'utf8')))));
+    for (const k of keys) assert.ok(fs.existsSync(path.join(N, k.slice(4))), `twin for ${k}`);
+    const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]));
+    for (const f of walk(path.join(N, 'gallery'))) assert.ok(keys.has(`img/${path.relative(N, f).split(path.sep).join('/')}`), `leftover twin ${f}`);
+  }
   // The theme pickers show one illustration per theme (scripts/theme-icons.py).
   for (const id of Object.keys(require('../src/generator/themes'))) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'icons', `${id}.webp`)), `theme icon ${id}`);
   // The order preview gallery has five pages per item for every theme.

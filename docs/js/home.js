@@ -76,9 +76,10 @@ if (!calm()) setInterval(() => { if (!document.hidden && heroSeen) showHero(next
 // ---- What you get: each product card opens its real pages, the photo first ------------------------
 $('productCards').querySelectorAll('.product').forEach((b) => b.addEventListener('click', () => {
   const k = b.dataset.k, id = b.dataset.theme, name = b.querySelector('b').textContent;
-  const pages = [{ k, cap: `${name}, printed and set up`, src: b.dataset.photo, alt: b.querySelector('img').alt },
-    ...setPages(id).filter((p) => p.k === k).map((p) => ({ ...p, tab: '' }))];
-  Gallery.open(pages, { label: `${name}: ${THEMES.find((t) => t.id === id).name}`, title: true, foot: Gallery.cta(`make/?theme=${id}`, 'Make my kit') });
+  const pagesFor = (a) => [{ k: 'photo', cap: `${name}, printed and set up`, src: b.dataset.photo, alt: b.querySelector('img').alt },
+    ...setPages(id, a).filter((p) => p.k === k).map((p) => ({ ...p, tab: '' }))];
+  Gallery.open(pagesFor('big'), { label: `${name}: ${THEMES.find((t) => t.id === id).name}`, title: true, foot: Gallery.cta(`make/?theme=${id}`, 'Make my kit'),
+    ages: k === 'kit' || k === 'activity' ? { value: 'big', pages: pagesFor } : null });
 }));
 // Host Mode: three phone screens from a real order.
 const HOST = [['hide', 'Hide the cards: one per screen, in your hiding order'], ['play', 'Play along: a quick challenge, a line to say and the clue to read'], ['sidekick', 'Bring a sidekick: a second grown-up gets their own lines']];
@@ -101,6 +102,7 @@ function previewTheme(id) {
     tabs: ['hunt', 'kit', 'activity', 'party'].map((k) => [k, LABELS[k]]),
     label: `${t.name} pages`,
     foot: Gallery.cta(`make/?theme=${id}`, `Make the ${THEME_LABELS[id]} set`),
+    ages: { value: 'big', pages: (a) => setPages(id, a) },
   });
 }
 drawThemeGrid();

@@ -541,3 +541,13 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 /* each order step eases in instead of popping */
 .wiz-step:not([hidden]) { animation: step-in .22s ease-out; }
 @keyframes step-in { from { opacity: 0; transform: translateY(6px); } }
+
+/* ---- The age switch in previews (2026-10-23): flip the play kit and activity pages between the
+   little kids and big kids versions ---------------------------------------------------------------- */
+.gallery .g-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.gallery .g-ages { display: inline-flex; align-items: center; gap: 0; padding: 3px; border-radius: 99px; background: var(--paper); border: 1px solid var(--line); }
+.gallery .g-ages[hidden] { display: none; }
+.gallery .g-ages button { font: 600 13.5px/1 var(--body); padding: 8px 12px; border: 0; border-radius: 99px; background: transparent; color: var(--ink-soft); cursor: pointer; white-space: nowrap; }
+.gallery .g-ages button[aria-pressed="true"] { background: var(--orange); color: var(--orange-ink); }
+.gallery .g-same { font-size: 12.5px; color: var(--ink-soft); padding: 0 8px 0 6px; white-space: nowrap; }
+@media (max-width: 520px) { .gallery .g-ages button { padding: 8px 10px; font-size: 13px; } .gallery .g-same { display: none; } }
