@@ -140,6 +140,16 @@ const ordered = seasonal ? [THEMES.find((t) => t.id === seasonal), ...THEMES.fil
 // Short names for the theme strip.
 const THEME_LABELS = { dino: 'Dinosaur', hero: 'Superhero', pirate: 'Pirate', space: 'Outer Space', royal: 'Princess & Knights', unicorn: 'Unicorn', mermaid: 'Mermaid', construction: 'Construction', vet: 'Pet Vet', easter: 'Easter', halloween: 'Halloween', christmas: 'Christmas', valentine: 'Valentine’s', fire: 'Firefighter', ice: 'Ice Kingdom', racecar: 'Race Car', pizza: 'Pizza Shop', burger: 'Burger Shop', grocery: 'Grocery Store', post: 'Post Office', library: 'Library', police: 'Police', dentist: 'Dentist', petshop: 'Pet Shop', coffee: 'Café', italian: 'Italian', auto: 'Auto Shop', kitchen: 'Play Kitchen', doctor: 'Doctor', puppet: 'Puppet Theater', agent: 'Secret Agent', dressup: 'Dress-Up', icecream: 'Ice Cream', airport: 'Airport' };
 
+// Theme groups for the filter chips above the theme tiles. Every theme sits in exactly one group;
+// a new theme missing from these lists still shows under All (test/smoke.js checks they all appear).
+const THEME_GROUPS = [
+  { id: 'adventure', label: 'Adventure', ids: ['dino', 'hero', 'pirate', 'space', 'racecar', 'agent'] },
+  { id: 'magic', label: 'Make-believe', ids: ['royal', 'unicorn', 'mermaid', 'ice', 'puppet', 'dressup'] },
+  { id: 'helpers', label: 'Helpers', ids: ['fire', 'police', 'doctor', 'dentist', 'vet', 'construction', 'auto', 'post', 'library', 'airport'] },
+  { id: 'shops', label: 'Food & shops', ids: ['pizza', 'burger', 'italian', 'coffee', 'icecream', 'kitchen', 'grocery', 'petshop'] },
+  { id: 'holidays', label: 'Holidays', ids: ['halloween', 'christmas', 'valentine', 'easter'] },
+];
+
 // The cart is a stack of papers: the hunt, its play kit, the activity pack and the party pack.
 // Pick any mix; two together cost less.
 const LAYERS = [

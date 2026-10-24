@@ -118,6 +118,12 @@ Work that is about to merge or is mid-merge, so sessions on the other account ca
 - Gotcha fixed 2026-10-23: text hidden when a picture was taken (the Field Kit's inactive tabs) got zero-size name spots, and the site drew them as a squashed column of words at the top left of the preview. `nameSlots` now skips them, `names.js` ignores any that remain, the 516 saved ones were removed, and `npm test` checks for them.
 - Regenerate in order: `gallery-images.js` -> `craft-gallery.js` -> `site-images.js` -> `hero-scenes.js`. If you only meant to refresh twins, `git checkout` the non-`n` images afterwards (they re-encode slightly differently). If a print layout changes, re-run the scripts or the overlay text sits in the old spot.
 
+### Theme groups (2026-10-24)
+
+With 34 themes, the theme tiles on the home page and the order page have one line of filter chips above them: All, Adventure, Make-believe, Helpers, Food & shops, Holidays (Jason asked to organize them without adding clutter). The order page's dropdown uses the same groups as `<optgroup>`s, with the in-season holiday first, and picking a theme from it switches the chips to that theme's group. The Play Kits page uses chips too: Helpers, Food & shops, and Make-believe (the few adventure and magic kits together).
+- Groups live in `THEME_GROUPS` in `docs/js/data.js`; the chips come from `themeFilter()` in `docs/js/site.js`. A group needs at least 2 tiles on a page to get a chip.
+- **New theme: add its id to one group.** `npm test` fails if a theme has no group, is in two, or a group lists an unknown id.
+
 ### Keeping the site smooth on phones (2026-10-23)
 Jason found navigating choppy. What it was and the rules now:
 - Swapping a preview's src made phones download the sample-name picture and then its nameless twin, plus that theme's ~50 KB name data (`img/n/<theme>.json`). Use `LPQName.setSrc(img, src, srcset)` after `LPQName.preload(theme)` resolves for pictures that change at runtime (banners, hook pages, order stack): it goes straight to the twin.

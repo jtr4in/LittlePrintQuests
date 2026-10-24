@@ -58,6 +58,7 @@
         <button type="button" data-big="img/life/pizza-flat.webp"><img decoding="async" src="img/life/pizza-flat-sm.webp" srcset="img/life/pizza-flat-sm.webp 640w, img/life/pizza-flat.webp 1200w" sizes="(max-width: 760px) 78vw, 600px" width="640" height="478" alt="Everything in the Pizza Shop kit printed out: welcome poster, menu, shop sign, order cards, play money and staff badges" loading="lazy"><span>Everything that prints<small>See the pages</small></span></button>
       </div>
       <h2 class="sub-title">Tap a kit to see its pages</h2>
+      <div class="theme-chips" id="kitChips" role="group" aria-label="Show kits"></div>
       <div class="themes" id="shopList"></div>
       <p class="kits-lede">Every shop kit also has its own scavenger hunt and party pack, so you can get the whole set in one everything bundle when you order.</p>
     </div>
@@ -92,6 +93,11 @@ const shopName = (id) => (SHOP_KITS.find(([k]) => k === id) || [])[1];
 $('shopList').innerHTML = SHOP_KITS.map(([id, name, blurb]) => `<button type="button" class="theme shop-card" data-kit="${id}" aria-haspopup="dialog">
     <img decoding="async" src="img/kit-${id}.webp" alt="${name} play kit pages" width="677" height="497" loading="lazy"><h3>${name}</h3><p>${esc(blurb.replace(/your child’s/g, 'your kid’s'))}</p><span class="foot"><span class="see">See what’s inside</span><span class="pages-badge">${PAGES.kit[id]} pages</span></span></button>`).join('');
 $('shopList').querySelectorAll('[data-kit]').forEach((b) => b.addEventListener('click', () => openShop(b.dataset.kit)));
+// Kits by kind; the few make-believe and adventure kits share a chip here.
+themeFilter($('kitChips'), $('shopList'), { key: 'kit', groups: [
+  ...THEME_GROUPS.filter((g) => g.id === 'shops' || g.id === 'helpers'),
+  { id: 'pretend', label: 'Make-believe', ids: THEME_GROUPS.filter((g) => g.id === 'magic' || g.id === 'adventure').flatMap((g) => g.ids) },
+] });
 // photo: a styled photo to show first (the two Pizza Shop photos at the top open this way).
 function openShop(id, photo) {
   shopKit = id;

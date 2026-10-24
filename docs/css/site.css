@@ -431,6 +431,13 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 .home .themes.mini.rows { grid-auto-columns: clamp(96px, calc((100% - 20px) / 3.3), 140px); gap: 12px; }
 .home .themes.mini.rows .theme { padding: 8px; }
 .home .themes.mini.rows .theme span { font-size: 14px; text-align: center; }
+/* filter chips above the theme tiles: one quiet line that swipes, never wraps */
+.theme-chips { display: flex; gap: 6px; overflow-x: auto; margin-top: 14px; padding: 2px; scrollbar-width: none; }
+.theme-chips::-webkit-scrollbar { display: none; }
+.theme-chips:empty { display: none; }
+.theme-chips button { flex: none; border: 1.5px solid var(--line); background: var(--sheet); color: var(--ink); border-radius: 999px; padding: 8px 13px; font: 700 13.5px/1 var(--body); cursor: pointer; }
+.theme-chips button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.theme-chips + .themes.mini.rows { margin-top: 10px; }
 /* the theme dropdown above the tiles */
 .theme-pick { display: grid; gap: 6px; max-width: 420px; font: 700 15px/1.2 var(--body); }
 /* the preview gallery: one photo needs no arrows, and a button or buy form can sit under the pages */
