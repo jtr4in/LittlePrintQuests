@@ -35,9 +35,11 @@ const dataUrl = (f) => `data:image/png;base64,${fs.readFileSync(f).toString('bas
   fs.mkdirSync(path.join(IMG, 'n', 'host'), { recursive: true });
   for (const id of Object.keys(THEMES).filter((k) => !only.length || only.includes(k))) {
     const dir = (k) => path.join(tmp, `${id}-${k}`);
+    // Shop-style kits (pizza, library...) keep their styled card photo and the page gallery-images.js made;
+    // a new one without a card photo yet gets the page fan like the other themes.
+    const kit = kitForHunt(id)?.bigSign && fs.existsSync(path.join(IMG, `kit-${id}.webp`)) ? null : kitForHunt(id);
+    const pg = (k, n) => path.join(dir(k), `page-${n}.png`);
     if (!hostOnly) {
-    // Shop-style kits (pizza, library...) keep the kit card and page theme-photos.js and gallery-images.js made.
-    const kit = kitForHunt(id)?.bigSign ? null : kitForHunt(id);
     const huntCfg = { theme: id, childName: 'Maya', age: 6, spots: SPOTS, pictures: true };
     await renderPdf(huntCfg, `${dir('hunt')}.pdf`, { pngDir: dir('hunt'), nameSlots: 'Maya' });
     const roles = pageRoles(buildHtml(huntCfg));
@@ -45,7 +47,6 @@ const dataUrl = (f) => `data:image/png;base64,${fs.readFileSync(f).toString('bas
     huntParts[id] = { guide: roles.host, briefing: roles.briefing, cards: roles.sheet, puzzle: roles.puzzle, cert: roles.cert, bonus: roles['pic-lists'] };
     await renderParty({ theme: id, childName: 'Maya', age: 6, party: PARTY }, `${dir('party')}.pdf`, { pngDir: dir('party'), nameSlots: 'Maya' });
     if (kit) await renderKit({ kit: kit.id, childName: 'Maya', subjects: [], lenient: true }, `${dir('kit')}.pdf`, { pngDir: dir('kit'), nameSlots: 'Maya' });
-    const pg = (k, n) => path.join(dir(k), `page-${n}.png`);
 
     // Play kit card: three kit pages fanned out on a transparent background.
     if (kit) {

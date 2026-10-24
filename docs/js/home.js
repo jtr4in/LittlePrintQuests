@@ -89,7 +89,7 @@ $('fkPhones').querySelectorAll('button').forEach((b) => b.addEventListener('clic
 $('seeHost').addEventListener('click', () => fieldKit());
 
 // ---- Themes: tap one to see its pages ------------------------------------------------------------
-// Two rows of tiles that swipe sideways, so 27 themes don't make a long page.
+// Two rows of tiles that swipe sideways, so 34 themes don't make a long page.
 function drawThemeGrid() {
   $('themeGrid').innerHTML = ordered.map((t) => `
   <button type="button" class="theme" data-id="${t.id}" aria-haspopup="dialog" title="${esc(t.name)}, ages ${t.ages}">
