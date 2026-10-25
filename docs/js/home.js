@@ -21,6 +21,7 @@ $('hookForm').addEventListener('submit', (e) => {
 function drawHookPages(id = theme) {
   LPQName.preload(id).then(() => {
     LPQName.setSrc($('hookBack'), `img/pages/${id}-cards.webp`);
+    LPQName.setSrc($('hookMid'), `img/pages/${id}-kit.webp`);
     LPQName.setSrc($('hookFront'), `img/host/${id}-play.webp`);
   });
 }

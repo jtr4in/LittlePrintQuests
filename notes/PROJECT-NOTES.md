@@ -164,7 +164,7 @@ Jason found the preview popup's top crowded on phones (tabs wrapped onto two lin
 
 ### Above the fold (2026-10-25)
 
-Beside the headline: the theme's clue card sheet (`img/pages/<theme>-cards.webp`) with the Field Kit's hunt screen on a phone in front (`img/host/<theme>-play.webp`), both name-swapped and following the occasion's theme; tapping it scrolls to the Field Kit clip (`#why`). Under the name box, three checks: their name on every page, a guide on your phone so you can play along, ready to print in minutes. The paragraph got shorter to make room. (Before: two pages, play kit and party invitation.)
+Beside the headline: the theme's clue card sheet (`img/pages/<theme>-cards.webp`) and play kit page (`-kit.webp`, added the same day so phones show pages too, not just the phone) with the Field Kit's hunt screen on a phone in front (`img/host/<theme>-play.webp`), both name-swapped and following the occasion's theme; tapping it scrolls to the Field Kit clip (`#why`). Under the name box, three checks: their name on every page, a guide on your phone so you can play along, ready to print in minutes. The paragraph got shorter to make room. (Before: two pages, play kit and party invitation.)
 
 ### Theme groups (2026-10-24)
 
