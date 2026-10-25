@@ -4,7 +4,7 @@
 // make/?pick=hunt+kit, make/?kit=burger. The old /?theme=…#order links land here too (index.html).
 
 // ages is the little kids (3 to 5) or big kids (6 to 8) version; it follows the age until they pick one.
-const state = { ages: 'big', agesPicked: false, theme: 'dino', picks: ['front_door', 'shoe_rack', 'couch', 'dryer', 'bathtub', 'bookshelf', 'pet_bed', 'kitchen_table'], custom: {} };
+const state = { ages: 'little', agesPicked: false, theme: 'dino', picks: ['front_door', 'shoe_rack', 'couch', 'dryer', 'bathtub', 'bookshelf', 'pet_bed', 'kitchen_table'], custom: {} };
 // Everything is ticked to start; untick what you don't need.
 const picked = new Set(['hunt', 'kit', 'activity', 'party']);
 let passInfo = null; // { code, left, total } once a Family Pass code checks out
