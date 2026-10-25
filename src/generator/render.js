@@ -65,13 +65,13 @@ async function writeThumbs(page, dir) {
     const head = clean(e.querySelector('h1,h2,h3,.title,[class*="title"]')?.textContent);
     const line = clean((e.innerText || '').split('\n').find((l) => clean(l).length > 2));
     const kind = Object.keys(KIND).find((k) => e.classList.contains(k));
-    return (named || (kindName && KIND[kindName]) || head || line || (kind && KIND[kind]) || `Page ${i + 1}`).slice(0, 48);
+    return { title: (named || (kindName && KIND[kindName]) || head || line || (kind && KIND[kind]) || `Page ${i + 1}`).slice(0, 48), kind: e.className.replace(/^page\s*/, '').trim() || 'page' };
   }), KIND);
   await page.evaluate(() => { document.documentElement.style.zoom = '0.3'; });
   const pages = await page.$$('.page');
   for (let i = 0; i < pages.length; i++) await pages[i].screenshot({ path: path.join(dir, `page-${i + 1}.jpg`), type: 'jpeg', quality: 72 });
   await page.evaluate(() => { document.documentElement.style.zoom = ''; });
-  fs.writeFileSync(path.join(dir, 'index.json'), JSON.stringify(titles.map((title) => ({ title }))));
+  fs.writeFileSync(path.join(dir, 'index.json'), JSON.stringify(titles));
 }
 
 module.exports = { renderPdf, renderHtml };

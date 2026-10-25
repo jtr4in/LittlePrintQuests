@@ -515,6 +515,8 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
       const { PDFDocument } = require('pdf-lib');
       const pj = await (await realFetch(`${base}/d/${w.downloadToken}/pages.json`)).json();
       assert.equal(pj.docs[0].id, 'main');
+      assert.ok(pj.docs.every((d) => d.type && d.pages.every((x) => x.kind)), 'page kinds for the Quick start presets');
+      if (main === 'hunt') assert.ok(pj.docs[0].pages.some((x) => / sheet /.test(` ${x.kind} `)), 'hunt clue card pages');
       assert.equal(pj.docs.length, 1 + ['kit', 'activity', 'party'].filter((i) => has.includes(i)).length);
       for (const d of pj.docs) {
         const suffix = d.id === 'main' ? '' : `-${d.id}`;
