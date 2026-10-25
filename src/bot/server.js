@@ -10,10 +10,11 @@ const orders = require('./orders');
 const payments = require('./payments');
 const listings = require('./listings');
 const sample = require('./sample');
+const mailer = require('./mailer');
 const health = require('./health');
 const products = require('./products');
 const { KITS, kitForHunt } = require('../kits/engine');
-const { sendHuntEmail, sendPassEmail } = require('./email');
+const { sendHuntEmail, sendPassEmail, sendGiftReceipt } = require('./email');
 const pass = require('./pass');
 const THEMES = require('../generator/themes');
 const { HOLIDAYS, craftLabel } = require('../crafts/build');
@@ -148,19 +149,24 @@ function passPanel(s) {
   const sold = Object.values(s.passes || {}).filter((p) => p.status === 'active').sort((a, b) => b.paidAt.localeCompare(a.paidAt));
   if (!sold.length) return `<div class="panel"><b>Family Passes:</b> <span class="muted">none sold yet ($${(payments.PRICES.pass / 100).toFixed(2)} for ${pass.USES} orders within a year).</span></div>`;
   return `<details class="panel"><summary><b>Family Passes:</b> ${sold.length} sold · ${sold.reduce((n, p) => n + p.uses.length, 0)} orders made with them</summary>
-    <table>${sold.map((p) => `<tr><td><code>${esc(p.code)}</code></td><td>${esc(p.email || '')}</td><td>${pass.left(p)} of ${p.total} left</td><td>ends ${esc(p.expiresAt.slice(0, 10))}</td><td class="problem">${esc(p.problem || '')}</td></tr>`).join('')}</table></details>`;
+    <table>${sold.map((p) => `<tr><td><code>${esc(p.code)}</code></td><td>${esc(p.email || '')}${p.gift ? ` <small>🎁 gift from ${esc(p.buyerEmail || p.gift.from)}</small>` : ''}</td><td>${pass.left(p)} of ${p.total} left</td><td>ends ${esc(p.expiresAt.slice(0, 10))}</td><td class="problem">${esc(p.problem || '')}</td></tr>`).join('')}</table></details>`;
 }
 
 function passPage(p) {
   const ends = p.expiresAt && new Date(p.expiresAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-  const body = p.status === 'active'
-    ? `<h1>Your Family Pass is ready! 🎉</h1>
+  if (p.status !== 'active') return buyerPage('Your Family Pass', `<h1>Setting up your Family Pass…</h1><p>Confirming your payment. This page updates by itself.</p><div class="spin"></div>`, true);
+  // A gift: the code went to the person it's for.
+  if (p.gift) {
+    return buyerPage('Your Family Pass gift', `<h1>Your gift is on its way! 🎁</h1>
+       <p>We emailed the Family Pass to <b>${esc(p.gift.to)}</b>${p.gift.message ? ' with your note' : ''}. It’s good for ${p.total} everything bundles until <b>${esc(ends)}</b>.</p>
+       <p>Their code, in case you’d like to write it in a card:</p><p class="code">${esc(p.code)}</p>
+       <p><small>We sent you a receipt too.</small></p>`);
+  }
+  return buyerPage('Your Family Pass', `<h1>Your Family Pass is ready! 🎉</h1>
        <p>Your code:</p><p class="code">${esc(p.code)}</p>
        <p><b>${pass.left(p)} of ${p.total}</b> orders left, to use by <b>${esc(ends)}</b>. Build an order on our site and type this code under “Have a Family Pass code?” next to the total.</p>
        <p><a class="btn" href="${esc(process.env.SITE_URL || process.env.PUBLIC_URL)}#order">Make my first order</a></p>
-       <p><small>${p.email ? `We also emailed the code to ${esc(p.email)}.` : 'Save this page or write the code down.'}</small></p>`
-    : `<h1>Setting up your Family Pass…</h1><p>Confirming your payment. This page updates by itself.</p><div class="spin"></div>`;
-  return buyerPage('Your Family Pass', body, p.status !== 'active');
+       <p><small>${p.email ? `We also emailed the code to ${esc(p.email)}.` : 'Save this page or write the code down.'}</small></p>`);
 }
 
 // Etsy listings the bot can create as drafts (see listings.js).
@@ -292,7 +298,7 @@ ${setupPanel()}
   }</div>
 ${passPanel(s)}
 ${listingsPanel(s)}
-<div class="panel"><b>Mailing list:</b> ${Object.values(s.subscribers || {}).filter((x) => !x.unsubscribedAt).length} people from the free sample. <a href="/admin/subscribers.csv">Download CSV</a></div>
+<div class="panel"><b>Mailing list:</b> ${Object.values(s.subscribers || {}).filter((x) => !x.unsubscribedAt).length} people from the free sample. <a href="/admin/subscribers.csv">Download CSV</a> · <a href="/admin/mail">Scheduled emails</a> (${process.env.MAIL_SCHEDULE === 'on' ? 'on' : 'off'})</div>
 <details class="panel"><summary><b>Make an order by hand</b> <span class="muted">(paste order notes, or test the bot)</span></summary>
   <form method="post" action="/admin/orders">
     <p><input name="buyerName" placeholder="Buyer name (optional)"></p>
@@ -392,6 +398,15 @@ async function route(req, res) {
     }
   }
 
+  // The Family Pass monthly mini hunt, and the link that stops those emails.
+  const dropM = p.match(/^\/drop\/([a-z]+)\.pdf$/);
+  if (dropM && THEMES[dropM[1]]) return sendPdf(req, res, await mailer.dropPdf(dropM[1]), 'mini-scavenger-hunt');
+  const stopM = p.match(/^\/pass\/(pass-[A-Za-z0-9_-]{8,})\/stop-mail$/);
+  if (stopM) {
+    const ok = mailer.stopDrops(stopM[1], url.searchParams.get('t'));
+    return send(res, ok ? 200 : 404, buyerPage('Monthly emails', ok ? '<h1>Done</h1><p>We won’t send you the monthly mini hunts anymore. Your Family Pass still works as usual.</p>' : '<h1>That link isn’t working</h1><p>Reply to any of our emails and we’ll stop them for you.</p>'));
+  }
+
   const sp = p.match(/^\/sample\/([a-z]+)\.pdf$/);
   if (sp && THEMES[sp[1]]) {
     const file = await sample.samplePdf(sp[1]);
@@ -459,7 +474,19 @@ async function route(req, res) {
       const found = pass.check(body.code);
       return found.error ? sendJson(res, 404, { error: found.error }) : sendJson(res, 200, pass.summary(found.pass));
     }
-    const id = pass.addPass();
+    // A gift: the code goes to the person it's for, with a note from the buyer.
+    let gift = null;
+    try {
+      const body = JSON.parse((await readRaw(req, 4_000)).toString() || '{}');
+      if (body.gift) {
+        const to = String(body.gift.to || '').trim().toLowerCase();
+        if (!/^[^\s@<>"]{1,64}@[^\s@<>"]{1,190}\.[a-z]{2,}$/i.test(to)) return sendJson(res, 400, { error: 'Please enter their email address.' });
+        gift = { to, from: String(body.gift.from || '').trim().slice(0, 60), message: String(body.gift.message || '').trim().slice(0, 400) };
+      }
+    } catch {
+      return sendJson(res, 400, { error: 'Bad request' });
+    }
+    const id = pass.addPass({ gift });
     try {
       const session = await payments.createPassCheckout(store.get().passes[id]);
       store.update((s) => (s.passes[id].checkoutId = session.id));
@@ -483,6 +510,7 @@ async function route(req, res) {
     const session = event.data?.object;
     if (event.type === 'checkout.session.completed' && payments.isPaid(session) && session.metadata?.pass_id) {
       const p = pass.activate(session.metadata.pass_id, { email: session.customer_details?.email, buyerName: session.customer_details?.name || '' });
+      if (p?.gift) sendGiftReceipt(p).catch((err) => health.recordError('Family Pass gift receipt', err.message));
       if (p) {
         sendPassEmail(p).catch((err) => {
           // They still see the code on the page Stripe sends them back to.
@@ -584,6 +612,7 @@ async function route(req, res) {
   if (!authorized(req)) return send(res, 401, 'Login required', { 'WWW-Authenticate': 'Basic realm="Order Bot"' });
 
   if (p === '/' || p === '/admin') return send(res, 200, dashboard(url.searchParams));
+  if (p === '/admin/mail') return send(res, 200, mailer.preview(), { 'Cache-Control': 'no-store' });
   if (p === '/admin/subscribers.csv') return send(res, 200, sample.subscribersCsv(), { 'Content-Type': 'text/csv', 'Content-Disposition': 'attachment; filename="subscribers.csv"' });
   if (p === '/auth/etsy/start') {
     const auth = etsy.startAuth();
@@ -686,4 +715,6 @@ http
   .listen(PORT, () => console.log(`Order bot listening on :${PORT}`));
 
 setInterval(() => orders.pollEtsy(), POLL_MINUTES * 60_000);
+// Scheduled emails (nurture and the monthly drop); does nothing unless MAIL_SCHEDULE=on.
+setInterval(() => mailer.run().catch((err) => console.error('Scheduled emails:', err.message)), 60 * 60_000);
 orders.pollEtsy();

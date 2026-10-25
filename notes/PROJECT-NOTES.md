@@ -194,6 +194,14 @@ Jason found navigating choppy. What it was and the rules now:
 ### Shop kit card photos (2026-10-23)
 - The 11 shop kit card thumbnails (`docs/img/kit-<id>.webp`, 1354x994, used by `SHOP_KITS` in `docs/js/data.js`) are styled Gemini photos, each starring the kit's signature piece, prompts say "no cash register". Prompts and scripts: `project-files/scavenger-hunt/previews/shop-kit-cards/`. Gemini redraws kit art loosely; use the round 4 lifestyle tools to restore exact art.
 
+### Bringing families back (2026-10-25)
+
+- **Scheduled emails** (`src/bot/mailer.js`), **off until Jason sets `MAIL_SCHEDULE=on` in Railway**. Admin → "Scheduled emails" (`/admin/mail`) previews every email and shows how many are due. Checked hourly.
+  - Nurture: 3 emails to free-mini-hunt sign-ups on day 1, 4 and 9 (play tips; why playing along matters plus the Field Kit; make one starring your kid). Only people who signed up in the last 3 weeks, one email at a time, at least 2 days apart. Unsubscribe link plus header.
+  - Monthly drop: after the 1st, each active Family Pass (bought before this month) gets a free 4-clue mini hunt in the month's theme (`MONTHS`: ice, valentine, unicorn, easter, construction, pirate, mermaid, space, dino, halloween, royal, christmas) at `/drop/<theme>.pdf`, a 10-minute play idea, and how many orders are left. "Stop these monthly emails" link (`/pass/<id>/stop-mail`).
+  - Once it's on, add a line about the monthly mini hunt to the Family Pass card and FAQ (left out so the site doesn't promise it before then).
+- **Gift a Family Pass**: "Give it as a gift" under the pass button (their email, from, note). The code and note go to the recipient (the pass's `email`); the buyer (`buyerEmail`) gets a receipt and sees the code on the thank-you page. Shown as 🎁 in the admin pass list.
+
 ### Field Kit page picker (2026-10-24)
 
 Jason: "there are a lot of pages now". The Get ready tab has **Choose pages to print**: a sheet listing every page of the order's PDFs (hunt, play kit, activity pack, party pack) as **tiles or a list** (his ask; the choice is remembered), with Select all per PDF and a Print button that opens one PDF of just the picked pages. Picks are remembered on the phone.

@@ -140,6 +140,13 @@ $('buyPass').addEventListener('click', () => {
   goCheckout({}, (t) => { $('passStatus').textContent = t; }, CHECKOUT_URL.replace(/\/api\/checkout$/, '/api/pass'));
 });
 
+// Or give one: the code goes to their email with a note.
+$('giftForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  $('giftStatus').textContent = 'Opening secure checkout…';
+  goCheckout({ gift: { to: $('giftTo').value, from: $('giftFrom').value, message: $('giftNote').value } }, (t) => { $('giftStatus').textContent = t; }, CHECKOUT_URL.replace(/\/api\/checkout$/, '/api/pass'));
+});
+
 // ---- Free sample signup: posts to the order bot next to /api/checkout ------------------------------
 const SAMPLE_URL = CHECKOUT_URL.replace(/\/api\/checkout$/, '/api/sample');
 $('sampleForm').addEventListener('submit', async (e) => {

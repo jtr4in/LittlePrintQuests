@@ -12,11 +12,11 @@ const chunk = () => Array.from(crypto.randomBytes(4), (b) => LETTERS[b % LETTERS
 const clean = (code) => String(code || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
 const left = (p) => p.total - p.uses.length;
 
-function addPass() {
+function addPass({ gift = null } = {}) {
   const id = `pass-${crypto.randomBytes(12).toString('base64url')}`;
   store.update((s) => {
     s.passes ||= {};
-    s.passes[id] = { id, status: 'awaiting_payment', createdAt: new Date().toISOString(), total: USES, uses: [] };
+    s.passes[id] = { id, status: 'awaiting_payment', createdAt: new Date().toISOString(), total: USES, uses: [], ...(gift ? { gift } : {}) };
   });
   return id;
 }
@@ -27,7 +27,8 @@ function activate(id, { email, buyerName }) {
   if (!p || p.status !== 'awaiting_payment') return null;
   const now = new Date();
   store.update((s) => Object.assign(s.passes[id], {
-    status: 'active', code: `LPQ-${chunk()}-${chunk()}`, email, buyerName,
+    // A gift's code belongs to the person it's for; the buyer is kept for the receipt.
+    status: 'active', code: `LPQ-${chunk()}-${chunk()}`, email: p.gift ? p.gift.to : email, buyerName, ...(p.gift ? { buyerEmail: email } : {}),
     paidAt: now.toISOString(), expiresAt: new Date(now.getTime() + DAYS * 864e5).toISOString(),
   }));
   return store.get().passes[id];
