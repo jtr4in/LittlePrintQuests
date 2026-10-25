@@ -1,14 +1,30 @@
 [
  {
-  "file": "01-cards.jpg",
+  "file": "01-hero.jpg",
+  "title": "santa's nice list"
+ },
+ {
+  "file": "02-cards.jpg",
   "title": "picture cards"
  },
  {
-  "file": "02-wear.jpg",
+  "file": "03-wear.jpg",
   "title": "elf hat band"
  },
  {
-  "file": "03-poster.jpg",
+  "file": "04-strips.jpg",
+  "title": "present ribbons"
+ },
+ {
+  "file": "05-labels.jpg",
+  "title": "jar labels"
+ },
+ {
+  "file": "06-rooms.jpg",
+  "title": "room door signs"
+ },
+ {
+  "file": "07-poster.jpg",
   "title": "parts of a sleigh"
  }
 ]

@@ -30,7 +30,11 @@ def write(kit, pages):
     for f in os.listdir(d): os.remove(os.path.join(d, f))
     out = []
     for i, (im, slot, t) in enumerate(pages):
-        f = f'{i + 1:02d}-{slot}.jpg'; save(im, os.path.join(d, f)); out.append({'file': f, 'title': t})
+        f = f'{i + 1:02d}-{slot}.jpg'
+        # A kept page is bytes (read before the folder was emptied): copy it as is, so it isn't re-encoded.
+        if isinstance(im, bytes): open(os.path.join(d, f), 'wb').write(im)
+        else: save(im, os.path.join(d, f))
+        out.append({'file': f, 'title': t})
     json.dump(out, open(os.path.join(d, 'pages.json'), 'w'), indent=1)
     print(kit, len(out), 'pages')
 
@@ -62,6 +66,6 @@ else:
             # Raw pictures don't outlive a session, so a slot with no raw one keeps the kit's current page.
             old = [x for x in glob.glob(os.path.join(ROOT, 'src', 'kits', 'art', kit, 'big', f'*-{slot}.jpg'))]
             if os.path.exists(f): pages.append((Image.open(f), slot, title(slot, K[kit]['pages'][slot])))
-            elif old: pages.append((Image.open(old[0]).copy(), slot, title(slot, K[kit]['pages'][slot])))
+            elif old: pages.append((open(old[0], 'rb').read(), slot, title(slot, K[kit]['pages'][slot])))
             else: print('missing', f)
         write(kit, pages)

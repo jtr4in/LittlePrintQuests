@@ -1,30 +1,42 @@
 [
  {
-  "file": "01-cards.jpg",
+  "file": "01-hero.jpg",
+  "title": "store map"
+ },
+ {
+  "file": "02-cards.jpg",
   "title": "picture cards"
  },
  {
-  "file": "02-wear.jpg",
+  "file": "03-wear.jpg",
   "title": "store apron patch"
  },
  {
-  "file": "03-signs.jpg",
+  "file": "04-signs.jpg",
   "title": "signs and charts"
  },
  {
-  "file": "04-forms.jpg",
+  "file": "05-strips.jpg",
+  "title": "price tag strips"
+ },
+ {
+  "file": "06-forms.jpg",
   "title": "mini cards and forms"
  },
  {
-  "file": "05-labels.jpg",
+  "file": "07-labels.jpg",
   "title": "jar labels"
  },
  {
-  "file": "06-rooms.jpg",
+  "file": "08-screen.jpg",
+  "title": "tablet screen"
+ },
+ {
+  "file": "09-rooms.jpg",
   "title": "room door signs"
  },
  {
-  "file": "07-poster.jpg",
+  "file": "10-poster.jpg",
   "title": "eat a rainbow"
  }
 ]

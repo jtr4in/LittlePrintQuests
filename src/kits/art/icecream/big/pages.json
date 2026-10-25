@@ -1,34 +1,42 @@
 [
  {
-  "file": "01-cards.jpg",
+  "file": "01-hero.jpg",
+  "title": "scoop shop menu"
+ },
+ {
+  "file": "02-cards.jpg",
   "title": "picture cards"
  },
  {
-  "file": "02-wear.jpg",
+  "file": "03-wear.jpg",
   "title": "scooper hat"
  },
  {
-  "file": "03-strips.jpg",
+  "file": "04-signs.jpg",
+  "title": "signs and charts"
+ },
+ {
+  "file": "05-strips.jpg",
   "title": "cup & cone wraps"
  },
  {
-  "file": "04-forms.jpg",
+  "file": "06-forms.jpg",
   "title": "mini cards and forms"
  },
  {
-  "file": "05-labels.jpg",
+  "file": "07-labels.jpg",
   "title": "jar labels"
  },
  {
-  "file": "06-screen.jpg",
+  "file": "08-screen.jpg",
   "title": "tablet screen"
  },
  {
-  "file": "07-rooms.jpg",
+  "file": "09-rooms.jpg",
   "title": "room door signs"
  },
  {
-  "file": "08-poster.jpg",
+  "file": "10-poster.jpg",
   "title": "how ice cream is made"
  }
 ]
