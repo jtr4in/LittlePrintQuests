@@ -23,8 +23,6 @@ Work that is about to merge or is mid-merge, so sessions on the other account ca
 - Hand-drawn big pictures import (PR #151): `src/kits/art/<19 kits>/big/*`, `docs/js/data.js` (PAGES, BIGPICS), `docs/img/gallery/*/big-*.webp`, stamps, notes. Branch `big-pictures-hand-drawn`, thread "handoff: hand-drawn images", 2026-10-25 03:30 UTC.
 - Face-free kit art (waiting on Jason's 13 Gemini grid images; prompt page https://claude.ai/artifact/QB7J7VcYHL3Jp6p4ufMzq6): will replace 136 files in `src/kits/art/*` and re-render docs/img icons, checkout and previews. Branch `claude/project-thread-wx32ov`, thread "Remove faces from kit images", 2026-10-24 23:40 UTC.
 
-- Little kids default, branch `little-default`, touches `docs/js/make.js`, `docs/make/index.html`, stamps, notes. Thread "Field Kit upgrade", 2026-10-25 21:13 UTC.
-
 ## Business direction
 
 - **Etsy is being faded out (Oct 2026).** Prioritize the direct webapp and order bot. Don't invest in new Etsy listing options. Etsy pack and party listings stay on the original 16 themes (`ETSY_THEMES` in `src/bot/listings.js`).
