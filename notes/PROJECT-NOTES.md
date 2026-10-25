@@ -162,6 +162,10 @@ Work that is about to merge or is mid-merge, so sessions on the other account ca
 
 Jason found the preview popup's top crowded on phones (tabs wrapped onto two lines, plus a big age switch). Now: one swiping line of short tabs (Hunt, Play kit, Activities, Party; the `SHORT` map in `Gallery.open`, `docs/js/site.js`) with the close button beside it, a small "Ages 3–5 / Ages 6–8" pill under, and a caption without the product name ("Host guide… · 1 of 21"). Styles are at the end of `docs/css/site.css`.
 
+### Above the fold (2026-10-25)
+
+Beside the headline: the theme's clue card sheet (`img/pages/<theme>-cards.webp`) with the Field Kit's hunt screen on a phone in front (`img/host/<theme>-play.webp`), both name-swapped and following the occasion's theme; tapping it scrolls to the Field Kit clip (`#why`). Under the name box, three checks: their name on every page, a guide on your phone so you can play along, ready to print in minutes. The paragraph got shorter to make room. (Before: two pages, play kit and party invitation.)
+
 ### Theme groups (2026-10-24)
 
 With 34 themes, the theme tiles on the home page and the order page have one line of filter chips above them: All, Adventure, Make-believe, Helpers, Food & shops, Holidays (Jason asked to organize them without adding clutter). The order page's dropdown uses the same groups as `<optgroup>`s, with the in-season holiday first, and picking a theme from it switches the chips to that theme's group. The Play Kits page uses chips too: Helpers, Food & shops, and Make-believe (the few adventure and magic kits together).

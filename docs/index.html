@@ -33,7 +33,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&display=swap">
 <!-- the printed pages' own fonts, for writing the kid's name over the previews (js/names.js); files load only when used -->
 <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:wght@200..1000&family=Bangers&family=Pirata+One&family=Orbitron:wght@400..900&family=Cinzel+Decorative:wght@700&family=Pacifico&family=Comic+Neue:wght@700&display=swap">
-<link rel="stylesheet" href="css/site.css?v=a3e473cf">
+<link rel="stylesheet" href="css/site.css?v=a2305680">
 <!-- most visits go on to the order page: fetch it and its script while they read -->
 <link rel="prefetch" href="make/">
 <link rel="prefetch" href="js/make.js?v=29635773">
@@ -67,17 +67,19 @@
       <div class="hook-copy">
         <h1 class="hook-title" id="hookTitle">Printable play starring <b>your kid</b>.</h1>
         <p class="eyebrow hook-tag">Personalized · ages 3 to 8</p>
-        <p class="hook-sub">A treasure hunt, a pretend play shop and a party pack with their name on every page, plus a guide on your phone so you can play along. Made for <span class="occasion" id="occasion">birthdays</span>.</p>
+        <p class="hook-sub">A treasure hunt, a pretend play shop and a party pack in the theme they love. Made for <span class="occasion" id="occasion">birthdays</span>.</p>
         <form class="hook-form" id="hookForm">
           <input type="text" id="hookName" maxlength="40" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="Your kid’s first name" aria-label="Your kid’s first name">
           <button class="btn btn-orange" type="submit" id="hookGo">Make my kit</button>
         </form>
+        <ul class="hook-checks"><li>Their name on every page</li><li>A guide on your phone so you can play along</li><li>Ready to print in minutes</li></ul>
         <p class="hook-note">Type their name and every page here becomes theirs. Not sure yet? <a href="#sample">Try a free mini hunt</a>.</p>
       </div>
-      <div class="hook-pages" aria-hidden="true">
-        <img decoding="async" class="back" id="hookBack" alt="" width="400" height="518">
-        <img decoding="async" class="front" id="hookFront" alt="" width="400" height="518">
-      </div>
+      <a class="hook-pages" href="#why" aria-label="See the Field Kit in action">
+        <img decoding="async" class="back" id="hookBack" alt="" width="480" height="621">
+        <span class="phone front"><img decoding="async" id="hookFront" alt="" width="540" height="1080"></span>
+        <span class="hook-play">▶ See it in action</span>
+      </a>
     </div>
     <div class="wrap">
       <div class="hero-banner" id="heroBanner">
@@ -284,6 +286,6 @@
 <script src="js/names.js?v=22d37737"></script>
 <script src="js/data.js?v=f2a7dc81"></script>
 <script src="js/site.js?v=f6ed885c"></script>
-<script src="js/home.js?v=c10e8373"></script>
+<script src="js/home.js?v=2ed8fba6"></script>
 </body>
 </html>
