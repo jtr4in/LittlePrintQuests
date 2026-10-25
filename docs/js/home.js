@@ -87,8 +87,19 @@ const HOST = [['hide', 'Hide the clues: one card per screen, in your hiding orde
   ['shop', 'Shop day: customers come to the counter and order from the real menu'], ['photos', 'Snap photos as you go. They stay on your phone.'],
   ['print', 'Then print a photo page with a themed border'], ['sidekick', 'Your Sidekick: a second grown-up gets their own lines on their phone']];
 const fieldKit = (i = 0) => Gallery.open(HOST.map(([f, cap]) => ({ k: f, cap, src: `img/host/${theme}-${f}.webp` })), { label: 'Your Field Kit', title: true, start: i, foot: Gallery.cta('make/', 'Make my kit') });
-$('fkPhones').querySelectorAll('img').forEach((img, i) => LPQName.preload(theme).then(() => LPQName.setSrc(img, `img/host/${theme}-${HOST[i][0]}.webp`)));
-$('fkPhones').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => fieldKit(+b.dataset.i)));
+// The Field Kit clip: plays (muted, looping) only while it's on screen, and not at all for people who
+// turn motion off; the steps beside it light up as it plays, and tapping one jumps there.
+{
+  const v = $('fkVideo'), steps = [...$('fkSteps').querySelectorAll('button')];
+  const at = (b) => +b.dataset.t;
+  const light = () => { const t = v.currentTime; steps.forEach((b, k) => b.classList.toggle('on', t >= at(b) && (k === steps.length - 1 || t < at(steps[k + 1])))); };
+  v.addEventListener('timeupdate', light);
+  steps.forEach((b) => b.addEventListener('click', () => { v.currentTime = at(b); light(); if (!calm()) v.play().catch(() => {}); }));
+  if (!calm() && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => { if (e.isIntersecting) { v.preload = 'auto'; v.play().catch(() => {}); } else v.pause(); }, { threshold: 0.35 }).observe(v);
+  }
+  steps[0].classList.add('on');
+}
 $('seeHost').addEventListener('click', () => fieldKit());
 
 // ---- Themes: tap one to see its pages ------------------------------------------------------------
