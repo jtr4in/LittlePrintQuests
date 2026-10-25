@@ -344,7 +344,7 @@ async function route(req, res) {
     const o = Object.values(store.get().orders).find((x) => x.downloadToken === token && x.status === 'ready');
     if (!o) return send(res, 404, 'Not found');
     const docs = orders.documents(o);
-    if (what === 'pages.json') return send(res, 200, JSON.stringify({ docs: (await orders.pageList(o)).map(({ id, label, pages }) => ({ id, label, pages })) }), { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+    if (what === 'pages.json') return send(res, 200, JSON.stringify({ docs: (await orders.pageList(o)).map(({ id, type, label, pages }) => ({ id, type, label, pages })) }), { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
     if (docId) {
       const d = docs.find((x) => x.id === docId);
       const file = d && path.join(orders.pagesDir(token, d.suffix), `page-${+n}.jpg`);

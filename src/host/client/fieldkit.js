@@ -416,6 +416,7 @@
   const pagesSheet = el(`<div class="fk-sheet" hidden role="dialog" aria-modal="true" aria-label="Choose pages to print"><div class="fk-sheet-in">
     <div class="fk-sheet-head"><b>📄 Choose pages</b><button type="button" class="fk-x" aria-label="Close">×</button></div>
     <p class="small" style="margin:4px 0 0">Tap the pages you want, then print just those.</p>
+    <div class="fk-presets" role="group" aria-label="Quick picks"><button type="button" data-preset="quick">⚡ Quick start <small>about 10 min to prep</small></button><button type="button" data-preset="party">🎉 Party day</button><button type="button" data-preset="all">Everything</button></div>
     <div class="fk-pv" role="group" aria-label="Show pages as"><button type="button" data-v="tile">▦ Tiles</button><button type="button" data-v="list">☰ List</button></div>
     <div id="fkPages"><p class="small">Getting your pages… The first time takes up to a minute.</p></div>
     <div class="fk-pbar"><button type="button" class="btn" data-clear>Clear</button><a class="btn fk-main" id="fkPrint" target="_blank" rel="noopener">Print</a></div>
@@ -424,6 +425,27 @@
   pagesSheet.addEventListener('click', (e) => { if (e.target === pagesSheet) pagesSheet.hidden = true; });
   pagesSheet.querySelectorAll('[data-v]').forEach((b) => { b.onclick = () => { pagesView = b.dataset.v; store('fk:pages-view', pagesView); drawPages(); }; });
   pagesSheet.querySelector('[data-clear]').onclick = () => { pagePicks = {}; savePicked(); drawPages(); };
+  // Quick picks, by document type and page kind (the class names the PDFs' pages carry).
+  // Quick start: just what it takes to play, so it's about 10 minutes of cutting. Party day adds the
+  // party pack. Everything is every page.
+  const has = (k, ...names) => names.some((n) => (` ${k} `).includes(` ${n} `));
+  const QUICK = {
+    hunt: (p) => has(p.kind, 'host', 'briefing', 'sheet', 'cert'),
+    kit: (p, i, all) => has(p.kind, 'shop-page') || (has(p.kind, 'signs') && all.findIndex((x) => has(x.kind, 'signs')) === i),
+    activity: (p, i) => i > 0 && i <= 4,
+    party: () => false,
+    craft: () => true,
+  };
+  const PARTY = { ...QUICK, hunt: (p) => !has(p.kind, 'bonus'), party: (p) => !has(p.kind, 'guide') };
+  function preset(name) {
+    pagePicks = {};
+    for (const d of pagesData || []) {
+      const rule = name === 'all' ? () => true : (name === 'party' ? PARTY : QUICK)[d.type] || (() => false);
+      pagePicks[d.id] = d.pages.map((p, i) => (rule(p, i, d.pages) ? i + 1 : 0)).filter(Boolean);
+    }
+    savePicked(); drawPages();
+  }
+  pagesSheet.querySelectorAll('[data-preset]').forEach((b) => { b.onclick = () => preset(b.dataset.preset); });
   const countPicked = () => Object.values(pagePicks).reduce((n, a) => n + a.length, 0);
   function printLink() {
     const n = countPicked(), a = pagesSheet.querySelector('#fkPrint');

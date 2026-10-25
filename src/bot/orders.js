@@ -116,18 +116,18 @@ async function generate(id) {
 
 // The order's PDFs in print order: the main one, then the play kit, activity pack and party pack it
 // comes with. Each has a file suffix, a label and a render(outPdf, opts).
-const MAIN_DOC = { craft: ['Handprint art', renderCraft], kit: ['Play kit', renderKit], activity: ['Activity pack', renderActivities], party: ['Party pack', renderParty] };
+const MAIN_DOC = { craft: ['Handprint art', renderCraft, 'craft'], kit: ['Play kit', renderKit, 'kit'], activity: ['Activity pack', renderActivities, 'activity'], party: ['Party pack', renderParty, 'party'] };
 function documents(order) {
   const main = products.mainOf(order);
-  const [label, render] = MAIN_DOC[main] || ['Scavenger hunt', renderPdf];
-  const docs = [{ id: 'main', suffix: '', label, render: (out, o) => render(order.config, out, o) }];
+  const [label, render, type] = MAIN_DOC[main] || ['Scavenger hunt', renderPdf, 'hunt'];
+  const docs = [{ id: 'main', type, suffix: '', label, render: (out, o) => render(order.config, out, o) }];
   const kit = main !== 'kit' && products.has(order, 'kit') ? kitOf(order) : null;
   // Etsy kit listings still promise the Wipe & Play pages, so Etsy kit orders get the activity pack too.
   const activity = main !== 'activity' && (products.has(order, 'activity') || (order.source === 'etsy' && products.has(order, 'kit'))) ? kitOf(order) : null;
   const party = main !== 'party' && products.has(order, 'party');
-  if (kit) docs.push({ id: 'kit', suffix: '-kit', label: 'Play kit', render: (out, o) => renderKit(kitConfig(order, kit), out, o) });
-  if (activity) docs.push({ id: 'activities', suffix: '-activities', label: 'Activity pack', render: (out, o) => renderActivities(kitConfig(order, activity), out, o) });
-  if (party) docs.push({ id: 'party', suffix: '-party', label: 'Party pack', render: (out, o) => renderParty(partyConfig(order), out, o) });
+  if (kit) docs.push({ id: 'kit', type: 'kit', suffix: '-kit', label: 'Play kit', render: (out, o) => renderKit(kitConfig(order, kit), out, o) });
+  if (activity) docs.push({ id: 'activities', type: 'activity', suffix: '-activities', label: 'Activity pack', render: (out, o) => renderActivities(kitConfig(order, activity), out, o) });
+  if (party) docs.push({ id: 'party', type: 'party', suffix: '-party', label: 'Party pack', render: (out, o) => renderParty(partyConfig(order), out, o) });
   return docs;
 }
 const pagesDir = (token, suffix) => path.join(store.PDF_DIR, `${token}${suffix}-pages`);
@@ -138,7 +138,8 @@ const pagesDir = (token, suffix) => path.join(store.PDF_DIR, `${token}${suffix}-
 const making = new Map();
 async function pageList(order) {
   const docs = documents(order).filter((d) => fs.existsSync(path.join(store.PDF_DIR, `${order.downloadToken}${d.suffix}.pdf`)));
-  const missing = docs.filter((d) => !fs.existsSync(path.join(pagesDir(order.downloadToken, d.suffix), 'index.json')));
+  // (index.json from before page kinds were saved is made again)
+  const missing = docs.filter((d) => { try { return !JSON.parse(fs.readFileSync(path.join(pagesDir(order.downloadToken, d.suffix), 'index.json'), 'utf8'))[0]?.kind; } catch { return true; } });
   if (missing.length) {
     if (!making.has(order.id)) making.set(order.id, (async () => { for (const d of missing) await d.render(null, { thumbs: pagesDir(order.downloadToken, d.suffix) }); })().finally(() => making.delete(order.id)));
     await making.get(order.id);
@@ -146,7 +147,7 @@ async function pageList(order) {
   return docs.map((d) => {
     let pages = [];
     try { pages = JSON.parse(fs.readFileSync(path.join(pagesDir(order.downloadToken, d.suffix), 'index.json'), 'utf8')); } catch {}
-    return { id: d.id, suffix: d.suffix, label: d.label, pages };
+    return { id: d.id, type: d.type, suffix: d.suffix, label: d.label, pages };
   });
 }
 
