@@ -33,7 +33,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&display=swap">
 <!-- the printed pages' own fonts, for writing the kid's name over the previews (js/names.js); files load only when used -->
 <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:wght@200..1000&family=Bangers&family=Pirata+One&family=Orbitron:wght@400..900&family=Cinzel+Decorative:wght@700&family=Pacifico&family=Comic+Neue:wght@700&display=swap">
-<link rel="stylesheet" href="css/site.css?v=2c5e3c59">
+<link rel="stylesheet" href="css/site.css?v=a3e473cf">
 <!-- most visits go on to the order page: fetch it and its script while they read -->
 <link rel="prefetch" href="make/">
 <link rel="prefetch" href="js/make.js?v=29635773">
@@ -210,6 +210,17 @@
           <button type="button" class="btn btn-orange" id="buyPass">Get the Family Pass</button>
           <p class="hint">Your pass code arrives by email in a minute.</p>
           <p class="status" id="passStatus"></p>
+          <details class="gift" id="giftPass">
+            <summary>🎁 Give it as a gift</summary>
+            <form id="giftForm">
+              <label>Their email<input type="email" id="giftTo" required maxlength="120" autocomplete="off" placeholder="grandkids@example.com"></label>
+              <label>From<input type="text" id="giftFrom" maxlength="60" placeholder="Grandma Jo"></label>
+              <label>A short note <small>(optional)</small><textarea id="giftNote" maxlength="400" rows="2" placeholder="For lots of fun days together!"></textarea></label>
+              <button type="submit" class="btn btn-ghost">Gift a Family Pass · $39.99</button>
+              <p class="hint">We email them the code and your note, and send you a receipt.</p>
+              <p class="status" id="giftStatus"></p>
+            </form>
+          </details>
         </div>
       </div>
     </div>
@@ -273,6 +284,6 @@
 <script src="js/names.js?v=22d37737"></script>
 <script src="js/data.js?v=f2a7dc81"></script>
 <script src="js/site.js?v=f6ed885c"></script>
-<script src="js/home.js?v=24ca4e3c"></script>
+<script src="js/home.js?v=c10e8373"></script>
 </body>
 </html>

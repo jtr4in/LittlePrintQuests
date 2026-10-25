@@ -59,8 +59,10 @@ async function sendPassEmail(pass) {
   const site = process.env.SITE_URL || process.env.PUBLIC_URL;
   const ends = new Date(pass.expiresAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
   const html = `<div style="font-family:Arial,sans-serif;max-width:520px;margin:auto;color:#3f4a73;line-height:1.5">
-    <h2 style="margin-bottom:4px">Your Family Pass is ready!</h2>
-    <p>Thanks for joining! Your pass covers <b>${pass.total} orders</b> on our website until <b>${ends}</b>. Each one can be the whole bundle: the scavenger hunts, their pretend play kit, the activity pack and the party pack, in any theme, for any of your kids.</p>
+    ${pass.gift ? `<h2 style="margin-bottom:4px">${esc(pass.gift.from || pass.buyerName || 'Someone')} gave you a Family Pass! 🎁</h2>
+    ${pass.gift.message ? `<p style="background:#fbf3df;border-radius:10px;padding:12px 16px;font-style:italic">“${esc(pass.gift.message)}”</p>` : ''}
+    <p>LittlePrintQuests makes printable play starring your kid: a treasure hunt for your house, a pretend play shop, activity pages and a party pack, with their name on every page and a guide on your phone so you can play along.</p>` : '<h2 style="margin-bottom:4px">Your Family Pass is ready!</h2>'}
+    <p>${pass.gift ? 'Your' : 'Thanks for joining! Your'} pass covers <b>${pass.total} orders</b> on our website until <b>${ends}</b>. Each one can be the whole bundle: the scavenger hunts, their pretend play kit, the activity pack and the party pack, in any theme, for any of your kids.</p>
     <p style="font-size:13px;margin-bottom:2px">Your pass code:</p>
     <p style="font:bold 26px/1.2 'Courier New',monospace;letter-spacing:2px;background:#fbf3df;border-radius:10px;padding:14px 18px;display:inline-block;margin-top:0">${esc(pass.code)}</p>
     <p><b>How to use it:</b> build your order on our site, then type this code under “Have a Family Pass code?” next to the total. Your order is free and arrives in minutes, like always.</p>
@@ -70,9 +72,33 @@ async function sendPassEmail(pass) {
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from: process.env.EMAIL_FROM, to: [pass.email], reply_to: process.env.EMAIL_REPLY_TO || undefined, subject: `Your LittlePrintQuests Family Pass code: ${pass.code}`, html }),
+    body: JSON.stringify({ from: process.env.EMAIL_FROM, to: [pass.email], reply_to: process.env.EMAIL_REPLY_TO || undefined, subject: pass.gift ? `${pass.gift.from || pass.buyerName || 'Someone'} gave you a LittlePrintQuests Family Pass 🎁` : `Your LittlePrintQuests Family Pass code: ${pass.code}`, html }),
   });
   if (!res.ok) throw new Error(`Email failed: ${res.status} ${await res.text()}`);
 }
 
-module.exports = { sendHuntEmail, sendPassEmail };
+// The buyer's receipt for a gifted Family Pass.
+async function sendGiftReceipt(pass) {
+  if (!pass.buyerEmail) return;
+  const ends = new Date(pass.expiresAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  const html = `<div style="font-family:Arial,sans-serif;max-width:520px;margin:auto;color:#3f4a73;line-height:1.5">
+    <h2 style="margin-bottom:4px">Your gift is on its way 🎁</h2>
+    <p>We emailed a Family Pass to <b>${esc(pass.gift.to)}</b>${pass.gift.message ? ' with your note' : ''}. It covers ${pass.total} everything bundles until ${esc(ends)}.</p>
+    <p>Their code, if you’d like to write it in a card: <b style="font-family:'Courier New',monospace">${esc(pass.code)}</b></p>
+    <p>Thank you for giving play! If anything’s not right, just reply to this email.</p>
+    <p>LittlePrintQuests</p></div>`;
+  return sendEmail({ to: pass.buyerEmail, subject: `Your Family Pass gift for ${pass.gift.to} is on its way`, html });
+}
+
+// Any other email: one Resend call. `unsub` adds the List-Unsubscribe header.
+async function sendEmail({ to, subject, html, unsub }) {
+  if (!process.env.RESEND_API_KEY || !process.env.EMAIL_FROM) throw new Error('Email is not set up (RESEND_API_KEY and EMAIL_FROM)');
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ from: process.env.EMAIL_FROM, to: [to], reply_to: process.env.EMAIL_REPLY_TO || undefined, subject, html, ...(unsub ? { headers: { 'List-Unsubscribe': `<${unsub}>` } } : {}) }),
+  });
+  if (!res.ok) throw new Error(`Email failed: ${res.status} ${await res.text()}`);
+}
+
+module.exports = { sendHuntEmail, sendPassEmail, sendGiftReceipt, sendEmail, esc };

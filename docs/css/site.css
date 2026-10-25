@@ -636,3 +636,10 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
   .fk-steps button { padding: 10px 11px; }
   .fk-steps span { display: none; }
 }
+
+/* Give a Family Pass as a gift (2026-10-25) */
+.pass-buy .gift { margin-top: 10px; text-align: left; }
+.pass-buy .gift summary { cursor: pointer; font-weight: 700; color: var(--ink); }
+.pass-buy .gift form { display: grid; gap: 10px; margin-top: 10px; }
+.pass-buy .gift label { display: grid; gap: 4px; font: 600 14px var(--body); }
+.pass-buy .gift input, .pass-buy .gift textarea { font: 16px var(--body); padding: 9px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--sheet); color: var(--ink); }

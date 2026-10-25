@@ -670,11 +670,58 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal(firstPassOrder.status, 'ready');
   assert.equal(firstPassOrder.paidWith, 'pass');
   assert.deepEqual(emails.find((e) => e.html.includes(`/d/${firstPassOrder.downloadToken}.pdf`)).to, ['pat@example.com']);
+
+  // Gift pass: the code goes to the person it's for, with the buyer's note; the buyer gets a receipt.
+  assert.equal((await realFetch(base + '/api/pass', { method: 'POST', body: JSON.stringify({ gift: { to: 'nope' } }) })).status, 400);
+  const giftId = (await (await realFetch(base + '/api/pass', { method: 'POST', body: JSON.stringify({ gift: { to: 'Kim@Example.com', from: 'Grandma Jo', message: 'Have fun, you two!' } }) })).json()).url.split('/').pop();
+  const giftPayload = JSON.stringify({ id: 'evt_g', type: 'checkout.session.completed', data: { object: {
+    id: 'cs_g', payment_status: 'paid', metadata: { pass_id: giftId }, customer_details: { email: 'gran@example.com', name: 'Jo' } } } });
+  assert.equal((await realFetch(base + '/webhooks/stripe', { method: 'POST', body: giftPayload, headers: { 'stripe-signature': payments.stripe().webhooks.generateTestHeaderString({ payload: giftPayload, secret: 'whsec_test' }) } })).status, 200);
+  await wait(300);
+  const giftMail = emails.find((e) => /Grandma Jo gave you a LittlePrintQuests Family Pass/.test(e.subject));
+  assert.deepEqual(giftMail.to, ['kim@example.com']);
+  assert.ok(giftMail.html.includes('Have fun, you two!') && /LPQ-/.test(giftMail.html));
+  assert.deepEqual(emails.find((e) => /Your Family Pass gift for kim@example\.com/.test(e.subject)).to, ['gran@example.com']);
+  assert.match(await (await realFetch(`${base}/pass/${giftId}`)).text(), /Your gift is on its way/);
+  assert.equal(readStateNow().passes[giftId].email, 'kim@example.com');
+
+  // Scheduled emails: nothing sends unless MAIL_SCHEDULE=on; the admin can read them all first.
+  const mailer = require('../src/bot/mailer');
+  assert.equal((await realFetch(base + '/admin/mail')).status, 401);
+  const mailPreview = await (await realFetch(base + '/admin/mail', { headers: auth })).text();
+  assert.match(mailPreview, /Sending is <b>OFF/);
+  assert.equal((mailPreview.match(/Subject:/g) || []).length, mailer.NURTURE.length + 1);
+  assert.ok(!/\{\w+\}|undefined|NaN/.test(mailPreview.replace(/<script[\s\S]*?<\/script>/g, '')), 'no blanks in the emails');
+  assert.deepEqual(await mailer.run(), { sent: 0 });
+  const bstore = require('../src/bot/store');
+  const daysAgo = (n) => new Date(Date.now() - n * 864e5).toISOString();
+  bstore.update((st) => {
+    st.subscribers ||= {};
+    st.subscribers['new@example.com'] = { email: 'new@example.com', theme: 'pirate', source: 'site-sample', subscribedAt: daysAgo(5) };
+    st.subscribers['old@example.com'] = { email: 'old@example.com', theme: 'dino', source: 'site-sample', subscribedAt: daysAgo(60) };
+    st.passes[giftId].paidAt = daysAgo(40); // bought before this month
+  });
+  assert.deepEqual(mailer.nurtureDue().map((d) => [d.sub.email, d.step]), [['new@example.com', 0]], 'older sign-ups get no burst');
+  const sentBefore = emails.length;
+  assert.ok((await mailer.run({ force: true })).sent >= 2);
+  const firstNurture = emails.slice(sentBefore).find((e) => e.to[0] === 'new@example.com');
+  assert.match(firstNurture.subject, /3 tricks/);
+  assert.match(firstNurture.html, /\/unsubscribe\?e=new%40example\.com/);
+  const drop = emails.slice(sentBefore).find((e) => e.to[0] === 'kim@example.com');
+  assert.match(drop.subject, /Your free \w+ mini hunt/);
+  assert.match(drop.html, new RegExp(`/drop/${mailer.dropTheme()}\\.pdf`));
+  assert.deepEqual(mailer.nurtureDue(), [], 'one nurture email at a time, two days apart');
+  assert.ok(!mailer.dropsDue().some((d) => d.pass.id === giftId), 'one drop a month');
+  assert.equal((await realFetch(`${base}/drop/${mailer.dropTheme()}.pdf`)).headers.get('content-type'), 'application/pdf');
+  const stopUrl = drop.html.match(/href="https:\/\/bot\.example\.com(\/pass\/[^"]+stop-mail[^"]+)"/)[1].replace(/&amp;/g, '&');
+  assert.equal((await realFetch(base + stopUrl)).status, 200);
+  assert.ok(readStateNow().passes[giftId].dropsOff);
+  assert.equal((await realFetch(`${base}/pass/${giftId}/stop-mail?t=wrong`)).status, 404);
   assert.ok(emails.some((e) => /Made with your Family Pass: <b>0 of 6<\/b>/.test(e.html)));
   const ordersNow = Object.values(readStateNow().orders);
   assert.equal(readStateNow().passes[passId].uses.length, 6);
   assert.ok(!ordersNow.some((o) => o.status === 'awaiting_payment' && o.form?.items?.[0] === 'activity' && !o.passId), 'the refused 7th order is not kept');
-  assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Family Passes:<\/b> 1 sold · 6 orders made with them/);
+  assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Family Passes:<\/b> 2 sold · 6 orders made with them/);
 
   // Website handprint art order: on its own, no Field Kit.
   const readState = () => JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8'));

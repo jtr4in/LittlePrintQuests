@@ -135,7 +135,7 @@ async function createPassCheckout(pass) {
         unit_amount: PRICES.pass,
         product_data: {
           tax_code: process.env.STRIPE_TAX_CODE || 'txcd_10000000',
-          name: 'Family Pass: 6 everything bundles',
+          name: pass.gift ? 'Family Pass gift: 6 everything bundles' : 'Family Pass: 6 everything bundles',
           images: checkoutImages('pass'),
           description: `${pass.total} printable orders (hunt, play kit, activity pack and party pack) to use within a year · PDF · no subscription`,
         },
