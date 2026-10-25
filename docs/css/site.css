@@ -660,3 +660,12 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
   .hook-copy > .hook-checks { grid-column: 1 / -1; }
 }
 @media (max-width: 520px) { .hook-checks { font-size: 14px; gap: 4px 14px; } }
+
+/* a second page in the fan (2026-10-25): on a laptop it peeks out behind; on a phone two pages fan behind the phone */
+.hook-pages .mid { left: 70px; top: 6px; width: 180px; transform: rotate(3deg); }
+@media (max-width: 860px) {
+  .hook { grid-template-columns: minmax(0, 1fr) 132px; }
+  .hook-pages .back { display: block; width: 78px; left: -6px; top: 34px; transform: rotate(-9deg); }
+  .hook-pages .mid { width: 78px; left: 14px; top: 14px; transform: rotate(-2deg); }
+  .hook-pages .phone.front { width: 84px; right: 0; top: 30px; }
+}
