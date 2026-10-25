@@ -609,3 +609,10 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 .hook-tag { margin-top: 16px; white-space: nowrap; }
 @media (max-width: 520px) { .hook-tag { font-size: 11.5px; letter-spacing: .04em; position: relative; z-index: 1; } }
 .hook-tag + .hook-sub { margin-top: 8px; }
+
+/* Why play together (2026-10-25): three short tiles, then the Field Kit, then the sources */
+#why .steps.why { margin-top: 22px; }
+#why .step .n { font: 700 17px/1.2 var(--display); color: var(--ink); }
+#why .field-kit { margin-top: 26px; }
+.why-src { margin-top: 14px; font-size: 13px; color: var(--ink-soft); }
+.why-src a { color: inherit; }
