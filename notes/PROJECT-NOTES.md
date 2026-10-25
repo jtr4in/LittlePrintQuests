@@ -32,6 +32,8 @@ Work that is about to merge or is mid-merge, so sessions on the other account ca
 
 ## Jason's preferences
 
+- **The story** (Jason, 2026-10-25): printable play is the what, **playing together** is the why, and the Field Kit is the how ("never stuck for what to say"). Lead with why kids need play and why the grown-up joining in matters, backed by the AAP's *Power of Play* and Harvard's serve-and-return work (cited on the home page). Don't claim we're the only ones: GigglePack (AI printable games with a phone companion) and Lovevery (physical kits plus a parent app, about $120 a kit, younger kids) are the closest. Our edge: personalized, ages 3 to 8, about $20, in-the-moment prompts.
+
 - Threads merge their own PRs once tests pass (said 2026-10-23), squash into main. Reason: PRs were piling up and landing out of order (the #88/#91/#93/#94 stack left a duplicate lede in `docs/index.html`, fixed in #95).
 - Age versions are **Little kids 3 to 5** (pre-readers: picture clues, circling, thick cut lines) and **Big kids 6 to 8** (early readers); the site says ages 3 to 8 overall (Jason, 2026-10-23; it was 2 to 4 / 5 to 8). A typed age of 5 or under picks little. Orders saved before the change carry the old version labels; `products.versionOf` reads both. Already-posted pins and their pictures still say 2 to 8 / 2 to 4: re-run `scripts/pins.js` before making new pin images.
 - The order page always opens on step 1 (who it's for, and the age version), even when a name is already saved; a theme, kit or items from the link stay picked (Jason, 2026-10-23).

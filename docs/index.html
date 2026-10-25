@@ -11,17 +11,17 @@
   if (location.hash === '#order' || ['theme', 'space', 'kit', 'age', 'pick'].some((k) => q.has(k))) location.replace('make/' + location.search);
 })();
 </script>
-<title>LittlePrintQuests · Personalized Printable Scavenger Hunts for Kids</title>
+<title>LittlePrintQuests · Personalized Printable Play for Kids 3 to 8</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Personalized printable scavenger hunts, pretend play kits and activity pages for kids ages 3 to 8. Your kid's name, your home's hiding spots, ready to print in minutes.">
+<meta name="description" content="Personalized printable play for kids 3 to 8: treasure hunts, pretend play shops, activity pages and party packs with your kid's name, plus a phone guide that helps you play along.">
 <link rel="icon" type="image/png" href="img/favicon.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <meta name="theme-color" content="#fbf8f1">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="LittlePrintQuests">
 <meta property="og:url" content="https://littleprintquests.com/">
-<meta property="og:title" content="A treasure hunt made for your kid · LittlePrintQuests">
-<meta property="og:description" content="Printable scavenger hunts, play kits and activity pages with your kid’s name and your home’s own hiding spots. Ages 3 to 8, ready to print in minutes.">
+<meta property="og:title" content="Printable play starring your kid · LittlePrintQuests">
+<meta property="og:description" content="Treasure hunts, pretend play shops and party packs with your kid’s name, plus a guide on your phone so you can play along. Ages 3 to 8, ready to print in minutes.">
 <meta property="og:image" content="https://littleprintquests.com/img/share.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -33,7 +33,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&display=swap">
 <!-- the printed pages' own fonts, for writing the kid's name over the previews (js/names.js); files load only when used -->
 <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:wght@200..1000&family=Bangers&family=Pirata+One&family=Orbitron:wght@400..900&family=Cinzel+Decorative:wght@700&family=Pacifico&family=Comic+Neue:wght@700&display=swap">
-<link rel="stylesheet" href="css/site.css?v=2c800760">
+<link rel="stylesheet" href="css/site.css?v=f8de602c">
 <!-- most visits go on to the order page: fetch it and its script while they read -->
 <link rel="prefetch" href="make/">
 <link rel="prefetch" href="js/make.js?v=29635773">
@@ -67,7 +67,7 @@
       <div class="hook-copy">
         <h1 class="hook-title" id="hookTitle">Printable play starring <b>your kid</b>.</h1>
         <p class="eyebrow hook-tag">Personalized · ages 3 to 8</p>
-        <p class="hook-sub">A treasure hunt for your house, a pretend play shop, activity pages and a party pack, all in the theme they love and all with their name. Made for <span class="occasion" id="occasion">birthdays</span>.</p>
+        <p class="hook-sub">A treasure hunt, a pretend play shop and a party pack with their name on every page, plus a guide on your phone so you can play along. Made for <span class="occasion" id="occasion">birthdays</span>.</p>
         <form class="hook-form" id="hookForm">
           <input type="text" id="hookName" maxlength="40" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="Your kid’s first name" aria-label="Your kid’s first name">
           <button class="btn btn-orange" type="submit" id="hookGo">Make my kit</button>
@@ -111,11 +111,24 @@
           <span class="p-body"><b>Party pack</b><span>Invitations, a banner that spells their name, cupcake toppers and favor tags.</span><small>See the pages</small></span>
         </button>
       </div>
+    </div>
+  </section>
+
+  <section class="stop" id="why">
+    <div class="wrap">
+      <div class="pin"><b></b><span class="eyebrow">Why it matters</span></div>
+      <h2>The best part is playing together</h2>
+      <p class="kits-lede">Pretend play and treasure hunts aren’t just fun. They’re how kids practice the big stuff, and the moments they remember are the ones you were part of.</p>
+      <div class="steps why">
+        <div class="step"><span class="n">🧠 Play is how they learn</span><p>Running a shop or cracking a clue means planning, taking turns, finding words and handling a little frustration. Pediatricians call play essential, not extra.</p></div>
+        <div class="step"><span class="n">💛 You’re the best part</span><p>The back-and-forth between you and your kid builds their brain and your bond. Your attention matters more than any toy.</p></div>
+        <div class="step"><span class="n">📱 You don’t have to plan it</span><p>Busy, tired, or not a “pretend” person? The Field Kit hands you the next line, the next challenge and the next game.</p></div>
+      </div>
       <div class="field-kit">
         <div class="fk-copy">
           <span class="eyebrow">Included with every set</span>
-          <h3>Your Field Kit runs the fun</h3>
-          <p>A private page on your phone that runs the day: where to hide each clue, what to say in character, and hints if they get stuck. It plays the sound effects, turns the play kit into a real shop with customers, and makes a printable photo page with a themed border.</p>
+          <h3>Your Field Kit: never stuck for what to say</h3>
+          <p>Most printables stop at the PDF. Ours come with a private page on your phone that coaches you through the day: where to hide each clue, lines to say in character, quick challenges, hints when they’re stuck, customers for their shop and sound effects to make it real. At the end it turns your photos into a printable keepsake page.</p>
           <p class="fk-side">Bring a second grown-up along as your <b>Sidekick</b>, with their own lines on their own phone.</p>
           <button type="button" class="btn btn-ghost" id="seeHost" aria-haspopup="dialog">See the Field Kit</button>
         </div>
@@ -127,6 +140,7 @@
         </div>
       </div>
     </div>
+    <p class="wrap why-src">Sources: <a href="https://www.healthychildren.org/English/family-life/power-of-play/Pages/The-Power-of-Play-How-Fun-and-Games-Help-Children-Thrive.aspx" target="_blank" rel="noopener">American Academy of Pediatrics, The Power of Play</a> · <a href="https://developingchild.harvard.edu/fast-facts/responsive-serve-and-return-interactions-with-caregivers-play-an-essential-role-in-supporting-healthy-brain-development" target="_blank" rel="noopener">Harvard Center on the Developing Child</a></p>
   </section>
 
   <section class="stop" id="how">
@@ -136,7 +150,7 @@
       <div class="steps">
         <div class="step"><span class="n">1 · About a minute</span><h3>Pick a theme, add their name</h3><p>Plus their age for the birthday pages and 6 to 10 spots around your home for the hunt.</p></div>
         <div class="step"><span class="n">2 · Instant</span><h3>We make it theirs</h3><p>Their name on every sign, card and banner, and a rhyming clue for each of your spots.</p></div>
-        <div class="step"><span class="n">3 · Same day</span><h3>Print and play</h3><p>Plain Letter paper at home. Cut, tape it up and play, with the Field Kit on your phone to guide you.</p></div>
+        <div class="step"><span class="n">3 · Same day</span><h3>Print, then play together</h3><p>Plain Letter paper at home. Cut and tape it up, then open the Field Kit and it cues you through the fun.</p></div>
       </div>
     </div>
   </section>
@@ -237,6 +251,7 @@
         <details><summary>Can my 3-year-old do it?</summary><p>Yes. For ages 3 to 5, every clue card also shows a picture of the next spot, so kids who can’t read yet can solve it themselves while a grown-up reads the rhyme.</p></details>
         <details><summary>What if my house doesn’t have a spot on the list?</summary><p>Type any spot you like, such as “the hammock” or “Dad’s guitar”, and we’ll write a rhyme for it. We skip anything unsafe for little kids, like the oven.</p></details>
         <details><summary>How many kids can play?</summary><p>One trail works well for 2 to 10 kids. For bigger groups, read each clue aloud and let a different kid find each card.</p></details>
+        <details><summary>I’m not great at pretend play. Will this work for me?</summary><p>Yes, that’s what the Field Kit is for. It gives you lines to say in character, questions to ask, customers for their shop and hints when they’re stuck, so you can follow along instead of making it up. Kids mostly want you there, not a performance.</p></details>
         <details><summary>What is the Field Kit? Do I need an app?</summary><p>The Field Kit is a private page for your phone that comes with every order, with a tab for each thing you get. For a hunt it shows where each card goes, what to say in character, quick challenges and hints if the kids get stuck. For a play kit it has pretend-play scenarios, lines to say and games, and for a party pack a planning checklist. It opens in your phone’s browser from the link in your email, so there’s nothing to install.</p></details>
         <details><summary>How does the Family Pass work?</summary><p>One payment of $39.99 gets you 6 orders to use within 12 months. Each order can be the whole bundle: the scavenger hunt, its play kit, the activity pack and the party pack, in any theme and for any of your kids. Your code arrives by email. Make an order as usual and type the code under “Have a Family Pass code?” on the checkout step. It covers anything in the order builder, shop play kits included; handprint art is sold separately. It doesn’t renew by itself.</p></details>
         <details><summary>What if something looks wrong?</summary><p>Reply to your order email and we’ll fix it and send a new PDF free. If we can’t make it right, we’ll refund you in full. See our <a href="refunds/">happy party promise</a>.</p></details>
