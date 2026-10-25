@@ -16,12 +16,12 @@ $('hookForm').addEventListener('submit', (e) => {
   LPQName.set($('hookName').value);
   location.href = 'make/';
 });
-// The two pages beside the name box: the play kit and the party pack, in the theme that goes with
-// the occasion in the headline.
+// Beside the name box: a clue card sheet and the Field Kit's hunt screen on a phone, in the theme
+// that goes with the occasion in the headline (tap to see the Field Kit clip further down).
 function drawHookPages(id = theme) {
   LPQName.preload(id).then(() => {
-    LPQName.setSrc($('hookBack'), `img/pages/${id}-kit.webp`);
-    LPQName.setSrc($('hookFront'), `img/pages/${id}-party.webp`);
+    LPQName.setSrc($('hookBack'), `img/pages/${id}-cards.webp`);
+    LPQName.setSrc($('hookFront'), `img/host/${id}-play.webp`);
   });
 }
 // The occasion under the headline rotates so it reads as more than a birthday thing. (Only the words

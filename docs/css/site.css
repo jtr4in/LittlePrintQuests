@@ -643,3 +643,20 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 .pass-buy .gift form { display: grid; gap: 10px; margin-top: 10px; }
 .pass-buy .gift label { display: grid; gap: 4px; font: 600 14px var(--body); }
 .pass-buy .gift input, .pass-buy .gift textarea { font: 16px var(--body); padding: 9px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--sheet); color: var(--ink); }
+
+/* above the fold (2026-10-25): a clue card sheet with the Field Kit on a phone in front, and three checks */
+.hook-pages { display: block; text-decoration: none; color: inherit; }
+.hook-pages .back { left: 0; top: 30px; width: 200px; transform: rotate(-6deg); }
+.hook-pages .phone.front { position: absolute; right: 6px; top: 0; width: 150px; padding: 5px; border-radius: 22px; transform: rotate(4deg); box-shadow: 0 18px 34px -14px rgba(40, 50, 90, .6); }
+.hook-pages .phone.front img { position: static; width: 100%; aspect-ratio: 1 / 2; border-radius: 17px; box-shadow: none; transform: none; }
+.hook-play { position: absolute; right: 18px; bottom: 6px; font: 700 13px/1 var(--body); background: var(--ink); color: var(--paper); padding: 8px 12px; border-radius: 99px; box-shadow: 0 8px 16px -8px rgba(40, 50, 90, .6); }
+.hook-checks { list-style: none; padding: 0; margin: 14px 0 0; display: flex; flex-wrap: wrap; gap: 6px 18px; font: 600 15px/1.3 var(--body); color: var(--ink); }
+.hook-checks li::before { content: "✓"; color: var(--mint-deep); font-weight: 800; margin-right: 6px; }
+@media (max-width: 860px) {
+  .hook-pages { height: 200px; }
+  .hook-pages .phone.front { width: 96px; right: 4px; top: 6px; padding: 3px; border-radius: 15px; }
+  .hook-pages .phone.front img { border-radius: 12px; }
+  .hook-play { display: none; }
+  .hook-copy > .hook-checks { grid-column: 1 / -1; }
+}
+@media (max-width: 520px) { .hook-checks { font-size: 14px; gap: 4px 14px; } }
