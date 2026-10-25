@@ -33,7 +33,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&display=swap">
 <!-- the printed pages' own fonts, for writing the kid's name over the previews (js/names.js); files load only when used -->
 <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:wght@200..1000&family=Bangers&family=Pirata+One&family=Orbitron:wght@400..900&family=Cinzel+Decorative:wght@700&family=Pacifico&family=Comic+Neue:wght@700&display=swap">
-<link rel="stylesheet" href="css/site.css?v=6d3bf63a">
+<link rel="stylesheet" href="css/site.css?v=2c5e3c59">
 <!-- most visits go on to the order page: fetch it and its script while they read -->
 <link rel="prefetch" href="make/">
 <link rel="prefetch" href="js/make.js?v=29635773">
@@ -132,11 +132,14 @@
           <p class="fk-side">Bring a second grown-up along as your <b>Sidekick</b>, with their own lines on their own phone.</p>
           <button type="button" class="btn btn-ghost" id="seeHost" aria-haspopup="dialog">See the Field Kit</button>
         </div>
-        <div class="fk-phones" id="fkPhones">
-          <button type="button" data-i="0" aria-label="Field Kit: hiding the clues"><span class="phone"><img decoding="async" src="img/host/dino-hide.webp" alt="" width="540" height="1080" loading="lazy"></span><span class="fk-cap">Hide the clues</span></button>
-          <button type="button" data-i="1" aria-label="Field Kit: running the hunt"><span class="phone"><img decoding="async" src="img/host/dino-play.webp" alt="" width="540" height="1080" loading="lazy"></span><span class="fk-cap">Run the hunt</span></button>
-          <button type="button" data-i="2" aria-label="Field Kit: Shop day with customers"><span class="phone"><img decoding="async" src="img/host/dino-shop.webp" alt="" width="540" height="1080" loading="lazy"></span><span class="fk-cap">Shop day</span></button>
-          <button type="button" data-i="3" aria-label="Field Kit: photos for a printable page"><span class="phone"><img decoding="async" src="img/host/dino-photos.webp" alt="" width="540" height="1080" loading="lazy"></span><span class="fk-cap">Snap &amp; print</span></button>
+        <div class="fk-demo" id="fkDemo">
+          <span class="phone"><video id="fkVideo" muted playsinline loop preload="none" poster="img/host/fk-demo.jpg" width="480" height="960" aria-label="The Field Kit on a phone: hiding a clue card, the hunt with a quick challenge and lines to say, a customer at the shop counter, then the photos made into a printable page"><source src="img/host/fk-demo.webm" type="video/webm"><source src="img/host/fk-demo.mp4" type="video/mp4"></video></span>
+          <ol class="fk-steps" id="fkSteps">
+            <li><button type="button" data-t="0"><b>Hide the clues</b><span>One card per screen, in your hiding order</span></button></li>
+            <li><button type="button" data-t="3.3"><b>Run the hunt</b><span>A quick challenge, a line to say, the clue to read</span></button></li>
+            <li><button type="button" data-t="8.4"><b>Shop day</b><span>Customers line up with their orders</span></button></li>
+            <li><button type="button" data-t="13.7"><b>Snap &amp; print</b><span>Your photos, on a page with a themed border</span></button></li>
+          </ol>
         </div>
       </div>
     </div>
@@ -270,6 +273,6 @@
 <script src="js/names.js?v=22d37737"></script>
 <script src="js/data.js?v=f2a7dc81"></script>
 <script src="js/site.js?v=f6ed885c"></script>
-<script src="js/home.js?v=d46ff33d"></script>
+<script src="js/home.js?v=24ca4e3c"></script>
 </body>
 </html>
