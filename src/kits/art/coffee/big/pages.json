@@ -1,38 +1,42 @@
 [
  {
-  "file": "01-cards.jpg",
+  "file": "01-hero.jpg",
+  "title": "cafe menu board"
+ },
+ {
+  "file": "02-cards.jpg",
   "title": "picture cards"
  },
  {
-  "file": "02-wear.jpg",
+  "file": "03-wear.jpg",
   "title": "barista visor"
  },
  {
-  "file": "03-signs.jpg",
+  "file": "04-signs.jpg",
   "title": "signs and charts"
  },
  {
-  "file": "04-strips.jpg",
+  "file": "05-strips.jpg",
   "title": "cup sleeves"
  },
  {
-  "file": "05-forms.jpg",
+  "file": "06-forms.jpg",
   "title": "mini cards and forms"
  },
  {
-  "file": "06-labels.jpg",
+  "file": "07-labels.jpg",
   "title": "jar labels"
  },
  {
-  "file": "07-screen.jpg",
+  "file": "08-screen.jpg",
   "title": "tablet screen"
  },
  {
-  "file": "08-rooms.jpg",
+  "file": "09-rooms.jpg",
   "title": "room door signs"
  },
  {
-  "file": "09-poster.jpg",
+  "file": "10-poster.jpg",
   "title": "how hot cocoa is made"
  }
 ]

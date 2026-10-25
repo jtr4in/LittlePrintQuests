@@ -8,27 +8,35 @@
   "title": "picture cards"
  },
  {
-  "file": "03-signs.jpg",
+  "file": "03-wear.jpg",
+  "title": "burger cook hat"
+ },
+ {
+  "file": "04-signs.jpg",
   "title": "signs and charts"
  },
  {
-  "file": "04-strips.jpg",
+  "file": "05-strips.jpg",
   "title": "burger wrapper bands"
  },
  {
-  "file": "05-forms.jpg",
+  "file": "06-forms.jpg",
   "title": "mini cards and forms"
  },
  {
-  "file": "06-labels.jpg",
+  "file": "07-labels.jpg",
   "title": "jar labels"
  },
  {
-  "file": "07-screen.jpg",
+  "file": "08-screen.jpg",
   "title": "tablet screen"
  },
  {
-  "file": "08-rooms.jpg",
+  "file": "09-rooms.jpg",
   "title": "room door signs"
+ },
+ {
+  "file": "10-poster.jpg",
+  "title": "build a burger"
  }
 ]

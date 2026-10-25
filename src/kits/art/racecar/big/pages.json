@@ -1,18 +1,42 @@
 [
  {
-  "file": "01-cards.jpg",
+  "file": "01-hero.jpg",
+  "title": "grand prix race track"
+ },
+ {
+  "file": "02-cards.jpg",
   "title": "picture cards"
  },
  {
-  "file": "02-signs.jpg",
+  "file": "03-wear.jpg",
+  "title": "racing helmet band"
+ },
+ {
+  "file": "04-signs.jpg",
   "title": "signs and charts"
  },
  {
-  "file": "03-labels.jpg",
+  "file": "05-strips.jpg",
+  "title": "race stripes"
+ },
+ {
+  "file": "06-forms.jpg",
+  "title": "mini cards and forms"
+ },
+ {
+  "file": "07-labels.jpg",
   "title": "jar labels"
  },
  {
-  "file": "04-poster.jpg",
+  "file": "08-screen.jpg",
+  "title": "tablet screen"
+ },
+ {
+  "file": "09-rooms.jpg",
+  "title": "room door signs"
+ },
+ {
+  "file": "10-poster.jpg",
   "title": "parts of a race car"
  }
 ]
