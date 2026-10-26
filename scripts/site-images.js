@@ -49,6 +49,9 @@ const wowPage = (kitId) => {
 (async () => {
   const only = process.argv.slice(2);
   const hostOnly = Boolean(process.env.HOST_ONLY);
+  // KIT_CARDS=1 rebuilds only the play kit cards (img/kit-<id>.webp), shop kits included, and
+  // leaves every other picture alone.
+  const cardsOnly = Boolean(process.env.KIT_CARDS);
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'site-images-'));
   const browser = await chromium.launch();
   const index = {};
@@ -59,15 +62,17 @@ const wowPage = (kitId) => {
     const dir = (k) => path.join(tmp, `${id}-${k}`);
     // Shop-style kits (pizza, library...) keep their styled card photo and the page gallery-images.js made;
     // a new one without a card photo yet gets the page fan like the other themes.
-    const kit = kitForHunt(id)?.bigSign && fs.existsSync(path.join(IMG, `kit-${id}.webp`)) ? null : kitForHunt(id);
+    const kit = !cardsOnly && kitForHunt(id)?.bigSign && fs.existsSync(path.join(IMG, `kit-${id}.webp`)) ? null : kitForHunt(id);
     const pg = (k, n) => path.join(dir(k), `page-${n}.png`);
     if (!hostOnly) {
+    if (!cardsOnly) {
     const huntCfg = { theme: id, childName: 'Maya', age: 6, spots: SPOTS, pictures: true };
     await renderPdf(huntCfg, `${dir('hunt')}.pdf`, { pngDir: dir('hunt'), nameSlots: 'Maya' });
     const roles = pageRoles(buildHtml(huntCfg));
     // The "What's in the box" hunt pages, by role: guide, briefing, first clue sheet, puzzle, certificate, picture hunt checklist.
     huntParts[id] = { guide: roles.host, briefing: roles.briefing, cards: roles.sheet, puzzle: roles.puzzle, cert: roles.cert, bonus: roles['pic-lists'] };
     await renderParty({ theme: id, childName: 'Maya', age: 6, party: PARTY }, `${dir('party')}.pdf`, { pngDir: dir('party'), nameSlots: 'Maya' });
+    }
     if (kit) await renderKit({ kit: kit.id, childName: 'Maya', subjects: [], lenient: true }, `${dir('kit')}.pdf`, { pngDir: dir('kit'), nameSlots: 'Maya' });
 
     // Play kit card: three kit pages fanned out on a transparent background.
@@ -90,6 +95,7 @@ const wowPage = (kitId) => {
       await fan.close();
     }
     }
+    if (cardsOnly) { console.log('Rendered the kit card for', id); continue; }
 
     // Field Kit phones: hiding Card 3, then "They found Card 3" for the host and the sidekick. Captured
     // at 2x and saved at 540x1080: the 240x480 they used to be looked blurry blown up in the gallery.
@@ -177,6 +183,7 @@ import sys, os
 from PIL import Image
 import json
 tmp, img, parts = sys.argv[1], sys.argv[2], json.loads(sys.argv[3])
+cards_only = sys.argv[4] == '1'
 for f in os.listdir(tmp):
     p = os.path.join(tmp, f)
     if f.startswith('kit-') and f.endswith('.png'):
@@ -185,7 +192,7 @@ for f in os.listdir(tmp):
         Image.open(p).convert('RGB').resize((640, 828), Image.LANCZOS).save(os.path.join(img, 'host', f[6:-4] + '-print.webp'), 'WEBP', quality=84)
     elif f.startswith('host-') and f.endswith('.png'):
         Image.open(p).convert('RGB').resize((540, 1080), Image.LANCZOS).save(os.path.join(img, 'host', f[5:-4] + '.webp'), 'WEBP', quality=84)
-    elif os.path.isdir(p):
+    elif os.path.isdir(p) and not cards_only:
         theme, kind = f.rsplit('-', 1)
         n = {'hunt': 3, 'party': 2, 'kit': 7}[kind]
         Image.open(os.path.join(p, f'page-{n}.png')).convert('RGB').resize((400, 518), Image.LANCZOS).save(os.path.join(img, 'pages', f'{theme}-{kind}.webp'), 'WEBP', quality=80)
@@ -193,7 +200,7 @@ for f in os.listdir(tmp):
             for part, n in parts[theme].items():
                 if n is None: continue
                 Image.open(os.path.join(p, f'page-{n}.png')).convert('RGB').resize((480, 621), Image.LANCZOS).save(os.path.join(img, 'pages', f'{theme}-{part}.webp'), 'WEBP', quality=80)
-`, tmp, IMG, JSON.stringify(huntParts)]);
+`, tmp, IMG, JSON.stringify(huntParts), cardsOnly ? '1' : '0']);
   fs.writeFileSync(path.join(tmp, 'blanks.json'), JSON.stringify(blanks));
   execFileSync('python3', ['-c', `
 import sys, json

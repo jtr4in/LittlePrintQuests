@@ -204,7 +204,7 @@ Jason found navigating choppy. What it was and the rules now:
 - The shop welcome poster and big sign show three pictures: `shop.hero` in the kit def, or by default the first two menu items plus the kit icon. That default doubled up the pizza and the burger, so Pizza and Burger set their own trio. Jason checked the other kits on 2026-10-24 and they're fine.
 
 ### Shop kit card photos (2026-10-23)
-- The 11 shop kit card thumbnails (`docs/img/kit-<id>.webp`, 1354x994, used by `SHOP_KITS` in `docs/js/data.js`) are styled Gemini photos, each starring the kit's signature piece, prompts say "no cash register". Prompts and scripts: `project-files/scavenger-hunt/previews/shop-kit-cards/`. Gemini redraws kit art loosely; use the round 4 lifestyle tools to restore exact art.
+- The 11 original shop kit card thumbnails (`docs/img/kit-<id>.webp`, used by `SHOP_KITS` in `docs/js/data.js`) were once styled Gemini photos, each starring the kit's signature piece, prompts say "no cash register". **2026-10-26:** they had become page fans with the cash register in the middle (Jason: "can we pick better cover photos"), so they were rebuilt like the newer kits: welcome poster, wow prop in the middle (pizza, grill, scanner, mailbox, computer, radio, tooth X-ray, fish tank, espresso machine, gelato case, engine), big sign. They now have name-swap twins too. `site-images.js` still skips a shop kit's card once it exists, so after changing a wow prop run `KIT_CARDS=1 node scripts/site-images.js <kit...>`, which rebuilds only the cards. Prompts and scripts: `project-files/scavenger-hunt/previews/shop-kit-cards/`. Gemini redraws kit art loosely; use the round 4 lifestyle tools to restore exact art.
 
 ### Bringing families back (2026-10-25)
 
