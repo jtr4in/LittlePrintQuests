@@ -4,6 +4,9 @@
 // craft-<id>-inside.jpg (all 8 crafts), craft-<id>-p01.jpg... (one per page) and docs/img/craft-<id>.png
 // (save that as a 1000x750 WebP, q82, for the website).
 // The Memory Handprint Book gets a grid of all its pages instead, shown with the prints painted in.
+// Holiday packs' main picture (the website card) also shows the prints painted in (Jason,
+// 2026-10-26: handprint previews without handprints looked lame); the inside and page photos keep
+// the real printable pages.
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -34,14 +37,14 @@ h1 { font: 700 58px/1 Fredoka; margin: 0; letter-spacing: -.01em; }
 // The three craft pages fanned out on the main photo, the middle one in front.
 const FAN = { halloween: [2, 5, 9], christmas: [2, 3, 5] };
 
-function shots(h, dir) {
-  const p = (n) => png(path.join(dir, `page-${n}.png`));
+function shots(h, dir, done) {
+  const p = (n, d = dir) => png(path.join(d, `page-${n}.png`));
   const [left, middle, right] = FAN[h.id] || [2, 3, 5];
   const main = `<div class="top"><h1>${h.name} Handprint Art</h1>
       <div class="sub">8 handprint &amp; footprint keepsake crafts, personalized with your child’s name and age</div></div>
-    <div class="page" style="left:60px;top:205px;width:330px;transform:rotate(-6deg)"><img src="${p(left)}"></div>
-    <div class="page" style="left:610px;top:205px;width:330px;transform:rotate(6deg)"><img src="${p(right)}"></div>
-    <div class="page" style="left:330px;top:180px;width:350px;z-index:2"><img src="${p(middle)}"></div>
+    <div class="page" style="left:60px;top:205px;width:330px;transform:rotate(-6deg)"><img src="${p(left, done)}"></div>
+    <div class="page" style="left:610px;top:205px;width:330px;transform:rotate(6deg)"><img src="${p(right, done)}"></div>
+    <div class="page" style="left:330px;top:180px;width:350px;z-index:2"><img src="${p(middle, done)}"></div>
     <div style="position:absolute;left:56px;bottom:30px;right:56px;display:flex;gap:12px;z-index:3">
       <span class="pill">Child’s name on every page</span><span class="pill" style="background:${h.colors.ink}">Printable PDF</span><span class="pill" style="background:#fff;color:${h.colors.ink}">Toddler friendly</span></div>`;
   const inside = `<div class="top" style="top:34px;text-align:center"><h1 style="font-size:46px">8 crafts + cards + poem page</h1>
@@ -83,12 +86,10 @@ function bookShots(h, dir, plain) {
     const h = HOLIDAYS[id];
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), `craft-${id}-`));
     await renderHtml(buildCraftHtml({ holiday: id, childName: 'Maya', age: 4, year: 2026, preview: h.book }), path.join(dir, 'pack.pdf'), { pngDir: dir });
-    let plain = null;
-    if (h.book) {
-      plain = fs.mkdtempSync(path.join(os.tmpdir(), `craft-${id}-plain-`));
-      await renderHtml(buildCraftHtml({ holiday: id, childName: 'Maya', age: 4, year: 2026 }), path.join(plain, 'pack.pdf'), { pngDir: plain });
-    }
-    for (const [name, html] of Object.entries(h.book ? bookShots(h, dir, plain) : shots(h, dir))) {
+    // books: the plain pages for the "inside" picture; holiday packs: the painted pages for the main one
+    const plain = fs.mkdtempSync(path.join(os.tmpdir(), `craft-${id}-other-`));
+    await renderHtml(buildCraftHtml({ holiday: id, childName: 'Maya', age: 4, year: 2026, preview: !h.book }), path.join(plain, 'pack.pdf'), { pngDir: plain });
+    for (const [name, html] of Object.entries(h.book ? bookShots(h, dir, plain) : shots(h, dir, plain))) {
       await page.setContent(`<!doctype html><meta charset="utf-8"><style>${css(h)}</style>${html}`);
       await page.waitForTimeout(150);
       await page.screenshot({ path: path.join(OUT, `${name}.jpg`), type: 'jpeg', quality: 80 });
@@ -101,7 +102,7 @@ function bookShots(h, dir, plain) {
     }
     fs.copyFileSync(path.join(dir, 'site.png'), path.join(ROOT, 'docs', 'img', `craft-${id}.png`));
     fs.rmSync(dir, { recursive: true, force: true });
-    if (plain) fs.rmSync(plain, { recursive: true, force: true });
+    fs.rmSync(plain, { recursive: true, force: true });
   }
   await browser.close();
 })();

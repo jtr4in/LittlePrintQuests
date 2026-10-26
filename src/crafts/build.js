@@ -3,7 +3,8 @@
 //
 // cfg = { holiday: 'halloween' | 'christmas' | 'memory', childName: 'Maya', age?: 4, year?: 2026, preview?: true }
 // Books (memory.js, zoo.js, fingerprint.js) are a frameable page per craft instead. preview shows
-// every page with the prints already painted, for listing photos.
+// every page with the prints already painted, for listing photos and the website (books and
+// holiday packs alike).
 // Returns one Letter-size HTML document of `.page` sections (rendered by src/generator/render.js).
 // Each craft page has a faint dashed outline where to press, a poem, and a small finished example.
 
@@ -59,7 +60,7 @@ function craftPage(h, craft, ctx, clean = false) {
     <div class="kicker">${esc(h.kicker)}</div>
     <h1>${esc(craft.title)}</h1>
     <p class="poem">${craft.poem.map((l) => fill(l, ctx)).join('<br>')}</p>
-    <div class="panel">${panel(craft, clean ? 'clean' : 'page')}</div>
+    <div class="panel">${panel(craft, clean ? 'clean' : ctx.preview ? 'example' : 'page')}</div>
     <div class="keep">${keepsakeLine(ctx)}</div>
     <div class="how">
       <div class="steps">
