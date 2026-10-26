@@ -78,6 +78,12 @@ Work that is about to merge or is mid-merge, so sessions on the other account ca
   - `import.py` now copies a kit's kept pages byte for byte instead of re-encoding them (it used to re-save every old JPEG, losing quality each import).
 - Hand-reviewed rejects (2026-10-24): duplicate items on a sheet, a small poster floating in a big page, leaked notes, and the pirate poster (Gemini keeps drawing a skull on the kid's hat). The kitchen room sign had a smiley icon painted out by hand.
 
+### Wow banners (2026-10-26)
+- Jason asked that previews highlight the pieces with a "wow" factor. The dino home banner (`docs/img/hero/dino.webp`) now leads with the T-rex skeleton poster, the Real Fossil Finds prop, the ranger hat band and the fossil field map, plus the named welcome poster, one clue card and the Field Kit phone. The text-heavy hunt pages (mission checklist, "Urgent Field Report") and the party invite are out. Jason approved dino as the example.
+- Code: `WOW_SCENES` and `wowSheets()` in `scripts/hero-scenes.js`. Only themes in `WOW_SCENES` use it; the rest keep the old layout. Props are kept off the page titles and middle pages for these scenes.
+- To roll out to another theme: check its `big-n.webp` (order follows `BIGPICS` in `docs/js/data.js`; big-1/big-2 must be landscape and big-3 portrait for this layout, so themes like fire, doctor and christmas need their own picks), add it to `WOW_SCENES`, run `node scripts/hero-scenes.js <theme>` and look at the result.
+- Not done yet: the "What's in your order" stack on make/ (first card is still a toy page).
+
 ### Site previews rebuild themselves (2026-10-24)
 - Jason asked for previews to update whenever a kit changes. `.github/workflows/previews.yml` runs on pushes to main that touch `src/kits`, `src/generator`, `src/party`, `src/crafts`, `src/host` or the preview scripts. `scripts/preview-targets.js` maps changed files to themes (a kit's own defs or art: just that kit and its hunt theme; shared code: all), it runs gallery-images, craft-gallery (only for all), site-images and hero-scenes in the required order, `scripts/keep-changed-images.py` puts back images that only re-encoded, and it commits "Site previews: ..." and asks Pages to rebuild. It diffs from its own last commit, so nothing is missed when pushes overlap. Run it by hand from the Actions tab (Site previews, input `all` or theme names).
 - So threads no longer need to run the preview scripts themselves after a kit change, but a full run takes over an hour; check the Actions tab if previews look stale.

@@ -71,6 +71,21 @@ const sheet = (f, x, y, w, r, extra = '') => `<div class="p" data-key="img/${f}"
 // One clue card, cut out along its dashed line (two cards to a page).
 const card = (f, second, x, y, w, r) => `<div class="p card" data-occ style="left:${x}px;top:${y}px;width:${w}px;height:${Math.round(w * 0.6)}px;transform:rotate(${r}deg)"><img src="${url(f)}" style="width:${Math.round(w * 1.12)}px;margin-left:${-Math.round(w * 0.06)}px;margin-top:${-Math.round(w * (second ? 0.8 : 0.075))}px"></div>`;
 
+// "Wow" banners (Jason, 2026-10-26: highlight the pieces with a wow factor). Leads with the big
+// full-page pictures and the realistic wow prop instead of the text-heavy hunt pages. Trying it on
+// dino first; add a theme here once its picks below look right.
+// gallery/<id>/big-n.webp follow BIGPICS in docs/js/data.js; kit-3 is the wow prop, kit-1 the
+// named welcome poster.
+const WOW_SCENES = new Set(['dino']);
+const wowSheets = (id) => `${sheet(`gallery/${id}/big-1.webp`, 70, 395, 430, 4)}
+${sheet(`gallery/${id}/big-2.webp`, 25, 30, 560, -5)}
+${sheet(`gallery/${id}/kit-3.webp`, 545, 45, 360, 5)}
+${card(`gallery/${id}/hunt-3.webp`, false, 560, 500, 280, -9)}
+${sheet(`gallery/${id}/kit-1.webp`, 905, 60, 280, -4)}
+${sheet(`gallery/${id}/big-3.webp`, 1180, 30, 290, 6)}
+<div class="phone" data-key="img/host/${id}-play.webp" style="left:1320px;top:395px;transform:rotate(-10deg)"><img src="${url(`host/${id}-play.webp`)}"></div>
+`;
+
 function scene(id) {
   const shop = SHOPS.includes(id);
   const kit = shop ? KITS[id] : kitForHunt(id);
@@ -78,11 +93,14 @@ function scene(id) {
   const [, , ink] = TABLES[id];
   const props = [...kit.menu.items.map(([e]) => e), ...kit.defaultKinds.map((k) => kit.kinds[k][0])];
   const spots = [[1490, 600, 120, 14], [700, 615, 110, -10], [1015, 40, 95, 18], [40, 610, 105, -16], [640, 25, 90, 10], [1560, 330, 95, -12], [880, 330, 80, 8]];
-  const scatter = spots.map(([x, y, s, r], i) => `<div class="prop" data-occ style="left:${x - s / 2}px;top:${y - s / 2}px;width:${s}px;transform:rotate(${r}deg)">${art.pic(props[i % props.length], `${s}px`)}</div>`).join('');
+  // Wow scenes put big pages along the top and across the middle, so props there would sit on
+  // their titles and pictures.
+  const clear = ([x, y]) => !WOW_SCENES.has(id) || (y >= 60 && !(x > 545 && x < 1185 && y < 430));
+  const scatter = spots.filter(clear).map(([x, y, s, r], i) => `<div class="prop" data-occ style="left:${x - s / 2}px;top:${y - s / 2}px;width:${s}px;transform:rotate(${r}deg)">${art.pic(props[i % props.length], `${s}px`)}</div>`).join('');
   // along the edges and in the gaps, on top of the paper like things set down on it
   const edge = [[30, 380, 92, -14], [655, 40, 84, 12], [660, 640, 96, -8], [1100, 660, 88, 16], [1560, 70, 90, 10], [1110, 250, 70, -12], [255, 30, 70, 20], [1560, 650, 84, -10], [1020, 520, 66, 6]];
   const d = pics(DECOR[id]);
-  const decor = edge.map(([x, y, s, r], i) => `<div class="prop" data-occ style="left:${x - s / 2}px;top:${y - s / 2}px;width:${s}px;transform:rotate(${r}deg)">${art.pic(d[i % d.length], `${s}px`)}</div>`).join('');
+  const decor = edge.filter(clear).map(([x, y, s, r], i) => `<div class="prop" data-occ style="left:${x - s / 2}px;top:${y - s / 2}px;width:${s}px;transform:rotate(${r}deg)">${art.pic(d[i % d.length], `${s}px`)}</div>`).join('');
   const circles = `<svg style="position:absolute;inset:0" viewBox="0 0 640 828"><g fill="none" stroke="${ink}" stroke-width="7" stroke-linecap="round" opacity=".85"><ellipse cx="420" cy="300" rx="50" ry="45" transform="rotate(-12 420 300)"/><ellipse cx="200" cy="520" rx="48" ry="44"/></g></svg><div class="gloss"></div>`;
   return `<!doctype html><html><head><meta charset="utf-8"><style>
 body{margin:0;width:${W}px;height:${H}px;overflow:hidden;position:relative}
@@ -103,7 +121,7 @@ body{margin:0;width:${W}px;height:${H}px;overflow:hidden;position:relative}
 .light{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(255,240,215,.2),rgba(0,0,0,0) 55%),radial-gradient(ellipse at center,rgba(0,0,0,0) 55%,rgba(20,10,4,.35))}
 </style></head><body>${table(TABLES[id])}
 ${scatter}
-${shop ? `${sheet(`gallery/${id}/kit-2.webp`, 30, 40, 340, -8)}
+${WOW_SCENES.has(id) ? wowSheets(id) : shop ? `${sheet(`gallery/${id}/kit-2.webp`, 30, 40, 340, -8)}
 ${sheet(`gallery/${id}/kit-3.webp`, 300, 80, 340, 5)}
 ${sheet(`gallery/${id}/kit-4.webp`, 120, 400, 330, -4)}
 ${sheet(`gallery/${id}/kit-1.webp`, 700, 70, 320, -4)}
