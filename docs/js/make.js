@@ -78,13 +78,9 @@ function drawThemes() {
   </button>`).join('');
   $('themeList').querySelectorAll('.theme').forEach((b) => b.addEventListener('click', () => setTheme(b.dataset.id)));
   // The dropdown lists the themes by group (the in-season one first), so 34 names are easy to scan.
-  const opt = (t) => `<option value="${t.id}">${esc(THEME_LABELS[t.id])}</option>`;
-  const GROUPS = typeof THEME_GROUPS === 'undefined' ? [] : THEME_GROUPS;
-  const grouped = new Set(GROUPS.flatMap((g) => g.ids));
-  $('themeSelect').innerHTML = (seasonal ? opt(THEMES.find((t) => t.id === seasonal)) : '') +
-    GROUPS.map((g) => `<optgroup label="${esc(g.label)}">${g.ids.filter((id) => id !== seasonal).map((id) => THEMES.find((t) => t.id === id)).filter(Boolean).map(opt).join('')}</optgroup>`).join('') +
-    THEMES.filter((t) => !grouped.has(t.id) && t.id !== seasonal).map(opt).join('');
-  if (GROUPS.length && typeof themeFilter === 'function') themeChips = themeFilter($('themeChips'), $('themeList'));
+  $('themeSelect').innerHTML = typeof themeOptions === 'function' ? themeOptions()
+    : THEMES.map((t) => `<option value="${t.id}">${esc(THEME_LABELS[t.id])}</option>`).join('');
+  if (typeof THEME_GROUPS !== 'undefined' && typeof themeFilter === 'function') themeChips = themeFilter($('themeChips'), $('themeList'));
 }
 let themeChips = null;
 $('themeSelect').addEventListener('change', (e) => setTheme(e.target.value, { scroll: true }));

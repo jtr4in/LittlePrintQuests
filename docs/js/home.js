@@ -125,8 +125,10 @@ function previewTheme(id) {
 }
 drawThemeGrid();
 
-// The free sample's theme list.
-$('sampleTheme').innerHTML = ordered.map((t) => `<option value="${t.id}">${esc(t.name)} (ages ${t.ages})</option>`).join('');
+// The free sample's theme list: same order and groups as the order page's dropdown, with each
+// hunt's own name and ages.
+$('sampleTheme').innerHTML = typeof themeOptions === 'function' ? themeOptions((t) => `${t.name} (ages ${t.ages})`)
+  : ordered.map((t) => `<option value="${t.id}">${esc(t.name)} (ages ${t.ages})</option>`).join('');
 $('sampleTheme').value = theme;
 
 // ---- Pricing -------------------------------------------------------------------------------------
