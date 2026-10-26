@@ -299,7 +299,10 @@ function drawCart() {
   $('stack').querySelectorAll(':scope > img').forEach((img) => img.classList.toggle('out', !gets.includes(img.dataset.k)));
   order.forEach((k, i) => {
     const img = $('stack').querySelector(`[data-k="${k}"]`);
-    const src = `img/pages/${state.theme}-${little(k) ? 'little-' : ''}${k}.webp`;
+    // The play kit's paper (on top of the stack) is its realistic wow prop, the third Play kit page
+    // in the gallery for every theme and age (Jason, 2026-10-26: lead with the wow pieces).
+    const src = k === 'kit' ? `img/gallery/${state.theme}/${little(k) ? 'little/' : ''}kit-3.webp`
+      : `img/pages/${state.theme}-${little(k) ? 'little-' : ''}${k}.webp`;
     if (named.has(state.theme) && img.dataset.src !== src) { img.dataset.src = src; LPQName.setSrc(img, src); }
     img.style.zIndex = i + 1;
     img.style.transform = `translate(calc(-50% + ${pos[i][0]}px), ${Math.abs(pos[i][0]) / 5}px) rotate(${pos[i][1]}deg)`;
