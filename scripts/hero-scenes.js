@@ -71,23 +71,59 @@ const sheet = (f, x, y, w, r, extra = '') => `<div class="p" data-key="img/${f}"
 // One clue card, cut out along its dashed line (two cards to a page).
 const card = (f, second, x, y, w, r) => `<div class="p card" data-occ style="left:${x}px;top:${y}px;width:${w}px;height:${Math.round(w * 0.6)}px;transform:rotate(${r}deg)"><img src="${url(f)}" style="width:${Math.round(w * 1.12)}px;margin-left:${-Math.round(w * 0.06)}px;margin-top:${-Math.round(w * (second ? 0.8 : 0.075))}px"></div>`;
 
-// "Wow" banners (Jason, 2026-10-26: highlight the pieces with a wow factor). Leads with the big
-// full-page pictures and the realistic wow prop instead of the text-heavy hunt pages. Trying it on
-// dino first; add a theme here once its picks below look right.
-// gallery/<id>/big-n.webp follow BIGPICS in docs/js/data.js; kit-3 is the wow prop, kit-1 the
-// named welcome poster.
-const WOW_SCENES = new Set(['dino']);
-const wowSheets = (id) => `${sheet(`gallery/${id}/big-1.webp`, 70, 395, 430, 4)}
-${sheet(`gallery/${id}/big-2.webp`, 25, 30, 560, -5)}
+// "Wow" banners (Jason, 2026-10-26: highlight the pieces with a wow factor). Every banner leads
+// with the kit's big full-page pictures and its realistic wow prop (kit-3) instead of the
+// text-heavy hunt pages: the best landscape picture big at top left, the next one under it, the
+// wearable band (portrait) at the right, plus the named welcome poster (kit-1), one clue card (a
+// shop kit's named sign instead) and the Field Kit phone. Picture order follows BIGPICS in
+// docs/js/data.js (scripts/big-previews.js); "Tablet screen" pages only fill a gap.
+// A theme listed in OLD_SCENES keeps the old layout; so does one with fewer than 3 big pictures.
+const OLD_SCENES = new Set([]);
+const BIGPICS = (() => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'docs', 'js', 'data.js'), 'utf8');
+  return JSON.parse(src.match(/const BIGPICS = (\{.*?\});/)[1]);
+})();
+// Width and height of a WebP file, read from its header.
+function webpSize(file) {
+  const b = fs.readFileSync(file);
+  const kind = b.toString('ascii', 12, 16);
+  if (kind === 'VP8X') return [1 + b.readUIntLE(24, 3), 1 + b.readUIntLE(27, 3)];
+  if (kind === 'VP8L') { const n = b.readUInt32LE(21); return [1 + (n & 0x3fff), 1 + ((n >> 14) & 0x3fff)]; }
+  return [b.readUInt16LE(26) & 0x3fff, b.readUInt16LE(28) & 0x3fff];
+}
+const TABLET = /tablet/i;
+// Which big-n.webp go where: { top, bottom, band } (1-based), or null to keep the old layout.
+function wowPicks(id) {
+  if (OLD_SCENES.has(id)) return null;
+  const names = BIGPICS[id] || [];
+  const pics = names.map((name, i) => {
+    const file = path.join(IMG, 'gallery', id, `big-${i + 1}.webp`);
+    if (!fs.existsSync(file)) return null;
+    const [w, h] = webpSize(file);
+    return { n: i + 1, name, wide: w > h, tablet: TABLET.test(name) };
+  }).filter(Boolean);
+  const pick = (test) => pics.filter((p) => test(p) && !used.has(p.n));
+  const used = new Set();
+  const take = (p) => (p && used.add(p.n), p);
+  // "Parts of…" style posters usually come second in BIGPICS; they're the biggest wow, so they go top.
+  const wide = pick((p) => p.wide && !p.tablet);
+  const top = take(wide[1] || wide[0]);
+  const bottom = take(pick((p) => p.wide && !p.tablet)[0] || pick((p) => p.wide)[0]);
+  const band = take(pick((p) => !p.wide && !p.tablet)[0]);
+  return top && bottom && band ? { top: top.n, bottom: bottom.n, band: band.n } : null;
+}
+const wowSheets = (id, picks, shop) => `${sheet(`gallery/${id}/big-${picks.bottom}.webp`, 70, 395, 430, 4)}
+${sheet(`gallery/${id}/big-${picks.top}.webp`, 25, 30, 560, -5)}
 ${sheet(`gallery/${id}/kit-3.webp`, 545, 45, 360, 5)}
-${card(`gallery/${id}/hunt-3.webp`, false, 560, 500, 280, -9)}
+${shop ? card(`gallery/${id}/kit-2.webp`, false, 560, 500, 280, -9) : card(`gallery/${id}/hunt-3.webp`, false, 560, 500, 280, -9)}
 ${sheet(`gallery/${id}/kit-1.webp`, 905, 60, 280, -4)}
-${sheet(`gallery/${id}/big-3.webp`, 1180, 30, 290, 6)}
+${sheet(`gallery/${id}/big-${picks.band}.webp`, 1180, 30, 290, 6)}
 <div class="phone" data-key="img/host/${id}-play.webp" style="left:1320px;top:395px;transform:rotate(-10deg)"><img src="${url(`host/${id}-play.webp`)}"></div>
 `;
 
 function scene(id) {
   const shop = SHOPS.includes(id);
+  const picks = wowPicks(id);
   const kit = shop ? KITS[id] : kitForHunt(id);
   art.setKit(kit);
   const [, , ink] = TABLES[id];
@@ -95,7 +131,7 @@ function scene(id) {
   const spots = [[1490, 600, 120, 14], [700, 615, 110, -10], [1015, 40, 95, 18], [40, 610, 105, -16], [640, 25, 90, 10], [1560, 330, 95, -12], [880, 330, 80, 8]];
   // Wow scenes put big pages along the top and across the middle, so props there would sit on
   // their titles and pictures.
-  const clear = ([x, y]) => !WOW_SCENES.has(id) || (y >= 60 && !(x > 545 && x < 1185 && y < 430));
+  const clear = ([x, y]) => !picks || (y >= 60 && !(x > 545 && x < 1185 && y < 430));
   const scatter = spots.filter(clear).map(([x, y, s, r], i) => `<div class="prop" data-occ style="left:${x - s / 2}px;top:${y - s / 2}px;width:${s}px;transform:rotate(${r}deg)">${art.pic(props[i % props.length], `${s}px`)}</div>`).join('');
   // along the edges and in the gaps, on top of the paper like things set down on it
   const edge = [[30, 380, 92, -14], [655, 40, 84, 12], [660, 640, 96, -8], [1100, 660, 88, 16], [1560, 70, 90, 10], [1110, 250, 70, -12], [255, 30, 70, 20], [1560, 650, 84, -10], [1020, 520, 66, 6]];
@@ -121,7 +157,7 @@ body{margin:0;width:${W}px;height:${H}px;overflow:hidden;position:relative}
 .light{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(255,240,215,.2),rgba(0,0,0,0) 55%),radial-gradient(ellipse at center,rgba(0,0,0,0) 55%,rgba(20,10,4,.35))}
 </style></head><body>${table(TABLES[id])}
 ${scatter}
-${WOW_SCENES.has(id) ? wowSheets(id) : shop ? `${sheet(`gallery/${id}/kit-2.webp`, 30, 40, 340, -8)}
+${picks ? wowSheets(id, picks, shop) : shop ? `${sheet(`gallery/${id}/kit-2.webp`, 30, 40, 340, -8)}
 ${sheet(`gallery/${id}/kit-3.webp`, 300, 80, 340, 5)}
 ${sheet(`gallery/${id}/kit-4.webp`, 120, 400, 330, -4)}
 ${sheet(`gallery/${id}/kit-1.webp`, 700, 70, 320, -4)}
