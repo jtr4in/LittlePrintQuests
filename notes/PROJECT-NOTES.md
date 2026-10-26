@@ -243,6 +243,12 @@ Tools: `project-files/scavenger-hunt/previews/lifestyle/tools/`. Outputs are lar
 - Round 4: pieces cut to shape and staged (`tools/round4/`): `cutout.py`, `circcut.py` -> `gen_ref.py` sends cutouts as "Image N" refs ("3:2 sheet NOT a long strip", "never redraw/crop/cut holes") -> `locate.py` + `zoomcorners.py` find quads -> `restore.py` warps the real piece in (fit stretch/cover/contain, anchor, grow, clear, occluder polygons + GrabCut). `gen_edit.py` fixes one bad piece. Gemini sometimes paints reference numbers into the scene (inpaint them), and real dollar bills get drawn (replace with kit money). Pizza and dino approved.
 - Products round: styled photos for party pack, scavenger hunt, activity pack (`tools/products/`). Bunting pennant quads are a parallelogram from top corners plus apex with fit contain; Gemini can re-render a small printed tag via `gen_edit`; for a half-drawn maze, solve it on a cell grid and draw the path before warping.
 
+## Node version on Railway (2026-10-26)
+
+- Stripe emailed on 2026-10-26 that the order bot ran a Node with CVE-2026-111497 (Brotli decoder RCE, fixed in 22.23.4 / 24.22.1 / 26.12.1 on 2026-10-21). The bot was exposed: the Playwright base image's own Node was older, and the bot calls `fetch` (Etsy, Resend, Anthropic), which is the demonstrated exploit path.
+- Fix: the Dockerfile copies a pinned `node:24.22.1` binary over the Playwright image's Node and fails the build if `node -v` doesn't match. **On every Node security release, bump that tag (both lines) and redeploy.** Bumping Playwright alone doesn't change the Node we run.
+- Jason's side of the incident: roll the Stripe secret key and webhook secret, then update `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` in Railway; check Stripe logs for unknown calls; consider rolling the other Railway secrets too (`ANTHROPIC_API_KEY`, `RESEND_API_KEY`, `ETSY_*`, `ADMIN_PASSWORD`).
+
 ## Environment gotchas
 
 - 2026-10-24: `npm test` used to leave its data folder (~415 MB of orders and PDFs) in /tmp on every run, and `renderHtml` left a temp HTML folder per render; after a long session the Claude workspace disk filled up and tests failed oddly ("Printing failed", orders stuck processing). Both now clean up. If tests fail strangely, check `df -h /` first.
