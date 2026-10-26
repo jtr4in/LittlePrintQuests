@@ -120,6 +120,18 @@ const Gallery = (() => {
 })();
 
 // One theme's whole set (hunt, play kit, activity pack, party pack and the box build), for previews.
+// The <option>s for a theme dropdown: the in-season theme first, then the themes by group
+// (THEME_GROUPS), then any left over. Used by the order page and the free sample so they match.
+// label(t) is each option's text.
+function themeOptions(label = (t) => THEME_LABELS[t.id]) {
+  const opt = (t) => `<option value="${t.id}">${esc(label(t))}</option>`;
+  const GROUPS = typeof THEME_GROUPS === 'undefined' ? [] : THEME_GROUPS;
+  const grouped = new Set(GROUPS.flatMap((g) => g.ids));
+  return (seasonal ? opt(THEMES.find((t) => t.id === seasonal)) : '') +
+    GROUPS.map((g) => `<optgroup label="${esc(g.label)}">${g.ids.filter((id) => id !== seasonal).map((id) => THEMES.find((t) => t.id === id)).filter(Boolean).map(opt).join('')}</optgroup>`).join('') +
+    THEMES.filter((t) => !grouped.has(t.id) && t.id !== seasonal).map(opt).join('');
+}
+
 // Filter chips over a row of tiles: All plus each group with at least `min` tiles in the row.
 // Tiles carry their id in data-<key>. Returns { show(id) } to bring a hidden tile's group up.
 function themeFilter(chips, row, { groups = THEME_GROUPS, key = 'id', min = 2 } = {}) {
