@@ -126,9 +126,9 @@ function previewTheme(id) {
 drawThemeGrid();
 
 // The free sample's theme list: same order and groups as the order page's dropdown, with each
-// hunt's own name and ages.
-$('sampleTheme').innerHTML = typeof themeOptions === 'function' ? themeOptions((t) => `${t.name} (ages ${t.ages})`)
-  : ordered.map((t) => `<option value="${t.id}">${esc(t.name)} (ages ${t.ages})</option>`).join('');
+// hunt's own name (no ages: Jason, 2026-10-26, they're nearly all 3 to 7).
+$('sampleTheme').innerHTML = typeof themeOptions === 'function' ? themeOptions((t) => t.name)
+  : ordered.map((t) => `<option value="${t.id}">${esc(t.name)}</option>`).join('');
 $('sampleTheme').value = theme;
 
 // ---- Pricing -------------------------------------------------------------------------------------
