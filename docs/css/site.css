@@ -19,18 +19,7 @@
   --body: 'Atkinson Hyperlegible', 'Segoe UI', system-ui, sans-serif;
   --mono: 'DM Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
   --r: 14px;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #151a2e; --sheet: #1e2541; --ink: #f4f0e6; --ink-soft: #b4bad4; --line: #343c63;
-    --orange: #f2a640; --orange-ink: #2b1d06; --orange-edge: #b8721a; --mint: #89dcb0; --mint-deep: #89dcb0; --tint: #1d2c3a; --hl: color-mix(in srgb, #89dcb0 38%, transparent);
-    --word-little: #89dcb0; --word-print: #f2a640; --word-quests: #f4f0e6; color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --paper: #151a2e; --sheet: #1e2541; --ink: #f4f0e6; --ink-soft: #b4bad4; --line: #343c63;
-  --orange: #f2a640; --orange-ink: #2b1d06; --orange-edge: #b8721a; --mint: #89dcb0; --mint-deep: #89dcb0; --tint: #1d2c3a; --hl: color-mix(in srgb, #89dcb0 38%, transparent);
-  --word-little: #89dcb0; --word-print: #f2a640; --word-quests: #f4f0e6; color-scheme: dark;
+  color-scheme: only light; /* no dark mode (Jason, 2026-10-27) */
 }
 
 * { box-sizing: border-box; }
