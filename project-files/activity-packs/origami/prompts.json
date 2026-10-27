@@ -1,0 +1,444 @@
+[
+  {
+    "n": 1,
+    "theme": "dino",
+    "model": "Volcano",
+    "paper": {
+      "file": "dino-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: warm brown rock texture with small dinosaur footprints and tiny fern leaves.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "dino-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper volcano: a red-orange lava splash shaped to sit on a flat volcano top, a small grey smoke cloud, and a small cute baby dinosaur.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded volcano, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 2,
+    "theme": "hero",
+    "model": "Hero Cape",
+    "paper": {
+      "file": "hero-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: bold red with small yellow lightning bolts and blue stars.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "hero-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper hero cape: a round yellow hero emblem with a lightning bolt, and a short piece of blue string.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded hero cape, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 3,
+    "theme": "pirate",
+    "model": "Pirate Ship",
+    "paper": {
+      "file": "pirate-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: old map parchment color with tiny compass roses, dotted trails and small gold coins.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "pirate-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper pirate ship: a brown wooden pirate ship hull seen from the side, a tall wooden mast, and a small black pirate flag with crossed bones (no skull face).\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded pirate ship, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 4,
+    "theme": "space",
+    "model": "Rocket",
+    "paper": {
+      "file": "space-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: deep navy with tiny white stars, small orange planets and little moons.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "space-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper rocket: orange and yellow rocket flames, a round porthole window, and two red rocket fins.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded rocket, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 5,
+    "theme": "royal",
+    "model": "Pet Dragon",
+    "paper": {
+      "file": "royal-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: soft green dragon scales with tiny gold crowns.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "royal-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper pet dragon: a pair of small purple dragon wings and a little gold crown.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded pet dragon, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 6,
+    "theme": "unicorn",
+    "model": "Unicorn",
+    "paper": {
+      "file": "unicorn-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: pale lavender with small pastel rainbows, tiny stars and little gems.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "unicorn-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper unicorn: a gold spiral unicorn horn and a rainbow mane tuft.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded unicorn, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 7,
+    "theme": "mermaid",
+    "model": "Mermaid Tail",
+    "paper": {
+      "file": "mermaid-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: shimmering teal fish scales with tiny pink pearls.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "mermaid-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper mermaid tail: a big teal mermaid tail fin and a small pink seashell.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded mermaid tail, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 8,
+    "theme": "construction",
+    "model": "Hard Hat",
+    "paper": {
+      "file": "construction-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: bright safety yellow with small bolts, nuts and tiny wrenches.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "construction-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper hard hat: a small round headlamp and a reflective orange safety stripe.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded hard hat, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 9,
+    "theme": "vet",
+    "model": "Puppy",
+    "paper": {
+      "file": "vet-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: soft golden-brown fur color with light fur texture and a few tiny paw prints.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "vet-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper puppy: a red collar with a gold tag and a round black dog nose.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded puppy, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 10,
+    "theme": "racecar",
+    "model": "Race Car",
+    "paper": {
+      "file": "racecar-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: bright red with thin white racing stripes and tiny checkered flags.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "racecar-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper race car: two black car wheels and a round white number badge with a big 1.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded race car, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 11,
+    "theme": "fire",
+    "model": "Dalmatian Puppy",
+    "paper": {
+      "file": "fire-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: white with round black dalmatian spots and a few tiny red fire helmets.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "fire-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper dalmatian puppy: a few loose black spots, a red collar and a small red fire helmet.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded dalmatian puppy, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 12,
+    "theme": "agent",
+    "model": "Secret Note",
+    "paper": {
+      "file": "agent-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: dark charcoal grey with tiny magnifying glasses, footprints and fingerprint swirls in light grey.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "agent-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper secret note: a magnifying glass and a round red wax seal.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded secret note, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 13,
+    "theme": "ice",
+    "model": "Arctic Fox",
+    "paper": {
+      "file": "ice-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: icy pale blue with small white snowflakes and soft frost sparkles.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "ice-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper arctic fox: fluffy white earmuffs and a short striped scarf.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded arctic fox, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 14,
+    "theme": "puppet",
+    "model": "Finger Puppet",
+    "paper": {
+      "file": "puppet-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: deep red velvet curtain color with tiny gold stars.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "puppet-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper finger puppet: a tiny gold crown and a small yellow bow tie.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded finger puppet, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 15,
+    "theme": "dressup",
+    "model": "Paper Fan",
+    "paper": {
+      "file": "dressup-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: pink with small gold sequins, tiny bows and little stars.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "dressup-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper paper fan: a pink satin bow and three sparkly gems.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded paper fan, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 16,
+    "theme": "police",
+    "model": "Police Badge",
+    "paper": {
+      "file": "police-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: navy blue with small gold stars and thin light-blue stripes.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "police-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper police badge: a shiny gold star.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded police badge, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 17,
+    "theme": "doctor",
+    "model": "Teddy Bear",
+    "paper": {
+      "file": "doctor-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: soft honey-brown fur color with tiny bandages and small hearts.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "doctor-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper teddy bear: a crossed pair of bandages and a round brown bear nose.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded teddy bear, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 18,
+    "theme": "dentist",
+    "model": "Beaver",
+    "paper": {
+      "file": "dentist-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: warm brown fur color with tiny sparkly toothbrushes and small bubbles.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "dentist-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper beaver: two big white beaver front teeth (as one piece) and a flat brown beaver tail with a criss-cross pattern.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded beaver, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 19,
+    "theme": "auto",
+    "model": "Car",
+    "paper": {
+      "file": "auto-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: bright blue with small wrenches, gears and tiny tires.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "auto-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper car: two black car wheels and two light blue car windows.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded car, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 20,
+    "theme": "post",
+    "model": "Envelope",
+    "paper": {
+      "file": "post-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: light kraft-paper brown with tiny postage stamps, small hearts and airmail stripes.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "post-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper envelope: a postage stamp with a flower on it and a round red heart seal.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded envelope, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 21,
+    "theme": "library",
+    "model": "Corner Bookmark",
+    "paper": {
+      "file": "library-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: soft cream with small books, tiny stars and little reading glasses.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "library-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper corner bookmark: three small gold stars.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded corner bookmark, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 22,
+    "theme": "airport",
+    "model": "Airplane",
+    "paper": {
+      "file": "airport-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: sky blue with small white clouds and tiny dotted flight paths.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "airport-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper airplane: a pair of long white airplane wings (as one piece) and a small white tail fin.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded airplane, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 23,
+    "theme": "pizza",
+    "model": "Pizza Slice",
+    "paper": {
+      "file": "pizza-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: golden cheese yellow with small pepperoni circles, olive rings and basil leaves.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "pizza-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper pizza slice: six pepperoni slices, three mushroom slices and two green basil leaves.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded pizza slice, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 24,
+    "theme": "burger",
+    "model": "Fries Box",
+    "paper": {
+      "file": "burger-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: bright red with small yellow stars.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "burger-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper fries box: a bunch of golden french fries (as one piece, to stick out of a box).\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded fries box, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 25,
+    "theme": "italian",
+    "model": "Bow Tie",
+    "paper": {
+      "file": "italian-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: red and white checkered tablecloth pattern.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "italian-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper bow tie: a small round red knot for the middle of a bow tie.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded bow tie, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 26,
+    "theme": "coffee",
+    "model": "Coffee Cup",
+    "paper": {
+      "file": "coffee-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: warm cream with tiny coffee beans, small steam swirls and little hearts.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "coffee-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper coffee cup: a cup handle shaped like a C and three wavy steam swirls.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded coffee cup, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 27,
+    "theme": "icecream",
+    "model": "Ice Cream Cone",
+    "paper": {
+      "file": "icecream-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: golden waffle cone pattern.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "icecream-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper ice cream cone: a round pink strawberry ice cream scoop with sprinkles and a red cherry.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded ice cream cone, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 28,
+    "theme": "kitchen",
+    "model": "Cupcake",
+    "paper": {
+      "file": "kitchen-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: light blue with small white polka dots.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "kitchen-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper cupcake: a swirl of pink cupcake frosting with sprinkles and a red cherry.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded cupcake, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 29,
+    "theme": "grocery",
+    "model": "Carrot",
+    "paper": {
+      "file": "grocery-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: bright orange with light line texture like a carrot.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "grocery-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper carrot: a bunch of green carrot leaves.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded carrot, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 30,
+    "theme": "petshop",
+    "model": "Goldfish",
+    "paper": {
+      "file": "petshop-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: bright orange goldfish scales with tiny bubbles.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "petshop-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper goldfish: an orange goldfish tail fin and three small bubbles.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded goldfish, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 31,
+    "theme": "halloween",
+    "model": "Black Cat",
+    "paper": {
+      "file": "halloween-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: black with small orange pumpkins, tiny purple bats and little stars.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "halloween-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper black cat: a small purple witch hat and white whiskers (as one piece).\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded black cat, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 32,
+    "theme": "christmas",
+    "model": "Christmas Tree",
+    "paper": {
+      "file": "christmas-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: deep green with small white snowflakes, tiny red ornaments and gold stars.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "christmas-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper christmas tree: a gold star, a brown tree trunk and four round ornaments.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded christmas tree, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 33,
+    "theme": "valentine",
+    "model": "Tulip",
+    "paper": {
+      "file": "valentine-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: bright red with tiny pink and white hearts.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "valentine-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper tulip: a long green stem with two leaves.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded tulip, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  },
+  {
+    "n": 34,
+    "theme": "easter",
+    "model": "Bunny",
+    "paper": {
+      "file": "easter-paper.jpg",
+      "prompt": "Create a seamless, all-over pattern for a square sheet of origami paper: soft pastel yellow with small pastel eggs and tiny flowers.\n\nThe pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.\n\nPerfectly square image, high resolution, edge to edge, no border or margin, no central picture.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos."
+    },
+    "pieces": {
+      "file": "easter-pieces.jpg",
+      "prompt": "Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper bunny: a pink bow and a small decorated easter egg.\n\nLay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.\n\nWide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded bunny, no hands, no scissors, no glue, no shadows.\n\nNo faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one."
+    }
+  }
+]

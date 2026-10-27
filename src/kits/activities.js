@@ -28,6 +28,7 @@
 const art = require('./art');
 const MOSAICS = require('./mosaics.json');
 const { movePages, moveCss } = require('./movegame');
+const { origamiPages, origamiTitles, origamiCss } = require('./origami');
 
 const possessive = (name) => (/s$/i.test(name) ? `${name}’` : `${name}’s`);
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -442,13 +443,18 @@ const PAGES = [
   ['Move game cards', movePages.cards1], ['More move game cards', movePages.cards2], ['Move game board', movePages.board],
 ];
 const pagesFor = (k) => PAGES.filter(([, , who]) => !who || who === (k.little ? 'little' : 'big'));
-const activityTitles = (k) => pagesFor(k).map(([t]) => t);
+// The origami pages (src/kits/origami.js) come first, right after the cover, once a kit has its
+// pictures: the paper is the pack's lead page in the order stack.
+const activityTitles = (k) => [...origamiTitles(k), ...pagesFor(k).map(([t]) => t)];
 function activityPages(k) {
-  return pagesFor(k).map(([, f]) => f(k)).join('');
+  return origamiPages(k) + pagesFor(k).map(([, f]) => f(k)).join('');
 }
-const activityCount = (k) => pagesFor(k).length;
+const activityCount = (k) => activityTitles(k).length;
+// How many origami pages a kit's pack opens with (0 until its pictures are in), for scripts that
+// pick preview pages by number.
+const origamiShift = (kitId) => origamiTitles({ def: { id: kitId } }).length;
 
-const activityCss = `
+const activityCss = origamiCss + `
 .wp .wp-badge { position:absolute; top:.32in; right:.4in; font:700 10pt 'Fredoka'; letter-spacing:.08em; text-transform:uppercase; background:var(--orange); color:var(--accent-ink); padding:.05in .14in; border-radius:99px; }
 .wp-clean-pic { margin:.3in auto 0; width:7.2in; height:7.5in; display:grid; place-items:center; border:4px dashed var(--mint); border-radius:30px; background:var(--mint-l); }
 .wp-steps { display:flex; justify-content:center; gap:.3in; margin-top:.3in; font:600 15pt 'Fredoka'; color:var(--teal-d); }
@@ -557,4 +563,4 @@ const activityCss = `
 .wp-st-pick span { border:3px solid var(--line); border-radius:50%; padding:.08in; }
 ${moveCss}`;
 
-module.exports = { activityPages, activityTitles, activityCss, activityCount, CLEAN, MOSAIC_PICS, CRAYONS };
+module.exports = { activityPages, activityTitles, activityCss, activityCount, origamiShift, CLEAN, MOSAIC_PICS, CRAYONS };
