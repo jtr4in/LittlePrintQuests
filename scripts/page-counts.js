@@ -5,6 +5,7 @@
 const { chromium } = require('playwright');
 const { buildHtml } = require('../src/generator/build');
 const { buildKitHtml, activityPackHtml, kitForHunt } = require('../src/kits/engine');
+const { origamiShift } = require('../src/kits/activities');
 const { buildPartyHtml } = require('../src/party/build');
 const { buildCraftHtml } = require('../src/crafts/build');
 const THEMES = require('../src/generator/themes');
@@ -26,7 +27,8 @@ const SPOTS = Object.keys(require('../src/generator/spots'));
     if (got !== 7 + Math.ceil(n / 2)) throw new Error(`A ${n}-spot hunt has ${got} pages; update the hunt rule here and in docs/js/data.js`);
   }
   const pages = { kit: {}, activity: {}, party: await count(buildPartyHtml({ theme: 'dino', ...kid })), craft: {} };
-  for (const ages of ['big', 'little']) pages.activity[ages] = await count(activityPackHtml({ kit: 'dino', ...kid, ages, lenient: true, subjects: [] }));
+  // Without the origami pages: pagesOf() in docs/js/data.js adds 2 for themes in ORIGAMI.
+  for (const ages of ['big', 'little']) pages.activity[ages] = await count(activityPackHtml({ kit: 'dino', ...kid, ages, lenient: true, subjects: [] })) - origamiShift('dino');
   for (const id of Object.keys(THEMES)) {
     pages.kit[id] = await count(buildKitHtml({ kit: kitForHunt(id).id, ...kid, lenient: true, withHunt: true, subjects: [] }));
   }

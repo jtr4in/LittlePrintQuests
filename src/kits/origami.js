@@ -270,7 +270,7 @@ const MODELS = {
   volcano: { name: 'Volcano', start: 'diamond', side: 'white', steps: [triUp, { say: 'Fold the top point down.', fold: [-D, -0.55 * D, D, -0.55 * D], move: [0, -D] }, glue('lava and baby dino')] },
   cape: { name: 'Hero Cape', start: 'diamond', side: 'white', steps: [triDown, { say: 'Fold the top edge down to make a collar.', fold: [-D, 0.16 * D, D, 0.16 * D], move: [0, -1] }, glue('hero badge and string')] },
   pizza: { name: 'Pizza Slice', start: 'diamond', side: 'white', steps: [triDown, { say: 'Fold the top edge down to make the crust.', fold: [-D, 0.14 * D, D, 0.14 * D], move: [0, -1] }, glue('toppings')] },
-  sailboat: { name: 'Pirate Ship', start: 'diamond', side: 'white', steps: [triUp, { say: 'Fold it in half again.', fold: [0, -D, 0, 0], move: [D - 1, -0.3] }, glue('boat and flag')] },
+  sailboat: { name: 'Pirate Ship', start: 'diamond', side: 'white', steps: [triUp, { say: 'Fold it in half again.', fold: [0, -D, 0, 0], move: [D - 1, -0.3] }, glue('ship, mast and flag')] },
   rocket: { name: 'Rocket', start: 'diamond', side: 'white', steps: [...kiteUp, { say: 'Fold the bottom point up.', fold: [-D, 0.35 * D, D, 0.35 * D], move: [0, D] }, glue('flames and window')] },
   tree: { name: 'Christmas Tree', start: 'diamond', side: 'white', steps: [...kiteUp, { say: 'Fold the bottom point up.', fold: [-D, 0.35 * D, D, 0.35 * D], move: [0, D] }, glue('star, trunk and ornaments')] },
   cone: { name: 'Traffic Cone', start: 'diamond', side: 'white', steps: [...kiteUp, { say: 'Fold the bottom point up.', fold: [-D, 0.35 * D, D, 0.35 * D], move: [0, D] }, glue('white stripes and base')] },
@@ -403,18 +403,19 @@ function origamiPages(k) {
   return `<section class="page wp og og-paper">
       <div class="wp-badge">Print &amp; Play</div>
       <h2 class="pg-title">${esc(possessive(k.childName))} Origami Paper</h2>
-      <p class="pg-sub">Grown-ups: cut on the dashed line. ${k.childName} folds it into a ${esc(model.name.toLowerCase())} on the next page!</p>
+      <p class="pg-sub">Grown-ups: cut on the dashed line. ${k.childName} folds it into ${aOrAn(model.name)} ${esc(model.name.toLowerCase())} on the next page!</p>
       <div class="og-square">${img(k, 'paper', 'og-paper-art')}<span class="og-scissors">✂️</span></div>
     </section>
     <section class="page wp og og-how">
       <div class="wp-badge">Print &amp; Play</div>
-      <h2 class="pg-title">Fold a ${esc(model.name)}!</h2>
+      <h2 class="pg-title">Fold ${aOrAn(model.name)} ${esc(model.name)}!</h2>
       <p class="pg-sub">${startSide} Follow the red dashed line and the arrow.</p>
       <div class="og-grid n${steps.length}">${steps.join('')}</div>
       <div class="og-pieces"><div class="og-pieces-cap">✂️ Cut out your pieces</div>${img(k, 'pieces', 'og-pieces-art')}</div>
     </section>`;
 }
-const origamiTitles = (k) => (hasOrigami(k) ? ['Origami paper', `Fold a ${MODELS[THEMES[k.def.id][0]].name.toLowerCase()}`] : []);
+const origamiTitles = (k) => { if (!hasOrigami(k)) return []; const n = MODELS[THEMES[k.def.id][0]].name; return ['Origami paper', `Fold ${aOrAn(n)} ${n.toLowerCase()}`]; };
+const aOrAn = (word) => (/^[aeiou]/i.test(word) ? 'an' : 'a');
 function possessive(name) { return /s$/i.test(name) ? `${name}’` : `${name}’s`; }
 
 const origamiCss = `

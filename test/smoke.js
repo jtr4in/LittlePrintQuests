@@ -960,7 +960,10 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   for (const id of Object.keys(allKits)) {
     for (const age of [3, 6]) {
       const html = activityPackHtml({ kit: id, childName: 'Ava', age, lenient: true });
-      assert.equal((html.match(/<section class="page/g) || []).length, age === 3 ? 20 : 19, `${id} activity pages`);
+      // Kits with origami pictures open with two more pages (src/kits/origami.js).
+      const og = require('../src/kits/activities').origamiShift(id);
+      assert.equal((html.match(/<section class="page/g) || []).length, (age === 3 ? 20 : 19) + og, `${id} activity pages`);
+      if (og) assert.match(html, /Origami Paper[\s\S]*class="og-step"[\s\S]*og-pieces-art/, `${id} origami pages`);
       // The move game: two sheets of 9 cards (6 specials) and a board with 4 stand-up pieces, for both ages.
       assert.equal((html.match(/class="mv-card[ "]/g) || []).length, 18, `${id} move cards`);
       assert.equal((html.match(/class="mv-card sp"/g) || []).length, 6, `${id} move specials`);
