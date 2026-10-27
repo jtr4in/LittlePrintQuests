@@ -21,10 +21,11 @@ const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&
 function inSeason(now) {
   const m = now.getUTCMonth() + 1, d = now.getUTCDate(), md = m * 100 + d;
   return [
-    ['halloween', 915, 1031], ['christmas', 1101, 1225], ['valentine', 101, 214], ['easter', 301, 420],
+    ['halloween', 915, 1031], ['thanksgiving', 1001, 1126], ['christmas', 1101, 1225], ['valentine', 101, 214], ['easter', 301, 420],
   ].filter(([, from, to]) => md >= from && md <= to).map(([id]) => id);
 }
-const holiday = (pin) => ['halloween', 'christmas', 'valentine', 'easter'].find((h) => pin.id.endsWith(`-${h}`));
+// Matches hunt-christmas as well as free-christmas-scavenger-hunt and ideas-thanksgiving-scavenger-hunt.
+const holiday = (pin) => ['halloween', 'thanksgiving', 'christmas', 'valentine', 'easter'].find((h) => pin.id.includes(h));
 
 function run(perFeed = 1, now = new Date()) {
   const pool = JSON.parse(fs.readFileSync(path.join(DIR, 'pool.json'), 'utf8'));

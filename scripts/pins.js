@@ -2,13 +2,15 @@
 // party pack and free-ideas page, into docs/pins/img/<id>.jpg, and lists them in docs/pins/pool.json
 // with each pin's board feed, title, description and link. pin-feed.js then adds a few of them to the
 // Pinterest RSS feeds each day (Pinterest's "Auto-publish" reads docs/pins/<feed>.xml).
-//   node scripts/pins.js [pin-id ...]
+//   node scripts/pins.js [pin-id ...]     (or --new for every pin not posted yet)
 const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 const THEMES = require('../src/generator/themes');
 const SPACES = require('../src/generator/spaces');
 const { KITS, kitForHunt } = require('../src/kits/engine');
+const { GUIDES } = require('./idea-guides');
+const { clueSets } = require('./idea-pages');
 
 const SITE = 'https://littleprintquests.com/';
 const IMG = path.join(__dirname, '..', 'docs', 'img');
@@ -71,6 +73,34 @@ for (const s of Object.values(SPACES)) {
   });
 }
 
+// The guide pages (scripts/idea-guides.js): birthday, Thanksgiving, classroom, ages...
+for (const g of GUIDES) {
+  PINS.push({
+    id: `ideas-${g.slug}`, feed: g.slug.startsWith('birthday') ? 'party-printables' : 'scavenger-hunts', color: '#2f9a6b',
+    kicker: 'Free ideas', head: g.title.split(':')[0].replace(/ for Kids$/, ''), sub: g.title.split(':')[1]?.trim() || 'Free rhyming clues and easy tips',
+    tags: ['Use them today', 'Ages 3 to 8'], art: fan(['gallery/dino/hunt-3.webp', 'gallery/unicorn/hunt-3.webp', 'gallery/pirate/hunt-3.webp']),
+    title: g.title,
+    description: g.description,
+    link: `${SITE}ideas/${g.slug}/?utm_source=pinterest&utm_medium=pin`,
+  });
+}
+
+// The free printable clue sheet of every hunt page (scripts/free-printables.js). Pins only exist for sheets
+// that have been made, so run free-printables.js first.
+const PRINTABLES = path.join(__dirname, '..', 'docs', 'printables', 'img');
+for (const set of clueSets()) {
+  const f = path.join(PRINTABLES, `${set.slug}.webp`);
+  if (!fs.existsSync(f)) continue;
+  PINS.push({
+    id: `free-${set.slug}`, feed: set.slug.startsWith('birthday') ? 'party-printables' : 'scavenger-hunts', color: set.colors.primary,
+    kicker: 'Free printable', head: `Free Printable ${set.name}`, sub: `${set.clues.length} rhyming clue cards with picture hints and an answer key`,
+    tags: ['Free PDF', 'Ages 3 to 8'], art: `<img class="sheet" src="data:image/webp;base64,${fs.readFileSync(f).toString('base64')}">`,
+    title: `Free Printable ${set.name} for Kids: Rhyming Clue Cards`,
+    description: `Free printable ${set.name.toLowerCase().replace(/christmas|halloween|easter|valentine|thanksgiving/g, (m) => m[0].toUpperCase() + m.slice(1))} clue cards: ${set.clues.length} rhyming riddles with picture hints for kids who can’t read yet, cut lines and an answer key. Print, cut, hide, play. Ages 3 to 8.`,
+    link: `${SITE}ideas/${set.slug}/?utm_source=pinterest&utm_medium=pin`,
+  });
+}
+
 // A play kit, its little-kids version and its activity pack.
 function kitPins(k, q) {
   const g = (n) => `gallery/${q.theme || k.id}/${n}.webp`;
@@ -101,6 +131,11 @@ function kitPins(k, q) {
   });
 }
 
+// Fonts from the repo's fonts/ folder, so pins come out right without internet access (Google Fonts can't be
+// reached from the Claude sandbox, and pins fell back to a serif font there).
+const font = (family, file, weight) => `@font-face{font-family:'${family}';font-weight:${weight};src:url(data:font/${file.endsWith('ttf') ? 'ttf' : 'woff2'};base64,${fs.readFileSync(path.join(__dirname, '..', 'fonts', file)).toString('base64')})}`;
+const FONTS = font('Fredoka', 'Fredoka.ttf', '600 700') + font('Atkinson Hyperlegible', 'AtkinsonHyperlegible-400.woff2', 400) + font('Atkinson Hyperlegible', 'AtkinsonHyperlegible-700.woff2', 700);
+
 const CSS = `
 body{margin:0;width:1000px;height:1500px;overflow:hidden;background:#fbf8f1;font-family:'Atkinson Hyperlegible';color:#2f3760;position:relative}
 .top{position:absolute;left:0;right:0;top:0;height:560px;padding:64px 70px 0;box-sizing:border-box}
@@ -112,6 +147,7 @@ h1{margin:26px 0 0;font:700 86px/1.02 Fredoka;color:#2f3760;text-wrap:balance}
 .fan{position:absolute;inset:0}
 .pg{position:absolute;width:440px;top:60px;border-radius:10px;box-shadow:0 18px 40px rgba(40,40,70,.25);background:#fff}
 .p0{left:40px;transform:rotate(-8deg);top:100px}.p2{left:520px;transform:rotate(7deg);top:100px}.p1{left:270px;top:30px;width:460px;z-index:2}
+.sheet{position:absolute;left:50%;top:40px;width:600px;margin-left:-300px;transform:rotate(-3deg);border-radius:8px;box-shadow:0 22px 50px rgba(40,40,70,.28);background:#fff}
 .wide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}.wide img{width:960px;filter:drop-shadow(0 18px 30px rgba(40,40,70,.22))}
 .foot{position:absolute;left:0;right:0;bottom:0;height:180px;display:flex;align-items:center;justify-content:space-between;padding:0 70px;box-sizing:border-box;background:#fff}
 .tags{display:flex;gap:14px}.tags span{font:700 26px Atkinson Hyperlegible;padding:12px 20px;border-radius:999px;background:#f2f0ea;color:#3f4a73}
@@ -120,15 +156,20 @@ h1{margin:26px 0 0;font:700 86px/1.02 Fredoka;color:#2f3760;text-wrap:balance}
 `;
 
 (async () => {
-  const only = process.argv.slice(2);
+  // `--new` draws only the pins that haven't gone out yet (docs/pins/published.json), so pins already on
+  // Pinterest keep the picture they were posted with.
+  let only = process.argv.slice(2);
+  if (only.includes('--new')) {
+    const published = JSON.parse(fs.readFileSync(path.join(OUT, 'published.json'), 'utf8'));
+    only = PINS.map((p) => p.id).filter((id) => !published[id]);
+  }
   fs.mkdirSync(path.join(OUT, 'img'), { recursive: true });
   const b = await chromium.launch();
   const page = await b.newPage({ viewport: { width: 1000, height: 1500 } });
   const mark = data('mark.png');
   for (const p of PINS.filter((x) => !only.length || only.includes(x.id))) {
     await page.setContent(`<!doctype html><html><head>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
-<style>${CSS}</style></head><body>
+<style>${FONTS}${CSS}</style></head><body>
 <div class="top"><span class="kicker" style="background:${p.color}">${esc(p.kicker)}</span><h1>${esc(p.head)}</h1><div class="sub">${esc(p.sub)}</div></div>
 <div class="art">${p.art}</div>
 <div class="foot"><div class="tags">${p.tags.map((t) => `<span>${esc(t)}</span>`).join('')}</div>
@@ -137,7 +178,13 @@ h1{margin:26px 0 0;font:700 86px/1.02 Fredoka;color:#2f3760;text-wrap:balance}
     await page.screenshot({ path: path.join(OUT, 'img', `${p.id}.jpg`), type: 'jpeg', quality: 82 });
   }
   await b.close();
-  const pool = PINS.map(({ id, feed, title, description, link: url }) => ({ id, feed, title, description, link: url, image: `${SITE}pins/img/${id}.jpg` }));
+  // Pool order: take turns between the kinds of pin (hunt, ideas, free printable, kit...) so each board's
+  // daily pin varies instead of running through 34 of one kind first.
+  const kinds = {};
+  for (const p of PINS) (kinds[p.id.split('-')[0]] ||= []).push(p);
+  const mixed = [];
+  for (let i = 0; mixed.length < PINS.length; i++) for (const list of Object.values(kinds)) if (list[i]) mixed.push(list[i]);
+  const pool = mixed.map(({ id, feed, title, description, link: url }) => ({ id, feed, title, description, link: url, image: `${SITE}pins/img/${id}.jpg` }));
   fs.writeFileSync(path.join(OUT, 'pool.json'), JSON.stringify(pool, null, 1) + '\n');
   console.log(`Drew ${only.length || PINS.length} pins; ${PINS.length} in docs/pins/pool.json`);
 })();

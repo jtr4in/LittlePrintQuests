@@ -1,7 +1,7 @@
 // The occasion and age guides for the ideas pages (built by scripts/idea-pages.js): birthday, Thanksgiving and
 // classroom hunts, and hunts for little and big kids. Clues are either ids from the riddle library
 // (src/generator/spots.js) or written here as { label, riddle: [line, line], tip } when the spots are
-// party, holiday or classroom ones the library doesn't have. Section bodies are HTML; links in them are written
+// party, holiday or classroom ones the library doesn't have; pic is the picture hint on the free printable. Section bodies are HTML; links in them are written
 // from a page in docs/ideas/<slug>/. Site copy says "kid", not "child".
 
 const GUIDES = [
@@ -16,14 +16,14 @@ const GUIDES = [
     cta: [{ pick: 'hunt+party' }, 'Make a personalized party hunt'],
     clueIntro: 'Hide each clue at the answer to the clue before it. Hand the first one to the birthday kid, and put the goodie bags at the end.',
     clues: [
-      { label: 'Balloons', riddle: ['Look up, look up, where they bob and they sway,', 'The next clue is tied where the balloons like to play!'], tip: 'Tied to a balloon ribbon' },
-      { label: 'Presents', riddle: ['Boxes in paper with ribbons so bright,', 'Look by the presents, but no peeking tonight!'], tip: 'Under the gift table' },
-      { label: 'Party hats', riddle: ['Pointy and stripy, you wear it to cheer,', 'Look under a party hat, your clue is right here!'], tip: 'Under the stack of party hats' },
-      { label: 'Freezer', riddle: ['Where does the ice cream stay frozen and cold?', 'Look by the freezer, be quick and be bold!'], tip: 'Taped to the freezer door' },
-      { label: 'Paper plates', riddle: ['Paper plates stacked by the forks and the cups,', 'Lift up the plates where the party sets up!'], tip: 'Under the bottom plate in the stack' },
-      { label: 'Front door', riddle: ['You came through it smiling, all ready to play,', 'Go back to the door where you came in today!'], tip: 'Taped to the inside of the front door' },
-      { label: 'Birthday chair', riddle: ['Who is the star with a crown on their head?', 'Look by the birthday kid’s chair, like I said!'], tip: 'On the seat of the birthday kid’s chair' },
-      { label: 'Goodie bags', riddle: ['You played and you searched and you found every clue,', 'The goodie bags wait, and there’s one just for you!'], tip: 'The treasure: the favor bags, one for each kid' },
+      { label: 'Balloons', pic: '🎈', riddle: ['Look up, look up, where they bob and they sway,', 'The next clue is tied where the balloons like to play!'], tip: 'Tied to a balloon ribbon' },
+      { label: 'Presents', pic: '🎁', riddle: ['Boxes in paper with ribbons so bright,', 'Look by the presents, but no peeking tonight!'], tip: 'Under the gift table' },
+      { label: 'Party hats', pic: '🎉', riddle: ['Pointy and stripy, you wear it to cheer,', 'Look under a party hat, your clue is right here!'], tip: 'Under the stack of party hats' },
+      { label: 'Freezer', pic: '🧊', riddle: ['Where does the ice cream stay frozen and cold?', 'Look by the freezer, be quick and be bold!'], tip: 'Taped to the freezer door' },
+      { label: 'Paper plates', pic: '🍽️', riddle: ['Paper plates stacked by the forks and the cups,', 'Lift up the plates where the party sets up!'], tip: 'Under the bottom plate in the stack' },
+      { label: 'Front door', pic: '🚪', riddle: ['You came through it smiling, all ready to play,', 'Go back to the door where you came in today!'], tip: 'Taped to the inside of the front door' },
+      { label: 'Birthday chair', pic: '🪑', riddle: ['Who is the star with a crown on their head?', 'Look by the birthday kid’s chair, like I said!'], tip: 'On the seat of the birthday kid’s chair' },
+      { label: 'Goodie bags', pic: '🛍️', riddle: ['You played and you searched and you found every clue,', 'The goodie bags wait, and there’s one just for you!'], tip: 'The treasure: the favor bags, one for each kid' },
     ],
     sections: [
       ['Running a hunt with a group', `<ul class="tips">
@@ -117,14 +117,14 @@ const GUIDES = [
     cta: [{ theme: 'kitchen' }, 'Make a personalized hunt'],
     clueIntro: 'Hide each clue at the answer to the clue before it. The last one leads to a Thankful Jar.',
     clues: [
-      { label: 'Coat hooks', riddle: ['Coats and hats hanging up by the door,', 'Look where the guests hung their jackets, there’s more!'], tip: 'In a coat pocket by the door' },
-      { label: 'Pumpkin pie', riddle: ['It’s round and it’s spicy and baked in a dish,', 'Look by the pumpkin pie, then make a wish!'], tip: 'Next to (not on!) the pie plate' },
-      { label: 'Dinner table', riddle: ['Where will we gather to share the big meal?', 'Look under a plate, what will it reveal?'], tip: 'Under a plate at the dinner table' },
-      { label: 'Fruit bowl', riddle: ['Apples and gourds and the corn in a heap,', 'Check the fruit bowl, the next clue is in deep!'], tip: 'Under the fruit in the centerpiece bowl' },
-      { label: 'TV', riddle: ['Where do the grown-ups all cheer for the game?', 'Check by the TV, the clue’s there all the same!'], tip: 'Under the TV remote' },
-      { label: 'Grandma’s chair', riddle: ['Who tells the best stories and gives the best hugs?', 'Check by Grandma’s chair, then give her a snug!'], tip: 'Ask a grandparent to hold it' },
-      { label: 'Kitchen cupboard', riddle: ['It smells like a feast and the oven is hot,', 'The clue’s on a cupboard, but not on the pot!'], tip: 'Taped to a cupboard away from the stove' },
-      { label: 'Thankful Jar', riddle: ['You found every clue, now the best part is near,', 'Look in the Thankful Jar, what’s waiting in here?'], tip: 'The treasure: a jar with a small treat and blank slips' },
+      { label: 'Coat hooks', pic: '🧥', riddle: ['Coats and hats hanging up by the door,', 'Look where the guests hung their jackets, there’s more!'], tip: 'In a coat pocket by the door' },
+      { label: 'Pumpkin pie', pic: '🥧', riddle: ['It’s round and it’s spicy and baked in a dish,', 'Look by the pumpkin pie, then make a wish!'], tip: 'Next to (not on!) the pie plate' },
+      { label: 'Dinner table', pic: '🍽️', riddle: ['Where will we gather to share the big meal?', 'Look under a plate, what will it reveal?'], tip: 'Under a plate at the dinner table' },
+      { label: 'Fruit bowl', pic: '🍎', riddle: ['Apples and gourds and the corn in a heap,', 'Check the fruit bowl, the next clue is in deep!'], tip: 'Under the fruit in the centerpiece bowl' },
+      { label: 'TV', pic: '📺', riddle: ['Where do the grown-ups all cheer for the game?', 'Check by the TV, the clue’s there all the same!'], tip: 'Under the TV remote' },
+      { label: 'Grandma’s chair', pic: '🪑', riddle: ['Who tells the best stories and gives the best hugs?', 'Check by Grandma’s chair, then give her a snug!'], tip: 'Ask a grandparent to hold it' },
+      { label: 'Kitchen cupboard', pic: '🚪', riddle: ['It smells like a feast and the oven is hot,', 'The clue’s on a cupboard, but not on the pot!'], tip: 'Taped to a cupboard away from the stove' },
+      { label: 'Thankful Jar', pic: '🫙', riddle: ['You found every clue, now the best part is near,', 'Look in the Thankful Jar, what’s waiting in here?'], tip: 'The treasure: a jar with a small treat and blank slips' },
     ],
     sections: [
       ['The thankful twist', '<p>At every stop, the finder says one thing they’re thankful for, and a grown-up writes it on a slip. The slips go in the Thankful Jar at the end, and at dinner each kid pulls one out and reads it to the table. Little ones can draw theirs.</p>'],
@@ -151,14 +151,14 @@ const GUIDES = [
     cta: [{ pick: 'hunt' }, 'Make a printable hunt'],
     clueIntro: 'Hide each clue at the answer to the clue before it. The treasure waits on the circle-time rug.',
     clues: [
-      { label: 'Class library', riddle: ['Where do the stories sit snug in a row?', 'Check the class library, the readers all know!'], tip: 'Between two picture books' },
-      { label: 'Pencil sharpener', riddle: ['It grinds and it whirrs till your pencil is sharp,', 'Check by the sharpener, it hums like a harp!'], tip: 'Taped beside the sharpener' },
-      { label: 'Calendar', riddle: ['Monday and Tuesday, the days in a row,', 'Check the class calendar, it’s where they all go!'], tip: 'Pinned under today’s date' },
-      { label: 'Cubbies', riddle: ['Where do your backpack and lunchbox all wait?', 'Look in the cubbies, but don’t be late!'], tip: 'In an empty cubby' },
-      { label: 'Sink', riddle: ['Scrub away paint and the glue and the mud,', 'Check by the class sink with soap and with suds!'], tip: 'Taped above the sink' },
-      { label: 'Whiteboard', riddle: ['It’s big and it’s white and we write with a pen,', 'Check by the whiteboard, wipe clean, start again!'], tip: 'On the marker tray' },
-      { label: 'Teacher’s desk', riddle: ['Who has the stickers, the stamps and gold stars?', 'Check by the teacher’s desk, look near the jars!'], tip: 'Next to the sticker jar' },
-      { label: 'Circle-time rug', riddle: ['Great job, detectives, you worked as a crew,', 'Now sit on the rug, there’s a treasure for you!'], tip: 'The treasure: on the rug at circle time' },
+      { label: 'Class library', pic: '📚', riddle: ['Where do the stories sit snug in a row?', 'Check the class library, the readers all know!'], tip: 'Between two picture books' },
+      { label: 'Pencil sharpener', pic: '✏️', riddle: ['It grinds and it whirrs till your pencil is sharp,', 'Check by the sharpener, it hums like a harp!'], tip: 'Taped beside the sharpener' },
+      { label: 'Calendar', pic: '📅', riddle: ['Monday and Tuesday, the days in a row,', 'Check the class calendar, it’s where they all go!'], tip: 'Pinned under today’s date' },
+      { label: 'Cubbies', pic: '🎒', riddle: ['Where do your backpack and lunchbox all wait?', 'Look in the cubbies, but don’t be late!'], tip: 'In an empty cubby' },
+      { label: 'Sink', pic: '🧼', riddle: ['Scrub away paint and the glue and the mud,', 'Check by the class sink with soap and with suds!'], tip: 'Taped above the sink' },
+      { label: 'Whiteboard', pic: '🖍️', riddle: ['It’s big and it’s white and we write with a pen,', 'Check by the whiteboard, wipe clean, start again!'], tip: 'On the marker tray' },
+      { label: 'Teacher’s desk', pic: '⭐', riddle: ['Who has the stickers, the stamps and gold stars?', 'Check by the teacher’s desk, look near the jars!'], tip: 'Next to the sticker jar' },
+      { label: 'Circle-time rug', pic: '🏆', riddle: ['Great job, detectives, you worked as a crew,', 'Now sit on the rug, there’s a treasure for you!'], tip: 'The treasure: on the rug at circle time' },
     ],
     sections: [
       ['Running it with a whole class', `<ul class="tips">
