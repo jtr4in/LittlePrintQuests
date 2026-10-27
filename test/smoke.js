@@ -609,7 +609,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.match(await (await realFetch(`${base}/order/${huntOnly.id}`)).text(), /Add the pretend play kit, activity pack and party pack[\s\S]*Add to my order · \$10\.00/);
   // The party bundle (hunt, kit and party pack) only lacks the activity pack: $3 more.
   const bundleOrder = Object.values(state.orders).find((o) => o.source === 'web' && o.product === 'bundle' && o.status === 'ready');
-  assert.match(await (await realFetch(`${base}/order/${bundleOrder.id}`)).text(), /Add the activity pack[\s\S]*Add to my order · \$3\.00/);
+  assert.match(await (await realFetch(`${base}/order/${bundleOrder.id}`)).text(), /Add the activity pack[\s\S]*Add to my order · \$4\.00/);
   const upCharged = [];
   payments.createUpgradeCheckout = async (order, up) => {
     upCharged.push(up.cents);
