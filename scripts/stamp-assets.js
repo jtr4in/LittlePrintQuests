@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const DOCS = path.join(__dirname, '..', 'docs');
-const PAGES = ['index.html', 'make/index.html', 'play-kits/index.html', 'handprint-art/index.html'];
+const PAGES = ['index.html', 'make/index.html', 'play-kits/index.html', 'handprint-art/index.html', 'activity-pages/index.html'];
 const REF = /((?:src|href)=")((?:js|css)\/[\w.-]+\.(?:js|css))(?:\?v=[0-9a-f]+)?"/g;
 const stamp = (file) => crypto.createHash('sha256').update(fs.readFileSync(path.join(DOCS, file))).digest('hex').slice(0, 8);
 function stamped(html) { return html.replace(REF, (m, attr, file) => `${attr}${file}?v=${stamp(file)}"`); }

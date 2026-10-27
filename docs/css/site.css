@@ -671,3 +671,26 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
   .hook-pages .mid { width: 78px; left: 14px; top: 14px; transform: rotate(-2deg); }
   .hook-pages .phone.front { width: 84px; right: 0; top: 30px; }
 }
+
+/* Activity pages (activity-pages/): the origami feature and the kinds of pages in the pack. */
+.og-feature { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 32px; align-items: center; margin: 30px 0 36px; }
+.og-pages { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.og-pages button { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 8px; cursor: pointer; font: inherit; color: inherit; display: grid; gap: 8px; transition: transform .15s ease; }
+.og-pages button:nth-child(1) { transform: rotate(-2deg); }
+.og-pages button:nth-child(2) { transform: rotate(1.5deg) translateY(10px); }
+.og-pages button:hover, .og-pages button:focus-visible { transform: none; }
+.og-pages img { width: 100%; height: auto; aspect-ratio: 8.5 / 11; object-fit: cover; border-radius: 4px; display: block; background: #fff; }
+.og-pages span { font: 600 15px/1.2 var(--display); }
+.og-copy h2 { font-size: clamp(26px, 3.2vw, 34px); margin: 8px 0 10px; text-wrap: balance; }
+.og-copy p { color: var(--ink-soft); font-size: 17px; max-width: 34em; }
+.og-points { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.og-points li { position: relative; padding-left: 26px; font-size: 16.5px; }
+.og-points li::before { content: ""; position: absolute; left: 4px; top: .45em; width: 10px; height: 10px; border-radius: 50%; background: var(--orange); }
+.og-soon { margin-top: 12px; font: 500 13px/1.4 var(--mono); }
+.act-kinds { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 16px; }
+.act-kinds div { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; display: grid; gap: 6px; align-content: start; }
+.act-kinds b { font: 600 17px/1.2 var(--display); }
+.act-kinds span { color: var(--ink-soft); font-size: 15px; line-height: 1.45; }
+@media (max-width: 860px) { .og-feature { grid-template-columns: 1fr; } .act-kinds { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .act-kinds { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .og-pages button { transition: none; } }
