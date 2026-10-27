@@ -11,13 +11,13 @@ const cents = (key, fallback) => Number(process.env[key] || fallback);
 const PRICES = {
   hunt: cents('PRICE_CENTS', 999),
   kit: cents('KIT_PRICE_CENTS', 799),
-  party: cents('PARTY_PRICE_CENTS', 699),
+  party: cents('PARTY_PRICE_CENTS', 499),
   'hunt+kit': cents('HUNT_KIT_PRICE_CENTS', 1499),
-  'hunt+party': cents('HUNT_PARTY_PRICE_CENTS', 1399),
-  'kit+party': cents('KIT_PARTY_PRICE_CENTS', 1299),
-  bundle: cents('BUNDLE_PRICE_CENTS', 1699),
-  activity: cents('ACTIVITY_PRICE_CENTS', 499), // the activity pack on its own
-  activityAdd: cents('ACTIVITY_ADD_CENTS', 300), // added to anything else
+  'hunt+party': cents('HUNT_PARTY_PRICE_CENTS', 1299),
+  'kit+party': cents('KIT_PARTY_PRICE_CENTS', 1199),
+  bundle: cents('BUNDLE_PRICE_CENTS', 1599),
+  activity: cents('ACTIVITY_PRICE_CENTS', 699), // the activity pack on its own
+  activityAdd: cents('ACTIVITY_ADD_CENTS', 400), // added to anything else
   craft: cents('CRAFT_PRICE_CENTS', 599),
   pass: cents('PASS_PRICE_CENTS', 3999), // the Family Pass: 6 orders within a year
   book: cents('BOOK_PRICE_CENTS', 799), // a handprint book (memory, zoo, fingerprint), a craft order

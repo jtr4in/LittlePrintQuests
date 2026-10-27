@@ -980,11 +980,24 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.doesNotMatch(kitHtml({ kit: id, childName: "Ava", lenient: true }), /class="page wp |class="wp-badge"/, `${id} kit has no activity pages`);
   }
   const prices = require('../src/bot/products');
-  assert.deepEqual(['activity', 'hunt+kit+activity', 'bundle+activity', 'kit+party+activity'].map(prices.priceFor), [499, 1799, 1999, 1599]);
+  assert.deepEqual(['activity', 'hunt+kit+activity', 'bundle+activity', 'kit+party+activity'].map(prices.priceFor), [699, 1899, 1999, 1599]);
+  // Every mix of hunt, kit, activity and party: adding an item always costs something, and no mix
+  // costs more than its items bought one at a time (Oct 27, 2026: a first try at swapping the
+  // activity and party prices made the party pack free inside the everything bundle).
+  {
+    const ALL = ['hunt', 'kit', 'activity', 'party'];
+    const mixes = Array.from({ length: 15 }, (_, m) => ALL.filter((_, i) => m + 1 & (1 << i)));
+    const cost = (items) => prices.priceFor(prices.productFor(items));
+    for (const a of mixes) {
+      assert.ok(cost(a) <= a.reduce((n, i) => n + cost([i]), 0), `${a.join('+')} costs more than its items alone`);
+      for (const b of mixes) if (b.length > a.length && a.every((i) => b.includes(i))) assert.ok(cost(b) > cost(a), `${b.join('+')} should cost more than ${a.join('+')}`);
+    }
+    assert.equal(cost(ALL), 1999, 'everything is $19.99');
+  }
   assert.equal(prices.productFor(['hunt', 'kit', 'activity', 'party']), 'bundle+activity');
   // The site's cart prices must match the bot's.
   const docs = (...f) => fs.readFileSync(path.join(__dirname, '..', 'docs', ...f), 'utf8');
-  assert.match(docs('js', 'data.js'), /activity: 4\.99, activityAdd: 3 \}/);
+  assert.match(docs('js', 'data.js'), /activity: 6\.99, activityAdd: 4 \}/);
   // The order page (make/) starts with everything ticked.
   assert.match(docs('js', 'make.js'), /const picked = new Set\(\['hunt', 'kit', 'activity', 'party'\]\)/);
   assert.match(docs('make', 'index.html'), /id="childAge" min="2" max="12" placeholder="Optional">/);
