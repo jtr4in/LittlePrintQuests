@@ -87,9 +87,7 @@ const page = (slug, { title, lede, body }) => `<!doctype html>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>
 :root { --paper:#fbf8f1; --ink:#3f4a73; --soft:#646d8f; --line:#e4dfd2; --orange:#ef9d31;
-  --display:'Fredoka','Trebuchet MS',system-ui,sans-serif; --body:'Atkinson Hyperlegible','Segoe UI',system-ui,sans-serif; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --paper:#151a2e; --ink:#f4f0e6; --soft:#b4bad4; --line:#343c63; --orange:#f2a640; color-scheme:dark; } }
-:root[data-theme="dark"] { --paper:#151a2e; --ink:#f4f0e6; --soft:#b4bad4; --line:#343c63; --orange:#f2a640; color-scheme:dark; }
+  --display:'Fredoka','Trebuchet MS',system-ui,sans-serif; --body:'Atkinson Hyperlegible','Segoe UI',system-ui,sans-serif; color-scheme:only light; }
 * { box-sizing:border-box; }
 body { margin:0; background:var(--paper); color:var(--ink); font:17px/1.6 var(--body); }
 a { color:inherit; }

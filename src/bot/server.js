@@ -132,8 +132,7 @@ function upgradeOffer(o) {
 function buyerPage(title, body, refresh) {
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title>${refresh ? '<meta http-equiv="refresh" content="4">' : ''}<style>
-:root{--bg:#fbf8f1;--ink:#3f4a73;--muted:#646d8f;--sun:#ef9d31;--sun-ink:#2b1d06}
-@media (prefers-color-scheme:dark){:root{--bg:#151a2e;--ink:#f4f0e6;--muted:#b4bad4}}
+:root{--bg:#fbf8f1;--ink:#3f4a73;--muted:#646d8f;--sun:#ef9d31;--sun-ink:#2b1d06;color-scheme:only light}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 system-ui,sans-serif}
 main{max-width:560px;margin:12vh auto;padding:0 16px;text-align:center}
 h1{font-size:28px;line-height:1.2}p{color:var(--muted)}p b{color:var(--ink)}
