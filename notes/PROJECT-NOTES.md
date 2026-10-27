@@ -16,7 +16,7 @@ Work in flight is listed under **In progress** below.
 - Waiting on Jason: set the Stripe logo and colors in the Dashboard (see "Stripe checkout page" below), and check that Railway redeployed the order bot after #118 (a test checkout should show a picture beside the product).
 - 2026-10-27: a PR stacked on another PR's branch merges into that branch, not main, when it isn't retargeted first (#167 did this; the guide pages were re-landed from main). Retarget or rebase onto main before merging a stacked PR.
 - 2026-10-27: origami pages live for 17 themes (see "Origami pages" for the list); Jason is making the other 17 from the prompts page. Next: import them with `scripts/origami-import.py`.
-- 2026-10-27: home page above-the-fold rework for ad traffic (see "Above the fold"), branch `hero-cold-traffic`. Not merged: that session couldn't get push access, so it handed Jason a patch. If it isn't on main yet, apply `hero-cold-traffic.patch` (`git am`), run `npm test`, merge.
+- 2026-10-27: home page above-the-fold rework for ad traffic is live (PR #173, see "Above the fold").
 - Ideas raised but not started: the Stage 0 growth items (analytics, email capture); a grill piece for Burger and an espresso machine for Coffee (play kitchen fit).
 
 ## In progress
@@ -24,7 +24,6 @@ Work in flight is listed under **In progress** below.
 Work that is about to merge or is mid-merge, so sessions on the other account can hold off. Pull main and read this before starting and before merging. Add your entry directly on main (not only in your PR). Don't merge if another entry touches the same files; wait or coordinate. Remove your entry after merging. One line each: what, branch, files touched, thread, UTC time.
 
 - Hand-drawn big pictures import (PR #151): `src/kits/art/<19 kits>/big/*`, `docs/js/data.js` (PAGES, BIGPICS), `docs/img/gallery/*/big-*.webp`, stamps, notes. Branch `big-pictures-hand-drawn`, thread "handoff: hand-drawn images", 2026-10-25 03:30 UTC.
-- Home above-the-fold rework: `docs/index.html`, `docs/js/home.js`, `docs/css/site.css`, asset stamps on the storefront pages, notes. Branch `hero-cold-traffic`, thread "Re-engineer the above-the-fold section", 2026-10-27 18:00 UTC.
 - Face-free kit art (waiting on Jason's 13 Gemini grid images; prompt page https://claude.ai/artifact/QB7J7VcYHL3Jp6p4ufMzq6): will replace 136 files in `src/kits/art/*` and re-render docs/img icons, checkout and previews. Branch `claude/project-thread-wx32ov`, thread "Remove faces from kit images", 2026-10-24 23:40 UTC.
 
 ## Business direction
