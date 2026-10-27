@@ -278,7 +278,8 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   // The idea pages: a hub, one per home, one per theme and one per play kit, all in the sitemap, with no blanks.
   const ideaUrls = require('../scripts/idea-pages').build();
   // (plus the home page, make/, play-kits/ and handprint-art/)
-  assert.equal(ideaUrls.length, 5 + Object.keys(SPACE_TRAILS).length + Object.keys(require('../src/generator/themes')).length + Object.keys(require('../src/kits/engine').KITS).length);
+  assert.equal(ideaUrls.length, 5 + Object.keys(SPACE_TRAILS).length + Object.keys(require('../src/generator/themes')).length + Object.keys(require('../src/kits/engine').KITS).length + require('../scripts/idea-guides').GUIDES.length);
+  for (const g of require('../scripts/idea-guides').GUIDES) assert.match(fs.readFileSync(path.join(__dirname, '..', 'docs', 'ideas', g.slug, 'index.html'), 'utf8'), /<ol class="clues"><li class="clue">/, g.slug);
   const pizzaIdeas = fs.readFileSync(path.join(__dirname, '..', 'docs', 'ideas', 'pizza-shop-pretend-play', 'index.html'), 'utf8');
   assert.match(pizzaIdeas, /make\/\?theme=pizza"/);
   assert.match(pizzaIdeas, /Delivery Driver/);
@@ -289,6 +290,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal((sitemap.match(/<lastmod>\d{4}-\d\d-\d\d<\/lastmod>/g) || []).length, ideaUrls.length, 'every sitemap URL needs a lastmod');
   assert.match(fs.readFileSync(path.join(__dirname, '..', 'docs', 'robots.txt'), 'utf8'), /Sitemap: https:\/\/littleprintquests\.com\/sitemap\.xml/);
   const { KEY, urlOf } = require('../scripts/indexnow');
+  assert.match(fs.readFileSync(path.join(__dirname, '..', 'docs', 'ideas', 'index.html'), 'utf8'), /href="\.\.\/ideas\/birthday-scavenger-hunt\/"/);
   assert.equal(fs.readFileSync(path.join(__dirname, '..', 'docs', `${KEY}.txt`), 'utf8'), KEY);
   assert.equal(urlOf('docs/ideas/dinosaur-scavenger-hunt/index.html'), 'https://littleprintquests.com/ideas/dinosaur-scavenger-hunt/');
   assert.equal(urlOf('docs/index.html'), 'https://littleprintquests.com/');
