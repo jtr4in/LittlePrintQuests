@@ -277,8 +277,8 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   }
   // The idea pages: a hub, one per home, one per theme and one per play kit, all in the sitemap, with no blanks.
   const ideaUrls = require('../scripts/idea-pages').build();
-  // (plus the home page, make/, play-kits/ and handprint-art/)
-  assert.equal(ideaUrls.length, 5 + Object.keys(SPACE_TRAILS).length + Object.keys(require('../src/generator/themes')).length + Object.keys(require('../src/kits/engine').KITS).length + require('../scripts/idea-guides').GUIDES.length);
+  // (plus the home page, make/, play-kits/, handprint-art/ and activity-pages/)
+  assert.equal(ideaUrls.length, 6 + Object.keys(SPACE_TRAILS).length + Object.keys(require('../src/generator/themes')).length + Object.keys(require('../src/kits/engine').KITS).length + require('../scripts/idea-guides').GUIDES.length);
   for (const g of require('../scripts/idea-guides').GUIDES) assert.match(fs.readFileSync(path.join(__dirname, '..', 'docs', 'ideas', g.slug, 'index.html'), 'utf8'), /<ol class="clues"><li class="clue">/, g.slug);
   const pizzaIdeas = fs.readFileSync(path.join(__dirname, '..', 'docs', 'ideas', 'pizza-shop-pretend-play', 'index.html'), 'utf8');
   assert.match(pizzaIdeas, /make\/\?theme=pizza"/);
@@ -991,7 +991,8 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   // Old order links (/?theme=dino#order, pins, the bot's emails) still reach the order page.
   assert.match(docs('index.html'), /location\.hash === '#order'[^\n]*location\.replace\('make\/' \+ location\.search\)/);
   // Each storefront page loads the shared code, and no page repeats an id.
-  for (const f of [['index.html'], ['make', 'index.html'], ['play-kits', 'index.html'], ['handprint-art', 'index.html']]) {
+  for (const f of [['index.html'], ['make', 'index.html'], ['play-kits', 'index.html'], ['handprint-art', 'index.html'], ['activity-pages', 'index.html']]) {
+    if (f[0] !== 'activity-pages') assert.match(docs(...f), /<a href="activity-pages\/">Activity pages<\/a>/, `${f.join('/')} links to the activity pages`);
     const html = docs(...f);
     for (const s of ['css/site.css', 'js/names.js', 'js/data.js', 'js/site.js']) assert.ok(html.includes(s), `${f.join('/')} loads ${s}`);
     const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);

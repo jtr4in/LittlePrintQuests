@@ -426,7 +426,7 @@ function build() {
   fs.rmSync(OUT, { recursive: true, force: true });
   const themes = Object.values(THEMES);
   const kits = Object.values(KITS);
-  const urls = [SITE, `${SITE}make/`, `${SITE}play-kits/`, `${SITE}handprint-art/`, hub(themes, kits), ...Object.values(SPACES).map((s) => spacePage(s, themes)), ...themes.map((t, i) => themePage(t, i, themes)), ...kits.map((k) => kitPage(k, kits)), ...GUIDES.map((g) => guidePage(g, themes))];
+  const urls = [SITE, `${SITE}make/`, `${SITE}play-kits/`, `${SITE}handprint-art/`, `${SITE}activity-pages/`, hub(themes, kits), ...Object.values(SPACES).map((s) => spacePage(s, themes)), ...themes.map((t, i) => themePage(t, i, themes)), ...kits.map((k) => kitPage(k, kits)), ...GUIDES.map((g) => guidePage(g, themes))];
   // The hub lives one folder higher than the other pages, so its links back to the shop go up one level.
   const hubFile = path.join(OUT, 'index.html');
   fs.writeFileSync(hubFile, fs.readFileSync(hubFile, 'utf8').replaceAll('href="../../"', 'href="../"').replace('<a href="../">More party and hunt ideas</a> · ', ''));
