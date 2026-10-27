@@ -168,7 +168,7 @@ function kitPages(id, ages = 'big') {
 function captions(x, id, little) {
   const caps = (little && GALLERY[`${x}Little`]) || GALLERY[x];
   const fold = x === 'activity' && typeof ORIGAMI !== 'undefined' && ORIGAMI[id];
-  return fold ? [caps[0], 'Origami paper', `Fold a ${fold}`, caps[1], caps[2]] : caps;
+  return fold ? [caps[0], 'Origami paper', `Fold ${/^[aeiou]/.test(fold) ? 'an' : 'a'} ${fold}`, caps[1], caps[2]] : caps;
 }
 
 function setPages(id, ages = 'big') {

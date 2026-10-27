@@ -5,7 +5,7 @@ project-files/activity-packs/origami/prompts.md) into src/kits/art/<kit>/.
   python3 scripts/origami-import.py <folder> [theme...]
 
 The folder holds <theme>-paper.<ext> and <theme>-pieces.<ext> (jpg, jpeg, png or webp). The paper is
-cropped to its centered square and saved 2000px; the pieces are trimmed of their white margin. Both
+cropped to its centered square and saved 1600px (about 210 dpi on the 7.5 in square); the pieces are whitened (a light grey background becomes white) and trimmed of their white margin. Both
 are saved as JPEG (Chrome copies a JPEG into the PDF as is). Then ORIGAMI in docs/js/data.js is
 rewritten to list every kit that has both pictures.
 
@@ -37,18 +37,29 @@ def paper(src, out):
     im = Image.open(src).convert('RGB')
     s = min(im.size)
     left, top = (im.width - s) // 2, (im.height - s) // 2
-    im.crop((left, top, left + s, top + s)).resize((2000, 2000), Image.LANCZOS).save(out, quality=86)
+    im.crop((left, top, left + s, top + s)).resize((1600, 1600), Image.LANCZOS).save(out, quality=86)
+
+
+def whiten(im):
+    """Gemini's "white" backgrounds are sometimes light grey: stretch each channel so the
+    background (the median of the border) prints as pure white."""
+    w, h = im.size
+    border = [im.getpixel((x, y)) for x in range(0, w, 16) for y in (2, h - 3)] + [im.getpixel((x, y)) for y in range(0, h, 16) for x in (2, w - 3)]
+    bg = [sorted(c[i] for c in border)[len(border) // 2] for i in range(3)]
+    if min(bg) >= 250 or min(bg) < 170:
+        return im
+    return Image.merge('RGB', [band.point(lambda v, b=b: min(255, round(v * 255 / max(b - 4, 1)))) for band, b in zip(im.split(), bg)])
 
 
 def pieces(src, out):
-    im = Image.open(src).convert('RGB')
+    im = whiten(Image.open(src).convert('RGB'))
     diff = ImageChops.difference(im, Image.new('RGB', im.size, (255, 255, 255))).convert('L').point(lambda v: 255 if v > 24 else 0)
     box = diff.getbbox()
     if box:
         pad = int(0.03 * max(im.size))
         im = im.crop((max(0, box[0] - pad), max(0, box[1] - pad), min(im.width, box[2] + pad), min(im.height, box[3] + pad)))
-    if im.width > 2400:
-        im = im.resize((2400, round(im.height * 2400 / im.width)), Image.LANCZOS)
+    if im.width > 2000:
+        im = im.resize((2000, round(im.height * 2000 / im.width)), Image.LANCZOS)
     im.save(out, quality=86)
 
 
