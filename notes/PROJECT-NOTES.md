@@ -21,6 +21,7 @@ Work in flight is listed under **In progress** below.
 
 Work that is about to merge or is mid-merge, so sessions on the other account can hold off. Pull main and read this before starting and before merging. Add your entry directly on main (not only in your PR). Don't merge if another entry touches the same files; wait or coordinate. Remove your entry after merging. One line each: what, branch, files touched, thread, UTC time.
 
+- Free printables and pins (PR #169): `scripts/free-printables.js`, `docs/printables/*`, `scripts/pins.js`, `scripts/pin-feed.js`, `docs/pins/*`, `.github/workflows/pins.yml`, `scripts/idea-pages.js`, `scripts/idea-guides.js`, `docs/ideas/*`, `src/generator/build.js` (export only), `test/smoke.js`, notes. Branch `free-printables-pins`, thread "SEO ideas", 2026-10-27 02:20 UTC.
 - Hand-drawn big pictures import (PR #151): `src/kits/art/<19 kits>/big/*`, `docs/js/data.js` (PAGES, BIGPICS), `docs/img/gallery/*/big-*.webp`, stamps, notes. Branch `big-pictures-hand-drawn`, thread "handoff: hand-drawn images", 2026-10-25 03:30 UTC.
 - Face-free kit art (waiting on Jason's 13 Gemini grid images; prompt page https://claude.ai/artifact/QB7J7VcYHL3Jp6p4ufMzq6): will replace 136 files in `src/kits/art/*` and re-render docs/img icons, checkout and previews. Branch `claude/project-thread-wx32ov`, thread "Remove faces from kit images", 2026-10-24 23:40 UTC.
 
