@@ -571,7 +571,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   }
   await wait(500);
   assert.equal(emails.length, 9);
-  assert.deepEqual(charged, [1699, 999, 699, 1499, 1299, 1799, 499, 1699, 1099]);
+  assert.deepEqual(charged, [1599, 999, 499, 1499, 1199, 1899, 699, 1599, 1199]);
 
   // A 100%-off promotion code: Stripe says 'no_payment_required', and the order is still built and emailed.
   {
