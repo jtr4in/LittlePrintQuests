@@ -1,10 +1,11 @@
 // Builds the "ideas" pages for search: one page per hunt theme and one per kind of home, plus a
-// hub and sitemap.xml (submit it in Google Search Console; a project site can't have its own robots.txt). Everything comes from the real riddle library and theme stories,
+// hub, sitemap.xml (with lastmod dates) and robots.txt. Everything comes from the real riddle library and theme stories,
 // so each page gives parents free clues they can use today and a link into the builder.
 //   node scripts/idea-pages.js
 
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 const THEMES = require('../src/generator/themes');
 const SPOTS = require('../src/generator/spots');
 const SPACES = require('../src/generator/spaces');
@@ -35,6 +36,16 @@ const howto = (k) => (HOWTO[k.id] ? `<h2>Build it from a box</h2>
 <p>${esc(HOWTO[k.id])} from a cardboard box and the pieces in your kit. Grown-ups do the cutting, kids paint, glue and play.</p>
 <a href="../../img/howto/${k.id}.webp"><img class="photo howto" src="../../img/howto/${k.id}-sm.webp" srcset="../../img/howto/${k.id}-sm.webp 640w, ../../img/howto/${k.id}.webp 1200w" sizes="(max-width: 760px) 100vw, 560px" width="1200" height="1800" alt="${esc(HOWTO[k.id])}: six illustrated steps to build it from a cardboard box with the printed ${esc(k.name)} kit" loading="lazy"></a>` : '');
 const lifePhoto = (k, v, alt, lazy = true) => (LIFE[k.id] ? `<img class="photo" src="../../img/life/${k.id}-${v}.webp" srcset="../../img/life/${k.id}-${v}-sm.webp 640w, ../../img/life/${k.id}-${v}.webp 1200w" sizes="(max-width: 760px) 100vw, 720px" width="1200" height="896" alt="${esc(alt)}"${lazy ? ' loading="lazy"' : ''}>` : '');
+
+// The picture a page shows when it's shared or pinned: the page's own Pinterest pin (1000x1500) when there is one,
+// else the theme's hero banner, else the site's share card.
+function shareImage(...names) {
+  for (const [rel, w, h] of names) if (rel && fs.existsSync(path.join(DOCS, rel))) return { url: SITE + rel, w, h };
+  return { url: `${SITE}img/share.jpg`, w: 1200, h: 630 };
+}
+const PIN = (name) => [`pins/img/${name}.jpg`, 1000, 1500];
+const HERO = (id) => [`img/hero/${id}.webp`, 1600, 700];
+const ORG = { '@type': 'Organization', name: 'LittlePrintQuests', url: SITE, logo: `${SITE}img/icon-512.png` };
 
 const CSS = `
 :root { --paper:#fbf8f1; --sheet:#fff; --ink:#3f4a73; --soft:#646d8f; --line:#e4dfd2; --orange:#ef9d31; --orange-ink:#2b1d06; --mint:#2f9a6b; --tint:#f2f8f2;
@@ -74,8 +85,16 @@ footer { margin-top:56px; padding:28px 0 40px; border-top:1px solid var(--line);
 @media (max-width:600px) { .pages { grid-template-columns:repeat(2,1fr); } }
 `;
 
-function page({ file, title, description, body, jsonLd }) {
+function page({ file, title, description, body, jsonLd, image, crumb }) {
   const url = SITE + path.relative(DOCS, path.dirname(file)).split(path.sep).join('/') + '/';
+  const img = image || shareImage();
+  // Breadcrumbs (Home > Ideas > this page) and the page as an article, alongside the page's FAQ.
+  const crumbs = [['LittlePrintQuests', SITE], ['Ideas', `${SITE}ideas/`], ...(crumb ? [[crumb, url]] : [])];
+  const graph = [
+    { '@type': 'BreadcrumbList', itemListElement: crumbs.map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })) },
+    ...(crumb ? [{ '@type': 'Article', headline: title, description, image: img.url, url, mainEntityOfPage: url, author: ORG, publisher: ORG }] : []),
+    ...(jsonLd ? [jsonLd] : []),
+  ];
   const html = `<!doctype html>
 <html lang="en">
 <head>
@@ -89,14 +108,14 @@ function page({ file, title, description, body, jsonLd }) {
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="LittlePrintQuests">
 <meta property="og:url" content="${url}">
-<meta property="og:image" content="${SITE}img/share.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image" content="${img.url}">
+<meta property="og:image:width" content="${img.w}">
+<meta property="og:image:height" content="${img.h}">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="${SITE}img/favicon.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>${CSS}</style>
-${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : ''}
+<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })}</script>
 </head>
 <body>
 <header><div class="wrap"><a href="../../"><span>Little</span><span>Print</span><span>Quests</span></a></div></header>
@@ -118,7 +137,6 @@ const clueCard = (id, n) => {
 };
 
 const faq = (items) => ({
-  '@context': 'https://schema.org',
   '@type': 'FAQPage',
   mainEntity: items.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
 });
@@ -126,6 +144,7 @@ const faqHtml = (items) => items.map(([q, a]) => `<details><summary>${esc(q)}</s
 
 function themePage(t, i, all) {
   const ids = Object.keys(SPOTS);
+  const kit = Object.values(KITS).find((k) => (k.hunt || k.id) === t.id);
   // A different run of the riddle library on each theme page, so no two pages share their clues.
   const picks = Array.from({ length: 5 }, (_, k) => ids[(i * 2 + k * 7) % ids.length]);
   const story = t.briefing.paragraphs.map((p) => p.replace(/\{kids\}/g, t.hunters).replace(/\{count\}/g, 'eight'));
@@ -165,6 +184,10 @@ ${HUNT_LIFE[t.id] ? `<img class="photo" src="../../img/life/hunt-${t.id}.webp" s
 ${Object.values(SPACES).map((s) => `<a class="btn ghost" href="${builder({ theme: t.id, space: s.id })}">${esc(s.label)} trail</a>`).join('')}
 </p>
 
+${kit ? `<h2>Make it a whole day</h2>
+<p>When the treasure is found, keep the story going: turn a corner of the room into a ${esc(kit.name)} with signs, play money and hands-on toys. Here’s how to set it up, games to play and who’s who.</p>
+<p><a class="btn ghost" href="../${kitSlug(kit)}/">${esc(kit.name)} pretend play ideas</a></p>
+` : ''}
 <h2>Questions</h2>
 ${faqHtml(questions)}
 
@@ -176,6 +199,8 @@ ${Object.values(SPACES).map((s) => `<li><a href="../${spaceSlug(s)}/">${esc(s.ti
     title: `${t.label} Scavenger Hunt for Kids: Free Rhyming Clues and Printable`,
     description: `A ${t.label.toLowerCase()} scavenger hunt for ages ${t.ages}: a read-aloud story, 5 free rhyming clues with answers, age tips and a printable personalized with your child’s name.`,
     body,
+    image: shareImage(PIN(`ideas-${t.id}`), PIN(`hunt-${t.id}`), HERO(t.id)),
+    crumb: `${t.label} scavenger hunt`,
     jsonLd: faq(questions),
   });
 }
@@ -212,6 +237,8 @@ ${themes.map((t) => `<li><a href="../${themeSlug(t)}/">${esc(t.label)} hunt</a><
     title: `${s.title} for Kids: 8 Free Rhyming Clues`,
     description: `A ready-to-use ${s.label.toLowerCase()} scavenger hunt for ages 3 to 8: eight rhyming clues with answers, where to hide each one, and tips.`,
     body,
+    image: shareImage(PIN(`ideas-${spaceSlug(s)}`)),
+    crumb: s.title,
     jsonLd: faq(questions),
   });
 }
@@ -254,6 +281,10 @@ ${lifePhoto(k, 'flat', `Everything in the ${k.name} kit printed out: poster, pri
 <div class="pages">${[`${k.hunt || k.id}-kit`, `${k.hunt || k.id}-little-kit`, `${k.hunt || k.id}-activity`, `${k.hunt || k.id}-little-activity`].filter((f) => fs.existsSync(path.join(DOCS, 'img', 'pages', `${f}.webp`))).map((f) => `<img src="../../img/pages/${f}.webp" alt="${esc(k.name)} printable page" width="400" height="518" loading="lazy">`).join('')}</div>
 <p><a class="btn" href="${builder(q)}">Build my ${esc(k.name)} kit</a></p>
 
+${THEMES[k.hunt || k.id] ? `<h2>Start with a treasure hunt</h2>
+<p>Kick off play day with a ${esc(THEMES[k.hunt || k.id].label.toLowerCase())} scavenger hunt: a story to read aloud and five free rhyming clues to hide around the house. The last clue can lead straight to the ${esc(name)}.</p>
+<p><a class="btn ghost" href="../${themeSlug(THEMES[k.hunt || k.id])}/">${esc(THEMES[k.hunt || k.id].label)} scavenger hunt clues</a></p>
+` : ''}
 <h2>Questions</h2>
 ${faqHtml(questions)}
 
@@ -264,6 +295,9 @@ ${faqHtml(questions)}
     title: `${k.name} Pretend Play for Kids: Setup Ideas, Games and Printable`,
     description: `How to set up a pretend ${name} at home for ages 3 to 8: setup steps, games to play, roles, tips for toddlers and a printable kit personalized with your child’s name.`,
     body,
+    // Not the kit pins: they still say "Ages 2 to 8" (see the notes on age versions).
+    image: shareImage(HERO(k.hunt || k.id)),
+    crumb: `${k.name} pretend play`,
     jsonLd: faq(questions),
   });
 }
@@ -288,6 +322,27 @@ function hub(themes, kits) {
   });
 }
 
+// lastmod for each URL: unchanged pages keep the date the committed sitemap gave them (or, the first time,
+// the date git last changed the file); pages this run changed get today's date. Reading the old sitemap
+// first keeps the dates right in a shallow clone, where git would give every file the same date.
+function lastmods(urls) {
+  const old = {};
+  try {
+    for (const m of fs.readFileSync(path.join(DOCS, 'sitemap.xml'), 'utf8').matchAll(/<loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod>/g)) old[m[1]] = m[2];
+  } catch {}
+  const today = new Date().toISOString().slice(0, 10);
+  const git = (...a) => execFileSync('git', a, { cwd: DOCS, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
+  return urls.map((u) => {
+    const file = path.join(DOCS, u.slice(SITE.length), 'index.html');
+    try {
+      if (git('status', '--porcelain', '--', file)) return today;
+      return old[u] || git('log', '-1', '--format=%cs', '--', file) || today;
+    } catch {
+      return old[u] || today;
+    }
+  });
+}
+
 function build() {
   fs.rmSync(OUT, { recursive: true, force: true });
   const themes = Object.values(THEMES);
@@ -298,9 +353,10 @@ function build() {
   fs.writeFileSync(hubFile, fs.readFileSync(hubFile, 'utf8').replaceAll('href="../../"', 'href="../"').replace('<a href="../">More party and hunt ideas</a> · ', ''));
   fs.writeFileSync(path.join(DOCS, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map((u) => `  <url><loc>${u}</loc></url>`).join('\n')}
+${lastmods(urls).map((d, i) => `  <url><loc>${urls[i]}</loc><lastmod>${d}</lastmod></url>`).join('\n')}
 </urlset>
 `);
+  fs.writeFileSync(path.join(DOCS, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}sitemap.xml\n`);
   return urls;
 }
 

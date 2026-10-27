@@ -284,6 +284,21 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.match(pizzaIdeas, /Delivery Driver/);
   const sitemap = fs.readFileSync(path.join(__dirname, '..', 'docs', 'sitemap.xml'), 'utf8');
   for (const u of ideaUrls) assert.ok(sitemap.includes(`<loc>${u}</loc>`), u);
+  // Search plumbing: every sitemap URL has a lastmod date, robots.txt points at the sitemap, the IndexNow key
+  // file is live, and every idea and storefront page's structured data parses.
+  assert.equal((sitemap.match(/<lastmod>\d{4}-\d\d-\d\d<\/lastmod>/g) || []).length, ideaUrls.length, 'every sitemap URL needs a lastmod');
+  assert.match(fs.readFileSync(path.join(__dirname, '..', 'docs', 'robots.txt'), 'utf8'), /Sitemap: https:\/\/littleprintquests\.com\/sitemap\.xml/);
+  const { KEY, urlOf } = require('../scripts/indexnow');
+  assert.equal(fs.readFileSync(path.join(__dirname, '..', 'docs', `${KEY}.txt`), 'utf8'), KEY);
+  assert.equal(urlOf('docs/ideas/dinosaur-scavenger-hunt/index.html'), 'https://littleprintquests.com/ideas/dinosaur-scavenger-hunt/');
+  assert.equal(urlOf('docs/index.html'), 'https://littleprintquests.com/');
+  assert.equal(urlOf('docs/js/site.js'), null);
+  for (const u of ideaUrls) {
+    const html = fs.readFileSync(path.join(__dirname, '..', 'docs', u.slice('https://littleprintquests.com/'.length), 'index.html'), 'utf8');
+    const ld = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s);
+    assert.ok(ld, `${u} needs structured data`);
+    assert.ok(JSON.parse(ld[1])['@graph'].length, u);
+  }
   const dinoIdeas = fs.readFileSync(path.join(__dirname, '..', 'docs', 'ideas', 'dinosaur-scavenger-hunt', 'index.html'), 'utf8');
   assert.match(dinoIdeas, /Junior Rangers/);
   assert.match(dinoIdeas, /make\/\?theme=dino"/);

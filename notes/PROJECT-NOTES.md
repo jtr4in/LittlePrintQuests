@@ -239,6 +239,15 @@ Added on top of the Field Kit (`src/host/host.js`), all driven by one browser sc
 - Field Kit pages still must not contain shop links, `$` prices or `{placeholders}`; the smoke test checks the host and Mission pages, including the inlined script.
 - After merging, Railway has to redeploy the order bot for any of this to show up.
 
+### Search (SEO) plumbing (2026-10-26)
+- Jason has verified the site in Google Search Console, Bing Webmaster Tools and Pinterest (claimed domain), as of 2026-10-26. Google Business Profile doesn't apply (no physical location).
+- `scripts/idea-pages.js` builds the idea pages, `docs/sitemap.xml` and `docs/robots.txt`. Re-run it (`node scripts/idea-pages.js`, `npm test` runs it too) after changing themes, kits or the page template. The old comment that a project site can't have a robots.txt was wrong: the custom domain serves `docs/` at the root.
+- Sitemap `lastmod`: a page this run changed gets today's date; an unchanged page keeps the date in the committed sitemap (first time: git's last commit date for the file). Storefront pages (`/`, make/, play-kits/, handprint-art/) only get a fresh date when someone re-runs the script, so re-run it after big storefront changes.
+- Every idea page carries JSON-LD as one `@graph`: BreadcrumbList, Article (not on the hub) and FAQPage. Google shows FAQ results only for government and health sites since 2023, so the FAQ markup is just for completeness. Storefront pages have hand-written JSON-LD at the end of `<head>`: Organization + WebSite on the home page, Product with offers on make/ ($4.99 to $39.99 Family Pass), play-kits/ ($7.99) and handprint-art/ ($5.99 to $7.99). **Change those prices when `PRICES` changes.**
+- Share images (`og:image`): theme pages use their `pins/img/ideas-<theme>.jpg` pin (1000x1500, good for Pinterest) when there is one, else `img/hero/<theme>.webp`; home pages use `pins/img/ideas-<slug>.jpg`; kit pages use the hero banner because the `pins/img/kit-*.jpg` pins still say "Ages 2 to 8".
+- Each hunt page links to its matching pretend play page ("Make it a whole day") and back ("Start with a treasure hunt").
+- **IndexNow**: key `7f373aabcc0c8f7354e1d5a457cf6d8b`, public by design, served from `docs/<key>.txt`. `.github/workflows/indexnow.yml` runs on every push to main that touches `docs/`, waits 3 minutes for Pages, then sends the changed pages (`scripts/indexnow.js <range>`). Run the workflow by hand with "all" ticked to resubmit the whole sitemap. Bing, Yandex, Seznam and Naver use it; Google doesn't. Pushes made by the workflow token (daily pins) don't trigger it, and those only touch the pin feeds anyway.
+
 ## Stripe checkout page (2026-10-23)
 
 - Promotion codes (2026-10-24): every checkout shows the promo code box, the Family Pass included (it was left out before; Jason couldn't use his coupon). Codes are made in the Stripe dashboard; a coupon can be limited to certain products there if it shouldn't apply to the pass.
