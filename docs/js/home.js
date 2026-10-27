@@ -18,9 +18,20 @@ $('hookForm').addEventListener('submit', (e) => {
 });
 // Beside the name box: a clue card sheet and the Field Kit's hunt screen on a phone, in the theme
 // that goes with the occasion in the headline (tap to see the Field Kit clip further down).
+// Themes with a styled photo (real props, kids' hands in play) show it behind the pages instead of the
+// clue card sheet, so cold visitors see the finished thing first. Photos are fixed, not name-swapped.
+const HOOK_PHOTOS = { halloween: 'halloween-b', dino: 'dino-stand', pizza: 'pizza-stand', unicorn: 'unicorn-a', vet: 'vet-b' };
 function drawHookPages(id = theme) {
+  const photo = HOOK_PHOTOS[id];
+  document.querySelector('.hook-pages').classList.toggle('has-photo', !!photo);
+  $('hookPhoto').hidden = !photo;
+  if (photo) {
+    $('hookPhoto').srcset = `img/life/${photo}-sm.webp 640w, img/life/${photo}.webp 1200w`;
+    $('hookPhoto').sizes = '(max-width: 760px) 140px, 300px';
+    $('hookPhoto').src = `img/life/${photo}-sm.webp`;
+  }
   LPQName.preload(id).then(() => {
-    LPQName.setSrc($('hookBack'), `img/pages/${id}-cards.webp`);
+    if (!photo) LPQName.setSrc($('hookBack'), `img/pages/${id}-cards.webp`);
     LPQName.setSrc($('hookMid'), `img/pages/${id}-kit.webp`);
     LPQName.setSrc($('hookFront'), `img/host/${id}-play.webp`);
   });
@@ -28,10 +39,10 @@ function drawHookPages(id = theme) {
 // The occasion under the headline rotates so it reads as more than a birthday thing. (Only the words
 // change: swapping the pages beside it too meant downloads every few seconds, which made phones choppy.)
 const OCCASIONS = [
-  // (all follow "Made for", which stays put while the occasion fades)
-  ['birthdays', null], ['rainy days', 'pirate'], ['sleepovers', 'space'], ['snow days', 'ice'],
-  ['Halloween', 'halloween'], ['playdates', 'dino'], ['Christmas morning', 'christmas'],
-  ['Valentine’s Day', 'valentine'], ['spring break', 'easter'], ['weekends', 'royal'],
+  // (all follow "Turn an ordinary", which stays put while the occasion fades, so keep them singular)
+  ['afternoon', null], ['rainy day', 'pirate'], ['sleepover', 'space'], ['snow day', 'ice'],
+  ['Halloween', 'halloween'], ['playdate', 'dino'], ['Christmas morning', 'christmas'],
+  ['Valentine’s Day', 'valentine'], ['spring break', 'easter'], ['weekend', 'royal'], ['birthday', null],
 ];
 let occasionAt = 0;
 function nextOccasion() {

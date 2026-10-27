@@ -33,7 +33,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&display=swap">
 <!-- the printed pages' own fonts, for writing the kid's name over the previews (js/names.js); files load only when used -->
 <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:wght@200..1000&family=Bangers&family=Pirata+One&family=Orbitron:wght@400..900&family=Cinzel+Decorative:wght@700&family=Pacifico&family=Comic+Neue:wght@700&display=swap">
-<link rel="stylesheet" href="css/site.css?v=e49b6f09">
+<link rel="stylesheet" href="css/site.css?v=37fefd62">
 <!-- most visits go on to the order page: fetch it and its script while they read -->
 <link rel="prefetch" href="make/">
 <link rel="prefetch" href="js/make.js?v=423b916e">
@@ -69,15 +69,16 @@
       <div class="hook-copy">
         <h1 class="hook-title" id="hookTitle">Printable play starring <b>your kid</b>.</h1>
         <p class="eyebrow hook-tag">Personalized · ages 3 to 8</p>
-        <p class="hook-sub">A treasure hunt, a pretend play shop and a party pack in the theme they love. Made for <span class="occasion" id="occasion">birthdays</span>.</p>
+        <p class="hook-sub">Turn an ordinary <span class="occasion" id="occasion">afternoon</span> into an immersive, screen-free adventure. Print, cut and start playing in about 10 minutes.</p>
         <form class="hook-form" id="hookForm">
           <input type="text" id="hookName" maxlength="40" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="Your kid’s first name" aria-label="Your kid’s first name">
           <button class="btn btn-orange" type="submit" id="hookGo">Make my kit</button>
         </form>
-        <ul class="hook-checks"><li>Their name on every page</li><li>A guide on your phone so you can play along</li><li>Ready to print in minutes</li></ul>
+        <ul class="hook-checks"><li>Their name on every page</li><li>A guide on your phone so you can play along</li><li>Plain paper, simple cut lines</li></ul>
         <p class="hook-note">Type their name and every page here becomes theirs. Not sure yet? <a href="#sample">Try a free mini hunt</a>.</p>
       </div>
       <a class="hook-pages" href="#why" aria-label="See the Field Kit in action">
+        <img decoding="async" class="photo" id="hookPhoto" alt="" width="640" height="478" hidden>
         <img decoding="async" class="mid" id="hookMid" alt="" width="480" height="621">
         <img decoding="async" class="back" id="hookBack" alt="" width="480" height="621">
         <span class="phone front"><img decoding="async" id="hookFront" alt="" width="540" height="1080"></span>
@@ -90,6 +91,7 @@
         <img decoding="async" class="hb" alt="" width="1600" height="700" sizes="(max-width: 1240px) 100vw, 1200px">
         <button type="button" class="hb-cap" id="heroCap"></button>
       </div>
+      <p class="no-guess"><b>Zero guesswork.</b> Designed for busy parents: print on standard paper, cut along simple lines, and watch them dive straight into pretend play.</p>
     </div>
   </section>
 
@@ -123,7 +125,7 @@
     <div class="wrap">
       <div class="pin"><b></b><span class="eyebrow">Why it matters</span></div>
       <h2>The best part is playing together</h2>
-      <p class="kits-lede">Pretend play and treasure hunts aren’t just fun. They’re how kids practice the big stuff, and the moments they remember are the ones you were part of.</p>
+      <p class="kits-lede">Pretend play and treasure hunts are how kids practice the big stuff, and the afternoons they remember are the ones you joined. No brainstorming, no Pinterest rabbit hole: step into their world and be the hero of the living room.</p>
       <div class="steps why">
         <div class="step"><span class="n">🧠 Play is how they learn</span><p>Running a shop or cracking a clue means planning, taking turns, finding words and handling a little frustration. Pediatricians call play essential, not extra.</p></div>
         <div class="step"><span class="n">💛 You’re the best part</span><p>The back-and-forth between you and your kid builds their brain and your bond. Your attention matters more than any toy.</p></div>
@@ -289,6 +291,6 @@
 <script src="js/names.js?v=22d37737"></script>
 <script src="js/data.js?v=53415ee4"></script>
 <script src="js/site.js?v=3644097c"></script>
-<script src="js/home.js?v=bb93cf47"></script>
+<script src="js/home.js?v=09f8df20"></script>
 </body>
 </html>

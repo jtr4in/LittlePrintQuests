@@ -16,6 +16,7 @@ Work in flight is listed under **In progress** below.
 - Waiting on Jason: set the Stripe logo and colors in the Dashboard (see "Stripe checkout page" below), and check that Railway redeployed the order bot after #118 (a test checkout should show a picture beside the product).
 - 2026-10-27: a PR stacked on another PR's branch merges into that branch, not main, when it isn't retargeted first (#167 did this; the guide pages were re-landed from main). Retarget or rebase onto main before merging a stacked PR.
 - 2026-10-27: origami pages live for 17 themes (see "Origami pages" for the list); Jason is making the other 17 from the prompts page. Next: import them with `scripts/origami-import.py`.
+- 2026-10-27: home page above-the-fold rework for ad traffic (see "Above the fold"), branch `hero-cold-traffic`. Not merged: that session couldn't get push access, so it handed Jason a patch. If it isn't on main yet, apply `hero-cold-traffic.patch` (`git am`), run `npm test`, merge.
 - Ideas raised but not started: the Stage 0 growth items (analytics, email capture); a grill piece for Burger and an espresso machine for Coffee (play kitchen fit).
 
 ## In progress
@@ -191,6 +192,13 @@ Jason found the preview popup's top crowded on phones (tabs wrapped onto two lin
 ### Above the fold (2026-10-25)
 
 Beside the headline: the theme's clue card sheet (`img/pages/<theme>-cards.webp`) and play kit page (`-kit.webp`, added the same day so phones show pages too, not just the phone) with the Field Kit's hunt screen on a phone in front (`img/host/<theme>-play.webp`), both name-swapped and following the occasion's theme; tapping it scrolls to the Field Kit clip (`#why`). Under the name box, three checks: their name on every page, a guide on your phone so you can play along, ready to print in minutes. The paragraph got shorter to make room. (Before: two pages, play kit and party invitation.)
+
+**Cold-traffic rework (2026-10-27, Jason's brief for ad visitors: what is it, who is it for, why now; and kill the "hours of cutting" worry):**
+- Subheadline: "Turn an ordinary <occasion> into an immersive, screen-free adventure. Print, cut and start playing in about 10 minutes." The rotating occasion now sits after "an ordinary", so `OCCASIONS` in `home.js` are singular and start on "afternoon". "About 10 minutes" matches the Field Kit's Quick start preset; don't promise less.
+- Third check is now "Plain paper, simple cut lines" (the 10 minutes moved into the subheadline).
+- Visual: themes in `HOOK_PHOTOS` (`home.js`: halloween, dino, pizza, unicorn, vet) show a styled lifestyle photo (`img/life/*`, kids' hands in play, not name-swapped) behind the named play kit page and the phone; the clue card sheet is hidden then. Other themes keep the old sheet + page + phone. Add a theme to `HOOK_PHOTOS` when it gets a lifestyle photo.
+- A "Zero guesswork" strip (`.no-guess`) sits under the hero banner: busy parents, standard paper, simple cut lines, straight into pretend play.
+- The "Why it matters" lede now carries the parent-hero line ("be the hero of the living room", no brainstorming). Not "put down your phone": the Field Kit is on the phone. Kids are screen-free; the grown-up's phone is the guide.
 
 ### Theme groups (2026-10-24)
 
