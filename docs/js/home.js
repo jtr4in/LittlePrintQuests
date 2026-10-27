@@ -20,7 +20,7 @@ $('hookForm').addEventListener('submit', (e) => {
 // that goes with the occasion in the headline (tap to see the Field Kit clip further down).
 // Themes with a styled photo (real props, kids' hands in play) show it behind the pages instead of the
 // clue card sheet, so cold visitors see the finished thing first. Photos are fixed, not name-swapped.
-const HOOK_PHOTOS = { halloween: 'halloween-b', dino: 'dino-stand', pizza: 'pizza-stand', unicorn: 'unicorn-a', vet: 'vet-b' };
+const HOOK_PHOTOS = { halloween: 'halloween-stand', dino: 'dino-stand', pizza: 'pizza-stand', unicorn: 'unicorn-a', vet: 'vet-b' };
 function drawHookPages(id = theme) {
   const photo = HOOK_PHOTOS[id];
   document.querySelector('.hook-pages').classList.toggle('has-photo', !!photo);
