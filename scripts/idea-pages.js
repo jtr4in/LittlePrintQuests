@@ -10,6 +10,7 @@ const THEMES = require('../src/generator/themes');
 const SPOTS = require('../src/generator/spots');
 const SPACES = require('../src/generator/spaces');
 const { KITS } = require('../src/kits/engine');
+const { GUIDES } = require('./idea-guides');
 
 const SITE = 'https://littleprintquests.com/';
 const DOCS = path.join(__dirname, '..', 'docs');
@@ -132,7 +133,7 @@ ${body}
 }
 
 const clueCard = (id, n) => {
-  const s = SPOTS[id];
+  const s = typeof id === 'string' ? SPOTS[id] : id;
   return `<li class="clue"><h3>Clue ${n}</h3><p>${lines(s.riddle)}</p><small><b>Answer:</b> ${esc(s.label)}. <b>Hide it:</b> ${esc(s.tip)}.</small></li>`;
 };
 
@@ -192,7 +193,8 @@ ${kit ? `<h2>Make it a whole day</h2>
 ${faqHtml(questions)}
 
 <h2>More hunt ideas</h2>
-<ul class="links">${all.filter((o) => o.id !== t.id).map((o) => `<li><a href="../${themeSlug(o)}/">${esc(o.label)} hunt</a></li>`).join('')}
+<ul class="links">${guideLinks(GUIDES)}
+${all.filter((o) => o.id !== t.id).map((o) => `<li><a href="../${themeSlug(o)}/">${esc(o.label)} hunt</a></li>`).join('')}
 ${Object.values(SPACES).map((s) => `<li><a href="../${spaceSlug(s)}/">${esc(s.title)}</a></li>`).join('')}</ul>`;
   return page({
     file: path.join(OUT, themeSlug(t), 'index.html'),
@@ -230,7 +232,8 @@ function spacePage(s, themes) {
 ${faqHtml(questions)}
 
 <h2>More ideas</h2>
-<ul class="links">${Object.values(SPACES).filter((o) => o.id !== s.id).map((o) => `<li><a href="../${spaceSlug(o)}/">${esc(o.title)}</a></li>`).join('')}
+<ul class="links">${guideLinks(GUIDES)}
+${Object.values(SPACES).filter((o) => o.id !== s.id).map((o) => `<li><a href="../${spaceSlug(o)}/">${esc(o.title)}</a></li>`).join('')}
 ${themes.map((t) => `<li><a href="../${themeSlug(t)}/">${esc(t.label)} hunt</a></li>`).join('')}</ul>`;
   return page({
     file: path.join(OUT, spaceSlug(s), 'index.html'),
@@ -302,10 +305,70 @@ ${faqHtml(questions)}
   });
 }
 
-function hub(themes, kits) {
+// The occasion and age guides (scripts/idea-guides.js): birthday, Thanksgiving, classroom, little and big kids.
+const guideLinks = (gs) => gs.map((g) => `<li><a href="../${g.slug}/">${esc(g.short)}</a></li>`).join('');
+function guidePage(g, themes) {
+  const cta = `<p><a class="btn" href="${builder(g.cta[0])}">${esc(g.cta[1])}</a></p>`;
+  const fill = (html) => html
+    .replace('{CTA}', cta)
+    .replace('{THEMES}', `<ul class="links">${themes.map((t) => `<li><a href="../${themeSlug(t)}/">${esc(t.label)}</a></li>`).join('')}</ul>`)
+    .replace(/\{LINKS:([^}]+)\}/g, (_, list) => `<ul class="links">${list.split(',').map((pair) => {
+      const [slugName, label] = pair.split('=');
+      if (!fs.existsSync(path.join(OUT, slugName))) throw new Error(`${g.slug} links to a missing idea page: ${slugName}`);
+      return `<li><a href="../${slugName}/">${esc(label)}</a></li>`;
+    }).join('')}</ul>`);
   const body = `
-<h1>Scavenger hunt, party and pretend play ideas for kids</h1>
-<p class="lede">Free rhyming clues, read-aloud stories, hiding tips and pretend play setups for kids ages 3 to 8, sorted by theme, by the kind of home you have and by play kit.</p>
+<h1>${esc(g.h1)}</h1>
+<p class="lede">${esc(g.lede)}</p>
+<a class="btn" href="${builder(g.cta[0])}">${esc(g.cta[1])}</a>
+
+<h2>${g.clues.length} free rhyming clues</h2>
+<p>${esc(g.clueIntro)}</p>
+<ol class="clues">${g.clues.map((c, k) => clueCard(c, k + 1)).join('')}</ol>
+${g.sections.map(([h, html]) => `\n<h2>${esc(h)}</h2>\n${fill(html)}`).join('\n')}
+
+<h2>Questions</h2>
+${faqHtml(g.faq)}
+
+<h2>More hunt ideas</h2>
+<ul class="links">${guideLinks(GUIDES.filter((o) => o.slug !== g.slug))}
+${Object.values(SPACES).map((s) => `<li><a href="../${spaceSlug(s)}/">${esc(s.title)}</a></li>`).join('')}
+${themes.map((t) => `<li><a href="../${themeSlug(t)}/">${esc(t.label)} hunt</a></li>`).join('')}</ul>`;
+  return page({
+    file: path.join(OUT, g.slug, 'index.html'),
+    title: g.title,
+    description: g.description,
+    body,
+    jsonLd: faq(g.faq),
+    image: shareImage(PIN(`ideas-${g.slug}`)),
+    crumb: g.h1,
+  });
+}
+
+function hub(themes, kits) {
+  const sample = ['couch', 'fridge', 'bookshelf', 'front_door'];
+  const body = `
+<h1>Scavenger hunt clues and play ideas for kids</h1>
+<p class="lede">Free rhyming scavenger hunt clues, read-aloud stories, hiding tips and pretend play setups for kids ages 3 to 8, sorted by occasion, by age, by the kind of home you have and by theme.</p>
+<a class="btn" href="../make/">Make a personalized hunt</a>
+
+<h2>How to run a scavenger hunt at home</h2>
+<ol class="tips">
+<li><b>Pick six to ten spots</b> your kid knows, in different rooms.</li>
+<li><b>Write a clue for each spot</b> and hide it at the spot before, so each card leads to the next.</li>
+<li><b>Read a story first.</b> A mission from a pirate captain or a dinosaur ranger turns cards into a quest.</li>
+<li><b>Hand over clue one</b> and follow along. Read for little ones; let readers read.</li>
+<li><b>End with a treasure</b> at the last spot: a small prize, a snack, or the next activity.</li>
+</ol>
+
+<h2>Four clues to start with</h2>
+<ol class="clues">${sample.map((id, k) => clueCard(id, k + 1)).join('')}</ol>
+<p>Every page below has a full trail of clues with answers and hiding spots.</p>
+
+<h2>By occasion</h2>
+<ul class="links">${guideLinks(GUIDES.filter((g) => g.group === 'occasion')).replaceAll('href="../', 'href="../ideas/')}</ul>
+<h2>By age</h2>
+<ul class="links">${guideLinks(GUIDES.filter((g) => g.group === 'age')).replaceAll('href="../', 'href="../ideas/')}</ul>
 <h2>By home</h2>
 <ul class="links">${Object.values(SPACES).map((s) => `<li><a href="../ideas/${spaceSlug(s)}/">${esc(s.title)}</a></li>`).join('')}</ul>
 <h2>By theme</h2>
@@ -316,8 +379,8 @@ function hub(themes, kits) {
   // The hub sits one level up from the other pages, so its links are written from docs/ideas/.
   return page({
     file: path.join(OUT, 'index.html'),
-    title: 'Scavenger Hunt and Party Ideas for Kids',
-    description: 'Free rhyming scavenger hunt clues, stories and tips for kids ages 3 to 8, by theme and by home: apartment, house or backyard.',
+    title: 'Scavenger Hunt Clues for Kids: Free Rhyming Clues and Party Ideas',
+    description: 'Free rhyming scavenger hunt clues for kids ages 3 to 8, how to run a hunt at home, and ideas by occasion, age, home and theme: birthday, Thanksgiving, classroom and more.',
     body,
   });
 }
@@ -347,7 +410,7 @@ function build() {
   fs.rmSync(OUT, { recursive: true, force: true });
   const themes = Object.values(THEMES);
   const kits = Object.values(KITS);
-  const urls = [SITE, `${SITE}make/`, `${SITE}play-kits/`, `${SITE}handprint-art/`, hub(themes, kits), ...Object.values(SPACES).map((s) => spacePage(s, themes)), ...themes.map((t, i) => themePage(t, i, themes)), ...kits.map((k) => kitPage(k, kits))];
+  const urls = [SITE, `${SITE}make/`, `${SITE}play-kits/`, `${SITE}handprint-art/`, hub(themes, kits), ...Object.values(SPACES).map((s) => spacePage(s, themes)), ...themes.map((t, i) => themePage(t, i, themes)), ...kits.map((k) => kitPage(k, kits)), ...GUIDES.map((g) => guidePage(g, themes))];
   // The hub lives one folder higher than the other pages, so its links back to the shop go up one level.
   const hubFile = path.join(OUT, 'index.html');
   fs.writeFileSync(hubFile, fs.readFileSync(hubFile, 'utf8').replaceAll('href="../../"', 'href="../"').replace('<a href="../">More party and hunt ideas</a> · ', ''));
