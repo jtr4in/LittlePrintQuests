@@ -15,6 +15,7 @@ Work in flight is listed under **In progress** below.
 - Today's site work, all live: the site split into a home page plus `make/`, `play-kits/` and `handprint-art/` (#110); swipeable theme rows with a dropdown (#111); theme tiles with one cute illustration each (#114, after the wow-prop tiles were tried and reverted, #112/#113); home leads with the four products, plus the phone checkout bar (#115); phone speed fixes (#116); theme dropdown without ages (#117); product pictures on the Stripe checkout (#118).
 - Waiting on Jason: set the Stripe logo and colors in the Dashboard (see "Stripe checkout page" below), and check that Railway redeployed the order bot after #118 (a test checkout should show a picture beside the product).
 - 2026-10-27: a PR stacked on another PR's branch merges into that branch, not main, when it isn't retargeted first (#167 did this; the guide pages were re-landed from main). Retarget or rebase onto main before merging a stacked PR.
+- 2026-10-26: origami page for every activity pack, waiting on Jason's 34 Gemini pictures (prompts and plan under "Origami page"). Next: import them, add the page, make it the activity stack's cover in the preview.
 - Ideas raised but not started: the Stage 0 growth items (analytics, email capture); a grill piece for Burger and an espresso machine for Coffee (play kitchen fit).
 
 ## In progress
@@ -125,6 +126,13 @@ Work that is about to merge or is mid-merge, so sessions on the other account ca
 - Previews: the order gallery shows big = cover, I spy, secret code, color by number, roll a creature; little = cover, trace the path, stick it on, color by dot, I spy. Don't preview dot the letter: its big letter is drawn from the name, so the name-swap overlay can't change it.
 - To refresh only the activity previews: run `gallery-images.js`, `git checkout` every changed file without "activity" in its path, and in `docs/img/n/<set>.json` keep main's entries and swap in only the `activity` keys.
 - Sample PDFs (Maya, both ages, dino, pirate, unicorn, space, pizza): `/mnt/project-files/activity-packs/`.
+
+### Origami page (activity packs, started 2026-10-26)
+- Jason wants one easy, theme-matched origami page per activity pack ("more educational and different"), sized for a 4-year-old: a big themed square to cut out plus 4 numbered step panels, at most 3 to 4 folds, and the kid draws the face or details at the end. **Plan: once the pictures are in, add the page to each pack and make it the top paper (cover) of the activity stack in the preview.**
+- Prompts (paste into the Gemini app, Jason runs them himself): `project-files/activity-packs/origami/prompts.json` / `prompts.md`, built by `node project-files/activity-packs/origami/make-prompts.js` (edit the `THEMES` map there to change a theme's model or paper). Copy-paste page with a done checklist: https://claude.ai/artifact/GrahPsyP5RwQkQCQtyfTuG (owned by the second account, jtr4in). Files are to be saved as `<theme>.jpg`.
+- Models: dino volcano, hero cape, pirate sailboat, space rocket, royal pet dragon face, unicorn face, mermaid tail, construction hard hat, vet puppy, racecar and auto car, fire dalmatian, agent secret note, ice arctic fox, puppet finger puppet, dressup paper fan, police badge, doctor teddy bear, dentist beaver (big teeth), post envelope, library corner bookmark, airport airplane (5 folds, the hardest), pizza slice, burger fries carton, italian bow tie, coffee cup, icecream cone, kitchen chef's hat, grocery carrot, petshop goldfish, halloween black cat, christmas tree, valentine tulip, easter bunny.
+- Step diagrams are where Gemini goes wrong: check each fold matches the step text before importing. If a diagram is wrong, re-prompt one step panel at a time.
+- Not done yet: importing the pictures, the activity page itself (`src/kits/activities.js` `PAGES`, page counts, `node scripts/page-counts.js`) and the stack cover (`drawCart()` in `docs/js/make.js` and the gallery's first activity page).
 
 ### Move game (activity packs, 2026-10-23)
 - Jason asked for cut-out action/movement cards ("roar like a dinosaur", "hop on one foot") that work as a real game, not just words on cards. Every activity pack, both ages, now ends with 3 Print & Play pages from `src/kits/movegame.js`: two sheets of 9 cards and a board.
