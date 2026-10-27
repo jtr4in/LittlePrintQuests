@@ -1,649 +1,888 @@
 # Origami page prompts (Gemini app)
 
-One per theme. Save each result as the file name shown.
+Two per theme: the paper pattern and the add-on pieces. Save each picture with the file name shown,
+then import with `python3 scripts/origami-import.py <folder>`.
 
-## 1. dino: volcano (save as `dino.jpg`)
+## 1. dino: Volcano
 
+Paper, save as `dino-paper.jpg`:
+
+```
+Create a seamless, all-over pattern for a square sheet of origami paper: warm brown rock texture with small dinosaur footprints and tiny fern leaves.
+
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
+
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
+```
+
+Pieces, save as `dino-pieces.jpg`:
+
+```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper volcano: a red-orange lava splash shaped to sit on a flat volcano top, a small grey smoke cloud, and a small cute baby dinosaur.
+
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
+
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded volcano, no hands, no scissors, no glue, no shadows.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
+```
+
+## 2. hero: Hero Cape
+
+Paper, save as `hero-paper.jpg`:
+
+```
+Create a seamless, all-over pattern for a square sheet of origami paper: bold red with small yellow lightning bolts and blue stars.
+
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
+
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
+```
+
+Pieces, save as `hero-pieces.jpg`:
+
+```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper hero cape: a round yellow hero emblem with a lightning bolt, and a short piece of blue string.
+
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
+
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded hero cape, no hands, no scissors, no glue, no shadows.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
+```
+
+## 3. pirate: Pirate Ship
+
+Paper, save as `pirate-paper.jpg`:
+
+```
+Create a seamless, all-over pattern for a square sheet of origami paper: old map parchment color with tiny compass roses, dotted trails and small gold coins.
+
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
+
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
+```
+
+Pieces, save as `pirate-pieces.jpg`:
+
+```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper pirate ship: a brown wooden pirate ship hull seen from the side, a tall wooden mast, and a small black pirate flag with crossed bones (no skull face).
+
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
+
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded pirate ship, no hands, no scissors, no glue, no shadows.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
+```
+
+## 4. space: Rocket
+
+Paper, save as `space-paper.jpg`:
+
+```
+Create a seamless, all-over pattern for a square sheet of origami paper: deep navy with tiny white stars, small orange planets and little moons.
+
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
+
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
+```
+
+Pieces, save as `space-pieces.jpg`:
+
+```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper rocket: orange and yellow rocket flames, a round porthole window, and two red rocket fins.
+
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
+
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded rocket, no hands, no scissors, no glue, no shadows.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
+```
+
+## 5. royal: Pet Dragon
+
+Paper, save as `royal-paper.jpg`:
+
+```
+Create a seamless, all-over pattern for a square sheet of origami paper: soft green dragon scales with tiny gold crowns.
+
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
+
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
+```
+
+Pieces, save as `royal-pieces.jpg`:
+
+```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper pet dragon: a pair of small purple dragon wings and a little gold crown.
+
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
+
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded pet dragon, no hands, no scissors, no glue, no shadows.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
+```
+
+## 6. unicorn: Unicorn
+
+Paper, save as `unicorn-paper.jpg`:
+
+```
+Create a seamless, all-over pattern for a square sheet of origami paper: pale lavender with small pastel rainbows, tiny stars and little gems.
+
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
+
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
+```
+
+Pieces, save as `unicorn-pieces.jpg`:
+
+```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper unicorn: a gold spiral unicorn horn and a rainbow mane tuft.
+
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
+
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded unicorn, no hands, no scissors, no glue, no shadows.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
+```
+
+## 7. mermaid: Mermaid Tail
+
+Paper, save as `mermaid-paper.jpg`:
+
+```
+Create a seamless, all-over pattern for a square sheet of origami paper: shimmering teal fish scales with tiny pink pearls.
+
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
+
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
+```
+
+Pieces, save as `mermaid-pieces.jpg`:
+
+```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper mermaid tail: a big teal mermaid tail fin and a small pink seashell.
+
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
+
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded mermaid tail, no hands, no scissors, no glue, no shadows.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
+```
+
+## 8. construction: Hard Hat
+
+Paper, save as `construction-paper.jpg`:
+
+```
+Create a seamless, all-over pattern for a square sheet of origami paper: bright safety yellow with small bolts, nuts and tiny wrenches.
+
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
+
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
+```
+
+Pieces, save as `construction-pieces.jpg`:
+
+```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper hard hat: a small round headlamp and a reflective orange safety stripe.
+
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
+
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded hard hat, no hands, no scissors, no glue, no shadows.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
+```
+
+## 9. vet: Puppy
+
+Paper, save as `vet-paper.jpg`:
+
+```
+Create a seamless, all-over pattern for a square sheet of origami paper: soft golden-brown fur color with light fur texture and a few tiny paw prints.
+
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
+
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
+```
+
+Pieces, save as `vet-pieces.jpg`:
+
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper puppy: a red collar with a gold tag and a round black dog nose.
+
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: warm brown rock texture with small scattered dinosaur footprints and tiny fern leaves. The pattern has no up or down side and no central picture.
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded puppy, no hands, no scissors, no glue, no shadows.
 
-BOTTOM: A very simple origami diagram for a volcano, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the top corner down to the bottom corner, then turned so the triangle points up
-2. The top point of the triangle being folded down to make a flat volcano top
-3. The finished volcano shape, flat on top and wide at the bottom
-4. The finished volcano with simple drawn lava running down from the top
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
+```
+
+## 10. racecar: Race Car
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Paper, save as `racecar-paper.jpg`:
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
 ```
+Create a seamless, all-over pattern for a square sheet of origami paper: bright red with thin white racing stripes and tiny checkered flags.
 
-## 2. hero: hero cape (save as `hero.jpg`)
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+
+Pieces, save as `racecar-pieces.jpg`:
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: bold red with small scattered yellow lightning bolts and blue stars. The pattern has no up or down side and no central picture.
+```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper race car: two black car wheels and a round white number badge with a big 1.
 
-BOTTOM: A very simple origami diagram for a hero cape, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the top corner down to the bottom corner to make a triangle pointing down
-2. The long top edge of the triangle being folded down a little to make a collar strip
-3. The finished cape shape, a triangle with a folded collar along the top
-4. The finished cape tied around a small toy figure with a piece of string through the collar
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded race car, no hands, no scissors, no glue, no shadows.
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
 ```
 
-## 3. pirate: sailboat (save as `pirate.jpg`)
+## 11. fire: Dalmatian Puppy
 
+Paper, save as `fire-paper.jpg`:
+
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+Create a seamless, all-over pattern for a square sheet of origami paper: white with round black dalmatian spots and a few tiny red fire helmets.
+
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: old map parchment color with tiny compass roses, dotted trails and small gold coins. The pattern has no up or down side and no central picture.
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
 
-BOTTOM: A very simple origami diagram for a sailboat, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the top corner down to the bottom corner, then turned so the triangle points up
-2. The bottom edge of the triangle being folded up a little to make the boat’s hull
-3. The finished sailboat shape: a tall triangle sail sitting on a flat hull
-4. The finished sailboat floating on simple drawn waves
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
+```
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Pieces, save as `fire-pieces.jpg`:
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
 ```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper dalmatian puppy: a few loose black spots, a red collar and a small red fire helmet.
+
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
-## 4. space: rocket (save as `space.jpg`)
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded dalmatian puppy, no hands, no scissors, no glue, no shadows.
 
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+
+## 12. agent: Secret Note
+
+Paper, save as `agent-paper.jpg`:
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: deep navy with tiny white stars, small orange planets and little moons. The pattern has no up or down side and no central picture.
+```
+Create a seamless, all-over pattern for a square sheet of origami paper: dark charcoal grey with tiny magnifying glasses, footprints and fingerprint swirls in light grey.
 
-BOTTOM: A very simple origami diagram for a rocket, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, with a dashed line down the middle from the top corner to the bottom corner
-2. The left and right top edges being folded in to meet at the middle line, making a long pointy shape
-3. The bottom point being folded up to make a flat bottom
-4. The finished rocket, pointy top and flat bottom, with simple drawn flames under it
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
 ```
 
-## 5. royal: pet dragon face (save as `royal.jpg`)
+Pieces, save as `agent-pieces.jpg`:
 
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper secret note: a magnifying glass and a round red wax seal.
+
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: soft green dragon scales with tiny gold crowns scattered on top. The pattern has no up or down side and no central picture.
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded secret note, no hands, no scissors, no glue, no shadows.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
+```
 
-BOTTOM: A very simple origami diagram for a pet dragon face, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the bottom corner up to the top corner to make a triangle pointing down
-2. The triangle with its left and right corners being folded up past the top edge to make tall pointy ears
-3. The paper turned over, showing the head shape with a pointy chin at the bottom
-4. The finished dragon face shape, with the face area left blank for the child to draw on
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+## 13. ice: Arctic Fox
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Paper, save as `ice-paper.jpg`:
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
 ```
+Create a seamless, all-over pattern for a square sheet of origami paper: icy pale blue with small white snowflakes and soft frost sparkles.
 
-## 6. unicorn: unicorn face (save as `unicorn.jpg`)
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+
+Pieces, save as `ice-pieces.jpg`:
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: pale lavender with small pastel rainbows, tiny stars and little gems. The pattern has no up or down side and no central picture.
+```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper arctic fox: fluffy white earmuffs and a short striped scarf.
 
-BOTTOM: A very simple origami diagram for a unicorn face, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the bottom corner up to the top corner to make a triangle pointing down
-2. The triangle with its left and right corners being folded up past the top edge to make tall pointy ears
-3. The paper turned over, showing the head shape with a pointy chin at the bottom
-4. The finished unicorn face shape, with the face area left blank and a simple drawn horn between the ears
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded arctic fox, no hands, no scissors, no glue, no shadows.
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
 ```
+
+## 14. puppet: Finger Puppet
 
-## 7. mermaid: mermaid tail (save as `mermaid.jpg`)
+Paper, save as `puppet-paper.jpg`:
 
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+Create a seamless, all-over pattern for a square sheet of origami paper: deep red velvet curtain color with tiny gold stars.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: shimmering teal fish scales with tiny pink pearls. The pattern has no up or down side and no central picture.
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
-BOTTOM: A very simple origami diagram for a mermaid tail, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, with a dashed line down the middle from the left corner to the right corner
-2. The top and bottom edges on the right side being folded in to meet at the middle line, making a long pointy shape
-3. The narrow pointy end being folded back outward a little to make a tail fin
-4. The finished mermaid tail, standing upright with the fin at the top
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
+```
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+Pieces, save as `puppet-pieces.jpg`:
+
 ```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper finger puppet: a tiny gold crown and a small yellow bow tie.
+
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
-## 8. construction: hard hat (save as `construction.jpg`)
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded finger puppet, no hands, no scissors, no glue, no shadows.
 
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: bright safety yellow with small scattered bolts, nuts and tiny wrenches. The pattern has no up or down side and no central picture.
+## 15. dressup: Paper Fan
 
-BOTTOM: A very simple origami diagram for a hard hat, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the top corner down to the bottom corner, then turned so the triangle points up
-2. The left corner being folded across to touch the right edge
-3. The right corner being folded across to touch the left edge, on top
-4. The top flap folded down on the front and the back, making the finished hat
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+Paper, save as `dressup-paper.jpg`:
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+```
+Create a seamless, all-over pattern for a square sheet of origami paper: pink with small gold sequins, tiny bows and little stars.
+
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
 ```
 
-## 9. vet: puppy face (save as `vet.jpg`)
+Pieces, save as `dressup-pieces.jpg`:
 
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper paper fan: a pink satin bow and three sparkly gems.
+
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: soft golden-brown fur color with very light fur texture and a few tiny paw prints. The pattern has no up or down side and no central picture.
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded paper fan, no hands, no scissors, no glue, no shadows.
 
-BOTTOM: A very simple origami diagram for a puppy face, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the top corner down to the bottom corner to make a triangle pointing down
-2. The triangle with its left and right corners being folded down to make two floppy ears
-3. The small bottom point being folded up a little to make the chin
-4. The finished puppy face shape, with the face area left blank for the child to draw on
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
+```
+
+## 16. police: Police Badge
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Paper, save as `police-paper.jpg`:
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
 ```
+Create a seamless, all-over pattern for a square sheet of origami paper: navy blue with small gold stars and thin light-blue stripes.
 
-## 10. racecar: car (save as `racecar.jpg`)
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+
+Pieces, save as `police-pieces.jpg`:
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: bright red with thin white racing stripes and tiny checkered flags. The pattern has no up or down side and no central picture.
+```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper police badge: a shiny gold star.
 
-BOTTOM: A very simple origami diagram for a car, shown as 4 large numbered panels in one row, read left to right:
-1. A square being folded in half from top to bottom to make a long rectangle
-2. The top left corner being folded down a little at a slant to make the windshield
-3. The top right corner being folded down a little the same way to make the back window
-4. The finished car shape with two simple drawn wheels
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded police badge, no hands, no scissors, no glue, no shadows.
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
 ```
+
+## 17. doctor: Teddy Bear
 
-## 11. fire: dalmatian puppy face (save as `fire.jpg`)
+Paper, save as `doctor-paper.jpg`:
 
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+Create a seamless, all-over pattern for a square sheet of origami paper: soft honey-brown fur color with tiny bandages and small hearts.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: white with round black dalmatian spots and a few tiny red fire helmets. The pattern has no up or down side and no central picture.
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
-BOTTOM: A very simple origami diagram for a dalmatian puppy face, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the top corner down to the bottom corner to make a triangle pointing down
-2. The triangle with its left and right corners being folded down to make two floppy ears
-3. The small bottom point being folded up a little to make the chin
-4. The finished dalmatian puppy face shape, with the face area left blank for the child to draw on
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
+```
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Pieces, save as `doctor-pieces.jpg`:
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
 ```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper teddy bear: a crossed pair of bandages and a round brown bear nose.
 
-## 12. agent: secret note (save as `agent.jpg`)
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded teddy bear, no hands, no scissors, no glue, no shadows.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+
+## 18. dentist: Beaver
+
+Paper, save as `dentist-paper.jpg`:
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: dark charcoal grey with tiny magnifying glasses, footprints and fingerprint swirls in light grey. The pattern has no up or down side and no central picture.
+```
+Create a seamless, all-over pattern for a square sheet of origami paper: warm brown fur color with tiny sparkly toothbrushes and small bubbles.
 
-BOTTOM: A very simple origami diagram for a secret note, shown as 4 large numbered panels in one row, read left to right:
-1. A square being folded in half to make a rectangle
-2. The rectangle being folded in half again to make a smaller square
-3. The small square being folded in half once more to make a tiny rectangle
-4. The tiny folded secret note, ready to hide
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
 ```
 
-## 13. ice: fox face (save as `ice.jpg`)
+Pieces, save as `dentist-pieces.jpg`:
 
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper beaver: two big white beaver front teeth (as one piece) and a flat brown beaver tail with a criss-cross pattern.
+
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: icy pale blue with small white snowflakes and soft frost sparkles. The pattern has no up or down side and no central picture.
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded beaver, no hands, no scissors, no glue, no shadows.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
+```
 
-BOTTOM: A very simple origami diagram for a fox face, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the bottom corner up to the top corner to make a triangle pointing down
-2. The triangle with its left and right corners being folded up past the top edge to make tall pointy ears
-3. The paper turned over, showing the head shape with a pointy chin at the bottom
-4. The finished fox face shape, with the face area left blank for the child to draw on
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+## 19. auto: Car
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Paper, save as `auto-paper.jpg`:
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
 ```
+Create a seamless, all-over pattern for a square sheet of origami paper: bright blue with small wrenches, gears and tiny tires.
 
-## 14. puppet: finger puppet (save as `puppet.jpg`)
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+
+Pieces, save as `auto-pieces.jpg`:
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: deep red velvet curtain color with tiny gold stars. The pattern has no up or down side and no central picture.
+```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper car: two black car wheels and two light blue car windows.
 
-BOTTOM: A very simple origami diagram for a finger puppet, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the top corner down to the bottom corner, then turned so the triangle points up
-2. The left corner being folded across to touch the right edge
-3. The right corner being folded across to touch the left edge, on top
-4. The top flap folded down on the front and the back, making a finished finger puppet, shown on a child’s fingertip
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded car, no hands, no scissors, no glue, no shadows.
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
 ```
+
+## 20. post: Envelope
 
-## 15. dressup: paper fan (save as `dressup.jpg`)
+Paper, save as `post-paper.jpg`:
 
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+Create a seamless, all-over pattern for a square sheet of origami paper: light kraft-paper brown with tiny postage stamps, small hearts and airmail stripes.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: pink with small gold sequins, tiny bows and little stars. The pattern has no up or down side and no central picture.
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
-BOTTOM: A very simple origami diagram for a paper fan, shown as 4 large numbered panels in one row, read left to right:
-1. A square with one edge being folded over a finger-wide strip
-2. The paper being turned over and folded back the same width, starting a zig-zag
-3. The zig-zag folds continuing all the way across the paper
-4. The folded strip pinched at one end and opened out into a finished fan
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
+```
+
+Pieces, save as `post-pieces.jpg`:
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
 ```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper envelope: a postage stamp with a flower on it and a round red heart seal.
 
-## 16. police: badge (save as `police.jpg`)
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded envelope, no hands, no scissors, no glue, no shadows.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+
+## 21. library: Corner Bookmark
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: navy blue with small gold stars and thin light-blue stripes. The pattern has no up or down side and no central picture.
+Paper, save as `library-paper.jpg`:
 
-BOTTOM: A very simple origami diagram for a badge, shown as 4 large numbered panels in one row, read left to right:
-1. A square with dashed lines from corner to corner, crossing in the middle
-2. All four corners being folded in to touch the center point
-3. The smaller square turned so it sits like a diamond
-4. The finished diamond badge with a simple drawn star in the middle
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+```
+Create a seamless, all-over pattern for a square sheet of origami paper: soft cream with small books, tiny stars and little reading glasses.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
 ```
 
-## 17. doctor: teddy bear face (save as `doctor.jpg`)
+Pieces, save as `library-pieces.jpg`:
 
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper corner bookmark: three small gold stars.
+
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: soft honey-brown fur color with tiny bandages and small hearts. The pattern has no up or down side and no central picture.
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded corner bookmark, no hands, no scissors, no glue, no shadows.
 
-BOTTOM: A very simple origami diagram for a teddy bear face, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the bottom corner up to the top corner to make a triangle pointing down
-2. The triangle with its left and right corners being folded up just a little to make two small round ears
-3. The small bottom point being folded up to make a flat chin
-4. The finished teddy bear face shape, with the face area left blank for the child to draw on
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
+```
+
+## 22. airport: Airplane
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Paper, save as `airport-paper.jpg`:
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
 ```
+Create a seamless, all-over pattern for a square sheet of origami paper: sky blue with small white clouds and tiny dotted flight paths.
 
-## 18. dentist: beaver face (save as `dentist.jpg`)
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+
+Pieces, save as `airport-pieces.jpg`:
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: warm brown fur color with tiny sparkly toothbrushes and small bubbles. The pattern has no up or down side and no central picture.
+```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper airplane: a pair of long white airplane wings (as one piece) and a small white tail fin.
 
-BOTTOM: A very simple origami diagram for a beaver face, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the top corner down to the bottom corner to make a triangle pointing down
-2. The triangle with its left and right corners being folded down to make two floppy ears
-3. The small bottom point being folded up a little to make the chin
-4. The finished beaver face shape, with the face area left blank for the child to draw on
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded airplane, no hands, no scissors, no glue, no shadows.
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
 ```
+
+## 23. pizza: Pizza Slice
 
-## 19. auto: car (save as `auto.jpg`)
+Paper, save as `pizza-paper.jpg`:
 
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+Create a seamless, all-over pattern for a square sheet of origami paper: golden cheese yellow with small pepperoni circles, olive rings and basil leaves.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: bright blue with small scattered wrenches, gears and tiny tires. The pattern has no up or down side and no central picture.
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
-BOTTOM: A very simple origami diagram for a car, shown as 4 large numbered panels in one row, read left to right:
-1. A square being folded in half from top to bottom to make a long rectangle
-2. The top left corner being folded down a little at a slant to make the windshield
-3. The top right corner being folded down a little the same way to make the back window
-4. The finished car shape with two simple drawn wheels
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
+```
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Pieces, save as `pizza-pieces.jpg`:
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
 ```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper pizza slice: six pepperoni slices, three mushroom slices and two green basil leaves.
 
-## 20. post: envelope (save as `post.jpg`)
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded pizza slice, no hands, no scissors, no glue, no shadows.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+
+## 24. burger: Fries Box
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: light kraft-paper brown with tiny postage stamps, small hearts and airmail stripes along the edges. The pattern has no up or down side and no central picture.
+Paper, save as `burger-paper.jpg`:
+
+```
+Create a seamless, all-over pattern for a square sheet of origami paper: bright red with small yellow stars.
 
-BOTTOM: A very simple origami diagram for a envelope, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, with the left and right corners being folded in to the center
-2. The bottom corner being folded up past the center
-3. The top corner being folded down over the others like a flap
-4. The finished envelope with a small drawn heart sticker holding the flap
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
 ```
 
-## 21. library: corner bookmark (save as `library.jpg`)
+Pieces, save as `burger-pieces.jpg`:
 
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper fries box: a bunch of golden french fries (as one piece, to stick out of a box).
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: soft cream with small scattered books, tiny stars and little reading glasses. The pattern has no up or down side and no central picture.
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
-BOTTOM: A very simple origami diagram for a corner bookmark, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the top corner down to the bottom corner, then turned so the triangle points up
-2. Only the top layer of the top point being folded down to the bottom edge
-3. The left and right corners being folded up and tucked into the pocket in front
-4. The finished corner bookmark slipped over the corner of a book page
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded fries box, no hands, no scissors, no glue, no shadows.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
+```
+
+## 25. italian: Bow Tie
+
+Paper, save as `italian-paper.jpg`:
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
 ```
+Create a seamless, all-over pattern for a square sheet of origami paper: red and white checkered tablecloth pattern.
 
-## 22. airport: airplane (save as `airport.jpg`)
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+
+Pieces, save as `italian-pieces.jpg`:
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: sky blue with small white clouds and tiny dotted flight paths. The pattern has no up or down side and no central picture.
+```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper bow tie: a small round red knot for the middle of a bow tie.
 
-BOTTOM: A very simple origami diagram for a airplane, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, with a dashed line down the middle from the top corner to the bottom corner
-2. The left and right top edges being folded in to meet at the middle line, making a pointy nose
-3. The shape being folded in half along the middle line
-4. Each side being folded down to make the wings, the finished airplane
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded bow tie, no hands, no scissors, no glue, no shadows.
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
 ```
+
+## 26. coffee: Coffee Cup
 
-## 23. pizza: pizza slice (save as `pizza.jpg`)
+Paper, save as `coffee-paper.jpg`:
 
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+Create a seamless, all-over pattern for a square sheet of origami paper: warm cream with tiny coffee beans, small steam swirls and little hearts.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: golden cheese yellow with small pepperoni circles, olive rings and basil leaves. The pattern has no up or down side and no central picture.
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
-BOTTOM: A very simple origami diagram for a pizza slice, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the top corner down to the bottom corner to make a triangle pointing down
-2. The long top edge of the triangle being folded down a little to make the crust
-3. The finished pizza slice shape: a triangle with a thick crust along the top
-4. The finished pizza slice with simple drawn toppings
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
+```
+
+Pieces, save as `coffee-pieces.jpg`:
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
 ```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper coffee cup: a cup handle shaped like a C and three wavy steam swirls.
 
-## 24. burger: fries carton (save as `burger.jpg`)
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded coffee cup, no hands, no scissors, no glue, no shadows.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+
+## 27. icecream: Ice Cream Cone
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: bright red with small yellow stars and tiny french fries. The pattern has no up or down side and no central picture.
+Paper, save as `icecream-paper.jpg`:
 
-BOTTOM: A very simple origami diagram for a fries carton, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the top corner down to the bottom corner, then turned so the triangle points up
-2. The left corner being folded across to touch the right edge
-3. The right corner being folded across to touch the left edge, on top
-4. The top flap folded down on the front and the back, making a finished fries carton with simple drawn fries sticking out
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+```
+Create a seamless, all-over pattern for a square sheet of origami paper: golden waffle cone pattern.
+
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
 ```
 
-## 25. italian: bow tie (save as `italian.jpg`)
+Pieces, save as `icecream-pieces.jpg`:
 
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper ice cream cone: a round pink strawberry ice cream scoop with sprinkles and a red cherry.
+
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
+
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded ice cream cone, no hands, no scissors, no glue, no shadows.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: red and white checkered tablecloth pattern. The pattern has no up or down side and no central picture.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
+```
 
-BOTTOM: A very simple origami diagram for a bow tie, shown as 4 large numbered panels in one row, read left to right:
-1. A square with one edge being folded over a finger-wide strip
-2. The paper being turned over and folded back the same width, starting a zig-zag
-3. The zig-zag folds continuing all the way across the paper
-4. The folded strip pinched in the middle and opened out on both sides into a finished bow tie
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+## 28. kitchen: Cupcake
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Paper, save as `kitchen-paper.jpg`:
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
 ```
+Create a seamless, all-over pattern for a square sheet of origami paper: light blue with small white polka dots.
 
-## 26. coffee: cup (save as `coffee.jpg`)
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+
+Pieces, save as `kitchen-pieces.jpg`:
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: warm cream with tiny coffee beans, small steam swirls and little hearts. The pattern has no up or down side and no central picture.
+```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper cupcake: a swirl of pink cupcake frosting with sprinkles and a red cherry.
 
-BOTTOM: A very simple origami diagram for a cup, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the top corner down to the bottom corner, then turned so the triangle points up
-2. The left corner being folded across to touch the right edge
-3. The right corner being folded across to touch the left edge, on top
-4. The top flap folded down on the front and the back, making the finished cup, shown upright
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded cupcake, no hands, no scissors, no glue, no shadows.
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
 ```
+
+## 29. grocery: Carrot
 
-## 27. icecream: ice cream cone (save as `icecream.jpg`)
+Paper, save as `grocery-paper.jpg`:
 
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+Create a seamless, all-over pattern for a square sheet of origami paper: bright orange with light line texture like a carrot.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: soft pink with tiny rainbow sprinkles scattered all over. The pattern has no up or down side and no central picture.
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
-BOTTOM: A very simple origami diagram for a ice cream cone, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, with a dashed line down the middle from the top corner to the bottom corner
-2. The left and right bottom edges being folded in to meet at the middle line, making a long cone point at the bottom
-3. The top point being folded down a little to make a round-looking scoop top
-4. The finished ice cream cone with simple drawn sprinkles on the scoop
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
+```
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Pieces, save as `grocery-pieces.jpg`:
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
 ```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper carrot: a bunch of green carrot leaves.
 
-## 28. kitchen: chef’s hat (save as `kitchen.jpg`)
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded carrot, no hands, no scissors, no glue, no shadows.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+
+## 30. petshop: Goldfish
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: crisp white with small light-grey kitchen spoons, whisks and tiny wheat stalks. The pattern has no up or down side and no central picture.
+Paper, save as `petshop-paper.jpg`:
+
+```
+Create a seamless, all-over pattern for a square sheet of origami paper: bright orange goldfish scales with tiny bubbles.
 
-BOTTOM: A very simple origami diagram for a chef’s hat, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the top corner down to the bottom corner, then turned so the triangle points up
-2. The left corner being folded across to touch the right edge
-3. The right corner being folded across to touch the left edge, on top
-4. The top flap folded down on the front and the back, making the finished hat
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
 ```
 
-## 29. grocery: carrot (save as `grocery.jpg`)
+Pieces, save as `petshop-pieces.jpg`:
 
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper goldfish: an orange goldfish tail fin and three small bubbles.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: bright orange with small scattered fruits and vegetables in light outline. The pattern has no up or down side and no central picture.
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
-BOTTOM: A very simple origami diagram for a carrot, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, with a dashed line down the middle from the top corner to the bottom corner
-2. The left and right bottom edges being folded in to meet at the middle line, making a long cone point at the bottom
-3. The top point being folded down a little to make a round-looking scoop top
-4. The finished carrot shape, pointy at the bottom, with simple drawn green leaves at the top
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded goldfish, no hands, no scissors, no glue, no shadows.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
+```
+
+## 31. halloween: Black Cat
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+Paper, save as `halloween-paper.jpg`:
+
 ```
+Create a seamless, all-over pattern for a square sheet of origami paper: black with small orange pumpkins, tiny purple bats and little stars.
+
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
-## 30. petshop: fish (save as `petshop.jpg`)
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
 
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: bright orange goldfish scales with tiny bubbles. The pattern has no up or down side and no central picture.
+Pieces, save as `halloween-pieces.jpg`:
 
-BOTTOM: A very simple origami diagram for a fish, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, with a dashed line down the middle from the left corner to the right corner
-2. The top and bottom edges on the right side being folded in to meet at the middle line, making a long pointy shape
-3. The narrow pointy end being folded back outward a little to make a tail fin
-4. The finished fish shape, round body on the left and tail fin on the right
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper black cat: a small purple witch hat and white whiskers (as one piece).
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded black cat, no hands, no scissors, no glue, no shadows.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
 ```
+
+## 32. christmas: Christmas Tree
 
-## 31. halloween: cat face (save as `halloween.jpg`)
+Paper, save as `christmas-paper.jpg`:
 
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+Create a seamless, all-over pattern for a square sheet of origami paper: deep green with small white snowflakes, tiny red ornaments and gold stars.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: black with small orange pumpkins, tiny purple bats and little stars. The pattern has no up or down side and no central picture.
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
-BOTTOM: A very simple origami diagram for a cat face, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the bottom corner up to the top corner to make a triangle pointing down
-2. The triangle with its left and right corners being folded up to make two pointy ears
-3. The top edge between the ears being folded down a little behind the head to flatten it
-4. The finished cat face shape, with the face area left blank for the child to draw on
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
+```
+
+Pieces, save as `christmas-pieces.jpg`:
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
 ```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper christmas tree: a gold star, a brown tree trunk and four round ornaments.
 
-## 32. christmas: Christmas tree (save as `christmas.jpg`)
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded christmas tree, no hands, no scissors, no glue, no shadows.
+
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+
+## 33. valentine: Tulip
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: deep green with small white snowflakes, tiny red ornaments and gold stars. The pattern has no up or down side and no central picture.
+Paper, save as `valentine-paper.jpg`:
 
-BOTTOM: A very simple origami diagram for a Christmas tree, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, with a dashed line down the middle from the top corner to the bottom corner
-2. The left and right top edges being folded in to meet at the middle line, making a long pointy shape
-3. The bottom point being folded up to make a flat bottom
-4. The finished Christmas tree, pointy top and flat bottom, with a simple drawn star on top
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+```
+Create a seamless, all-over pattern for a square sheet of origami paper: bright red with tiny pink and white hearts.
+
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
 ```
 
-## 33. valentine: tulip flower (save as `valentine.jpg`)
+Pieces, save as `valentine-pieces.jpg`:
 
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper tulip: a long green stem with two leaves.
+
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
+
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded tulip, no hands, no scissors, no glue, no shadows.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: bright red with tiny pink and white hearts. The pattern has no up or down side and no central picture.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
+```
 
-BOTTOM: A very simple origami diagram for a tulip flower, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the top corner down to the bottom corner to make a triangle pointing down
-2. The left corner of the triangle being folded up at a slant so it sticks up above the top edge
-3. The right corner being folded up the same way, making the tulip shape
-4. The finished tulip, laid on a simple drawn green stem with two leaves
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+## 34. easter: Bunny
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Paper, save as `easter-paper.jpg`:
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
 ```
+Create a seamless, all-over pattern for a square sheet of origami paper: soft pastel yellow with small pastel eggs and tiny flowers.
+
+The pattern must look good from every direction (no up or down side) and run evenly to all four edges, because the sheet will be cut out and folded. Keep every motif small, under about 1/12 of the sheet width, so folds don't cut through details. Bright, saturated colors that print well on a home inkjet printer.
 
-## 34. easter: bunny face (save as `easter.jpg`)
+Perfectly square image, high resolution, edge to edge, no border or margin, no central picture.
 
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos.
 ```
-Create a printable activity page for a 4-year-old, portrait, 8.5x11 inches, white background, high resolution for print.
 
-TOP: A large square of origami paper, about 7 inches wide, centered, with a thick dashed "cut here" line around it and a small scissors icon at one corner. The square is filled edge to edge with an all-over pattern: soft pastel yellow with small pastel eggs and tiny flowers. The pattern has no up or down side and no central picture.
+Pieces, save as `easter-pieces.jpg`:
+
+```
+Create a sheet of cut-out paper craft pieces for a child to glue onto a folded paper bunny: a pink bow and a small decorated easter egg.
 
-BOTTOM: A very simple origami diagram for a bunny face, shown as 4 large numbered panels in one row, read left to right:
-1. A square turned like a diamond, being folded in half from the bottom corner up to the top corner to make a triangle pointing down
-2. The triangle with its left and right corners being folded straight up, standing tall above the top edge, to make two long ears
-3. The small bottom point being folded up a little to make the chin
-4. The finished bunny face shape, with the face area left blank for the child to draw on
-Each panel shows the paper in a flat color matching the pattern, with a thick dashed line where to fold and a big curved arrow for the fold direction. Extra large, simple, friendly shapes, like a preschool picture book.
+Lay the pieces out in one row from left to right, well spaced, on a plain white background. Draw each piece as a bold, simple, flat cartoon shape with a thick dark outline, big enough for a 4-year-old to cut around (each piece at least 1 inch on the printed sheet). Bright colors that print well on a home inkjet printer.
 
-No faces on objects: no smiley faces on stars, food, hearts, planets or anything else. Animal faces stay blank for the child to draw.
+Wide landscape image, about 3 times as wide as it is tall. Nothing else on the sheet: no folded bunny, no hands, no scissors, no glue, no shadows.
 
-Only text allowed: the numbers 1 to 4. No other words, titles, labels or logos.
+No faces on objects: no smiley faces on stars, food, hearts, planets, clouds or anything else. No text, letters, numbers or logos, except where a piece above asks for one.
 ```

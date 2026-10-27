@@ -163,10 +163,18 @@ function kitPages(id, ages = 'big') {
     page(5)];
 }
 
+// Gallery captions for one product. A theme with origami pages (ORIGAMI) leads its activity
+// preview with them, as scripts/gallery-images.js renders it (actPicks there).
+function captions(x, id, little) {
+  const caps = (little && GALLERY[`${x}Little`]) || GALLERY[x];
+  const fold = x === 'activity' && typeof ORIGAMI !== 'undefined' && ORIGAMI[id];
+  return fold ? [caps[0], 'Origami paper', `Fold a ${fold}`, caps[1], caps[2]] : caps;
+}
+
 function setPages(id, ages = 'big') {
   const little = (k) => ages === 'little' && (k === 'kit' || k === 'activity');
   return ['hunt', 'kit', 'activity', 'party'].flatMap((x) => [
-    ...(x === 'kit' ? kitPages(id, ages) : ((little(x) && GALLERY[`${x}Little`]) || GALLERY[x]).map((cap, i) => ({ cap, src: `img/gallery/${id}/${little(x) ? 'little/' : ''}${x}-${i + 1}.webp` })))
+    ...(x === 'kit' ? kitPages(id, ages) : captions(x, id, little(x)).map((cap, i) => ({ cap, src: `img/gallery/${id}/${little(x) ? 'little/' : ''}${x}-${i + 1}.webp` })))
       .map((p) => ({ k: x, tab: LABELS[x], ...p })),
     ...(x === 'kit' && HOWTO[id] ? [{ k: x, tab: LABELS[x], cap: `Build it from a box: ${HOWTO[id]}`, src: `img/howto/${id}-sm.webp` }] : []),
   ]);

@@ -17,6 +17,7 @@ const { buildHtml, pageRoles } = require('../src/generator/build');
 const { renderKit, renderActivities } = require('../src/kits/render-kit');
 const { renderParty } = require('../src/party/render-party');
 const { kitForHunt, KITS, buildKitHtml } = require('../src/kits/engine');
+const { origamiShift } = require('../src/kits/activities');
 const THEMES = require('../src/generator/themes');
 const { blankJob, saveIndex } = require('../src/generator/name-slots');
 
@@ -48,6 +49,11 @@ const toyAt = (kitId, ages, start, kit, f) => {
   return toys[Math.round(f * (toys.length - 1))];
 };
 const bigOrToy = (kitId, ages, start, kit) => bigPages(kitId, ages)[0] || toyAt(kitId, ages, start, kit, 0.55);
+// Once a kit has its origami pictures, its activity pack opens with two origami pages (paper, then
+// steps). Then the gallery leads with the cover and both origami pages, and the order stack's
+// activity paper is the origami paper (Jason, 2026-10-26).
+const actPicks = (kitId, list) => { const s = origamiShift(kitId); return s ? [1, 2, 3, list[1] + s, list[2] + s] : list; };
+const actCard = (kitId, n) => (origamiShift(kitId) ? 2 : n);
 const count = (dir) => fs.readdirSync(dir).filter((f) => /^page-\d+\.png$/.test(f)).length;
 
 // The little-kids kit and activity pack: thicker cut lines, bigger pictures, dot, path and cut-and-glue pages.
@@ -60,14 +66,14 @@ async function little(id, kitId, tmp, jobs) {
   const toys = [0.35, 0.55, 0.75].map((f) => toyAt(kitId, 'little', start, kit, f));
   const picks = {
     kit: [2, start - 1, wowPage(kitId, 'little'), bigOrToy(kitId, 'little', start, kit), toys[2]],
-    activity: [1, 4, 12, 14, 9], // cover, trace the path, stick it on, color by dot, I spy
+    activity: actPicks(kitId, [1, 4, 12, 14, 9]), // cover, trace the path, stick it on, color by dot, I spy
   };
   fs.mkdirSync(path.join(OUT, id, 'little'), { recursive: true });
   for (const [k, pages] of Object.entries(picks)) {
     pages.forEach((n, i) => jobs.push([path.join(dir(k), `page-${n}.png`), path.join(OUT, id, 'little', `${k}-${i + 1}.webp`)]));
   }
   jobs.push([path.join(dir('kit'), `page-${toys[0]}.png`), path.join(OUT, '..', 'pages', `${id}-little-kit.webp`), 400]);
-  jobs.push([path.join(dir('activity'), 'page-9.png'), path.join(OUT, '..', 'pages', `${id}-little-activity.webp`), 400]);
+  jobs.push([path.join(dir('activity'), `page-${actCard(kitId, 9)}.png`), path.join(OUT, '..', 'pages', `${id}-little-activity.webp`), 400]);
 }
 
 (async () => {
@@ -85,14 +91,14 @@ async function little(id, kitId, tmp, jobs) {
       const kit = count(dir('kit'));
       const picks = {
         kit: [2, 4, wowPage(id), bigOrToy(id, undefined, 5, kit), toyAt(id, undefined, 5, kit, 0.75)], // welcome poster, shop sign, wow prop, big picture page, a toy
-        activity: [1, 6, 11, 12, 13], // cover, I spy, secret code, color by number, roll a creature
+        activity: actPicks(id, [1, 6, 11, 12, 13]), // cover, I spy, secret code, color by number, roll a creature
       };
       fs.mkdirSync(path.join(OUT, id), { recursive: true });
       for (const [k, pages] of Object.entries(picks)) {
         pages.forEach((n, i) => jobs.push([path.join(dir(k), `page-${n}.png`), path.join(OUT, id, `${k}-${i + 1}.webp`)]));
       }
       jobs.push([path.join(dir('kit'), `page-${toyAt(id, undefined, 5, kit, 0.35)}.png`), path.join(OUT, '..', 'pages', `${id}-kit.webp`), 400]);
-      jobs.push([path.join(dir('activity'), 'page-6.png'), path.join(OUT, '..', 'pages', `${id}-activity.webp`), 400]);
+      jobs.push([path.join(dir('activity'), `page-${actCard(id, 6)}.png`), path.join(OUT, '..', 'pages', `${id}-activity.webp`), 400]);
       await little(id, id, tmp, jobs);
       console.log('Rendered', id);
       continue;
@@ -107,7 +113,7 @@ async function little(id, kitId, tmp, jobs) {
     const start = firstToy(kitForHunt(id).id);
     const picks = {
       hunt: [roles.host, roles.briefing, roles.sheet, roles.sheet + 1, roles.cert], // host guide, briefing, two clue card sheets, certificate
-      activity: [1, 6, 11, 12, 13], // cover, I spy, secret code, color by number, roll a creature
+      activity: actPicks(kitForHunt(id).id, [1, 6, 11, 12, 13]), // cover, I spy, secret code, color by number, roll a creature
       party: [2, 3, 4, 5, 6], // invitations, thank-you cards, toppers, favor tags, banner
       kit: [2, start - 1, wowPage(kitForHunt(id).id), bigOrToy(kitForHunt(id).id, undefined, start, kit), toyAt(kitForHunt(id).id, undefined, start, kit, 0.75)], // welcome poster, sign, wow prop, big picture page, a toy
     };
@@ -115,7 +121,7 @@ async function little(id, kitId, tmp, jobs) {
     for (const [k, pages] of Object.entries(picks)) {
       pages.forEach((n, i) => jobs.push([path.join(dir(k), `page-${n}.png`), path.join(OUT, id, `${k}-${i + 1}.webp`)]));
     }
-    jobs.push([path.join(dir('activity'), 'page-6.png'), path.join(OUT, '..', 'pages', `${id}-activity.webp`), 400]);
+    jobs.push([path.join(dir('activity'), `page-${actCard(kitForHunt(id).id, 6)}.png`), path.join(OUT, '..', 'pages', `${id}-activity.webp`), 400]);
     await little(id, kitForHunt(id).id, tmp, jobs);
     console.log('Rendered', id);
   }

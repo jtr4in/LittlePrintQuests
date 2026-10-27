@@ -1059,6 +1059,18 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
       caps.forEach((c, i) => assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'gallery', id, `big-${i + 1}.webp`)), `gallery ${id} big-${i + 1}`));
     }
   }
+  // Origami pages (src/kits/origami.js): every theme has a model whose steps draw, and ORIGAMI in
+  // data.js lists exactly the kits that have both origami pictures (so the gallery captions match).
+  {
+    const og = require('../src/kits/origami');
+    for (const id of Object.keys(require('../src/generator/themes'))) assert.ok(og.THEMES[id] && og.MODELS[og.THEMES[id][0]], `origami model for ${id}`);
+    for (const id of Object.keys(og.MODELS)) assert.ok(og.stepPanels(id, '#888').length >= 3, `origami steps ${id}`);
+    const want = {};
+    for (const id of Object.keys(og.THEMES)) if (og.hasOrigami({ def: { id } })) want[id] = og.MODELS[og.THEMES[id][0]].name.toLowerCase();
+    const line = docs('js', 'data.js').match(/^const ORIGAMI = (\{.*\});$/m);
+    assert.ok(line, 'data.js has an ORIGAMI line');
+    assert.deepEqual(JSON.parse(line[1]), want, 'ORIGAMI in data.js must list the kits with origami pictures');
+  }
 
   // Every Pinterest pin has its picture and a link into the site; holiday pins wait for their season.
   const pins = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'docs', 'pins', 'pool.json'), 'utf8'));

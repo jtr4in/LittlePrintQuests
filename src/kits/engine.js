@@ -719,7 +719,7 @@ function activityPackHtml(cfg) {
   const cover = `<section class="page guide act-cover">
     <div class="guide-head"><div class="guide-icon">${def.icon}</div><div><div class="clinic">${esc(def.name)} · Wipe &amp; Play${k.little ? ' · little kids version, ages 3 to 5' : ''}</div><h1>${esc(possessive(k.childName))} Activity Pack</h1></div></div>
     <p class="lead">${activityCount(k)} activity pages, made from the same pictures as ${esc(k.placeName)}. Use the Wipe &amp; Play pages again and again: slip each one into a sheet protector (or laminate it) and use a dry-erase marker, then wipe clean with a tissue.${k.little ? ' The Print &amp; Play pages are for paper, with dot markers (or stickers), scissors and glue.' : ' The Print &amp; Play move game is for paper: cut out the cards and get everyone moving.'}</p>
-    <div class="act-list">${list.map((x, i) => `<div><span>${i + 1}</span>${esc(x)}<i class="box"></i></div>`).join('')}</div>
+    <div class="act-list${list.length > 20 ? ' dense' : ''}">${list.map((x, i) => `<div><span>${i + 1}</span>${esc(x)}<i class="box"></i></div>`).join('')}</div>
     <div class="act-pics">${def.menu.items.slice(0, 5).map(([e]) => art.pic(e, '.85in')).join('')}</div>
     <p class="act-tip"><b>Grown-up tip:</b> keep the pages in a binder with a marker clipped on for car rides, waiting rooms and quiet time.</p>
     <footer class="foot">Printable Party Games &amp; Quests · LittlePrintQuests</footer>
@@ -731,6 +731,9 @@ function activityPackHtml(cfg) {
 .act-list div { display:flex; align-items:center; gap:.14in; border:2px solid var(--line); border-radius:14px; padding:.07in .18in; font:600 13pt 'Fredoka'; }
 .act-list span { width:.36in; height:.36in; border-radius:50%; background:var(--teal); color:#fff; display:grid; place-items:center; flex:none; }
 .act-list .box { margin-left:auto; }
+.act-list.dense { gap:.06in .3in; margin:.14in 0; }
+.act-list.dense div { padding:.04in .16in; font-size:12pt; }
+.act-list.dense span { width:.3in; height:.3in; }
 .act-pics { display:flex; justify-content:space-around; margin:.2in 0 .2in; }
 .act-tip { background:var(--mint-l); border-radius:14px; padding:.16in .22in; font-size:12pt; }
 </style></head><body class="${k.little ? 'little' : 'big'}">${html}${fitScript}</body></html>`;
