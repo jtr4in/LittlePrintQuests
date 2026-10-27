@@ -687,7 +687,7 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 /* Above the fold with a photo (2026-10-27): for themes with a styled photo (HOOK_PHOTOS in home.js) the
    real props in play sit behind, the named play kit page in front of it, and the Field Kit phone on top. */
 .hook:has(.hook-pages.has-photo) { grid-template-columns: minmax(0, 1fr) 380px; }
-.hook-pages .photo { position: absolute; left: 0; top: 12px; width: 300px; height: auto; aspect-ratio: 640 / 478; object-fit: cover; border: 7px solid #fff; border-radius: 6px; background: #fff; transform: rotate(-3deg); box-shadow: 0 18px 34px -16px rgba(40, 50, 90, .6); }
+.hook-pages .photo { position: absolute; left: 0; top: 12px; width: 300px; height: auto; aspect-ratio: 640 / 478; object-fit: cover; border: 7px solid #fff; border-radius: 6px; background: #fff; box-shadow: 0 18px 34px -16px rgba(40, 50, 90, .6); }
 .hook-pages.has-photo { height: 350px; }
 .hook-pages.has-photo .back { display: none; }
 .hook-pages.has-photo .mid { left: -14px; top: 196px; width: 116px; transform: rotate(-6deg); }
