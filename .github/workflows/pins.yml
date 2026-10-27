@@ -1,4 +1,4 @@
-# Adds the next Pinterest pins to the feeds in docs/pins each morning, then rebuilds the site so
+# Adds the next Pinterest pins (two per board) to the feeds in docs/pins each morning, then rebuilds the site so
 # Pinterest's Auto-publish sees them (pushes made with the workflow token don't start a Pages build).
 name: Daily pins
 on:
@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: node scripts/pin-feed.js
+      - run: node scripts/pin-feed.js 2  # two pins per board a day (8 a day; was 1 per board)
       - name: Commit and rebuild the site
         env:
           GH_TOKEN: ${{ github.token }}

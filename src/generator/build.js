@@ -502,4 +502,4 @@ function pageRoles(html) {
   return roles;
 }
 
-module.exports = { buildHtml, planHunt, pageRoles };
+module.exports = { buildHtml, planHunt, pageRoles, picHtml };

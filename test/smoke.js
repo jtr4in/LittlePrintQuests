@@ -289,6 +289,11 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   // file is live, and every idea and storefront page's structured data parses.
   assert.equal((sitemap.match(/<lastmod>\d{4}-\d\d-\d\d<\/lastmod>/g) || []).length, ideaUrls.length, 'every sitemap URL needs a lastmod');
   assert.match(fs.readFileSync(path.join(__dirname, '..', 'docs', 'robots.txt'), 'utf8'), /Sitemap: https:\/\/littleprintquests\.com\/sitemap\.xml/);
+  // Every hunt page has its free printable (scripts/free-printables.js) and links to it.
+  for (const set of require('../scripts/idea-pages').clueSets()) {
+    for (const f of [`printables/${set.slug}.pdf`, `printables/img/${set.slug}.webp`]) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', f)), `missing docs/${f}: run scripts/free-printables.js`);
+    assert.match(fs.readFileSync(path.join(__dirname, '..', 'docs', 'ideas', set.slug, 'index.html'), 'utf8'), new RegExp(`printables/${set.slug}\\.pdf`), set.slug);
+  }
   const { KEY, urlOf } = require('../scripts/indexnow');
   assert.match(fs.readFileSync(path.join(__dirname, '..', 'docs', 'ideas', 'index.html'), 'utf8'), /href="\.\.\/ideas\/birthday-scavenger-hunt\/"/);
   assert.equal(fs.readFileSync(path.join(__dirname, '..', 'docs', `${KEY}.txt`), 'utf8'), KEY);
@@ -1061,10 +1066,11 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'pins', 'img', `${p.id}.jpg`)), `pin image ${p.id}`);
     assert.match(p.link, /^https:\/\/littleprintquests\.com\/.*utm_source=pinterest/);
   }
-  const ideas = pins.filter((p) => p.id.startsWith('ideas-')).map((p) => new URL(p.link).pathname);
+  const ideas = pins.filter((p) => /^(ideas|free)-/.test(p.id)).map((p) => new URL(p.link).pathname);
   for (const u of ideas) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', u, 'index.html')), `idea page ${u}`);
   const { inSeason } = require('../scripts/pin-feed');
-  assert.deepEqual([inSeason(new Date('2026-10-22')), inSeason(new Date('2026-12-01')), inSeason(new Date('2026-07-01'))], [['halloween'], ['christmas'], []]);
+  assert.deepEqual([inSeason(new Date('2026-10-22')), inSeason(new Date('2026-12-01')), inSeason(new Date('2026-07-01'))], [['halloween', 'thanksgiving'], ['christmas'], []]);
+  assert.ok(pins.some((p) => p.id === 'free-thanksgiving-scavenger-hunt'), 'free printable pins are in the pool');
 
   console.log('All smoke checks passed');
   process.exit(0);

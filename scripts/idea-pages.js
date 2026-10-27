@@ -74,6 +74,7 @@ h3 { font-size:19px; margin:0 0 6px; }
 .clue small b { color:var(--mint); }
 .story { background:var(--tint); border-radius:14px; padding:20px 22px; }
 .story p { margin:0 0 10px; }
+.photo.sheet { max-width:420px; box-shadow:0 4px 18px rgba(0,0,0,.14); }
 .photo.howto { max-width:560px; display:block; margin-left:auto; margin-right:auto; }
 .pages { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
 .pages img { width:100%; height:auto; border-radius:6px; box-shadow:0 2px 10px rgba(0,0,0,.12); background:#fff; }
@@ -143,11 +144,26 @@ const faq = (items) => ({
 });
 const faqHtml = (items) => items.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('\n');
 
-function themePage(t, i, all) {
+// A different run of the riddle library on each theme page, so no two pages share their clues.
+const themePicks = (i) => {
   const ids = Object.keys(SPOTS);
+  return Array.from({ length: 5 }, (_, k) => ids[(i * 2 + k * 7) % ids.length]);
+};
+
+// The free printable clue sheet for a page (docs/printables/<slug>.pdf, made by scripts/free-printables.js).
+// Links are written from docs/ideas/<slug>/.
+function freePrintable(pageSlug, n) {
+  if (!fs.existsSync(path.join(DOCS, 'printables', `${pageSlug}.pdf`))) return '';
+  return `<h2>Free printable clue cards</h2>
+<p>All ${n} clues on one sheet with picture hints for pre-readers, dashed cut lines and an answer key for the grown-up doing the hiding. Print it, cut it, hide it.</p>
+<a href="../../printables/${pageSlug}.pdf"><img class="photo sheet" src="../../printables/img/${pageSlug}.webp" width="600" height="776" alt="Free printable clue card sheet with ${n} rhyming clues and picture hints" loading="lazy"></a>
+<p><a class="btn" href="../../printables/${pageSlug}.pdf">Download the free printable (PDF)</a></p>
+`;
+}
+
+function themePage(t, i, all) {
   const kit = Object.values(KITS).find((k) => (k.hunt || k.id) === t.id);
-  // A different run of the riddle library on each theme page, so no two pages share their clues.
-  const picks = Array.from({ length: 5 }, (_, k) => ids[(i * 2 + k * 7) % ids.length]);
+  const picks = themePicks(i);
   const story = t.briefing.paragraphs.map((p) => p.replace(/\{kids\}/g, t.hunters).replace(/\{count\}/g, 'eight'));
   const young = t.ages.split('–')[0];
   const questions = [
@@ -169,7 +185,7 @@ function themePage(t, i, all) {
 <ol class="clues">${picks.map((id, k) => clueCard(id, k + 1)).join('')}</ol>
 <p>Between clues, read a ${esc(t.label.toLowerCase())} rhyme to keep the story going:</p>
 <div class="story"><p>${lines(t.openers.start)}</p><p>${lines(t.openers.middle[0])}</p><p>${lines(t.openers.last)}</p></div>
-
+${freePrintable(themeSlug(t), picks.length)}
 <h2>Make it right for their age</h2>
 <ul class="tips">
 <li><b>Ages ${esc(young)} to 5:</b> add a picture of the hiding spot to every card so pre-readers can solve it, and keep the trail to 6 spots.</li>
@@ -220,7 +236,7 @@ function spacePage(s, themes) {
 <h2>The trail, clue by clue</h2>
 <p>Hide each card at the answer to the clue before it. The first clue goes in the kids’ hands, and the prize waits at the last answer.</p>
 <ol class="clues">${s.spots.map((id, k) => clueCard(id, k + 1)).join('')}</ol>
-
+${freePrintable(spaceSlug(s), s.spots.length)}
 <h2>Tips for a ${esc(s.label.toLowerCase())} hunt</h2>
 <ul class="tips">${s.tips.map((tip) => `<li>${esc(tip)}</li>`).join('')}</ul>
 
@@ -325,7 +341,7 @@ function guidePage(g, themes) {
 <h2>${g.clues.length} free rhyming clues</h2>
 <p>${esc(g.clueIntro)}</p>
 <ol class="clues">${g.clues.map((c, k) => clueCard(c, k + 1)).join('')}</ol>
-${g.sections.map(([h, html]) => `\n<h2>${esc(h)}</h2>\n${fill(html)}`).join('\n')}
+${freePrintable(g.slug, g.clues.length)}${g.sections.map(([h, html]) => `\n<h2>${esc(h)}</h2>\n${fill(html)}`).join('\n')}
 
 <h2>Questions</h2>
 ${faqHtml(g.faq)}
@@ -424,4 +440,19 @@ ${lastmods(urls).map((d, i) => `  <url><loc>${urls[i]}</loc><lastmod>${d}</lastm
 }
 
 if (require.main === module) console.log(`Wrote ${build().length - 1} idea pages and the sitemap.`);
-module.exports = { build, themeSlug, spaceSlug, kitSlug };
+// Every page that has a hunt on it, with its clues, for scripts/free-printables.js and scripts/pins.js.
+function clueSets() {
+  const spot = (c) => (typeof c === 'string' ? SPOTS[c] : c);
+  const themes = Object.values(THEMES).map((t, i) => ({
+    slug: themeSlug(t), name: `${t.label} Scavenger Hunt`, label: t.label, theme: t.id, colors: t.colors,
+    hunters: t.hunters, treasure: t.treasureWord,
+    story: { title: t.briefing.title, paragraphs: t.briefing.paragraphs.map((p) => p.replace(/\{kids\}/g, t.hunters).replace(/\{count\}/g, 'five')), signoff: t.briefing.signoff, from: t.briefing.from },
+    clues: themePicks(i).map(spot),
+  }));
+  const green = { primary: '#2f9a6b', accent: '#ef9d31', soft: '#e4f2e9', paper: '#fbf8f1', ink: '#3f4a73' };
+  const spaces = Object.values(SPACES).map((s) => ({ slug: spaceSlug(s), name: s.title, label: s.label, colors: green, hunters: 'Hunters', treasure: 'treasure', clues: s.spots.map(spot) }));
+  const guides = GUIDES.map((g) => ({ slug: g.slug, name: g.title.split(':')[0].replace(/ for Kids$/, ''), label: g.short, colors: green, hunters: 'Hunters', treasure: 'treasure', clues: g.clues.map(spot) }));
+  return [...themes, ...spaces, ...guides];
+}
+
+module.exports = { build, themeSlug, spaceSlug, kitSlug, clueSets };
