@@ -106,7 +106,7 @@ function showHero(id) {
   LPQName.setSrc(back, `img/hero/${id}.webp`, `img/hero/${id}-sm.webp 800w, img/hero/${id}.webp 1600w`);
   $('heroCap').innerHTML = `<b>${esc(name)}</b><span>See the pages</span>`;
 }
-$('heroCap').addEventListener('click', () => Gallery.open(setPages(state.theme, state.ages), { tabs: ['hunt', 'kit', 'activity', 'party'].map((k) => [k, LABELS[k]]), label: `${THEMES.find((t) => t.id === state.theme).name} pages`, ages: { value: state.ages, pages: (a) => setPages(state.theme, a) } }));
+$('heroCap').addEventListener('click', () => (window.withPages || ((i, f) => f()))(state.theme, () => Gallery.open(setPages(state.theme, state.ages), { tabs: ['hunt', 'kit', 'activity', 'party'].map((k) => [k, LABELS[k]]), label: `${THEMES.find((t) => t.id === state.theme).name} pages`, ages: { value: state.ages, pages: (a) => setPages(state.theme, a) } })));
 function setTheme(id, { scroll = false } = {}) {
   state.theme = id;
   $('themeSelect').value = id;
@@ -379,6 +379,9 @@ $('stack').innerHTML = ['hunt', 'kit', 'activity', 'party'].map((k) => `<img dat
 function openGallery(k) {
   const gets = ['hunt', 'kit', 'activity', 'party'].filter((x) => picked.has(x));
   if (!gets.length) return;
+  (window.withPages || ((i, f) => f()))(state.theme, () => showGallery(k, gets));
+}
+function showGallery(k, gets) {
   const pagesFor = (a) => setPages(state.theme, a).filter((p) => gets.includes(p.k));
   const pages = pagesFor(state.ages);
   // starts on the age they picked; the switch only changes the preview, not the order

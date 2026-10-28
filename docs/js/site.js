@@ -152,9 +152,28 @@ function themeFilter(chips, row, { groups = THEME_GROUPS, key = 'id', min = 2 } 
   return { show(id) { const t = tiles().find((x) => x.dataset[key] === id); if (t && t.hidden) pick((list.find((g) => g.ids.includes(id)) || { id: 'all' }).id); } };
 }
 
+// The preview popup's page lists: about half of each product (Jason, 2026-10-27), in
+// img/gallery/<theme>/pages.json from scripts/gallery-images.js ({ hunt, kit, kitLittle, activity,
+// activityLittle, party }, each [src, caption] with {N} for the kid's name). withPages(id, fn) loads a
+// theme's list, then runs fn; until it's there, or if it can't load, the five pages per product below
+// are shown instead.
+const POPUP = {};
+function withPages(id, fn) {
+  POPUP[id] ||= fetch(`img/gallery/${id}/pages.json`).then((r) => (r.ok ? r.json() : {})).catch(() => ({})).then((d) => (POPUP[id] = d));
+  return Promise.resolve(POPUP[id]).then(fn);
+}
+function popupList(id, key) {
+  const d = POPUP[id];
+  if (!d || d instanceof Promise || !Array.isArray(d[key])) return null;
+  const kid = window.LPQName ? LPQName.get() : 'Maya';
+  return d[key].map(([src, cap]) => ({ src, cap: cap.replace(/\{N\}/g, kid) }));
+}
+
 // A theme's play kit pages for the preview: welcome poster, sign and wow piece, then up to four big
-// picture pages (BIGPICS, the same for both ages), then a hands-on page. Each is { cap, src }.
+// picture pages (BIGPICS, the same for both ages), then hands-on pages. Each is { cap, src }.
 function kitPages(id, ages = 'big') {
+  const listed = popupList(id, ages === 'little' ? 'kitLittle' : 'kit');
+  if (listed) return listed;
   const dir = ages === 'little' ? 'little/' : '';
   const page = (n) => ({ cap: GALLERY.kit[n - 1], src: `img/gallery/${id}/${dir}kit-${n}.webp` });
   const big = (typeof BIGPICS !== 'undefined' && BIGPICS[id]) || [];
@@ -174,7 +193,7 @@ function captions(x, id, little) {
 function setPages(id, ages = 'big') {
   const little = (k) => ages === 'little' && (k === 'kit' || k === 'activity');
   return ['hunt', 'kit', 'activity', 'party'].flatMap((x) => [
-    ...(x === 'kit' ? kitPages(id, ages) : captions(x, id, little(x)).map((cap, i) => ({ cap, src: `img/gallery/${id}/${little(x) ? 'little/' : ''}${x}-${i + 1}.webp` })))
+    ...(x === 'kit' ? kitPages(id, ages) : popupList(id, little(x) ? `${x}Little` : x) || captions(x, id, little(x)).map((cap, i) => ({ cap, src: `img/gallery/${id}/${little(x) ? 'little/' : ''}${x}-${i + 1}.webp` })))
       .map((p) => ({ k: x, tab: LABELS[x], ...p })),
     ...(x === 'kit' && HOWTO[id] ? [{ k: x, tab: LABELS[x], cap: `Build it from a box: ${HOWTO[id]}`, src: `img/howto/${id}-sm.webp` }] : []),
   ]);

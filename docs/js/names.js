@@ -28,7 +28,7 @@
   // ---- The JSON for each set, loaded once ------------------------------------------------------
   const shards = {};
   // Same rule as shardOf() in src/generator/name-slots.js.
-  const shardOf = (key) => (/^img\/gallery\/crafts\//.test(key) ? 'crafts' : key.match(/^img\/(?:gallery\/|pages\/|kit-|hero\/|host\/)([a-z]+)/)?.[1]);
+  const shardOf = (key) => (/^img\/gallery\/crafts\//.test(key) ? 'crafts' : key.match(/^img\/gallery\/([a-z]+)\/(?:little\/)?more\//)?.[1]?.concat('-more') || key.match(/^img\/(?:gallery\/|pages\/|kit-|hero\/|host\/)([a-z]+)/)?.[1]);
   const load = (shard) => (shards[shard] ||= fetch(`img/n/${shard}.json`).then((r) => (r.ok ? r.json() : {})).catch(() => ({})).then((d) => (shards[shard] = d)));
   const ready = (shard) => (shards[shard] && !(shards[shard] instanceof Promise) ? shards[shard] : null);
 

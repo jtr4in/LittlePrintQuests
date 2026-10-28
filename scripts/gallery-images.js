@@ -7,6 +7,10 @@
 // The little-kids version (ages 3 to 5) of the kit and activity pack goes in gallery/<theme>/little/,
 // with its order stack cards in docs/img/pages/<theme>-little-kit.webp and -little-activity.webp.
 // Every picture with the child's name also gets a twin without it in docs/img/n/ (see name-slots.js).
+// The popup shows about half of each product (scripts/gallery-picks.js): the pages beyond those five
+// go in gallery/<theme>/more/ (and little/more/), and gallery/<theme>/pages.json lists every page the
+// popup shows, in order, with its caption ({N} for the kid's name). Their name twins are in their own
+// set, img/n/<theme>-more.json, which the site loads only when the popup opens.
 // Usage: node scripts/gallery-images.js [theme ...]
 const fs = require('fs');
 const os = require('os');
@@ -20,6 +24,8 @@ const { kitForHunt, KITS, buildKitHtml } = require('../src/kits/engine');
 const { origamiShift } = require('../src/kits/activities');
 const THEMES = require('../src/generator/themes');
 const { blankJob, saveIndex } = require('../src/generator/name-slots');
+const { huntPicks, partyPicks, activityPicks, kitPicks } = require('./gallery-picks');
+const { bigPicks } = require('../src/kits/bigpages');
 
 const OUT = path.join(__dirname, '..', 'docs', 'img', 'gallery');
 const SPOTS = ['front_door', 'shoe_rack', 'couch', 'dryer', 'bathtub', 'bookshelf', 'pet_bed', 'kitchen_table'];
@@ -55,12 +61,45 @@ const bigOrToy = (kitId, ages, start, kit) => bigPages(kitId, ages)[0] || toyAt(
 const actPicks = (kitId, list) => { const s = origamiShift(kitId); return s ? [1, 2, 3, list[1] + s, list[2] + s] : list; };
 const actCard = (kitId, n) => (origamiShift(kitId) ? 2 : n);
 const count = (dir) => fs.readdirSync(dir).filter((f) => /^page-\d+\.png$/.test(f)).length;
+const titles = (dir) => JSON.parse(fs.readFileSync(`${dir}.titles.json`, 'utf8'));
+const DOCS = path.join(OUT, '..', '..');
+// Clears a theme's extra pages (and their name twins) before they're made again, so pages that are no
+// longer picked don't linger.
+function clearMore(id) {
+  for (const d of [path.join(OUT, id, 'more'), path.join(OUT, id, 'little', 'more'), path.join(DOCS, 'img', 'n', 'gallery', id, 'more'), path.join(DOCS, 'img', 'n', 'gallery', id, 'little', 'more')]) fs.rmSync(d, { recursive: true, force: true });
+  fs.rmSync(path.join(DOCS, 'img', 'n', `${id}-more.json`), { force: true });
+}
+// The popup's list for one product: [src, caption] for each picked page. A page that's already one of
+// the five (legacy) pictures uses that file; any other goes to more/<k>-<n>.webp.
+function popup(id, k, little, legacy, picks, pngDir, jobs) {
+  const sub = little ? 'little/' : '';
+  return picks.map(({ n, cap }) => {
+    const i = legacy.indexOf(n);
+    if (i >= 0) return [`img/gallery/${id}/${sub}${k}-${i + 1}.webp`, cap];
+    const out = path.join(OUT, id, little ? 'little' : '', 'more', `${k}-${n}.webp`);
+    fs.mkdirSync(path.dirname(out), { recursive: true });
+    jobs.push([path.join(pngDir, `page-${n}.png`), out]);
+    return [`img/gallery/${id}/${sub}more/${k}-${n}.webp`, cap];
+  });
+}
+// The play kit's list: welcome poster, sign, wow piece, the big pictures (big-<n>.webp, the same for
+// both ages, from scripts/big-previews.js), then hands-on pages.
+function kitPopup(id, kitId, little, legacy, pngDir, jobs) {
+  const big = bigPicks(kitId, 4);
+  const { fixed, hands } = kitPicks(titles(pngDir), { poster: legacy[0], sign: legacy[1], wow: legacy[2], big: big.length });
+  const cap = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+  return [
+    ...popup(id, 'kit', little, legacy, fixed, pngDir, jobs),
+    ...big.map((p, i) => [`img/gallery/${id}/big-${i + 1}.webp`, cap(p.title)]),
+    ...popup(id, 'kit', little, legacy, hands, pngDir, jobs),
+  ];
+}
 
 // The little-kids kit and activity pack: thicker cut lines, bigger pictures, dot, path and cut-and-glue pages.
 async function little(id, kitId, tmp, jobs) {
   const dir = (k) => path.join(tmp, `${id}-little-${k}`);
-  await renderKit({ kit: kitId, childName: 'Maya', ages: 'little', subjects: [], lenient: true }, `${dir('kit')}.pdf`, { pngDir: dir('kit'), nameSlots: 'Maya' });
-  await renderActivities({ kit: kitId, childName: 'Maya', ages: 'little', lenient: true }, `${dir('activity')}.pdf`, { pngDir: dir('activity'), nameSlots: 'Maya' });
+  await renderKit({ kit: kitId, childName: 'Maya', ages: 'little', subjects: [], lenient: true }, `${dir('kit')}.pdf`, { pngDir: dir('kit'), nameSlots: 'Maya', titles: `${dir('kit')}.titles.json` });
+  await renderActivities({ kit: kitId, childName: 'Maya', ages: 'little', lenient: true }, `${dir('activity')}.pdf`, { pngDir: dir('activity'), nameSlots: 'Maya', titles: `${dir('activity')}.titles.json` });
   const kit = count(dir('kit'));
   const start = firstToy(kitId);
   const toys = [0.35, 0.55, 0.75].map((f) => toyAt(kitId, 'little', start, kit, f));
@@ -74,7 +113,15 @@ async function little(id, kitId, tmp, jobs) {
   }
   jobs.push([path.join(dir('kit'), `page-${toys[0]}.png`), path.join(OUT, '..', 'pages', `${id}-little-kit.webp`), 400]);
   jobs.push([path.join(dir('activity'), `page-${actCard(kitId, 9)}.png`), path.join(OUT, '..', 'pages', `${id}-little-activity.webp`), 400]);
+  return {
+    kitLittle: kitPopup(id, kitId, true, picks.kit, dir('kit'), jobs),
+    activityLittle: popup(id, 'activity', true, picks.activity, activityPicks(titles(dir('activity')), 'little'), dir('activity'), jobs),
+  };
 }
+
+// gallery/<theme>/pages.json: { hunt, kit, kitLittle, activity, activityLittle, party }, each a list of
+// [src, caption]. Shop kits have no hunt or party.
+const writeList = (id, lists) => fs.writeFileSync(path.join(OUT, id, 'pages.json'), JSON.stringify(lists));
 
 (async () => {
   const only = process.argv.slice(2);
@@ -86,8 +133,9 @@ async function little(id, kitId, tmp, jobs) {
     const dir = (k) => path.join(tmp, `${id}-${k}`);
     const shop = shops.includes(id);
     if (shop) {
-      await renderKit({ kit: id, childName: 'Maya', subjects: [], lenient: true }, `${dir('kit')}.pdf`, { pngDir: dir('kit'), nameSlots: 'Maya' });
-      await renderActivities({ kit: id, childName: 'Maya', lenient: true }, `${dir('activity')}.pdf`, { pngDir: dir('activity'), nameSlots: 'Maya' });
+      clearMore(id);
+      await renderKit({ kit: id, childName: 'Maya', subjects: [], lenient: true }, `${dir('kit')}.pdf`, { pngDir: dir('kit'), nameSlots: 'Maya', titles: `${dir('kit')}.titles.json` });
+      await renderActivities({ kit: id, childName: 'Maya', lenient: true }, `${dir('activity')}.pdf`, { pngDir: dir('activity'), nameSlots: 'Maya', titles: `${dir('activity')}.titles.json` });
       const kit = count(dir('kit'));
       const picks = {
         kit: [2, 4, wowPage(id), bigOrToy(id, undefined, 5, kit), toyAt(id, undefined, 5, kit, 0.75)], // welcome poster, shop sign, wow prop, big picture page, a toy
@@ -99,16 +147,21 @@ async function little(id, kitId, tmp, jobs) {
       }
       jobs.push([path.join(dir('kit'), `page-${toyAt(id, undefined, 5, kit, 0.35)}.png`), path.join(OUT, '..', 'pages', `${id}-kit.webp`), 400]);
       jobs.push([path.join(dir('activity'), `page-${actCard(id, 6)}.png`), path.join(OUT, '..', 'pages', `${id}-activity.webp`), 400]);
-      await little(id, id, tmp, jobs);
+      writeList(id, {
+        kit: kitPopup(id, id, false, picks.kit, dir('kit'), jobs),
+        activity: popup(id, 'activity', false, picks.activity, activityPicks(titles(dir('activity')), 'big'), dir('activity'), jobs),
+        ...(await little(id, id, tmp, jobs)),
+      });
       console.log('Rendered', id);
       continue;
     }
+    clearMore(id);
     const huntCfg = { theme: id, childName: 'Maya', age: 6, spots: SPOTS, pictures: true };
-    await renderPdf(huntCfg, `${dir('hunt')}.pdf`, { pngDir: dir('hunt'), nameSlots: 'Maya' });
+    await renderPdf(huntCfg, `${dir('hunt')}.pdf`, { pngDir: dir('hunt'), nameSlots: 'Maya', titles: `${dir('hunt')}.titles.json` });
     const roles = pageRoles(buildHtml(huntCfg));
-    await renderParty({ theme: id, childName: 'Maya', age: 6, party: PARTY }, `${dir('party')}.pdf`, { pngDir: dir('party'), nameSlots: 'Maya' });
-    await renderKit({ kit: kitForHunt(id).id, childName: 'Maya', subjects: [], lenient: true }, `${dir('kit')}.pdf`, { pngDir: dir('kit'), nameSlots: 'Maya' });
-    await renderActivities({ kit: kitForHunt(id).id, childName: 'Maya', lenient: true }, `${dir('activity')}.pdf`, { pngDir: dir('activity'), nameSlots: 'Maya' });
+    await renderParty({ theme: id, childName: 'Maya', age: 6, party: PARTY }, `${dir('party')}.pdf`, { pngDir: dir('party'), nameSlots: 'Maya', titles: `${dir('party')}.titles.json` });
+    await renderKit({ kit: kitForHunt(id).id, childName: 'Maya', subjects: [], lenient: true }, `${dir('kit')}.pdf`, { pngDir: dir('kit'), nameSlots: 'Maya', titles: `${dir('kit')}.titles.json` });
+    await renderActivities({ kit: kitForHunt(id).id, childName: 'Maya', lenient: true }, `${dir('activity')}.pdf`, { pngDir: dir('activity'), nameSlots: 'Maya', titles: `${dir('activity')}.titles.json` });
     const kit = count(dir('kit'));
     const start = firstToy(kitForHunt(id).id);
     const picks = {
@@ -122,7 +175,13 @@ async function little(id, kitId, tmp, jobs) {
       pages.forEach((n, i) => jobs.push([path.join(dir(k), `page-${n}.png`), path.join(OUT, id, `${k}-${i + 1}.webp`)]));
     }
     jobs.push([path.join(dir('activity'), `page-${actCard(kitForHunt(id).id, 6)}.png`), path.join(OUT, '..', 'pages', `${id}-activity.webp`), 400]);
-    await little(id, kitForHunt(id).id, tmp, jobs);
+    writeList(id, {
+      hunt: popup(id, 'hunt', false, picks.hunt, huntPicks(titles(dir('hunt'))), dir('hunt'), jobs),
+      kit: kitPopup(id, kitForHunt(id).id, false, picks.kit, dir('kit'), jobs),
+      activity: popup(id, 'activity', false, picks.activity, activityPicks(titles(dir('activity')), 'big'), dir('activity'), jobs),
+      party: popup(id, 'party', false, picks.party, partyPicks(titles(dir('party'))), dir('party'), jobs),
+      ...(await little(id, kitForHunt(id).id, tmp, jobs)),
+    });
     console.log('Rendered', id);
   }
   // Twins with the name left out, for the website to write the typed name over (docs/js/names.js).
