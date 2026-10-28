@@ -24,6 +24,7 @@ Work in flight is listed under **In progress** below.
 
 Work that is about to merge or is mid-merge, so sessions on the other account can hold off. Pull main and read this before starting and before merging. Add your entry directly on main (not only in your PR). Don't merge if another entry touches the same files; wait or coordinate. Remove your entry after merging. One line each: what, branch, files touched, thread, UTC time.
 
+- More pages in the preview popup (about half of each product): `scripts/gallery-images.js`, new `scripts/gallery-picks.js`, `src/generator/render.js`, `name-slots.js`, `docs/js/site.js`, `names.js`, `home.js`, `make.js`, play-kits and activity-pages scripts, asset stamps, `docs/img/gallery/*/` (new `more/` folders, `pages.json`), `docs/img/n/*-more.json`, tests, notes. Every theme re-rendered, so hold off on preview re-renders until it's merged. Branch `more-preview-pages`, thread "show ~50% of pages in previews", 2026-10-28 00:50 UTC.
 - Face-free kit art (waiting on Jason's 13 Gemini grid images; prompt page https://claude.ai/artifact/QB7J7VcYHL3Jp6p4ufMzq6): will replace 136 files in `src/kits/art/*` and re-render docs/img icons, checkout and previews. Branch `claude/project-thread-wx32ov`, thread "Remove faces from kit images", 2026-10-24 23:40 UTC.
 
 ## Business direction
