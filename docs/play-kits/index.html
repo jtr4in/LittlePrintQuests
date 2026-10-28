@@ -83,9 +83,9 @@
     <nav class="foot-links"><a href="make/">Make a kit</a><a href="activity-pages/">Activity pages</a><a href="handprint-art/">Handprint art</a><a href="ideas/">Party and hunt ideas</a><a href="contact/">Contact</a><a href="refunds/">Refunds</a><a href="privacy/">Privacy</a><a href="terms/">Terms</a></nav>
   </div>
 </footer>
-<script src="js/names.js?v=22d37737"></script>
+<script src="js/names.js?v=e3031f47"></script>
 <script src="js/data.js?v=86608b27"></script>
-<script src="js/site.js?v=dc517582"></script>
+<script src="js/site.js?v=3dd597c5"></script>
 <script>
 // Tapping a shop kit opens its pages (both age versions and the box build) with a buy form under them.
 // "Get the kit" opens the order page with that kit ticked, so the rest of the set can be added there.
@@ -103,6 +103,9 @@ if (typeof THEME_GROUPS !== 'undefined' && typeof themeFilter === 'function') th
 ] });
 // photo: a styled photo to show first (the two Pizza Shop photos at the top open this way).
 function openShop(id, photo) {
+  (window.withPages || ((i, f) => f()))(id, () => showShop(id, photo));
+}
+function showShop(id, photo) {
   shopKit = id;
   shopBtn.textContent = `Get the ${shopName(id)} kit · $7.99`;
   shopChild.value = LPQName.typed();

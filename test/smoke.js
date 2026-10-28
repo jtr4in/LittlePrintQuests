@@ -1064,6 +1064,34 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   for (const id of Object.keys(require('../src/generator/themes'))) {
     for (const k of ['hunt', 'party', 'kit', 'activity']) for (let i = 1; i <= 5; i++) assert.ok(fs.existsSync(path.join(__dirname, '..', 'docs', 'img', 'gallery', id, `${k}-${i}.webp`)), `gallery ${id} ${k}-${i}`);
   }
+  // The preview popup shows about half of each product (scripts/gallery-picks.js, Jason 2026-10-27):
+  // gallery/<theme>/pages.json lists them, every picture exists, captions use {N} rather than the
+  // sample name, and each extra page's name data is in the <theme>-more set the site loads for it.
+  {
+    const DOCS = path.join(__dirname, '..', 'docs');
+    const { shardOf } = require('../src/generator/name-slots');
+    const N = path.join(DOCS, 'img', 'n');
+    for (const f of fs.readdirSync(N).filter((x) => x.endsWith('.json'))) {
+      for (const k of Object.keys(JSON.parse(fs.readFileSync(path.join(N, f), 'utf8')))) assert.equal(shardOf(k), f.slice(0, -5), `${k} is in ${f}`);
+    }
+    const WANT = { hunt: [6, 6], party: [8, 8], activity: [10, 10], activityLittle: [10, 10], kit: [12, 15], kitLittle: [12, 15] };
+    for (const id of Object.keys(require('../src/generator/themes'))) {
+      const file = path.join(DOCS, 'img', 'gallery', id, 'pages.json');
+      assert.ok(fs.existsSync(file), `preview list for ${id}: run node scripts/gallery-images.js ${id}`);
+      const lists = JSON.parse(fs.readFileSync(file, 'utf8'));
+      for (const [k, [lo, hi]] of Object.entries(WANT)) {
+        const l = lists[k] || [];
+        assert.ok(l.length >= lo && l.length <= hi, `${id} ${k} shows ${l.length} pages`);
+        assert.equal(new Set(l.map(([src]) => src)).size, l.length, `${id} ${k} repeats a page`);
+        for (const [src, cap] of l) {
+          assert.ok(fs.existsSync(path.join(DOCS, src)), `${id} ${k}: ${src}`);
+          assert.ok(cap && !/\bMaya\b/i.test(cap), `${id} ${k} caption "${cap}"`);
+        }
+      }
+    }
+    const site = fs.readFileSync(path.join(DOCS, 'js', 'names.js'), 'utf8');
+    assert.ok(site.includes("?.concat('-more')"), 'names.js knows the -more sets');
+  }
   // The play kit previews show up to four big picture pages per theme (scripts/big-previews.js):
   // BIGPICS in data.js must match the kits' big/pages.json, and each picture must exist.
   {

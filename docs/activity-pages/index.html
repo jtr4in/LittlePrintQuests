@@ -98,21 +98,21 @@
     <nav class="foot-links"><a href="make/">Make a kit</a><a href="play-kits/">Play kits</a><a href="handprint-art/">Handprint art</a><a href="ideas/">Party and hunt ideas</a><a href="contact/">Contact</a><a href="refunds/">Refunds</a><a href="privacy/">Privacy</a><a href="terms/">Terms</a></nav>
   </div>
 </footer>
-<script src="js/names.js?v=22d37737"></script>
+<script src="js/names.js?v=e3031f47"></script>
 <script src="js/data.js?v=86608b27"></script>
-<script src="js/site.js?v=dc517582"></script>
+<script src="js/site.js?v=3dd597c5"></script>
 <script>
 // Theme tiles open that theme's activity pages (both age versions); the button orders just the pack.
 const hasFold = (id) => typeof ORIGAMI !== 'undefined' && Boolean(ORIGAMI[id]);
 const actPages = (id, ages) => setPages(id, ages).filter((p) => p.k === 'activity');
 function previewActivities(id, start = 0) {
-  Gallery.open(actPages(id, 'little'), {
+  (window.withPages || ((i, f) => f()))(id, () => Gallery.open(actPages(id, 'little'), {
     label: `${THEME_LABELS[id]} activity pages`,
     title: true,
     start,
     foot: Gallery.cta(`make/?theme=${id}&pick=activity`, `Make the ${THEME_LABELS[id]} activity pack`),
     ages: { value: 'little', pages: (a) => actPages(id, a) },
-  });
+  }));
 }
 $('themeGrid').innerHTML = ordered.map((t) => `
   <button type="button" class="theme" data-id="${t.id}" aria-haspopup="dialog" title="${esc(THEME_LABELS[t.id])} activity pages">

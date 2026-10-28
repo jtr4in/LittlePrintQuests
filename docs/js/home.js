@@ -90,8 +90,8 @@ $('productCards').querySelectorAll('.product').forEach((b) => b.addEventListener
   const k = b.dataset.k, id = b.dataset.theme, name = b.querySelector('b').textContent;
   const pagesFor = (a) => [{ k: 'photo', cap: `${name}, printed and set up`, src: b.dataset.photo, alt: b.querySelector('img').alt },
     ...setPages(id, a).filter((p) => p.k === k).map((p) => ({ ...p, tab: '' }))];
-  Gallery.open(pagesFor('big'), { label: `${name}: ${THEMES.find((t) => t.id === id).name}`, title: true, foot: Gallery.cta(`make/?theme=${id}`, 'Make my kit'),
-    ages: k === 'kit' || k === 'activity' ? { value: 'big', pages: pagesFor } : null });
+  (window.withPages || ((i, f) => f()))(id, () => Gallery.open(pagesFor('big'), { label: `${name}: ${THEMES.find((t) => t.id === id).name}`, title: true, foot: Gallery.cta(`make/?theme=${id}`, 'Make my kit'),
+    ages: k === 'kit' || k === 'activity' ? { value: 'big', pages: pagesFor } : null }));
 }));
 // The Field Kit (the grown-up's phone page): screens from a real order, in the home theme. The first
 // four are the phones on the page; the popup adds the printed photo page and the Sidekick.
@@ -127,12 +127,12 @@ function drawThemeGrid() {
 }
 function previewTheme(id) {
   const t = THEMES.find((x) => x.id === id);
-  Gallery.open(setPages(id), {
+  (window.withPages || ((i, f) => f()))(id, () => Gallery.open(setPages(id), {
     tabs: ['hunt', 'kit', 'activity', 'party'].map((k) => [k, LABELS[k]]),
     label: `${t.name} pages`,
     foot: Gallery.cta(`make/?theme=${id}`, `Make the ${THEME_LABELS[id]} set`),
     ages: { value: 'big', pages: (a) => setPages(id, a) },
-  });
+  }));
 }
 drawThemeGrid();
 

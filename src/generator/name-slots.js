@@ -204,7 +204,9 @@ const path = require('path');
 const DOCS = path.join(__dirname, '..', '..', 'docs');
 // The JSON file a picture's slots live in, one per theme or kit (and one for the handprint packs).
 // docs/js/names.js has the same rule.
-const shardOf = (key) => (key.match(/^img\/gallery\/crafts\//) ? 'crafts' : key.match(/^img\/(?:gallery\/|pages\/|kit-|hero\/|host\/)([a-z]+)/)?.[1]);
+// The popup's extra pages (gallery/<theme>/more/, little/more/) get their own set, <theme>-more, so
+// the theme's main set stays small for the home page and order page.
+const shardOf = (key) => (key.match(/^img\/gallery\/crafts\//) ? 'crafts' : key.match(/^img\/gallery\/([a-z]+)\/(?:little\/)?more\//)?.[1]?.concat('-more') || key.match(/^img\/(?:gallery\/|pages\/|kit-|hero\/|host\/)([a-z]+)/)?.[1]);
 
 // png: a page from renderHtml's pngDir; out: where its usual picture goes in docs/img. Returns the
 // blank twin's [src, out] or null.
