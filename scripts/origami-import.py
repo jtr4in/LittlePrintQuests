@@ -5,7 +5,7 @@ project-files/activity-packs/origami/prompts.md) into src/kits/art/<kit>/.
   python3 scripts/origami-import.py <folder> [theme...]
 
 The folder holds <theme>-paper.<ext> and <theme>-pieces.<ext> (jpg, jpeg, png or webp). The paper is
-cropped to its centered square and saved 1600px (about 210 dpi on the 7.5 in square); the pieces are whitened (a light grey background becomes white) and trimmed of their white margin. Both
+cropped to its centered square and saved 1600px (about 210 dpi on the 7.5 in square); the pieces get a pure white background (a grey table, paper edge or shadow is removed) and trimmed of their white margin. Both
 are saved as JPEG (Chrome copies a JPEG into the PDF as is). Then ORIGAMI in docs/js/data.js is
 rewritten to list every kit that has both pictures.
 
@@ -41,14 +41,29 @@ def paper(src, out):
 
 
 def whiten(im):
-    """Gemini's "white" backgrounds are sometimes light grey: stretch each channel so the
-    background (the median of the border) prints as pure white."""
-    w, h = im.size
-    border = [im.getpixel((x, y)) for x in range(0, w, 16) for y in (2, h - 3)] + [im.getpixel((x, y)) for y in range(0, h, 16) for x in (2, w - 3)]
-    bg = [sorted(c[i] for c in border)[len(border) // 2] for i in range(3)]
-    if min(bg) >= 250 or min(bg) < 170:
-        return im
-    return Image.merge('RGB', [band.point(lambda v, b=b: min(255, round(v * 255 / max(b - 4, 1)))) for band, b in zip(im.split(), bg)])
+    """Makes everything around the pieces pure white. Gemini sometimes draws the sheet as a photo
+    of paper lying on a grey table, or on a light grey background: every pale, colorless pixel
+    joined to the image's edge (table, paper, shadows, the white sticker borders) turns white.
+    White inside a piece's outline (teeth, windows) isn't joined to the edge, so it stays."""
+    import numpy as np
+    from scipy import ndimage
+    a = np.asarray(im).astype(np.int16)
+    pale = (a.min(axis=2) > 150) & (a.max(axis=2) - a.min(axis=2) < 28)
+    pale = ndimage.binary_opening(pale, iterations=1)
+    labels, _ = ndimage.label(pale)
+    edge = np.unique(np.concatenate([labels[0], labels[-1], labels[:, 0], labels[:, -1]]))
+    bg = np.isin(labels, edge[edge > 0])
+    # a soft halo just outside each piece (the shadow's edge) goes too
+    bg = ndimage.binary_dilation(bg, iterations=2) & (a.min(axis=2) > 120) & (a.max(axis=2) - a.min(axis=2) < 40) | bg
+    # thin lines (the paper's edge) and specks left on the white: keep only marks that have some
+    # body (they survive a 4-pixel erosion), so the sheet trims tight around the real pieces
+    ink = ~bg & ((a.min(axis=2) < 235) | (a.max(axis=2) - a.min(axis=2) > 20))
+    core = ndimage.binary_erosion(ink, iterations=4)
+    marks, _ = ndimage.label(ndimage.binary_dilation(ink, iterations=3))
+    keep = np.isin(marks, np.unique(marks[core]))
+    out = np.asarray(im).copy()
+    out[bg | ~keep] = 255
+    return Image.fromarray(out)
 
 
 def pieces(src, out):
