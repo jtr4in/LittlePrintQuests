@@ -415,7 +415,8 @@ function origamiPages(k) {
     </section>`;
 }
 const origamiTitles = (k) => { if (!hasOrigami(k)) return []; const n = MODELS[THEMES[k.def.id][0]].name; return ['Origami paper', `Fold ${aOrAn(n)} ${n.toLowerCase()}`]; };
-const aOrAn = (word) => (/^[aeiou]/i.test(word) ? 'an' : 'a');
+// "an" before a vowel sound: an arctic fox, but a unicorn.
+const aOrAn = (word) => (/^(?!uni|use|eu)[aeiou]/i.test(word) ? 'an' : 'a');
 function possessive(name) { return /s$/i.test(name) ? `${name}’` : `${name}’s`; }
 
 const origamiCss = `
