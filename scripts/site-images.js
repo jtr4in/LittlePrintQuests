@@ -1,10 +1,11 @@
 // Builds the website's per-theme pictures in docs/img/: the theme card pages (pages/<id>-hunt|kit|party.webp:
 // a clue card sheet, the invitation and the kit's first hands-on toy),
 // the hunt pages for "What's in the box" (pages/<id>-guide|briefing|cards|puzzle|cert|bonus.webp; bonus is the picture hunt checklist),
-// the play kit card (kit-<id>.webp) and the Field Kit phones (host/<id>-hide|play|sidekick.webp).
+// the play kit card (kit-<id>.webp) and the Field Kit phones (host/<id>-hide|play|shop|photos|pages|sidekick.webp).
 // Each picture with the child's name also gets a twin without it in docs/img/n/ (see name-slots.js).
 // Usage: node scripts/site-images.js [theme ...]
-// HOST_ONLY=1 redoes just the phone screenshots (fast: no PDFs).
+// HOST_ONLY=1 redoes just the phone screenshots (fast: no PDFs, except the page thumbnails the
+// "pages" phone shows). HOST_SCREENS=pages,shop limits them to those phones.
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -15,6 +16,7 @@ const { renderKit } = require('../src/kits/render-kit');
 const { renderParty } = require('../src/party/render-party');
 const { kitForHunt, buildKitHtml } = require('../src/kits/engine');
 const { plan, hostPage, sidekickPage, stickers } = require('../src/host/host');
+const { documents } = require('../src/bot/orders');
 const THEMES = require('../src/generator/themes');
 const { nameSlots, sheetLayers, blankJob, blankLayers, pageSlots, saveIndex } = require('../src/generator/name-slots');
 
@@ -53,6 +55,7 @@ const wowPage = (kitId) => {
   // leaves every other picture alone.
   const cardsOnly = Boolean(process.env.KIT_CARDS);
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'site-images-'));
+  const thumbs = fs.mkdtempSync(path.join(os.tmpdir(), 'site-thumbs-'));
   const browser = await chromium.launch();
   const index = {};
   const huntParts = {};
@@ -106,7 +109,34 @@ const wowPage = (kitId) => {
     // as for an everything bundle, so the Play Kit and Party tabs show as included, not greyed out
     const fk = () => hostPage(order, { stateUrl: '/h/state', sidekickUrl: null, downloads: [], items: ['hunt', 'kit', 'party'] });
     const photos = fieldKitPhotos();
+    // Choose pages (Get ready tab): every page of an everything order as tiles, with Quick start picked.
+    // Thumbnails and titles are made the way the bot makes them for the picker (render.js `thumbs`).
+    const all = { ...order, items: ['hunt', 'kit', 'activity', 'party'] };
+    const thumbDir = (doc) => path.join(thumbs, `${id}-${doc}`); // (not in tmp: everything there gets converted)
+    const pagesDocs = async () => {
+      const out = [];
+      for (const d of documents(all)) {
+        await d.render(null, { thumbs: thumbDir(d.id) });
+        out.push({ id: d.id, type: d.type, label: d.label, pages: JSON.parse(fs.readFileSync(path.join(thumbDir(d.id), 'index.json'), 'utf8')) });
+      }
+      return out;
+    };
+    const wanted = process.env.HOST_SCREENS ? process.env.HOST_SCREENS.split(',') : null;
+    const docs = !wanted || wanted.includes('pages') ? await pagesDocs() : [];
     const screens = [
+      ['pages', hostPage(all, { stateUrl: '/h/state', sidekickUrl: null, downloads: '/d/x.pdf', items: all.items }), 0, async (ph) => {
+        await ph.click('[data-sec="prep"]');
+        await ph.click('[data-pages]');
+        await ph.waitForSelector('[data-preset="quick"]');
+        await ph.waitForSelector('#fkPages [data-n]');
+        await ph.click('[data-preset="quick"]');
+        // only the sheet shows, so the name swap doesn't pick up text hidden behind it
+        await ph.evaluate(() => {
+          document.querySelectorAll('section[id^="sec-"], .sections').forEach((x) => { x.style.display = 'none'; });
+          document.querySelectorAll('.top b, .top small').forEach((x) => { x.style.visibility = 'hidden'; x.textContent = ''; });
+        });
+        await ph.waitForFunction(() => [...document.querySelectorAll('#fkPages img')].slice(0, 9).every((i) => i.complete && i.naturalWidth));
+      }],
       ['hide', fk(), hide, (ph) => ph.click('[data-sec="hunt"]')],
       ['play', fk(), play, (ph) => ph.click('[data-sec="hunt"]')],
       ['sidekick', sidekickPage(order, { stateUrl: '/s' }), play],
@@ -127,14 +157,19 @@ const wowPage = (kitId) => {
         await ph.evaluate(() => document.querySelectorAll('section[id^="sec-"], .sections').forEach((x) => { x.style.display = 'none'; }));
       }],
     ];
-    for (const [name, html, step, act] of screens) {
+    for (const [name, html, step, act] of screens.filter(([name]) => !wanted || wanted.includes(name))) {
       const phone = await browser.newPage({ viewport: { width: 360, height: 720 }, deviceScaleFactor: 2 });
       // the same customer and lines on every run
+      // tiles, not the list (the picker remembers which one on the phone)
+      await phone.addInitScript(() => localStorage.setItem('fk:pages-view', 'tile'));
       await phone.addInitScript(() => { let a = 7; Math.random = () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; });
       const art = stickers(order);
       await phone.route('http://host.test/**', (route) => {
         const u = new URL(route.request().url()).pathname;
         if (u === '/h') return route.fulfill({ contentType: 'text/html', body: html });
+        if (u === '/d/x/pages.json') return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ docs }) });
+        const th = u.match(/^\/d\/x\/thumb\/(\w+)\/(\d+)\.jpg$/);
+        if (th) return route.fulfill({ contentType: 'image/jpeg', body: fs.readFileSync(path.join(thumbDir(th[1]), `page-${th[2]}.jpg`)) });
         const a = u.match(/\/art\/(\d+)\.webp$/);
         if (a && art[+a[1]]) return route.fulfill({ contentType: 'image/webp', body: fs.readFileSync(art[+a[1]]) });
         const f = u.match(/^\/photo\/(\d+)$/);
@@ -155,6 +190,7 @@ const wowPage = (kitId) => {
       }
       // and its twin without the name, saved at the same size
       const [screen] = await phone.evaluate(`(${nameSlots})('Maya', 'html')`);
+      screen.slots = screen.slots.filter((x) => x.y < 720); // (not ones further down a scrolling sheet)
       if (screen.slots.length) {
         await phone.screenshot({ path: path.join(tmp, `blank-host-${id}-${name}.png`) });
         const key = `img/host/${id}-${name}.webp`;

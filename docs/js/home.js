@@ -93,9 +93,9 @@ $('productCards').querySelectorAll('.product').forEach((b) => b.addEventListener
   (window.withPages || ((i, f) => f()))(id, () => Gallery.open(pagesFor('big'), { label: `${name}: ${THEMES.find((t) => t.id === id).name}`, title: true, foot: Gallery.cta(`make/?theme=${id}`, 'Make my kit'),
     ages: k === 'kit' || k === 'activity' ? { value: 'big', pages: pagesFor } : null }));
 }));
-// The Field Kit (the grown-up's phone page): screens from a real order, in the home theme. The first
-// four are the phones on the page; the popup adds the printed photo page and the Sidekick.
-const HOST = [['hide', 'Hide the clues: one card per screen, in your hiding order'], ['play', 'Run the hunt: a quick challenge, a line to say and the clue to read'],
+// The Field Kit (the grown-up's phone page): screens from a real order, in the home theme, from hiding
+// the clues to the printed photo page and the Sidekick. The page overview (pages) also has its own band.
+const HOST = [['pages', 'Choose pages: every page at a glance. Print the Quick start set, the Party day set or just the ones you tap'], ['hide', 'Hide the clues: one card per screen, in your hiding order'], ['play', 'Run the hunt: a quick challenge, a line to say and the clue to read'],
   ['shop', 'Shop day: customers come to the counter and order from the real menu'], ['photos', 'Snap photos as you go. They stay on your phone.'],
   ['print', 'Then print a photo page with a themed border'], ['sidekick', 'Your Sidekick: a second grown-up gets their own lines on their phone']];
 const fieldKit = (i = 0) => Gallery.open(HOST.map(([f, cap]) => ({ k: f, cap, src: `img/host/${theme}-${f}.webp` })), { label: 'Your Field Kit', title: true, start: i, foot: Gallery.cta('make/', 'Make my kit') });
@@ -112,7 +112,10 @@ const fieldKit = (i = 0) => Gallery.open(HOST.map(([f, cap]) => ({ k: f, cap, sr
   }
   steps[0].classList.add('on');
 }
-$('seeHost').addEventListener('click', () => fieldKit());
+$('seeHost').addEventListener('click', () => fieldKit(1));
+// The page overview band (2026-10-30, Jason: "that's pretty big"): its phone follows the home theme.
+LPQName.preload(theme).then(() => LPQName.setSrc($('pagesPhone'), `img/host/${theme}-pages.webp`));
+$('seePages').addEventListener('click', () => fieldKit(0));
 
 // ---- Themes: tap one to see its pages ------------------------------------------------------------
 // Two rows of tiles that swipe sideways, so 34 themes don't make a long page.
