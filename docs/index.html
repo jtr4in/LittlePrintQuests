@@ -33,7 +33,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&display=swap">
 <!-- the printed pages' own fonts, for writing the kid's name over the previews (js/names.js); files load only when used -->
 <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito:wght@200..1000&family=Bangers&family=Pirata+One&family=Orbitron:wght@400..900&family=Cinzel+Decorative:wght@700&family=Pacifico&family=Comic+Neue:wght@700&display=swap">
-<link rel="stylesheet" href="css/site.css?v=298b8eb6">
+<link rel="stylesheet" href="css/site.css?v=fc8fa98a">
 <!-- most visits go on to the order page: fetch it and its script while they read -->
 <link rel="prefetch" href="make/">
 <link rel="prefetch" href="js/make.js?v=589461f0">
@@ -147,6 +147,19 @@
             <li><button type="button" data-t="8.4"><b>Shop day</b><span>Customers line up with their orders</span></button></li>
             <li><button type="button" data-t="13.7"><b>Snap &amp; print</b><span>Your photos, on a page with a themed border</span></button></li>
           </ol>
+        </div>
+      </div>
+      <div class="fk-pages">
+        <button type="button" class="fk-pages-phone" id="seePages" aria-haspopup="dialog" aria-label="See the page overview in the Field Kit"><span class="phone"><img decoding="async" id="pagesPhone" src="img/host/dino-pages.webp" alt="The Field Kit’s Choose pages screen: every page of the order as tiles, with the Quick start pages ticked" width="540" height="1080" loading="lazy"></span></button>
+        <div class="fk-pages-copy">
+          <span class="eyebrow">Also in your Field Kit</span>
+          <h3>See every page before you print</h3>
+          <p>A full set is a lot of pages. Your Field Kit lays out every one of them as a picture, grouped by hunt, play kit, activity pack and party pack, so you know exactly what you got and print only what you need.</p>
+          <ul class="fk-pages-list">
+            <li><b>⚡ Quick start</b><span>The pages it takes to start playing, about 10 minutes of cutting</span></li>
+            <li><b>🎉 Party day</b><span>Adds the puzzle and the party pack for the big day</span></li>
+            <li><b>👆 Your pick</b><span>Tap any pages you like and print just those, as one PDF</span></li>
+          </ul>
         </div>
       </div>
     </div>
@@ -273,7 +286,7 @@
         <details><summary>What if my house doesn’t have a spot on the list?</summary><p>Type any spot you like, such as “the hammock” or “Dad’s guitar”, and we’ll write a rhyme for it. We skip anything unsafe for little kids, like the oven.</p></details>
         <details><summary>How many kids can play?</summary><p>One trail works well for 2 to 10 kids. For bigger groups, read each clue aloud and let a different kid find each card.</p></details>
         <details><summary>I’m not great at pretend play. Will this work for me?</summary><p>Yes, that’s what the Field Kit is for. It gives you lines to say in character, questions to ask, customers for their shop and hints when they’re stuck, so you can follow along instead of making it up. Kids mostly want you there, not a performance.</p></details>
-        <details><summary>What is the Field Kit? Do I need an app?</summary><p>The Field Kit is a private page for your phone that comes with every order, with a tab for each thing you get. For a hunt it shows where each card goes, what to say in character, quick challenges and hints if the kids get stuck. For a play kit it has pretend-play scenarios, lines to say and games, and for a party pack a planning checklist. It opens in your phone’s browser from the link in your email, so there’s nothing to install.</p></details>
+        <details><summary>What is the Field Kit? Do I need an app?</summary><p>The Field Kit is a private page for your phone that comes with every order, with a tab for each thing you get. It shows every page of your order as a picture, so you can print just the ones you need. For a hunt it shows where each card goes, what to say in character, quick challenges and hints if the kids get stuck. For a play kit it has pretend-play scenarios, lines to say and games, and for a party pack a planning checklist. It opens in your phone’s browser from the link in your email, so there’s nothing to install.</p></details>
         <details><summary>How does the Family Pass work?</summary><p>One payment of $39.99 gets you 6 orders to use within 12 months. Each order can be the whole bundle: the scavenger hunt, its play kit, the activity pack and the party pack, in any theme and for any of your kids. Your code arrives by email. Make an order as usual and type the code under “Have a Family Pass code?” on the checkout step. It covers anything in the order builder, shop play kits included; handprint art is sold separately. It doesn’t renew by itself.</p></details>
         <details><summary>What if something looks wrong?</summary><p>Reply to your order email and we’ll fix it and send a new PDF free. If we can’t make it right, we’ll refund you in full. See our <a href="refunds/">happy party promise</a>.</p></details>
         <details><summary>How do I pay?</summary><p>Apple Pay, Google Pay or any major card, through Stripe’s secure checkout. We never see your card number.</p></details>
@@ -291,6 +304,6 @@
 <script src="js/names.js?v=e3031f47"></script>
 <script src="js/data.js?v=86608b27"></script>
 <script src="js/site.js?v=3dd597c5"></script>
-<script src="js/home.js?v=44ebcc44"></script>
+<script src="js/home.js?v=ff25b245"></script>
 </body>
 </html>

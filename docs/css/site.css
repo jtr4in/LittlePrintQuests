@@ -706,3 +706,22 @@ footer .brand b { display: block; font: 600 19px/1.2 var(--display); }
 .no-guess { margin: 16px auto 0; max-width: 46em; text-align: center; font-size: 16px; line-height: 1.5; color: var(--ink-soft); background: var(--sheet); border: 1.5px dashed var(--line); border-radius: 14px; padding: 12px 18px; }
 .no-guess b { color: var(--ink); }
 @media (max-width: 520px) { .no-guess { font-size: 15px; text-align: left; } }
+
+/* the Field Kit's page overview (2026-10-30): its own band under the clip, phone beside the copy */
+.fk-pages { display: grid; grid-template-columns: minmax(0, 230px) minmax(0, 1fr); gap: 28px; align-items: center; margin-top: 18px; padding: 26px 28px; border-radius: 20px; background: var(--sheet); border: 2px solid var(--orange); }
+.fk-pages > * { min-width: 0; }
+.fk-pages-phone { padding: 0; border: 0; background: none; cursor: zoom-in; }
+.fk-pages-phone .phone { position: relative; overflow: hidden; padding: 7px; border-radius: 30px; transform: rotate(-2deg); }
+.fk-pages-phone .phone img { border-radius: 24px; }
+.fk-pages-copy { display: grid; gap: 10px; justify-items: start; }
+.fk-pages-copy h3 { font-size: clamp(24px, 3vw, 30px); }
+.fk-pages-copy p { color: var(--ink-soft); }
+.fk-pages-list { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 8px; width: 100%; }
+.fk-pages-list li { display: grid; gap: 2px; padding: 10px 14px; border-radius: 14px; background: var(--tint); border: 1px solid var(--line); }
+.fk-pages-list b { font: 600 16px/1.2 var(--display); color: var(--ink); }
+.fk-pages-list span { font-size: 14px; color: var(--ink-soft); }
+@media (max-width: 760px) {
+  .fk-pages { grid-template-columns: 1fr; padding: 20px; justify-items: center; }
+  .fk-pages-phone { width: 100%; max-width: 220px; }
+  .fk-pages-copy { order: -1; }
+}
