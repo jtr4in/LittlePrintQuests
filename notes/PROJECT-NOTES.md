@@ -24,6 +24,7 @@ Work in flight is listed under **In progress** below.
 
 Work that is about to merge or is mid-merge, so sessions on the other account can hold off. Pull main and read this before starting and before merging. Add your entry directly on main (not only in your PR). Don't merge if another entry touches the same files; wait or coordinate. Remove your entry after merging. One line each: what, branch, files touched, thread, UTC time.
 
+- Static Etsy listings ($1 singles, $2 theme bundles, no personalization, name-free PDFs attached): branch `claude/project-thread-l88oin`, files `src/bot/listings.js`, `src/bot/etsy.js`, `etsy-listings.md`, `src/party/build.js`, `src/generator/render.js`, `test/smoke.js`, notes. Thread "Make Etsy listings static downloads", 2026-10-30 01:20 UTC.
 - Face-free kit art (waiting on Jason's 13 Gemini grid images; prompt page https://claude.ai/artifact/QB7J7VcYHL3Jp6p4ufMzq6): will replace 136 files in `src/kits/art/*` and re-render docs/img icons, checkout and previews. Branch `claude/project-thread-wx32ov`, thread "Remove faces from kit images", 2026-10-24 23:40 UTC.
 
 ## Business direction
