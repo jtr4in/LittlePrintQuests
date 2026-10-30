@@ -10,6 +10,7 @@ const fs = require('fs');
 const path = require('path');
 const THEMES = require('../generator/themes');
 const { flavorFor } = require('./flavor');
+const { BLANK_NAME } = require('../generator/blank-name');
 
 const FONT_DIR = path.join(__dirname, '..', '..', 'fonts');
 
@@ -189,6 +190,7 @@ function pennant(ctx, flag, x, y, i, total, flip = false) {
     .join(' ');
   const face = flag.letter
     ? `<div class="flag-letter fit" data-group="banner" style="color:${flag.fg}">${esc(flag.letter)}</div>`
+    : flag.blank ? '<div class="flag-letter"></div>'
     : `<div class="icon flag-icon" style="color:${flag.fg}">${theme.icon}</div>`;
   return `<div class="item flag${flip ? ' flip' : ''}" style="${at(x, y, w, strip + h)}">
     <svg class="flag-bg" viewBox="0 0 ${w} ${strip + h}">
@@ -325,7 +327,9 @@ function buildPartyHtml(cfg = {}) {
   // 5. Banner: HAPPY [icon] BIRTHDAY [icon] NAME, 3 pennants per page.
   const colors = [c.primary, c.accent, c.soft];
   // Letters, digits and a few marks get a flag; spaces, hyphens and the like become icon spacers.
-  const seq = [...'HAPPY', null, ...'BIRTHDAY', null, ...name.toUpperCase()]
+  // A name-free pack (the static Etsy download) ends with blank flags to write the name on instead.
+  const blank = name === BLANK_NAME;
+  const seq = [...'HAPPY', null, ...'BIRTHDAY', null, ...(blank ? [] : name.toUpperCase())]
     .map((ch) => (ch && /[\p{L}\p{N}'’!&]/u.test(ch) ? ch : null))
     .filter((ch, i, a) => ch || (i > 0 && a[i - 1]));
   let n = 0;
@@ -334,6 +338,7 @@ function buildPartyHtml(cfg = {}) {
     const bg = colors[n++ % colors.length];
     return { letter: ch, bg, fg: textOn(bg, c.ink) };
   });
+  if (blank) for (let i = 0; i < 8; i++) flags.push({ letter: null, blank: true, bg: colors[n++ % colors.length] });
   const bannerPages = [];
   // Three flags nest on each page: the middle one prints upside down between the other two,
   // sharing their slanted edges, so one cut frees both.
@@ -357,7 +362,7 @@ function buildPartyHtml(cfg = {}) {
     });
     bannerPages.push(page('sheet', items.join('') + guides(cuts), 'Name banner'));
   }
-  add('Birthday banner', `${flags.length} flags spelling HAPPY BIRTHDAY ${esc(name.toUpperCase())}, 3 per page (the middle one prints upside down). Fold the top strip over string and tape.`, 'Cardstock', bannerPages);
+  add('Birthday banner', `${flags.length} flags spelling HAPPY BIRTHDAY ${blank ? 'plus 8 blank ones to write the name on' : esc(name.toUpperCase())}, 3 per page (the middle one prints upside down). Fold the top strip over string and tape.`, 'Cardstock', bannerPages);
 
   // 6. Food tent cards, 4 per page: 3 themed + 5 blank.
   const foods = [...flavor.foods.slice(0, 3), '', '', '', '', ''];

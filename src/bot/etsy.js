@@ -69,7 +69,9 @@ async function api(method, path, query, body) {
   else if (body) [payload, headers['Content-Type']] = [new URLSearchParams(body), 'application/x-www-form-urlencoded'];
   const res = await fetch(url, { method, headers, body: payload });
   if (!res.ok) throw new Error(`Etsy ${method} ${path} failed: ${res.status} ${await res.text()}`);
-  return res.json();
+  // A DELETE answers 204 with no body.
+  const text = await res.text();
+  return text ? JSON.parse(text) : {};
 }
 
 // Paid receipts created at or after `since` (unix seconds), newest first.
@@ -189,11 +191,51 @@ async function uploadListingImage(listingId, { name, data, type }, rank) {
   return api('POST', `/application/shops/${shopId()}/listings/${listingId}/images`, null, fd);
 }
 
-async function uploadListingFile(listingId, { name, data }) {
+async function uploadListingFile(listingId, { name, data, rank }) {
   const fd = new FormData();
   fd.append('file', new Blob([data], { type: 'application/pdf' }), name);
   fd.append('name', name);
+  if (rank) fd.append('rank', String(rank));
   return api('POST', `/application/shops/${shopId()}/listings/${listingId}/files`, null, fd);
+}
+
+// The digital files on a listing, and removing one.
+async function listingFiles(listingId) {
+  return (await api('GET', `/application/shops/${shopId()}/listings/${listingId}/files`)).results || [];
+}
+async function deleteListingFile(listingId, fileId) {
+  return api('DELETE', `/application/shops/${shopId()}/listings/${listingId}/files/${fileId}`);
+}
+
+// One price, no options (replaces any dropdown the listing had).
+async function setPrice(listingId, price) {
+  return api('PUT', `/application/listings/${listingId}/inventory`, null, {
+    json: {
+      products: [{ sku: '', property_values: [], offerings: [{ price, quantity: 999, is_enabled: true, readiness_state_id: null }] }],
+      price_on_property: [],
+      quantity_on_property: [],
+      sku_on_property: [],
+    },
+  });
+}
+
+// Takes the personalization box off a listing. Tries the personalization questions API first,
+// then the older is_personalizable switch.
+async function removePersonalization(listingId) {
+  try {
+    return await api('DELETE', `/application/shops/${shopId()}/listings/${listingId}/personalization`);
+  } catch (err) {
+    try {
+      return await api('PATCH', `/application/shops/${shopId()}/listings/${listingId}`, null, { is_personalizable: 'false' });
+    } catch {
+      throw new Error(`Couldn't turn off personalization (turn it off in Shop Manager): ${err.message}`);
+    }
+  }
+}
+
+// Hides a live listing from the shop (Shop Manager can turn it back on).
+async function deactivateListing(listingId) {
+  return api('PATCH', `/application/shops/${shopId()}/listings/${listingId}`, null, { state: 'inactive' });
 }
 
 // One custom variation (Etsy's custom property 513) with a price per option.
@@ -222,6 +264,11 @@ module.exports = { listingTitle,
   listingContents,
   uploadListingImage,
   uploadListingFile,
+  listingFiles,
+  deleteListingFile,
+  setPrice,
+  removePersonalization,
+  deactivateListing,
   setVariationPrices,
   setPersonalization,
   canWriteListings: () => /listings_w/.test(store.get().etsy?.scopes || '') && /shops_w/.test(store.get().etsy?.scopes || ''),

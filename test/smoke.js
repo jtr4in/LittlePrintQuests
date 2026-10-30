@@ -67,11 +67,11 @@ const etsyListingApi = async (u, opts) => {
   }
   if (p === '/shops/42/listings' && opts.method === 'GET') return json({ results: new URL(u).searchParams.get('state') === 'draft' ? shopDrafts : [] });
   if (p === '/shops/42/listings') return json({ listing_id: 7000 + etsyCalls.filter((c) => c.p === p && c.method === 'POST').length });
-  if (opts.method === 'GET' && /\/(images|files)$/.test(p)) return json({ count: 1, results: [{}] });
+  if (opts.method === 'GET' && /\/(images|files)$/.test(p)) return json({ count: 1, results: [{ listing_file_id: 55 }] });
   const one = p.match(/^(?:\/shops\/42)?\/listings\/(\d+)$/);
   if (one && opts.method === 'GET') return json({ listing_id: +one[1], title: etsyTitles[one[1]] });
   if (one && opts.method === 'PATCH' && body.title) etsyTitles[one[1]] = body.title;
-  if (/\/images$/.test(p) && body.image.name === 'kits-main.jpg' && failImageOnce) {
+  if (/\/images$/.test(p) && body.image.name === 'kit-vet.jpg' && failImageOnce) {
     failImageOnce = false;
     return json({ error: 'Temporary upload problem' }, 500);
   }
@@ -792,14 +792,28 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.doesNotMatch(await (await realFetch(base + '/admin/subscribers.csv', { headers: auth })).text(), /jo@example/);
   assert.equal((await realFetch(base + '/unsubscribe?e=jo@example.com&t=wrong')).status, 400);
 
-  // Etsy listings: drafts with photos, files and variation prices; a failed step resumes on the next click.
+  // Etsy listings: static downloads with photos, files and one price; a failed step resumes on the next click.
+  // Their PDFs are real renders in production; here a one-page stand-in keeps the run fast.
+  const render = require('../src/generator/render');
+  const realRenderHtml = render.renderHtml;
+  const rendered = [];
+  render.renderHtml = async (html, out) => {
+    rendered.push({ lab: /________’s Dino Dig Lab/.test(html), standIn: /qzx/i.test(html.replace(/data:[^"')]+/g, '')), site: /littleprintquests\.com/.test(html) });
+    await wait(20); // long enough for the run's progress bar to show
+    const { PDFDocument } = require('pdf-lib');
+    const doc = await PDFDocument.create();
+    doc.addPage();
+    fs.writeFileSync(out, await doc.save());
+    return out;
+  };
   const createListings = () => realFetch(base + '/admin/etsy/listings', { method: 'POST', headers: auth, redirect: 'manual' });
-  const N = require('../src/bot/listings').CATALOG.length;
+  const listings0 = () => require('../src/bot/listings').CATALOG;
+  const N = listings0().length;
   for (const c of require('../src/bot/listings').CATALOG) {
     assert.ok(c.photos.length <= 20, `${c.key} has more than 20 photos`);
     for (const f of c.photos) assert.ok(fs.existsSync(path.join(__dirname, '..', 'listing-assets', f)), `missing listing-assets/${f}`);
   }
-  assert.equal(N, 67); // 16 packs, the bundle, both dropdown listings, a party pack per theme, a listing per kit (16 theme kits + 11 shop kits) 2 handprint art packs and 3 handprint books
+  assert.equal(N, 80); // 16 packs, a party pack and a bundle per theme, a listing per kit (16 theme kits + 11 shop kits), 2 handprint art packs and 3 handprint books
   const listingsDone = async () => {
     for (let i = 0; i < 240; i++) {
       await wait(500);
@@ -813,7 +827,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   await createListings();
   const running = await (await realFetch(base + '/admin', { headers: auth })).text();
   assert.match(running, /class="bar"/);
-  assert.match(running, /of 67 listings done/);
+  assert.match(running, /of 80 listings done/);
   await realFetch(base + '/admin/etsy/listings/stop', { method: 'POST', headers: auth, redirect: 'manual' });
   for (let i = 0; i < 100 && require('../src/bot/listings').isRunning(); i++) await wait(100);
   assert.ok(!require('../src/bot/listings').isRunning(), 'stop ends the run');
@@ -822,74 +836,86 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.ok(Object.values(JSON.parse(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf8')).listings || {}).filter((x) => x.ready).length < N);
   await createListings();
   let listed = await listingsDone();
-  assert.match(listed.kits.error, /Temporary upload problem/);
+  assert.match(listed['kit-vet'].error, /Temporary upload problem/);
   assert.equal(Object.values(listed).filter((x) => x.ready).length, N - 1);
   await createListings();
   listed = await listingsDone();
   assert.ok(Object.values(listed).every((x) => x.ready));
   const creates = etsyCalls.filter((c) => c.p === '/shops/42/listings' && c.method === 'POST');
-  assert.equal(creates.length, N, 'resuming must not create a second kits listing');
+  assert.equal(creates.length, N, 'resuming must not create a second kit listing');
   const pack = creates[0].body;
   // Five shop sections, each made once and reused.
-  assert.deepEqual(shopSections.map((s) => s.title), ['Scavenger Hunt Packs', 'Custom Party Bundles', 'Pretend Play Kits', 'Party Printables', 'Handprint Art']);
+  assert.deepEqual(shopSections.map((s) => s.title), ['Scavenger Hunt Packs', 'Pretend Play Kits', 'Party Printables', 'Party Bundles', 'Handprint Art']);
   assert.deepEqual([...new Set(creates.map((c) => c.body.shop_section_id))], ['300', '301', '302', '303', '304']);
   assert.equal(pack.type, 'download');
-  assert.equal(pack.price, '8.00');
+  assert.equal(pack.price, '1.00');
   assert.equal(pack.taxonomy_id, '1250');
   assert.equal(pack.tags.split(',').length, 13);
   assert.match(pack.description, /^Roar!.*WHAT'S INCLUDED/s);
-  const bundleId = listed.bundle.id;
-  const inv = etsyCalls.find((c) => c.p === `/listings/${bundleId}/inventory`).body;
-  assert.deepEqual(inv.products.map((x) => [x.property_values[0].values[0], x.offerings[0].price]), [['Hunt + Play Kit + Party Pack', 16.99], ['Hunt + Play Kit', 14.99], ['Hunt + Party Pack', 13.99], ['Hunt only', 9.99]]);
-  const kitInv = etsyCalls.find((c) => c.p === `/listings/${listed.kits.id}/inventory`).body;
-  assert.equal(kitInv.products.length, 27);
-  const partyInv = etsyCalls.find((c) => c.p === `/listings/${listed.party.id}/inventory`).body;
-  assert.deepEqual(partyInv.products.map((x) => x.property_values[0].values[0]).slice(0, 2), ['Dinosaur', 'Superhero']);
-  const q = etsyCalls.find((c) => c.p === `/shops/42/listings/${bundleId}/personalization`).body.personalization_questions[0];
-  assert.ok(q.required && q.question_text.length <= 45 && /pets or toys/.test(q.instructions));
-  assert.equal(etsyCalls.filter((c) => c.p === `/shops/42/listings/${listed.kits.id}/images`).length, 21); // 20 photos + 1 failed try
-  const files = etsyCalls.filter((c) => /\/files$/.test(c.p));
-  assert.equal(files.length, N);
+  // Static downloads: one price ($1, or $2 for a theme bundle), no personalization box, no dropdown.
+  const bundleListing = creates.find((c) => /^Dinosaur Party Bundle/.test(c.body.title)).body;
+  assert.equal(bundleListing.price, '2.00');
+  assert.match(bundleListing.description, /^Roar! The whole Dinosaur party.*Dino Fossil Recovery Mission scavenger hunt.*Dino Dig Lab pretend play kit/s);
+  assert.ok(creates.every((c) => ['1.00', '2.00'].includes(c.body.price)));
+  assert.ok(!etsyCalls.some((c) => /\/personalization$/.test(c.p)));
+  assert.ok(etsyCalls.filter((c) => /\/inventory$/.test(c.p)).every((c) => c.body.products.length === 1 && !c.body.products[0].property_values.length));
+  // No listing copy names the website (Etsy bans sending buyers off Etsy) or asks for a name.
+  assert.ok(creates.every((c) => !/littleprintquests\.com|personali[sz]/i.test(c.body.description + c.body.title + c.body.tags)), 'static listing copy');
+  assert.equal(etsyCalls.filter((c) => c.p === `/shops/42/listings/${listed['kit-vet'].id}/images`).length, listings0().find((c) => c.key === 'kit-vet').photos.length + 1); // + 1 failed try
+  // Every listing gets its own PDFs in order: a kit comes with its activity pack, a bundle with all four.
+  const files = etsyCalls.filter((c) => /\/files$/.test(c.p) && c.method === 'POST');
+  assert.equal(files.length, listings0().reduce((n, c) => n + c.files.length, 0));
+  const bundleFiles = files.filter((c) => c.p === `/shops/42/listings/${listed['bundle-dino'].id}/files`).map((c) => [c.body.name, String(c.body.rank)]);
+  assert.deepEqual(bundleFiles, [['dino-scavenger-hunt.pdf', '1'], ['dino-play-kit.pdf', '2'], ['dino-activity-pack.pdf', '3'], ['dino-party-pack.pdf', '4']]);
+  // The name-free PDFs: built with a stand-in name that prints as a write-in line, never as letters.
+  assert.ok(rendered.some((h) => h.lab));
+  assert.ok(rendered.every((h) => !h.standIn), 'no stand-in name left in a PDF');
+  assert.ok(rendered.some((h) => h.site), 'the hunt packs point to the website');
   // Theme packs get 5 photos each.
   assert.equal(etsyCalls.filter((c) => c.p === `/shops/42/listings/${listed['pack-dino'].id}/images`).length, 5);
   // Clicking again once everything is ready updates the listings in place: no new drafts or photos.
   const imagesBefore = etsyCalls.filter((c) => /\/images$/.test(c.p) && c.method === 'POST').length;
   const patchesBefore = etsyCalls.filter((c) => c.method === 'PATCH').length;
-  const bundleInvBefore = etsyCalls.filter((c) => c.p === `/listings/${bundleId}/inventory`).length;
+  const invBefore = etsyCalls.filter((c) => /\/inventory$/.test(c.p)).length;
   assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Update listings on Etsy/);
   await createListings();
   for (let i = 0; i < 120 && etsyCalls.filter((c) => c.method === 'PATCH').length < patchesBefore + N; i++) await wait(250);
+  for (let i = 0; i < 120 && require('../src/bot/listings').isRunning(); i++) await wait(250);
   const patches = etsyCalls.filter((c) => c.method === 'PATCH').slice(patchesBefore);
   assert.equal(patches.length, N);
   assert.ok(patches.every((c) => c.body.shop_section_id && c.body.title && c.body.tags));
   assert.equal(etsyCalls.filter((c) => c.p === '/shops/42/listings' && c.method === 'POST').length, N);
   assert.equal(etsyCalls.filter((c) => /\/images$/.test(c.p) && c.method === 'POST').length, imagesBefore);
-  // The update also re-sends option prices, so the bundle's new Package choices reach old drafts.
-  assert.equal(etsyCalls.filter((c) => c.p === `/listings/${bundleId}/inventory`).length, bundleInvBefore + 1);
+  // The update also re-sends each price; files already sent aren't rendered or sent again.
+  const prices0 = etsyCalls.filter((c) => /\/inventory$/.test(c.p)).slice(invBefore);
+  assert.equal(prices0.length, N);
+  assert.ok(prices0.every((c) => c.body.products.length === 1 && [1, 2].includes(c.body.products[0].offerings[0].price) && !c.body.price_on_property.length));
+  assert.equal(etsyCalls.filter((c) => /\/files$/.test(c.p) && c.method === 'POST').length, files.length);
   // A draft made with an older photo list gets the new photo in place: every rank from it on is
   // re-uploaded with overwrite, so the listing never goes past Etsy's 20 photos.
   const store = require('../src/bot/store');
-  const oldPhotos = ['bundle-main.jpg', 'party-main.jpg', 'hunt-space.jpg', 'kit-unicorn.jpg', 'kit-dino.jpg', 'kit-mermaid.jpg', 'kit-hero.jpg', 'kit-construction.jpg', 'kit-pirate.jpg', 'kit-royal.jpg'];
-  store.update((st) => (st.listings.bundle.steps = [...st.listings.bundle.steps.filter((x) => !x.startsWith('photo:')), ...oldPhotos.map((x) => `photo:${x}`)]));
+  const bundleId = listed['bundle-dino'].id;
+  const oldPhotos = ['hunt-dino.jpg', 'party-dino.jpg', 'kit-royal.jpg'];
+  store.update((st) => (st.listings['bundle-dino'].steps = [...st.listings['bundle-dino'].steps.filter((x) => !x.startsWith('photo:')), ...oldPhotos.map((x) => `photo:${x}`)]));
   const callsBefore = etsyCalls.length;
   await createListings();
   for (let i = 0; i < 120 && etsyCalls.filter((c) => c.method === 'PATCH').length < patchesBefore + 2 * N; i++) await wait(250);
   const redo = etsyCalls.slice(callsBefore).filter((c) => c.method === 'POST' && c.p === `/shops/42/listings/${bundleId}/images`);
-  assert.equal(redo.length, 9);
-  assert.equal(redo[0].body.image.name, 'bundle-host.jpg');
+  assert.equal(redo.length, 5);
+  assert.equal(redo[0].body.image.name, 'kit-dino.jpg');
   assert.equal(String(redo[0].body.rank), '2');
   assert.ok(redo.every((c) => String(c.body.overwrite) === 'true'));
-  assert.ok(!store.get().listings.bundle.steps.includes('photo:kit-royal.jpg'));
+  assert.ok(!store.get().listings['bundle-dino'].steps.includes('photo:kit-royal.jpg'));
   // A photo regenerated under the same name (new art) is re-sent at its rank on the next update.
-  const lastPhoto = store.get().listings.bundle.steps.filter((x) => x.startsWith('photo:')).pop().slice(6);
-  store.update((st) => (st.listings.bundle.photoHashes[lastPhoto] = 'stale'));
+  const lastPhoto = store.get().listings['bundle-dino'].steps.filter((x) => x.startsWith('photo:')).pop().slice(6);
+  store.update((st) => (st.listings['bundle-dino'].photoHashes[lastPhoto] = 'stale'));
   const callsBefore2 = etsyCalls.length;
   await createListings();
   for (let i = 0; i < 120 && etsyCalls.filter((c) => c.method === 'PATCH').length < patchesBefore + 3 * N; i++) await wait(250);
   const redo2 = etsyCalls.slice(callsBefore2).filter((c) => c.method === 'POST' && /\/images$/.test(c.p));
   assert.equal(redo2.length, 1);
   assert.equal(redo2[0].body.image.name, lastPhoto);
-  assert.equal(String(redo2[0].body.rank), '10');
+  assert.equal(String(redo2[0].body.rank), '6');
   // A title changed on Etsy (say, by Etsy's title review) survives the next update.
   const pirateId = String(listed['kit-pirate'].id);
   etsyTitles[pirateId] = 'Pirate Pretend Play Printable, Ages 3-8 (Digital Download)';
@@ -902,24 +928,18 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const dinoPatch = etsyCalls.slice(callsBefore3).find((c) => c.method === 'PATCH' && c.p === `/shops/42/listings/${listed['kit-dino'].id}`);
   assert.match(dinoPatch.body.title, /Dino/);
   assert.ok(!store.get().listings['kit-dino'].titleKept);
-  // Per-theme listings: their own copy, three photos plus a page close-up for each pair of pages, and orders that know their kit or theme.
+  // Per-theme listings: their own copy, three photos plus a page close-up for each pair of pages. Their
+  // orders need nothing from the bot: Etsy delivers the files.
   const pirateKit = creates.find((c) => /Pirate Ship Pretend Play/.test(c.body.title)).body;
   assert.match(pirateKit.description, /^Ahoy, Captain!.*Pirate Ship".*Treasure Map, Wanted Posters/s);
   assert.doesNotMatch(pirateKit.description, /\{\w+\}/);
   assert.equal(etsyCalls.filter((c) => c.method === 'POST' && c.p === `/shops/42/listings/${listed['kit-pirate'].id}/images`).length, require('../src/bot/listings').CATALOG.find((c) => c.key === 'kit-pirate').photos.length);
   assert.ok(require('../src/bot/listings').CATALOG.find((c) => c.key === 'kit-pirate').photos.length > 10);
   const { customRequest } = require('../src/bot/orders');
-  const name = [{ formatted_name: 'Personalization', formatted_value: 'Maya, Teddy (bear)', question_id: 1 }];
-  assert.deepEqual(customRequest({ listing_id: listed['kit-pirate'].id, title: 'x', variations: name }), { personalization: 'Maya, Teddy (bear)', options: {}, product: 'kit', kit: 'pirate' });
-  const partyReq = customRequest({ listing_id: listed['party-vet'].id, title: 'x', variations: name });
-  assert.equal(partyReq.product, 'party');
-  assert.equal(partyReq.options.Theme, 'Pet Vet');
-  assert.equal(customRequest({ listing_id: listed['pack-dino'].id, title: 'x', variations: [] }), null);
-  assert.deepEqual(customRequest({ listing_id: listed['craft-christmas'].id, title: 'x', variations: name }), { personalization: 'Maya, Teddy (bear)', options: {}, product: 'craft', holiday: 'christmas' });
-  assert.deepEqual(customRequest({ listing_id: listed['craft-memory'].id, title: 'x', variations: name }), { personalization: 'Maya, Teddy (bear)', options: {}, product: 'craft', holiday: 'memory' });
+  for (const key of ['kit-pirate', 'party-vet', 'pack-dino', 'bundle-dino', 'craft-christmas', 'craft-memory']) {
+    assert.equal(customRequest({ listing_id: listed[key].id, title: 'x', variations: [] }), null, key);
+  }
   assert.match(creates.find((c) => /Memory Handprint Book/.test(c.body.title)).body.description, /12 month pages/);
-  assert.equal(customRequest({ listing_id: listed['craft-zoo'].id, title: 'x', variations: name }).holiday, 'zoo');
-  assert.equal(customRequest({ listing_id: listed['craft-fingerprint'].id, title: 'x', variations: name }).holiday, 'fingerprint');
   assert.match(creates.find((c) => /Handprint Zoo Book/.test(c.body.title)).body.description, /12 animal pages/);
   assert.match(creates.find((c) => /Fingerprint Art Book/.test(c.body.title)).body.description, /12 fingerprint pages/);
   const craftListing = creates.find((c) => /Halloween Handprint Art/.test(c.body.title)).body;
@@ -938,14 +958,36 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   assert.equal(etsyCalls.filter((c) => c.p === '/shops/42/listings' && c.method === 'POST').length, N);
   const adoptPosts = etsyCalls.filter((c) => c.method === 'POST').slice(postsBefore);
   assert.equal(adoptPosts.filter((c) => c.p === `/shops/42/listings/${listed['pack-dino'].id}/images`).length, 4);
-  assert.ok(!adoptPosts.some((c) => /\/files$/.test(c.p)));
-  assert.ok(files.every((f) => f.body.file.size > 10000 && f.body.file.type === 'application/pdf'));
+  // An adopted listing's files are unknown, so they're replaced, and its price is set again.
+  assert.equal(adoptPosts.filter((c) => c.p === `/shops/42/listings/${listed['pack-dino'].id}/files`).length, 1);
+  assert.ok(etsyCalls.some((c) => c.method === 'DELETE' && c.p === `/shops/42/listings/${listed['pack-dino'].id}/files/55`));
+  assert.ok(etsyCalls.some((c) => c.method === 'PUT' && c.p === `/listings/${listed['pack-dino'].id}/inventory`));
+  assert.ok(files.every((f) => f.body.file.size > 100 && f.body.file.type === 'application/pdf'));
   assert.ok(!etsyCalls.some((c) => c.p.includes(`/listings/${listed['pack-dino'].id}/personalization`)));
+  // A listing made before the static switch (with a personalization box and the old "we're making it"
+  // PDF) loses the box and gets its real files on the next update, and the old custom bundle and
+  // dropdown listings are deactivated.
+  store.update((st) => {
+    st.listings['kit-pirate'].steps.push('personalization');
+    delete st.listings['kit-pirate'].filesVersion;
+    st.listings.bundle = { id: 9100, ready: true, steps: ['personalization', 'variation'] };
+  });
+  const callsBefore4 = etsyCalls.length;
+  await createListings();
+  for (let i = 0; i < 400 && !store.get().listings.bundle.retired; i++) await wait(100);
+  const migrate = etsyCalls.slice(callsBefore4);
+  assert.ok(migrate.some((c) => c.method === 'DELETE' && c.p === `/shops/42/listings/${listed['kit-pirate'].id}/personalization`));
+  assert.deepEqual(migrate.filter((c) => c.method === 'POST' && /\/files$/.test(c.p)).map((c) => c.body.name), ['pirate-play-kit.pdf', 'pirate-activity-pack.pdf']);
+  assert.ok(migrate.some((c) => c.method === 'PATCH' && c.p === '/shops/42/listings/9100' && c.body.state === 'inactive'));
+  assert.ok(store.get().listings['kit-pirate'].personalizationOff);
+  assert.match(await (await realFetch(base + '/admin', { headers: auth })).text(), /Old listing: Custom Party Bundle · deactivated/);
+  for (let i = 0; i < 100 && require('../src/bot/listings').isRunning(); i++) await wait(100);
+  render.renderHtml = realRenderHtml;
 
   // Shop kits (pizza, grocery...) have no matching hunt: their listing and Field Kit stand on their own.
   const shopCopy = require('../src/bot/listings').readCopy().find((l) => l.key === 'kit-pizza');
   assert.match(shopCopy.description, /Pizza Order forms and Pizza Club Cards/);
-  assert.match(shopCopy.description, /Any of our personalized scavenger hunts/);
+  assert.match(shopCopy.description, /Any of our scavenger hunts/);
   assert.doesNotMatch(shopCopy.description, /\{\w+\}/);
   const { hostPage } = require('../src/host/host');
   for (const id of ['pizza', 'burger', 'grocery', 'post', 'library', 'police', 'petshop', 'coffee', 'italian', 'auto', 'dentist']) {
