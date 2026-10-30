@@ -191,6 +191,12 @@ function listingsPanel(s) {
       : l.working ? 'Creating…' : l.error ? `<span class="problem">${esc(l.error)}</span>` : l.id ? 'Partly created' : '<span class="muted">Not created</span>';
     return `<li><b>${esc(c.label)}</b> · ${state}${l.titleKept ? ' <span class="muted">· keeping the title from Etsy</span>' : ''}</li>`;
   }).join('');
+  // The old listings that needed a name, deactivated on the next update (see listings.js).
+  const retired = listings.RETIRED.filter((k) => st[k]?.id).map((k) => {
+    const l = st[k];
+    const state = l.retired ? 'deactivated' : l.error ? `<span class="problem">${esc(l.error)}</span> <span class="muted">Deactivate it in Shop Manager.</span>` : 'deactivated on the next update';
+    return `<li class="muted">Old listing: ${esc({ bundle: 'Custom Party Bundle', kits: 'Pretend Play Kit (dropdown)', party: 'Party Pack (dropdown)' }[k])} · ${state}</li>`;
+  }).join('');
   const allReady = listings.CATALOG.every((c) => st[c.key]?.ready);
   const someReady = listings.CATALOG.some((c) => st[c.key]?.ready);
   const action = !etsy.canWriteListings()
@@ -198,9 +204,9 @@ function listingsPanel(s) {
     : working
     ? progressBar(listings.getProgress())
     : `${s.listingsStopped ? '<p class="muted">Stopped. Click below to pick up where it left off.</p>' : ''}<form method="post" action="/admin/etsy/listings"><button>${allReady ? 'Update listings on Etsy' : someReady ? 'Update listings and create new drafts' : 'Create drafts on Etsy'}</button></form>
-       ${someReady ? `<p class="muted">Sends the latest titles, descriptions, tags, option prices, shop sections and any new photos to these listings, including ones you’ve already published.${allReady ? '' : ' Listings marked Not created are made as new drafts.'}</p>` : ''}`;
-  return `<div class="panel"><b>Etsy listings</b> <span class="muted">Created as drafts with photos, files, prices and options. Nothing goes live until you publish it in Shop Manager.</span>
-  <ul>${rows}</ul>${s.listingsError ? `<p class="problem">${esc(s.listingsError)}</p>` : ''}${action}
+       ${someReady ? `<p class="muted">Sends the latest titles, descriptions, tags, prices, shop sections, any new photos and the download files to these listings, including ones you’ve already published.${allReady ? '' : ' Listings marked Not created are made as new drafts.'}</p>` : ''}`;
+  return `<div class="panel"><b>Etsy listings</b> <span class="muted">Static instant downloads: Etsy delivers the attached PDFs itself. New listings start as drafts; nothing new goes live until you publish it in Shop Manager.</span>
+  <ul>${rows}${retired}</ul>${s.listingsError ? `<p class="problem">${esc(s.listingsError)}</p>` : ''}${action}
   ${working ? '<script>setTimeout(()=>location.reload(),4000)</script>' : ''}</div>`;
 }
 

@@ -4,9 +4,13 @@ The order bot can create all of these as Etsy drafts for you: open its dashboard
 
 To do it by hand instead, everything is copy-paste ready. Each standard listing uses its PDF from `output/standard/` as the digital file and its photo from `output/listing-photos/` as the main image.
 
-**Pricing:** Etsy shoppers in this category expect a sale price. Set the standard packs at $8.00 and run an ongoing 40% off sale (Shop Manager > Marketing > Sales and discounts), so buyers see $4.80 with the $8 crossed out.
+**Static downloads (since 2026-10-30):** every listing is an instant download with no personalization. The bot attaches the finished, name-free PDFs (names print as write-in lines) and Etsy delivers them at checkout, so Etsy orders need nothing from you. The hunt PDFs point buyers to littleprintquests.com for a personalized version. The listing text never names the website: Etsy's fee-avoidance rule bans sending shoppers off Etsy to buy. Etsy is being faded out, so these listings are kept simple.
 
-**Shop sections:** the bot puts each listing in a section, making the sections the first time: **Scavenger Hunt Packs** (the 16 theme packs), **Custom Party Bundles**, **Pretend Play Kits** and **Party Printables**. Rename or reorder them any time in Shop Manager > Listings > Sections.
+**Pricing:** $1 for a single listing (a hunt pack, a play kit, a party pack or handprint art) and $2 for a theme bundle (hunt + play kit + party pack). The bot sets these; the prices live in `src/bot/listings.js`.
+
+**Retired:** listings 6 (Custom Party Bundle), 7 (play kit dropdown) and 8 (party pack dropdown) needed a name, so the bot deactivates them on its next update. Their copy stays below for reference.
+
+**Shop sections:** the bot puts each listing in a section, making the sections the first time: **Scavenger Hunt Packs** (the 16 theme packs), **Party Bundles**, **Pretend Play Kits**, **Party Printables** and **Handprint Art**. Rename or reorder them any time in Shop Manager > Listings > Sections.
 
 **Settings for every listing:** Type: Digital. Who made it: I did. What is it: A finished product. When was it made: 2020–2026. Category: Paper & Party Supplies > Party Supplies > Party Games.
 
@@ -34,9 +38,6 @@ Every card has a tiny "parent check" footer saying where it's hidden and where i
 
 Takes kids about 20–40 minutes. Great for birthday parties, playdates, rainy days and holidays.
 
-★ WANT IT PERSONALIZED?
-Get a hunt with your child's name, age and YOUR home's hiding spots (mailbox, dog bed, grandma's piano, anything!) in our Custom Scavenger Hunt listing.
-
 ★ WHAT YOU'LL NEED
 • Printer paper works fine. Cardstock (65–110 lb) makes the clue cards sturdier and harder to peek through.
 • Scissors or a paper cutter
@@ -49,7 +50,7 @@ This is a DIGITAL DOWNLOAD. No physical item will be shipped. Colors may vary sl
 
 ---
 
-## 1. Dino Fossil Recovery Mission (list $8.00, run a 40% sale → $4.80)
+## 1. Dino Fossil Recovery Mission ($1)
 
 **Title**
 Dinosaur Scavenger Hunt Printable, Kids Birthday Party Game, Dino Treasure Hunt Clues, Indoor Scavenger Hunt Ages 3-6, Instant Download
@@ -62,7 +63,7 @@ dinosaur party, dino scavenger hunt, scavenger hunt kids, treasure hunt clues, d
 
 ---
 
-## 2. Superhero Secret HQ Trial (list $8.00, run a 40% sale → $4.80)
+## 2. Superhero Secret HQ Trial ($1)
 
 **Title**
 Superhero Scavenger Hunt Printable, Kids Birthday Party Game, Hero Treasure Hunt Clues, Indoor Scavenger Hunt Ages 4-8, Instant Download
@@ -75,7 +76,7 @@ superhero party, hero scavenger hunt, scavenger hunt kids, treasure hunt clues, 
 
 ---
 
-## 3. Pirate Captain's Lost Ledger (list $8.00, run a 40% sale → $4.80)
+## 3. Pirate Captain's Lost Ledger ($1)
 
 **Title**
 Pirate Treasure Hunt Printable, Kids Birthday Party Game, Pirate Scavenger Hunt Clues, Indoor Treasure Map Game Ages 3-7, Instant Download
@@ -88,7 +89,7 @@ pirate party, pirate treasure hunt, scavenger hunt kids, treasure hunt clues, pi
 
 ---
 
-## 4. Deep Space Rover Expedition (list $8.00, run a 40% sale → $4.80)
+## 4. Deep Space Rover Expedition ($1)
 
 **Title**
 Space Scavenger Hunt Printable, Kids Birthday Party Game, Astronaut Treasure Hunt Clues, Indoor Scavenger Hunt Ages 4-8, Instant Download
@@ -101,7 +102,7 @@ space party, space scavenger hunt, scavenger hunt kids, treasure hunt clues, ast
 
 ---
 
-## 5. Royal Castle Garden Quest (list $8.00, run a 40% sale → $4.80)
+## 5. Royal Castle Garden Quest ($1)
 
 **Title**
 Princess Scavenger Hunt Printable, Knight Castle Birthday Party Game, Treasure Hunt Clues, Indoor Scavenger Hunt Ages 3-7, Instant Download
@@ -114,7 +115,7 @@ princess party, princess scavenger, scavenger hunt kids, treasure hunt clues, pr
 
 ---
 
-## 6. Custom Party Bundle: hunt + matching play kit + party pack ($16.99, or $9.99 hunt only)
+## 6. Custom Party Bundle (retired 2026-10-30)
 
 Add a variation called **Package** with prices per option:
 - **Hunt + Play Kit + Party Pack**: $16.99 (make this the first option, so it's the default shown)
@@ -209,7 +210,7 @@ custom hunt for kids, personalized game, scavenger hunt kids, treasure hunt clue
 
 ---
 
-## 7. Personalized Pretend Play Kit ($7.99)
+## 7. Personalized Pretend Play Kit (retired 2026-10-30)
 
 One listing with a **Kit** variation: Vet Clinic, Mission Control, Dino Dig Lab, Hero HQ, Pirate Ship, Royal Castle, Unicorn Stable, Mermaid Lagoon, Construction Site. Every kit matches a hunt theme; the Vet Clinic kit pairs with Pet Rescue Vet Quest.
 
@@ -273,7 +274,7 @@ pretend play, pretend play kit, vet clinic printable, kids role play, dramatic p
 
 ---
 
-## 8. Personalized Party Pack ($6.99)
+## 8. Personalized Party Pack (retired 2026-10-30)
 
 Matching party printables for any theme, with the child's name. Comes free in the Custom Party Bundle. Theme is a variation (**Theme**), and the name goes in personalization.
 
@@ -323,7 +324,7 @@ birthday printables, party printables, kids invitation, cupcake toppers, favor t
 
 ---
 
-## 9. Unicorn Rainbow Quest (list $8.00, run a 40% sale → $4.80)
+## 9. Unicorn Rainbow Quest ($1)
 
 **Title**
 Unicorn Scavenger Hunt Printable, Kids Birthday Party Game, Rainbow Treasure Hunt Clues, Indoor Scavenger Hunt Ages 3-7, Instant Download
@@ -336,7 +337,7 @@ unicorn party, unicorn scavenger, scavenger hunt kids, treasure hunt clues, unic
 
 ---
 
-## 10. Mermaid Lagoon Treasure (list $8.00, run a 40% sale → $4.80)
+## 10. Mermaid Lagoon Treasure ($1)
 
 **Title**
 Mermaid Scavenger Hunt Printable, Kids Birthday Party Game, Under the Sea Treasure Hunt Clues, Indoor Scavenger Hunt Ages 3-7, Download
@@ -349,7 +350,7 @@ mermaid party, mermaid scavenger, scavenger hunt kids, treasure hunt clues, merm
 
 ---
 
-## 11. Construction Crew Big Build (list $8.00, run a 40% sale → $4.80)
+## 11. Construction Crew Big Build ($1)
 
 **Title**
 Construction Scavenger Hunt Printable, Kids Birthday Party Game, Digger Truck Treasure Hunt Clues, Indoor Scavenger Hunt Ages 3-7, Download
@@ -362,7 +363,7 @@ construction party, digger party, scavenger hunt kids, treasure hunt clues, truc
 
 ---
 
-## 12. Pet Rescue Vet Quest (list $8.00, run a 40% sale → $4.80)
+## 12. Pet Rescue Vet Quest ($1)
 
 **Title**
 Pet Vet Scavenger Hunt Printable, Kids Birthday Party Game, Puppy and Kitten Treasure Hunt Clues, Indoor Scavenger Hunt Ages 3-7, Download
@@ -375,7 +376,7 @@ vet party, pet vet party, scavenger hunt kids, treasure hunt clues, puppy birthd
 
 ---
 
-## 13. Play kit, one listing per theme ($7.99)
+## 13. Play kit, one listing per theme ($1)
 
 The same kits as listing 7, each on its own listing so it can have its own title, tags and search terms. The bot fills `{kit}`, `{place}`, `{toys}`, `{props}`, `{subjects}`, `{forms}` and `{pairing}` in the template below from each kit, and puts the theme's opening line at `{opening}`. Orders on these listings already know their kit, so there's no dropdown.
 
@@ -383,28 +384,26 @@ The same kits as listing 7, each on its own listing so it can have its own title
 ```
 {opening}
 
-★ WHAT YOU GET (37–47 page PDF, US Letter)
+★ WHAT YOU GET (2 PDFs, US Letter: the play kit and a Wipe & Play activity pack)
 • {toys}
 • A whole shop to set up: a "Welcome to {place}" poster, a menu, Today's Specials, order slips, play money and a pull-tab money machine
 • Morning paperwork for little bosses: a Good Morning checklist and a Supply Order form
-• A wall full of signs with your child's name: door signs, station signs, counter signs (a fold-over open/closed sign, pay here, our hours) and shelf and bin labels
-• 7 Wipe & Play activity pages to use again and again with a dry-erase marker: clean-up time, tracing, matching, counting, I spy, a maze and invent-a-treat
+• A wall full of signs with a line for your child's name: door signs, station signs, counter signs (a fold-over open/closed sign, pay here, our hours) and shelf and bin labels
+• A Wipe & Play activity pack (about 20 pages) to use again and again with a dry-erase marker: tracing, matching, counting, I spy, mazes, a move game and more
 • Flat props to cut out and play with: {props}
 • 8 ID badges for your child, family and friends
 • {forms} for each of your child's {subjects} (stuffed animals and toys count!)
 • Tickets and a certificate (plus a blank one for guests)
 • A grown-up guide with setup steps and play ideas
-• HOST MODE on your phone: 8 pretend-play scenarios with lines to say and silly twists, a "Surprise me" button, and quick games. Works in any phone browser, nothing to download
 
-★ MADE FOR THEIR AGE
-Tell us your child's age and we make the right version. Ages 3 to 5 get thicker cut lines, bigger pictures and order forms they can fill in by circling pictures. Ages 5 and up get the writing version.
+★ AGES
+This is the writing version, for ages 5 and up.
 
 ★ PERFECT WITH
 {pairing}
 
-★ HOW TO ORDER
-Fill in the personalization box with your child's name, their age and up to 6 pets or toys.
-We send your PDF and your Field Kit link through Etsy messages, usually within a few hours.
+★ HOW IT WORKS
+Instant download: your PDF is ready as soon as you check out. Print the pages and write your child's name on the lines.
 
 ★ WHAT YOU'LL NEED
 • Cardstock (65–110 lb) for the toys, badges and props. Regular paper is fine for the forms and tickets.
@@ -416,230 +415,226 @@ We send your PDF and your Field Kit link through Etsy messages, usually within a
 This is a DIGITAL file. No physical item will be shipped. For personal use only.
 ```
 
-**Personalization:** On, required. Instructions to buyer:
-```
-Child's first name and age, and up to 6 pets or toys with what they are, like "Maya, 3. Rover (dog), Teddy (bear)".
-```
 
 ### vet
 **Title**
-Personalized Vet Clinic Pretend Play Printable, Kids Pet Doctor Role Play Set, Animal Hospital Dramatic Play, Vet Party Activity
+Vet Clinic Pretend Play Printable, Kids Pet Doctor Role Play Set, Animal Hospital Dramatic Play, Vet Party Activity
 **Opening line**
 Turn the living room into a real pet clinic, with your child as the head vet and their stuffed animals as patients.
 **Tags**
-vet pretend play, vet clinic printable, pet doctor play, animal hospital, dramatic play, kids role play, pretend play kit, printable play set, vet party, pet vet birthday, personalized kids, homeschool play, toddler activity
+vet pretend play, vet clinic printable, pet doctor play, animal hospital, dramatic play, kids role play, pretend play kit, printable play set, vet party, pet vet birthday, instant download, homeschool play, toddler activity
 
 ### space
 **Title**
-Personalized Space Mission Control Pretend Play Printable, Kids Astronaut Role Play Set, Outer Space Dramatic Play, Space Party
+Space Mission Control Pretend Play Printable, Kids Astronaut Role Play Set, Outer Space Dramatic Play, Space Party
 **Opening line**
 3, 2, 1, blast off! Turn any room into Mission Control, with your child in charge of the launch.
 **Tags**
-space pretend play, mission control, astronaut play, outer space party, dramatic play, kids role play, pretend play kit, printable play set, space birthday, rocket party, personalized kids, homeschool play, space activity
+space pretend play, mission control, astronaut play, outer space party, dramatic play, kids role play, pretend play kit, printable play set, space birthday, rocket party, instant download, homeschool play, space activity
 
 ### dino
 **Title**
-Personalized Dinosaur Dig Lab Pretend Play Printable, Kids Paleontologist Role Play Set, Fossil Dramatic Play, Dino Party Activity
+Dinosaur Dig Lab Pretend Play Printable, Kids Paleontologist Role Play Set, Fossil Dramatic Play, Dino Party Activity
 **Opening line**
 Dig in! Your little paleontologist runs their own Dino Dig Lab, scanning fossils and caring for dinosaurs.
 **Tags**
-dino pretend play, dinosaur printable, paleontologist, fossil dig kids, dramatic play, kids role play, pretend play kit, printable play set, dino party, dinosaur birthday, personalized kids, homeschool play, dinosaur activity
+dino pretend play, dinosaur printable, paleontologist, fossil dig kids, dramatic play, kids role play, pretend play kit, printable play set, dino party, dinosaur birthday, instant download, homeschool play, dinosaur activity
 
 ### hero
 **Title**
-Personalized Superhero HQ Pretend Play Printable, Kids Hero Masks and Role Play Set, Superhero Dramatic Play, Hero Party Activity
+Superhero HQ Pretend Play Printable, Kids Hero Masks and Role Play Set, Superhero Dramatic Play, Hero Party Activity
 **Opening line**
 Calling all heroes! Your child runs Hero HQ, with masks, gear and a communicator to save the day.
 **Tags**
-superhero play, hero masks printable, superhero party, hero role play, dramatic play, kids role play, pretend play kit, printable play set, hero birthday, superhero mask, personalized kids, homeschool play, superhero activity
+superhero play, hero masks printable, superhero party, hero role play, dramatic play, kids role play, pretend play kit, printable play set, hero birthday, superhero mask, instant download, homeschool play, superhero activity
 
 ### pirate
 **Title**
-Personalized Pirate Ship Pretend Play Printable, Kids Treasure Map and Eye Patch Role Play Set, Pirate Dramatic Play, Pirate Party
+Pirate Ship Pretend Play Printable, Kids Treasure Map and Eye Patch Role Play Set, Pirate Dramatic Play, Pirate Party
 **Opening line**
 Ahoy, Captain! Turn the couch into a pirate ship, with your child at the wheel and treasure to find.
 **Tags**
-pirate pretend play, pirate printable, treasure map kids, pirate eye patch, dramatic play, kids role play, pretend play kit, printable play set, pirate party, pirate birthday, personalized kids, homeschool play, pirate activity
+pirate pretend play, pirate printable, treasure map kids, pirate eye patch, dramatic play, kids role play, pretend play kit, printable play set, pirate party, pirate birthday, instant download, homeschool play, pirate activity
 
 ### royal
 **Title**
-Personalized Princess Castle Pretend Play Printable, Kids Royal Crown Role Play Set, Knight and Princess Dramatic Play, Royal Party
+Princess Castle Pretend Play Printable, Kids Royal Crown Role Play Set, Knight and Princess Dramatic Play, Royal Party
 **Opening line**
 Welcome to the castle! Your child rules the kingdom, with a royal crown, a magic mirror and a court to run.
 **Tags**
-princess play, castle printable, royal crown kids, knight party, dramatic play, kids role play, pretend play kit, printable play set, princess party, princess birthday, personalized kids, homeschool play, royal activity
+princess play, castle printable, royal crown kids, knight party, dramatic play, kids role play, pretend play kit, printable play set, princess party, princess birthday, instant download, homeschool play, royal activity
 
 ### unicorn
 **Title**
-Personalized Unicorn Stable Pretend Play Printable, Kids Unicorn Role Play Set, Rainbow Dramatic Play, Unicorn Party Activity
+Unicorn Stable Pretend Play Printable, Kids Unicorn Role Play Set, Rainbow Dramatic Play, Unicorn Party Activity
 **Opening line**
 Saddle up for sparkles! Your child runs a magical Unicorn Stable, caring for every unicorn friend.
 **Tags**
-unicorn pretend play, unicorn printable, unicorn stable, rainbow party, dramatic play, kids role play, pretend play kit, printable play set, unicorn party, unicorn birthday, personalized kids, homeschool play, unicorn activity
+unicorn pretend play, unicorn printable, unicorn stable, rainbow party, dramatic play, kids role play, pretend play kit, printable play set, unicorn party, unicorn birthday, instant download, homeschool play, unicorn activity
 
 ### mermaid
 **Title**
-Personalized Mermaid Lagoon Pretend Play Printable, Kids Mermaid Crown Role Play Set, Under the Sea Dramatic Play, Mermaid Party
+Mermaid Lagoon Pretend Play Printable, Kids Mermaid Crown Role Play Set, Under the Sea Dramatic Play, Mermaid Party
 **Opening line**
 Dive in! Your child runs the Mermaid Lagoon, looking after sea creatures with a shell phone and a crown.
 **Tags**
-mermaid pretend play, mermaid printable, under the sea party, mermaid crown, dramatic play, kids role play, pretend play kit, printable play set, mermaid party, mermaid birthday, personalized kids, homeschool play, ocean activity
+mermaid pretend play, mermaid printable, under the sea party, mermaid crown, dramatic play, kids role play, pretend play kit, printable play set, mermaid party, mermaid birthday, instant download, homeschool play, ocean activity
 
 ### construction
 **Title**
-Personalized Construction Site Pretend Play Printable, Kids Builder Role Play Set, Digger Dramatic Play, Construction Party Activity
+Construction Site Pretend Play Printable, Kids Builder Role Play Set, Digger Dramatic Play, Construction Party Activity
 **Opening line**
 Hard hats on! Your child runs their own Construction Co., with a crane control panel and a crew to boss around.
 **Tags**
-builder pretend play, construction play, digger party, builder role play, dramatic play, kids role play, pretend play kit, printable play set, construction party, truck birthday, personalized kids, homeschool play, digger activity
+builder pretend play, construction play, digger party, builder role play, dramatic play, kids role play, pretend play kit, printable play set, construction party, truck birthday, instant download, homeschool play, digger activity
 
 ### easter
 **Title**
-Personalized Easter Egg Factory Pretend Play Printable, Kids Bunny Role Play Set, Egg Painting Dramatic Play, Easter Basket Stuffer
+Easter Egg Factory Pretend Play Printable, Kids Bunny Role Play Set, Egg Painting Dramatic Play, Easter Basket Stuffer
 **Opening line**
 Hop to it! Your child runs a Bunny Egg Factory, painting eggs and delivering baskets to every stuffed animal.
 **Tags**
-easter pretend play, easter printable, easter bunny play, egg painting kids, dramatic play, kids role play, pretend play kit, printable play set, easter basket, basket stuffer, personalized kids, homeschool play, easter activity
+easter pretend play, easter printable, easter bunny play, egg painting kids, dramatic play, kids role play, pretend play kit, printable play set, easter basket, basket stuffer, instant download, homeschool play, easter activity
 
 ### halloween
 **Title**
-Personalized Potion Shop Pretend Play Printable, Kids Witch and Wizard Role Play Set, Halloween Dramatic Play, Halloween Party Activity
+Potion Shop Pretend Play Printable, Kids Witch and Wizard Role Play Set, Halloween Dramatic Play, Halloween Party Activity
 **Opening line**
 Bubble, bubble! Turn the kitchen into a silly potion shop, with your child as the head potion maker and their stuffed animals as customers.
 **Tags**
-potion pretend play, potion shop, halloween play, witch pretend play, wizard role play, dramatic play, kids role play, pretend play kit, printable play set, halloween activity, halloween kids, personalized kids, homeschool play
+potion pretend play, potion shop, halloween play, witch pretend play, wizard role play, dramatic play, kids role play, pretend play kit, printable play set, halloween activity, halloween kids, instant download, homeschool play
 
 ### christmas
 **Title**
-Personalized Santa’s Workshop Pretend Play Printable, Kids Elf Toy Shop Role Play Set, Christmas Dramatic Play, Elf Activity
+Santa’s Workshop Pretend Play Printable, Kids Elf Toy Shop Role Play Set, Christmas Dramatic Play, Elf Activity
 **Opening line**
 Ho ho ho! Turn the playroom into Santa’s Workshop, with your child as Head Elf and their toys as busy helpers.
 **Tags**
-christmas play, santas workshop, elf pretend play, elf activity, dramatic play, kids role play, pretend play kit, printable play set, christmas party, nice list kids, personalized kids, homeschool play, christmas activity
+christmas play, santas workshop, elf pretend play, elf activity, dramatic play, kids role play, pretend play kit, printable play set, christmas party, nice list kids, instant download, homeschool play, christmas activity
 
 ### valentine
 **Title**
-Personalized Valentine Post Office Pretend Play Printable, Kids Mail Carrier Role Play Set, Valentines Day Dramatic Play, Valentine Activity
+Valentine Post Office Pretend Play Printable, Kids Mail Carrier Role Play Set, Valentines Day Dramatic Play, Valentine Activity
 **Opening line**
 Turn the living room into a Valentine Post Office, with your child as postmaster writing, stamping and delivering cards to their stuffed animal friends.
 **Tags**
-valentine pretend, post office play, mail carrier play, valentines activity, dramatic play, kids role play, pretend play kit, printable play set, valentine printable, valentine kids, personalized kids, homeschool play, toddler valentine
+valentine pretend, post office play, mail carrier play, valentines activity, dramatic play, kids role play, pretend play kit, printable play set, valentine printable, valentine kids, instant download, homeschool play, toddler valentine
 
 ### fire
 **Title**
-Personalized Fire Station Pretend Play Printable, Kids Firefighter Role Play Set, Fire Truck Dramatic Play, Firefighter Party Activity
+Fire Station Pretend Play Printable, Kids Firefighter Role Play Set, Fire Truck Dramatic Play, Firefighter Party Activity
 **Opening line**
 Ding-a-ling! Your child runs their own fire station, with a dispatch radio, rescue calls and toys who need a helping hand.
 **Tags**
-firefighter play, fire station play, fire truck party, firefighter role, dramatic play, kids role play, pretend play kit, printable play set, firefighter party, fireman birthday, personalized kids, homeschool play, fire truck activity
+firefighter play, fire station play, fire truck party, firefighter role, dramatic play, kids role play, pretend play kit, printable play set, firefighter party, fireman birthday, instant download, homeschool play, fire truck activity
 
 ### ice
 **Title**
-Personalized Ice Palace Pretend Play Printable, Kids Snow Princess Role Play Set, Winter Wonderland Dramatic Play, Snowflake Party
+Ice Palace Pretend Play Printable, Kids Snow Princess Role Play Set, Winter Wonderland Dramatic Play, Snowflake Party
 **Opening line**
 Welcome to the Ice Palace! Your child rules a winter wonderland, with a snowflake tiara, a crystal ball tablet and snowy guests to greet.
 **Tags**
-ice palace play, snow princess play, snowflake tiara, winter wonderland, dramatic play, kids role play, pretend play kit, printable play set, winter party, snowflake birthday, personalized kids, homeschool play, winter activity
+ice palace play, snow princess play, snowflake tiara, winter wonderland, dramatic play, kids role play, pretend play kit, printable play set, winter party, snowflake birthday, instant download, homeschool play, winter activity
 
 ### racecar
 **Title**
-Personalized Race Car Garage Pretend Play Printable, Kids Pit Stop Mechanic Role Play Set, Car Dramatic Play, Race Car Party
+Race Car Garage Pretend Play Printable, Kids Pit Stop Mechanic Role Play Set, Car Dramatic Play, Race Car Party
 **Opening line**
 Start your engines! Your child runs their own Pit Stop Garage, fixing and fueling every toy car before the big race.
 **Tags**
-race car play, pit stop printable, car mechanic play, racing goggles, dramatic play, kids role play, pretend play kit, printable play set, race car party, car birthday, personalized kids, homeschool play, car activity
+race car play, pit stop printable, car mechanic play, racing goggles, dramatic play, kids role play, pretend play kit, printable play set, race car party, car birthday, instant download, homeschool play, car activity
 
 ### pizza
 **Title**
-Personalized Pizza Shop Dramatic Play Printable, Kids Pretend Pizzeria Set, Play Food Toppings, Cash Register, Menu and Order Forms
+Pizza Shop Dramatic Play Printable, Kids Pretend Pizzeria Set, Play Food Toppings, Cash Register, Menu and Order Forms
 **Opening line**
 Your child is the head chef at their very own pizzeria, with a big pizza to top and slice, a cash register and a menu with their name on it.
 **Tags**
-pizza dramatic play, pizza shop printable, pretend pizzeria, play food printable, dramatic play, kids role play, pretend play kit, printable play set, pizza party kids, play cash register, personalized kids, homeschool play, preschool center
+pizza dramatic play, pizza shop printable, pretend pizzeria, play food printable, dramatic play, kids role play, pretend play kit, printable play set, pizza party kids, play cash register, instant download, homeschool play, preschool center
 
 ### grocery
 **Title**
-Personalized Grocery Store Dramatic Play Printable, Kids Pretend Supermarket Set, Play Food, Cash Register, Coupons and Shopping Lists
+Grocery Store Dramatic Play Printable, Kids Pretend Supermarket Set, Play Food, Cash Register, Coupons and Shopping Lists
 **Opening line**
 Turn the kitchen into your child's own grocery store, with play food to stock, aisle signs, coupons and a cash register to ring it all up.
 **Tags**
-grocery store play, supermarket play, pretend supermarket, play food printable, dramatic play, kids role play, pretend play kit, printable play set, play cash register, shopping list kids, personalized kids, homeschool play, preschool center
+grocery store play, supermarket play, pretend supermarket, play food printable, dramatic play, kids role play, pretend play kit, printable play set, play cash register, shopping list kids, instant download, homeschool play, preschool center
 
 ### burger
 **Title**
-Personalized Burger Shop Dramatic Play Printable, Kids Pretend Restaurant Set, Build a Burger Game, Play Food, Menu and Cash Register
+Burger Shop Dramatic Play Printable, Kids Pretend Restaurant Set, Build a Burger Game, Play Food, Menu and Cash Register
 **Opening line**
 Order up! Your child runs their own burger shop, stacking big burgers to match each order and ringing up fries and shakes.
 **Tags**
-burger dramatic play, burger shop play, pretend restaurant, build a burger, dramatic play, kids role play, pretend play kit, printable play set, play food printable, play cash register, personalized kids, homeschool play, preschool center
+burger dramatic play, burger shop play, pretend restaurant, build a burger, dramatic play, kids role play, pretend play kit, printable play set, play food printable, play cash register, instant download, homeschool play, preschool center
 
 ### post
 **Title**
-Personalized Post Office Dramatic Play Printable, Kids Pretend Mail Set, Stamps, Postcards, Letters, Parcel Labels and Cash Register
+Post Office Dramatic Play Printable, Kids Pretend Mail Set, Stamps, Postcards, Letters, Parcel Labels and Cash Register
 **Opening line**
 Your child runs the town post office, selling stamps, weighing parcels and sorting the mail, with their name on every sign.
 **Tags**
-post office play, dramatic play, pretend mail, play stamps, printable postcards, letter writing kids, kids role play, pretend play kit, printable play set, mail carrier play, personalized kids, homeschool play, preschool center
+post office play, dramatic play, pretend mail, play stamps, printable postcards, letter writing kids, kids role play, pretend play kit, printable play set, mail carrier play, instant download, homeschool play, preschool center
 
 ### library
 **Title**
-Personalized Library Dramatic Play Printable, Kids Pretend Library Set, Library Cards, Checkout Slips, Book Review and Shelf Labels
+Library Dramatic Play Printable, Kids Pretend Library Set, Library Cards, Checkout Slips, Book Review and Shelf Labels
 **Opening line**
 Your child runs their very own library, checking out books, stamping library cards and hosting story time, with their name on every sign.
 **Tags**
-library play, dramatic play, pretend library, library card kids, book review kids, story time, kids role play, pretend play kit, printable play set, reading center, personalized kids, homeschool play, preschool center
+library play, dramatic play, pretend library, library card kids, book review kids, story time, kids role play, pretend play kit, printable play set, reading center, instant download, homeschool play, preschool center
 
 ### police
 **Title**
-Personalized Police Station Dramatic Play Printable, Kids Pretend Police Set, Officer Badges, Steering Wheel, Parking Tickets and Signs
+Police Station Dramatic Play Printable, Kids Pretend Police Set, Officer Badges, Steering Wheel, Parking Tickets and Signs
 **Opening line**
 Your child is the friendly police chief of their own station, finding lost toys, keeping the roads safe and handing out silly parking tickets.
 **Tags**
-police dramatic play, police station play, pretend police, community helpers, police badge kids, road safety kids, kids role play, pretend play kit, printable play set, play steering wheel, personalized kids, homeschool play, preschool center
+police dramatic play, police station play, pretend police, community helpers, police badge kids, road safety kids, kids role play, pretend play kit, printable play set, play steering wheel, instant download, homeschool play, preschool center
 
 ### petshop
 **Title**
-Personalized Pet Shop Dramatic Play Printable, Kids Pretend Pet Store Set, Adoption Papers, Grooming, Cash Register and Price Board
+Pet Shop Dramatic Play Printable, Kids Pretend Pet Store Set, Adoption Papers, Grooming, Cash Register and Price Board
 **Opening line**
 Your child runs their very own pet shop, with adoption papers for their stuffed animals, a bubble-bath grooming station, a cash register and signs with their name on them.
 **Tags**
-pet shop printable, pet store pretend, dramatic play, pet adoption kids, pet grooming play, kids role play, pretend play kit, printable play set, stuffed animal play, play cash register, personalized kids, homeschool play, preschool center
+pet shop printable, pet store pretend, dramatic play, pet adoption kids, pet grooming play, kids role play, pretend play kit, printable play set, stuffed animal play, play cash register, instant download, homeschool play, preschool center
 
 ### dentist
 **Title**
-Personalized Dentist Office Dramatic Play Printable, Kids Pretend Dentist Set, Wipe Clean Teeth to Brush, Tooth Chart, Dentist Bag
+Dentist Office Dramatic Play Printable, Kids Pretend Dentist Set, Wipe Clean Teeth to Brush, Tooth Chart, Dentist Bag
 **Opening line**
 Your child is the head dentist at their very own dental office, with a big wipe-clean smile to brush, a lift-the-flap dentist bag, tooth charts and signs with their name on them.
 **Tags**
-dentist play, pretend dentist, dental office kids, dramatic play, brush teeth game, tooth chart kids, kids role play, pretend play kit, printable play set, play cash register, personalized kids, homeschool play, preschool center
+dentist play, pretend dentist, dental office kids, dramatic play, brush teeth game, tooth chart kids, kids role play, pretend play kit, printable play set, play cash register, instant download, homeschool play, preschool center
 
 ### coffee
 **Title**
-Personalized Coffee Shop Dramatic Play Printable, Kids Pretend Cafe Set, Hot Cocoa Menu, Cash Register, Drink Orders and Signs
+Coffee Shop Dramatic Play Printable, Kids Pretend Cafe Set, Hot Cocoa Menu, Cash Register, Drink Orders and Signs
 **Opening line**
 Your child is the head barista at their very own café, serving hot cocoa, smoothies and muffins from a menu board, register and signs with their name on them.
 **Tags**
-coffee shop play, cafe dramatic play, pretend cafe, hot cocoa stand, dramatic play, kids role play, pretend play kit, printable play set, play kitchen sign, play cash register, personalized kids, homeschool play, preschool center
+coffee shop play, cafe dramatic play, pretend cafe, hot cocoa stand, dramatic play, kids role play, pretend play kit, printable play set, play kitchen sign, play cash register, instant download, homeschool play, preschool center
 
 ### italian
 **Title**
-Personalized Italian Restaurant Dramatic Play Printable, Kids Pretend Restaurant Set, Waiter Order Pad, Menu, Cash Register, Play Food
+Italian Restaurant Dramatic Play Printable, Kids Pretend Restaurant Set, Waiter Order Pad, Menu, Cash Register, Play Food
 **Opening line**
 Your child is the head chef at their very own Italian trattoria, with a dinner menu, a waiter’s order pad, table cards and a cash register with their name on it.
 **Tags**
-restaurant play, italian restaurant, pretend restaurant, dramatic play, play food printable, waiter order pad, kids role play, pretend play kit, printable play set, play cash register, personalized kids, homeschool play, preschool center
+restaurant play, italian restaurant, pretend restaurant, dramatic play, play food printable, waiter order pad, kids role play, pretend play kit, printable play set, play cash register, instant download, homeschool play, preschool center
 
 ### auto
 **Title**
-Personalized Auto Repair Shop Dramatic Play Printable, Kids Pretend Mechanic and Car Wash Set, Toolbox, Cash Register, Car Check-Up
+Auto Repair Shop Dramatic Play Printable, Kids Pretend Mechanic and Car Wash Set, Toolbox, Cash Register, Car Check-Up
 **Opening line**
 Your child is the head mechanic at their very own auto shop, with a lift-the-flap toolbox, car check-up forms, a car wash and a cash register with their name on it.
 **Tags**
-mechanic play, auto shop printable, car wash pretend, dramatic play, kids role play, pretend play kit, printable play set, toy car play, play cash register, personalized kids, homeschool play, preschool center, car repair kids
+mechanic play, auto shop printable, car wash pretend, dramatic play, kids role play, pretend play kit, printable play set, toy car play, play cash register, instant download, homeschool play, preschool center, car repair kids
 
 ---
 
-## 14. Party pack, one listing per theme ($6.99)
+## 14. Party pack, one listing per theme ($1)
 
 The same party packs as listing 8, each on its own listing. The bot fills `{theme}`, `{party}`, `{foods}` and `{hunt}` from each theme and puts its opening line at `{opening}`. Orders on these listings already know their theme.
 
@@ -650,20 +645,17 @@ The same party packs as listing 8, each on its own listing. The bot fills `{them
 ★ WHAT YOU GET (PDF, US Letter)
 • Invitations (5" x 7", two per page) with lines for when, where and RSVP
 • Thank-you cards to send after the party
-• Cupcake toppers with your child's name and age
+• Cupcake toppers
 • Favor tags for goodie bags
-• A HAPPY BIRTHDAY banner that spells your child's name
+• A HAPPY BIRTHDAY banner, plus blank flags to write your child's name on
 • Food tent cards with {theme} snack names ({foods}), plus blank ones to fill in
 • Water bottle labels
-• HOST MODE on your phone: a party-planning checklist for your {theme} party, from the invitations to the thank-you cards. Tick things off as you go
 
 ★ PERFECT WITH
-Our {hunt} scavenger hunt, the main event of the party. Find it in our shop, or get the hunt, a matching play kit and this party pack together in our Custom Party Bundle.
+Our {hunt} scavenger hunt, the main event of the party. Find it in our shop, or get the hunt, a matching play kit and this party pack together in our {theme} Party Bundle.
 
-★ HOW TO ORDER
-Write your child's name and the age they're turning in the personalization box.
-Add your party date, time and place if you'd like them printed on the invitations.
-We send your PDF and your Field Kit link through Etsy messages, usually within a few hours.
+★ HOW IT WORKS
+Instant download: your PDF is ready as soon as you check out. Print the pages and write your child's name on the lines.
 
 ★ WHAT YOU'LL NEED
 • Cardstock (65–110 lb) for the invitations, thank-you cards, toppers, tags and banner
@@ -676,142 +668,138 @@ We send your PDF and your Field Kit link through Etsy messages, usually within a
 This is a DIGITAL file. No physical item will be shipped. For personal use only.
 ```
 
-**Personalization:** On, required. Instructions to buyer:
-```
-Child's first name and the age they're turning. Optional: party date, time, place and RSVP for the invitations.
-```
 
 ### dino
 **Title**
-Personalized Dinosaur Birthday Party Printables, Dino Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Kids Party
+Dinosaur Birthday Party Printables, Dino Invitation, Cupcake Toppers, Birthday Banner, Favor Tags, Thank You Cards, Kids Party
 **Opening line**
-Roar! Everything for a dinosaur party table, made with your child's name and age.
+Roar! Everything for a dinosaur party table, with lines to write in your child's name.
 **Tags**
-dinosaur party, dino birthday, dino invitation, dinosaur banner, dino cupcake topper, dino party decor, dinosaur printable, personalized party, kids party pack, dino favor tags, birthday printables, party printable, dino thank you
+dinosaur party, dino birthday, dino invitation, dinosaur banner, dino cupcake topper, dino party decor, dinosaur printable, instant download, kids party pack, dino favor tags, birthday printables, party printable, dino thank you
 
 ### hero
 **Title**
-Personalized Superhero Birthday Party Printables, Hero Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Kids Party
+Superhero Birthday Party Printables, Hero Invitation, Cupcake Toppers, Birthday Banner, Favor Tags, Thank You Cards, Kids Party
 **Opening line**
-Pow! Everything for a superhero party table, made with your child's name and age.
+Pow! Everything for a superhero party table, with lines to write in your child's name.
 **Tags**
-superhero party, hero birthday, hero invitation, superhero banner, hero cupcake topper, hero party decor, superhero printable, personalized party, kids party pack, hero favor tags, birthday printables, party printable, hero thank you
+superhero party, hero birthday, hero invitation, superhero banner, hero cupcake topper, hero party decor, superhero printable, instant download, kids party pack, hero favor tags, birthday printables, party printable, hero thank you
 
 ### pirate
 **Title**
-Personalized Pirate Birthday Party Printables, Pirate Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Kids Party
+Pirate Birthday Party Printables, Pirate Invitation, Cupcake Toppers, Birthday Banner, Favor Tags, Thank You Cards, Kids Party
 **Opening line**
-Ahoy! Everything for a pirate party table, made with your child's name and age.
+Ahoy! Everything for a pirate party table, with lines to write in your child's name.
 **Tags**
-pirate party, pirate birthday, pirate invitation, pirate banner, pirate cupcake top, pirate party decor, pirate printable, personalized party, kids party pack, pirate favor tags, birthday printables, party printable, pirate thank you
+pirate party, pirate birthday, pirate invitation, pirate banner, pirate cupcake top, pirate party decor, pirate printable, instant download, kids party pack, pirate favor tags, birthday printables, party printable, pirate thank you
 
 ### space
 **Title**
-Personalized Outer Space Birthday Party Printables, Space Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Rocket
+Outer Space Birthday Party Printables, Space Invitation, Cupcake Toppers, Birthday Banner, Favor Tags, Thank You Cards, Rocket
 **Opening line**
-Blast off! Everything for an outer space party table, made with your child's name and age.
+Blast off! Everything for an outer space party table, with lines to write in your child's name.
 **Tags**
-space party, space birthday, space invitation, outer space banner, rocket cupcake top, space party decor, astronaut party, personalized party, kids party pack, space favor tags, birthday printables, party printable, space thank you
+space party, space birthday, space invitation, outer space banner, rocket cupcake top, space party decor, astronaut party, instant download, kids party pack, space favor tags, birthday printables, party printable, space thank you
 
 ### royal
 **Title**
-Personalized Princess and Knight Birthday Party Printables, Castle Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards
+Princess and Knight Birthday Party Printables, Castle Invitation, Cupcake Toppers, Birthday Banner, Favor Tags, Thank You Cards
 **Opening line**
-Hear ye! Everything for a royal castle party table, made with your child's name and age.
+Hear ye! Everything for a royal castle party table, with lines to write in your child's name.
 **Tags**
-princess party, princess birthday, castle invitation, princess banner, crown cupcake top, royal party decor, knight party, personalized party, kids party pack, royal favor tags, birthday printables, party printable, royal thank you
+princess party, princess birthday, castle invitation, princess banner, crown cupcake top, royal party decor, knight party, instant download, kids party pack, royal favor tags, birthday printables, party printable, royal thank you
 
 ### unicorn
 **Title**
-Personalized Unicorn Birthday Party Printables, Unicorn Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Rainbow
+Unicorn Birthday Party Printables, Unicorn Invitation, Cupcake Toppers, Birthday Banner, Favor Tags, Thank You Cards, Rainbow
 **Opening line**
-Sparkle time! Everything for a unicorn party table, made with your child's name and age.
+Sparkle time! Everything for a unicorn party table, with lines to write in your child's name.
 **Tags**
-unicorn party, unicorn birthday, unicorn invitation, unicorn banner, unicorn cupcake top, unicorn decor, rainbow party, personalized party, kids party pack, unicorn favor tags, birthday printables, party printable, unicorn thank you
+unicorn party, unicorn birthday, unicorn invitation, unicorn banner, unicorn cupcake top, unicorn decor, rainbow party, instant download, kids party pack, unicorn favor tags, birthday printables, party printable, unicorn thank you
 
 ### mermaid
 **Title**
-Personalized Mermaid Birthday Party Printables, Under the Sea Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards
+Mermaid Birthday Party Printables, Under the Sea Invitation, Cupcake Toppers, Birthday Banner, Favor Tags, Thank You Cards
 **Opening line**
-Make a splash! Everything for a mermaid party table, made with your child's name and age.
+Make a splash! Everything for a mermaid party table, with lines to write in your child's name.
 **Tags**
-mermaid party, mermaid birthday, mermaid invitation, mermaid banner, mermaid cupcake top, under the sea party, ocean party, personalized party, kids party pack, mermaid favor tags, birthday printables, party printable, mermaid thank you
+mermaid party, mermaid birthday, mermaid invitation, mermaid banner, mermaid cupcake top, under the sea party, ocean party, instant download, kids party pack, mermaid favor tags, birthday printables, party printable, mermaid thank you
 
 ### construction
 **Title**
-Personalized Construction Birthday Party Printables, Digger Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Truck
+Construction Birthday Party Printables, Digger Invitation, Cupcake Toppers, Birthday Banner, Favor Tags, Thank You Cards, Truck
 **Opening line**
-Hard hats on! Everything for a construction party table, made with your child's name and age.
+Hard hats on! Everything for a construction party table, with lines to write in your child's name.
 **Tags**
-construction party, digger birthday, truck invitation, construction banner, digger cupcake top, truck party decor, builder party, personalized party, kids party pack, truck favor tags, birthday printables, party printable, dump truck party
+construction party, digger birthday, truck invitation, construction banner, digger cupcake top, truck party decor, builder party, instant download, kids party pack, truck favor tags, birthday printables, party printable, dump truck party
 
 ### vet
 **Title**
-Personalized Pet Vet Birthday Party Printables, Puppy Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Animal Party
+Pet Vet Birthday Party Printables, Puppy Invitation, Cupcake Toppers, Birthday Banner, Favor Tags, Thank You Cards, Animal Party
 **Opening line**
-Paws up! Everything for a pet vet party table, made with your child's name and age.
+Paws up! Everything for a pet vet party table, with lines to write in your child's name.
 **Tags**
-pet vet party, puppy birthday, puppy invitation, pet party banner, puppy cupcake top, vet party decor, animal party, personalized party, kids party pack, pet favor tags, birthday printables, party printable, puppy thank you
+pet vet party, puppy birthday, puppy invitation, pet party banner, puppy cupcake top, vet party decor, animal party, instant download, kids party pack, pet favor tags, birthday printables, party printable, puppy thank you
 
 ### easter
 **Title**
-Personalized Easter Birthday Party Printables, Bunny Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Spring
+Easter Birthday Party Printables, Bunny Invitation, Cupcake Toppers, Birthday Banner, Favor Tags, Thank You Cards, Spring
 **Opening line**
 Hoppy birthday! Everything for a spring bunny party table, made with your child’s name and age.
 **Tags**
-easter party, bunny birthday, bunny invitation, easter banner, bunny cupcake top, easter party decor, spring party, personalized party, kids party pack, easter favor tags, birthday printables, party printable, bunny thank you
+easter party, bunny birthday, bunny invitation, easter banner, bunny cupcake top, easter party decor, spring party, instant download, kids party pack, easter favor tags, birthday printables, party printable, bunny thank you
 
 ### halloween
 **Title**
-Personalized Halloween Birthday Party Printables, Pumpkin Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Ghost Party
+Halloween Birthday Party Printables, Pumpkin Invitation, Cupcake Toppers, Birthday Banner, Favor Tags, Thank You Cards, Ghost Party
 **Opening line**
 Boo! Everything for a not-so-spooky Halloween party table, made with your child’s name and age.
 **Tags**
-halloween party, halloween birthday, pumpkin invitation, halloween banner, pumpkin cupcake top, ghost party, halloween decor, personalized party, kids party pack, halloween favor tag, birthday printables, party printable, boo birthday
+halloween party, halloween birthday, pumpkin invitation, halloween banner, pumpkin cupcake top, ghost party, halloween decor, instant download, kids party pack, halloween favor tag, birthday printables, party printable, boo birthday
 
 ### christmas
 **Title**
-Personalized Christmas Party Printables, Santa Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, December Birthday
+Christmas Party Printables, Santa Invitation, Cupcake Toppers, Birthday Banner, Favor Tags, Thank You Cards, December Birthday
 **Opening line**
 Ho ho ho! Everything for a merry Christmas party or December birthday table, made with your child’s name and age.
 **Tags**
-christmas party, december birthday, christmas invite, christmas banner, christmas cupcake, santa party decor, holiday party kids, personalized party, kids party pack, xmas favor tags, birthday printables, party printable, christmas thank you
+christmas party, december birthday, christmas invite, christmas banner, christmas cupcake, santa party decor, holiday party kids, instant download, kids party pack, xmas favor tags, birthday printables, party printable, christmas thank you
 
 ### valentine
 **Title**
-Personalized Valentines Party Printables, February Birthday Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards
+Valentines Party Printables, February Birthday Invitation, Cupcake Toppers, Birthday Banner, Favor Tags, Thank You Cards
 **Opening line**
 Share the love! Everything for a Valentine’s party table or a February birthday, made with your child’s name and age.
 **Tags**
-valentines party, valentine birthday, valentine invite, heart party banner, heart cupcake top, valentine decor, february birthday, personalized party, kids party pack, valentine favor tag, birthday printables, party printable, valentine thank you
+valentines party, valentine birthday, valentine invite, heart party banner, heart cupcake top, valentine decor, february birthday, instant download, kids party pack, valentine favor tag, birthday printables, party printable, valentine thank you
 
 ### fire
 **Title**
-Personalized Firefighter Birthday Party Printables, Fire Truck Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Siren
+Firefighter Birthday Party Printables, Fire Truck Invitation, Cupcake Toppers, Birthday Banner, Favor Tags, Thank You Cards, Siren
 **Opening line**
 Sirens on! Everything for a firefighter party table, made with your child’s name and age.
 **Tags**
-firefighter party, fire truck birthday, fire truck invite, firefighter banner, fire truck cupcake, fire truck decor, fireman party, personalized party, kids party pack, firefighter favor, birthday printables, party printable, fire truck thanks
+firefighter party, fire truck birthday, fire truck invite, firefighter banner, fire truck cupcake, fire truck decor, fireman party, instant download, kids party pack, firefighter favor, birthday printables, party printable, fire truck thanks
 
 ### ice
 **Title**
-Personalized Snowflake Birthday Party Printables, Winter Wonderland Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards
+Snowflake Birthday Party Printables, Winter Wonderland Invitation, Cupcake Toppers, Birthday Banner, Favor Tags, Thank You Cards
 **Opening line**
 Brrr! Everything for a winter wonderland party table, made with your child’s name and age.
 **Tags**
-snowflake party, snowflake birthday, winter invitation, snowflake banner, snowflake cupcake, winter party decor, snow princess party, personalized party, kids party pack, winter favor tags, birthday printables, party printable, winter thank you
+snowflake party, snowflake birthday, winter invitation, snowflake banner, snowflake cupcake, winter party decor, snow princess party, instant download, kids party pack, winter favor tags, birthday printables, party printable, winter thank you
 
 ### racecar
 **Title**
-Personalized Race Car Birthday Party Printables, Racing Invitation, Cupcake Toppers, Name Banner, Favor Tags, Thank You Cards, Kids Party
+Race Car Birthday Party Printables, Racing Invitation, Cupcake Toppers, Birthday Banner, Favor Tags, Thank You Cards, Kids Party
 **Opening line**
 Vroom! Everything for a race car party table, made with your child’s name and age.
 **Tags**
-race car party, car birthday, race car invitation, racing banner, race car cupcake, two fast party, checkered flag, personalized party, kids party pack, race car favor tag, birthday printables, party printable, race thank you
+race car party, car birthday, race car invitation, racing banner, race car cupcake, two fast party, checkered flag, instant download, kids party pack, race car favor tag, birthday printables, party printable, race thank you
 
 ---
 
-## 15. Golden Egg Easter Hunt (list $8.00, run a 40% sale → $4.80)
+## 15. Golden Egg Easter Hunt ($1)
 
 **Title**
 Easter Scavenger Hunt Printable, Kids Easter Egg Hunt Clues, Golden Egg Treasure Hunt, Indoor Scavenger Hunt Ages 3-7, Download
@@ -824,7 +812,7 @@ easter scavenger, easter egg hunt, egg hunt clues, scavenger hunt kids, treasure
 
 ---
 
-## 16. Not-So-Spooky Halloween Hunt (list $8.00, run a 40% sale → $4.80)
+## 16. Not-So-Spooky Halloween Hunt ($1)
 
 **Title**
 Halloween Scavenger Hunt Printable, Kids Halloween Party Game, Not So Spooky Treat Hunt Clues, Indoor Scavenger Hunt Ages 3-7, Download
@@ -837,7 +825,7 @@ halloween scavenger, halloween party game, kids halloween, treasure hunt clues, 
 
 ---
 
-## 17. Santa’s Jingle Bell Rescue (list $8.00, run a 40% sale → $4.80)
+## 17. Santa’s Jingle Bell Rescue ($1)
 
 **Title**
 Christmas Scavenger Hunt Printable, Christmas Eve Game for Kids, Santa Elf Treasure Hunt Clues, Indoor Scavenger Hunt Ages 3-7, Download
@@ -850,7 +838,7 @@ christmas scavenger, christmas eve game, elf activity, scavenger hunt kids, trea
 
 ---
 
-## 18. Valentine Friendship Delivery (list $8.00, run a 40% sale → $4.80)
+## 18. Valentine Friendship Delivery ($1)
 
 **Title**
 Valentines Scavenger Hunt Printable, Kids Valentines Day Activity, Family Valentine Game, Friendship Treasure Hunt Clues, Download
@@ -863,7 +851,7 @@ valentines hunt, valentine scavenger, scavenger hunt kids, treasure hunt clues, 
 
 ---
 
-## 19. Fire Station Rescue Run (list $8.00, run a 40% sale → $4.80)
+## 19. Fire Station Rescue Run ($1)
 
 **Title**
 Firefighter Scavenger Hunt Printable, Kids Birthday Party Game, Fire Truck Treasure Hunt Clues, Indoor Scavenger Hunt Ages 3-7, Download
@@ -876,7 +864,7 @@ firefighter party, fire truck party, scavenger hunt kids, treasure hunt clues, f
 
 ---
 
-## 20. Ice Palace Snowflake Quest (list $8.00, run a 40% sale → $4.80)
+## 20. Ice Palace Snowflake Quest ($1)
 
 **Title**
 Snowflake Scavenger Hunt Printable, Kids Winter Birthday Party Game, Snow Princess Treasure Hunt Clues, Indoor Scavenger Hunt Ages 3-7
@@ -889,7 +877,7 @@ winter party, snowflake birthday, scavenger hunt kids, treasure hunt clues, snow
 
 ---
 
-## 21. Race Car Grand Prix Chase (list $8.00, run a 40% sale → $4.80)
+## 21. Race Car Grand Prix Chase ($1)
 
 **Title**
 Race Car Scavenger Hunt Printable, Kids Birthday Party Game, Racing Treasure Hunt Clues, Indoor Scavenger Hunt Ages 3-7, Download
@@ -902,9 +890,9 @@ race car party, car birthday, scavenger hunt kids, treasure hunt clues, racing p
 
 ---
 
-## 22. Handprint art pack, one listing per holiday ($5.99)
+## 22. Handprint art pack, one listing per holiday ($1)
 
-Personalized handprint and footprint keepsake pages, one listing per holiday. The bot fills `{holiday}`, `{crafts}`, `{count}` and `{month}` from each holiday and puts its opening line at `{opening}`. Orders on these listings already know their holiday.
+Handprint and footprint keepsake pages, one listing per holiday. The bot fills `{holiday}`, `{crafts}`, `{count}` and `{month}` from each holiday and puts its opening line at `{opening}`. Orders on these listings already know their holiday.
 
 **Description template**
 ```
@@ -914,15 +902,14 @@ Personalized handprint and footprint keepsake pages, one listing per holiday. Th
 • 8 handprint, footprint and fingerprint crafts: {crafts}
 • Every craft page has a sweet little poem, a light dotted guide showing where to press, and a finished example to copy
 • Every craft page again with no outlines, for older kids or a picture-perfect frame
-• Your child's name, age and the month printed on each page as a keepsake ("Maya · age 4 · {month} 2026")
+• Lines on every page to write your child's name and the date, as a keepsake
 • 2 handprint greeting cards to give to grandparents
 • A cut-out add-on sheet: eyes, hats, noses and more to glue on once the paint dries
 • "These Little Hands" poem page with space for both hands
 • A grown-up guide with tips for mess-free printing, even with babies and toddlers
 
-★ HOW TO ORDER
-Write your child's first name and age in the personalization box.
-We send your PDF through Etsy messages, usually within a few hours.
+★ HOW IT WORKS
+Instant download: your PDF is ready as soon as you check out. Print the pages and write your child's name on the lines.
 
 ★ WHAT YOU'LL NEED
 • White cardstock (65–110 lb) so the paint doesn't soak through
@@ -937,37 +924,33 @@ Daycare and preschool crafts, a baby's first {holiday}, gifts for grandparents, 
 This is a DIGITAL file. No physical item will be shipped. For personal use only.
 ```
 
-**Personalization:** On, required. Instructions to buyer:
-```
-Child's first name and age (for example: Maya, age 4).
-```
 
 ### halloween
 **Title**
-Personalized Halloween Handprint Art, Footprint Craft Keepsake, Toddler Baby Preschool Halloween Craft, Printable Kids Activity
+Halloween Handprint Art, Footprint Craft Keepsake, Toddler Baby Preschool Halloween Craft, Printable Kids Activity
 **Opening line**
-Not-so-spooky little hands! 8 Halloween handprint and footprint crafts, personalized with your child's name and age, to keep year after year.
+Not-so-spooky little hands! 8 Halloween handprint and footprint crafts, with a line for your child's name, to keep year after year.
 **Tags**
 halloween handprint, footprint art, halloween craft, toddler craft, baby keepsake, handprint keepsake, preschool craft, kids halloween, footprint keepsake, daycare craft, ghost handprint, pumpkin craft, halloween printable
 
 ### christmas
 **Title**
-Personalized Christmas Handprint Art, Footprint Craft Keepsake, Toddler Baby Preschool Christmas Craft, Printable Kids Activity
+Christmas Handprint Art, Footprint Craft Keepsake, Toddler Baby Preschool Christmas Craft, Printable Kids Activity
 **Opening line**
-Little hands, big Christmas memories! 8 handprint and footprint crafts, personalized with your child's name and age, to keep year after year.
+Little hands, big Christmas memories! 8 handprint and footprint crafts, with a line for your child's name, to keep year after year.
 **Tags**
 xmas handprint, footprint art, christmas craft, toddler craft, baby keepsake, handprint keepsake, preschool craft, baby first xmas, reindeer footprint, daycare craft, santa handprint, christmas gift, xmas printable
 
-## 23. Memory Handprint Book ($7.99)
+## 23. Memory Handprint Book ($1)
 
-One listing: a handprint page for every month of the year, personalized with the child's name. Orders on this listing already know it's the book. Photo 1 is the grid of every page (shown finished); photo 2 is a printed page beside its finished look.
+One listing: a handprint page for every month of the year (static download). Orders on this listing already know it's the book. Photo 1 is the grid of every page (shown finished); photo 2 is a printed page beside its finished look.
 
 **Title**
-Personalized Memory Handprint Book, Monthly Handprint Art Keepsake, Toddler Baby Preschool Craft, 12 Month Printable Kids Activity
+Memory Handprint Book, Monthly Handprint Art Keepsake, Toddler Baby Preschool Craft, 12 Month Printable Kids Activity
 
 **Description**
 ```
-A whole year of little hands! One handprint page for every month, January to December, personalized with your child's name. Make a page each month and by the end of the year you'll have a book to keep forever.
+A whole year of little hands! One handprint page for every month, January to December, with a line for your child's name. Make a page each month and by the end of the year you'll have a book to keep forever.
 
 ★ WHAT YOU GET (PDF, US Letter, 29 pages)
 • A cover: "My Memory Handprint Book, this book belongs to [Name]"
@@ -982,9 +965,8 @@ A whole year of little hands! One handprint page for every month, January to Dec
 • A "Look how I've grown" page for a January and a December handprint side by side
 • A grown-up guide with tips for mess-free printing
 
-★ HOW TO ORDER
-Write your child's first name in the personalization box.
-We send your PDF through Etsy messages, usually within a few hours.
+★ HOW IT WORKS
+Instant download: your PDF is ready as soon as you check out. Print the pages and write your child's name on the lines.
 
 ★ WHAT YOU'LL NEED
 • White cardstock (65–110 lb) so the paint doesn't soak through
@@ -1003,21 +985,17 @@ This is a DIGITAL file. No physical item will be shipped. For personal use only.
 **Tags**
 handprint book, handprint art, monthly craft, toddler craft, baby keepsake, handprint keepsake, preschool craft, footprint art, daycare craft, baby first year, memory book, kids art book, handprint calendar
 
-**Personalization:** On, required. Instructions to buyer:
-```
-Child's first name (for example: Maya).
-```
 
-## 24. Handprint Zoo Book ($7.99)
+## 24. Handprint Zoo Book ($1)
 
-One listing: 12 handprint animal pages, personalized with the child's name. Orders on this listing already know it's the zoo book. Photo 1 is the grid of every page (shown finished); photo 2 is a printed page beside its finished look.
+One listing: 12 handprint animal pages (static download). Orders on this listing already know it's the zoo book. Photo 1 is the grid of every page (shown finished); photo 2 is a printed page beside its finished look.
 
 **Title**
-Personalized Handprint Zoo Book, Handprint Animal Art, Toddler Preschool Craft, Printable Kids Activity, Handprint Keepsake
+Handprint Zoo Book, Handprint Animal Art, Toddler Preschool Craft, Printable Kids Activity, Handprint Keepsake
 
 **Description**
 ```
-Turn little hands into a whole zoo! Twelve handprint animal pages, each personalized with your child's name. Make one page at a time and keep them together as a book.
+Turn little hands into a whole zoo! Twelve handprint animal pages, each with a line for your child's name. Make one page at a time and keep them together as a book.
 
 ★ WHAT YOU GET (PDF, US Letter, 28 pages)
 • A cover: "My Handprint Zoo Book, this book belongs to [Name]"
@@ -1030,9 +1008,8 @@ Turn little hands into a whole zoo! Twelve handprint animal pages, each personal
 • "How to make each page" sheets with the paint colors, easy steps and the finished look of every animal
 • A grown-up guide with tips for mess-free printing
 
-★ HOW TO ORDER
-Write your child's first name in the personalization box.
-We send your PDF through Etsy messages, usually within a few hours.
+★ HOW IT WORKS
+Instant download: your PDF is ready as soon as you check out. Print the pages and write your child's name on the lines.
 
 ★ WHAT YOU'LL NEED
 • White cardstock (65–110 lb) so the paint doesn't soak through
@@ -1051,21 +1028,17 @@ This is a DIGITAL file. No physical item will be shipped. For personal use only.
 **Tags**
 handprint art, handprint animals, zoo craft, toddler craft, preschool craft, handprint keepsake, kids art book, animal craft, daycare craft, homeschool art, handprint book, kids activity, printable craft
 
-**Personalization:** On, required. Instructions to buyer:
-```
-Child's first name (for example: Maya).
-```
 
-## 25. Fingerprint Friends Book ($7.99)
+## 25. Fingerprint Friends Book ($1)
 
-One listing: 12 fingerprint art pages, personalized with the child's name. Orders on this listing already know it's the fingerprint book. Photo 1 is the grid of every page (shown finished); photo 2 is a printed page beside its finished look.
+One listing: 12 fingerprint art pages (static download). Orders on this listing already know it's the fingerprint book. Photo 1 is the grid of every page (shown finished); photo 2 is a printed page beside its finished look.
 
 **Title**
-Personalized Fingerprint Art Book, Thumbprint Craft Pages, Toddler Preschool Activity, Printable Kids Craft, Fingerprint Keepsake
+Fingerprint Art Book, Thumbprint Craft Pages, Toddler Preschool Activity, Printable Kids Craft, Fingerprint Keepsake
 
 **Description**
 ```
-Tiny fingers, big pictures! Twelve fingerprint and thumbprint art pages, each personalized with your child's name. Just a dab of paint on a fingertip turns into ladybugs, balloons, sheep and more.
+Tiny fingers, big pictures! Twelve fingerprint and thumbprint art pages, each with a line for your child's name. Just a dab of paint on a fingertip turns into ladybugs, balloons, sheep and more.
 
 ★ WHAT YOU GET (PDF, US Letter, 28 pages)
 • A cover: "My Fingerprint Friends, this book belongs to [Name]"
@@ -1078,9 +1051,8 @@ Tiny fingers, big pictures! Twelve fingerprint and thumbprint art pages, each pe
 • "How to make each page" sheets with the paint colors, easy steps and the finished look of every page
 • A grown-up guide with tips for getting a great fingerprint
 
-★ HOW TO ORDER
-Write your child's first name in the personalization box.
-We send your PDF through Etsy messages, usually within a few hours.
+★ HOW IT WORKS
+Instant download: your PDF is ready as soon as you check out. Print the pages and write your child's name on the lines.
 
 ★ WHAT YOU'LL NEED
 • White cardstock (65–110 lb)
@@ -1099,7 +1071,158 @@ This is a DIGITAL file. No physical item will be shipped. For personal use only.
 **Tags**
 fingerprint art, thumbprint art, toddler craft, preschool craft, fingerprint craft, kids art book, daycare craft, homeschool art, fine motor skills, kids activity, printable craft, keepsake craft, handprint art
 
-**Personalization:** On, required. Instructions to buyer:
+---
+
+## 26. Theme party bundle, one listing per theme ($2)
+
+Added 2026-10-30. The hunt pack, the matching play kit (with its activity pack) and the party pack for one theme, as one static download. The bot fills `{hunt}`, `{kit}`, `{theme}` and `{foods}` from each theme and puts its opening line at `{opening}`.
+
+**Description template**
 ```
-Child's first name (for example: Maya).
+{opening}
+
+★ WHAT YOU GET (PDFs, US Letter)
+• The {hunt} scavenger hunt: a Host Guide, a Mission Briefing to read aloud, 8 rhyming clue cards with picture clues for kids who can't read yet, and a Mission Accomplished certificate. Hiding spots: couch, fridge, bed, bathtub, bookshelf, front door, toy box and kitchen table
+• The {kit} pretend play kit: door and station signs, a welcome poster, a menu, play money, ID badges, flat props to cut out, play forms and a grown-up guide with play ideas
+• A Wipe & Play activity pack (about 20 pages) to use again and again with a dry-erase marker
+• {theme} party printables: invitations, thank-you cards, cupcake toppers, favor tags, a HAPPY BIRTHDAY banner, food tent cards ({foods}) and water bottle labels
+• Lines to write in your child's name wherever it goes
+
+★ HOW IT WORKS
+Instant download: your PDFs are ready as soon as you check out. Print what you need and write your child's name on the lines.
+
+★ WHAT YOU'LL NEED
+• Printer paper, plus cardstock (65–110 lb) for the clue cards, invitations, toppers, badges and props
+• Scissors, tape or sticky tack, and a hole punch with ribbon or string for the banner and badges
+
+★ PLEASE NOTE
+This is a DIGITAL file. No physical item will be shipped. For personal use only.
 ```
+
+### dino
+**Title**
+Dinosaur Party Bundle, Kids Scavenger Hunt, Dino Dig Lab Pretend Play Kit, Birthday Party Printables, Invitations, Instant Download
+**Opening line**
+Roar! The whole Dinosaur party in one download: the Dino Fossil Recovery Mission scavenger hunt, the Dino Dig Lab play kit and matching party printables.
+**Tags**
+dino party, dino birthday, dino hunt, dino pretend play, party bundle, birthday bundle, scavenger hunt kids, pretend play kit, party printables, kids party game, instant download, birthday printables, party games kids
+
+### hero
+**Title**
+Superhero Party Bundle, Kids Scavenger Hunt, Hero HQ Pretend Play Kit, Birthday Party Printables, Invitations, Instant Download
+**Opening line**
+Pow! The whole Superhero party in one download: the Superhero Secret HQ Trial scavenger hunt, the Hero HQ play kit and matching party printables.
+**Tags**
+superhero party, superhero birthday, superhero hunt, superhero play, party bundle, birthday bundle, scavenger hunt kids, pretend play kit, party printables, kids party game, instant download, birthday printables, party games kids
+
+### pirate
+**Title**
+Pirate Party Bundle, Kids Scavenger Hunt, Pirate Ship Pretend Play Kit, Birthday Party Printables, Invitations, Instant Download
+**Opening line**
+Ahoy! The whole Pirate party in one download: the Pirate Captain’s Lost Ledger scavenger hunt, the Pirate Ship play kit and matching party printables.
+**Tags**
+pirate party, pirate birthday, pirate hunt, pirate pretend play, party bundle, birthday bundle, scavenger hunt kids, pretend play kit, party printables, kids party game, instant download, birthday printables, party games kids
+
+### space
+**Title**
+Outer Space Party Bundle, Kids Scavenger Hunt, Mission Control Pretend Play Kit, Birthday Party Printables, Invitations, Instant Download
+**Opening line**
+Blast off! The whole Outer Space party in one download: the Deep Space Rover Expedition scavenger hunt, the Mission Control play kit and matching party printables.
+**Tags**
+space party, space birthday, space hunt, space pretend play, party bundle, birthday bundle, scavenger hunt kids, pretend play kit, party printables, kids party game, instant download, birthday printables, party games kids
+
+### royal
+**Title**
+Princess & Knights Party Bundle, Kids Scavenger Hunt, Royal Castle Pretend Play Kit, Birthday Party Printables, Instant Download
+**Opening line**
+Hear ye! The whole Princess & Knights party in one download: the Royal Castle Garden Quest scavenger hunt, the Royal Castle play kit and matching party printables.
+**Tags**
+princess party, princess birthday, princess hunt, princess play, party bundle, birthday bundle, scavenger hunt kids, pretend play kit, party printables, kids party game, instant download, birthday printables, party games kids
+
+### unicorn
+**Title**
+Unicorn Party Bundle, Kids Scavenger Hunt, Unicorn Stable Pretend Play Kit, Birthday Party Printables, Invitations, Instant Download
+**Opening line**
+Sparkle time! The whole Unicorn party in one download: the Unicorn Rainbow Quest scavenger hunt, the Unicorn Stable play kit and matching party printables.
+**Tags**
+unicorn party, unicorn birthday, unicorn hunt, unicorn pretend play, party bundle, birthday bundle, scavenger hunt kids, pretend play kit, party printables, kids party game, instant download, birthday printables, party games kids
+
+### mermaid
+**Title**
+Mermaid Party Bundle, Kids Scavenger Hunt, Mermaid Lagoon Pretend Play Kit, Birthday Party Printables, Invitations, Instant Download
+**Opening line**
+Make a splash! The whole Mermaid party in one download: the Mermaid Lagoon Treasure scavenger hunt, the Mermaid Lagoon play kit and matching party printables.
+**Tags**
+mermaid party, mermaid birthday, mermaid hunt, mermaid pretend play, party bundle, birthday bundle, scavenger hunt kids, pretend play kit, party printables, kids party game, instant download, birthday printables, party games kids
+
+### construction
+**Title**
+Construction Party Bundle, Kids Scavenger Hunt, Construction Site Pretend Play Kit, Birthday Party Printables, Invitations, Instant Download
+**Opening line**
+Hard hats on! The whole Construction party in one download: the Construction Crew Big Build scavenger hunt, the Construction Site play kit and matching party printables.
+**Tags**
+digger party, digger birthday, digger hunt, digger pretend play, party bundle, birthday bundle, scavenger hunt kids, pretend play kit, party printables, kids party game, instant download, birthday printables, party games kids
+
+### vet
+**Title**
+Pet Vet Party Bundle, Kids Scavenger Hunt, Vet Clinic Pretend Play Kit, Birthday Party Printables, Invitations, Instant Download
+**Opening line**
+Paws up! The whole Pet Vet party in one download: the Pet Rescue Vet Quest scavenger hunt, the Vet Clinic play kit and matching party printables.
+**Tags**
+pet vet party, pet vet birthday, pet vet hunt, pet vet pretend play, party bundle, birthday bundle, scavenger hunt kids, pretend play kit, party printables, kids party game, instant download, birthday printables, party games kids
+
+### easter
+**Title**
+Easter Party Bundle, Kids Scavenger Hunt, Bunny Egg Factory Pretend Play Kit, Birthday Party Printables, Invitations, Instant Download
+**Opening line**
+Hop to it! The whole Easter party in one download: the Golden Egg Easter Hunt scavenger hunt, the Bunny Egg Factory play kit and matching party printables.
+**Tags**
+easter party, easter birthday, easter hunt, easter pretend play, party bundle, birthday bundle, scavenger hunt kids, pretend play kit, party printables, kids party game, instant download, birthday printables, party games kids
+
+### halloween
+**Title**
+Halloween Party Bundle, Kids Scavenger Hunt, Potion Shop Pretend Play Kit, Birthday Party Printables, Invitations, Instant Download
+**Opening line**
+Boo! The whole Halloween party in one download: the Not-So-Spooky Halloween Hunt scavenger hunt, the Potion Shop play kit and matching party printables.
+**Tags**
+halloween party, halloween birthday, halloween hunt, halloween play, party bundle, birthday bundle, scavenger hunt kids, pretend play kit, party printables, kids party game, instant download, birthday printables, party games kids
+
+### christmas
+**Title**
+Christmas Party Bundle, Kids Scavenger Hunt, Santa’s Workshop Pretend Play Kit, Birthday Party Printables, Invitations, Instant Download
+**Opening line**
+Ho ho ho! The whole Christmas party in one download: the Santa’s Jingle Bell Rescue scavenger hunt, the Santa’s Workshop play kit and matching party printables.
+**Tags**
+christmas party, christmas birthday, christmas hunt, christmas play, party bundle, birthday bundle, scavenger hunt kids, pretend play kit, party printables, kids party game, instant download, birthday printables, party games kids
+
+### valentine
+**Title**
+Valentine’s Party Bundle, Kids Scavenger Hunt, Valentine Post Office Pretend Play Kit, Birthday Party Printables, Instant Download
+**Opening line**
+Special delivery! The whole Valentine’s party in one download: the Valentine Friendship Delivery scavenger hunt, the Valentine Post Office play kit and matching party printables.
+**Tags**
+valentine party, valentine birthday, valentine hunt, valentine play, party bundle, birthday bundle, scavenger hunt kids, pretend play kit, party printables, kids party game, instant download, birthday printables, party games kids
+
+### fire
+**Title**
+Firefighter Party Bundle, Kids Scavenger Hunt, Fire Station Pretend Play Kit, Birthday Party Printables, Invitations, Instant Download
+**Opening line**
+Sirens on! The whole Firefighter party in one download: the Fire Station Rescue Run scavenger hunt, the Fire Station play kit and matching party printables.
+**Tags**
+fire truck party, fire truck birthday, fire truck hunt, fire truck play, party bundle, birthday bundle, scavenger hunt kids, pretend play kit, party printables, kids party game, instant download, birthday printables, party games kids
+
+### ice
+**Title**
+Ice Kingdom Party Bundle, Kids Scavenger Hunt, Ice Palace Pretend Play Kit, Birthday Party Printables, Invitations, Instant Download
+**Opening line**
+Let it snow! The whole Ice Kingdom party in one download: the Ice Palace Snowflake Quest scavenger hunt, the Ice Palace play kit and matching party printables.
+**Tags**
+snowflake party, snowflake birthday, snowflake hunt, snowflake play, party bundle, birthday bundle, scavenger hunt kids, pretend play kit, party printables, kids party game, instant download, birthday printables, party games kids
+
+### racecar
+**Title**
+Race Car Party Bundle, Kids Scavenger Hunt, Pit Stop Garage Pretend Play Kit, Birthday Party Printables, Invitations, Instant Download
+**Opening line**
+Start your engines! The whole Race Car party in one download: the Race Car Grand Prix Chase scavenger hunt, the Pit Stop Garage play kit and matching party printables.
+**Tags**
+race car party, race car birthday, race car hunt, race car play, party bundle, birthday bundle, scavenger hunt kids, pretend play kit, party printables, kids party game, instant download, birthday printables, party games kids
