@@ -3,6 +3,7 @@ module.exports = {
   id: 'vet',
   name: 'Vet Clinic',
   hunt: 'vet',
+  bigSign: true, // a shop-style kit: it keeps the big shop sign (missed when the sign came in on 2026-10-18)
   colors: { main: '#2a9d8f', dark: '#1f6f66', soft: '#bfe9d6', light: '#eaf7f0', accent: '#ef9d31' },
   icon: '🏥',
   placeName: (who) => `${who} Pet Clinic`,
