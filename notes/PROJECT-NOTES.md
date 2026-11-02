@@ -24,7 +24,6 @@ Work in flight is listed under **In progress** below.
 
 Work that is about to merge or is mid-merge, so sessions on the other account can hold off. Pull main and read this before starting and before merging. Add your entry directly on main (not only in your PR). Don't merge if another entry touches the same files; wait or coordinate. Remove your entry after merging. One line each: what, branch, files touched, thread, UTC time.
 
-- Vet kit big sign: `bigSign: true` on vet, vet page count, Etsy FILES_VERSION, notes. Branch `claude/project-thread-darg8a`, files `src/kits/defs/vet.js`, `docs/js/data.js`, `src/bot/listings.js`, `notes/PROJECT-NOTES.md`, thread "Restore vet kit two-page banner", 2026-11-02 20:00 UTC.
 - Face-free kit art (waiting on Jason's 13 Gemini grid images; prompt page https://claude.ai/artifact/QB7J7VcYHL3Jp6p4ufMzq6): will replace 136 files in `src/kits/art/*` and re-render docs/img icons, checkout and previews. Branch `claude/project-thread-wx32ov`, thread "Remove faces from kit images", 2026-10-24 23:40 UTC.
 
 ## Business direction
@@ -56,6 +55,7 @@ Work that is about to merge or is mid-merge, so sessions on the other account ca
 
 ### Themes and kits
 - All 34 play kits are hunt themes with party packs, so every theme has an everything bundle (PR #87, 2026-10-23). The 11 shop kits (pizza, burger, grocery, post, library, police, dentist, petshop, coffee, italian, auto) have `hunt: '<id>'` and `bigSign: true` in their kit defs; the defs' `shop` key is a different thing (the shop config). Shop kits are website-only. Sample PDFs: `/mnt/project-files/scavenger-hunt/shop-kit-hunts/`.
+- **Big shop sign (two pages that glue into one 20 inch banner).** Only kits with `bigSign: true` get it (`extras.bigSignPages`); a kit with `hunt` and no `bigSign` skips it. The vet kit never had it: it became a hunt theme on 2026-10-15, before the sign came in (2026-10-18, non-hunt kits only), and when the shop kits got `bigSign` on 2026-10-23 vet was missed. Jason noticed and it was added on 2026-11-02 (vet kit 53 → 55 pages, Etsy `FILES_VERSION` bumped). Not caused by the static Etsy change. The other 15 adventure kits (dino, pirate, space...) have never had a sign, by design. When adding a shop-style kit (a clinic, shop, restaurant), set `bigSign: true`.
 
 ### Seven room kits and manila folders (2026-10-24)
 - New kits, each a full set (kit, hunt, party pack, activity pack) with a wow piece and disguises: **kitchen** (Chef’s Kitchen, Glowing Oven Window), **doctor** (Doctor’s Clinic, Patient Monitor), **puppet** (Puppet Theater, Velvet Stage Curtains), **agent** (Secret Agent HQ, Handprint Scanner), **dressup** (Costume Shop, Dressing Room Mirror Lights), **icecream** (Ice Cream Parlor, Soft Serve Machine), **airport** (Airport, Airplane Window). Jason's list also had grocery, coffee, post office, mechanic (auto) and vet, which already existed. All are `bigSign` shop-style kits listed in `SHOP_KITS`.
