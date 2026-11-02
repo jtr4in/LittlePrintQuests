@@ -1,4 +1,4 @@
-// The occasion and age guides for the ideas pages (built by scripts/idea-pages.js): birthday, Thanksgiving and
+// The occasion and age guides for the ideas pages (built by scripts/idea-pages.js): birthday, Thanksgiving, Christmas Eve and
 // classroom hunts, and hunts for little and big kids. Clues are either ids from the riddle library
 // (src/generator/spots.js) or written here as { label, riddle: [line, line], tip } when the spots are
 // party, holiday or classroom ones the library doesn't have; pic is the picture hint on the free printable. Section bodies are HTML; links in them are written
@@ -177,6 +177,56 @@ const GUIDES = [
     faq: [
       ['How do you do a scavenger hunt with a whole class?', 'Split the class into teams of four, give each team its own colored cards and start each team at a different clue so they don’t crowd the same spot. All trails end at the same treasure.'],
       ['How long does a classroom scavenger hunt take?', 'About 20 minutes with eight clues, plus five minutes to hide the cards before the kids come in.'],
+    ],
+  },
+  {
+    slug: 'christmas-eve-scavenger-hunt',
+    group: 'occasion',
+    short: 'Christmas Eve hunt',
+    title: 'Christmas Eve Scavenger Hunt for Kids: Free Bedtime Clues and a Christmas Eve Box',
+    description: 'A Christmas Eve scavenger hunt for ages 3 to 8: 8 free rhyming clues that get ready for Santa and end in bed, Christmas Eve box ideas and a free printable.',
+    h1: 'Christmas Eve scavenger hunt for kids',
+    lede: 'Christmas Eve is the longest night of the year for a 5 year old. This hunt turns the wait into a game: the first clues get the house ready for Santa, the last ones lead through bath, pajamas and into bed, where a Christmas Eve box is waiting.',
+    cta: [{ theme: 'christmas' }, 'Make a personalized Christmas hunt'],
+    clueIntro: 'Hide each clue at the answer to the clue before it, while the kids are busy after dinner. Hand them the first card and the trail ends on their pillow.',
+    clues: [
+      { label: 'Christmas tree', pic: '🎄', riddle: ['Twinkly lights and a star at the top,', 'Look under the tree, it’s your very first stop!'], tip: 'Under the tree skirt, beside the presents (no peeking!)' },
+      { label: 'Stocking', pic: '🧦', riddle: ['It hangs nice and empty, it’s waiting for you,', 'Peek in your stocking, it’s holding a clue!'], tip: 'Tucked in the top of a stocking (never over a lit fire)' },
+      { label: 'Cookie plate', pic: '🍪', riddle: ['Santa gets peckish from flying all night,', 'Look by his cookie plate, ready to bite!'], tip: 'Under the empty plate you’ll fill with cookies together' },
+      { label: 'Reindeer carrots', pic: '🥕', riddle: ['The reindeer get hungry, they nibble and munch,', 'Look by the carrots, they love a good crunch!'], tip: 'In the fridge drawer, next to the carrots for the reindeer' },
+      { label: 'Window', pic: '🪟', riddle: ['Is something up there, way up high in the sky?', 'Check by the window for sleighs flying by!'], tip: 'Taped low on a window that looks out at the sky' },
+      { label: 'Bathtub', pic: '🛁', riddle: ['Bubbles and splashes to wash off the day,', 'Look by the bathtub where bath toys all play!'], tip: 'On the edge of the tub, before the water goes in' },
+      { label: 'Pajamas', pic: '👕', riddle: ['Snuggly and soft for a long winter’s night,', 'Look where your pajamas are folded up tight!'], tip: 'On top of the pajamas (or the new Christmas Eve pair)' },
+      { label: 'Pillow', pic: '🛏️', riddle: ['You found every clue, now it’s time for your bed,', 'Look on your pillow, there’s a gift by your head!'], tip: 'The treasure: a Christmas Eve box on the pillow' },
+    ],
+    sections: [
+      ['A hunt that ends in bed', `<p>Most hunts wind kids up. This one winds them down. The first four clues are jobs for Santa’s arrival: check the tree, find the stockings, set out the cookie plate and the carrots for the reindeer. Then the trail turns toward bedtime, with a last look out the window for the sleigh, a bath, pajamas and a pillow.</p>
+<ul class="tips">
+<li><b>Start after dinner.</b> About an hour before bed gives you 20 minutes of hunt and a slow, happy bedtime.</li>
+<li><b>Do each job at its stop.</b> Fill the cookie plate, put the carrots out, wave at the sky. The hunt does the Christmas Eve to-do list for you.</li>
+<li><b>Dim the lights as you go.</b> Bright rooms for the Santa clues, soft lamps for the bedtime ones.</li>
+</ul>`],
+      ['What to put in a Christmas Eve box', `<p>A Christmas Eve box is a small gift opened the night before: something to wear to bed, something to read in it. Any shoebox works. A few ideas:</p>
+<ul class="tips">
+<li>New pajamas or cozy socks to wear tonight.</li>
+<li>A Christmas book to read together in bed.</li>
+<li>A hot cocoa packet and a special mug for tomorrow morning.</li>
+<li>A small flashlight for spotting the sleigh from the window.</li>
+<li>A note from the elves saying Santa is on his way.</li>
+</ul>
+<p>For kids under 3, skip anything small enough to fit in their mouth, and keep the box to pajamas and a book.</p>`],
+      ['Keep it calm and safe', `<ul class="tips">
+<li><b>Hide clues while they’re busy.</b> Five minutes during dinner cleanup is enough.</li>
+<li><b>No clues near candles, a lit fire or the oven.</b> If the stockings hang over a fireplace you’re using, hide that clue in a stocking somewhere else.</li>
+<li><b>Bigger kids read, little ones find.</b> With siblings, the reader reads the rhyme and the youngest gets to pull the card out.</li>
+<li><b>Same night next year.</b> Keep the cards in the Christmas box. A hunt that happens every year becomes a family tradition.</li>
+</ul>`],
+      ['More Christmas play', '<p>Make the days before Christmas count too: a Christmas hunt with a story from Santa’s elves, a pretend Santa’s Workshop for wrapping and toy making, or a snowy Ice Kingdom hunt for a cold afternoon. Our printed Christmas hunt has your kid’s name on every page and arrives by email in minutes.</p>{LINKS:christmas-scavenger-hunt=Christmas scavenger hunt,santas-workshop-pretend-play=Santa’s Workshop pretend play,ice-kingdom-scavenger-hunt=Ice Kingdom scavenger hunt}{CTA}'],
+    ],
+    faq: [
+      ['When should you do a Christmas Eve scavenger hunt?', 'After dinner, about an hour before bed. Eight clues take about 20 minutes, and because the last clues are the bath, pajamas and the pillow, the hunt ends right at bedtime.'],
+      ['What goes in a Christmas Eve box?', 'Usually new pajamas, a Christmas book to read in bed and a small treat like a hot cocoa packet. Keep it small: the big presents are for the morning.'],
+      ['Can a 3 year old do a Christmas Eve hunt?', 'Yes. Read the rhymes out loud and use the free printable, which has a picture of the hiding spot on every card so little ones can find it themselves.'],
     ],
   },
 ];
