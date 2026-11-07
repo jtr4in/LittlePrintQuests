@@ -65,7 +65,7 @@ function stationSign(k, title, icon, n) {
       <rect x="62" y="62" width="${W - 124}" height="${H - 124}" rx="14" fill="#fff"/>
     </svg>
     <div class="st-body">
-      <div class="st-words"><div class="st-place">${k.def.icon} ${placeHtml(k.placeName)}</div><div class="st-title" style="font-size:${Math.min(56, Math.floor(400 / Math.max(...title.split(' ').map((w) => w.length))))}pt">${esc(title)}</div></div>
+      <div class="st-words"><div class="st-place">${k.def.icon} ${placeHtml(k.placeName)}</div><div class="st-title" data-lines="2" style="font-size:${Math.min(56, Math.floor(400 / Math.max(...title.split(' ').map((w) => w.length))))}pt">${esc(title)}</div></div>
       <div class="st-pic">${art.pic(icon, '2.1in')}</div>
     </div></div>`;
 }
@@ -105,7 +105,7 @@ function hoursCard(k) {
     <div class="ct-lead" data-lines="2">${placeHtml(k.placeName)}</div>
     <div class="ct-word">HOURS</div>
     <div class="hr-rows">${rows}</div>
-    <div class="ct-foot">Draw the hands or write the times</div>
+    ${k.def.cleanCuts ? '' : '<div class="ct-foot">Draw the hands or write the times</div>'}
   </div></div>`;
 }
 
@@ -116,16 +116,33 @@ function openClosedCard(k) {
     <div class="fs-fold">fold here</div><div class="fs-half upside">${counterCard(COUNTER[1], k)}</div></div>`;
 }
 
+function blankCounterCard(k) {
+  return `<div class="ct-card blank"><div class="ct-in">
+    <div class="ct-lead">make your own sign</div>
+    <div class="ct-lines"><i></i><i></i></div>
+    <div class="ct-foot">${k.def.icon} ${esc(k.placeName)}</div>
+  </div></div>`;
+}
+
 function counterPages(k) {
-  const cards = [openClosedCard(k), ...COUNTER.slice(2).map((c) => counterCard(c, k)), hoursCard(k)];
+  const skip = k.def.counterSkip || [];
+  const cards = [openClosedCard(k), ...COUNTER.slice(2).filter((c) => !skip.includes(c[1])).map((c) => counterCard(c, k)), hoursCard(k)];
   const out = [];
+  // cleanCuts: the how-to for the hours sign goes under the signs, outside the cut lines.
+  const note = k.def.cleanCuts ? '<p class="ct-note">Hours sign: draw the hands on the clocks or write the times on the lines.</p>' : '';
   // The fold-over sign takes the left column of the first page.
-  for (let i = 0; i < cards.length; i += i ? 4 : 3) out.push(`<section class="page ct-page"><div class="ct-grid">${cards.slice(i, i + (i ? 4 : 3)).join('')}</div></section>`);
+  for (let i = 0; i < cards.length; i += i ? 4 : 3) {
+    const list = cards.slice(i, i + (i ? 4 : 3));
+    // cleanCuts: a short last page is filled with blank signs to write, so the cards keep their size.
+    while (k.def.cleanCuts && i && list.length < 4) list.push(blankCounterCard(k));
+    out.push(`<section class="page ct-page${note ? ' noted' : ''}"><div class="ct-grid${i && list.length <= 2 ? ' one-row' : ''}">${list.join('')}</div>${list.some((c) => c.includes('ct-card hours')) ? note : ''}</section>`);
+  }
   return out.join('');
 }
 
 function labelItems(k) {
   const d = k.def;
+  if (d.binLabels) return d.binLabels;
   const all = [...(d.props?.labels?.items || []), ...d.menu.items.map(([e, n]) => [e, n]), ...(d.props?.food?.items || []).map(([e, n]) => [e, n]), ...d.ticket.options];
   const seen = new Set();
   return all.filter(([, n]) => { const key = n.toLowerCase(); if (seen.has(key)) return false; seen.add(key); return true; }).slice(0, 15);
@@ -147,10 +164,14 @@ const signageCss = `
 .st-body { position:absolute; inset:.62in .7in; display:flex; align-items:center; gap:.2in; }
 .st-words { flex:1; min-width:0; }
 .st-place { font:600 13pt 'Fredoka'; color:var(--teal); text-transform:uppercase; letter-spacing:.08em; margin-bottom:.08in; }
-.st-title { font:700 50pt/1.02 'Fredoka'; color:var(--navy); text-transform:uppercase; overflow-wrap:break-word; }
+.st-title { font:700 50pt/1.02 'Fredoka'; color:var(--navy); text-transform:uppercase; } /* too long a word shrinks to fit (data-lines) instead of breaking off a letter */
 .st-pic { flex:none; }
 /* counter signs: 4 to a page */
 .ct-page { padding:.35in; }
+.ct-page.noted { display:flex; flex-direction:column; } .ct-page.noted .ct-grid { height:auto; flex:1; min-height:0; grid-template-rows:minmax(0,1fr) minmax(0,1fr); }
+.ct-grid.one-row, .ct-page.noted .ct-grid.one-row { grid-template-rows:1fr; }
+.ct-lines { width:80%; display:flex; flex-direction:column; gap:.5in; margin:.5in 0 .3in; } .ct-lines i { border-bottom:2px solid #b7c0cc; }
+.ct-note { margin:.08in 0 0; text-align:center; font:600 10pt 'Fredoka'; color:#66708f; }
 .ct-grid { height:100%; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:0; }
 .ct-card { padding:.12in; border:1.5px dashed #b7c0cc; margin:-.75px; }
 .ct-card.flip-sign { grid-row:span 2; padding:0; display:flex; flex-direction:column; }
@@ -164,6 +185,7 @@ const signageCss = `
 .ct-card.stop .ct-in { border-color:#d0574a; outline-color:#d0574a; } .ct-card.stop .ct-word { color:#b8463a; font-size:50pt; }
 .ct-card.alt .ct-in { border-color:var(--orange); outline-color:var(--orange); }
 .hr-rows { width:100%; margin-top:.2in; display:flex; flex-direction:column; gap:.16in; }
+.ct-page.noted .hr-rows { margin-top:.1in; gap:.1in; }
 .hr-row { display:flex; align-items:center; gap:.12in; font:600 15pt 'Fredoka'; }
 .hr-row span:first-child { width:.85in; text-align:left; }
 .hr-clock { width:.55in; height:.55in; border-radius:50%; border:2.5px solid var(--teal); flex:none; background:radial-gradient(circle, var(--teal) 0 3px, transparent 4px); }

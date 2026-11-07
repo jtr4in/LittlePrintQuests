@@ -47,8 +47,17 @@ function bigSignPages(k) {
     <text x="${seam - lap / 2}" y="${H / 2}" class="bs-glue" text-anchor="middle" transform="rotate(-90 ${seam - lap / 2} ${H / 2})">GLUE UNDER</text>`;
   const half = (x, w, glue) => `<div class="bs-turn" style="width:${(w * inch).toFixed(3)}in;height:${(H * inch).toFixed(3)}in"><svg viewBox="${x} 0 ${w} ${H}">${art}${glue ? marks : ''}</svg></div>`;
   const page = (n, body, tip) => `<section class="page big-sign"><div class="bs-tip">${esc(`Big sign, page ${n} of 2 · ${tip}`)}</div>${body}</section>`;
-  return page(1, half(0, seam, false), 'Print both pages at Actual size (100%). Cut right on the edge of the sign.')
+  const signs = page(1, half(0, seam, false), 'Print both pages at Actual size (100%). Cut right on the edge of the sign.')
     + page(2, half(seam - lap, seam + lap, true), 'Glue this strip under page 1, its edge on the dashed line.');
+  if (!d.bannerExtender) return signs;
+  // A blank middle strip, the same awning, color and border as the sign but no ends or words. It's
+  // as long as one half (a whole number of stripes, so they keep alternating), with its own glue
+  // strip: print as many as you like and glue them in between page 1 and page 2.
+  const mid = `<rect x="0" y="0" width="${W}" height="${H}" fill="var(--teal)"/>${awn}
+    <line x1="0" y1="92" x2="${W}" y2="92" stroke="#fff" stroke-width="5" stroke-dasharray="2 14" stroke-linecap="round"/>
+    <line x1="0" y1="${H - 22}" x2="${W}" y2="${H - 22}" stroke="#fff" stroke-width="5" stroke-dasharray="2 14" stroke-linecap="round"/>`;
+  const strip = `<div class="bs-turn" style="width:${((seam + lap) * inch).toFixed(3)}in;height:${(H * inch).toFixed(3)}in"><svg viewBox="${seam - lap} 0 ${seam + lap} ${H}">${mid}${marks}</svg></div>`;
+  return signs + `<section class="page big-sign"><div class="bs-tip">${esc('Banner extender: print more and glue them between page 1 and page 2 for a longer sign.')}</div>${strip}</section>`;
 }
 
 // ---------- ATM ----------

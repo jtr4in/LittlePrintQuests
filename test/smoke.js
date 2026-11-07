@@ -193,8 +193,10 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   // Every kit: draw labels sit under the boxes, a fold-over Open/Closed sign and the money machine.
   for (const id of Object.keys(KITS)) {
     const html = buildKitHtml({ kit: id, childName: 'Ava', lenient: true });
-    assert.ok(html.includes('class="draw-cap">Draw yourself') && !html.includes('Draw<br>yourself'), id);
-    assert.ok(html.includes('flip-sign') && html.includes('Money Machine') && html.includes('Good Morning,'), id);
+    // cleanCuts kits (the vet, 2026-11-07) keep instructions off the pieces; def.skip drops pages.
+    assert.ok(KITS[id].cleanCuts || (html.includes('class="draw-cap">Draw yourself') && !html.includes('Draw<br>yourself')), id);
+    const skip = KITS[id].skip || [];
+    assert.ok(html.includes('flip-sign') && html.includes('Money Machine') !== skip.includes('atm') && html.includes('Good Morning,') !== skip.includes('morning'), id);
     assert.equal(html.includes('Big sign, page 2 of 2'), !KITS[id].hunt || Boolean(KITS[id].bigSign), id);
   }
   // Two kids on one kit: "and" becomes "&", each kid gets a lead badge and a certificate, and the
@@ -1004,7 +1006,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
       const html = activityPackHtml({ kit: id, childName: 'Ava', age, lenient: true });
       // Kits with origami pictures open with two more pages (src/kits/origami.js).
       const og = require('../src/kits/activities').origamiShift(id);
-      assert.equal((html.match(/<section class="page/g) || []).length, (age === 3 ? 20 : 19) + og, `${id} activity pages`);
+      assert.equal((html.match(/<section class="page/g) || []).length, (age === 3 ? 20 : 19) + og + (allKits[id].activityToys || []).length, `${id} activity pages`);
       if (og) assert.match(html, /Origami Paper[\s\S]*class="og-step"[\s\S]*og-pieces-art/, `${id} origami pages`);
       // The move game: two sheets of 9 cards (6 specials) and a board with 4 stand-up pieces, for both ages.
       assert.equal((html.match(/class="mv-card[ "]/g) || []).length, 18, `${id} move cards`);

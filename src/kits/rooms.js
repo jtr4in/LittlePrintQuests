@@ -161,6 +161,7 @@ const TAB_COLORS = ['#e8574b', '#3a7bd5', '#2f9e6b', '#f2b632', '#8c4fc4', '#ef8
 // behind it, printed side out, so half-page forms slip inside.
 function folderPage(k, subject, n) {
   const F = k.def.folders;
+  const clean = k.def.cleanCuts; // no writing on the cut or fold lines, a blank file number
   const name = subject ? (subject.name || k.def.kinds[subject.kind][1]) : '';
   const tabX = n % 2 ? 420 : 40;
   const letters = (name || '').replace(/[^A-Za-z]/g, '').slice(0, 2).toUpperCase().padEnd(2, ' ').split('');
@@ -173,8 +174,8 @@ function folderPage(k, subject, n) {
     <rect x="60" y="88" width="420" height="150" rx="10" class="mf-label"/>
     <text x="80" y="128" class="mf-kicker" data-fit-w="380">${esc(k.placeName)}</text>
     <text x="80" y="180" class="mf-big">${esc(F.label)}</text>
-    <text x="80" y="220" class="mf-no">File no. ${String(1000 + n * 137).slice(-4)}</text>
-    ${subject ? `<circle cx="580" cy="165" r="78" class="mf-photo"/>${em(580, 165, 110, k.def.kinds[subject.kind][0])}` : `<circle cx="580" cy="165" r="78" class="mf-photo"/><text x="580" y="172" class="mf-small" text-anchor="middle">photo</text>`}
+    ${clean ? '<text x="80" y="220" class="mf-no">File no.</text><line x1="168" y1="222" x2="300" y2="222" class="mf-line"/>' : `<text x="80" y="220" class="mf-no">File no. ${String(1000 + n * 137).slice(-4)}</text>`}
+    ${subject ? `<circle cx="580" cy="165" r="78" class="mf-photo"/>${em(580, 165, 110, k.def.kinds[subject.kind][0])}` : clean ? '<circle cx="580" cy="158" r="72" class="mf-photo"/><text x="580" y="256" class="mf-small" text-anchor="middle">pet photo</text>' : `<circle cx="580" cy="165" r="78" class="mf-photo"/><text x="580" y="172" class="mf-small" text-anchor="middle">photo</text>`}
     <g transform="rotate(-9 560 330)"><rect x="420" y="290" width="300" height="78" rx="8" class="mf-stamp"/><rect x="428" y="298" width="284" height="62" rx="5" class="mf-stamp thin"/>
       <text x="570" y="342" class="mf-stamp-t" text-anchor="middle" style="font-size:${Math.min(34, Math.round(520 / F.stamp.length))}px">${esc(F.stamp)}</text></g>
     <text x="60" y="300" class="mf-in">In this file:</text>
@@ -190,7 +191,7 @@ function folderPage(k, subject, n) {
     ${Array.from({ length: 28 }, (_, i) => `<rect x="${520 + i * 7}" y="930" width="${i % 3 ? 3 : 5}" height="44" fill="#5a4630"/>`).join('')}
   </g>`;
   const cut = `<path d="M10,1000 L10,60 Q10,46 24,46 L${tabX},46 L${tabX + 22},6 L${tabX + 310},6 L${tabX + 332},46 L766,46 Q780,46 780,60 L780,1000 Z" class="cut-dash" fill="none"/>
-    <line x1="10" y1="520" x2="780" y2="520" class="fold-dot"/><text x="395" y="540" class="mf-fold" text-anchor="middle">fold back here</text>`;
+    <line x1="10" y1="520" x2="780" y2="520" class="fold-dot"/>${clean ? '' : '<text x="395" y="540" class="mf-fold" text-anchor="middle">fold back here</text>'}`;
   return `<section class="page props mf-page"><div class="mf-tip">${esc(`${F.title} · Cut along the dashed line, fold back on the dotted line (printed side out) and slip the forms inside.`)}</div>
     <svg viewBox="0 0 790 1004" class="mf-art">${front}${back}${cut}</svg></section>`;
 }
@@ -205,7 +206,7 @@ function intakeHalf(k, subject) {
   // 'pet' shows the patient's own picture to mark up; 'scene' is an empty box to draw in.
   const kind = (subject || { kind: k.def.defaultKinds[0] }).kind;
   const body = I.figure === 'scene' ? '<div class="mf-scene"></div>' : I.figure === 'pet' ? `<div class="mf-pet">${pic(k.def.kinds[kind][0], '1.7in')}</div>` : `<svg viewBox="0 0 200 280" class="mf-body">${FIGURES[I.figure || 'person']}</svg>`;
-  return `<div class="mf-intake">
+  return `<div class="mf-intake${I.card ? ' fc mf-card' : ''}">
     <header class="rec-head"><span class="em">📝</span><h2>${esc(I.title)}</h2><span class="clinic">${esc(k.placeName)}</span></header>
     <div class="mf-in-cols"><div class="mf-in-left">
       <div class="mf-fields">${I.fields.map((f, i) => `<div class="field"><b>${esc(f)}:</b><span class="fill">${esc(val(i))}</span></div>`).join('')}</div>
@@ -243,8 +244,11 @@ function folderPages(k) {
   const F = k.def.folders;
   if (!F) return '';
   const subs = k.subjects.length ? k.subjects : k.def.defaultKinds.map((kind) => ({ name: '', kind }));
-  const folders = [folderPage(k, k.subjects.length ? subs[0] : null, 0), folderPage(k, k.subjects.length > 1 ? subs[1] : null, 1)].join('');
-  const intake = `<section class="page recs">${intakeHalf(k, k.subjects[0] || null)}<div class="cut-h"></div>${intakeHalf(k, k.subjects[1] || null)}</section>`;
+  const folders = [folderPage(k, k.subjects.length ? subs[0] : null, 0), folderPage(k, k.subjects.length > 1 ? subs[1] : null, 1)].slice(0, F.count || 2).join('');
+  // intake.card: the form is file-card size (clinic.js), so it fits inside the folder like the check-up cards.
+  const intake = F.intake.card
+    ? `<section class="page fc-page"><p class="pg-sub">${esc(F.intake.title)}s: cut on the dashed lines; each one fits inside the file folder.</p><div class="fc-cut">${intakeHalf(k, k.subjects[0] || null)}</div><div class="fc-cut">${intakeHalf(k, k.subjects[1] || null)}</div></section>`
+    : `<section class="page recs">${intakeHalf(k, k.subjects[0] || null)}<div class="cut-h"></div>${intakeHalf(k, k.subjects[1] || null)}</section>`;
   return folders + intake + labelsPageFor(k);
 }
 
@@ -368,6 +372,9 @@ const roomsCss = `
 .mf-in { font:700 22px 'Fredoka'; fill:#8a6a2c; } .mf-box { fill:#fff; stroke:var(--navy); stroke-width:3; } .mf-item { font:600 22px 'Fredoka'; fill:var(--navy); }
 .mf-line { stroke:var(--navy); stroke-width:2; } .mf-line.soft { stroke:#b89a5a; } .mf-sign { font:400 30px 'Pacifico', 'Fredoka'; fill:var(--navy); }
 .mf-back-t { font:600 22px 'Fredoka'; fill:#8a6a2c; } .mf-fold { font:600 15px 'Fredoka'; fill:#8a6a2c; }
+.mf-card { flex:none; padding:.14in .2in; } .mf-card .rec-head { margin-bottom:.02in; } .mf-card .mf-in-right { width:1.6in; }
+.mf-card .field { margin:.02in 0; font-size:10pt; } .mf-card .mf-q { font-size:10pt; margin-top:.02in; } .mf-card .mf-opts { gap:.02in .14in; } .mf-card .mf-opts span { font-size:10pt; }
+.mf-card .mf-pet { width:1.5in; height:1.7in; } .mf-card .mf-pet .pic { width:1.25in !important; height:1.25in !important; } .mf-card .mf-signed { margin-top:.04in; }
 .mf-intake { flex:1; display:flex; flex-direction:column; padding:.05in 0; }
 .mf-in-cols { flex:1; display:flex; gap:.2in; } .mf-in-left { flex:1; display:flex; flex-direction:column; justify-content:space-around; } .mf-in-right { width:1.9in; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; }
 .mf-fields { display:grid; grid-template-columns:1fr 1fr; gap:0 .2in; }

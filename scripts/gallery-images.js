@@ -31,12 +31,16 @@ const OUT = path.join(__dirname, '..', 'docs', 'img', 'gallery');
 const SPOTS = ['front_door', 'shoe_rack', 'couch', 'dryer', 'bathtub', 'bookshelf', 'pet_bed', 'kitchen_table'];
 const PARTY = { date: 'Saturday, June 3', time: '2 to 4 pm', place: 'Our house', rsvp: 'Text Sam' };
 // The page the hands-on toys start after: shop-style kits have a big shop sign first.
-const firstToy = (kitId) => (KITS[kitId].hunt && !KITS[kitId].bigSign ? 4 : 5);
+// A banner extender page (def.bannerExtender, the vet since 2026-11-07) adds one more sign page.
+const firstToy = (kitId) => (KITS[kitId].hunt && !KITS[kitId].bigSign ? 4 : 5) + (KITS[kitId].bannerExtender ? 1 : 0);
+// The sign shown second: the page before the toys, or the banner's second half when an extender follows it.
+const signPage = (kitId) => firstToy(kitId) - 1 - (KITS[kitId].bannerExtender ? 1 : 0);
 // The kit's wow prop page (def.wow), shown as the third kit sample.
 const wowPage = (kitId, ages) => {
   const html = buildKitHtml({ kit: kitId, childName: 'Maya', ages, subjects: [], lenient: true });
   const at = html.indexOf('<section class="page props wow"');
-  if (at < 0) throw new Error(`${kitId} has no wow page`);
+  // No wow prop (the vet dropped its X-ray film, 2026-11-07): show the first page after the signs.
+  if (at < 0) return firstToy(kitId);
   return html.slice(0, at).split('<section class="page').length;
 };
 // The big picture pages (src/kits/bigpages.js): their page numbers, so the toy picks below skip
@@ -104,7 +108,7 @@ async function little(id, kitId, tmp, jobs) {
   const start = firstToy(kitId);
   const toys = [0.35, 0.55, 0.75].map((f) => toyAt(kitId, 'little', start, kit, f));
   const picks = {
-    kit: [2, start - 1, wowPage(kitId, 'little'), bigOrToy(kitId, 'little', start, kit), toys[2]],
+    kit: [2, signPage(kitId), wowPage(kitId, 'little'), bigOrToy(kitId, 'little', start, kit), toys[2]],
     activity: actPicks(kitId, [1, 4, 12, 14, 9]), // cover, trace the path, stick it on, color by dot, I spy
   };
   fs.mkdirSync(path.join(OUT, id, 'little'), { recursive: true });
@@ -168,7 +172,7 @@ const writeList = (id, lists) => fs.writeFileSync(path.join(OUT, id, 'pages.json
       hunt: [roles.host, roles.briefing, roles.sheet, roles.sheet + 1, roles.cert], // host guide, briefing, two clue card sheets, certificate
       activity: actPicks(kitForHunt(id).id, [1, 6, 11, 12, 13]), // cover, I spy, secret code, color by number, roll a creature
       party: [2, 3, 4, 5, 6], // invitations, thank-you cards, toppers, favor tags, banner
-      kit: [2, start - 1, wowPage(kitForHunt(id).id), bigOrToy(kitForHunt(id).id, undefined, start, kit), toyAt(kitForHunt(id).id, undefined, start, kit, 0.75)], // welcome poster, sign, wow prop, big picture page, a toy
+      kit: [2, signPage(kitForHunt(id).id), wowPage(kitForHunt(id).id), bigOrToy(kitForHunt(id).id, undefined, start, kit), toyAt(kitForHunt(id).id, undefined, start, kit, 0.75)], // welcome poster, sign, wow prop, big picture page, a toy
     };
     fs.mkdirSync(path.join(OUT, id), { recursive: true });
     for (const [k, pages] of Object.entries(picks)) {
