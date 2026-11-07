@@ -45,7 +45,10 @@ o = io.BytesIO(); c.save(o, 'JPEG', quality=88); sys.stdout.buffer.write(o.getva
 // The kit page with the wow prop, counted from 1.
 const wowPage = (kitId) => {
   const html = buildKitHtml({ kit: kitId, childName: 'Maya', subjects: [], lenient: true });
-  return html.slice(0, html.indexOf('<section class="page props wow"')).split('<section class="page').length;
+  // No wow prop (the vet, 2026-11-07): use its first big picture page instead.
+  const at = html.indexOf('<section class="page props wow"');
+  const end = at < 0 ? html.indexOf('<section class="page bigpic"') : at;
+  return end < 0 ? 5 : html.slice(0, end).split('<section class="page').length;
 };
 
 (async () => {

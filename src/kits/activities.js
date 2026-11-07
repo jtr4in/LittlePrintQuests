@@ -442,7 +442,15 @@ const PAGES = [
   // The get-up-and-move card game (src/kits/movegame.js) goes last: it's cut up, so it shouldn't sit between pages.
   ['Move game cards', movePages.cards1], ['More move game cards', movePages.cards2], ['Move game board', movePages.board],
 ];
-const pagesFor = (k) => PAGES.filter(([, , who]) => !who || who === (k.little ? 'little' : 'big'));
+// def.activityToys: paper toys a kit keeps in its activity pack instead of the play kit (the vet's
+// doctor bag, 2026-11-07). They go just before the move game, one entry each.
+const toyEntries = (k) => (k.def.activityToys || []).map((t) => [t.title, (kk) => require('./toys').toyPages({ ...kk, def: { ...kk.def, toys: [t] } })]);
+const pagesFor = (k) => {
+  const list = PAGES.filter(([, , who]) => !who || who === (k.little ? 'little' : 'big'));
+  const at = list.findIndex(([t]) => t === 'Move game cards');
+  list.splice(at < 0 ? list.length : at, 0, ...toyEntries(k));
+  return list;
+};
 // The origami pages (src/kits/origami.js) come first, right after the cover, once a kit has its
 // pictures: the paper is the pack's lead page in the order stack.
 const activityTitles = (k) => [...origamiTitles(k), ...pagesFor(k).map(([t]) => t)];

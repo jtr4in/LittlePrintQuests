@@ -26,6 +26,7 @@ const extras = require('./extras');
 const { bigPages, bigLine, bigCss } = require('./bigpages');
 const { bookCardPages, bookCardLine, bookCardCss } = require('./bookcards');
 const rooms = require('./rooms');
+const clinic = require('./clinic');
 const { fitScript, placeHtml } = require('./fit');
 const { splitNames, joinNames } = require('../generator/kid-names');
 
@@ -62,6 +63,8 @@ function normalize(def, cfg) {
 }
 
 const pic = (k, s) => k.def.kinds[s.kind][0];
+// A kit can leave out standard pages with def.skip (the vet kit review, 2026-11-07).
+const has = (k, part) => !(k.def.skip || []).includes(part);
 // An empty box to draw in, with its words underneath so they don't get drawn over.
 const drawBox = (cls, label) => `<div class="draw-wrap"><div class="${cls} empty"></div><span class="draw-cap">${esc(label)}</span></div>`;
 const kindName = (k, s) => k.def.kinds[s.kind][1];
@@ -93,9 +96,19 @@ const ownSign = () => `<div class="sign own"><div class="sign-in"><div class="ow
 
 function signsPages(k) {
   const d = k.def;
-  const s = [sign(k.placeName, d.tagline, d.icon, 'hero'), ...d.signs.map(([t, sub, icon, cls]) => (cls === 'wash' ? washSign(t) : sign(t, sub, icon, cls)))];
-  if (s.length % 2) s.push(ownSign());
   const out = [];
+  let list = d.signs;
+  // signFold: Open and Closed share the first page, Closed upside down, so the page folds in half
+  // and hangs on a door to flip from one to the other.
+  if (d.signFold) {
+    const go = list.find((x) => x[3] === 'go'); const stop = list.find((x) => x[3] === 'stop');
+    if (go && stop) {
+      out.push(`<section class="page signs fold-signs">${sign(...go)}<div class="fold-mid"></div><div class="upside">${sign(...stop)}</div></section>`);
+      list = list.filter((x) => x !== go && x !== stop);
+    }
+  }
+  const s = [sign(k.placeName, d.tagline, d.icon, 'hero'), ...list.map(([t, sub, icon, cls]) => (cls === 'wash' ? washSign(t) : sign(t, sub, icon, cls)))];
+  if (s.length % 2) s.push(ownSign());
   for (let i = 0; i < s.length; i += 2) out.push(`<section class="page signs">${s[i]}<div class="cut-h"></div>${s[i + 1]}</section>`);
   return out.join('');
 }
@@ -104,7 +117,7 @@ function badge(k, name, role, lead) {
   return `<div class="badge ${lead ? 'lead' : ''}">
     <div class="badge-top"><span>${k.def.badgeIcon} ${esc(lead ? k.def.leadRole : 'Crew')}</span><span>ID</span></div>
     <div class="badge-body">
-      <div class="photo-col"><div class="photo"></div><span class="draw-cap">Draw yourself</span></div>
+      <div class="photo-col"><div class="photo"></div>${k.def.cleanCuts ? '' : '<span class="draw-cap">Draw yourself</span>'}</div>
       <div class="badge-info">
         <div class="clinic">${esc(k.placeName)}</div>
         <div class="who"${name ? ' data-lines="2"' : ''}>${name ? esc(name) : '<span class="blank"></span>'}</div>
@@ -126,7 +139,7 @@ function badgesPage(k) {
   }
   return `<section class="page badges">
     <h2 class="pg-title">${esc(d.badgeTitle || 'Staff ID Badges')}</h2>
-    <p class="pg-sub">Cut out, draw your face, and clip or tape to your shirt.</p>
+    <p class="pg-sub">Cut out, draw your face${k.def.cleanCuts ? ' in the box' : ''}, and clip or tape to your shirt.</p>
     <div class="badge-grid">${cards.join('')}</div>
   </section>`;
 }
@@ -263,27 +276,32 @@ function guidePage(k) {
   const G = k.def.guide;
   const d = k.def;
   const signCount = d.signs.length + 1;
+  const counterN = 7 - (d.counterSkip || []).length;
+  const shopBits = [`${d.menu.fold ? `a ${d.menu.title} that folds like a book` : `${d.menu.title} board`}`, ...(has(k, 'specials') ? ['Today’s Specials, order slips'] : []), d.menu.coinsTitle.toLowerCase(), ...(has(k, 'atm') ? ['a pull-tab money machine'] : [])];
   const inside = [
-    ...(d.hunt && !d.bigSign ? [] : ['A big shop sign: two pages that glue into one 20 inch banner']),
-    `${signCount} signs for doors and walls${signCount % 2 ? ' (and a blank one)' : ''}, plus ${signageCount(d) ? `${signageCount(d)} big station ${signageCount(d) === 1 ? 'sign' : 'signs'}, ` : ''}7 counter signs (a fold-over Open/Closed sign, pay here, our hours and more) and 15 shelf and bin labels`,
+    ...(d.hunt && !d.bigSign ? [] : [`A big shop sign: two pages that glue into one 20 inch banner${d.bannerExtender ? ', plus a blank middle strip to make it longer' : ''}`]),
+    `${signCount} signs for doors and walls${signCount % 2 ? ' (and a blank one)' : ''}, plus ${signageCount(d) ? `${signageCount(d)} big station ${signageCount(d) === 1 ? 'sign' : 'signs'}, ` : ''}${d.doorSigns ? `${d.doorSigns.length} door signs, ` : ''}${counterN} counter signs (a fold-over Open/Closed sign, ${(d.counterSkip || []).includes('PAY HERE') ? '' : 'pay here, '}our hours and more) and ${d.binLabels ? d.binLabels.length : 15} shelf and bin labels`,
     ...(d.appliances ? appliancesLines(d.appliances) : []),
     ...(extras.hasWow(k) ? [d.wow.inside] : []),
     ...bigLine(k),
     ...(d.jars ? [`${d.jars.length} wrap-around jar labels`] : []),
-    ...(d.toys ? d.toys.map((t) => t.inside) : [`${['laptop', 'console'].includes(d.dashboard.device) ? 'A fold-up' : 'A cut-out'} ${d.dashboard.gadget} with 3 screens`]),
+    ...(d.wrapLabels ? [`${d.wrapLabels.length} long wrap-around food and treat jar labels with pretend food to cut off`] : []),
+    ...(d.bandages ? [`${d.bandages.length} inch wrap-around pretend bandages`] : []),
+    ...(d.tablet ? [`A clinic tablet with ${d.tablet.screens.length} screens`] : d.toys ? d.toys.map((t) => t.inside) : [`${['laptop', 'console'].includes(d.dashboard.device) ? 'A fold-up' : 'A cut-out'} ${d.dashboard.gadget} with 3 screens`]),
     '8 ID badges',
     ...(d.chefHat ? [`A chef hat with ${k.lead} on the band`] : []),
     ...(hasDisguises(k) ? [`Photo booth disguises on a stick: a ${DISGUISES[d.id][0].toLowerCase()}, ${DISGUISES[d.id][1].toLowerCase()} and speech bubbles`] : []),
     ...(d.peel ? ['A pizza peel and two draw-your-own wipe-off pizzas'] : []),
     ...(d.props ? [`Props to cut out: ${Object.values(d.props).map((x) => x.title).join(', ')}`] : []),
-    ...(d.folders ? [`${d.folders.title}: manila folders with a tab to fold up, a ${d.folders.intake.title}, plus file labels and stamps`] : []),
-    `${d.record.title} forms, two to a page, for ${k.subjects.length ? `each of your ${d.subjectPlural}` : `four ${d.subjectPlural}`} plus a blank one`,
-    `${d.ticket.title} cards`,
-    d.passport.pageTitle,
+    ...(d.folders ? [`${d.folders.title}: ${d.folders.count === 1 ? 'a manila folder' : 'manila folders'} with a tab to fold up, a ${d.folders.intake.title}, plus file labels and stamps`] : []),
+    ...(d.fileSheet ? ['Clinic cards for the pet’s file: visit checklists, a check-up chart and little X-rays to tick off'] : []),
+    d.checkup ? `${d.record.title} cards that fit in the folder: four pretend patients plus two blank` : `${d.record.title} forms, two to a page, for ${k.subjects.length ? `each of your ${d.subjectPlural}` : `four ${d.subjectPlural}`} plus a blank one`,
+    ...(has(k, 'ticket') ? [`${d.ticket.title} cards`] : []),
+    ...(has(k, 'passport') ? [d.passport.pageTitle] : []),
     ...bookCardLine(k),
-    'Morning paperwork: a Good Morning checklist and a Supply Order form',
-    `Shop set: welcome poster, ${d.menu.fold ? `a ${d.menu.title} that folds like a book` : `${d.menu.title} board`}, Today’s Specials, order slips, ${d.menu.coinsTitle.toLowerCase()} and a pull-tab money machine`,
-    `${d.certificate.title} (named + blank)`,
+    ...(has(k, 'morning') ? ['Morning paperwork: a Good Morning checklist and a Supply Order form'] : []),
+    `Shop set: welcome poster, ${shopBits.slice(0, -1).join(', ')} and ${shopBits[shopBits.length - 1]}`,
+    `${d.certificate.title} (named + blank)${d.training ? `, plus ${d.training.title.toLowerCase()}s` : ''}`,
   ];
   // A long list (the shop kits with lots of extra pieces) gets a smaller type size so the play ideas still fit.
   const len = inside.join('').length;
@@ -605,6 +623,7 @@ function guestCheck(k, p, n) {
 }
 
 function recordsPages(k) {
+  if (k.def.checkup) return clinic.checkupPages(k);
   if (k.def.record.style === 'check') {
     const list = [...subjectsOrDefaults(k), null];
     if (list.length % 2) list.push(null);
@@ -675,12 +694,16 @@ function buildKitHtml(cfg) {
     extras.wowPage(k),
     bigPages(k, ['hero', 'poster']),
     stationPages(k),
+    clinic.doorSignPages(k),
     bigPages(k, ['signs', 'rooms']),
     counterPages(k),
     labelsPage(k),
     extras.jarPages(k),
+    clinic.wrapLabelPages(k),
     bigPages(k, ['labels', 'strips']),
+    clinic.bandagePages(k),
     gadgetPages(k),
+    clinic.tabletPages(k),
     bigPages(k, ['screen']),
     badgesPage(k),
     extras.chefHatPage(k),
@@ -688,20 +711,23 @@ function buildKitHtml(cfg) {
     disguisePages(k),
     propsPages(k),
     extras.peelPages(k),
-    extras.morningPages(k),
-    recordsPages(k),
+    has(k, 'morning') ? extras.morningPages(k) : '',
+    def.checkup ? '' : recordsPages(k),
     bigPages(k, ['forms']),
     rooms.folderPages(k),
-    ticketPage(k),
-    passportsPages(k),
+    def.checkup ? recordsPages(k) : '',
+    clinic.fileSheetPage(k),
+    has(k, 'ticket') ? ticketPage(k) : '',
+    has(k, 'passport') ? passportsPages(k) : '',
     bookCardPages(k),
     def.menu.fold ? extras.foldMenuPages(k) : menuBoard(k),
     k.def.props?.recipe ? SHOP_PROPS.find(([key]) => key === 'recipe')[1](k) : '',
-    specialsPage(k),
+    has(k, 'specials') ? specialsPage(k) : '',
     moneyPage(k),
-    extras.atmPage(k),
+    has(k, 'atm') ? extras.atmPage(k) : '',
     certificatePage(k),
     certificatePage(k, true),
+    clinic.trainingPage(k),
   ].join('');
   art.setPicScale(1);
   return `<!doctype html><html><head><meta charset="utf-8"><style>${k.little ? thicker(css(def.colors)) : css(def.colors)}</style></head><body class="${k.little ? 'little' : 'big'}">${pages}${fitScript}</body></html>`;
@@ -759,6 +785,7 @@ ${disguiseCss}
 ${rooms.roomsCss}
 ${bigCss}
 ${bookCardCss}
+${clinic.clinicCss}
 ${shopCss(font)}
 :root { --teal:${c.main}; --teal-d:${c.dark}; --mint:${c.soft}; --mint-l:${c.light}; --orange:${c.accent}; --accent-ink:${c.accentInk || '#2b1d06'}; --navy:#3f4a73; --cream:#fbf8f1; --line:#c9d6d0; --gold:${c.gold || '#f1d48f'}; }
 * { box-sizing:border-box; }
@@ -805,6 +832,9 @@ p.lead { font-size:13.5pt; line-height:1.45; margin:.2in 0; }
 
 /* signs: two landscape signs per page */
 .signs { padding:.3in; display:flex; flex-direction:column; }
+.fold-signs .upside { flex:1; display:flex; transform:rotate(180deg); }
+.fold-mid { border-top:2px dotted #8a93ab; margin:0 -.3in; position:relative; }
+.fold-mid::after { content:'fold'; position:absolute; right:.04in; top:-.09in; font:600 7pt 'Fredoka'; color:#8a93ab; background:#fff; padding:0 2px; }
 .sign { flex:1; padding:.12in; }
 .cut-h { border-top:2px dashed #b7c0cc; margin:.06in -.3in; }
 .sign-in { height:100%; border-radius:22px; background:var(--mint-l); border:5px solid var(--teal); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; position:relative; padding:.2in; }
@@ -1083,8 +1113,8 @@ p.lead { font-size:13.5pt; line-height:1.45; margin:.2in 0; }
 .item { border:2px dashed #b7c0cc; border-radius:.16in; background:var(--mint-l); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.04in; text-align:center; padding:.06in; }
 .item b { font-size:50pt; line-height:1.1; } .item span { font:700 13pt/1.1 'Fredoka'; } .item small { font:600 9.5pt 'Fredoka'; color:var(--teal-d); background:#fff; border-radius:99px; padding:1px 9px; }
 
-.patch-grid { flex:1; display:grid; grid-template-columns:repeat(3, 1fr); gap:.2in; align-content:center; justify-items:center; }
-.patch { width:2.2in; height:2.2in; border-radius:50%; background:var(--teal); box-shadow:0 0 0 .08in #fff, 0 0 0 .14in var(--orange); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; color:#fff; padding:.2in; outline:2px dashed #b7c0cc; outline-offset:.2in; }
+.patch-grid { flex:1; display:grid; grid-template-columns:repeat(3, 1fr); gap:.5in .2in; align-content:center; justify-items:center; }
+.patch { width:2in; height:2in; border-radius:50%; background:var(--teal); box-shadow:0 0 0 .08in #fff, 0 0 0 .14in var(--orange); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; color:#fff; padding:.2in; outline:2px dashed #b7c0cc; outline-offset:.18in; }
 .patch b { font-size:50pt; line-height:1.1; } .patch span { font:700 12.5pt/1.1 'Fredoka'; }
 .patch:nth-child(even) { background:var(--teal-d); }
 

@@ -35,14 +35,16 @@ function welcomePage(k) {
 
 function menuBoard(k) {
   const M = k.def.menu;
-  const rows = M.items.map(([e, n, c]) => `<div class="mrow">${pic(e, '.72in')}<span class="mn">${esc(n)}</span><span class="dots"></span><span class="mp">${c}${pic(M.coinIcon, '.3in')}</span></div>`).join('');
-  return `<section class="page shop-page menu-board">
+  // menu.dollars: prices read "$3", like the paper money kids already play with.
+  const price = (c) => (M.dollars ? `$${c}` : `${c}${pic(M.coinIcon, '.3in')}`);
+  const rows = M.items.map(([e, n, c]) => `<div class="mrow">${pic(e, '.72in')}<span class="mn">${esc(n)}</span><span class="dots"></span><span class="mp">${price(c)}</span></div>`).join('');
+  return `<section class="page shop-page menu-board${M.items.length > 7 ? ' long' : ''}">
     ${bg(7, [70, 40, 676, 980], 46)}
     <div class="board-head">${pic(M.icon, '.85in')}<h1 class="script">${esc(M.title)}</h1>${pic(M.items[0][0], '.85in')}</div>
     <div class="board">
       <div class="ribbon">On the menu</div>
       <div class="mrows">${rows}</div>
-      <div class="board-foot">Prices in ${esc(M.coinWord)}s · ${pic(M.coinIcon, '.26in')} = 1</div>
+      <div class="board-foot">${M.dollars ? `Prices in dollars. Pay with ${esc(M.coinsTitle)}!` : `Prices in ${esc(M.coinWord)}s · ${pic(M.coinIcon, '.26in')} = 1`}</div>
     </div>
     <p class="board-tip">Tape it up where customers order. Wipe-clean idea: slip it into a sheet protector and use a dry-erase marker for today’s prices.</p>
   </section>`;
@@ -97,45 +99,45 @@ function bill(k, v, n) {
   }).join('');
   const rosette = (cx, cy) => `<g transform="translate(${cx} ${cy})">${Array.from({ length: 12 }, (_, i) => `<ellipse rx="20" ry="7" transform="rotate(${i * 15})" fill="none" stroke="${ink}" stroke-width=".7" opacity=".55"/>`).join('')}
     <circle r="15" fill="${paper}" stroke="${ink}" stroke-width="1.4"/><text y="6" text-anchor="middle" class="bn-num" fill="${ink}">${v}</text></g>`;
-  const serial = `${k.placeName.replace(/[^A-Za-z]/g, '').slice(0, 2).toUpperCase() || 'LP'} ${String(1000000 + ((v * 7919 + n * 104729) % 9000000)).padStart(8, '0')} ${'ABCDEFGH'[n % 8]}`;
+  const serial = `${M.bucks ? 'TY' : k.placeName.replace(/[^A-Za-z]/g, '').slice(0, 2).toUpperCase() || 'LP'} ${String(1000000 + ((v * 7919 + n * 104729) % 9000000)).padStart(8, '0')} ${'ABCDEFGH'[n % 8]}`;
   const seal = `<g transform="translate(92 102)">${Array.from({ length: 24 }, (_, i) => `<path d="M0,-33 L3,-27 L-3,-27 Z" transform="rotate(${i * 15})" fill="${ink}" opacity=".7"/>`).join('')}
     <circle r="27" fill="none" stroke="${ink}" stroke-width="1.6"/><circle r="21" fill="none" stroke="${ink}" stroke-width=".8"/>
-    <text y="-6" text-anchor="middle" class="bn-tiny" fill="${ink}">BANK OF</text><text y="4" text-anchor="middle" class="bn-tiny" fill="${ink}">${esc(k.childName.toUpperCase().slice(0, 10))}</text>
+    ${M.bucks ? `<text y="-2" text-anchor="middle" class="bn-tiny" fill="${ink}">THANK</text><text y="8" text-anchor="middle" class="bn-tiny" fill="${ink}">YOU</text>` : `<text y="-6" text-anchor="middle" class="bn-tiny" fill="${ink}">BANK OF</text><text y="4" text-anchor="middle" class="bn-tiny" fill="${ink}">${esc(k.childName.toUpperCase().slice(0, 10))}</text>`}
     <text y="14" text-anchor="middle" class="bn-tiny" fill="${ink}">★ ★ ★</text></g>`;
   return `<svg class="bill2" viewBox="0 0 ${w} ${h}" style="width:${BILL.w}in;height:${BILL.h}in">
     <rect x="1" y="1" width="${w - 2}" height="${h - 2}" fill="${paper}"/>${waves}
     <rect x="8" y="8" width="${w - 16}" height="${h - 16}" fill="none" stroke="${ink}" stroke-width="2.2"/>
     <rect x="13" y="13" width="${w - 26}" height="${h - 26}" fill="none" stroke="${ink}" stroke-width=".8" stroke-dasharray="1.5 2"/>
     ${rosette(36, 36)}${rosette(w - 36, 36)}${rosette(36, h - 36)}${rosette(w - 36, h - 36)}
-    <text x="${w / 2}" y="34" text-anchor="middle" class="bn-bank" fill="${ink}">${esc(`BANK OF ${k.placeName}`.toUpperCase())}</text>
+    <text x="${w / 2}" y="34" text-anchor="middle" class="bn-bank" fill="${ink}">${esc(M.bucks ? `${M.coinsTitle} · good for kindness everywhere`.toUpperCase() : `BANK OF ${k.placeName}`.toUpperCase())}</text>
     <text x="70" y="62" class="bn-serial" fill="${ink}">${serial}</text>
     <text x="${w - 70}" y="${h - 50}" text-anchor="end" class="bn-serial" fill="${ink}">${serial}</text>
     ${seal}
     <ellipse cx="${w / 2}" cy="${h / 2 + 4}" rx="58" ry="66" fill="#fffdf6" stroke="${ink}" stroke-width="2"/>
     <ellipse cx="${w / 2}" cy="${h / 2 + 4}" rx="52" ry="60" fill="none" stroke="${ink}" stroke-width=".7" stroke-dasharray="2 2"/>
-    ${em(w / 2, h / 2 + 4, 74, k.def.icon)}
+    ${M.bucks ? `<path transform="translate(${w / 2} ${h / 2 + 8}) scale(2.3)" d="M0,14 C-22,-2 -18,-20 -6,-20 C-1,-20 0,-15 0,-13 C0,-15 1,-20 6,-20 C18,-20 22,-2 0,14 Z" fill="${ink}" opacity=".85"/>${em(w / 2, h / 2 - 2, 34, '🐾')}` : em(w / 2, h / 2 + 4, 74, k.def.icon)}
     <text x="${w - 92}" y="${h / 2 + 4}" text-anchor="middle" class="bn-big" fill="${ink}">${v}</text>
     <path d="M${w / 2 - 90},${h - 30} L${w / 2 + 90},${h - 30} L${w / 2 + 80},${h - 14} L${w / 2 - 80},${h - 14} Z" fill="${ink}"/>
     <text x="${w / 2}" y="${h - 18}" text-anchor="middle" class="bn-word">${WORDS[v]} ${esc((v === 1 ? M.coinWord : `${M.coinWord}s`).toUpperCase())}</text>
-    <text x="${w - 92}" y="${h / 2 + 34}" text-anchor="middle" class="bn-sign" fill="${ink}">${esc(k.lead)}</text>
+    <text x="${w - 92}" y="${h / 2 + 34}" text-anchor="middle" class="bn-sign" fill="${ink}">${esc(M.bucks ? 'Thank you!' : k.lead)}</text>
     <line x1="${w - 140}" y1="${h / 2 + 38}" x2="${w - 44}" y2="${h / 2 + 38}" stroke="${ink}" stroke-width=".8"/>
   </svg>`;
 }
 
-function coin(v) {
+function coin(v, dollars) {
   const ticks = Array.from({ length: 60 }, (_, i) => `<line x1="0" y1="-46" x2="0" y2="-41" transform="rotate(${i * 6})"/>`).join('');
   return `<svg class="coin3" viewBox="-50 -50 100 100"><defs><radialGradient id="cg" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff4cf"/><stop offset=".55" stop-color="#e7bd52"/><stop offset="1" stop-color="#b8862a"/></radialGradient></defs>
     <circle r="48" fill="url(#cg)" stroke="#8a6215" stroke-width="2"/><g stroke="#9a7020" stroke-width="1.2">${ticks}</g>
-    <circle r="36" fill="none" stroke="#9a7020" stroke-width="1.2"/><text y="13" text-anchor="middle" class="cn-num">${v}</text></svg>`;
+    <circle r="36" fill="none" stroke="#9a7020" stroke-width="1.2"/><text y="13" text-anchor="middle" class="cn-num">${dollars ? `$${v}` : v}</text></svg>`;
 }
 
 function moneyPage(k) {
   const M = k.def.menu;
   const page = (values, n) => `<section class="page shop-page money-page">
     <h1 class="script center">${esc(M.coinsTitle)}${n ? ' <small>(more)</small>' : ''}</h1>
-    <p class="pg-sub">Cut out the money along the dashed lines and share it out before the shop opens.</p>
+    <p class="pg-sub">Cut out the money along the dashed lines and share it out before ${M.bucks ? 'the clinic opens' : 'the shop opens'}.</p>
     <div class="money-cols"><div class="bills2">${values.map((v, i) => `<div class="cut">${bill(k, v, n * 4 + i)}</div>`).join('')}</div>
-    <div class="coins3">${Array.from({ length: 10 }, () => `<div class="cut round">${coin(1)}</div>`).join('')}</div></div>
+    <div class="coins3">${Array.from({ length: 10 }, () => `<div class="cut round">${coin(1, M.dollars)}</div>`).join('')}</div></div>
   </section>`;
   return page([1, 1, 2, 5], 0) + page([2, 5, 10, 10], 1);
 }
@@ -165,6 +167,7 @@ svg.pic { display:inline-block; vertical-align:middle; flex:none; }
 .board { margin-top:.2in; padding-bottom:.4in !important; border:5px solid var(--teal); border-radius:30px; background:#fff; padding:.5in .45in .3in; position:relative; outline:3px solid var(--mint); outline-offset:6px; }
 .ribbon { position:absolute; top:-.28in; left:50%; transform:translateX(-50%); background:var(--teal); color:#fff; font:700 17pt 'Fredoka'; letter-spacing:.14em; text-transform:uppercase; padding:.07in .5in; border-radius:10px; white-space:nowrap; }
 .mrows { display:flex; flex-direction:column; gap:.21in; }
+.little .menu-board.long .mrows { gap:.08in; } .little .menu-board.long .mrow { font-size:19pt; } .little .menu-board.long .board { padding-top:.4in; } .little .menu-board.long .board-tip { display:none; }
 .mrow { display:flex; align-items:center; gap:.16in; font:600 21pt 'Fredoka'; color:var(--navy); }
 .mrow .mn { white-space:nowrap; }
 .mrow .dots { flex:1; border-bottom:3px dotted var(--line); transform:translateY(.08in); }

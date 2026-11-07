@@ -29,7 +29,7 @@ function bigPages(k, kinds) {
 // The guide's "What's inside" line. Kept short: the shop kits' lists only just fit on the page.
 function bigLine(k) {
   const list = bigList(k.def.id);
-  return list.length ? [`${list.length} big full-page pictures: signs, labels, wrap-around props and posters`] : [];
+  return list.length ? [`${list.length} big full-page pictures: ${k.def.bigWhat || 'signs, labels, wrap-around props and posters'}`] : [];
 }
 
 // The big pictures shown in the website's preview gallery (scripts/big-previews.js), best first:
