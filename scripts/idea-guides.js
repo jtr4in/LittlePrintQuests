@@ -1,4 +1,4 @@
-// The occasion and age guides for the ideas pages (built by scripts/idea-pages.js): birthday, Thanksgiving, Christmas Eve and
+// The occasion and age guides for the ideas pages (built by scripts/idea-pages.js): birthday, Thanksgiving, Christmas Eve, New Year’s Eve and
 // classroom hunts, and hunts for little and big kids. Clues are either ids from the riddle library
 // (src/generator/spots.js) or written here as { label, riddle: [line, line], tip } when the spots are
 // party, holiday or classroom ones the library doesn't have; pic is the picture hint on the free printable. Section bodies are HTML; links in them are written
@@ -227,6 +227,51 @@ const GUIDES = [
       ['When should you do a Christmas Eve scavenger hunt?', 'After dinner, about an hour before bed. Eight clues take about 20 minutes, and because the last clues are the bath, pajamas and the pillow, the hunt ends right at bedtime.'],
       ['What goes in a Christmas Eve box?', 'Usually new pajamas, a Christmas book to read in bed and a small treat like a hot cocoa packet. Keep it small: the big presents are for the morning.'],
       ['Can a 3 year old do a Christmas Eve hunt?', 'Yes. Read the rhymes out loud and use the free printable, which has a picture of the hiding spot on every card so little ones can find it themselves.'],
+    ],
+  },
+  {
+    slug: 'new-years-eve-scavenger-hunt',
+    group: 'occasion',
+    short: 'New Year’s Eve hunt',
+    title: 'New Year’s Eve Scavenger Hunt for Kids: Free Countdown Clues and a Countdown Box',
+    description: 'A New Year’s Eve scavenger hunt for kids ages 3 to 8: 8 free rhyming clues that look back at the year, an early countdown kids can stay up for and a free printable.',
+    h1: 'New Year’s Eve scavenger hunt for kids',
+    lede: 'Midnight is a long way off when you’re 4. This hunt gives New Year’s Eve its own kid-sized countdown: eight clues that look back at the year, ending in a countdown box of hats and noisemakers, with the big cheer at a time little ones can actually stay up for.',
+    cta: [{ theme: 'space' }, 'Make a personalized countdown hunt'],
+    clueIntro: 'Hide each clue at the answer to the clue before it. Start about an hour before your countdown, and the last card leads to the countdown box.',
+    clues: [
+      { label: 'Calendar', pic: '📅', riddle: ['From January to December, the year’s almost through,', 'Check by the calendar, it’s hiding a clue!'], tip: 'Pinned to the last page of this year’s calendar' },
+      { label: 'Clock', pic: '⏰', riddle: ['Tick-tock, tick-tock, it keeps counting the time,', 'Look by the clock for the next little rhyme!'], tip: 'Next to a wall clock or a clock on a shelf' },
+      { label: 'Family photos', pic: '🖼️', riddle: ['Remember the beach and the snow and the zoo?', 'Look by our photos, a year full of you!'], tip: 'Under a fridge magnet holding a family photo' },
+      { label: 'Shoes', pic: '👟', riddle: ['They walked you to school and the park every day,', 'Look in your shoes for the clue tucked away!'], tip: 'In a shoe by the front door' },
+      { label: 'Bookshelf', pic: '📚', riddle: ['Which was the story you loved best this year?', 'Look on the bookshelf, the next clue is here!'], tip: 'Inside the favorite book of the year' },
+      { label: 'Sparkling juice', pic: '🧃', riddle: ['It’s bubbly and fizzy, we’ll toast with a cheer,', 'Look by the juice for a clink at New Year!'], tip: 'In the fridge door, next to the sparkling juice for the toast' },
+      { label: 'Window', pic: '🎆', riddle: ['Bang, pop and sparkle, the sky’s full of light,', 'Check by the window for fireworks tonight!'], tip: 'Taped low on a window' },
+      { label: 'Countdown box', pic: '🎉', riddle: ['You found every clue and the countdown is near,', 'Look under the cushion and shout Happy New Year!'], tip: 'The treasure: a countdown box under a couch cushion' },
+    ],
+    sections: [
+      ['An early countdown kids can stay up for', `<p>Most kids under 8 won’t make it to midnight, and they don’t need to. Pick a countdown time that fits bedtime, like 7 or 8 o’clock, and treat it as the real thing. Little kids can’t read a clock, so nobody will know.</p>
+<ul class="tips">
+<li><b>Start an hour before.</b> Twenty minutes of hunt, a few minutes to open the countdown box, then hats on for the countdown.</li>
+<li><b>Count down out loud from 10.</b> Everyone shouts the numbers, then “Happy New Year!” with noisemakers and a juice toast.</li>
+<li><b>Noon Year’s Eve.</b> For toddlers or a playdate, run the whole hunt in the morning and count down to lunch at 12.</li>
+</ul>`],
+      ['The look-back twist', '<p>Every clue on this trail is something from the year: the calendar, the clock, the family photos, the shoes that walked to school, the favorite book. At each stop, the finder says one favorite thing from the year, and a grown-up writes it on a slip. Put the slips in a jar or an envelope marked with next year’s date and open it next New Year’s Eve. Little ones can draw theirs.</p>'],
+      ['What to put in the countdown box', `<p>Any shoebox works. Wrap it, write the new year on the lid and fill it with things for the countdown:</p>
+<ul class="tips">
+<li>Party hats and paper crowns for everyone.</li>
+<li>Noisemakers or a pot and wooden spoon for each kid.</li>
+<li>Paper confetti they make themselves with a hole punch (it vacuums up easily).</li>
+<li>Sparkling juice and fancy plastic cups for the toast.</li>
+<li>A new calendar to decorate with birthdays and big days for next year.</li>
+</ul>
+<p>Leave out balloons for kids under 8: popped or uninflated balloons are a choking risk. Skip glow sticks for kids who still chew things.</p>`],
+      ['More winter play', '<p>A countdown is the start of every rocket launch, so an Outer Space hunt or a pretend Mission Control fits the night too. For the cold days after, try a snowy Ice Kingdom hunt. Our printed hunts have your kid’s name on every page and arrive by email in minutes.</p>{LINKS:outer-space-scavenger-hunt=Outer Space scavenger hunt,mission-control-pretend-play=Mission Control pretend play,ice-kingdom-scavenger-hunt=Ice Kingdom scavenger hunt,christmas-eve-scavenger-hunt=Christmas Eve scavenger hunt}{CTA}'],
+    ],
+    faq: [
+      ['How do you celebrate New Year’s Eve with young kids?', 'Pick an early countdown time, like 7 or 8 o’clock, and treat it as midnight. A scavenger hunt an hour before fills the evening, ends with hats and noisemakers in a countdown box, and gets everyone to bed on time.'],
+      ['What is a Noon Year’s Eve?', 'A New Year’s countdown held at 12 noon instead of midnight, so toddlers and preschoolers can join in. Run the hunt in the morning and count down to lunch.'],
+      ['Can a 3 year old do a New Year’s Eve hunt?', 'Yes. Read the rhymes out loud and use the free printable, which has a picture of the hiding spot on every card so little ones can find it themselves.'],
     ],
   },
 ];
