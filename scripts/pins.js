@@ -96,7 +96,7 @@ for (const set of clueSets()) {
     kicker: 'Free printable', head: `Free Printable ${set.name}`, sub: `${set.clues.length} rhyming clue cards with picture hints and an answer key`,
     tags: ['Free PDF', 'Ages 3 to 8'], art: `<img class="sheet" src="data:image/webp;base64,${fs.readFileSync(f).toString('base64')}">`,
     title: `Free Printable ${set.name} for Kids: Rhyming Clue Cards`,
-    description: `Free printable ${set.name.toLowerCase().replace(/christmas eve|christmas|halloween|easter|valentine|thanksgiving/g, (m) => m.replace(/\b\w/g, (c) => c.toUpperCase()))} clue cards: ${set.clues.length} rhyming riddles with picture hints for kids who can’t read yet, cut lines and an answer key. Print, cut, hide, play. Ages 3 to 8.`,
+    description: `Free printable ${set.name.toLowerCase().replace(/new year’s eve|christmas eve|christmas|halloween|easter|valentine|thanksgiving/g, (m) => m.replace(/(^|\s)\w/g, (c) => c.toUpperCase()))} clue cards: ${set.clues.length} rhyming riddles with picture hints for kids who can’t read yet, cut lines and an answer key. Print, cut, hide, play. Ages 3 to 8.`,
     link: `${SITE}ideas/${set.slug}/?utm_source=pinterest&utm_medium=pin`,
   });
 }
