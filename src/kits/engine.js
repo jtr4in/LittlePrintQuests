@@ -707,7 +707,7 @@ function buildKitHtml(cfg) {
     bigPages(k, ['screen']),
     badgesPage(k),
     extras.chefHatPage(k),
-    bigPages(k, ['wear', 'cards']),
+    bigPages(k, ['wear', 'cards', 'xcards']),
     disguisePages(k),
     propsPages(k),
     extras.peelPages(k),

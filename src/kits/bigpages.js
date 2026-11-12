@@ -11,11 +11,14 @@ const path = require('path');
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const dirOf = (id) => path.join(__dirname, 'art', id, 'big');
 
-function bigList(id) {
+// A picture with "ages": "little" or "big" goes only in that version (the vet's two X-ray sets,
+// 2026-11-12: cartoon X-ray cards for little kids, real-looking X-rays for big kids).
+function bigList(id, ages) {
   const f = path.join(dirOf(id), 'pages.json');
   if (!fs.existsSync(f)) return [];
-  return JSON.parse(fs.readFileSync(f, 'utf8')).filter((p) => fs.existsSync(path.join(dirOf(id), p.file)));
+  return JSON.parse(fs.readFileSync(f, 'utf8')).filter((p) => fs.existsSync(path.join(dirOf(id), p.file)) && (!ages || !p.ages || p.ages === ages));
 }
+const agesOf = (k) => (k.little ? 'little' : 'big');
 
 // Each picture's kind comes from its file name (03-wear.jpg, 11-poster-bird.jpg). The engine
 // places each kind next to the kit's own pages of the same sort, so a big sign sheet sits with the
@@ -23,12 +26,12 @@ function bigList(id) {
 const kindOf = (file) => (file.match(/^\d+-([a-z]+)/) || [])[1];
 
 function bigPages(k, kinds) {
-  return bigList(k.def.id).filter((p) => !kinds || kinds.includes(kindOf(p.file))).map((p) => `<section class="page bigpic"><img src="data:image/jpeg;base64,${fs.readFileSync(path.join(dirOf(k.def.id), p.file)).toString('base64')}" alt="${esc(p.title)}"></section>`).join('');
+  return bigList(k.def.id, agesOf(k)).filter((p) => !kinds || kinds.includes(kindOf(p.file))).map((p) => `<section class="page bigpic"><img src="data:image/jpeg;base64,${fs.readFileSync(path.join(dirOf(k.def.id), p.file)).toString('base64')}" alt="${esc(p.title)}"></section>`).join('');
 }
 
 // The guide's "What's inside" line. Kept short: the shop kits' lists only just fit on the page.
 function bigLine(k) {
-  const list = bigList(k.def.id);
+  const list = bigList(k.def.id, agesOf(k));
   return list.length ? [`${list.length} big full-page pictures: ${k.def.bigWhat || 'signs, labels, wrap-around props and posters'}`] : [];
 }
 
