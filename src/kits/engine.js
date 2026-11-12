@@ -285,7 +285,7 @@ function guidePage(k) {
     ...(extras.hasWow(k) ? [d.wow.inside] : []),
     ...bigLine(k),
     ...(d.jars ? [`${d.jars.length} wrap-around jar labels`] : []),
-    ...(d.wrapLabels ? [`${d.wrapLabels.length} long wrap-around food and treat jar labels with pretend food to cut off`] : []),
+    ...(d.wrapLabels ? [`${d.wrapLabels.length} long wrap-around food and treat jar labels with pretend food on both ends`] : []),
     ...(d.bandages ? [`${d.bandages.length} inch wrap-around pretend bandages`] : []),
     ...(d.tablet ? [`A clinic tablet with ${d.tablet.screens.length} screens`] : d.toys ? d.toys.map((t) => t.inside) : [`${['laptop', 'console'].includes(d.dashboard.device) ? 'A fold-up' : 'A cut-out'} ${d.dashboard.gadget} with 3 screens`]),
     '8 ID badges',

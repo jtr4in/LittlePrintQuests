@@ -91,6 +91,7 @@ const COUNTER = [
 ];
 
 function counterCard([lead, word, icon, cls = ''], k) {
+  icon = (k.def.counterIcons || {})[word] || icon; // the vet's Open sign is a sun (2026-11-11)
   return `<div class="ct-card ${cls}"><div class="ct-in">
     <div class="ct-pic">${art.pic(icon, '1.1in')}</div>
     <div class="ct-lead">${esc(lead)}</div>

@@ -26,8 +26,12 @@ const chunk = (list, n) => Array.from({ length: Math.ceil(list.length / n) }, (_
 function bigSignPages(k) {
   const d = k.def;
   const trio = (d.shop && d.shop.hero) || [d.menu.items[0][0], d.icon, d.menu.items[1][0]];
-  const W = 1520; const H = 430; const lap = 40;
+  const W = 1520; const H = 430;
   const stripes = 24; const sw = W / stripes;
+  // The glue strip is exactly one awning stripe, printed with the same stripe as the edge of the
+  // piece that covers it, so a cut a little off still lines up (Jason, 2026-11-11: the flags didn't
+  // meet with a narrower, washed-out strip).
+  const lap = sw;
   const awn = Array.from({ length: stripes }, (_, i) => `<path d="M${i * sw},0 L${(i + 1) * sw},0 L${(i + 1) * sw},56 A${sw / 2},${sw / 2.4} 0 0 1 ${i * sw},56 Z" fill="${i % 2 ? '#fff' : 'var(--teal-d)'}" stroke="var(--teal-d)" stroke-width="2"/>`).join('');
   const art = `<rect x="0" y="0" width="${W}" height="${H}" rx="28" fill="var(--teal)"/>${awn}
     <rect x="22" y="92" width="${W - 44}" height="${H - 114}" rx="22" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="2 14" stroke-linecap="round"/>
@@ -41,7 +45,7 @@ function bigSignPages(k) {
   const inch = 9.9 / (W / 2 + lap);
   const seam = W / 2;
   // On page 2: a dark line where page 1's edge goes, with arrows at the top and bottom.
-  const marks = `<rect x="${seam - lap}" y="0" width="${lap}" height="${H}" fill="#fff" opacity=".55"/>
+  const marks = `<rect x="${seam - lap}" y="92" width="${lap}" height="${H - 92}" fill="#fff" opacity=".35"/>
     <line x1="${seam}" y1="0" x2="${seam}" y2="${H}" stroke="var(--navy)" stroke-width="3" stroke-dasharray="10 6"/>
     <path d="M${seam - 14},0 L${seam},16 L${seam - 14},32 Z M${seam - 14},${H} L${seam},${H - 16} L${seam - 14},${H - 32} Z" fill="var(--navy)"/>
     <text x="${seam - lap / 2}" y="${H / 2}" class="bs-glue" text-anchor="middle" transform="rotate(-90 ${seam - lap / 2} ${H / 2})">GLUE UNDER</text>`;

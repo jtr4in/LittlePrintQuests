@@ -18,7 +18,7 @@ function welcomePage(k) {
   const trio = S.hero || [d.menu.items[0][0], d.icon, d.menu.items[1][0]];
   return `<section class="page shop-page poster">
     ${bg(3, [120, 120, 576, 820])}
-    <svg class="awning" viewBox="0 0 ${W} 80">${awning(W, 12)}</svg>
+    <svg class="awning" viewBox="0 0 ${W} 92">${awning(W, 12)}</svg>
     <div class="poster-in">
       <div class="kicker">Welcome to</div>
       ${who ? `<div class="script p-who" data-lines="1">${esc(who)}</div>` : ''}
@@ -151,7 +151,8 @@ svg.pic { display:inline-block; vertical-align:middle; flex:none; }
 .shop-bg { position:absolute; inset:0; width:100%; height:100%; z-index:0; }
 .shop-page > *:not(.shop-bg) { position:relative; z-index:1; }
 .poster { padding:0; }
-.awning { position:absolute !important; top:0; left:0; width:100%; }
+/* Below the printer's top margin, and tall enough for the scallops (68 wide, 28 deep). */
+.awning { position:absolute !important; top:.2in; left:0; width:100%; }
 .poster-in { position:absolute !important; inset:1.2in .6in .55in; display:flex; flex-direction:column; align-items:center; text-align:center; border:5px solid var(--teal); border-radius:36px; background:rgba(255,255,255,.82); padding:.35in .3in .3in; outline:3px solid var(--mint); outline-offset:7px; }
 .kicker { font:700 20pt 'Fredoka'; letter-spacing:.18em; text-transform:uppercase; color:var(--teal); }
 .p-who { font-size:40pt; color:var(--teal-d); margin-top:.1in; }
