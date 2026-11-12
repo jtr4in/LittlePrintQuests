@@ -36,7 +36,7 @@ const ETSY_THEMES = Object.keys(PACK_SECTIONS);
 const SINGLE_PRICE = 1.0;
 const BUNDLE_PRICE = 2.0;
 // Bump this when the attached files change: the next update replaces them on every listing.
-const FILES_VERSION = 'static-2026-11-07'; // 2026-11-07: the vet kit review changes (2026-11-02: the vet kit got its big sign)
+const FILES_VERSION = 'static-2026-11-12'; // 2026-11-12: vet kit round 2 (2026-11-07: the vet kit review; 2026-11-02: the vet kit got its big sign)
 // Listings from before then that needed a name. The next update deactivates them on Etsy.
 const RETIRED = ['bundle', 'kits', 'party'];
 
