@@ -26,6 +26,8 @@ Work that is about to merge or is mid-merge, so sessions on the other account ca
 
 - Face-free kit art (waiting on Jason's 13 Gemini grid images; prompt page https://claude.ai/artifact/QB7J7VcYHL3Jp6p4ufMzq6): will replace 136 files in `src/kits/art/*` and re-render docs/img icons, checkout and previews. Branch `claude/project-thread-wx32ov`, thread "Remove faces from kit images", 2026-10-24 23:40 UTC.
 
+- Weekly site check: pin GitHub Actions runners to ubuntu-24.04 (Site previews fails on 26.04). Branch `claude/weekly-check-runner-pin`, files `.github/workflows/{previews,pins,indexnow}.yml`, `notes/PROJECT-NOTES.md` (gotchas), thread "Weekly health check", 2026-11-12 13:55 UTC.
+
 ## Business direction
 
 - **Prices (Jason, 2026-10-27).** He swapped the activity pack and party pack so the activity pack reads as the more valuable one (he's building it out): activity pack $6.99 alone or **+$4** added to anything, party pack **$4.99**. Combos: hunt $9.99, kit $7.99, hunt + kit $14.99, hunt + party $12.99, kit + party $11.99, hunt + kit + party $15.99, everything **$19.99** (unchanged). A first try (+$5 add-on, hunt + kit + party $14.99) made the party pack free inside two bundles; `npm test` now checks every mix costs more than any smaller one and no more than its items alone. Prices live in `src/bot/products.js` and `docs/js/data.js` (`PRICES` and `LAYERS`), plus hand-written copies in `docs/index.html` (pricing cards) and `docs/activity-pages/index.html` (copy, meta description, JSON-LD). Etsy listings were left at their old prices (Etsy is fading). **Railway variables named `*_PRICE_CENTS` or `ACTIVITY_ADD_CENTS` override the code**, and `.env.example` used to set `BUNDLE_PRICE_CENTS=1699`; Jason was asked to check Railway has none.
