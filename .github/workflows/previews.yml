@@ -21,7 +21,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   previews:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # pinned 2026-11-12: ubuntu-latest became 26.04, which Playwright 1.56 can't install on
     timeout-minutes: 240
     steps:
       - uses: actions/checkout@v4
