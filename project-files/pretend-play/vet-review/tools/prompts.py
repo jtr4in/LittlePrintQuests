@@ -31,4 +31,7 @@ JOBS = [
  ('fill-pellets', '21:9', 'A wide strip completely filled edge to edge with small round green and brown turtle food pellets piled together. The food fills the whole picture, no background showing.', None),
  ('fill-chews', '21:9', 'A wide strip completely filled edge to edge with short red-brown chewy dog treat sticks piled together. The food fills the whole picture, no background showing.', None),
  ('fill-catkibble', '21:9', 'A wide strip completely filled edge to edge with small triangle and star shaped cat kibble in brown and orange piled together. The food fills the whole picture, no background showing.', None),
+ # Round 2 (Jason, 2026-11-11): a sun for Open, and a plain moon for Closed (the face-free moon kept its sleeping cap).
+ ('sun', '1:1', 'A bright, warm yellow and orange sun: a round glowing disc with soft rounded rays all around it. A plain sun.', A + 'check-up.webp'),
+ ('moon2', '1:1', 'A pale golden-yellow crescent moon with three small twinkling yellow stars beside it and a soft little wisp of blue-grey cloud under it. A plain moon, no hat, no cap, no clothing.', A + 'check-up.webp'),
 ]

@@ -5,7 +5,7 @@ module.exports = {
   hunt: 'vet',
   bigSign: true, // a shop-style kit: it keeps the big shop sign (missed when the sign came in on 2026-10-18)
   signs: [
-    ['Open', 'Come on in! The vet will see you soon.', '✅', 'go'],
+    ['Open', 'Come on in! The vet will see you soon.', '☀️', 'go'],
     ['Closed', 'The vets are resting. Please come back later!', '🌙', 'stop'],
     ['Waiting Room', 'Please sit quietly with your pet', '🪑'],
     ['Exam Room', 'Check-ups this way', '🩺'],
@@ -63,7 +63,7 @@ module.exports = {
   // Manila file folders for patient charts, intake forms and records (src/kits/rooms.js).
   folders: {
     title: 'Patient File Folders', label: 'PET RECORDS', tab: 'Patient', stamp: 'CONFIDENTIAL', wristbands: true,
-    inside: [['📝', 'New pet form'], ['🩺', 'Check-up'], ['🐾', 'Visit checklist'], ['🦴', 'X-rays']],
+    inside: [['📝', 'New pet form'], ['🩺', 'Check-up'], ['🦴', 'X-rays']],
     count: 1, // one folder: print it again for more pets
     tags: ['X-RAYS', 'VACCINES', 'ALLERGIES', 'GROOMING'], stamps: ['URGENT', 'ALL BETTER', 'GOOD PET!', 'FOLLOW UP'],
     intake: {
@@ -77,8 +77,7 @@ module.exports = {
   },
   // Flat props to cut out and play with (see propsPages in engine.js).
   props: {
-    scans: { title: 'Pet X-Rays', label: 'X-RAY', howTo: 'Cut out the X-rays. Hold one up to the window to “read” it, then tick what the vet found.',
-      findings: ['Swallowed a sock', 'Sore paw', 'Tummy full of treats', 'Wobbly tooth', 'Bent whisker', 'Ate a toy car'] },
+    // The Pet X-Rays page (teddy, bunny, dog, cat, hamster, bird) went in the 2026-11-11 review.
     patches: { title: 'Brave Patient Stickers', howTo: 'Cut out and tape one on every brave patient.',
       items: [['🏅', 'Brave patient'], ['⭐', 'Super pet'], ['💖', 'Get well soon'], ['🐾', 'Good boy'], ['🐾', 'Good girl'], ['🌈', 'All better'], ['🦷', 'Clean teeth'], ['💉', 'I had my vaccine'], ['😊', 'Happy & healthy']] },
   },
@@ -122,6 +121,7 @@ module.exports = {
   signFold: true, // the big Open and Closed signs share a page, one upside down, to fold and flip
   cleanCuts: true, // no instructions inside the cut lines (badges, hours sign, file folder)
   skip: ['ticket', 'passport', 'specials', 'atm', 'morning'],
+  counterIcons: { OPEN: '☀️' },
   counterSkip: ['PAY HERE', 'COME AGAIN!'],
   stations: [['Check-In Desk', '📋'], ['Pet Grooming', '🛁'], ['Pet Food', '🥣'], ['Recovery Room', '🛏️']],
   binLabels: [['🧰', 'Check-Up Tools'], ['🩹', 'Bandages & Tape'], ['🌡️', 'Pet Thermometers'], ['🩺', 'Stethoscopes'], ['🦴', 'X-Rays'], ['⛑️', 'First Aid'],
@@ -130,18 +130,9 @@ module.exports = {
   // Door signs, four to a page (clinic.js), bigger than the twelve on Jason's wife's sheet.
   doorSigns: [['Examination Room', '🩺', '#e2879b'], ['Treatment Room', '⛑️', '#2a9d8f'], ['X-Ray Room', '🩻', '#4f7fc4'], ['Medicine Storage', '🧪', '#ef9d31'],
     ['Cleaning Supplies', '🧽', '#e9b949'], ['Check-In Desk', '📋', '#5bb4a6'], ['Recovery Kennel', '🛌', '#9b7fd1'], ['Adoption Agency', '💞', '#e2879b']],
-  // Jason's wife's sheet of clinic cards (src/kits/art/vet/sheets/clinic-cards.jpg), with the Vet
-  // Services and For Animals Only cards turned into visit checklists for the pet's file, and a
-  // checklist on each little X-ray card. Boxes are in the picture's pixels: [x, y, w, h].
-  fileSheet: {
-    file: 'clinic-cards.jpg', size: [1024, 1536],
-    title: 'Today’s Visit', checklist: [['🩺', 'Examination'], ['💈', 'Grooming'], ['🦴', 'X-ray'], ['💉', 'Vaccine'], ['🎾', 'Training'], ['🦷', 'Teeth clean'], ['🧪', 'Medicine']],
-    visits: [[20, 594, 296, 506, '#e8879c'], [707, 592, 294, 508, '#e8879c']],
-    xrays: [[20, 1410, 218, 113, '#2f9e8f'], [272, 1410, 218, 113, '#2f9e8f'], [526, 1410, 218, 113, '#e8879c'], [782, 1410, 218, 113, '#4f7fc4']],
-    xrayChecks: ['Healthy bones', 'Needs a bandage', 'Come back soon'],
-  },
-  // Long, narrow labels that wrap round a play jar, with pretend food on the end: cut it off if the
-  // jar gets real pompoms instead (clinic.js). Fillers are src/kits/art/vet/fill/<name>.jpg.
+  // The sheet of clinic picture cards with visit checklists (fileSheet) went in the 2026-11-11 review.
+  // Long, narrow labels that wrap round a play jar, with pretend food on both ends to trim to fit
+  // (clinic.js). Fillers are src/kits/art/vet/fill/<name>.jpg.
   wrapLabels: [['Yummy Kibble', '🥣', 'kibble'], ['Tasty Treats', '🦴', 'bones'], ['Fishy Nibbles', '🐟', 'fish'], ['Kitty Kibble', '🐱', 'catkibble'],
     ['Chewy Bites', '🥩', 'chews'], ['Healthy Veggies', '🥕', 'veggies'], ['Seed Mix', '🐦', 'seeds'], ['Turtle Pellets', '🐢', 'pellets']],
   // Wrap-around bandages, sized to go round a stuffed animal's leg or paw with room to tape.

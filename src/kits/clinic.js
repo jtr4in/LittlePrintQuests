@@ -2,7 +2,7 @@
 // by its own key in a kit def, so other kits can copy them once the vet kit is right:
 //   doorSigns    [[title, emoji, color]]  big door signs, four to a page
 //   fileSheet    {...}                    a sheet of picture cards with checklists drawn over it
-//   wrapLabels   [[name, emoji, filler]]  long jar labels with pretend food on the end to cut off
+//   wrapLabels   [[name, emoji, filler]]  long jar labels with pretend food on both ends to trim
 //   bandages     { length, width }        wrap-around bandages for a stuffed animal's leg
 //   tablet       { app, screens }         a clinic tablet, one full-page screen per button
 //   checkup      {...}                    check-up cards sized to fit the file folder
@@ -27,7 +27,7 @@ const kindName = (k, kind) => k.def.kinds[kind][1];
 function doorSign(k, [title, e, color]) {
   return `<div class="ds-cut"><div class="ds" style="--ds:${color}">
     <div class="ds-paws">${art.pic('🐾', '.42in')}${art.pic('🐾', '.42in')}</div>
-    <div class="ds-pic">${art.pic(e, '2.15in')}</div>
+    <div class="ds-pic">${art.pic(e, '1.75in')}</div>
     <div class="ds-title" data-lines="2">${esc(title)}</div>
     <div class="ds-place">${esc(k.placeName)}</div>
   </div></div>`;
@@ -68,21 +68,22 @@ function fileSheetPage(k) {
 
 // ---------- wrap-around jar labels ----------
 
-// 6.75 inches goes round a play jar or bottle about 2 inches across, with a little overlap to tape.
+// 9.4 inches long, printed on its side: the name in the middle and pretend food on both ends, so
+// it goes all the way round a play jar or bottle (Jason, 2026-11-11: the 6.75 inch ones with food
+// on one end didn't reach). Trim the ends to fit.
 function wrapLabel(k, [name, e, filler], i) {
   const f = artFile(k, 'fill', `${filler}.jpg`);
-  const food = fs.existsSync(f) ? `<div class="wl-food" style="background-image:url('${dataUrl(f)}')"></div>` : `<div class="wl-food plain">${Array.from({ length: 12 }, () => art.pic(e, '.5in')).join('')}</div>`;
-  return `<div class="wl s${i % 4}">
-    <div class="wl-name">${art.pic(e, '.72in')}<b data-lines="2">${esc(name)}</b><span class="wl-paws">${art.pic('🐾', '.22in')}${art.pic('🐾', '.22in')}${art.pic('🐾', '.22in')}</span></div>
-    <div class="wl-snip"></div>${food}
-  </div>`;
+  const food = (side) => (fs.existsSync(f) ? `<div class="wl-food ${side}" style="background-image:url('${dataUrl(f)}')"></div>` : `<div class="wl-food plain ${side}">${Array.from({ length: 10 }, () => art.pic(e, '.45in')).join('')}</div>`);
+  return `<div class="wl-slot"><div class="wl s${i % 4}">
+    ${food('l')}<div class="wl-name">${art.pic(e, '.7in')}<b data-lines="2">${esc(name)}</b><span class="wl-paws">${art.pic('🐾', '.2in')}${art.pic('🐾', '.2in')}${art.pic('🐾', '.2in')}</span></div>${food('r')}
+  </div></div>`;
 }
 
 function wrapLabelPages(k) {
   const list = k.def.wrapLabels;
   if (!list) return '';
   return chunk(list, 4).map((four, i) => `<section class="page wl-page">
-    ${head(i ? 'Food and Treat Jar Labels (more)' : 'Food and Treat Jar Labels', 'Cut out a label and wrap it round a play jar or bottle, about 2 inches across, then tape the end. The food on the end makes the jar look full. Filling the jar with pompoms instead? Cut the food off on the dotted line.')}
+    <p class="pg-sub">${i ? 'More food and treat jar labels' : 'Food and treat jar labels'}: cut out a label, wrap it round a play jar or bottle and tape it. Trim the food off either end to fit.</p>
     <div class="wl-list">${four.map((x, j) => wrapLabel(k, x, i * 4 + j)).join('')}</div>
   </section>`).join('');
 }
@@ -227,7 +228,7 @@ const trainingPage = (k) => (k.def.training ? `<section class="page tc-page"><p 
 const clinicCss = `
 /* door signs */
 .ds-page { padding:.35in .4in; display:flex; flex-direction:column; } .ds-page .pg-sub { margin:0 0 .12in; }
-.ds-grid { flex:1; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; }
+.ds-grid { flex:1; min-height:0; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:minmax(0,1fr) minmax(0,1fr); }
 .ds-cut { border:1.5px dashed #b7c0cc; margin:-.75px; padding:.14in; display:flex; }
 .ds { flex:1; border:6px solid var(--ds); border-radius:24px; background:#fff; position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.14in; padding:.3in .25in; text-align:center; box-shadow:inset 0 0 0 .1in color-mix(in srgb, var(--ds) 14%, #fff); }
 .ds-paws { position:absolute; top:.22in; left:.24in; right:.24in; display:flex; justify-content:space-between; opacity:.85; }
@@ -247,15 +248,15 @@ const clinicCss = `
 .fs-xray { border-radius:8px; display:flex; flex-direction:column; justify-content:center; gap:.03in; padding:.02in .1in; font:600 8.5pt 'Fredoka'; color:var(--navy); }
 .fs-xray div { display:flex; align-items:center; gap:.06in; } .fs-xray .box { width:.14in; height:.14in; border-width:1.5px; }
 /* wrap-around jar labels */
-.wl-page { padding:.4in .5in; display:flex; flex-direction:column; } .wl-page .pg-sub { margin-bottom:.15in; }
-.wl-list { display:flex; flex-direction:column; align-items:center; gap:.22in; }
-.wl { width:6.75in; height:2.1in; display:flex; outline:2px dashed #b7c0cc; outline-offset:2px; border-radius:6px; overflow:hidden; flex:none; }
-.wl-name { width:2.6in; flex:none; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.03in; background:#fff; border:5px solid var(--wl); border-right:0; border-radius:6px 0 0 6px; padding:.06in; text-align:center; }
-.wl-name b { font:700 18pt/1 'Fredoka'; color:var(--wl); text-transform:uppercase; width:100%; }
+.wl-page { padding:.35in .4in; display:flex; flex-direction:column; } .wl-page .pg-sub { margin:0 0 .15in; }
+.wl-list { flex:1; display:flex; justify-content:space-around; align-items:center; }
+.wl-slot { width:1.7in; height:9.4in; position:relative; flex:none; }
+.wl { position:absolute; left:50%; top:50%; width:9.4in; height:1.7in; transform:translate(-50%, -50%) rotate(-90deg); display:flex; outline:2px dashed #b7c0cc; outline-offset:2px; border-radius:6px; overflow:hidden; }
+.wl-name { width:2.7in; flex:none; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.03in; background:#fff; border-top:5px solid var(--wl); border-bottom:5px solid var(--wl); padding:.06in .1in; text-align:center; }
+.wl-name b { font:700 17pt/1 'Fredoka'; color:var(--wl); text-transform:uppercase; width:100%; }
 .wl-paws { display:flex; gap:.08in; opacity:.8; }
-.wl-snip { width:0; border-left:2.5px dotted #6d7792; flex:none; position:relative; }
-.wl-snip::before { content:'✂'; position:absolute; top:-.04in; left:-.1in; font-size:13pt; color:#6d7792; background:#fff; line-height:1; }
-.wl-food { flex:1; background-size:cover; background-position:center; border:5px solid var(--wl); border-left:0; border-radius:0 6px 6px 0; }
+.wl-food { flex:1; background-size:auto 100%; background-position:center; border:5px solid var(--wl); }
+.wl-food.l { border-right:0; border-radius:6px 0 0 6px; } .wl-food.r { border-left:0; border-radius:0 6px 6px 0; }
 .wl-food.plain { display:flex; flex-wrap:wrap; align-content:center; justify-content:center; gap:.05in; background:#fff; }
 .wl.s0 { --wl:#2a9d8f; } .wl.s1 { --wl:#e2879b; } .wl.s2 { --wl:#4f7fc4; } .wl.s3 { --wl:#9b7fd1; }
 /* bandages */
@@ -310,6 +311,7 @@ const clinicCss = `
 .fc-cols { flex:1; display:flex; gap:.2in; min-height:0; }
 .fc-left { width:2.5in; flex:none; display:flex; flex-direction:column; } .fc-left .field { margin:.03in 0; font-size:10pt; } .fc-left .fill { font-size:11pt; min-width:.6in; }
 .fc-photo { height:1.45in; border:2.5px solid var(--mint); border-radius:14px; display:grid; place-items:center; background:var(--mint-l); margin-bottom:.04in; } .fc-photo.empty { background:#fff; border-style:dashed; }
+.fc-photo { overflow:hidden; } .fc-photo .pic { max-width:1.3in; max-height:1.3in; }
 .fc-right { flex:1; display:flex; flex-direction:column; gap:.05in; min-width:0; }
 .fc-q { font:700 10pt 'Fredoka'; color:var(--teal-d); }
 .fc-svc { display:grid; grid-template-columns:1fr 1fr; gap:.04in .1in; } .fc-svc span { display:flex; align-items:center; gap:.06in; font:600 10.5pt 'Fredoka'; } .fc-svc .box { width:.18in; height:.18in; }
