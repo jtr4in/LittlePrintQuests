@@ -1,30 +1,14 @@
 [
- {
-  "file": "01-hero.jpg",
-  "title": "a big bird X-ray"
- },
- {
-  "file": "02-cards.jpg",
-  "title": "four pet X-ray cards"
- },
- {
-  "file": "11-poster-bird.jpg",
-  "title": "bird X-ray poster"
- },
- {
-  "file": "12-poster-bunny.jpg",
-  "title": "bunny X-ray poster"
- },
- {
-  "file": "13-poster-cat.jpg",
-  "title": "cat X-ray poster"
- },
- {
-  "file": "14-poster-dog.jpg",
-  "title": "dog X-ray poster"
- },
- {
-  "file": "15-poster-turtle.jpg",
-  "title": "turtle X-ray poster"
- }
+ { "file": "01-hero-dog.jpg", "title": "a real-looking dog X-ray", "ages": "big" },
+ { "file": "02-hero-cat.jpg", "title": "a real-looking cat X-ray", "ages": "big" },
+ { "file": "03-hero-bunny.jpg", "title": "a real-looking bunny X-ray", "ages": "big" },
+ { "file": "04-hero-bird.jpg", "title": "a real-looking bird X-ray", "ages": "big" },
+ { "file": "05-hero-turtle.jpg", "title": "a real-looking turtle X-ray", "ages": "big" },
+ { "file": "06-xcards-little-1.jpg", "title": "cat, bunny and turtle X-ray cards", "ages": "little" },
+ { "file": "07-xcards-little-2.jpg", "title": "dog, bird and hamster X-ray cards", "ages": "little" },
+ { "file": "11-poster-bird.jpg", "title": "bird X-ray poster" },
+ { "file": "12-poster-bunny.jpg", "title": "bunny X-ray poster" },
+ { "file": "13-poster-cat.jpg", "title": "cat X-ray poster" },
+ { "file": "14-poster-dog.jpg", "title": "dog X-ray poster" },
+ { "file": "15-poster-turtle.jpg", "title": "turtle X-ray poster" }
 ]

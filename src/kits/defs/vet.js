@@ -116,7 +116,7 @@ module.exports = {
   defaultKinds: ['bear', 'bunny', 'dog', 'cat'],
   // The vet kit was gone over page by page by Jason and his wife on 2026-11-07 (notes/PROJECT-NOTES.md,
   // "Vet kit review"). These switches turn on what came out of it, so other kits can copy them:
-  bigWhat: 'X-ray pictures, X-ray cards and labelled X-ray posters',
+  bigWhat: 'X-ray pictures and labelled X-ray posters',
   bannerExtender: true, // a blank middle strip for the big sign, to print as many times as you like
   signFold: true, // the big Open and Closed signs share a page, one upside down, to fold and flip
   cleanCuts: true, // no instructions inside the cut lines (badges, hours sign, file folder)
