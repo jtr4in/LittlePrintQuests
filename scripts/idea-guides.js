@@ -1,4 +1,4 @@
-// The occasion and age guides for the ideas pages (built by scripts/idea-pages.js): birthday, Thanksgiving, Christmas Eve, New Year’s Eve and
+// The occasion and age guides for the ideas pages (built by scripts/idea-pages.js): birthday, Thanksgiving, Christmas Eve, New Year’s Eve, snow day and
 // classroom hunts, and hunts for little and big kids. Clues are either ids from the riddle library
 // (src/generator/spots.js) or written here as { label, riddle: [line, line], tip } when the spots are
 // party, holiday or classroom ones the library doesn't have; pic is the picture hint on the free printable. Section bodies are HTML; links in them are written
@@ -272,6 +272,55 @@ const GUIDES = [
       ['How do you celebrate New Year’s Eve with young kids?', 'Pick an early countdown time, like 7 or 8 o’clock, and treat it as midnight. A scavenger hunt an hour before fills the evening, ends with hats and noisemakers in a countdown box, and gets everyone to bed on time.'],
       ['What is a Noon Year’s Eve?', 'A New Year’s countdown held at 12 noon instead of midnight, so toddlers and preschoolers can join in. Run the hunt in the morning and count down to lunch.'],
       ['Can a 3 year old do a New Year’s Eve hunt?', 'Yes. Read the rhymes out loud and use the free printable, which has a picture of the hiding spot on every card so little ones can find it themselves.'],
+    ],
+  },
+  {
+    slug: 'snow-day-scavenger-hunt',
+    group: 'occasion',
+    short: 'Snow day hunt',
+    title: 'Snow Day Scavenger Hunt for Kids: Free Rhyming Clues and Snow Play Ideas',
+    description: 'A snow day scavenger hunt for kids ages 3 to 8: 8 free rhyming clues that get them dressed for the snow, outdoor ice gem hunt ideas and a free printable.',
+    h1: 'Snow day scavenger hunt for kids',
+    lede: 'School is canceled, the yard is white and everyone is up early. This hunt gives the morning a plan: the clues lead through the kitchen and then to each piece of snow gear, so by the last card your kid is bundled up at the back door with a snow kit waiting.',
+    cta: [{ theme: 'ice' }, 'Make a personalized snowy hunt'],
+    clueIntro: 'Hide each clue at the answer to the clue before it while the kids eat breakfast. They put on each piece of snow gear as they find it, and the last card sends them outside.',
+    clues: [
+      { label: 'Window', pic: '❄️', riddle: ['Snowflakes are falling, the whole yard is white,', 'Look by the window, what a wonderful sight!'], tip: 'Taped low on the window where they first saw the snow' },
+      { label: 'Mugs', pic: '☕', riddle: ['After the snow comes a warm, cozy treat,', 'Look by the mugs for some cocoa so sweet!'], tip: 'In the mug you’ll use for hot cocoa later' },
+      { label: 'Freezer', pic: '🧊', riddle: ['Inside it’s as chilly as snow on a hill,', 'Look by the freezer, it’s frosty and still!'], tip: 'Taped to the freezer door, where the ice gems for outside are waiting' },
+      { label: 'Snow boots', pic: '🥾', riddle: ['Stomp through the snow with a crunch and a squeak,', 'Look in your snow boots, go on, take a peek!'], tip: 'Tucked inside a snow boot by the door' },
+      { label: 'Scarf', pic: '🧣', riddle: ['Long, soft and stripy, it wraps round and round,', 'Look by your scarf where the next clue is found!'], tip: 'Wrapped in a scarf on a hook' },
+      { label: 'Coat', pic: '🧥', riddle: ['It’s puffy and warm and it zips to your chin,', 'Check in your coat pocket, the next clue is in!'], tip: 'In a coat pocket, on the hook or in the closet' },
+      { label: 'Mittens', pic: '🧤', riddle: ['Fingers get frosty and thumbs get cold too,', 'Look in your mittens, they’re keeping a clue!'], tip: 'Inside a mitten in the hat and mitten basket, never on a heater' },
+      { label: 'Snow kit', pic: '🪣', riddle: ['You’re bundled and ready, so head for the door,', 'Your snow kit is waiting, go out and explore!'], tip: 'The treasure: a bucket of snow toys by the back door' },
+    ],
+    sections: [
+      ['A hunt that gets them dressed', `<p>Getting a 4 year old into snow gear can take longer than the snow play. This trail turns it into the game: after the window, the mugs and the freezer, every stop is a piece of gear, and the kids put it on as they find the card. Mittens come last, because nobody can pick up a clue card in mittens.</p>
+<ul class="tips">
+<li><b>Snow pants first.</b> Have them on before the first clue, then the hunt does boots, scarf, coat and mittens.</li>
+<li><b>Bathroom before boots.</b> Make the freezer stop a bathroom stop too. Nobody wants to unzip a snowsuit five minutes later.</li>
+<li><b>Lay the gear out the night before.</b> When the snow is in the forecast, put each kid’s gear in a pile by the door and hide the cards in it in the morning.</li>
+</ul>`],
+      ['What to put in the snow kit', `<p>Any bucket or bin by the back door works. Fill it with things that make snow play last longer:</p>
+<ul class="tips">
+<li>Spray bottles of water with a few drops of food coloring, for painting the snow.</li>
+<li>Sand toys and cookie cutters for snow bricks and snow shapes.</li>
+<li>A small shovel for digging a path or a snow fort.</li>
+<li>Ice gems: water with food coloring frozen in a muffin tin the night before.</li>
+<li>A dry pair of mittens for when the first pair gets soggy.</li>
+</ul>`],
+      ['Keep the hunt going outside', `<p>Paper clues don’t last in the snow, but a second hunt can. Hide the ice gems in the snow while the kids watch from the window, then send them out to dig. Count them as they come in so you know when they’ve found them all. Or give them a list to spot: a footprint, a bird track, an icicle, a pinecone, a snowball as big as their head.</p>
+<ul class="tips">
+<li><b>Muffin-size gems only.</b> Skip ice cube trays and small beads for kids under 3: big gems are easy to find and too big to swallow.</li>
+<li><b>Short trips for little kids.</b> 15 to 20 minutes out, then warm up inside and check hands and toes.</li>
+<li><b>Stay off the plow piles.</b> Keep play away from the street and the snowbanks along it, off frozen ponds, and out from under icicles on the roof edge.</li>
+</ul>`],
+      ['When it’s too cold to go out', '<p>Some snow days are for looking, not playing. Bring a bin of snow inside to play with in mittens at the table, run the hunt to end at the cocoa mugs instead of the door, or set up a cozy coffee shop with cocoa on the menu. A snowy Ice Kingdom hunt or a pretend Ice Palace fills the rest of the day. Our printed hunts have your kid’s name on every page and arrive by email in minutes.</p>{LINKS:ice-kingdom-scavenger-hunt=Ice Kingdom scavenger hunt,ice-palace-pretend-play=Ice Palace pretend play,coffee-shop-pretend-play=Coffee Shop pretend play,indoor-scavenger-hunt-for-a-house=Indoor hunt for a house}{CTA}'],
+    ],
+    faq: [
+      ['What can kids do on a snow day?', 'Start with a scavenger hunt that ends at the back door in full snow gear, then play outside in short trips: paint the snow with colored water, dig for ice gems, build with sand toys. Warm up with cocoa and a pretend play game when they come in.'],
+      ['How do you make ice gems for a snow hunt?', 'Fill a muffin tin with water, add a few drops of food coloring to each cup and freeze it overnight. Pop the gems out in the morning and hide them in the snow. Muffin-size gems are easy to spot and too big for little ones to swallow.'],
+      ['Can a 3 year old do a snow day scavenger hunt?', 'Yes. Read the rhymes out loud and use the free printable, which has a picture of the hiding spot on every card so little ones can find it themselves. A grown-up helps with zippers and mittens along the way.'],
     ],
   },
 ];
