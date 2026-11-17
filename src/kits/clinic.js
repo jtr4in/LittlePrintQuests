@@ -155,6 +155,22 @@ function adoptionPages(k) {
   <section class="page ac-page"><p class="pg-sub">Adoption certificates: one for each pet that finds a new family. Fold one in half to fit it in the folder pocket.</p>${adoptionCert(k)}<div class="cut-h"></div>${adoptionCert(k)}</section>`;
 }
 
+// ---------- vet notepad ----------
+
+// Four little notepad sheets to a page, like the one Jason's wife made (2026-11-17): a to-do list with
+// a "when" line beside each box, and room for notes. The round logo is a paw, not a smiley (no faces).
+function notepadSheet(k) {
+  const N = k.def.notepad;
+  const row = () => '<div class="np-row"><i class="box"></i><span class="np-l"></span><span class="np-d"></span></div>';
+  return `<div class="np-cut"><div class="np"><div class="np-top"><div class="np-logo">${art.pic('🐾', '.34in')}</div><b>${esc(N.title)}</b></div>
+    <div class="np-icons">${art.pic('📋', '.5in')}<span>${esc(N.when)}</span>${art.pic('📅', '.5in')}</div>
+    ${Array.from({ length: 6 }, row).join('')}
+    <div class="np-notes">${art.pic('📝', '.5in')}<div><span class="np-l"></span><span class="np-l"></span><span class="np-l"></span></div></div>
+  </div></div>`;
+}
+
+const notepadPage = (k) => (k.def.notepad ? `<section class="page np-page"><p class="pg-sub">Clinic notepad: cut the pad sheets apart on the dashed lines. Write down what each pet needs and when.</p><div class="np-grid">${notepadSheet(k).repeat(4)}</div></section>` : '');
+
 // ---------- bandages ----------
 
 const PATTERNS = [
@@ -350,8 +366,8 @@ const clinicCss = `
 /* fish bowl */
 .fb-page { padding:.4in .45in; display:flex; flex-direction:column; align-items:center; }
 .fb-bowl { flex:1; min-height:0; width:100%; object-fit:contain; margin-top:.1in; }
-.fb-fish { flex:1; display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:.18in; align-content:center; width:7.2in; max-width:100%; box-sizing:border-box; margin-top:.15in; }
-.fb-cut { border:1.5px dashed #b7c0cc; border-radius:50%; aspect-ratio:1.25; display:grid; place-items:center; padding:.18in; min-width:0; box-sizing:border-box; overflow:hidden; }
+.fb-fish { flex:1; display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:.18in; align-content:center; width:7.4in; max-width:100%; box-sizing:border-box; margin-top:.15in; }
+.fb-cut { border:1.5px dashed #b7c0cc; border-radius:50%; aspect-ratio:1.1; display:grid; place-items:center; padding:.36in; min-width:0; box-sizing:border-box; overflow:hidden; }
 .fb-cut img { max-width:100%; max-height:100%; object-fit:contain; }
 /* adoption folder and certificates */
 .af-page { padding:.35in .4in; display:flex; flex-direction:column; } .af-page .pg-sub { margin:0 0 .1in; }
@@ -379,6 +395,18 @@ const clinicCss = `
 .ac-words { flex:1; display:flex; flex-direction:column; justify-content:center; gap:.1in; text-align:center; } .ac-words p { font:500 13pt/1.3 'Fredoka'; color:var(--navy); margin:0; }
 .ac-f, .ac-sign > div { display:flex; flex-direction:column; } .ac-f small, .ac-sign small { font:500 9pt 'Fredoka'; color:#8a93a8; text-align:center; }
 .ac-sign { display:flex; gap:.5in; } .ac-sign > div { flex:1; }
+/* notepad */
+.np-page { padding:.35in .4in; display:flex; flex-direction:column; } .np-page .pg-sub { margin:0 0 .12in; }
+.np-grid { flex:1; min-height:0; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:minmax(0,1fr) minmax(0,1fr); }
+.np-cut { border:1.5px dashed #b7c0cc; margin:-.75px; padding:.12in; display:flex; }
+.np { flex:1; display:flex; flex-direction:column; border-radius:6px; overflow:hidden; background:#fff; box-shadow:0 0 0 1.5px var(--teal) inset; }
+.np-top { background:var(--teal); display:grid; place-items:center; padding:.1in 0; }
+.np-top b { display:none; }
+.np-logo { width:.55in; height:.55in; border:3px solid #fff; border-radius:50%; display:grid; place-items:center; background:#fff; }
+.np-icons { display:flex; justify-content:space-between; align-items:center; padding:.1in .35in .02in .3in; } .np-icons span { display:none; }
+.np-row { display:flex; align-items:flex-end; gap:.12in; padding:.07in .3in 0; flex:1; } .np-row .box { border-color:var(--teal); flex:none; margin-bottom:.02in; }
+.np-l { flex:1; border-bottom:2px solid var(--teal); height:100%; min-height:.14in; } .np-d { width:1.1in; flex:none; border-bottom:2px solid var(--teal); height:100%; min-height:.14in; }
+.np-notes { display:flex; align-items:flex-end; gap:.1in; padding:.1in .3in .15in; flex:1.4; } .np-notes > div { flex:1; height:100%; display:flex; flex-direction:column; justify-content:space-around; } .np-notes .np-l { flex:none; height:.1in; width:100%; }
 /* bandages */
 .bd-page { padding:.4in .45in; display:flex; flex-direction:column; align-items:center; }
 .bd-row { display:flex; gap:.18in; justify-content:center; margin-top:.05in; }
@@ -448,4 +476,4 @@ const clinicCss = `
 .tc-seal { width:auto !important; }
 `;
 
-module.exports = { adoptionPages, fishbowlPages, doorSignPages, fileSheetPage, wrapLabelPages, bandagePages, tabletPages, checkupPages, trainingPage, clinicCss };
+module.exports = { notepadPage, adoptionPages, fishbowlPages, doorSignPages, fileSheetPage, wrapLabelPages, bandagePages, tabletPages, checkupPages, trainingPage, clinicCss };

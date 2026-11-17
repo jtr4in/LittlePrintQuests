@@ -143,6 +143,8 @@ module.exports = {
   fishbowl: { title: 'Fish Bowl', howTo: 'Hang the bowl on a wall or the side of a box, then add the fish from the next page. Who will adopt a fish today?' },
   // Adoption Papers pocket folder and adoption certificates (clinic.js, Jason 2026-11-17).
   adoption: { title: 'Adoption Papers', certTitle: 'Adoption Certificate', flap: 'Keep your pet’s papers safe in here', pocket: 'Pet Papers', promise: 'and will be fed, walked, cuddled and loved forever.' },
+  // Clinic notepad sheets, four to a page (clinic.js, Jason 2026-11-17).
+  notepad: { title: 'Clinic Notepad', when: 'When' },
   // The clinic tablet: one screen per page, as if the vet tapped a different button (clinic.js).
   tablet: { app: 'PawCare', screens: ['appointments', 'patient', 'monitor', 'xray'] },
   // File-folder size check-up cards (clinic.js): the pet's details and picture, the services it
