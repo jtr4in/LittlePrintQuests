@@ -3,10 +3,12 @@
 //   doorSigns    [[title, emoji, color]]  big door signs, four to a page
 //   fileSheet    {...}                    a sheet of picture cards with checklists drawn over it
 //   wrapLabels   [[name, emoji, filler]]  long jar labels with pretend food on both ends to trim
+//   medLabels    [[name, emoji, filler]]  the same, for pretend medicine (pills, vitamins, drops)
 //   bandages     { length, width }        wrap-around bandages for a stuffed animal's leg
 //   tablet       { app, screens }         a clinic tablet, one full-page screen per button
 //   checkup      {...}                    check-up cards sized to fit the file folder
 //   training     {...}                    pet training certificates, two to a page
+//   fishbowl     {...}                    a big fish bowl and a sheet of fish to cut out and put in it
 // The rule they asked for everywhere: instructions go in the white space around a piece, never on it.
 
 const fs = require('fs');
@@ -80,12 +82,77 @@ function wrapLabel(k, [name, e, filler], i) {
 }
 
 function wrapLabelPages(k) {
-  const list = k.def.wrapLabels;
-  if (!list) return '';
-  return chunk(list, 4).map((four, i) => `<section class="page wl-page">
-    <p class="pg-sub">${i ? 'More food and treat jar labels' : 'Food and treat jar labels'}: cut out a label, wrap it round a play jar or bottle and tape it. Trim the food off either end to fit.</p>
-    <div class="wl-list">${four.map((x, j) => wrapLabel(k, x, i * 4 + j)).join('')}</div>
-  </section>`).join('');
+  const sets = [[k.def.wrapLabels, 'Food and treat jar labels', 'More food and treat jar labels', 'Trim the food off either end to fit.'],
+    [k.def.medLabels, 'Medicine jar labels', 'More medicine jar labels', 'Trim the ends to fit.']];
+  let n = 0;
+  return sets.filter(([list]) => list).map(([list, first, more, trim]) => chunk(list, 4).map((four, i) => `<section class="page wl-page">
+    <p class="pg-sub">${i ? more : first}: cut out a label, wrap it round a play jar or bottle and tape it. ${trim}</p>
+    <div class="wl-list">${four.map((x) => wrapLabel(k, x, n++)).join('')}</div>
+  </section>`).join('')).join('');
+}
+
+// ---------- adoption folder ----------
+
+// A pocket folder for the pet's adoption papers, like the kraft one Jason's wife used (2026-11-17):
+// cut it out, fold the side flap and the bottom flap behind the cover, and tuck the side flap's tab
+// into the slit on the bottom flap. Printed side out, so the cover and both flaps show. The bottom
+// flap's words are upside down on the sheet so they read the right way once it is folded up.
+// Two adoption certificates (next page) fit in the pocket.
+function adoptionFolder(k) {
+  const A = k.def.adoption;
+  const T = 0.5, S = 2.2, M = 5.0, H = 6.6, B = 1.6, Y = H - B / 2; // inches
+  const u = (n) => +(n * 100).toFixed(1);
+  const W = T + S + M, HH = H + B;
+  const cut = `M${u(T + S)} ${u(H + B)} H${u(W)} V0 H${u(T)} V${u(Y + 0.4)} H${u(0.25)} A${u(0.25)} ${u(0.25)} 0 0 1 0 ${u(Y + 0.15)} V${u(Y - 0.15)} A${u(0.25)} ${u(0.25)} 0 0 1 ${u(0.25)} ${u(Y - 0.4)} H${u(T)} V0`;
+  const outline = `M${u(T)} 0 H${u(W)} V${u(H + B)} H${u(T + S)} V${u(H)} H${u(T)} V${u(Y + 0.4)} H${u(0.25)} A${u(0.25)} ${u(0.25)} 0 0 1 0 ${u(Y + 0.15)} V${u(Y - 0.15)} A${u(0.25)} ${u(0.25)} 0 0 1 ${u(0.25)} ${u(Y - 0.4)} H${u(T)} Z`;
+  const slitX = T + S + S + 0.15, slitY = H + B / 2;
+  return `<div class="af" style="width:${W}in;height:${HH}in">
+    <svg class="af-lines" viewBox="0 0 ${u(W)} ${u(HH)}" width="${W}in" height="${HH}in">
+      <path d="${outline}" fill="#fff" stroke="#9aa6b6" stroke-width="2.5" stroke-dasharray="10 7"/>
+      <line x1="${u(T + S)}" y1="0" x2="${u(T + S)}" y2="${u(H)}" stroke="var(--teal)" stroke-width="2.5" stroke-dasharray="2 6" stroke-linecap="round"/>
+      <line x1="${u(T + S)}" y1="${u(H)}" x2="${u(W)}" y2="${u(H)}" stroke="var(--teal)" stroke-width="2.5" stroke-dasharray="2 6" stroke-linecap="round"/>
+      <line x1="${u(slitX)}" y1="${u(slitY - 0.45)}" x2="${u(slitX)}" y2="${u(slitY + 0.45)}" stroke="#d6455d" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <div class="af-side" style="left:${T}in;width:${S}in;height:${H}in">
+      <div class="af-paws">${Array.from({ length: 6 }, () => art.pic('🐾', '.42in')).join('')}</div>
+      <p>${esc(A.flap)}</p>
+    </div>
+    <div class="af-cover" style="left:${T + S}in;width:${M}in;height:${H}in"><div class="af-cv">
+      <div class="af-place">${placeHtml(k.placeName)}</div>
+      <div class="af-art">${art.pic('🐶', '1in')}${art.pic('💞', '.7in')}${art.pic('🐱', '1in')}</div>
+      <h2>${esc(A.title)}</h2>
+      <div class="af-f"><small>Pet’s name</small><span class="fill"></span></div>
+      <div class="af-f"><small>Adopted by</small><span class="fill"></span></div>
+      <div class="af-f"><small>Date</small><span class="fill"></span></div>
+    </div></div>
+    <div class="af-bottom" style="left:${T + S}in;top:${H}in;width:${M}in;height:${B}in">
+      <div>${art.pic('🐾', '.35in')}<b>${esc(A.pocket)}</b>${art.pic('🐾', '.35in')}</div>
+    </div>
+  </div>`;
+}
+
+function adoptionCert(k) {
+  const A = k.def.adoption;
+  return `<div class="ac"><div class="ac-in">
+    <div class="ac-top">${art.pic('💞', '.55in')}<div><div class="clinic">${placeHtml(k.placeName)}</div><h2>${esc(A.certTitle)}</h2></div>${art.pic('🐾', '.5in')}</div>
+    <div class="ac-body">
+      <div class="ac-pic"><small>Draw your pet</small></div>
+      <div class="ac-words">
+        <div class="ac-f"><span class="fill"></span><small>pet’s name</small></div>
+        <p>has been adopted by</p>
+        <div class="ac-f"><span class="fill"></span><small>new family</small></div>
+        <p>${esc(A.promise)}</p>
+      </div>
+    </div>
+    <div class="ac-sign"><div><span class="fill"></span><small>Date</small></div><div><span class="fill"></span><small>Adoption Agency</small></div></div>
+  </div></div>`;
+}
+
+function adoptionPages(k) {
+  if (!k.def.adoption) return '';
+  return `<section class="page af-page">${head(k.def.adoption.title + ' Folder', 'Cut on the dashed line and cut the short red slit. Fold the side flap and the bottom flap back behind the cover on the dotted lines, then tuck the round tab into the slit. Put the adoption papers in the pocket.')}
+    <div class="af-wrap">${adoptionFolder(k)}</div></section>
+  <section class="page ac-page"><p class="pg-sub">Adoption certificates: one for each pet that finds a new family. Fold one in half to fit it in the folder pocket.</p>${adoptionCert(k)}<div class="cut-h"></div>${adoptionCert(k)}</section>`;
 }
 
 // ---------- bandages ----------
@@ -105,6 +172,27 @@ function bandagePages(k) {
     ${head('Pretend Bandages', `Each one is ${B.length} inches long: enough to wrap round a teddy’s arm or leg and tape the end. Put the soft middle on the sore spot. Cut a bit off for a small paw.`)}
     <div class="bd-row">${PATTERNS.map(strip).join('')}</div>
     <p class="bd-tip">Print at Actual size (100%) so the bandages come out the right length.</p>
+  </section>`;
+}
+
+// ---------- fish bowl ----------
+
+// Jason's wife's idea (2026-11-16): a big empty fish bowl to hang up, and nine fish to cut out and
+// stick on with tape or Blu Tack. Pictures: art/<kit>/sheets/fishbowl.jpg and art/<kit>/fish/fish-N.jpg.
+function fishbowlPages(k) {
+  const F = k.def.fishbowl;
+  if (!F) return '';
+  const bowl = artFile(k, 'sheets', 'fishbowl.jpg');
+  const dir = artFile(k, 'fish');
+  if (!fs.existsSync(bowl) || !fs.existsSync(dir)) return '';
+  const fish = fs.readdirSync(dir).filter((f) => f.endsWith('.jpg')).sort((a, b) => parseInt(a.match(/\d+/), 10) - parseInt(b.match(/\d+/), 10));
+  return `<section class="page fb-page">
+    ${head(F.title, F.howTo)}
+    <img class="fb-bowl" src="${dataUrl(bowl)}" alt="">
+  </section>
+  <section class="page fb-page">
+    ${head(`${F.title}: Fish`, 'Cut out the fish on the dashed lines and put them in the bowl with tape or sticky tack. Move them around, feed them and give them names!')}
+    <div class="fb-fish">${fish.map((f) => `<div class="fb-cut"><img src="${dataUrl(path.join(dir, f))}" alt=""></div>`).join('')}</div>
   </section>`;
 }
 
@@ -259,6 +347,38 @@ const clinicCss = `
 .wl-food.l { border-right:0; border-radius:6px 0 0 6px; } .wl-food.r { border-left:0; border-radius:0 6px 6px 0; }
 .wl-food.plain { display:flex; flex-wrap:wrap; align-content:center; justify-content:center; gap:.05in; background:#fff; }
 .wl.s0 { --wl:#2a9d8f; } .wl.s1 { --wl:#e2879b; } .wl.s2 { --wl:#4f7fc4; } .wl.s3 { --wl:#9b7fd1; }
+/* fish bowl */
+.fb-page { padding:.4in .45in; display:flex; flex-direction:column; align-items:center; }
+.fb-bowl { flex:1; min-height:0; width:100%; object-fit:contain; margin-top:.1in; }
+.fb-fish { flex:1; display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:.18in; align-content:center; width:7.2in; max-width:100%; box-sizing:border-box; margin-top:.15in; }
+.fb-cut { border:1.5px dashed #b7c0cc; border-radius:50%; aspect-ratio:1.25; display:grid; place-items:center; padding:.18in; min-width:0; box-sizing:border-box; overflow:hidden; }
+.fb-cut img { max-width:100%; max-height:100%; object-fit:contain; }
+/* adoption folder and certificates */
+.af-page { padding:.35in .4in; display:flex; flex-direction:column; } .af-page .pg-sub { margin:0 0 .1in; }
+.af-wrap { flex:1; display:grid; place-items:center; }
+.af { position:relative; }
+.af-lines { position:absolute; inset:0; }
+.af-side, .af-cover, .af-bottom { position:absolute; top:0; box-sizing:border-box; }
+.af-side { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.3in; padding:.3in .25in; text-align:center; }
+.af-side p { font:600 15pt/1.2 'Fredoka'; color:#d6607a; margin:0; }
+.af-paws { display:grid; grid-template-columns:1fr 1fr; gap:.18in .35in; opacity:.55; }
+.af-cover { padding:.2in; display:flex; }
+.af-cv { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.14in; padding:.3in .35in; text-align:center; border:5px solid #e2879b; border-radius:16px; box-shadow:inset 0 0 0 .09in #fbe7ec; }
+.af-place { font:600 11pt 'Fredoka'; color:#d6607a; text-transform:uppercase; letter-spacing:.08em; }
+.af-art { display:flex; align-items:center; gap:.12in; margin:.1in 0; }
+.af-cover h2 { font:700 34pt/1 'Fredoka'; color:var(--navy); text-transform:uppercase; margin:0 0 .15in; }
+.af-f { width:100%; display:flex; align-items:flex-end; gap:.1in; } .af-f small { font:600 12pt 'Fredoka'; color:var(--navy); white-space:nowrap; }
+.af-bottom { display:grid; place-items:center; padding-left:2.6in; } .af-bottom > div { transform:rotate(180deg); display:flex; align-items:center; gap:.15in; }
+.af-bottom b { font:700 18pt 'Fredoka'; color:#d6607a; text-transform:uppercase; letter-spacing:.06em; }
+.ac-page { padding:.35in .45in; display:flex; flex-direction:column; justify-content:space-between; } .ac-page .pg-sub { margin:0; }
+.ac { flex:1; display:flex; padding:.12in 0; } .ac-in { flex:1; border:5px solid #e2879b; border-radius:18px; box-shadow:inset 0 0 0 .08in #fbe7ec; padding:.3in .4in; display:flex; flex-direction:column; gap:.16in; }
+.ac-top { display:flex; align-items:center; justify-content:space-between; text-align:center; } .ac-top .clinic { font:600 10pt 'Fredoka'; color:#d6607a; text-transform:uppercase; letter-spacing:.08em; }
+.ac-top h2 { font:700 24pt/1.05 'Fredoka'; color:var(--navy); margin:.03in 0 0; }
+.ac-body { flex:1; display:flex; gap:.3in; align-items:stretch; }
+.ac-pic { width:2.3in; border:2px dashed #e2879b; border-radius:14px; display:flex; align-items:flex-end; justify-content:center; padding:.08in; } .ac-pic small { font:500 10pt 'Fredoka'; color:#b9788a; }
+.ac-words { flex:1; display:flex; flex-direction:column; justify-content:center; gap:.1in; text-align:center; } .ac-words p { font:500 13pt/1.3 'Fredoka'; color:var(--navy); margin:0; }
+.ac-f, .ac-sign > div { display:flex; flex-direction:column; } .ac-f small, .ac-sign small { font:500 9pt 'Fredoka'; color:#8a93a8; text-align:center; }
+.ac-sign { display:flex; gap:.5in; } .ac-sign > div { flex:1; }
 /* bandages */
 .bd-page { padding:.4in .45in; display:flex; flex-direction:column; align-items:center; }
 .bd-row { display:flex; gap:.18in; justify-content:center; margin-top:.05in; }
@@ -328,4 +448,4 @@ const clinicCss = `
 .tc-seal { width:auto !important; }
 `;
 
-module.exports = { doorSignPages, fileSheetPage, wrapLabelPages, bandagePages, tabletPages, checkupPages, trainingPage, clinicCss };
+module.exports = { adoptionPages, fishbowlPages, doorSignPages, fileSheetPage, wrapLabelPages, bandagePages, tabletPages, checkupPages, trainingPage, clinicCss };
