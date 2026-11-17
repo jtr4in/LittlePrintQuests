@@ -116,7 +116,7 @@ module.exports = {
   defaultKinds: ['bear', 'bunny', 'dog', 'cat'],
   // The vet kit was gone over page by page by Jason and his wife on 2026-11-07 (notes/PROJECT-NOTES.md,
   // "Vet kit review"). These switches turn on what came out of it, so other kits can copy them:
-  bigWhat: 'X-ray pictures and labelled X-ray posters',
+  bigWhat: 'X-ray pictures, labelled X-ray posters, an Adoption Agency sign, Adopted Pet tags and an X-ray screen',
   bannerExtender: true, // a blank middle strip for the big sign, to print as many times as you like
   signFold: true, // the big Open and Closed signs share a page, one upside down, to fold and flip
   cleanCuts: true, // no instructions inside the cut lines (badges, hours sign, file folder)
@@ -135,8 +135,14 @@ module.exports = {
   // (clinic.js). Fillers are src/kits/art/vet/fill/<name>.jpg.
   wrapLabels: [['Yummy Kibble', '🥣', 'kibble'], ['Tasty Treats', '🦴', 'bones'], ['Fishy Nibbles', '🐟', 'fish'], ['Kitty Kibble', '🐱', 'catkibble'],
     ['Chewy Bites', '🥩', 'chews'], ['Healthy Veggies', '🥕', 'veggies'], ['Seed Mix', '🐦', 'seeds'], ['Turtle Pellets', '🐢', 'pellets']],
+  // Medicine jar labels, same strips with pretend medicine on the ends (Jason, 2026-11-17).
+  medLabels: [['Feel Better Pills', '💊', 'pills'], ['Pet Vitamins', '❤️', 'vitamins'], ['Healing Capsules', '🧪', 'capsules'], ['Ear Drops', '💧', 'drops']],
   // Wrap-around bandages, sized to go round a stuffed animal's leg or paw with room to tape.
   bandages: { length: 9, width: 1.3 },
+  // A big empty fish bowl and nine fish to cut out and put in it (clinic.js, 2026-11-16).
+  fishbowl: { title: 'Fish Bowl', howTo: 'Hang the bowl on a wall or the side of a box, then add the fish from the next page. Who will adopt a fish today?' },
+  // Adoption Papers pocket folder and adoption certificates (clinic.js, Jason 2026-11-17).
+  adoption: { title: 'Adoption Papers', certTitle: 'Adoption Certificate', flap: 'Keep your pet’s papers safe in here', pocket: 'Pet Papers', promise: 'and will be fed, walked, cuddled and loved forever.' },
   // The clinic tablet: one screen per page, as if the vet tapped a different button (clinic.js).
   tablet: { app: 'PawCare', screens: ['appointments', 'patient', 'monitor', 'xray'] },
   // File-folder size check-up cards (clinic.js): the pet's details and picture, the services it
