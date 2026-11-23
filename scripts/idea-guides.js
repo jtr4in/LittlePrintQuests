@@ -323,6 +323,60 @@ const GUIDES = [
       ['Can a 3 year old do a snow day scavenger hunt?', 'Yes. Read the rhymes out loud and use the free printable, which has a picture of the hiding spot on every card so little ones can find it themselves. A grown-up helps with zippers and mittens along the way.'],
     ],
   },
+  {
+    slug: 'grandparents-scavenger-hunt',
+    group: 'occasion',
+    short: 'Grandparents’ visit hunt',
+    title: 'Grandparents Scavenger Hunt: Free Rhyming Clues for a Visit with the Grandkids',
+    description: 'A scavenger hunt for grandparents and grandkids ages 3 to 8: 8 free rhyming clues for a holiday visit at your house or theirs, a together box and a free printable.',
+    h1: 'Scavenger hunt for grandparents and grandkids',
+    lede: 'The bags are in, the hugs are done, and now everyone is standing in the kitchen wondering what to do. This hunt gives a grandparents’ visit its first adventure: eight clues through the suitcase, the old photos, the cookie tin and the comfy chair, ending in a box of things to do together.',
+    cta: [{ theme: 'kitchen' }, 'Make a personalized hunt for the grandkids'],
+    clueIntro: 'Hide each clue at the answer to the clue before it, while the grandkids settle in. A grandparent reads each rhyme out loud, and the trail ends on the guest bed.',
+    clues: [
+      { label: 'Doormat', pic: '🚪', riddle: ['Ding-dong, they are here, there are hugs at the door,', 'Look under the doormat, then look for some more!'], tip: 'Under the mat just inside the front door' },
+      { label: 'Suitcase', pic: '🧳', riddle: ['They packed up a suitcase and came a long way,', 'Look by the suitcase, they’re here for a stay!'], tip: 'Tucked in the handle of a suitcase by the guest bed (whoever is visiting)' },
+      { label: 'Old photos', pic: '📷', riddle: ['When grown-ups were little, what games did they play?', 'Look in the photo book, way back in the day!'], tip: 'Inside a family photo album, at a page of the grown-ups as kids' },
+      { label: 'Cookie tin', pic: '🍪', riddle: ['There’s something that’s yummy and crunchy and sweet,', 'Look by the cookie tin, time for a treat!'], tip: 'Beside the cookie tin on the counter, away from the stove' },
+      { label: 'Comfy chair', pic: '🪑', riddle: ['A big comfy chair for a story or two,', 'Look under the cushion, it’s hiding a clue!'], tip: 'Under the seat cushion of the chair where you’ll read together' },
+      { label: 'Slippers', pic: '🥿', riddle: ['They’re soft and they’re fuzzy and warm on the toes,', 'Look in the slippers, that’s where the clue goes!'], tip: 'Inside a slipper by the couch or the bed' },
+      { label: 'Games', pic: '🎲', riddle: ['Roll it and shake it and count every dot,', 'Look by the games in their usual spot!'], tip: 'In the box of a family board game or a deck of cards' },
+      { label: 'Guest bed', pic: '🛏️', riddle: ['You found all the clues, and now here is the best,', 'Look on the bed where our guests like to rest!'], tip: 'The treasure: a together box on the guest bed pillow' },
+    ],
+    sections: [
+      ['A hunt grandparents can run', `<p>This trail works in any house, so it fits both kinds of visit: grandparents coming to stay with you, or the grandkids arriving at theirs. The clues are things every home has, plus a few that belong to a visit, like the suitcase and the guest bed.</p>
+<ul class="tips">
+<li><b>Let the grandparents lead.</b> They read the rhymes, the kids do the finding. It breaks the ice for little ones who are shy for the first hour.</li>
+<li><b>Hide the cards while everyone unpacks.</b> A parent can set the trail in five minutes while the grandparents get the welcome hugs.</li>
+<li><b>Use your family’s names.</b> Read “Nana”, “Pop-Pop” or “Abuela” wherever it fits. On a personalized hunt, the kid’s name is printed on every page.</li>
+<li><b>Visiting from far away?</b> Grandparents can run it over a video call: a parent hides the cards, the grandparent reads each rhyme on screen.</li>
+</ul>`],
+      ['Turn each stop into a story', `<p>The best part of a grandparents’ visit is the stories, and every stop on this trail has one waiting. At each card, the kid asks one question and a grandparent answers:</p>
+<ul class="tips">
+<li><b>Suitcase:</b> What was the farthest trip you ever took?</li>
+<li><b>Old photos:</b> What did my mom or dad get in trouble for?</li>
+<li><b>Cookie tin:</b> What was your favorite treat when you were little?</li>
+<li><b>Comfy chair:</b> What was your favorite book or bedtime story?</li>
+<li><b>Games:</b> What games did you play outside with your friends?</li>
+</ul>
+<p>Big kids can write the answers down. Little ones can draw a picture of the story, and a grown-up writes a line under it to keep.</p>`],
+      ['What to put in the together box', `<p>The treasure is a box of things to do with the grandparents for the rest of the visit. Any shoebox works:</p>
+<ul class="tips">
+<li>A deck of cards for Go Fish, Crazy Eights or a first game of rummy.</li>
+<li>A cookie recipe card and cookie cutters for baking together.</li>
+<li>A picture book for the comfy chair, or a blank one to make up a story together.</li>
+<li>A jigsaw puzzle to leave out on a table all week.</li>
+<li>Stamped postcards addressed to the grandparents, to mail after they go home.</li>
+</ul>
+<p>Grandparents’ houses aren’t always set up for small kids: before you hide the cards, move pills and purses up high, and keep clues off stairs, away from the stove and anything hot.</p>`],
+      ['More to do together', '<p>A day with the grandparents is made for slow play. Bake together in a pretend Chef’s Kitchen, open a living room library for story time, or set up a coffee shop where the grandkids serve the grown-ups. Our printed hunts have your kid’s name on every page and arrive by email in minutes.</p>{LINKS:chefs-kitchen-pretend-play=Chef’s Kitchen pretend play,library-pretend-play=Library pretend play,coffee-shop-pretend-play=Coffee Shop pretend play,indoor-scavenger-hunt-for-a-house=Indoor hunt for a house,christmas-eve-scavenger-hunt=Christmas Eve scavenger hunt}{CTA}'],
+    ],
+    faq: [
+      ['What can grandparents do with grandkids on a visit?', 'Start with a scavenger hunt that ends in a box of things to do together, then settle in with card games, baking, a jigsaw puzzle and story time. Asking grandparents about their childhood at each stop turns the hunt into family stories.'],
+      ['Can grandparents do a scavenger hunt over a video call?', 'Yes. A parent hides the cards around the house, the grandparent reads each rhyme on the call, and the kids run back to the screen with every card they find.'],
+      ['Can a 3 year old do a grandparents scavenger hunt?', 'Yes. A grandparent reads the rhymes out loud, and the free printable has a picture of the hiding spot on every card so little ones can find it themselves.'],
+    ],
+  },
 ];
 
 module.exports = { GUIDES };
